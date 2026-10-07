@@ -82,7 +82,7 @@ it('collateral range shots damage both physical meshes but count one scored disc
   engine.sim=new Simulation({...defaults,mode:'transfer',weapon:'awp',spread:false});
   engine.sim.targetHealth=[1000,1000];engine.targets=[target,second];engine.targetModels=[body,secondBody];
   const marks:THREE.Vector3[]=[];engine['addImpact']=(_parent,point)=>{marks.push(point.clone());};
-  Object.assign(engine,{xpTargets:new Set(),viewAnimations:new Map(),viewMuzzles:new Map(),
+  Object.assign(engine,{attemptTargets:new Set(),viewAnimations:new Map(),viewMuzzles:new Map(),
     viewFlashes:{fire:vi.fn()},acoustics:{setBoxes:vi.fn()},
     hitmarker:{style:{}},hitCaption:{style:{},textContent:''},
     hitMaterial:{color:new THREE.Color()},bodyMaterial:{color:new THREE.Color()},missMaterial:{color:new THREE.Color()},
@@ -99,7 +99,7 @@ it('collateral range shots damage both physical meshes but count one scored disc
 it.each(Object.keys(modeNames).filter(mode => mode !== 'hearing') as Mode[])('shows distinct head/body feedback for actual hits in %s mode',mode=>{
   const {engine,body,wall,target}=rayFixture();
   engine.sim=new Simulation({...defaults,mode});
-  Object.assign(engine, {xpTargets: new Set(), viewAnimations: new Map(), viewMuzzles: new Map(), viewFlashes: {fire: vi.fn()},acoustics:{setBoxes:vi.fn()}});
+  Object.assign(engine, {attemptTargets: new Set(), viewAnimations: new Map(), viewMuzzles: new Map(), viewFlashes: {fire: vi.fn()},acoustics:{setBoxes:vi.fn()}});
   body.position.z=0;target.position.z=-10;
   engine.targets=[target];engine.impacts=new THREE.Group();
   engine.markerGeometry=new THREE.SphereGeometry(.018,6,4);

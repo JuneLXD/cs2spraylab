@@ -167,7 +167,7 @@ test('guided cues, immediate repeat ammo, visible feedback and project links', a
   await expect(page.locator('.aim-cue.now')).toBeVisible();
   await expect(page.locator('.aim-cue.next')).toBeVisible();
   expect(await page.locator('.aim-cue.now').evaluate(e => getComputedStyle(e).color)).not.toBe(await page.locator('.aim-cue.next').evaluate(e => getComputedStyle(e).color));
-  await expect(page.getByRole('link', { name: 'Donate' })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Donate/ })).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Source' })).toHaveAttribute('href', 'https://github.com/HamzahAlrawi/cs2spraylab');
   await expect(page.getByLabel('Target distance', { exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
@@ -290,7 +290,7 @@ test('mobile landscape keeps shooting, settings and project links within the vie
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeEnabled({timeout: 45000});
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth && document.documentElement.scrollHeight <= innerHeight)).toBe(true);
-  await expect(page.getByRole('link', { name: 'Donate' })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Donate/ })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Settings', exact: true })).toBeVisible();
   await page.getByLabel('Training mode').selectOption('spray');
   const canvas = page.locator('canvas[data-range]'), b = (await canvas.boundingBox())!;

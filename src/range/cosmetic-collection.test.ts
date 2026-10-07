@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {cosmeticCatalog, DEFAULT_GLOVE_PREVIEW} from './cosmetics';
-import {cosmeticsForEquipment, prepareCosmeticCatalog, sanitizeProgression, xpForLevel} from './progression';
+import {cosmeticsForEquipment, equippedCosmetic, prepareCosmeticCatalog, sanitizeProgression} from './progression';
 import actors from './actor-cosmetics-data.json';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -9,30 +9,21 @@ const catalog = prepareCosmeticCatalog(cosmeticCatalog);
 const finishes = (equipment: string) => catalog.filter(item => item.equipment === equipment && !item.isDefault);
 
 describe('equipment-focused cosmetic collections', () => {
-  it('shows stock only even if every level gate is open and every finish is affordable', () => {
-    const profile = sanitizeProgression({version: 2, xp: xpForLevel(100), balance: 1_000_000}, catalog);
-    expect(cosmeticsForEquipment(profile, catalog, 'ak47').map(item => item.id)).toEqual(['ak47-standard']);
-    expect(cosmeticsForEquipment(profile, catalog, 'ak47', 'unowned')).toHaveLength(10);
-  });
-  it('includes owned finishes only for the selected gun, without mutating the catalog', () => {
-    const ak = finishes('ak47')[0], deagle = finishes('deagle')[0];
-    const profile = sanitizeProgression({version: 2, owned: [ak.id, deagle.id]}, catalog);
-    expect(cosmeticsForEquipment(profile, catalog, 'ak47').map(item => item.id)).toEqual(['ak47-standard', ak.id]);
-    expect(cosmeticsForEquipment(profile, catalog, 'deagle').map(item => item.id)).toEqual(['deagle-standard', deagle.id]);
-    expect(cosmeticsForEquipment(profile, catalog, 'missing')).toEqual([]);
+  it('lists stock and every finish for the selected gun, without mutating the catalog', () => {
+    expect(cosmeticsForEquipment(catalog, 'ak47').map(item => item.id)).toEqual(['ak47-standard', ...finishes('ak47').map(item => item.id)]);
+    expect(cosmeticsForEquipment(catalog, 'ak47')).toHaveLength(11);
+    expect(cosmeticsForEquipment(catalog, 'deagle')[0].id).toBe('deagle-standard');
+    expect(cosmeticsForEquipment(catalog, 'missing')).toEqual([]);
     expect(catalog.filter(item => item.equipment === 'ak47')).toHaveLength(11);
   });
-  it('keeps legacy ownership visible even when the new level gate is higher', () => {
+  it('keeps the finish an old save had equipped, even the last in the list', () => {
     const item = finishes('ak47')[9];
     const profile = sanitizeProgression({version: 1, xp: 0, equipped: {ak47: item.id}}, catalog);
-    expect(cosmeticsForEquipment(profile, catalog, 'ak47')).toContain(item);
-    expect(cosmeticsForEquipment(profile, catalog, 'ak47', 'unowned')).not.toContain(item);
+    expect(equippedCosmetic(profile, catalog, 'ak47')).toBe(item);
   });
   it('separates gloves and agents, including their stock options', () => {
-    const gloves = finishes('gloves')[0], agent = finishes('agent')[0];
-    const profile = sanitizeProgression({version: 2, owned: [gloves.id, agent.id]}, catalog);
-    expect(cosmeticsForEquipment(profile, catalog, 'gloves').map(item => item.id)).toEqual(['gloves-standard', gloves.id]);
-    expect(cosmeticsForEquipment(profile, catalog, 'agent')).toHaveLength(2);
+    expect(cosmeticsForEquipment(catalog, 'gloves').map(item => item.id)).toEqual(['gloves-standard', ...finishes('gloves').map(item => item.id)]);
+    expect(cosmeticsForEquipment(catalog, 'agent')).toHaveLength(1 + finishes('agent').length);
   });
 });
 

@@ -1,5 +1,5 @@
 import { CSSProperties, useEffect, useRef, useState } from 'react';
-import { Activity, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronDown, Code2 as Github, Crosshair as AimIcon, Download, Eye, Gauge, Gift, History, ListPlus, Maximize, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, ShoppingCart, Target, Upload, Volume2, VolumeX, X } from 'lucide-react';
+import { Activity, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronDown, Code2 as Github, Crosshair as AimIcon, Download, Eye, Gauge, History, ListPlus, Maximize, Paintbrush, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, Target, Upload, Volume2, VolumeX, X } from 'lucide-react';
 import { classicViewmodel, Crosshair, defaults, gameData, historyModeNames, isDuelEngineMode, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, resolutions, resolutionSize, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol, type Resolution } from './config';
 import { RangeEngine, RangeStatus } from './engine';
 import { Result } from './simulation';
@@ -14,16 +14,17 @@ import {GraduationCap} from 'lucide-react';
 import {MovementTutorial} from './MovementTutorial';
 import {modeInfo} from './mode-info';
 import recoilProvenance from './recoil-provenance.json';
-import {createProgressionController, cosmeticsForEquipment, type ProgressionController, type ProgressionProfile} from './progression';
-import {ProgressionPanel, XpNotification, useProgression} from './ProgressionPanel';
+import {createProgressionController, cosmeticsForEquipment, equippedCosmetic, type ProgressionController, type ProgressionProfile} from './progression';
+import {AchievementNotification, ProgressionPanel, useProgression} from './ProgressionPanel';
 import {cosmeticCatalog, cosmeticLabel, cosmeticPreview} from './cosmetics';
 import {Changelog} from './Changelog';
 import {HearingPractice} from './HearingPractice';
 import {KeyboardSettings} from './keybinds/KeyboardSettings';
 import {keyHint, shortcutHint, slotKey} from './keybinds/profile';
 import {applyConsoleCommand} from './console-settings';
+import {frameLimitOptions, useDisplayRate} from './display-rate';
 
-function LoadoutFinishes({equipment, profile, controller, onShop, focusRequest}: {equipment: Weapon; profile: ProgressionProfile; controller: ProgressionController; onShop: (equipment: string) => void; focusRequest: number}) {
+function LoadoutFinishes({equipment, profile, controller, onArmory, focusRequest}: {equipment: Weapon; profile: ProgressionProfile; controller: ProgressionController; onArmory: (equipment: string) => void; focusRequest: number}) {
   const finishes = useRef<HTMLElement>(null);
   const handledFocusRequest = useRef(focusRequest);
   useEffect(() => {
@@ -34,9 +35,9 @@ function LoadoutFinishes({equipment, profile, controller, onShop, focusRequest}:
     (equipped ?? finishes.current?.querySelector<HTMLButtonElement>('button[aria-pressed]'))?.focus({preventScroll: true});
   }, [equipment, focusRequest]);
   return <section ref={finishes} className="loadout-finishes" aria-label={`${weaponNames[equipment]} skins`}><header><h3>{weaponNames[equipment]} finishes</h3>
-    <button type="button" className="finish-shop" onClick={() => onShop(equipment)} aria-label={`Browse ${weaponNames[equipment]} unlocks`}><ShoppingCart size={13}/>Unlocks</button></header>
-    <div>{cosmeticsForEquipment(profile, controller.catalog, equipment).map(item => {
-      const equipped = profile.equipped[equipment] === item.id || item.isDefault && !profile.equipped[equipment];
+    <button type="button" className="finish-armory" onClick={() => onArmory(equipment)} aria-label="Open the armory: weapon finishes, knives, gloves and agents" title="Weapon finishes, knives, gloves and agents"><Paintbrush size={13}/>Armory</button></header>
+    <div>{cosmeticsForEquipment(controller.catalog, equipment).map(item => {
+      const equipped = equippedCosmetic(profile, controller.catalog, equipment)?.id === item.id;
       return <button key={item.id} type="button" className={equipped ? 'selected' : ''} aria-pressed={equipped}
         title={item.label} aria-label={`Equip ${weaponNames[equipment]} skin ${item.label}`}
         onClick={() => controller.equip(equipment, item.id)}>
@@ -102,6 +103,8 @@ export default function RangeApp() {
   const settingsRef = useRef(settings); settingsRef.current = settings;
   const [status, setStatus] = useState(emptyStatus);
   const [panel, setPanel] = useState<Panel>(null), [tab, setTab] = useState<Tab>('game');
+  // Measured while Settings is open: the range is paused, so frame timing reflects the display.
+  const displayHz = useDisplayRate(panel === 'settings');
   const [finishSlot, setFinishSlot] = useState<1 | 2>(1);
   const [finishFocusRequest, setFinishFocusRequest] = useState(0);
   const [results, setResults] = useState(readResults);
@@ -206,8 +209,6 @@ export default function RangeApp() {
       <nav className="main-nav" aria-label="Workspace"><button className={!panel ? 'selected' : ''} onClick={() => setPanel(null)}><Target size={16} />Range</button><button className={panel === 'history' ? 'selected' : ''} onClick={() => open('history')}><History size={16} />Session<span className="count">{results.length}</span></button></nav>
       <div className="app-actions">
         <button type="button" className="changelog-button" aria-label="Changelog" title="Changelog" aria-haspopup="dialog" aria-expanded={panel === 'changelog'} onClick={event => {event.currentTarget.focus(); open('changelog');}}><ListPlus size={17} aria-hidden="true"/><span>Changelog</span></button>
-        <ProgressionPanel controller={progression} activeEquipment={selectedWeapon} equipmentLabels={equipmentNames} requestedEquipment={armoryRequest} requestedAchievements={achievementRequest} onRequestHandled={()=>{setArmoryRequest(null);setAchievementRequest(false);}} onOpenChange={value=>{setArmoryOpen(value); if(value)engine.current?.pause();}}/>
-        <a className="header-donation" href="https://steamcommunity.com/tradeoffer/new/?partner=135963670&token=IS6KDROD" target="_blank" rel="noreferrer"><Gift size={16} /><span>Donate unwanted<br className="donation-wrap"/> CS2 skins</span></a>
         <button ref={settingsButton} className={`settings-button${setupHint ? ' settings-nudge' : ''}`} aria-describedby={setupHint ? 'settings-hint-text' : undefined} onClick={() => open('settings')}><Settings2 size={17} />Settings</button>
       </div>
       {setupHint && !panel && <div className="settings-hint" role="status">
@@ -229,7 +230,7 @@ export default function RangeApp() {
     </section>
     <section className="mode-brief" aria-label="Drill purpose"><div><strong>{modeInfo[settings.mode].benefit}</strong><p>{modeInfo[settings.mode].task}</p></div><button onClick={() => {engine.current?.pause(); setTutorial(true);}}><GraduationCap size={19}/>Learn the fundamentals</button></section>
     <section ref={stage} className={`range-stage${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode)?' with-drill':''}`} aria-label="Practice range">
-      <XpNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
+      <AchievementNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
       {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={!!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' ? 'botz' : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={() => setSetupHint(false)} suspended={!!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
@@ -305,7 +306,8 @@ export default function RangeApp() {
               <button className="secondary" onClick={() => update({viewmodel: classicViewmodel})}><RotateCcw size={15}/>Classic position</button>
               <p className="setting-explanation">Same values as CS2&apos;s viewmodel_fov and viewmodel_offset_x/y/z (right, forward, up). Import CS2 config under Keyboard / Mouse reads them from autoexec.cfg or CS2&apos;s saved settings.</p>
               <h2>Graphics</h2><label className="select-row">Render quality<select aria-label="Render quality" value={settings.quality} onChange={e => update({ quality: e.target.value as Settings['quality'], ...(e.target.value === 'performance' ? {frameLimit:60} : {}) })}><option value="auto">Adaptive</option><option value="performance">Performance (older PCs)</option><option value="low">Low</option><option value="high">High</option></select></label>
-              <label className="select-row">Frame limit<select aria-label="Frame limit" value={settings.frameLimit} onChange={e => update({frameLimit: +e.target.value})}>{[0,30,60,120,144,240].map(n => <option key={n} value={n}>{n ? `${n} FPS` : 'Display refresh rate'}</option>)}</select></label>
+              <label className="select-row">Frame limit<select aria-label="Frame limit" value={settings.frameLimit} onChange={e => update({frameLimit: +e.target.value})}>{frameLimitOptions(displayHz, settings.frameLimit).map(n => <option key={n} value={n}>{n ? `${n} FPS` : displayHz ? `Display refresh rate (${displayHz} FPS)` : 'Display refresh rate'}</option>)}</select></label>
+              <p className="setting-explanation">Browsers draw at most once per display refresh, so Display refresh rate is the highest frame rate this PC allows: up to 500 FPS on a 500 Hz monitor, when the PC keeps up.{displayHz ? ` This display measures ${displayHz} Hz.` : ''}</p>
               <Toggle label="Show FPS counter" checked={settings.showFps} onChange={showFps => update({showFps})}/>
               <Toggle label="Protect range Ctrl+W" checked={settings.protectShortcuts} onChange={protectShortcuts => update({protectShortcuts})}/>
               <label className="select-row">Resolution<select aria-label="Resolution" value={settings.resolution} onChange={e => update({ resolution: e.target.value as Resolution })}>{resolutions.map(r => <option key={r} value={r}>{resolutionLabel(r)}</option>)}</select></label>
@@ -342,11 +344,11 @@ export default function RangeApp() {
           <Toggle label="Carry a primary weapon" checked={settings.primaryEnabled} onChange={primaryEnabled=>update({primaryEnabled})}/>
           <label className="select-row">Sidearm<select aria-label="Sidearm" value={settings.sidearm} onChange={e=>update({sidearm:e.target.value as Pistol})}>{pistolIds.map(id=><option key={id} value={id}>{weaponNames[id]}</option>)}</select></label>
           {settings.primaryEnabled && settings.weapon !== settings.sidearm && <label className="select-row">Finishes for<select aria-label="Skin weapon" value={finishSlot} onChange={e=>setFinishSlot(+e.target.value as 1 | 2)}><option value="1">{weaponNames[settings.weapon]}</option><option value="2">{weaponNames[settings.sidearm]}</option></select></label>}
-          <LoadoutFinishes equipment={settings.primaryEnabled && finishSlot === 1 ? settings.weapon : settings.sidearm} profile={progressionState.profile} controller={progression} focusRequest={finishFocusRequest} onShop={id=>{setPanel(null);setArmoryRequest(id);}}/>
+          <LoadoutFinishes equipment={settings.primaryEnabled && finishSlot === 1 ? settings.weapon : settings.sidearm} profile={progressionState.profile} controller={progression} focusRequest={finishFocusRequest} onArmory={id=>{setPanel(null);setArmoryRequest(id);}}/>
           <h2>Weapons</h2>{weaponIds.map(id => <button className={`weapon-item ${selectedWeapon === id ? 'chosen' : ''}`} key={id} onClick={() => {
             const sidearm = pistolIds.includes(id as Pistol);
             update(sidearm ? {sidearm: id as Pistol, primaryEnabled:false} : {weapon:id,primaryEnabled:true});
-            if (cosmeticsForEquipment(progressionState.profile, progression.catalog, id).some(item => !item.isDefault)) {
+            if (cosmeticsForEquipment(progression.catalog, id).some(item => !item.isDefault)) {
               setFinishSlot(sidearm ? 2 : 1); setFinishFocusRequest(request => request + 1);
             } else setPanel(null);
           }}><img src={cosmeticPreview(progressionState.profile,id)} alt={weaponNames[id]} /><span><b>{weaponNames[id]}</b><small>{gameData.weapons[id].magazine} rounds <i /> {Math.round(60 / gameData.weapons[id].cycle)} RPM</small></span>{id === selectedWeapon && <Check size={18} />}</button>)}</div>}
@@ -359,5 +361,6 @@ export default function RangeApp() {
       </aside>
     </div>}
     {tutorial && <MovementTutorial keyboard={settings.keyboard} close={() => setTutorial(false)} practice={() => {setTutorial(false); update({mode: 'precision', spread: true, drillPace: 'practice'});}}/>}
+    <ProgressionPanel controller={progression} activeEquipment={selectedWeapon} equipmentLabels={equipmentNames} requestedEquipment={armoryRequest} requestedAchievements={achievementRequest} onRequestHandled={()=>{setArmoryRequest(null);setAchievementRequest(false);}} onOpenChange={value=>{setArmoryOpen(value); if(value)engine.current?.pause();}}/>
   </main>;
 }

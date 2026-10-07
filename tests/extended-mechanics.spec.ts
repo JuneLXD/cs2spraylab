@@ -92,7 +92,7 @@ test('armor and radar persist while legacy latency preferences and controls are 
   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('spraylab.duel.v1')!));
   for(const key of ['playerPing','botPing','interpolationMs'])expect(saved).not.toHaveProperty(key);
   expect(saved.overrides[0]).not.toHaveProperty('ping');
-  expect(await page.evaluate(()=>(window as any).configEngine.xpSetup().bots[0])).toMatchObject({armor:true,helmet:false,armorPoints:27});
+  expect(await page.evaluate(()=>(window as any).configEngine.attemptSetup().bots[0])).toMatchObject({armor:true,helmet:false,armorPoints:27});
   await page.reload();
   await expect(page.getByLabel('Player armor points',{exact:true})).toHaveValue('35');
   await expect(page.getByLabel('Player helmet',{exact:true})).not.toBeChecked();

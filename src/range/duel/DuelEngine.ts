@@ -34,7 +34,7 @@ import {AcousticScene} from '../spatial-audio';
 import {seedForDesign} from './arena-layout';
 import {applyCosmetic, cosmeticAsset, cosmeticCatalog} from '../cosmetics';
 import weaponMounts from '../weapon-mounts.json';
-import {equippedCosmetic,type DuelXpSetup,type ProgressionController} from '../progression';
+import {equippedCosmetic,type DuelAttemptSetup,type ProgressionController} from '../progression';
 import {prepareNativeViewAssembly} from '../native-view-actions';
 import {ActorCosmeticLoader, loadAgent, type ActorCosmeticInstance} from '../actor-cosmetics';
 import {REVOLVER_WINDUP} from '../weapon-actions';
@@ -150,9 +150,9 @@ export class DuelEngine {
   private dropModels = new Map<number, THREE.Object3D>();
   private pickupDrawing = false;
   private cosmeticKey = '';
-  private xpAttempt: string | null = null;
-  private xpRevision = 0;
-  private xpDamage = new Map<number, number>();
+  private attemptId: string | null = null;
+  private attemptRevision = 0;
+  private attemptDamage = new Map<number, number>();
   private actorLoader = new ActorCosmeticLoader();
   private agentInstance?: ActorCosmeticInstance;
   private agentRevision = 0;
@@ -498,16 +498,16 @@ export class DuelEngine {
     await this.loadViewModel(this.sim.actors[0].weapon.id);
   }
 
-  private xpSetup(): DuelXpSetup {
+  private attemptSetup(): DuelAttemptSetup {
     return {playerHealth: this.config.playerHealth, playerArmor: this.config.playerArmor,
       bots: this.sim.actors.slice(1).map((actor, index) => ({id: String(actor.id), ...botConfig(this.config, index)}))};
   }
 
   private beginProgression() {
-    // Passive Aim Botz bots award no duel XP.
+    // Passive Aim Botz rounds do not count toward duel achievements.
     if (this.botz) return;
-    this.xpDamage.clear();
-    this.xpAttempt = this.progression?.beginDuel(this.xpSetup(), String(this.xpRevision)) ?? null;
+    this.attemptDamage.clear();
+    this.attemptId = this.progression?.beginDuel(this.attemptSetup(), String(this.attemptRevision)) ?? null;
   }
 
   setSettings(settings: Settings) {
@@ -563,8 +563,8 @@ export class DuelEngine {
 
   restart(continuous = false) {
     this.recordBotz();
-    if (this.xpAttempt) this.progression?.cancelAttempt(this.xpAttempt);
-    this.xpAttempt = null; this.xpRevision++;
+    if (this.attemptId) this.progression?.cancelAttempt(this.attemptId);
+    this.attemptId = null; this.attemptRevision++;
     this.paused = false; this.pointer = null; this.pickupDrawing = false; this.viewAnimation?.cancel();
     for (const object of this.dropModels.values()) this.scene.remove(object);
     this.dropModels.clear();
@@ -817,7 +817,7 @@ export class DuelEngine {
           if (held) held.visible = false;
         }
         if (event.shooter === 0) {
-          this.xpDamage.set(event.victim, (this.xpDamage.get(event.victim) ?? 0) + event.healthDamage);
+          this.attemptDamage.set(event.victim, (this.attemptDamage.get(event.victim) ?? 0) + event.healthDamage);
           this.audio.playHit(event.group === 'head', event.armorDamage > 0, false, this.settings.volume);
           this.damage += event.healthDamage;
           if (event.lethal) this.kills++;
@@ -840,11 +840,11 @@ export class DuelEngine {
         if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
       } else if (event.kind === 'round') {
         this.roundFlow.finish();
-        if (this.xpAttempt) this.progression?.completeDuel(this.xpAttempt, {
+        if (this.attemptId) this.progression?.completeDuel(this.attemptId, {
           completion: 'completed', outcome: event.outcome, activeSeconds:this.sim.time, review: this.sim.coach.review(),
-          opponents: this.sim.actors.slice(1).map(actor => ({id: String(actor.id), healthDamage: this.xpDamage.get(actor.id) ?? 0, killed: !actor.alive})),
-        }, this.xpSetup(), String(this.xpRevision));
-        this.xpAttempt = null;
+          opponents: this.sim.actors.slice(1).map(actor => ({id: String(actor.id), healthDamage: this.attemptDamage.get(actor.id) ?? 0, killed: !actor.alive})),
+        }, this.attemptSetup(), String(this.attemptRevision));
+        this.attemptId = null;
         this.history.unshift({date: new Date().toISOString(), outcome: event.outcome, review: this.sim.coach.review()});
         this.history = this.history.slice(0, 50);
         try {localStorage.setItem('spraylab.duel.history.v1', JSON.stringify(this.history));} catch { /* Session-only history. */ }
@@ -1070,7 +1070,7 @@ export class DuelEngine {
 
   dispose() {
     this.recordBotz();
-    if (this.xpAttempt) this.progression?.cancelAttempt(this.xpAttempt);
+    if (this.attemptId) this.progression?.cancelAttempt(this.attemptId);
     this.disposed = true; cancelAnimationFrame(this.frame); this.pause(); this.releaseShortcuts(); this.observer.disconnect();
     this.cleanup.forEach(fn => fn()); this.clearEffects(); this.audio.dispose(); this.damageFeedback.dispose();
     this.animators.forEach(animator => animator.dispose()); this.viewAnimation?.dispose(); this.scope.dispose();

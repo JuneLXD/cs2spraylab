@@ -65,27 +65,25 @@ test('practice tracers follow every round of a held spray to its impact', async 
   expect(spray.beams).toBe(true); expect(spray.lines).toBe(true);
 });
 
-test('knife shop filters by native model and owns every native preview before equipping', async ({page}) => {
+test('knife armory filters by native model and equips any native finish with its preview', async ({page}) => {
   await page.addInitScript(() => {
-    localStorage.setItem('spraylab.progression.v1',JSON.stringify({version:2,xp:357885,balance:1000000}));
     localStorage.setItem('spraylab.range.v2', JSON.stringify({mode:'guided',volume:0}));
   });
-  await page.goto('/'); await page.getByRole('button',{name:/Open armory/}).click();
-  const shop = page.getByRole('dialog',{name:'Armory'});
-  await shop.getByRole('button',{name:'Unlocks',exact:true}).click();
-  await shop.getByRole('tab',{name:'Knives',exact:true}).click();
-  const filter = shop.getByLabel('Knife type');
-  await expect(filter.locator('option')).toHaveCount(22);
+  await page.goto('/');
+  await page.locator('.weapon-select').click();
+  await page.getByRole('dialog',{name:'Loadout'}).getByRole('button',{name:/^Open the armory/}).click();
+  const armory = page.getByRole('dialog',{name:'Armory'});
+  await armory.getByRole('tab',{name:'Knives',exact:true}).click();
+  const filter = armory.getByLabel('Knife type');
+  await expect(filter.locator('option')).toHaveCount(23);
   await filter.selectOption('knife-karambit');
-  expect(await shop.locator('.progression-choice').count()).toBeGreaterThan(10);
-  expect(await shop.locator('.progression-choice').count()).toBeLessThan(40);
-  const emerald = shop.locator('.progression-choice').filter({hasText:'Karambit | Gamma Doppler Emerald'});
+  expect(await armory.locator('.progression-choice').count()).toBeGreaterThan(10);
+  expect(await armory.locator('.progression-choice').count()).toBeLessThan(40);
+  const emerald = armory.locator('.progression-choice').filter({hasText:'Karambit | Gamma Doppler Emerald'});
   await expect(emerald).toHaveCount(1);
   const image = emerald.locator('img'); await image.scrollIntoViewIfNeeded();
   await expect.poll(() => image.evaluate(node => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(100);
   await emerald.getByRole('button').click();
-  await expect(shop.getByRole('button',{name:'Collection',exact:true})).toHaveAttribute('aria-pressed','true');
-  await expect(shop.locator('.progression-choice')).toHaveCount(1);
-  await shop.locator('.progression-choice').getByRole('button').click();
+  await expect(emerald).toHaveClass(/is-equipped/);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.progression.v1')!).equipped.knife)).toContain('knife-karambit');
 });

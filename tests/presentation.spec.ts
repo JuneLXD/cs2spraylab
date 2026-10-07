@@ -150,11 +150,12 @@ test('first-visit Settings hint is noticeable, dismissible and not repeated', as
   await expect(page.locator('.settings-hint')).toBeVisible();
   await expect(page.locator('.hint-arrow')).toHaveCSS('animation-name', 'settings-arrow');
   await expect(page.locator('.hint-arrow')).toHaveCSS('animation-iteration-count', '4');
-  const donate = (await page.getByRole('link', {name: 'Donate unwanted CS2 skins', exact: true}).boundingBox())!;
+  await expect(page.getByRole('link', {name: /Donate/})).toHaveCount(0);
+  const changelog = (await page.getByRole('button', {name: 'Changelog', exact: true}).boundingBox())!;
   const header = (await page.locator('.appbar').boundingBox())!;
-  expect(donate.y).toBeGreaterThanOrEqual(header.y);
-  expect(donate.y + donate.height).toBeLessThanOrEqual(header.y + header.height);
-  expect(donate.height).toBeGreaterThanOrEqual(32);
+  expect(changelog.y).toBeGreaterThanOrEqual(header.y);
+  expect(changelog.y + changelog.height).toBeLessThanOrEqual(header.y + header.height);
+  expect(changelog.height).toBeGreaterThanOrEqual(32);
   const hint = (await page.locator('.settings-hint').boundingBox())!;
   expect(hint.x).toBeGreaterThanOrEqual(0);
   expect(hint.x + hint.width).toBeLessThanOrEqual(page.viewportSize()!.width);

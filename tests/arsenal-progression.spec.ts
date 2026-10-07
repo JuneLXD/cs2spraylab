@@ -18,27 +18,37 @@ async function duelEngine(page: Page) {
   await page.waitForFunction(() => (window as any).arsenalEngine?.viewRoot.children.length);
 }
 
+/** The armory opens from the loadout drawer, which replaced the header level widget. */
+async function openArmory(page: Page) {
+  await page.locator('.weapon-select').click();
+  await page.getByRole('dialog', {name: 'Loadout'}).getByRole('button', {name: /^Open the armory/}).click();
+}
+const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 async function nonblank(page: Page) {
   const colors = await canvasColors(page,'canvas[data-duel]');
   expect(colors).toBeGreaterThan(8);
 }
 
-test('stock knife, locked cosmetics and armory fit small screens without hiding Settings', async ({page}, info) => {
+test('every knife finish is equippable and the armory fits small screens without hiding Settings', async ({page}, info) => {
   test.skip(!['chromium', 'mobile-chromium'].includes(info.project.name));
   await page.goto('/');
+  await expect(page.locator('.progression-summary')).toHaveCount(0);
+  await expect(page.getByRole('link', {name: /Donate/})).toHaveCount(0);
   for (const width of [390, 320, 844]) {
     await page.setViewportSize({width, height: width === 844 ? 390 : 844});
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await page.getByRole('button', {name: /Open armory/}).click();
+    await openArmory(page);
     const dialog = page.getByRole('dialog', {name: 'Armory'});
     await expect(dialog).toBeVisible();
-    await dialog.getByRole('button',{name:'Unlocks',exact:true}).click();
+    await expect(dialog.getByRole('button', {name: /^(Unlocks|Milestones)$/})).toHaveCount(0);
+    await expect(dialog).not.toContainText(/credits|Level \d/);
     await dialog.getByRole('tab',{name:'Knives',exact:true}).click();
     await dialog.getByLabel('Knife type', {exact: true}).selectOption('knife-butterfly');
-    const emerald = dialog.getByRole('button', {name: new RegExp(`Butterfly.*Emerald.*locked until level ${emeraldDefinition.unlockLevel}`)});
-    await expect(emerald).toHaveAttribute('aria-disabled', 'true');
-    await emerald.dispatchEvent('click');
-    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.progression.v1') || '{}').equipped?.knife)).not.toBe('knife-butterfly-emerald');
+    const emerald = dialog.getByRole('button', {name: new RegExp(`^${escape(emeraldDefinition.label)}, Default knife, equip(ped)?$`)});
+    if (await emerald.isEnabled()) await emerald.click();
+    await expect(emerald).toHaveAttribute('aria-pressed', 'true');
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.progression.v1') || '{}').equipped?.knife)).toBe('knife-butterfly-emerald');
     const bounds = (await dialog.boundingBox())!;
     expect(bounds.x).toBeGreaterThanOrEqual(0); expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
     await page.screenshot({path: `test-results/${info.project.name}-armory-${width}.png`});
@@ -88,12 +98,12 @@ test('all native weapon assemblies render and have moving inspect/reload clips',
   expect(errors).toEqual([]);
 });
 
-test('unlocked emerald uses its native model, compiles its shader and persists equip choices', async ({page}, info) => {
+test('the emerald knife uses its native model, compiles its shader and persists equip choices', async ({page}, info) => {
   test.skip(!['chromium', 'mobile-chromium'].includes(info.project.name));
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', msg => {if (msg.type() === 'error') errors.push(msg.text());});
-  await page.addInitScript(() => localStorage.setItem('spraylab.progression.v1', JSON.stringify({version: 1, xp: 15485, equipped: {knife: 'knife-butterfly-emerald'}})));
+  await page.addInitScript(() => localStorage.setItem('spraylab.progression.v1', JSON.stringify({version: 3, equipped: {knife: 'knife-butterfly-emerald'}})));
   await duelEngine(page);
   await page.getByRole('button', {name: /Equip .*knife|Equip Default knife/}).click();
   await page.waitForFunction(() => {
@@ -106,7 +116,7 @@ test('unlocked emerald uses its native model, compiles its shader and persists e
   const stats = await sharp(await page.locator('canvas[data-duel]').screenshot()).stats();
   expect(stats.channels[1].stdev).toBeGreaterThan(15);
   await page.screenshot({path: `test-results/${info.project.name}-unlocked-emerald.png`});
-  await page.getByRole('button', {name: /Open armory/}).click();
+  await openArmory(page);
   await page.getByRole('tab',{name:'Weapons',exact:true}).click();
   await page.getByLabel('Equipment', {exact: true}).selectOption('ak47');
   await page.getByRole('button', {name: /B the Monster, AK-47, equip/}).click();
@@ -115,7 +125,7 @@ test('unlocked emerald uses its native model, compiles its shader and persists e
   expect(errors).toEqual([]);
 });
 
-test('completed combat awards XP once and keeps the score reward visible through round review', async ({page}, info) => {
+test('completed combat records achievements once and shows them through round review', async ({page}, info) => {
   test.skip(info.project.name !== 'chromium');
   await duelEngine(page);
   const result = await page.evaluate(() => {
@@ -129,16 +139,17 @@ test('completed combat awards XP once and keeps the score reward visible through
     sim.command(0, {firePressed: true, fireHeld: true});
     for (let tick = 0; tick < 384 && sim.phase === 'fighting'; tick++) sim.step();
     const events = sim.drainEvents(); e.processEvents(events);
-    const once = e.progression.getSnapshot().profile.xp;
+    const once = e.progression.getSnapshot().profile.achievements.stats.duelWins;
     e.processEvents(events.filter((event: any) => event.kind === 'round'));
     e.report(); e.paused = true; sim.pause();
-    return {phase: sim.phase, outcome: sim.outcome, once, twice: e.progression.getSnapshot().profile.xp};
+    return {phase: sim.phase, outcome: sim.outcome, once, twice: e.progression.getSnapshot().profile.achievements.stats.duelWins};
   });
-  expect(result.outcome).toBe('won'); expect(result.once).toBeGreaterThan(16);
-  expect(result.twice).toBe(result.once);
-  await expect(page.locator('.progression-notification')).toContainText('XP');
-  await expect(page.locator('.progression-notification')).toContainText('Achievement earned: First blood, First victory');
-  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.progression.v1')!).xp)).toBe(result.once);
+  expect(result.outcome).toBe('won'); expect(result.once).toBe(1);
+  expect(result.twice).toBe(1);
+  await expect(page.locator('.progression-notification')).toContainText('Achievement earned');
+  await expect(page.locator('.progression-notification')).toContainText('First blood, First victory');
+  await expect(page.locator('.progression-notification')).not.toContainText(/XP|credits/);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.progression.v1')!))).not.toHaveProperty('xp');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.progression.v1')!).achievements.stats.duelWins)).toBe(1);
   await page.getByRole('button', {name: 'View achievements', exact: true}).click();
   await expect(page.getByRole('button', {name: /^Achievements/})).toHaveAttribute('aria-pressed', 'true');
@@ -185,36 +196,32 @@ test('changing bot arsenals bounds the world-model cache without retiring an act
   expect(errors).toEqual([]);
 });
 
-test('loadout previews skins, purchases spend once, and sidearm-only hides slot one',async({page},info)=>{
+test('loadout lists every finish, equips without buying, and sidearm-only hides slot one',async({page},info)=>{
   test.skip(![...desktopProjects,'mobile-chromium'].includes(info.project.name));
-  await page.addInitScript(()=>{if(!localStorage.getItem('spraylab.progression.v1'))localStorage.setItem('spraylab.progression.v1',JSON.stringify({version:2,xp:1000,balance:1000,owned:[],equipped:{}}));});
+  const deagle=JSON.parse(readFileSync('src/range/cosmetics-data.json','utf8')).cosmetics.filter((item:any)=>item.equipment==='deagle');
   await page.goto('/');
   await page.locator('.weapon-select').click();
   const loadout=page.getByRole('dialog',{name:'Loadout'});
   await loadout.getByRole('switch',{name:'Carry a primary weapon'}).uncheck();
   await loadout.getByLabel('Sidearm',{exact:true}).selectOption('deagle');
-  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(1);
-  await expect(loadout.locator('.loadout-finishes img')).toHaveCount(1);
-  await loadout.getByRole('button',{name:'Browse Desert Eagle unlocks'}).click();
+  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(deagle.length+1);
+  await expect(loadout.locator('.loadout-finishes img')).toHaveCount(deagle.length+1);
+  const last=deagle[deagle.length-1];
+  await loadout.getByRole('button',{name:`Equip Desert Eagle skin ${last.label}`,exact:true}).click();
+  await expect(loadout.locator('.loadout-finishes button.selected')).toContainText(last.label);
+  await loadout.getByRole('button',{name:/^Open the armory/}).click();
   const armory=page.getByRole('dialog',{name:'Armory'});
   await expect(armory.getByLabel('Equipment',{exact:true})).toHaveValue('deagle');
-  const buy=armory.getByRole('button',{name:/buy for 350 credits/});
-  await buy.click();
-  await expect(armory.locator('.progression-wallet strong')).toHaveText('650');
-  const equip=armory.getByRole('button',{name:/Desert Eagle, equip$/}).filter({hasText:'Equip'});
-  await equip.click();
+  await expect(armory.getByRole('button',{name:new RegExp(`^${escape(last.label)}, Desert Eagle, equipped$`)})).toBeDisabled();
   await page.getByRole('button',{name:'Close armory'}).click();
-  await page.locator('.weapon-select').click();
-  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(2);
-  await page.getByRole('button',{name:'Close panel'}).click();
   await expect(page.getByRole('button',{name:'Equip AK-47',exact:true})).toHaveCount(0);
   await expect(page.getByRole('button',{name:'Equip Desert Eagle',exact:true})).toBeVisible();
   await page.reload();
   await expect(page.getByRole('button',{name:'Equip AK-47',exact:true})).toHaveCount(0);
   await expect(page.getByRole('button',{name:'Equip Desert Eagle',exact:true}).locator('img')).toHaveAttribute('src',/cosmetics/);
-  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('spraylab.progression.v1')!).balance)).toBe(650);
+  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('spraylab.progression.v1')!).equipped.deagle)).toBe(last.id);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-  await page.screenshot({path:`test-results/${info.project.name}-sidearm-purchased.png`});
+  await page.screenshot({path:`test-results/${info.project.name}-sidearm-equipped.png`});
 });
 
 test('native gloves and bot agents animate without missing bones or shader errors',async({page},info)=>{
@@ -222,7 +229,6 @@ test('native gloves and bot agents animate without missing bones or shader error
   const errors:string[]=[];
   page.on('pageerror',e=>errors.push(e.message));
   page.on('console',m=>{if(m.type()==='error'||m.text().includes('PropertyBinding')) errors.push(m.text());});
-  await page.addInitScript(()=>localStorage.setItem('spraylab.progression.v1',JSON.stringify({version:2,xp:357885,balance:500000,owned:[],equipped:{}})));
   await duelEngine(page);
   const ids=await page.evaluate(()=>{
     const e=(window as any).arsenalEngine;
@@ -232,7 +238,7 @@ test('native gloves and bot agents animate without missing bones or shader error
   for(const item of ids) {
     await page.evaluate(item=>{
       const e=(window as any).arsenalEngine;
-      e.progression.purchase(item.id);e.progression.equip(item.equipment,item.id);
+      e.progression.equip(item.equipment,item.id);
     },item);
     await page.waitForFunction(item=>{
       const e=(window as any).arsenalEngine;
@@ -283,8 +289,6 @@ test('legacy UV assemblies and native procedural finish styles render with their
   test.skip(!desktopProjects.includes(info.project.name));test.setTimeout(180000);
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   page.on('console',m=>{if(m.type()==='error'||m.text().includes('PropertyBinding'))errors.push(m.text());});
-  const owned=JSON.parse(readFileSync('src/range/cosmetics-data.json','utf8')).cosmetics.map((item:any)=>item.id);
-  await page.addInitScript(owned=>localStorage.setItem('spraylab.progression.v1',JSON.stringify({version:2,xp:357885,balance:0,owned,equipped:{}})),owned);
   await duelEngine(page);
   const items=await page.evaluate(async()=>{
     const data=await fetch('/src/range/cosmetics-data.json').then(r=>r.json()),seen=new Set<string>();

@@ -40,6 +40,8 @@ export function resolutionPixelRatio(resolution: Resolution, screenHeight = type
 /** CS2's Classic viewmodel position, which the trainer has always used. */
 export const classicViewmodel: Viewmodel = { fov: 68, x: 2.5, y: 0, z: -1.5 };
 export const viewmodelLimits = { fov: [54, 68], x: [-2.5, 2.5], y: [-2, 2], z: [-2, 2] } as const;
+/** Frame limit caps, like CS2's fps_max. 0 draws at the display's refresh rate. */
+export const frameLimitRange = [30, 1000] as const;
 export type Settings = {
   weapon: Weapon; sidearm: Pistol; primaryEnabled: boolean; mode: Mode; sensitivity: number; dpi: number; invertY: boolean;
   moving: boolean; targetSpeed: 'rifle' | 'smg' | 'knife';
@@ -118,7 +120,8 @@ export function sanitizeSettings(raw: unknown): Settings {
     drillPace: s.drillPace === 'challenge' ? 'challenge' : 'practice',
     burst: [0, 5, 10, 15].includes(s.burst!) ? s.burst! : 0,
     quality: ['auto', 'low', 'high', 'performance'].includes(s.quality!) ? s.quality! : 'auto',
-    frameLimit: [0,30,60,120,144,240].includes(s.frameLimit!) ? s.frameLimit! : s.quality === 'performance' ? 60 : 0,
+    frameLimit: s.frameLimit === 0 || Number.isInteger(s.frameLimit) && s.frameLimit! >= frameLimitRange[0] && s.frameLimit! <= frameLimitRange[1]
+      ? s.frameLimit! : s.quality === 'performance' ? 60 : 0,
     showFps: s.showFps === true, animatedGuides: s.animatedGuides !== false, protectShortcuts: s.protectShortcuts !== false,
     // The former Display aspect setting picks the matching resolution; native moves to the new 1920x1440 default.
     resolution: resolutions.find(value => value === s.resolution) ?? legacyAspects[(s as { aspect?: string }).aspect ?? ''] ?? defaults.resolution,

@@ -44,7 +44,7 @@ export const latestChanges = {
     {id: 'connection', title: 'Responsive combat, radar & armor', items: [
       'Removed simulated network latency, delayed input and hit feedback, prediction replay and shot rewind. Old saved ping settings are ignored.',
       'A compact rotating radar shows visible contacts and expiring last-known positions, with zoom and visibility controls.',
-      'Independent Kevlar, helmet and armor-condition controls for both sides and individual opponents, with armor-aware XP weighting.',
+      'Independent Kevlar, helmet and armor-condition controls for both sides and individual opponents.',
     ]},
     {id: 'presentation', title: 'Animation, audio & performance', items: [
       'Lazy native weapon gestures with stable anchors, phase-matched reloads and event-timed native weapon foley.',
@@ -79,6 +79,17 @@ export const latestChanges = {
       'Settings > Keyboard / Mouse mirrors CS2\'s own page, extracted from the installed game: every bind section and option, with click-to-rebind for keys, mouse buttons and the wheel.',
       'Import autoexec.cfg and CS2\'s saved cs2_user_keys/convars files. Aliases, toggle scripts, +/- binds, exec chains, sensitivity, zoom sensitivity, duck/walk toggles and viewmodel FOV/offsets behave as in CS2; Export writes a matching .cfg.',
       'Range, AI Duel and the movement lessons follow your binds, including chorded mouse buttons. HUD hints and fullscreen shortcut protection use your keys; slot 3 cycles knife and Zeus as in CS2.',
+    ]},
+    {id: 'armory', title: 'Every skin unlocked', items: [
+      'XP, levels, credits, milestones and the header donation link are gone. Every weapon finish, knife, glove and bot agent is unlocked.',
+      'Loadout lists all finishes for the selected weapon; its Armory button opens knives, gloves, agents and achievements. Equipped items and earned achievements carry over.',
+      'Achievements keep the combat, technique and training badges. Collection and level badges were removed with the unlocks.',
+    ]},
+    {id: 'frame-limit', title: 'Frame limit', items: [
+      'Settings > Graphics > Frame limit measures your display and offers caps up to its refresh rate: Display refresh rate runs uncapped, so a 500 Hz monitor allows up to 500 FPS.',
+    ]},
+    {id: 'auto-reload', title: 'Auto reload', items: [
+      'An empty magazine reloads by itself once the last shot\'s cycle ends, in the range, AI Duel and Aim Botz, as in CS2.',
     ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;

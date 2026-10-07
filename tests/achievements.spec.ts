@@ -1,4 +1,10 @@
-import {expect, test} from '@playwright/test';
+import {expect, test, type Page} from '@playwright/test';
+
+/** The armory opens from the loadout drawer. */
+async function openArmory(page: Page) {
+  await page.locator('.weapon-select').click();
+  await page.getByRole('dialog', {name: 'Loadout'}).getByRole('button', {name: /^Open the armory/}).click();
+}
 
 test('achievement progress, filters and earned badges persist on desktop and mobile', async ({page}, info) => {
   test.skip(!['chromium', 'mobile-chromium', 'mobile-webkit', 'brave', 'opera-gx'].includes(info.project.name));
@@ -11,10 +17,10 @@ test('achievement progress, filters and earned badges persist on desktop and mob
   });
   await page.goto('/');
   await expect(page.locator('.progression-notification')).toHaveCount(0);
-  await page.getByRole('button', {name: /Open armory/}).click();
+  await openArmory(page);
   const dialog = page.getByRole('dialog', {name: 'Armory'});
   await dialog.getByRole('button', {name: /^Achievements/}).click();
-  await expect(dialog.locator('.achievement-overview')).toContainText('3 / 42 earned');
+  await expect(dialog.locator('.achievement-overview')).toContainText('3 / 33 earned');
   await expect(dialog.locator('[data-achievement="kills-100"]')).toContainText('99 / 100');
   await expect(dialog.locator('[data-achievement="heads-100"]')).toContainText('99 / 100');
   await dialog.getByLabel('Achievement status', {exact: true}).selectOption('earned');
@@ -48,8 +54,8 @@ test('achievement progress, filters and earned badges persist on desktop and mob
   await dialog.getByRole('button', {name: 'Close armory'}).click();
   await page.reload();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.progression.v1')!).achievements.unlocked['first-blood'])).toBe(0);
-  await page.getByRole('button', {name: /Open armory/}).click();
+  await openArmory(page);
   await dialog.getByRole('button', {name: /^Achievements/}).click();
-  await expect(dialog.locator('.achievement-overview')).toContainText('3 / 42 earned');
+  await expect(dialog.locator('.achievement-overview')).toContainText('3 / 33 earned');
   expect(errors).toEqual([]);
 });

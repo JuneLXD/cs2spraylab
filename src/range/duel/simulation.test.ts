@@ -125,6 +125,20 @@ describe('headless combat fixtures', () => {
     expect(sim.outcome).toBe('draw');
   });
 
+  it('reloads the player\'s empty magazine by itself once the last shot\'s cycle ends', () => {
+    const sim = new DuelSimulation(sanitizeDuelConfig({playerHealth: 500}), 42, testArena(), 'deagle');
+    const player = sim.actors[0];
+    sim.start(); player.yaw += Math.PI; player.weapon.ammo = 1;
+    sim.command(0, {firePressed: true}); sim.step();
+    expect(player.weapon.ammo).toBe(0); expect(player.weapon.reload.active).toBe(false);
+    const ready = player.weapon.nextShotAt;
+    while (sim.time + STEP < ready - 1e-9) sim.step();
+    expect(player.weapon.reload.active).toBe(false);
+    sim.step(); sim.step();
+    expect(player.weapon.reload.active).toBe(true); expect(player.weapon.reloadEmpty).toBe(true);
+    expect(sim.drainEvents().some(event => event.kind === 'action' && event.actorId === 0 && event.action === 'reload-start')).toBe(true);
+  });
+
   it('freezes combat and clears held inputs on resume', () => {
     const sim = new DuelSimulation(); sim.start(); sim.pause();
     sim.command(0, {fireHeld: true}); sim.advance(5);

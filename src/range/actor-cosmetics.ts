@@ -5,7 +5,7 @@ import data from './actor-cosmetics-data.json';
 
 export type ActorCosmeticDefinition = Readonly<{
   id: string; label: string; equipment: 'gloves' | 'agent'; category: 'gloves' | 'agent';
-  price: number; unlockLevel: number; imageUrl: string; assetKey: string; modelUrl: string;
+  imageUrl: string; assetKey: string; modelUrl: string;
   source: string; sourceSha256: string; assetSha256: string; rendering: string;
 }>;
 export type ActorCosmeticCatalog = readonly Readonly<{

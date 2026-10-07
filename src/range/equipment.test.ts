@@ -22,10 +22,13 @@ describe('Always-available sidearm and knife',()=>{
     sim.advance(.08);expect(shots).toHaveBeenCalledTimes(3);
     expect(shots.mock.calls[2][0].at-shots.mock.calls[1][0].at).toBeGreaterThanOrEqual(.17);
   });
-  it('preserves ammo when switching and uses the installed reload duration',()=>{
-    const sim=new Simulation(defaults);sim.equip(2);sim.active=true;sim.time=1;
+  it('reloads an empty pistol by itself, preserves ammo when switching and uses the installed reload duration',()=>{
+    const sim=new Simulation(defaults);const shots=vi.fn();sim.onShot=shots;sim.equip(2);sim.active=true;sim.time=1;
     for(let i=0;i<12;i++){sim.start();sim.advance(.2);}
-    expect(sim.pistolAmmo).toBe(0);sim.start();expect(sim.pistolReloadAt-sim.time).toBeCloseTo(equipmentData.weapons.usp.reload);
+    // The reload starts on its own once the last shot's 0.17 s cycle ends, without another press.
+    expect(sim.pistolAmmo).toBe(0);expect(sim.reloadState.active).toBe(true);expect(sim.start()).toBe(false);
+    expect(sim.reloadState.startedAt-shots.mock.calls[11][0].at).toBeCloseTo(sim.stats.cycle,1);
+    expect(sim.pistolReloadAt-sim.reloadState.startedAt).toBeCloseTo(equipmentData.weapons.usp.reload);
     for(let i=0;i<8;i++)sim.advance(.25);expect(sim.pistolAmmo).toBe(0);
     sim.advance(.25);expect(sim.pistolAmmo).toBe(12);
     sim.start();sim.equip(3);sim.equip(2);expect(sim.pistolAmmo).toBe(11);

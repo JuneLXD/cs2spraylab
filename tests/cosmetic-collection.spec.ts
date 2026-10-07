@@ -1,67 +1,66 @@
-import {expect, test} from '@playwright/test';
+import {expect, test, type Page} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 
 const finishes = JSON.parse(readFileSync('src/range/cosmetics-data.json', 'utf8')).cosmetics as {id: string; equipment: string; label: string}[];
-const ak = finishes.find(item => item.equipment === 'ak47')!;
-const deagle = finishes.filter(item => item.equipment === 'deagle').slice(0, 2);
+const ak = finishes.filter(item => item.equipment === 'ak47');
+const deagle = finishes.filter(item => item.equipment === 'deagle');
+
+/** The armory opens from the loadout drawer. */
+async function openArmory(page: Page) {
+  await page.locator('.weapon-select').click();
+  await page.getByRole('dialog', {name: 'Loadout'}).getByRole('button', {name: /^Open the armory/}).click();
+}
 
 test.beforeEach(async ({page}, info) => {
   test.skip(!['chromium', 'mobile-chromium', 'mobile-webkit', 'brave', 'opera-gx'].includes(info.project.name));
-  await page.addInitScript(({ak, deagle}) => {
+  // An older save with XP, credits and a small owned list: everything is available regardless.
+  await page.addInitScript(({ak}) => {
     if (sessionStorage.getItem('collection-seeded')) return;
     localStorage.setItem('spraylab.progression.v1', JSON.stringify({version: 2, xp: 357885, balance: 10000,
-      owned: [ak.id, ...deagle.map(item => item.id)], equipped: {ak47: ak.id}}));
+      owned: [ak.id], equipped: {ak47: ak.id}}));
     sessionStorage.setItem('collection-seeded', '1');
-  }, {ak, deagle});
+  }, {ak: ak[0]});
   await page.goto('/');
 });
 
-test('collection is owned-only and scoped to the active gun, with a separate purchase view', async ({page}, info) => {
+test('every finish is available, scoped to the active gun, and equips without buying', async ({page}, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.getByRole('button', {name: /Open armory/}).click();
+  await openArmory(page);
   const armory = page.getByRole('dialog', {name: 'Armory'}), items = armory.locator('.progression-choice');
   await expect(armory.getByRole('button', {name: 'Collection', exact: true})).toHaveAttribute('aria-pressed', 'true');
+  await expect(armory.getByRole('button', {name: /^(Unlocks|Milestones)$/})).toHaveCount(0);
   await expect(armory.getByLabel('Equipment', {exact: true})).toHaveValue('ak47');
-  await expect(items).toHaveCount(2);
-  await expect(armory.locator('option[value="all"]')).toHaveCount(0);
-  await expect(armory.locator('.progression-price, .is-locked')).toHaveCount(0);
-  await expect(armory.getByLabel('Ownership', {exact: true})).toHaveCount(0);
+  await expect(items).toHaveCount(ak.length + 1);
+  await expect(items.filter({hasText: ak[0].label})).toHaveClass(/is-equipped/);
+  await expect(armory).not.toContainText(/credits|Level \d|Locked/);
   await armory.getByLabel('Equipment', {exact: true}).selectOption('deagle');
-  await expect(items).toHaveCount(3);
-  await expect(items.locator('.progression-choice-name small')).toHaveText(['Desert Eagle', 'Desert Eagle', 'Desert Eagle']);
-  await armory.getByRole('button', {name: 'Unlocks', exact: true}).click();
-  await expect(items).toHaveCount(8);
-  await expect(items.filter({hasText: deagle[0].label})).toHaveCount(0);
-  const boughtName = await items.first().locator('.progression-choice-name').evaluate(node => node.firstChild!.textContent!);
-  await items.first().getByRole('button').click();
-  await expect(armory.getByRole('button', {name: 'Collection', exact: true})).toHaveAttribute('aria-pressed', 'true');
-  await expect(items).toHaveCount(4);
-  await expect(armory.locator('.progression-action-notice')).toContainText(`${boughtName} purchased`);
-  await items.filter({hasText: boughtName}).getByRole('button').click();
-  await expect(items.filter({hasText: boughtName})).toHaveClass(/is-equipped/);
+  await expect(items).toHaveCount(deagle.length + 1);
+  await expect(items.locator('.progression-choice-name small')).toHaveText(Array(deagle.length + 1).fill('Desert Eagle'));
+  const choice = deagle[deagle.length - 1];
+  await items.filter({hasText: choice.label}).getByRole('button').click();
+  await expect(items.filter({hasText: choice.label})).toHaveClass(/is-equipped/);
+  await expect(armory.locator('.progression-action-notice')).toContainText(`${choice.label} equipped.`);
   await armory.getByRole('button', {name: 'Close armory'}).click();
   await page.reload();
   await page.locator('.weapon-select').click();
   const loadout = page.getByRole('dialog', {name: 'Loadout'});
   await expect(loadout.locator('.loadout-finishes')).toHaveCount(1);
-  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(2);
+  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(ak.length + 1);
   await loadout.getByLabel('Sidearm', {exact: true}).selectOption('deagle');
   await loadout.getByLabel('Skin weapon', {exact: true}).selectOption('2');
-  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(4);
-  await expect(loadout.locator('.loadout-finishes button.selected')).toContainText(boughtName);
-  await page.screenshot({path: `test-results/${info.project.name}-owned-loadout.png`});
+  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(deagle.length + 1);
+  await expect(loadout.locator('.loadout-finishes button.selected')).toContainText(choice.label);
+  await page.screenshot({path: `test-results/${info.project.name}-loadout-finishes.png`});
   expect(errors).toEqual([]);
 });
 
-test('native glove previews and the focused collection fit small screens', async ({page}, info) => {
+test('native glove previews and the collection fit small screens', async ({page}, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.getByRole('button', {name: /Open armory/}).click();
+  await openArmory(page);
   const armory = page.getByRole('dialog', {name: 'Armory'});
   await armory.getByRole('tab', {name: 'Gloves', exact: true}).click();
-  await expect(armory.locator('.progression-choice')).toHaveCount(1);
-  await expect(armory.locator('.progression-preview img')).toHaveAttribute('src', '/textures/cosmetics/gloves-standard-preview.webp');
-  await armory.getByRole('button', {name: 'Unlocks', exact: true}).click();
-  await expect(armory.locator('.progression-choice')).toHaveCount(8);
+  await expect(armory.locator('.progression-choice')).toHaveCount(9);
+  await expect(armory.locator('.progression-preview img').first()).toHaveAttribute('src', '/textures/cosmetics/gloves-standard-preview.webp');
   await expect.poll(() => armory.locator('.progression-preview img').evaluateAll(nodes => nodes.every(node => {
     const image = node as HTMLImageElement; return image.complete && image.naturalWidth >= 128;
   }))).toBe(true);
@@ -75,7 +74,5 @@ test('native glove previews and the focused collection fit small screens', async
     expect(await armory.locator('.progression-views button, .progression-tabs button').evaluateAll(nodes => nodes.every(node => node.scrollWidth <= node.clientWidth))).toBe(true);
     await page.screenshot({path: `test-results/${info.project.name}-glove-inventory-${width}.png`});
   }
-  await armory.getByRole('button', {name: 'Collection', exact: true}).click();
-  await expect(armory.locator('.progression-choice')).toHaveCount(1);
   expect(errors).toEqual([]);
 });

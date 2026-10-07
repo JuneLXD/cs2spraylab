@@ -1,14 +1,13 @@
-import type {CosmeticDefinition, DrillMode, DuelXpResult, DuelXpSetup, ProgressionProfile} from './progression';
+import type {DrillMode, DuelAttemptResult, DuelAttemptSetup, ProgressionProfile} from './progression';
 
-export type AchievementCategory = 'combat' | 'technique' | 'training' | 'collection' | 'career';
+export type AchievementCategory = 'combat' | 'technique' | 'training';
 const modes: readonly DrillMode[] = ['guided', 'spray', 'transfer', 'peek', 'precision', 'burst'];
 const counters = ['duelWins', 'duelKills', 'duelHeadshots', 'winsLevel5', 'winsLevel10', 'fiveBotWins',
   'flawlessWins', 'controlledRounds', 'accurateRounds', 'excellentWins', 'currentWinStreak', 'bestWinStreak'] as const;
 type Counter = typeof counters[number];
 export type AchievementStats = Readonly<Record<Counter, number> & {drills: Readonly<Record<DrillMode, number>>}>;
 export type AchievementState = Readonly<{stats: AchievementStats; unlocked: Readonly<Record<string, number>>}>;
-type Metric = Counter | `drill:${DrillMode}` | 'allDrills' | 'completedDrills' | 'level' |
-  'collection' | 'knives' | 'gloves' | 'agents';
+type Metric = Counter | `drill:${DrillMode}` | 'allDrills' | 'completedDrills';
 export type AchievementDefinition = Readonly<{
   id: string; title: string; description: string; category: AchievementCategory; metric: Metric; target: number;
 }>;
@@ -44,15 +43,6 @@ export const ACHIEVEMENTS: readonly AchievementDefinition[] = Object.freeze([
   ]),
   badge('all-drills', 'Well rounded', 'Complete a qualifying attempt in each of the six drills.', 'training', 'allDrills', 6),
   badge('drills-1000', 'Practice pays', 'Complete 1,000 qualifying drill attempts.', 'training', 'completedDrills', 1000),
-  badge('collection-1', 'Your first finish', 'Own your first non-default cosmetic.', 'collection', 'collection'),
-  badge('collection-10', 'Curated collection', 'Own 10 non-default cosmetics.', 'collection', 'collection', 10),
-  badge('collection-100', 'Collector', 'Own 100 non-default cosmetics.', 'collection', 'collection', 100),
-  badge('knife-1', 'A sharper look', 'Own a non-default knife finish.', 'collection', 'knives'),
-  badge('gloves-1', 'Fits like a glove', 'Own a non-default glove finish.', 'collection', 'gloves'),
-  badge('agent-1', 'New opponent', 'Own a non-default bot agent.', 'collection', 'agents'),
-  badge('career-10', 'Dedicated', 'Reach player level 10.', 'career', 'level', 10),
-  badge('career-50', 'Seasoned', 'Reach player level 50.', 'career', 'level', 50),
-  badge('career-100', 'Centurion', 'Reach player level 100.', 'career', 'level', 100),
 ]);
 
 const MAX_COUNTER = 1_000_000_000_000;
@@ -76,7 +66,7 @@ export function sanitizeAchievements(raw: unknown): AchievementState {
 }
 
 /** Called only after the progression controller validates and consumes the result token. */
-export function recordDuelAchievements(state: AchievementState, setup: DuelXpSetup, result: DuelXpResult): AchievementState {
+export function recordDuelAchievements(state: AchievementState, setup: DuelAttemptSetup, result: DuelAttemptResult): AchievementState {
   const stats = {...state.stats}, review = result.review, won = result.outcome === 'won';
   const fairChallenge = setup.playerHealth <= 100 && setup.bots.every(bot => bot.health >= 100 && bot.armor && bot.accuracy >= 1 && bot.weapon !== 'knife');
   stats.duelKills = increment(stats.duelKills, review.kills);
@@ -106,27 +96,22 @@ export function recordDrillAchievements(state: AchievementState, mode: DrillMode
   return sanitizeAchievements({...state, stats: {...state.stats, drills: {...state.stats.drills, [mode]: increment(state.stats.drills[mode])}}});
 }
 
-export function achievementProgress(item: AchievementDefinition, profile: ProgressionProfile, catalog: readonly CosmeticDefinition[], level: number) {
+export function achievementProgress(item: AchievementDefinition, profile: ProgressionProfile) {
   const {stats, unlocked} = profile.achievements;
   let current: number;
   if (item.metric.startsWith('drill:')) current = stats.drills[item.metric.slice(6) as DrillMode];
   else if (item.metric === 'allDrills') current = modes.filter(mode => stats.drills[mode] > 0).length;
   else if (item.metric === 'completedDrills') current = profile.completedDrills;
-  else if (item.metric === 'level') current = level;
-  else if (['collection', 'knives', 'gloves', 'agents'].includes(item.metric)) {
-    const equipment = {knives: 'knife', gloves: 'gloves', agents: 'agent'}[item.metric as 'knives' | 'gloves' | 'agents'];
-    const owned = new Set(profile.owned);
-    current = catalog.filter(cosmetic => !cosmetic.isDefault && owned.has(cosmetic.id) && (item.metric === 'collection' || cosmetic.equipment === equipment)).length;
-  } else current = stats[item.metric as Counter];
+  else current = stats[item.metric as Counter];
   const earned = Object.prototype.hasOwnProperty.call(unlocked, item.id);
   return {current: earned ? item.target : Math.min(current, item.target), target: item.target, fraction: earned ? 1 : Math.min(1, current / item.target),
     earned, earnedAt: earned ? unlocked[item.id] : null};
 }
 
 /** Load-time recognition uses timestamp zero for facts already present in an older save. */
-export function unlockAchievements(profile: ProgressionProfile, catalog: readonly CosmeticDefinition[], level: number, at: number) {
+export function unlockAchievements(profile: ProgressionProfile, at: number) {
   const ids = ACHIEVEMENTS.filter(item => {
-    const progress = achievementProgress(item, profile, catalog, level);
+    const progress = achievementProgress(item, profile);
     return !progress.earned && progress.current >= item.target;
   }).map(item => item.id);
   if (!ids.length) return {state: profile.achievements, ids: Object.freeze(ids)};

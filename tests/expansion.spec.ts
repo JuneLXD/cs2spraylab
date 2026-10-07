@@ -174,7 +174,7 @@ test('six-shot bursts and configurable timed peeking retain live shot feedback',
   await expect(page.getByRole('status',{name:'Rep feedback',exact:true})).toContainText('Your shot was blocked by cover');
 });
 
-test('repeated mistakes produce a central tip and the skin donation label fits narrow screens',async({page},info)=>{
+test('repeated mistakes produce a central tip and the header fits narrow screens',async({page},info)=>{
   await page.addInitScript(()=>{Math.random=()=>.9;});
   await ready(page);
   await page.getByLabel('Training mode').selectOption('peek');
@@ -199,16 +199,16 @@ test('repeated mistakes produce a central tip and the skin donation label fits n
     })).toBeLessThan(1);
     const boxes=await page.evaluate(()=>{
       const rect=(selector:string)=>{const r=document.querySelector(selector)!.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};};
-      return{feedback:rect('.rep-feedback'),canvas:rect('canvas[data-range]'),donate:rect('.header-donation'),settings:rect('.settings-button'),brand:rect('.brand'),history:rect('.main-nav')};
+      return{feedback:rect('.rep-feedback'),canvas:rect('canvas[data-range]'),changelog:rect('.changelog-button'),settings:rect('.settings-button'),brand:rect('.brand'),history:rect('.main-nav')};
     });
     expect(boxes.feedback.y+boxes.feedback.height).toBeLessThanOrEqual(boxes.canvas.y+boxes.canvas.height-4);
     expect(boxes.feedback.y).toBeGreaterThan(boxes.canvas.y+boxes.canvas.height/2+15);
-    const header=[boxes.brand,boxes.history,boxes.donate,boxes.settings];
+    const header=[boxes.brand,boxes.history,boxes.changelog,boxes.settings];
     for(let i=0;i<header.length;i++) {
       const a=header[i];expect(a.x).toBeGreaterThanOrEqual(0);expect(a.x+a.width).toBeLessThanOrEqual(size.width);
       for(const b of header.slice(i+1)) expect(a.x+a.width<=b.x||b.x+b.width<=a.x||a.y+a.height<=b.y||b.y+b.height<=a.y).toBe(true);
     }
-    await expect(page.getByRole('link',{name:'Donate unwanted CS2 skins',exact:true})).toBeVisible();
+    await expect(page.getByRole('link',{name:/Donate/})).toHaveCount(0);
     await page.screenshot({path:`test-results/${info.project.name}-rep-tip-${size.width}.png`});
   }
 });

@@ -8,16 +8,14 @@ type NativeFinish = CosmeticDefinition & {map?: string | null; colors?: number[]
   paintMaskMap?: string; patternRotation?: number; patternOffset?: number[]; paintRoughness?: number; stockOnly?: boolean};
 const finishes = data.cosmetics as readonly NativeFinish[];
 export const DEFAULT_GLOVE_PREVIEW = '/textures/cosmetics/gloves-standard-preview.webp';
-const legacyLevels: Record<string,number> = {'142':10,'106':7,'137':12,'138':5,'139':6,'144':4,'939':3,'937':3,'936':6,'883':5,'568':20};
 
 export const cosmeticCatalog: CosmeticDefinition[] = [
   ...equipmentIds.map(equipment => ({id: equipment === 'knife' ? 'knife-standard' : `${equipment}-standard`, equipment,
     label: equipment === 'knife' ? 'Standard knife' : 'Stock', category: equipment === 'knife' ? 'knife' as const : 'weapon' as const,
-    price: 0, unlockLevel: 1, isDefault: true, imageUrl: `/models/${equipment}.png`, assetKey: equipment})),
-  ...finishes.map(item=>({...item,...(item.kitId && legacyLevels[item.kitId] &&
-    (item.equipment !== 'knife' || item.id === 'knife-butterfly-emerald') ? {legacyUnlockLevel:legacyLevels[item.kitId]} : {})})),
-  {id:'gloves-standard',equipment:'gloves',category:'gloves',label:'Standard gloves',price:0,unlockLevel:1,isDefault:true,imageUrl:DEFAULT_GLOVE_PREVIEW},
-  {id:'agent-standard',equipment:'agent',category:'agent',label:'SAS',price:0,unlockLevel:1,isDefault:true,imageUrl:'/models/target.png'},
+    isDefault: true, imageUrl: `/models/${equipment}.png`, assetKey: equipment})),
+  ...finishes,
+  {id:'gloves-standard',equipment:'gloves',category:'gloves',label:'Standard gloves',isDefault:true,imageUrl:DEFAULT_GLOVE_PREVIEW},
+  {id:'agent-standard',equipment:'agent',category:'agent',label:'SAS',isDefault:true,imageUrl:'/models/target.png'},
   ...actorCosmetics,
 ];
 /** Small runtime model-filter list derived from the catalog, never the build manifest. */

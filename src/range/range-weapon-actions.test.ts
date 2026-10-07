@@ -64,6 +64,15 @@ describe('native range discharge and ammo controller', () => {
     sim.step(SHELL_RELOAD_FINISH); expect(shots).toHaveLength(1); expect(sim.loadedAmmo).toBe(0); expect(sim.reserveAmmo).toBe(31);
     expect(sim.drainActionEvents().map(event => event.kind)).toEqual(['reload-start', 'reload-shell', 'reload-end']);
   });
+  it('reloads an empty magazine by itself once the last shot\'s cycle ends, unless the reserve is empty', () => {
+    const sim = make('ak47', false); sim.reloadState.ammo = 1;
+    expect(sim.start(true)).toBe(true); expect(sim.loadedAmmo).toBe(0); expect(sim.firing).toBe(false);
+    runTo(sim, sim.stats.cycle - STEP); expect(sim.reloadPhase).toBe('idle');
+    runTo(sim, sim.stats.cycle + STEP); expect(sim.reloadPhase).toBe('magazine'); expect(sim.reloadEmpty).toBe(true);
+    expect(sim.drainActionEvents().map(event => event.kind)).toEqual(['reload-start']);
+    const dry = make('ak47', false); dry.reloadState.ammo = 1; dry.reloadState.reserve = 0;
+    dry.start(true); runTo(dry, 1); expect(dry.reloadPhase).toBe('idle'); expect(dry.drainActionEvents()).toEqual([]);
+  });
   it('preserves the pump deadline when reload is interrupted by holstering', () => {
     const sim = make('nova', false), shots: Shot[] = []; sim.onShot = shot => shots.push(shot); sim.start();
     sim.reloadHeld = true; sim.reload(); sim.step(.1); sim.equip(2); sim.equip(1); sim.equipReadyAt = sim.time;

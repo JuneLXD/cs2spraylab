@@ -351,8 +351,12 @@ export class DuelSimulation {
           this.useEnvironment(actor.id);
       }
       for (const state of actor.inventory.values()) if (state !== actor.weapon) state.advancePassive(this.time,STEP, (actor.duckAmount ?? 0) >= .95, !actor.grounded);
+      // CS2 reloads the player's empty magazine by itself once the last shot's cycle ends. Bots reload through their brain.
+      const autoReload = actor.id === 0 && actor.weapon.ammo === 0 && !actor.weapon.reload.active &&
+        this.time + 1e-9 >= Math.max(actor.weapon.nextShotAt, actor.weapon.actions.readyAt, actor.equipReadyAt);
       const fired = actor.weapon.advance(this.time, STEP, this.time < actor.equipReadyAt
-        ? {...command, fireHeld: false, firePressed: false, secondaryHeld: false, secondaryPressed: false} : command, actor);
+        ? {...command, fireHeld: false, firePressed: false, secondaryHeld: false, secondaryPressed: false}
+        : autoReload ? {...command, reloadPressed: true} : command, actor);
       if (this.botz && actor.id === 0) this.refillAmmo(actor);
       if(zoomBefore!==actor.weapon.actions.zoom)this.emit({kind:'action',tick:this.tick,actorId:actor.id,equipment:actor.weapon.id,
         action:actor.weapon.actions.zoom?'scope-in':'scope-out'});

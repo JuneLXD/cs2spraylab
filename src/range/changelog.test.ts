@@ -28,7 +28,11 @@ describe('append-only changelog', () => {
   it('covers the accumulated completed features', () => {
     expect(latestChanges.sections.map(section => section.id)).toEqual([
       'combat', 'weapons', 'movement', 'arenas', 'bot-behavior', 'connection', 'presentation', 'performance', 'tracers', 'fullscreen', 'display', 'crosshair', 'aim-botz', 'controls',
+      'armory', 'frame-limit', 'auto-reload',
     ]);
+    expect(latestChanges.sections.find(section => section.id === 'armory')!.items.join(' ')).toContain('Every weapon finish, knife, glove and bot agent is unlocked');
+    expect(latestChanges.sections.find(section => section.id === 'auto-reload')!.items.join(' ')).toContain('reloads by itself');
+    expect(latestChanges.sections.find(section => section.id === 'frame-limit')!.items.join(' ')).toContain('500 FPS');
     expect(latestChanges.sections.find(section => section.id === 'display')!.items.join(' ')).toContain('1920 x 1440');
     expect(latestChanges.sections.find(section => section.id === 'crosshair')!.items.join(' ')).toContain('cl_crosshair_length');
     expect(latestChanges.sections.find(section => section.id === 'controls')!.items.join(' ')).toContain('autoexec.cfg');

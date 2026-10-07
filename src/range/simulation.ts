@@ -364,6 +364,10 @@ export class Simulation {
     }
     if (this.firing && this.actions.isRevolver && !this.actions.alternateFire) this.nextShot = Math.max(this.nextShot, this.actions.chargeTrigger(this.time, true));
     if (this.firing && !this.reloadState.active && this.time + 1e-9 >= this.nextShot) this.fire();
+    // CS2 reloads an empty magazine by itself once the last shot's cycle ends. shotReady alone can
+    // lag behind a shot queued through a long shell reload, so time the cycle from the shot itself.
+    if (!this.firing && this.loadedAmmo === 0 && this.equipped !== 'knife' && !this.reloadState.active && this.time + 1e-9 >=
+      Math.max(this.shotReady.get(this.equipped) ?? 0, this.lastShotAt + this.stats.cycle, this.equipReadyAt, this.actions.readyAt)) this.reload();
   }
   fire() {
     const weapon = this.stats;

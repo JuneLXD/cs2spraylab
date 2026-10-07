@@ -1,19 +1,17 @@
 import {useState} from 'react';
-import {Award, Check, Crosshair, GraduationCap, Paintbrush, Swords, Trophy} from 'lucide-react';
+import {Check, Crosshair, GraduationCap, Swords, Trophy} from 'lucide-react';
 import {ACHIEVEMENTS, achievementProgress, type AchievementCategory} from './achievements';
-import {levelProgress, type CosmeticDefinition, type ProgressionProfile} from './progression';
+import type {ProgressionProfile} from './progression';
 
 const categories: readonly {id: AchievementCategory; label: string; icon: typeof Trophy}[] = [
   {id: 'combat', label: 'Combat', icon: Swords}, {id: 'technique', label: 'Technique', icon: Crosshair},
-  {id: 'training', label: 'Training', icon: GraduationCap}, {id: 'collection', label: 'Collection', icon: Paintbrush},
-  {id: 'career', label: 'Career', icon: Award},
+  {id: 'training', label: 'Training', icon: GraduationCap},
 ];
 const number = (value: number) => value.toLocaleString('en-US');
 
-export function AchievementPanel({profile, catalog}: {profile: ProgressionProfile; catalog: readonly CosmeticDefinition[]}) {
+export function AchievementPanel({profile}: {profile: ProgressionProfile}) {
   const [category, setCategory] = useState('all'), [status, setStatus] = useState('all'), [sort, setSort] = useState('default');
-  const level = levelProgress(profile.xp).level;
-  const achievements = ACHIEVEMENTS.map(item => ({...item, progress: achievementProgress(item, profile, catalog, level)}));
+  const achievements = ACHIEVEMENTS.map(item => ({...item, progress: achievementProgress(item, profile)}));
   const earned = achievements.filter(item => item.progress.earned).length;
   const items = achievements.filter(item => (category === 'all' || item.category === category) &&
     (status === 'all' || status === 'earned' && item.progress.earned || status === 'remaining' && !item.progress.earned))

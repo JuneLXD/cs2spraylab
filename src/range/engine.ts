@@ -109,9 +109,9 @@ export class RangeEngine {
   private scope: ScopeOverlay;
   private cosmeticKey = '';
   private cosmeticRevision = 0;
-  private xpAttempt: string | null = null;
-  private xpRevision = 0;
-  private xpTargets = new Set<number>();
+  private attemptId: string | null = null;
+  private attemptRevision = 0;
+  private attemptTargets = new Set<number>();
   loading = new Map<Equipment, Promise<THREE.Object3D>>();
   revision = 0; kick = 0; hitTime = 0;
   markerGeometry = new THREE.SphereGeometry(.018, 6, 4);
@@ -395,19 +395,19 @@ export class RangeEngine {
     await this.setWeapon(this.sim.equipped);
   }
   settleProgression(result: Result) {
-    if (!this.xpAttempt) return;
+    if (!this.attemptId) return;
     const drill = result.drill;
-    this.progression?.completeDrill(this.xpAttempt, {completion: 'completed',
+    this.progression?.completeDrill(this.attemptId, {completion: 'completed',
       objectiveCompleted: drill ? drill.passed : result.shots >= 6 && result.hits / result.shots >= .5,
       score: drill?.movementScore ?? result.hits / Math.max(1, result.shots) * 100,
       shots: result.shots, hits: result.hits, activeSeconds: result.seconds,
-      movementReps: drill?.counterStrafed ? 1 : 0, targetsHit: this.xpTargets.size,
-    }, String(this.xpRevision));
-    this.xpAttempt = null; this.xpTargets.clear();
+      movementReps: drill?.counterStrafed ? 1 : 0, targetsHit: this.attemptTargets.size,
+    }, String(this.attemptRevision));
+    this.attemptId = null; this.attemptTargets.clear();
   }
   private cancelProgression() {
-    if (this.xpAttempt) this.progression?.cancelAttempt(this.xpAttempt);
-    this.xpAttempt = null; this.xpRevision++; this.xpTargets.clear();
+    if (this.attemptId) this.progression?.cancelAttempt(this.attemptId);
+    this.attemptId = null; this.attemptRevision++; this.attemptTargets.clear();
   }
   reset() {this.cancelProgression(); this.viewAnimations.get(this.sim.equipped)?.cancel(); this.sim.reset(); this.clearImpacts();}
   trimModelCache() {
@@ -501,9 +501,9 @@ export class RangeEngine {
     this.acoustics.setBoxes(this.coverSolids);return this.coverSolids;
   }
   shot(shot: Shot) {
-    if (!shot.melee && !this.xpAttempt) {
-      this.xpTargets.clear();
-      this.xpAttempt = this.progression?.beginDrill(this.sim.settings.mode as DrillMode, String(this.xpRevision)) ?? null;
+    if (!shot.melee && !this.attemptId) {
+      this.attemptTargets.clear();
+      this.attemptId = this.progression?.beginDrill(this.sim.settings.mode as DrillMode, String(this.attemptRevision)) ?? null;
     }
     const animationAmmo = this.sim.loadedAmmo;
     this.viewAnimations.get(this.sim.equipped)?.playFire(this.sim.equipped, {side:animationAmmo % 2 ? 'right' : 'left',lastShot:animationAmmo===0,
@@ -594,7 +594,7 @@ export class RangeEngine {
     this.hitCaption.textContent = head ? 'HEADSHOT' : hit ? 'BODY HIT' : physicalHit ? 'WRONG TARGET' : 'MISS';
     this.hitCaption.style.color = this.hitmarker.style.color;
     if (hit) {
-      this.xpTargets.add(expectedIndex);
+      this.attemptTargets.add(expectedIndex);
       this.audio.playHit(head, false, false, this.sim.settings.volume);
       this.sim.hits++;
       if (head) this.sim.heads++;

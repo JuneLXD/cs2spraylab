@@ -9,46 +9,37 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {disposeResources} from './duel/render-resources';
 import {equipmentIds} from './equipment';
-import {prepareCosmeticCatalog,sanitizeProgression,xpForLevel,createProgressionController} from './progression';
+import {prepareCosmeticCatalog,sanitizeProgression,createProgressionController} from './progression';
 
 describe('native finish catalog and migration',()=>{
   const catalog=prepareCosmeticCatalog(cosmeticCatalog);
-  it.each(equipmentIds)('%s has distinct purchasable native finishes with previews',id=>{
+  it.each(equipmentIds)('%s has distinct native finishes with previews',id=>{
     const items=catalog.filter(item=>item.equipment===id&&!item.isDefault);
     if (id === 'zeus') {
       expect(weaponAudit.weapons.zeus.nativeAvailable).toBe(7);
       expect(items).toHaveLength(weaponAudit.weapons.zeus.nativeAvailable);
     } else expect(items.length).toBeGreaterThanOrEqual(10);
     expect(new Set(items.map(item=>item.id)).size).toBe(items.length);
-    expect(items.every(item=>item.imageUrl&&item.assetKey&&item.price!>0)).toBe(true);
+    expect(items.every(item=>item.imageUrl&&item.assetKey)).toBe(true);
   });
-  it('provides native gloves and bot agents as paid categories',()=>{
+  it('provides native gloves and bot agents',()=>{
     expect(catalog.filter(item=>item.category==='gloves'&&!item.isDefault)).toHaveLength(8);
     expect(catalog.filter(item=>item.category==='agent'&&!item.isDefault)).toHaveLength(6);
-    expect(catalog.filter(item=>!item.isDefault).reduce((total,item)=>total+item.price!,0)).toBeGreaterThan(2_000_000);
-  });
-  it('does not grant hundreds of newly added finishes when migrating an old level 100 save',()=>{
-    const profile=sanitizeProgression({version:1,xp:xpForLevel(100)},catalog);
-    const paid=catalog.filter(item=>!item.isDefault&&profile.owned.includes(item.id));
-    expect(paid.length).toBe(11);
-    expect(paid.every(item=>item.legacyUnlockLevel!==undefined)).toBe(true);
-    expect(profile.balance).toBe(0);
   });
   it('keeps an equipped old finish and uses its native preview in loadout',()=>{
     const id='ak47-cu_overpass_monster_ak47';
     const profile=sanitizeProgression({version:1,xp:0,equipped:{ak47:id}},catalog);
-    expect(profile.owned).toContain(id);
+    expect(profile.equipped.ak47).toBe(id);
     expect(cosmeticPreview(profile,'ak47')).toContain('/textures/cosmetics/');
     expect(cosmeticAsset(profile,'ak47')).toBe('ak47');
   });
-  it('requires a purchase rather than automatically owning a level-eligible new item',()=>{
-    const controller=createProgressionController({catalog,storage:{getItem:()=>JSON.stringify({version:2,xp:xpForLevel(100),balance:1000,owned:[]}),setItem:()=>{}}});
-    const item=catalog.find(item=>item.equipment==='ak47'&&!item.isDefault)!;
-    expect(controller.equip('ak47',item.id)).toBe(false);
-    expect(controller.purchase(item.id)).toMatchObject({success:true,spent:350});
-    expect(controller.getSnapshot().profile.balance).toBe(650);
-    expect(controller.purchase(item.id)).toMatchObject({success:true,spent:0});
-    expect(controller.equip('ak47',item.id)).toBe(true);
+  it('equips any finish straight away, without XP, credits or a purchase',()=>{
+    const controller=createProgressionController({catalog,storage:{getItem:()=>JSON.stringify({version:2,xp:0,balance:0,owned:[]}),setItem:()=>{}}});
+    const finishes=catalog.filter(item=>!item.isDefault);
+    expect(finishes.length).toBeGreaterThan(900);
+    for(const item of [finishes[0],finishes.find(item=>item.category==='knife')!,finishes.find(item=>item.category==='gloves')!,finishes.find(item=>item.category==='agent')!])
+      expect(controller.equip(item.equipment,item.id)).toBe(true);
+    expect(controller.getSnapshot().profile).not.toHaveProperty('balance');
   });
 });
 
@@ -109,7 +100,7 @@ describe('native knife types remain cosmetics for slot three',()=>{
   });
   it('selects a type through the existing knife equipment key',()=>{
     const choice=knives.find(item=>item.assetKey==='knife-shadow-daggers')!;
-    const profile=sanitizeProgression({version:2,owned:[choice.id],equipped:{knife:choice.id}},cosmeticCatalog);
+    const profile=sanitizeProgression({version:2,equipped:{knife:choice.id}},cosmeticCatalog);
     expect(cosmeticAsset(profile,'knife')).toBe('knife-shadow-daggers');
     expect(cosmeticPreview(profile,'knife')).toBe(choice.imageUrl);
     expect(cosmeticLabel(profile,'knife')).toBe(choice.label);
@@ -125,7 +116,7 @@ describe('native UV knife painting and resource ownership',()=>{
     const sleeve=new THREE.Mesh(new THREE.BoxGeometry(),base);sleeve.name='firstperson_sleeves';root.add(sleeve);
     const pattern=new THREE.Texture(),mask=new THREE.Texture(),item=finish();
     const load=vi.spyOn(THREE.TextureLoader.prototype,'loadAsync').mockResolvedValueOnce(pattern).mockResolvedValueOnce(mask);
-    const profile=sanitizeProgression({version:2,owned:[item.id],equipped:{knife:item.id}},cosmeticCatalog);
+    const profile=sanitizeProgression({version:2,equipped:{knife:item.id}},cosmeticCatalog);
     await applyCosmetic(root,profile,'knife');
     expect(load).toHaveBeenCalledTimes(2);expect(sleeve.material).toBe(base);
     const material=mesh.material as THREE.MeshStandardMaterial;
@@ -143,7 +134,7 @@ describe('native UV knife painting and resource ownership',()=>{
   it('cleans up the selected pattern when mask loading fails',async()=>{
     const pattern=new THREE.Texture(),dispose=vi.spyOn(pattern,'dispose'),item=finish();
     vi.spyOn(THREE.TextureLoader.prototype,'loadAsync').mockResolvedValueOnce(pattern).mockRejectedValueOnce(new Error('mask missing'));
-    const profile=sanitizeProgression({version:2,owned:[item.id],equipped:{knife:item.id}},cosmeticCatalog);
+    const profile=sanitizeProgression({version:2,equipped:{knife:item.id}},cosmeticCatalog);
     await expect(applyCosmetic(new THREE.Group(),profile,'knife')).rejects.toThrow('mask missing');
     expect(dispose).toHaveBeenCalledOnce();
   });
@@ -151,13 +142,13 @@ describe('native UV knife painting and resource ownership',()=>{
     const pattern=new THREE.Texture(),mask=new THREE.Texture(),item=finish();
     const disposePattern=vi.spyOn(pattern,'dispose'),disposeMask=vi.spyOn(mask,'dispose');
     vi.spyOn(THREE.TextureLoader.prototype,'loadAsync').mockResolvedValueOnce(pattern).mockResolvedValueOnce(mask);
-    const profile=sanitizeProgression({version:2,owned:[item.id],equipped:{knife:item.id}},cosmeticCatalog);
+    const profile=sanitizeProgression({version:2,equipped:{knife:item.id}},cosmeticCatalog);
     await applyCosmetic(new THREE.Group(),profile,'knife');
     expect(disposePattern).toHaveBeenCalledOnce();expect(disposeMask).toHaveBeenCalledOnce();
   });
   it('gives different shader branches distinct program cache keys',()=>{
     const material=new THREE.MeshStandardMaterial(),mask=new THREE.Texture();
-    const common={id:'test',equipment:'knife',category:'knife' as const,label:'test',unlockLevel:1};
+    const common={id:'test',equipment:'knife',category:'knife' as const,label:'test'};
     const palette=nativeKnifeMaterial(material,{...common,style:5,colors:[[1,0,0]]},new THREE.Texture(),mask);
     const albedo=nativeKnifeMaterial(material,{...common,style:7},new THREE.Texture(),mask);
     const solid=nativeKnifeMaterial(material,{...common,style:1,colors:[[1,0,0]]},undefined,mask);
