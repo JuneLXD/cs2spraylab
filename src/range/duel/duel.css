@@ -82,3 +82,4 @@
 .duel-tools>.equipment-slots,.duel-tools>.duel-exit,.duel-tools>.duel-shortcut-warning{position:static}
 @media(max-height:550px) and (orientation:landscape){.duel-tools{left:20px;display:grid;grid-template-columns:1fr auto;align-items:start}.duel-tools>.equipment-slots{grid-column:2;grid-row:1}.duel-tools>.duel-exit{grid-column:1;grid-row:1;justify-self:start}.duel-tools>.duel-shortcut-warning{grid-column:1;grid-row:2;justify-self:start}}
 @media(max-width:700px) and (orientation:portrait){.range-app:has(.settings-hint) .duel-view{min-height:0}.range-app:has(.settings-hint) .duel-controls{height:min(300px,40%)}}
+.botz-note{font-size:11px;line-height:1.5;color:#a8b9ae;margin:8px 0 0}

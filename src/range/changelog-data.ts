@@ -63,6 +63,11 @@ export const latestChanges = {
     {id: 'fullscreen', title: 'Fullscreen', items: [
       'The Fullscreen button works in AI Duel, and fullscreen shows only the game view. The Duel setup and drill coach panels return when fullscreen ends.',
     ]},
+    {id: 'aim-botz', title: 'Aim Botz', items: [
+      'A new Aim Botz drill after the aim_botz workshop map: up to 16 bots that never shoot back stand at close, mixed or long range, some on ledges, and respawn at a new spot after each kill.',
+      'Bots can stand still, strafe A-D or crouch. Headshot-only damage, respawn delay, timed or endless sessions, Kevlar/helmet and sv_infinite_ammo-style reserves are adjustable.',
+      'The HUD tracks kills, accuracy and headshot rate; the Stats tab adds kills per minute, time per kill and headshot streaks, and keeps your recent sessions in this browser.',
+    ]},
     {id: 'controls', title: 'Keybinds & CS2 configs', items: [
       'Settings > Keyboard / Mouse mirrors CS2\'s own page, extracted from the installed game: every bind section and option, with click-to-rebind for keys, mouse buttons and the wheel.',
       'Import autoexec.cfg and CS2\'s saved cs2_user_keys/convars files. Aliases, toggle scripts, +/- binds, exec chains, sensitivity, zoom sensitivity, duck/walk toggles and viewmodel FOV/offsets behave as in CS2; Export writes a matching .cfg.',

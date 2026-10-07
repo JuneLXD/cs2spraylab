@@ -29,6 +29,7 @@ import {TeamTacticsPlanner,BoostPlanner,type TacticalPeer,type TeamContact,type 
 import {TerrainTactics} from './terrain-tactics';
 import {actorShadows} from './shadow-scene';
 import {AcousticScene} from '../spatial-audio';
+import {BOTZ_PLAYER_SPAWN, BotzSpawner, BotzStrafe, emptyBotzStats, sanitizeBotzConfig, type BotzConfig, type BotzStats} from './botz';
 
 type CombatActor = ActorKinematics & TaggingState & {
   id: number;
@@ -101,9 +102,16 @@ export class DuelSimulation {
   private boostFeasibility=new Map<string,boolean>();
   readonly coach = new DuelCoach();
   playerAspect = 16 / 9;
+  /** Aim Botz: passive bots that respawn, with no rounds unless the session is timed. */
+  readonly botz?: BotzConfig;
+  readonly botzStats: BotzStats = emptyBotzStats();
+  private botzSpawner?: BotzSpawner;
+  private botzLives = new Map<number, {crouch: boolean; strafe?: BotzStrafe}>();
+  private respawnAt = new Map<number, number>();
 
-  constructor(config: DuelConfig = sanitizeDuelConfig({}), private seed = 1, arena: Arena = testArena(), private playerWeapon: Weapon = 'ak47', private sidearm: Pistol = 'usp', private hasPrimary = true) {
+  constructor(config: DuelConfig = sanitizeDuelConfig({}), private seed = 1, arena: Arena = testArena(), private playerWeapon: Weapon = 'ak47', private sidearm: Pistol = 'usp', private hasPrimary = true, botz?: BotzConfig) {
     this.config = sanitizeDuelConfig(config);
+    this.botz = botz && sanitizeBotzConfig(botz);
     this.terrainTactics=new TerrainTactics(seed);
     this.authoredArena = arena;
     this.environment = createEnvironmentState(arena);
@@ -112,6 +120,12 @@ export class DuelSimulation {
     this.actors = [makeActor(0, 'player', 0, 8, hasPrimary ? playerWeapon : sidearm, this.config.playerHealth, this.config.playerArmor, seed)];
     this.actors[0].armor = this.config.playerArmor ? this.config.playerArmorPoints : 0;
     this.actors[0].helmet = this.config.playerArmor && this.config.playerHelmet;
+    if (this.botz) {
+      this.actors[0].position = {...BOTZ_PLAYER_SPAWN};
+      this.botzSpawner = new BotzSpawner(this.botz, this.arena, seed);
+      for (let id = 1; id <= this.botz.botCount; id++) this.actors.push(this.spawnBot(id, 1));
+      return;
+    }
     this.actors[0].position.z *= this.config.arenaScale;
     const spawns = this.arena.solids.length ? coveredSpawns(this.arena, seed, this.config.botCount) : undefined;
     if (spawns) this.actors[0].position = {...spawns.player};
@@ -220,10 +234,11 @@ export class DuelSimulation {
     if (this.phase !== 'fighting' || this.paused) return;
     this.tick++;
     this.time = this.tick * STEP;
+    if (this.botz) this.respawnBots();
     this.applyEnvironment(advanceEnvironment(this.authoredArena,this.environment,STEP,this.actors.filter(actor=>actor.alive).map(actorBody)),0);
     const actorView = this.snapshot();
     this.previous = actorView;
-    if (this.tick % 4 === 1) {
+    if (!this.botz && this.tick % 4 === 1) {
       const shadows=actorShadows(actorView,this.arena);
       this.coach.observe(this.time, actorView[0], actorView.slice(1).flatMap(opponent => {
         const visible = observeBot(this.time, actorView[0], [opponent], this.arena,
@@ -277,6 +292,7 @@ export class DuelSimulation {
     }
     for (const actor of this.actors.slice(1)) {
       if (!actor.alive || this.controlledBots.has(actor.id)) continue;
+      if (this.botz) {this.commandBotz(actor); continue;}
       const brain = this.brains.get(actor.id);
       const patch = brain instanceof TacticalBrain
         ? brain.command(actorView[actor.id], this.time, actor.weapon.recovery.recoil, actorView.slice(1))
@@ -337,6 +353,7 @@ export class DuelSimulation {
       for (const state of actor.inventory.values()) if (state !== actor.weapon) state.advancePassive(this.time,STEP, (actor.duckAmount ?? 0) >= .95, !actor.grounded);
       const fired = actor.weapon.advance(this.time, STEP, this.time < actor.equipReadyAt
         ? {...command, fireHeld: false, firePressed: false, secondaryHeld: false, secondaryPressed: false} : command, actor);
+      if (this.botz && actor.id === 0) this.refillAmmo(actor);
       if(zoomBefore!==actor.weapon.actions.zoom)this.emit({kind:'action',tick:this.tick,actorId:actor.id,equipment:actor.weapon.id,
         action:actor.weapon.actions.zoom?'scope-in':'scope-out'});
       for(const action of actor.weapon.drainActionEvents()) {
@@ -348,7 +365,8 @@ export class DuelSimulation {
       command.usePressed=command.pickupPressed=command.dropPressed=command.jumpPressed=false;
       command.jumpPressOffset=0;
       if (!fired) continue;
-      if (actor.id === 0) this.coach.shot(this.snapshot()[0]);
+      if (actor.id === 0 && this.botz) {if (fired.kind !== 'melee') this.botzStats.shots++;}
+      else if (actor.id === 0) this.coach.shot(this.snapshot()[0]);
       const shotId = this.shotId++;
       shots.push({actor, fired, shotId});
       this.lastShotAt.set(actor.id,this.time);
@@ -368,8 +386,11 @@ export class DuelSimulation {
         if(hit.event.group==='head'){prior.event.group='head';prior.event.point=hit.event.point;}
       } else combined.push(hit);
     }
+    const counted = new Map<number, boolean>();
     for (const {victim, weapon, direction, event} of combined) {
       if (!victim.alive) continue;
+      // mp_damage_headshot_only: body hits still register, without damage.
+      if (this.botz?.headshotOnly && victim.side === 'enemy' && event.group !== 'head') event.healthDamage = event.armorDamage = 0;
       const rawDamage = event.healthDamage + event.armorDamage * 2, armorBeforeHit = victim.armor;
       event.healthDamage = Math.min(victim.health, event.healthDamage);
       event.armorDamage = Math.min(victim.armor, event.armorDamage);
@@ -392,6 +413,12 @@ export class DuelSimulation {
       }
       event.lethal = lethal;
       if(lethal && event.shooter===0) this.radar.confirmDeath(victim.id,this.time);
+      if (this.botz) {
+        if (lethal && victim.side === 'enemy') this.respawnAt.set(victim.id, this.time + this.botz.respawnSeconds);
+        if (event.shooter === 0 && victim.side === 'enemy') this.countBotzHit(event, weapon, counted);
+        this.emit(event);
+        continue;
+      }
       if (lethal && victim.side === 'enemy' && victim.weapon.id !== 'knife') this.drops.push({
         id: victim.id, equipment: victim.weapon.id, ammo: victim.weapon.ammo,
         reserve:victim.weapon.reserve,
@@ -400,7 +427,12 @@ export class DuelSimulation {
       this.coach.hit(event, this.time, this.actors[event.shooter].weapon.id === 'knife');
       this.emit(event);
     }
-    if (!this.actors[0].alive || this.actors.slice(1).every(actor => !actor.alive) || this.time >= this.config.roundSeconds) {
+    if (this.botz) {
+      if (this.botz.sessionSeconds && this.time + 1e-9 >= this.botz.sessionSeconds) {
+        this.outcome = 'won'; this.phase = 'result';
+        this.emit({kind: 'round', tick: this.tick, outcome: this.outcome, seconds: this.time});
+      }
+    } else if (!this.actors[0].alive || this.actors.slice(1).every(actor => !actor.alive) || this.time >= this.config.roundSeconds) {
       const playerAlive = this.actors[0].alive, botsAlive = this.actors.slice(1).some(actor => actor.alive);
       this.outcome = playerAlive && !botsAlive ? 'won' : !playerAlive && botsAlive ? 'lost' : 'draw';
       this.phase = 'result';
@@ -410,6 +442,71 @@ export class DuelSimulation {
 
   private commandBot(actor: CombatActor, patch: Partial<ActorCommand>) {
     actor.command = {...actor.command, ...patch};
+  }
+
+  /** A fresh Aim Botz life: full health and armor at a new spot, facing you. */
+  private spawnBot(id: number, generation: number, previous?: Vec) {
+    const botz = this.botz!, player = this.actors[0].position;
+    const occupied = this.actors.filter(actor => actor.side === 'enemy' && actor.alive && actor.id !== id).map(actor => actor.position);
+    const spawn = this.botzSpawner!.next(occupied, previous, player);
+    const actor = makeActor(id, 'enemy', spawn.x, spawn.z, botz.weapon, botz.health, botz.armor, this.seed);
+    actor.generation = generation;
+    actor.feet = spawn.feet; actor.position.y = spawn.feet + actor.eyeHeight; actor.grounded = true;
+    actor.helmet = botz.armor && botz.helmet;
+    actor.yaw = Math.atan2(player.x - spawn.x, player.z - spawn.z) + Math.PI;
+    const random = randomStream(this.seed, `botz:life:${id}:${generation}`);
+    this.botzLives.set(id, {crouch: botz.crouch === 'always' || botz.crouch === 'some' && random() < .35,
+      strafe: botz.movement === 'strafe' && !spawn.elevated ? new BotzStrafe(random) : undefined});
+    return actor;
+  }
+
+  private respawnBots() {
+    for (const [id, at] of this.respawnAt) {
+      if (this.time + 1e-9 < at) continue;
+      this.respawnAt.delete(id);
+      const old = this.actors[id];
+      this.actors[id] = this.spawnBot(id, old.generation + 1, old.position);
+      this.combatActions.delete(id);
+    }
+  }
+
+  /** Bots never fire. They turn to face you and, if set, strafe or crouch. */
+  private commandBotz(actor: CombatActor) {
+    const life = this.botzLives.get(actor.id), player = this.actors[0].position;
+    const facing = Math.atan2(player.x - actor.position.x, player.z - actor.position.z) + Math.PI;
+    const turn = Math.atan2(Math.sin(facing - actor.yaw), Math.cos(facing - actor.yaw)), limit = Math.PI * STEP;
+    this.commandBot(actor, {forward: 0, side: life?.strafe?.side(this.time) ?? 0, walk: false, crouch: !!life?.crouch, jump: false,
+      fireHeld: false, firePressed: false, yawDelta: Math.max(-limit, Math.min(limit, turn))});
+  }
+
+  /** sv_infinite_ammo 2 keeps reserves full; 1 also refills the magazine after every shot. */
+  private refillAmmo(actor: CombatActor) {
+    const mode = this.botz?.infiniteAmmo;
+    if (!mode || mode === 'off') return;
+    for (const state of new Set([actor.weapon, ...actor.inventory.values()])) {
+      if (state.id === 'knife' || state.id === 'zeus') continue;
+      const stats = equipmentStats(state.id);
+      state.reserve = stats.reserve;
+      if (mode === 'magazine' && !state.reload.active) state.ammo = stats.magazine;
+    }
+  }
+
+  /** Counts each discharge once, however many pellets or bots it hits. */
+  private countBotzHit(event: Extract<DuelEvent, {kind: 'hit'}>, weapon: Equipment, counted: Map<number, boolean>) {
+    const stats = this.botzStats;
+    stats.damage += event.healthDamage;
+    if (weapon !== 'knife') {
+      const head = counted.get(event.shotId);
+      if (head === undefined) stats.hits++;
+      if (!head && event.group === 'head') stats.headHits++;
+      counted.set(event.shotId, !!head || event.group === 'head');
+    }
+    if (!event.lethal) return;
+    stats.kills++;
+    if (event.group === 'head') {
+      stats.headshots++; stats.headshotStreak++;
+      stats.bestHeadshotStreak = Math.max(stats.bestHeadshotStreak, stats.headshotStreak);
+    } else stats.headshotStreak = 0;
   }
 
   private resolveShot(shooter: CombatActor, fired: FiredRound, shotId: number, pending: PendingHit[]) {

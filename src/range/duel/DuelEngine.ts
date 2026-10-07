@@ -43,6 +43,8 @@ import {ShortcutGuard} from '../shortcut-guard';
 import {MuzzleFlashes, ShotEffects} from '../weapon-effects';
 import {DuelRadar} from './radar';
 import {actorShadows,ActorShadowRenderer} from './shadow-scene';
+import {BOTZ_PLAYER_SPAWN, botzArena, botzDuelConfig, botzSummary, loadBotzHistory, sanitizeBotzConfig, saveBotzHistory,
+  type BotzConfig, type BotzHistory, type BotzSummary} from './botz';
 
 export type DuelStatus = {
   phase: 'ready' | 'fighting' | 'result'; paused: boolean; outcome?: 'won' | 'lost' | 'draw';
@@ -55,6 +57,8 @@ export type DuelStatus = {
   interaction?:string;
   reserve?:number; reloadSilent?:boolean; recharge?:number;
   arenaDesign?: string;
+  /** Aim Botz session: kills, accuracy and pace. */
+  botz?: BotzSummary; botzHistory?: BotzHistory[];
 };
 
 const v3 = (point: Vec) => new THREE.Vector3(point.x, point.y, point.z);
@@ -154,11 +158,17 @@ export class DuelEngine {
   private radarAt = 0;
   private readonly actorShadows=new ActorShadowRenderer();
   private shadowAt=0;
+  /** Set in Aim Botz: passive respawning bots instead of duel rounds. */
+  private botz?: BotzConfig;
+  private botzHistory: BotzHistory[] = [];
+  private botzRecorded = false;
+  private generations = new Map<number, number>();
 
   constructor(private readonly host: HTMLElement, private readonly crosshair: HTMLElement,
     private readonly onStatus: (status: DuelStatus) => void,
     private readonly onError: (message: string) => void, private settings: Settings, private config: DuelConfig,
-    private readonly progression?: ProgressionController) {
+    private readonly progression?: ProgressionController, botz?: BotzConfig) {
+    if (botz) {this.botz = sanitizeBotzConfig(botz); this.config = botzDuelConfig(this.botz); this.botzHistory = loadBotzHistory();}
     this.cosmeticKey = JSON.stringify(progression?.getSnapshot().profile.equipped);
     this.sim = this.createSimulation();
     this.radar = new DuelRadar(host);
@@ -174,11 +184,12 @@ export class DuelEngine {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.08;
     this.renderer.domElement.dataset.duel = 'true';
-    this.renderer.domElement.setAttribute('aria-label', 'AI Duel arena');
+    this.renderer.domElement.setAttribute('aria-label', this.botz ? 'Aim Botz yard' : 'AI Duel arena');
     this.renderer.domElement.tabIndex = 0;
     host.prepend(this.renderer.domElement);
     this.scene.background = new THREE.Color('#9baaa5');
-    this.scene.fog = new THREE.Fog('#9baaa5', 36, 75);
+    // The Aim Botz yard is 48 m deep: keep the far bots out of the haze.
+    this.scene.fog = this.botz ? new THREE.Fog('#9baaa5', 60, 120) : new THREE.Fog('#9baaa5', 36, 75);
     this.scene.add(new THREE.HemisphereLight('#f5f7ef', '#4d5d55', 2));
     this.scene.add(new THREE.AmbientLight('#bec9c3', .7));
     const sun = new THREE.DirectionalLight('#fff4dc', 2.4);
@@ -219,8 +230,9 @@ export class DuelEngine {
     const lane = new THREE.Mesh(new THREE.BoxGeometry(.08, .005, 30), surface('#c5c7a6'));
     lane.position.set(0, .002, -4); this.scene.add(lane);
     for (const object of [...this.scene.children]) if (object instanceof THREE.Mesh) this.shell.add(object);
-    this.shell.scale.set(config.arenaScale, 1, config.arenaScale);
+    this.shell.scale.set(this.config.arenaScale, 1, this.config.arenaScale);
     this.scene.add(this.shell); batchStaticMeshes(this.shell);
+    if (this.botz) this.markDistances();
     this.scene.add(this.actors, this.covers, this.dynamicCovers, this.effects,this.actorShadows.group);
     this.audio.setAcoustics(this.acoustics);
     this.shotEffects = new ShotEffects(this.effects); this.viewFlashes = new MuzzleFlashes(this.viewScene, 2);
@@ -235,7 +247,9 @@ export class DuelEngine {
 
   private createSimulation() {
     const seed = seedForDesign(this.seed++, this.config.mapDesign);
-    const simulation = new DuelSimulation(this.config, seed, duelArena(seed, this.config.arenaScale), this.settings.weapon, this.settings.sidearm, this.settings.primaryEnabled);
+    const simulation = new DuelSimulation(this.config, seed, this.botz ? botzArena() : duelArena(seed, this.config.arenaScale),
+      this.settings.weapon, this.settings.sidearm, this.settings.primaryEnabled, this.botz);
+    this.botzRecorded = false;
     simulation.playerAspect = this.camera.aspect;
     return simulation;
   }
@@ -307,6 +321,27 @@ export class DuelEngine {
     }
   }
 
+  /** Floor lines every 10 m from the Aim Botz spawn, labelled on the left. */
+  private markDistances() {
+    const markers = new THREE.Group(), line = new THREE.MeshBasicMaterial({color: '#d8d2a8', transparent: true, opacity: .5});
+    for (const distance of [10, 20, 30, 40]) {
+      const z = BOTZ_PLAYER_SPAWN.z - distance;
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(34, .004, .05), line);
+      mesh.position.set(0, .004, z); markers.add(mesh);
+      const canvas = document.createElement('canvas'); canvas.width = 128; canvas.height = 64;
+      const context = canvas.getContext('2d');
+      if (context) {
+        context.fillStyle = '#ece6c0'; context.font = 'bold 38px sans-serif';
+        context.textAlign = 'center'; context.textBaseline = 'middle'; context.fillText(`${distance} m`, 64, 34);
+      }
+      const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace;
+      const label = new THREE.Mesh(new THREE.PlaneGeometry(1.6, .8),
+        new THREE.MeshBasicMaterial({map: texture, transparent: true, opacity: .75, depthWrite: false}));
+      label.rotation.x = -Math.PI / 2; label.position.set(-15.5, .006, z + .5); markers.add(label);
+    }
+    this.scene.add(markers);
+  }
+
   private async loadTarget() {
     const revision = ++this.agentRevision;
     try {
@@ -336,21 +371,34 @@ export class DuelEngine {
     this.animationTimes.clear();
     this.botMuzzles.clear();
     disposeSkeletons(this.actors);
-    this.actors.clear(); this.models.clear(); this.heldWeapons.clear();
+    this.actors.clear(); this.models.clear(); this.heldWeapons.clear(); this.generations.clear();
     if (!this.targetScene) return;
-    for (const actor of this.sim.snapshot().slice(1)) {
-      const root = new THREE.Group();
-      const model = cloneSkeleton(this.targetScene);
-      const held = this.attachWorldWeapon(model, actor.equipment);
-      if (held) {held.visible = actor.alive; this.heldWeapons.set(actor.id, held);}
-      const muzzle = held ? muzzleAnchor(held) : undefined;
-      if (muzzle) this.botMuzzles.set(actor.id, muzzle);
-      root.add(model); this.actors.add(root); this.models.set(actor.id, root);
-      const animator=new DuelAnimator(model, this.targetClips, (actor.id * .317) % 1, actor.equipment);
-      animator.addGestureClips(this.gestureClips.get(actor.equipment)??[]);
-      animator.setDeathWorld({floor:0,boxes:this.sim.arena.solids.filter(blocksMovement)});
-      this.animators.set(actor.id,animator);
-    }
+    for (const actor of this.sim.snapshot().slice(1)) this.buildActor(actor);
+  }
+
+  private buildActor(actor: DuelActorSnapshot) {
+    const root = new THREE.Group();
+    const model = cloneSkeleton(this.targetScene!);
+    const held = this.attachWorldWeapon(model, actor.equipment);
+    if (held) {held.visible = actor.alive; this.heldWeapons.set(actor.id, held);}
+    const muzzle = held ? muzzleAnchor(held) : undefined;
+    if (muzzle) this.botMuzzles.set(actor.id, muzzle);
+    root.add(model); this.actors.add(root); this.models.set(actor.id, root);
+    const animator=new DuelAnimator(model, this.targetClips, (actor.id * .317) % 1, actor.equipment);
+    animator.addGestureClips(this.gestureClips.get(actor.equipment)??[]);
+    animator.setDeathWorld({floor:0,boxes:this.sim.arena.solids.filter(blocksMovement)});
+    this.animators.set(actor.id,animator);
+    this.generations.set(actor.id, actor.generation);
+  }
+
+  /** Aim Botz respawns reuse the actor id: replace the ragdoll with a fresh model. */
+  private respawnActor(actor: DuelActorSnapshot) {
+    const old = this.models.get(actor.id);
+    this.animators.get(actor.id)?.dispose(); this.animators.delete(actor.id);
+    if (old) {disposeSkeletons(old); this.actors.remove(old);}
+    this.models.delete(actor.id); this.heldWeapons.delete(actor.id); this.botMuzzles.delete(actor.id);
+    this.deaths.delete(actor.id); this.animationTimes.delete(actor.id);
+    if (this.targetScene) this.buildActor(actor);
   }
 
   private loadWorldWeapons() {
@@ -454,6 +502,8 @@ export class DuelEngine {
   }
 
   private beginProgression() {
+    // Passive Aim Botz bots award no duel XP.
+    if (this.botz) return;
     this.xpDamage.clear();
     this.xpAttempt = this.progression?.beginDuel(this.xpSetup(), String(this.xpRevision)) ?? null;
   }
@@ -481,12 +531,33 @@ export class DuelEngine {
   }
 
   setConfig(config: DuelConfig) {
-    if (config === this.config) return;
+    if (config === this.config || this.botz) return;
     this.config = config;
     this.restart();
   }
 
+  setBotz(botz: BotzConfig) {
+    if (!this.botz) return;
+    const next = sanitizeBotzConfig(botz);
+    if (JSON.stringify(next) === JSON.stringify(this.botz)) return;
+    this.botz = next; this.config = botzDuelConfig(next);
+    this.restart();
+  }
+
+  /** Saves an Aim Botz session once: when time runs out, or on a new session or exit. */
+  private recordBotz() {
+    if (!this.botz || this.botzRecorded) return;
+    const summary = botzSummary(this.sim.botzStats, this.sim.time, this.botz.sessionSeconds);
+    if (!summary.shots && !summary.kills) return;
+    this.botzRecorded = true;
+    this.botzHistory = [{date: new Date().toISOString(), weapon: loadoutWeapon(this.settings), distance: this.botz.distance,
+      movement: this.botz.movement, headshotOnly: this.botz.headshotOnly, seconds: summary.seconds, kills: summary.kills,
+      headshotRate: summary.headshotRate, accuracy: summary.accuracy, killsPerMinute: summary.killsPerMinute}, ...this.botzHistory].slice(0, 50);
+    saveBotzHistory(this.botzHistory);
+  }
+
   restart(continuous = false) {
+    this.recordBotz();
     if (this.xpAttempt) this.progression?.cancelAttempt(this.xpAttempt);
     this.xpAttempt = null; this.xpRevision++;
     this.paused = false; this.pointer = null; this.pickupDrawing = false; this.viewAnimation?.cancel();
@@ -506,6 +577,11 @@ export class DuelEngine {
     this.audio.stopVoices();this.clearEffects(); this.rebuildCovers(); this.rebuildActors(); this.report();
     this.loadWorldWeapons();
     if (continuous) {this.sim.start(); this.beginProgression(); this.updateMovement(); this.report();}
+  }
+
+  /** Aim Botz: save the finished session and start the next one straight away. */
+  newSession() {
+    this.restart(); void this.enter();
   }
 
   async enter() {
@@ -561,6 +637,7 @@ export class DuelEngine {
     const canvas = this.renderer.domElement;
     this.listen(canvas, 'pointerdown', ((event: PointerEvent) => {
       if (event.button !== 0) return;
+      if (this.botz && this.sim.phase === 'result') { this.newSession(); return; }
       if (this.sim.phase === 'ready' || this.paused) { void this.enter(); return; }
       if (this.sim.phase !== 'fighting') return;
       this.pointer = event.pointerId; this.pointerX = event.clientX; this.pointerY = event.clientY;
@@ -725,9 +802,11 @@ export class DuelEngine {
       else if (event.kind === 'hit') {
         endpoint(event.shotId,event.point);
         this.shotEffects.impact(v3(event.point),this.settings.impactSize,event.shooter===0?this.ownTraceColor:this.enemyTraceColor,this.animationClock);
-        if(event.lethal)this.animationTimes.delete(event.victim);
-        if (event.lethal && !this.deaths.has(event.victim)) this.deaths.set(event.victim, this.animationClock);
-        if (event.lethal && event.victim > 0) {
+        // An Aim Botz bot may already have respawned when a frame runs several ticks.
+        const down = event.lethal && !this.sim.actors[event.victim]?.alive;
+        if(down)this.animationTimes.delete(event.victim);
+        if (down && !this.deaths.has(event.victim)) this.deaths.set(event.victim, this.animationClock);
+        if (down && event.victim > 0) {
           const held = this.heldWeapons.get(event.victim);
           if (held) held.visible = false;
         }
@@ -736,7 +815,7 @@ export class DuelEngine {
           this.audio.playHit(event.group === 'head', event.armorDamage > 0, false, this.settings.volume);
           this.damage += event.healthDamage;
           if (event.lethal) this.kills++;
-          this.caption = event.group === 'head' ? 'HEADSHOT' : 'BODY HIT';
+          this.caption = event.group === 'head' ? 'HEADSHOT' : this.botz?.headshotOnly ? 'BODY - NO DAMAGE' : 'BODY HIT';
           this.captionUntil = this.animationClock + .65;
         } else if (event.victim === 0) {
           const source = this.sim.actors[event.shooter]?.position;
@@ -747,6 +826,12 @@ export class DuelEngine {
         }
         if (event.lethal) this.audio.playEvent('death', this.settings.volume * .4,
           event.victim === 0 ? undefined : this.soundLocation(event.point));
+      } else if (event.kind === 'round' && this.botz) {
+        // A timed session is over: free the mouse so New session can be clicked.
+        this.recordBotz();
+        this.binds.releaseAll(); this.bindHandle?.reset(); this.updateMovement(); this.releaseShortcuts();
+        this.sim.command(0, {fireHeld: false});
+        if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
       } else if (event.kind === 'round') {
         this.roundFlow.finish();
         if (this.xpAttempt) this.progression?.completeDuel(this.xpAttempt, {
@@ -826,6 +911,7 @@ export class DuelEngine {
     this.animationClock += dt;
     this.frustum.setFromProjectionMatrix(this.projectionView.multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse));
     for (const actor of snapshots.slice(1)) {
+      if (this.models.has(actor.id) && this.generations.get(actor.id) !== actor.generation) this.respawnActor(actor);
       const model = this.models.get(actor.id);
       if (!model) continue;
       this.actorBounds.center.set(actor.position.x, actor.feet + 1, actor.position.z);
@@ -875,7 +961,8 @@ export class DuelEngine {
       damage: this.damage, input: this.inputName, caption: this.animationClock < this.captionUntil ? this.caption : '',
       shortcutProtected: this.shortcuts.protected, nextRoundIn: this.roundFlow.remaining(this.config.feedbackSeconds),
       equipped: player.equipment, review: this.sim.coach.review(), history: this.history,
-      loadout: this.sim.loadout, pickup: this.sim.nearestPickup()?.equipment, interaction:this.sim.nearestDoor()?.open?'Close door':this.sim.nearestDoor()?'Open door':undefined, arenaDesign: this.sim.arena.design});
+      loadout: this.sim.loadout, pickup: this.sim.nearestPickup()?.equipment, interaction:this.sim.nearestDoor()?.open?'Close door':this.sim.nearestDoor()?'Open door':undefined, arenaDesign: this.sim.arena.design,
+      ...(this.botz ? {botz: botzSummary(this.sim.botzStats, this.sim.time, this.botz.sessionSeconds), botzHistory: this.botzHistory} : {})});
   }
 
   private tick(timestamp: number) {
@@ -975,6 +1062,7 @@ export class DuelEngine {
   }
 
   dispose() {
+    this.recordBotz();
     if (this.xpAttempt) this.progression?.cancelAttempt(this.xpAttempt);
     this.disposed = true; cancelAnimationFrame(this.frame); this.pause(); this.releaseShortcuts(); this.observer.disconnect();
     this.cleanup.forEach(fn => fn()); this.clearEffects(); this.audio.dispose(); this.damageFeedback.dispose();

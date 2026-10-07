@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { Activity, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronDown, Code2 as Github, Crosshair as AimIcon, Download, Eye, Gauge, Gift, History, ListPlus, Maximize, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, ShoppingCart, Target, Upload, Volume2, VolumeX, X } from 'lucide-react';
-import { classicViewmodel, Crosshair, defaults, gameData, historyModeNames, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol } from './config';
+import { classicViewmodel, Crosshair, defaults, gameData, historyModeNames, isDuelEngineMode, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol } from './config';
 import { RangeEngine, RangeStatus } from './engine';
 import { Result } from './simulation';
 import { loadAttempts } from '../lib/storage';
@@ -124,7 +124,7 @@ export default function RangeApp() {
   useEffect(()=>{if(!repFeedback)return;const timer=setTimeout(()=>setRepFeedback(null),4000);return()=>clearTimeout(timer);},[repFeedback]);
   useEffect(()=>setRepFeedback(null),[settings.mode]);
   useEffect(() => {
-    if (settings.mode === 'duel' || settings.mode === 'hearing') {engine.current = undefined; return;}
+    if (isDuelEngineMode(settings.mode) || settings.mode === 'hearing') {engine.current = undefined; return;}
     let range: RangeEngine;
     try {
       range = new RangeEngine(host.current!, setStatus, settingsRef.current, follow.current!, hitmarker.current!, setError, progression);
@@ -151,7 +151,7 @@ export default function RangeApp() {
       };
       return () => { engine.current = undefined; range.dispose(); };
     } catch { setError('WebGL could not start. Enable browser hardware acceleration, then restart the range.'); }
-  }, [generation, settings.mode === 'duel', settings.mode === 'hearing']);
+  }, [generation, isDuelEngineMode(settings.mode), settings.mode === 'hearing']);
   useEffect(() => {
     engine.current?.configure(settings, profiles[settings.weapon]);
     if (!saveSettings(settings)) setNotice('Browser storage unavailable. Settings apply to this session.');
@@ -208,18 +208,18 @@ export default function RangeApp() {
     <section className="range-toolbar" aria-label="Range configuration">
       {settings.mode !== 'hearing' && <button className="weapon-select" onClick={() => open('weapons')}><img src={cosmeticPreview(progressionState.profile, selectedWeapon)} alt="" /><span><small>{settings.primaryEnabled ? 'LOADOUT' : 'SIDEARM ONLY'}</small>{weaponNames[selectedWeapon]}</span><ChevronDown size={15} /></button>}
       <label className="mode-select"><small>DRILL</small><select aria-label="Training mode" value={settings.mode} onChange={e => {const mode = e.target.value as Mode; update({mode, spread: modeInfo[mode].spread});}}>{Object.entries(modeNames).map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></label>
-      {settings.mode !== 'duel' && settings.mode !== 'hearing' && <div className="distance-input"><small>DISTANCE</small><output>{status.distance.toFixed(1)} m</output></div>}
+      {!isDuelEngineMode(settings.mode) && settings.mode !== 'hearing' && <div className="distance-input"><small>DISTANCE</small><output>{status.distance.toFixed(1)} m</output></div>}
       <div className="toolbar-actions">
-        {settings.mode !== 'duel' && settings.mode !== 'hearing' && <button className="icon-button" title="Reset range" aria-label="Reset range" onClick={() => engine.current?.reset()}><RotateCcw size={18} /></button>}
+        {!isDuelEngineMode(settings.mode) && settings.mode !== 'hearing' && <button className="icon-button" title="Reset range" aria-label="Reset range" onClick={() => engine.current?.reset()}><RotateCcw size={18} /></button>}
         {settings.mode !== 'hearing' && <button type="button" className="icon-button fps-toggle" title={settings.showFps ? 'Hide FPS counter' : 'Show FPS counter'} aria-label="Toggle FPS counter" aria-pressed={settings.showFps} onClick={() => update({showFps: !settings.showFps})}><Gauge size={18} aria-hidden="true"/></button>}
         <button className="icon-button" title={settings.volume ? 'Mute' : 'Unmute'} aria-label={settings.volume ? 'Mute' : 'Unmute'} onClick={() => update({ volume: settings.volume ? 0 : .2 })}>{settings.volume ? <Volume2 size={18} /> : <VolumeX size={18} />}</button>
         {settings.mode !== 'hearing' && <button className="icon-button fullscreen" title="Fullscreen" aria-label="Fullscreen" onClick={() => { if (document.fullscreenElement) void document.exitFullscreen(); else void stage.current?.requestFullscreen?.().catch(() => setNotice('Fullscreen unavailable in this browser.')); }}><Maximize size={18} /></button>}
       </div>
     </section>
     <section className="mode-brief" aria-label="Drill purpose"><div><strong>{modeInfo[settings.mode].benefit}</strong><p>{modeInfo[settings.mode].task}</p></div><button onClick={() => {engine.current?.pause(); setTutorial(true);}}><GraduationCap size={19}/>Learn the fundamentals</button></section>
-    <section ref={stage} className={`range-stage${settings.mode === 'duel' ? ' duel-stage' : isDrillMode(settings.mode)?' with-drill':''}`} aria-label="Practice range">
+    <section ref={stage} className={`range-stage${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode)?' with-drill':''}`} aria-label="Practice range">
       <XpNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
-      {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={!!panel || tutorial || armoryOpen}/> : settings.mode === 'duel' ? <DuelStage settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={() => setSetupHint(false)} suspended={!!panel || tutorial || armoryOpen}/> : <>
+      {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={!!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' ? 'botz' : 'duel'} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={() => setSetupHint(false)} suspended={!!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
       <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
@@ -252,7 +252,7 @@ export default function RangeApp() {
       {isDrillMode(settings.mode)&&<DrillPanel status={status} mode={settings.mode} challenge={settings.drillPace==='challenge'} peekDuration={settings.peekDuration}/>}
       </>}
     </section>
-    <footer className="statusbar"><span><i className={settings.mode !== 'hearing' && status.active ? 'online' : ''} />{settings.mode === 'hearing' ? 'Hearing practice' : settings.mode === 'duel' ? 'AI Duel' : status.input}</span><span className="status-center">{settings.mode === 'hearing' ? 'Native samples / browser spatial audio' : settings.mode === 'duel' ? 'Simulation' : status.audio === 'unavailable' ? 'Audio unavailable' : status.slot===3?'250 u/s':`${Math.round(60 / equipmentStats(status.equipped).cycle)} RPM`}<span className="desktop-status">Build {gameData.build}</span></span><div className="project-links"><a href="https://github.com/HamzahAlrawi/cs2spraylab" target="_blank" rel="noreferrer"><Github size={14} />Source</a></div></footer>
+    <footer className="statusbar"><span><i className={settings.mode !== 'hearing' && status.active ? 'online' : ''} />{settings.mode === 'hearing' ? 'Hearing practice' : isDuelEngineMode(settings.mode) ? modeNames[settings.mode] : status.input}</span><span className="status-center">{settings.mode === 'hearing' ? 'Native samples / browser spatial audio' : isDuelEngineMode(settings.mode) ? 'Simulation' : status.audio === 'unavailable' ? 'Audio unavailable' : status.slot===3?'250 u/s':`${Math.round(60 / equipmentStats(status.equipped).cycle)} RPM`}<span className="desktop-status">Build {gameData.build}</span></span><div className="project-links"><a href="https://github.com/HamzahAlrawi/cs2spraylab" target="_blank" rel="noreferrer"><Github size={14} />Source</a></div></footer>
     {notice && <div className="toast" role="status">{notice}<button className="icon-button" aria-label="Dismiss message" onClick={() => setNotice('')}><X size={15} /></button></div>}
     {panel && <div className="drawer-backdrop" onPointerDown={e => { if (e.target === e.currentTarget) setPanel(null); }}>
       <aside className={`drawer ${panel === 'history' || panel === 'changelog' || panel === 'settings' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="panel-title" tabIndex={-1} ref={drawer}>
@@ -272,8 +272,8 @@ export default function RangeApp() {
               <Slider label="Peeking target duration" value={settings.peekDuration} min={.5} max={10} step={.25} suffix=" s" onChange={peekDuration=>update({peekDuration})}/>
               <label className="select-row">Counterstrafe / burst pace<select aria-label="Drill pace" value={settings.drillPace} onChange={e=>update({drillPace:e.target.value as Settings['drillPace']})}><option value="practice">Practice / 8 s exposure</option><option value="challenge">Challenge / 1.5 s exposure</option></select></label>
               <Toggle label="Follow recoil" checked={settings.follow} onChange={v => update({ follow: v })} />
-              <Toggle label="Practice spread" checked={settings.mode === 'duel' || settings.spread} disabled={settings.mode === 'duel'} onChange={v => update({ spread: v })} />
-              <p className="setting-explanation">Spread adds the weapon's random shot dispersion and the extra inaccuracy from movement, jumping and repeated fire. Turning it off does not remove recoil. Switching drills applies the recommended setting: off for Guided spray, on for other drills. AI Duel always applies it equally to you and the bots.</p>
+              <Toggle label="Practice spread" checked={isDuelEngineMode(settings.mode) || settings.spread} disabled={isDuelEngineMode(settings.mode)} onChange={v => update({ spread: v })} />
+              <p className="setting-explanation">Spread adds the weapon's random shot dispersion and the extra inaccuracy from movement, jumping and repeated fire. Turning it off does not remove recoil. Switching drills applies the recommended setting: off for Guided spray, on for other drills. AI Duel and Aim Botz always apply it, as CS2 does.</p>
               <label className="select-row">Transfer to B<select aria-label="Transfer trigger" value={settings.transferRule} onChange={e => update({transferRule: e.target.value as Settings['transferRule']})}><option value="bullet">After a bullet count</option><option value="kill">After A loses 100 health</option></select></label>
               {settings.transferRule === 'bullet' && <Slider label="Transfer after bullet" value={settings.transferAfter} min={1} max={weapon.magazine - 1} onChange={transferAfter => update({transferAfter})}/>}
               <p className="setting-explanation">Transfer targets have 100 health and no armor. Recoil continues across A and B. A short selected burst caps the transfer count before its last round.</p>
