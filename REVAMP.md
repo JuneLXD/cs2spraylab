@@ -42,8 +42,10 @@ The development workspace already contains assets. To reproduce them:
 
 1. Install CS2 locally; set `CS2_PATH` if outside the default Steam Windows path.
 2. Put the official [Source 2 Viewer CLI](https://github.com/ValveResourceFormat/ValveResourceFormat/releases) at `.local-tools/vrf/Source2Viewer-CLI.exe`. Release 20.0 was used.
-3. Open Blender with Blender MCP listening on localhost:9876. Blender 5.2 was used.
+3. Install Blender 5.2 and FFmpeg. Set `BLENDER` (and `BLENDER_PYTHON`) when Blender is not in `C:/Program Files/Blender Foundation/Blender 5.2/`, and `FFMPEG` when `ffmpeg` is not on PATH. `npm run assets:build` starts Blender with `tools/blender-server.py`, a minimal implementation of the Blender MCP socket protocol, unless something already listens on localhost:9876 (an open Blender with the Blender MCP add-on still works). `npm run blender:server` / `npm run blender:stop` manage it by hand.
 4. Run `npm ci`, then `npm run assets:build`.
+
+Blender must be installed outside `%LOCALAPPDATA%` when it is unpacked by a packaged (MSIX) app such as the Claude desktop app: Windows redirects that app's AppData writes into a private copy that its side-by-side loader cannot see, and `blender.exe` then fails with "side-by-side configuration is incorrect".
 
 The read-only pipeline extracts VPK weapon definitions, native models, first-person gloves/sleeves, weapon-specific idle clips, world idle/strafe clips and shot WAVs. It does not load game DLLs or access a running game.
 

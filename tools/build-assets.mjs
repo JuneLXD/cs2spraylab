@@ -1,5 +1,8 @@
 import { execFileSync } from 'node:child_process';
-for (const args of [
+import { ensureBlender, stopBlender } from './blender-server.mjs';
+// The Blender steps talk to port 9876; start a headless-friendly Blender unless one is listening.
+const startedBlender = await ensureBlender();
+try { for (const args of [
   ['tools/import-game.mjs'],
   ['tools/import-equipment.mjs'],
   ['tools/import-audio.mjs'],
@@ -22,4 +25,5 @@ for (const args of [
   ['tools/blender-command.mjs', 'art/verify_target_grips.py'],
   ['tools/blender-command.mjs', 'art/render_target_preview.py'],
   ['tools/check-assets.mjs']
-]) execFileSync(process.execPath, args, { stdio: 'inherit' });
+]) execFileSync(process.execPath, args, { stdio: 'inherit' }); }
+finally { if (startedBlender) await stopBlender(); }
