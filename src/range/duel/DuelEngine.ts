@@ -34,7 +34,7 @@ import {AcousticScene} from '../spatial-audio';
 import {seedForDesign} from './arena-layout';
 import {applyCosmetic, cosmeticAsset, cosmeticCatalog} from '../cosmetics';
 import weaponMounts from '../weapon-mounts.json';
-import {equippedCosmetic,type DuelAttemptSetup,type ProgressionController} from '../progression';
+import {equippedCosmetic,type DuelAttemptSetup,type ProgressionController,type ProgressionProfile} from '../progression';
 import {prepareNativeViewAssembly} from '../native-view-actions';
 import {ActorCosmeticLoader, loadAgent, type ActorCosmeticInstance} from '../actor-cosmetics';
 import {REVOLVER_WINDUP} from '../weapon-actions';
@@ -63,6 +63,8 @@ export type DuelStatus = {
 
 const v3 = (point: Vec) => new THREE.Vector3(point.x, point.y, point.z);
 const surface = (color: string, roughness = .86) => new THREE.MeshStandardMaterial({color, roughness});
+
+type ViewModel = {scene: THREE.Object3D; animation: ViewAnimation; muzzle?: THREE.Object3D};
 
 export class DuelEngine {
   sim: DuelSimulation;
@@ -149,6 +151,12 @@ export class DuelEngine {
   private scope: ScopeOverlay;
   private dropModels = new Map<number, THREE.Object3D>();
   private pickupDrawing = false;
+  /** First-person models for the loadout stay on the GPU, keyed by finish, so a switch only swaps them in. */
+  private viewModels = new Map<Equipment, {key: string; model: Promise<ViewModel>}>();
+  private retiredViewModels: Promise<ViewModel>[] = [];
+  private preloadingViewModels = false;
+  /** Bots, their weapons and motion clips are in; only then does the loadout preload start, so it never delays them. */
+  private sceneLoaded = false;
   private cosmeticKey = '';
   private attemptId: string | null = null;
   private attemptRevision = 0;
@@ -365,6 +373,8 @@ export class DuelEngine {
         this.motionReady = true;
         this.rebuildActors();
       } catch { /* Keep the baseline idle/run set if local native clips are absent. */ }
+      this.sceneLoaded = true;
+      void this.preloadViewModels();
     } catch { if (!this.disposed) this.onError('The player model is unavailable. Run npm run assets:build, then reload.'); }
   }
 
@@ -470,23 +480,80 @@ export class DuelEngine {
     this.renderedEquipment = weapon;
     const revision = ++this.viewRevision;
     try {
-      const profile = this.progression?.getSnapshot().profile;
-      const asset = profile ? cosmeticAsset(profile, weapon) : weapon;
-      const {scene, animations} = await new GLTFLoader().loadAsync(`/models/view-${asset}.glb`);
-      prepareNativeViewAssembly(scene);
-      try {if (profile) await applyCosmetic(scene, profile, weapon);}
-      catch {disposeResources([scene]); throw new Error('Cosmetic could not load');}
-      if (this.disposed || revision !== this.viewRevision) {disposeResources([scene]); return;}
-      this.viewAnimation?.dispose();
-      disposeResources([this.viewRoot]);
-      this.viewRoot.clear(); scene.rotation.y = Math.PI; this.viewRoot.add(scene);
-      this.viewAnimation = new ViewAnimation(scene, animations);
-      this.viewMuzzle = muzzleAnchor(scene);
-      if (weapon === 'elite') {muzzleAnchor(scene, 'left'); muzzleAnchor(scene, 'right');}
+      const entry = await this.viewModel(weapon);
+      if (this.disposed || revision !== this.viewRevision) return;
+      this.viewRoot.clear(); this.viewRoot.add(entry.scene);
+      this.viewAnimation = entry.animation;
+      this.viewMuzzle = entry.muzzle;
       const duration = Math.max(.01, this.sim.actors[0].equipReadyAt - this.sim.time);
-      if (this.pickupDrawing) this.viewAnimation.playPickup(duration); else this.viewAnimation.playDraw(duration);
+      if (this.pickupDrawing) entry.animation.playPickup(duration); else entry.animation.playDraw(duration);
       this.pickupDrawing = false;
+      this.trimViewModels();
+      if (this.sceneLoaded) void this.preloadViewModels();
     } catch { if (!this.disposed && revision === this.viewRevision) this.onError('The weapon model is unavailable. Run npm run assets:build, then reload.'); }
+  }
+
+  private viewModel(weapon: Equipment) {
+    const profile = this.progression?.getSnapshot().profile;
+    const asset = profile ? cosmeticAsset(profile, weapon) : weapon;
+    // A model wears its own finish and the gloves; other equip changes leave it valid.
+    const key = `${asset}|${profile?.equipped[weapon] ?? ''}|${profile?.equipped.gloves ?? ''}`, cached = this.viewModels.get(weapon);
+    if (cached?.key === key) return cached.model;
+    if (cached) this.retiredViewModels.push(cached.model);
+    const model = this.buildViewModel(weapon, asset, profile);
+    this.viewModels.set(weapon, {key, model});
+    model.catch(() => {if (this.viewModels.get(weapon)?.model === model) this.viewModels.delete(weapon);});
+    return model;
+  }
+
+  private async buildViewModel(weapon: Equipment, asset: string, profile?: ProgressionProfile): Promise<ViewModel> {
+    const {scene, animations} = await new GLTFLoader().loadAsync(`/models/view-${asset}.glb`);
+    prepareNativeViewAssembly(scene);
+    try {if (profile) await applyCosmetic(scene, profile, weapon);}
+    catch {disposeResources([scene]); throw new Error('Cosmetic could not load');}
+    if (this.disposed) {disposeResources([scene]); throw new Error('Engine disposed');}
+    scene.rotation.y = Math.PI;
+    const muzzle = muzzleAnchor(scene);
+    if (weapon === 'elite') {muzzleAnchor(scene, 'left'); muzzleAnchor(scene, 'right');}
+    // Upload textures and compile shaders now rather than on the first frame after a switch.
+    scene.traverse(node => {
+      if (node instanceof THREE.Mesh) for (const material of Array.isArray(node.material) ? node.material : [node.material])
+        for (const value of Object.values(material)) if (value instanceof THREE.Texture) this.renderer.initTexture(value);
+    });
+    await this.renderer.compileAsync(scene, this.viewCamera, this.viewScene);
+    if (this.disposed) {disposeResources([scene]); throw new Error('Engine disposed');}
+    return {scene, animation: new ViewAnimation(scene, animations), muzzle};
+  }
+
+  private loadoutEquipment(): Equipment[] {
+    const {primary, sidearm} = this.sim.loadout;
+    return [primary, sidearm, 'knife', 'zeus'].filter((id): id is Equipment => !!id);
+  }
+
+  /** Prepares the rest of the loadout in the background, one model at a time. */
+  private async preloadViewModels() {
+    if (this.preloadingViewModels) return;
+    this.preloadingViewModels = true;
+    try {
+      for (const weapon of this.loadoutEquipment()) {
+        if (this.disposed) return;
+        await this.viewModel(weapon).catch(() => undefined);
+      }
+    } finally {this.preloadingViewModels = false;}
+  }
+
+  /** Frees models dropped from the loadout or replaced by another finish, once they are off screen. */
+  private trimViewModels() {
+    const loadout = new Set(this.loadoutEquipment());
+    for (const [weapon, entry] of this.viewModels) if (!loadout.has(weapon) && weapon !== this.renderedEquipment) {
+      this.viewModels.delete(weapon); this.retiredViewModels.push(entry.model);
+    }
+    const retired = this.retiredViewModels;
+    this.retiredViewModels = [];
+    for (const model of retired) void model.then(entry => {
+      if (entry.scene.parent) {this.retiredViewModels.push(model); return;}
+      entry.animation.dispose(); disposeResources([entry.scene]);
+    }, () => undefined);
   }
 
   async refreshCosmetics() {
@@ -1078,6 +1145,9 @@ export class DuelEngine {
     this.disposed = true; cancelAnimationFrame(this.frame); this.pause(); this.releaseShortcuts(); this.observer.disconnect();
     this.cleanup.forEach(fn => fn()); this.clearEffects(); this.audio.dispose(); this.damageFeedback.dispose();
     this.animators.forEach(animator => animator.dispose()); this.viewAnimation?.dispose(); this.scope.dispose();
+    for (const model of [...[...this.viewModels.values()].map(entry => entry.model), ...this.retiredViewModels])
+      void model.then(entry => {entry.animation.dispose(); disposeResources([entry.scene]);}, () => undefined);
+    this.viewModels.clear(); this.retiredViewModels = [];
     this.gestureClips.clear();
     this.meter.dispose();
     this.radar.dispose();

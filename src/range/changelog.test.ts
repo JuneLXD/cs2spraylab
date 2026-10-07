@@ -28,11 +28,12 @@ describe('append-only changelog', () => {
   it('covers the accumulated completed features', () => {
     expect(latestChanges.sections.map(section => section.id)).toEqual([
       'combat', 'weapons', 'movement', 'arenas', 'bot-behavior', 'connection', 'presentation', 'performance', 'tracers', 'fullscreen', 'display', 'crosshair', 'aim-botz', 'controls',
-      'armory', 'frame-limit', 'auto-reload', 'input-latency',
+      'armory', 'frame-limit', 'auto-reload', 'weapon-switch', 'input-latency',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'armory')!.items.join(' ')).toContain('Every weapon finish, knife, glove and bot agent is unlocked');
     expect(latestChanges.sections.find(section => section.id === 'auto-reload')!.items.join(' ')).toContain('reloads by itself');
     expect(latestChanges.sections.find(section => section.id === 'input-latency')!.items.join(' ')).toContain('next frame');
+    expect(latestChanges.sections.find(section => section.id === 'weapon-switch')!.items.join(' ')).toContain('no longer freezes');
     expect(latestChanges.sections.find(section => section.id === 'frame-limit')!.items.join(' ')).toContain('500 FPS');
     expect(latestChanges.sections.find(section => section.id === 'display')!.items.join(' ')).toContain('1920 x 1440');
     expect(latestChanges.sections.find(section => section.id === 'crosshair')!.items.join(' ')).toContain('cl_crosshair_length');

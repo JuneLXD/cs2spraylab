@@ -91,6 +91,9 @@ export const latestChanges = {
     {id: 'auto-reload', title: 'Auto reload', items: [
       'An empty magazine reloads by itself once the last shot\'s cycle ends, in the range, AI Duel and Aim Botz, as in CS2.',
     ]},
+    {id: 'weapon-switch', title: 'Smooth weapon switching', items: [
+      'Switching weapons no longer freezes: the loadout\'s first-person models are prepared in the background and stay on the GPU, so a switch never re-downloads, re-parses or recompiles a model.',
+    ]},
     {id: 'input-latency', title: 'Faster shots', items: [
       'AI Duel and Aim Botz simulate a click on the next frame instead of waiting up to one 128 Hz tick (7.8 ms), and the view stays smooth while that tick runs ahead.',
     ]},

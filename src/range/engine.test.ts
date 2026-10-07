@@ -120,16 +120,16 @@ it.each(Object.keys(modeNames).filter(mode => mode !== 'hearing') as Mode[])('sh
   }
 });
 
-it('bounds the GPU weapon cache and never evicts the selected assembly', () => {
+it('keeps every loadout slot on the GPU so cycling never reloads, and frees other assemblies', () => {
   const engine = Object.create(RangeEngine.prototype) as RangeEngine;
-  engine.sim = new Simulation({...defaults, weapon: 'm4a4'});
-  engine.modelCache = new Map<Weapon, THREE.Object3D>(['ak47', 'm4a4', 'm4a1s', 'galil', 'famas'].map(id => [id as Weapon, new THREE.Group()]));
+  engine.sim = new Simulation({...defaults, weapon: 'm4a4', sidearm: 'deagle'});
+  engine.modelCache = new Map(['ak47', 'm4a4', 'deagle', 'm4a1s', 'knife', 'zeus', 'famas'].map(id => [id as Parameters<RangeEngine['setWeapon']>[0], new THREE.Group()]));
   const dispose = vi.fn(); engine.disposeObject = dispose;
   engine.viewAnimations = new Map();
   Object.assign(engine, {viewMuzzles: new Map()});
   engine.trimModelCache();
-  expect([...engine.modelCache.keys()]).toEqual(['m4a4', 'galil', 'famas']);
-  expect(dispose).toHaveBeenCalledTimes(2);
+  expect([...engine.modelCache.keys()]).toEqual(['m4a4', 'deagle', 'knife', 'zeus']);
+  expect(dispose).toHaveBeenCalledTimes(3);
 });
 
 it('clears hit feedback immediately when pausing so it cannot cover the entry button', () => {

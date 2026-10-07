@@ -113,6 +113,7 @@ export class RangeEngine {
   private attemptRevision = 0;
   private attemptTargets = new Set<number>();
   loading = new Map<Equipment, Promise<THREE.Object3D>>();
+  private preloading = false;
   revision = 0; kick = 0; hitTime = 0;
   markerGeometry = new THREE.SphereGeometry(.018, 6, 4);
   missMaterial = new THREE.MeshBasicMaterial({ color: '#ff6259' });
@@ -304,7 +305,7 @@ export class RangeEngine {
           return clip ? [mixer.clipAction(clip)] : [];
         }));
       });
-      this.loadedTarget = true; this.updateAssetStatus();
+      this.loadedTarget = true; this.updateAssetStatus(); void this.preloadModels();
       if (this.renderer) this.renderer.shadowMap.needsUpdate = true;
     } catch { if (!this.disposed) { this.assetStatus = 'Target asset missing'; this.onError('The player model could not load. Restore the local game assets with npm run assets:build.'); } }
   }
@@ -338,37 +339,7 @@ export class RangeEngine {
     this.assetStatus = 'Loading weapon';
     this.weaponRoot.clear();
     try {
-      let model = this.modelCache.get(id);
-      if (!model) {
-        if (!this.loading.has(id)) {
-          const profile = this.progression?.getSnapshot().profile;
-          const asset = profile ? cosmeticAsset(profile, id) : id;
-          const cosmeticRevision = this.cosmeticRevision;
-          const pending = new GLTFLoader().loadAsync(`/models/view-${asset}.glb`).then(async ({ scene: model, animations }) => {
-            prepareNativeViewAssembly(model);
-            try {if (profile) await applyCosmetic(model, profile, id);}
-            catch {this.disposeObject(model); throw new Error('Cosmetic could not load');}
-            if (this.disposed || cosmeticRevision !== this.cosmeticRevision) { this.disposeObject(model); return model; }
-            const wrapper = new THREE.Group();
-            model.rotation.y = Math.PI;
-            model.traverse(o => { if (o instanceof THREE.Mesh) for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
-              if (m instanceof THREE.MeshStandardMaterial) {
-                m.envMapIntensity = .3;
-                // The imported roughness map already contains the native surface values.
-                if (m.roughnessMap) m.roughness = 1;
-                if (/sleeve|glove|bare_arm/.test(m.name)) { m.metalness = 0; m.roughness = .9; m.roughnessMap = null; m.metalnessMap = null; }
-              }
-            } });
-            wrapper.add(model);
-            this.viewAnimations.set(id, new ViewAnimation(model, animations));
-            this.viewMuzzles.set(id, id === 'elite' ? {left: muzzleAnchor(model, 'left'), right: muzzleAnchor(model, 'right')} : {main: muzzleAnchor(model)});
-            this.modelCache.set(id, wrapper);
-            return wrapper;
-          }).finally(() => { if (cosmeticRevision === this.cosmeticRevision) this.loading.delete(id); });
-          this.loading.set(id, pending);
-        }
-        model = await this.loading.get(id)!;
-      }
+      const model = this.modelCache.get(id) ?? await this.loadModel(id);
       if (this.disposed) return;
       if (revision !== this.revision) { this.trimModelCache(); return; }
       this.modelCache.delete(id); this.modelCache.set(id, model);
@@ -377,12 +348,63 @@ export class RangeEngine {
       this.weaponRoot.rotation.set(0, 0, 0);
       this.trimModelCache();
       this.updateAssetStatus();
+      // Preload only once the target is in too, so it never delays the range becoming ready.
+      if (this.loadedTarget) void this.preloadModels();
     } catch {
       if (!this.disposed && revision === this.revision) {
         this.assetStatus = 'Weapon asset missing';
         this.onError('The weapon model could not load. Check the local asset export.');
       }
     }
+  }
+  private loadModel(id: Equipment) {
+    const loading = this.loading.get(id);
+    if (loading) return loading;
+    const profile = this.progression?.getSnapshot().profile;
+    const asset = profile ? cosmeticAsset(profile, id) : id;
+    const cosmeticRevision = this.cosmeticRevision;
+    const pending = new GLTFLoader().loadAsync(`/models/view-${asset}.glb`).then(async ({ scene: model, animations }) => {
+      prepareNativeViewAssembly(model);
+      try {if (profile) await applyCosmetic(model, profile, id);}
+      catch {this.disposeObject(model); throw new Error('Cosmetic could not load');}
+      if (this.disposed || cosmeticRevision !== this.cosmeticRevision) { this.disposeObject(model); return model; }
+      const wrapper = new THREE.Group();
+      model.rotation.y = Math.PI;
+      model.traverse(o => { if (o instanceof THREE.Mesh) for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
+        if (m instanceof THREE.MeshStandardMaterial) {
+          m.envMapIntensity = .3;
+          // The imported roughness map already contains the native surface values.
+          if (m.roughnessMap) m.roughness = 1;
+          if (/sleeve|glove|bare_arm/.test(m.name)) { m.metalness = 0; m.roughness = .9; m.roughnessMap = null; m.metalnessMap = null; }
+        }
+        // Upload textures now rather than on the first frame after a switch.
+        for (const value of Object.values(m)) if (value instanceof THREE.Texture) this.renderer.initTexture(value);
+      } });
+      wrapper.add(model);
+      await this.renderer.compileAsync(wrapper, this.viewCamera, this.viewScene);
+      if (this.disposed || cosmeticRevision !== this.cosmeticRevision) { this.disposeObject(model); return model; }
+      this.viewAnimations.set(id, new ViewAnimation(model, animations));
+      this.viewMuzzles.set(id, id === 'elite' ? {left: muzzleAnchor(model, 'left'), right: muzzleAnchor(model, 'right')} : {main: muzzleAnchor(model)});
+      this.modelCache.set(id, wrapper);
+      return wrapper;
+    }).finally(() => { if (cosmeticRevision === this.cosmeticRevision) this.loading.delete(id); });
+    this.loading.set(id, pending);
+    return pending;
+  }
+  private loadoutEquipment(): Equipment[] {
+    const {weapon, sidearm, primaryEnabled} = this.sim.settings;
+    return [...(primaryEnabled ? [weapon] : []), sidearm, 'knife', 'zeus'];
+  }
+  /** Prepares the rest of the loadout in the background, one model at a time, so a switch only swaps it in. */
+  private async preloadModels() {
+    if (this.preloading) return;
+    this.preloading = true;
+    try {
+      for (const id of this.loadoutEquipment()) {
+        if (this.disposed) return;
+        if (!this.modelCache.has(id)) await this.loadModel(id).catch(() => undefined);
+      }
+    } finally {this.preloading = false;}
   }
   async refreshCosmetics() {
     const key = JSON.stringify(this.progression?.getSnapshot().profile.equipped);
@@ -411,10 +433,10 @@ export class RangeEngine {
   }
   reset() {this.cancelProgression(); this.viewAnimations.get(this.sim.equipped)?.cancel(); this.sim.reset(); this.clearImpacts();}
   trimModelCache() {
-    // Embedded glove textures are duplicated per GLB; keep only three GPU assemblies.
+    // Embedded glove textures are duplicated per GLB, so only the loadout's assemblies stay on the GPU.
+    const loadout = new Set(this.loadoutEquipment());
     for (const [id, model] of this.modelCache) {
-      if (this.modelCache.size <= 3) break;
-      if (id === this.sim.equipped) continue;
+      if (loadout.has(id) || id === this.sim.equipped) continue;
       this.modelCache.delete(id); this.viewAnimations.get(id)?.dispose(); this.viewAnimations.delete(id); this.disposeObject(model);
       this.viewMuzzles.delete(id);
     }
