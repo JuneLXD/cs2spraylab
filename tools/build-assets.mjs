@@ -1,8 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { ensureBlender, stopBlender } from './blender-server.mjs';
-// The Blender steps talk to port 9876; start a headless-friendly Blender unless one is listening.
-const startedBlender = await ensureBlender();
-try { for (const args of [
+const steps = [
   ['tools/import-game.mjs'],
   ['tools/import-equipment.mjs'],
   ['tools/import-audio.mjs'],
@@ -25,5 +23,17 @@ try { for (const args of [
   ['tools/blender-command.mjs', 'art/verify_target_grips.py'],
   ['tools/blender-command.mjs', 'art/render_target_preview.py'],
   ['tools/check-assets.mjs']
-]) execFileSync(process.execPath, args, { stdio: 'inherit' }); }
+];
+// --from=<text> resumes at the first step whose command line contains <text>, e.g. --from=import-audio.
+const from = process.argv.find(arg => arg.startsWith('--from='))?.slice(7);
+const start = from ? steps.findIndex(args => args.join(' ').includes(from)) : 0;
+if (start < 0) throw new Error(`No asset step matches --from=${from}`);
+// The Blender steps talk to port 9876; start Blender unless something already listens there.
+const startedBlender = await ensureBlender();
+try {
+  for (const args of steps.slice(start)) {
+    console.log(`\n== ${args.join(' ')}`);
+    execFileSync(process.execPath, args, { stdio: 'inherit' });
+  }
+}
 finally { if (startedBlender) await stopBlender(); }

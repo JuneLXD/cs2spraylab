@@ -30,7 +30,8 @@ export function extractSoundTimeline(raw, duration, fps = 30) {
   const windows = Object.fromEntries((clip.m_eventTracks ?? []).flatMap(track => track.m_events ?? [])
     .filter(event => event._class === 'CNmClipDocEvent_ID' && /^WPN_RELOAD_(INTRO|LOOP|OUTRO)$/.test(event.m_ID))
     .map(event => [event.m_ID.slice(11).toLowerCase(), {start: event.m_flStartTime / fps, duration: event.m_flDuration / fps}]));
-  return {duration, fps, windows, source: clip.m_sourceFilename.replace(/\.dmx$/, '.vnmclip_c'),
+  // Newer clips record their DMX source with Windows separators.
+  return {duration, fps, windows, source: clip.m_sourceFilename.replace(/\\/g, '/').replace(/\.dmx$/, '.vnmclip_c'),
     sha256: crypto.createHash('sha256').update(raw).digest('hex'), cues};
 }
 
