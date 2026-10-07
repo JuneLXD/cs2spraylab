@@ -2,11 +2,13 @@ import { execFileSync } from 'node:child_process';
 import { ensureBlender, stopBlender } from './blender-server.mjs';
 const steps = [
   ['tools/import-game.mjs'],
+  ['tools/import-range-textures.mjs'],
   ['tools/import-equipment.mjs'],
   ['tools/import-audio.mjs'],
   ['tools/import-weapon-fx.mjs'],
   ['tools/blender-command.mjs', 'art/build_native.py', '--target-only'],
   ['tools/blender-command.mjs', 'art/build_arsenal.py'],
+  ['tools/import-combat-assets.mjs'],
   ['tools/build-weapon-mounts.mjs'],
   ['tools/blender-command.mjs', 'art/build_range.py'],
   ['tools/build-reload.mjs'],

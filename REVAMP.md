@@ -45,6 +45,10 @@ The development workspace already contains assets. To reproduce them:
 3. Install Blender 5.2 and FFmpeg. Set `BLENDER` (and `BLENDER_PYTHON`) when Blender is not in `C:/Program Files/Blender Foundation/Blender 5.2/`, and `FFMPEG` when `ffmpeg` is not on PATH. `npm run assets:build` starts Blender with `tools/blender-server.py`, a minimal implementation of the Blender MCP socket protocol, unless something already listens on localhost:9876 (an open Blender with the Blender MCP add-on still works). `npm run blender:server` / `npm run blender:stop` manage it by hand.
 4. Run `npm ci`, then `npm run assets:build`.
 
+`npm run assets:build -- --from=<step>` resumes at the first step whose command contains `<step>` (for example `--from=import-audio`). The pipeline also exports the concrete wall/floor textures (`tools/import-range-textures.mjs`; current CS2 shaders are newer than Source 2 Viewer 20 can decompile, so texture references are read from the compiled materials) and the HD and legacy world models of the five newer combat weapons (`tools/import-combat-assets.mjs`). A clean checkout builds the AI Duel gesture packs on its own: `build-duel-motion.mjs --gestures-only` exports the target skeleton and the requested world clips when they are absent.
+
+A fresh export from a newer CS2 build cannot reproduce the hashes recorded in the `docs/*-inventory.json` audits, so `npm run assets:check` reports those audits as stale while the runtime assets work. Keep the committed audits unless you intend to re-baseline them together with the build-pinned tests.
+
 Blender must be installed outside `%LOCALAPPDATA%` when it is unpacked by a packaged (MSIX) app such as the Claude desktop app: Windows redirects that app's AppData writes into a private copy that its side-by-side loader cannot see, and `blender.exe` then fails with "side-by-side configuration is incorrect".
 
 The read-only pipeline extracts VPK weapon definitions, native models, first-person gloves/sleeves, weapon-specific idle clips, world idle/strafe clips and shot WAVs. It does not load game DLLs or access a running game.

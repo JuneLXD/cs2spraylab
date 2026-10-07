@@ -24,7 +24,8 @@ try {
   const ids = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(mounts);
   for (const id of ids) {
     const {scene} = await load('target'), gun = (await load(id)).scene;
-    const original = scene.getObjectByName('held_weapon_target001') ?? scene.getObjectByName('held_weapon_target.001');
+    const original = scene.getObjectByName('held_weapon_target001') ?? scene.getObjectByName('held_weapon_target.001')
+      ?? scene.getObjectByName('held_weapon_target');
     assert(original, `${id}: target native weapon missing`); original.visible = false;
     const mount = scene.getObjectByName('wpn'); assert(mount, `${id}: native mount absent`);
     new Matrix4().fromArray(mounts[id].inverseBind).decompose(gun.position, gun.quaternion, gun.scale);

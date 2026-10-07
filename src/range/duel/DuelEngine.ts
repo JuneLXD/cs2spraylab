@@ -399,8 +399,10 @@ export class DuelEngine {
   }
 
   private attachWorldWeapon(model: THREE.Object3D, weapon: Equipment) {
-    // GLTFLoader sanitizes periods in animation node names.
-    const held = model.getObjectByName('held_weapon_target001') ?? model.getObjectByName('held_weapon_target.001');
+    // GLTFLoader sanitizes periods in animation node names. Blender adds the .001
+    // suffix only when the assembly session already held an object of that name.
+    const held = model.getObjectByName('held_weapon_target001') ?? model.getObjectByName('held_weapon_target.001')
+      ?? model.getObjectByName('held_weapon_target');
     if (weapon === 'm4a1s' && held) return held;
     const mount = model.getObjectByName('wpn');
     const source = this.worldWeapons.get(weapon);

@@ -8,22 +8,29 @@ import crypto from 'node:crypto';
 import {parseKv3} from './kv3.mjs';
 import {copyToDocument, dedup, prune, resample} from '@gltf-transform/functions';
 
+const game = process.env.CS2_PATH || 'C:/Program Files (x86)/Steam/steamapps/common/Counter-Strike Global Offensive';
+const cli = path.resolve('.local-tools/vrf/Source2Viewer-CLI.exe'), vpk = `${game}/game/csgo/pak01_dir.vpk`;
+const targetSource = path.resolve('research/raw-models/target-duel-native.glb');
+const targetClips = ['idle_rifle', 'idle_crouch_rifle', 'planted_e2w_rifle', 'planted_w2e_rifle',
+  'idle_pistol', 'idle_crouch_pistol',
+  ...['run', 'walk', 'crouch'].flatMap(gait => ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].flatMap(direction => ['rifle', 'pistol'].map(family => `${gait}_${direction}_${family}`))),
+  ...['usp', 'glock', 'hkp', 'p250', 'deagle', 'elite', 'fiveseven', 'tec9', 'cz75a', 'revolver'].flatMap(id => [`idle_${id}`, `idle_crouch_${id}`]),
+  'inair_stand_rifle', 'inair_crouch_stand_rifle', 'jump_crouch_stand_rifle',
+  'jump_stand_rifle', 'jump_e_rifle', 'jump_w_rifle', 'jump_n_rifle', 'jump_s_rifle',
+  'inair_stand_pistol', 'inair_crouch_stand_pistol', 'jump_crouch_stand_pistol',
+  'jump_stand_pistol', 'jump_e_pistol', 'jump_w_pistol', 'jump_n_pistol', 'jump_s_pistol'];
+const exportTarget = () => execFileSync(cli, ['-i', vpk, '-f', 'agents/models/ctm_sas/ctm_sas.vmdl_c', '-o', targetSource, '-d', '--gltf_export_format', 'glb',
+  '--gltf_export_animations', '--gltf_compose_additive', '--gltf_animation_list', targetClips.join(',')], {stdio: 'pipe', maxBuffer: 20e6});
+
 /** Disjoint, animation-only pack. Does not rebuild weapon/viewmodel/public base assets. */
 async function buildGestures() {
-  const source = path.resolve('research/raw-models/target-duel-native.glb');
-  const io = new NodeIO(), document = await io.read(source), root = document.getRoot();
-  for (const clip of root.listAnimations()) clip.dispose();
-  const nodes = new Map(root.listNodes().map(node => [node.getName(), node]));
-  const files = fs.readdirSync('research/native-view-audit/animation/anims/world', {recursive: true})
-    .filter(file => file.endsWith('.vnmclip')).map(file => path.join('research/native-view-audit/animation/anims/world', file));
   const ids = {ak47: 'ak', m4a4: 'm4a4', m4a1s: 'm4a1s', galil: 'galilar', famas: 'famas', sg553: 'sg556',
     aug: 'aug', mp9: 'mp9', mp7: 'mp7', mp5sd: 'mp5sd', mac10: 'mac10', ump45: 'ump45', p90: 'p90',
     bizon: 'bizon', m249: 'm249', negev: 'negev', cz75a: 'cz75a', usp: 'usp', glock: 'glock', hkp2000: 'hkp',
     p250: 'p250', deagle: 'deagle', elite: 'elite', fiveseven: 'fiveseven', tec9: 'tec9', revolver: 'revolver',
     awp: 'awp', ssg08: 'ssg08', g3sg1: 'g3sg1', scar20: 'scar20', nova: 'nova', xm1014: 'xm1014',
     mag7: 'mag7', sawedoff: 'sawedoff', zeus: 'taser', knife: 'default_ct'};
-  const audit = [], missing = [], requests = [];
-  for (const [id, suffix] of Object.entries(ids)) {
+  const actionsFor = (id, suffix) => {
     const actions = [['idle', `idle_${suffix}`], ['draw', `draw_${suffix}`], ['reload', `reload_${suffix}`],
       ['reload_crouch', `reload_crouch_${suffix}`], ['draw_crouch', `draw_crouch_${suffix}`],
       ['reload-empty', `reload_empty_${suffix}`], ['fire', `shoot_${id === 'cz75a' ? 'cz75' : suffix}`]];
@@ -31,19 +38,33 @@ async function buildGestures() {
       actions.push([`fire-${side}`, `shoot_${side}1_elite`], [`fire-${side}-last`, `shoot_${side}last_elite`]);
     }
     if (id === 'revolver') actions.push(['fire-alt', 'shoot_alt_revolver']);
-    for (const [action, name] of actions) {
+    return actions;
+  };
+  // A fresh checkout has neither the skeleton nor the world clips: export exactly what is requested.
+  if (!fs.existsSync(targetSource)) exportTarget();
+  const clipRoot = 'research/native-view-audit/animation/anims/world';
+  if (!fs.existsSync(clipRoot) || process.argv.includes('--refresh-gestures')) {
+    const wanted = new Set(Object.entries(ids).flatMap(([id, suffix]) => actionsFor(id, suffix).map(([, name]) => `${name}.vnmclip_c`)));
+    const listing = execFileSync(cli, ['-i', vpk, '-f', 'animation/anims/world/', '-e', 'vnmclip_c', '-l'], {encoding: 'utf8', windowsHide: true, maxBuffer: 50e6});
+    const sources = listing.split(/\r?\n/).map(line => line.trim().split(' ')[0]).filter(file => wanted.has(path.posix.basename(file ?? '')));
+    for (let start = 0; start < sources.length; start += 40)
+      execFileSync(cli, ['-i', vpk, '-f', sources.slice(start, start + 40).join(','), '-o', 'research/native-view-audit', '-d'],
+        {windowsHide: true, stdio: 'pipe', maxBuffer: 20e6});
+  }
+  const io = new NodeIO(), document = await io.read(targetSource), root = document.getRoot();
+  for (const clip of root.listAnimations()) clip.dispose();
+  const nodes = new Map(root.listNodes().map(node => [node.getName(), node]));
+  const files = fs.readdirSync(clipRoot, {recursive: true})
+    .filter(file => file.endsWith('.vnmclip')).map(file => path.join(clipRoot, file));
+  const audit = [], missing = [], requests = [];
+  for (const [id, suffix] of Object.entries(ids)) {
+    for (const [action, name] of actionsFor(id, suffix)) {
       const file = files.find(file => path.basename(file) === `${name}.vnmclip`);
       if (!file || !fs.existsSync(file.replace(/\.vnmclip$/, '.dmx'))) {missing.push({id, action}); continue;}
       const raw = fs.readFileSync(file, 'utf8'), metadata = parseKv3(raw);
       requests.push({id, action, name, raw, metadata, file});
     }
   }
-  const game = process.env.CS2_PATH || 'C:/Program Files (x86)/Steam/steamapps/common/Counter-Strike Global Offensive';
-  if (process.argv.includes('--refresh-gestures'))
-    execFileSync(path.resolve('.local-tools/vrf/Source2Viewer-CLI.exe'), ['-i', `${game}/game/csgo/pak01_dir.vpk`,
-      '-f', [...new Set(requests.map(r => r.file.replaceAll('\\', '/').replace('research/native-view-audit/', '').replace(/\.vnmclip$/, '.vnmclip_c')))].join(','),
-      '-o', 'research/native-view-audit', '-d'],
-      {windowsHide: true, stdio: 'pipe', maxBuffer: 20e6});
   const python = process.env.BLENDER_PYTHON || 'python';
   for (const {id, action, file} of requests) {
       const raw = fs.readFileSync(file, 'utf8'), metadata = parseKv3(raw);
@@ -97,26 +118,13 @@ async function buildGestures() {
 }
 if (process.argv.includes('--gestures-only')) {await buildGestures(); process.exit(0);}
 
-const source = path.resolve('research/raw-models/target-duel-native.glb');
+const source = targetSource;
 const output = path.resolve('public/revamp/models/duel-motion.glb');
 const unoptimized = path.resolve('research/duel-motion-unoptimized.glb');
-const game = process.env.CS2_PATH || 'C:/Program Files (x86)/Steam/steamapps/common/Counter-Strike Global Offensive';
 const deathClips = ['death_chest_a', 'death_chest_b', 'death_gut_a'];
 if (!fs.existsSync('.local-tools/datamodel.py')) throw new Error(
   'Install Blender Source Tools datamodel.py in .local-tools first; see docs/gameplay-session-audit.md.');
-if (process.argv.includes('--refresh')) {
-  const clips = ['idle_rifle', 'idle_crouch_rifle', 'planted_e2w_rifle', 'planted_w2e_rifle',
-    'idle_pistol', 'idle_crouch_pistol',
-    ...['run', 'walk', 'crouch'].flatMap(gait => ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'].flatMap(direction => ['rifle', 'pistol'].map(family => `${gait}_${direction}_${family}`))),
-    ...['usp', 'glock', 'hkp', 'p250', 'deagle', 'elite', 'fiveseven', 'tec9', 'cz75a', 'revolver'].flatMap(id => [`idle_${id}`, `idle_crouch_${id}`]),
-    'inair_stand_rifle', 'inair_crouch_stand_rifle', 'jump_crouch_stand_rifle',
-    'jump_stand_rifle', 'jump_e_rifle', 'jump_w_rifle', 'jump_n_rifle', 'jump_s_rifle',
-    'inair_stand_pistol', 'inair_crouch_stand_pistol', 'jump_crouch_stand_pistol',
-    'jump_stand_pistol', 'jump_e_pistol', 'jump_w_pistol', 'jump_n_pistol', 'jump_s_pistol'];
-  execFileSync(path.resolve('.local-tools/vrf/Source2Viewer-CLI.exe'), ['-i', `${game}/game/csgo/pak01_dir.vpk`,
-    '-f', 'agents/models/ctm_sas/ctm_sas.vmdl_c', '-o', source, '-d', '--gltf_export_format', 'glb',
-    '--gltf_export_animations', '--gltf_compose_additive', '--gltf_animation_list', clips.join(',')], {stdio: 'pipe', maxBuffer: 20e6});
-}
+if (process.argv.includes('--refresh')) exportTarget();
 if (!fs.existsSync(source)) throw new Error('Export target-duel-native.glb from the installed game first.');
 const io = new NodeIO();
 const document = await io.read(source);

@@ -13,6 +13,10 @@ from contextlib import redirect_stdout
 import bpy
 
 PORT = int(os.environ.get('SPRAYLAB_BLENDER_PORT', '9876'))
+# Start from an empty file. The factory scene's selected Cube would otherwise be
+# exported by art scripts that export the selection across all scenes.
+for obj in list(bpy.data.objects):
+    bpy.data.objects.remove(obj, do_unlink=True)
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(('127.0.0.1', PORT))
