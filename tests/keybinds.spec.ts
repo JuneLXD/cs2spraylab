@@ -70,6 +70,26 @@ test('Keyboard / Mouse mirrors CS2, imports autoexec.cfg and rebinds keys', asyn
   expect(errors).toEqual([]);
 });
 
+test('AI Duel fires and switches weapons through imported binds', async ({page}, info) => {
+  test.skip(info.project.name.startsWith('mobile'), 'Desktop keyboard workflow');
+  await page.goto('/');
+  await openKeyboardTab(page);
+  await page.getByLabel('Import CS2 config files').setInputFiles([{name: 'autoexec.cfg', mimeType: 'text/plain',
+    buffer: Buffer.from('unbind "MOUSE1"\nbind "k" "+attack"\nbind "6" "slot3"\n')}]);
+  await page.getByRole('button', {name: 'Done', exact: true}).click();
+  await page.getByLabel('Protect Ctrl+W').uncheck();
+  await page.getByRole('button', {name: 'Enter duel'}).click();
+  await expect(page.getByRole('button', {name: 'Pause duel'})).toBeVisible();
+  const ammo = async () => Number((await page.locator('.duel-ammo strong').innerText()).split('/')[0].trim());
+  await page.mouse.down(); await page.waitForTimeout(150); await page.mouse.up();
+  await page.waitForTimeout(300);
+  expect(await ammo()).toBe(30);
+  await page.keyboard.down('KeyK'); await page.waitForTimeout(150); await page.keyboard.up('KeyK');
+  await expect.poll(ammo, {timeout: 5000}).toBeLessThan(30);
+  await page.keyboard.press('Digit6');
+  await expect(page.getByRole('button', {name: 'Equip Default knife', exact: true})).toHaveAttribute('aria-pressed', 'true');
+});
+
 test('imported binds drive range movement instead of WASD', async ({page}, info) => {
   test.skip(info.project.name.startsWith('mobile'), 'Desktop keyboard workflow');
   await page.addInitScript(() => Object.defineProperty(HTMLElement.prototype, 'requestPointerLock', {value: undefined}));
