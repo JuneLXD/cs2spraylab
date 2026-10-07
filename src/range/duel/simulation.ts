@@ -84,6 +84,8 @@ export class DuelSimulation {
   private controlledBots = new Set<number>();
   private lastCalloutAt = new Map<number, number>();
   private previous: DuelActorSnapshot[] = [];
+  /** The snapshot before `previous`, presented while a tick runs ahead of real time. */
+  private earlier: DuelActorSnapshot[] = [];
   private combatActions = new Map<number,{action:DuelActorSnapshot['action'];at:number}>();
   private usedAt = new Map<number,number>();
   private hasSidearm = true;
@@ -228,6 +230,16 @@ export class DuelSimulation {
     while (this.accumulator + 1e-10 >= STEP && this.phase === 'fighting') {
       this.step(); this.accumulator -= STEP;
     }
+  }
+
+  /** Runs the next tick now rather than at its boundary, so a click is simulated by the next frame instead of up to
+   * a tick (7.8 ms) later. It stays at most one tick ahead of real time: later frames wait until time catches up. */
+  stepEarly() {
+    if (this.phase !== 'fighting' || this.paused || this.accumulator < 0) return false;
+    this.earlier = this.previous;
+    this.accumulator -= STEP;
+    this.step();
+    return true;
   }
 
   step() {
@@ -582,7 +594,9 @@ export class DuelSimulation {
   renderSnapshot() {
     const current = this.snapshot();
     if (this.paused || this.phase !== 'fighting') return current;
-    const presented = interpolateActors(this.previous, current, this.accumulator);
+    // While a tick runs ahead, the presented moment lies between the two ticks before it, so nothing jumps.
+    const presented = this.accumulator < 0 ? interpolateActors(this.earlier, this.previous, this.accumulator + STEP)
+      : interpolateActors(this.previous, current, this.accumulator);
     // Mouse look is immediate, even on frames between fixed simulation ticks.
     presented[0].yaw = current[0].yaw + this.actors[0].command.yawDelta;
     presented[0].pitch = Math.max(-89 * DEG, Math.min(89 * DEG, current[0].pitch + this.actors[0].command.pitchDelta));

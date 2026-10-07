@@ -647,7 +647,7 @@ export class DuelEngine {
       if (this.sim.phase !== 'fighting') return;
       this.pointer = event.pointerId; this.pointerX = event.clientX; this.pointerY = event.clientY;
       // Mouse buttons fire through their binds; touch fires directly.
-      if (event.pointerType !== 'mouse') this.sim.command(0, {firePressed: true});
+      if (event.pointerType !== 'mouse') {this.sim.command(0, {firePressed: true}); this.sim.stepEarly();}
       if (!document.pointerLockElement) canvas.setPointerCapture(event.pointerId);
     }) as EventListener);
     this.listen(document, 'pointermove', ((event: PointerEvent) => {
@@ -699,7 +699,11 @@ export class DuelEngine {
     if (event.kind === 'press' || event.kind === 'release') {
       const down = event.kind === 'press';
       switch (event.action) {
-        case 'attack': this.sim.command(0, down ? (fighting ? {fireHeld: true, firePressed: true} : {}) : {fireHeld: false}); return;
+        case 'attack':
+          this.sim.command(0, down ? (fighting ? {fireHeld: true, firePressed: true} : {}) : {fireHeld: false});
+          // Fire on the next frame rather than at the next tick boundary.
+          if (down && fighting) this.sim.stepEarly();
+          return;
         case 'attack2': this.sim.command(0, down ? (fighting ? {secondaryPressed: true, secondaryHeld: true} : {}) : {secondaryHeld: false}); return;
         case 'reload': this.sim.command(0, down ? {reloadPressed: true, reloadHeld: true} : {reloadHeld: false}); return;
         case 'inspect': if (down) this.inspect(); return;

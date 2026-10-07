@@ -139,6 +139,36 @@ describe('headless combat fixtures', () => {
     expect(sim.drainEvents().some(event => event.kind === 'action' && event.actorId === 0 && event.action === 'reload-start')).toBe(true);
   });
 
+  it('simulates a click on the next frame instead of waiting for the next tick boundary', () => {
+    const sim = new DuelSimulation(sanitizeDuelConfig({playerHealth: 500}), 42, testArena());
+    sim.start(); sim.actors[0].yaw += Math.PI;
+    sim.advance(STEP + .001); sim.drainEvents();
+    const tick = sim.tick;
+    sim.command(0, {firePressed: true, fireHeld: true});
+    sim.advance(.002);
+    expect(sim.tick).toBe(tick);
+    expect(sim.stepEarly()).toBe(true);
+    expect(sim.tick).toBe(tick + 1);
+    expect(sim.drainEvents().some(event => event.kind === 'fire' && event.actorId === 0)).toBe(true);
+    // At most one tick ahead of real time: later frames wait until it is repaid.
+    expect(sim.stepEarly()).toBe(false);
+    sim.advance(2 * STEP - .004); expect(sim.tick).toBe(tick + 1);
+    sim.advance(.002); expect(sim.tick).toBe(tick + 2);
+  });
+
+  it('keeps the presented view continuous while a tick runs ahead', () => {
+    const sim = new DuelSimulation(sanitizeDuelConfig({playerHealth: 500}), 42, testArena());
+    sim.start(); sim.command(0, {forward: 1});
+    for (let i = 0; i < 20; i++) sim.advance(.007);
+    const before = sim.renderSnapshot()[0].position;
+    sim.command(0, {firePressed: true}); expect(sim.stepEarly()).toBe(true);
+    const after = sim.renderSnapshot()[0].position;
+    expect(Math.hypot(after.x - before.x, after.y - before.y, after.z - before.z)).toBeLessThan(1e-9);
+    sim.advance(.004);
+    const later = sim.renderSnapshot()[0].position;
+    expect(Math.hypot(later.x - after.x, later.z - after.z)).toBeGreaterThan(0);
+  });
+
   it('freezes combat and clears held inputs on resume', () => {
     const sim = new DuelSimulation(); sim.start(); sim.pause();
     sim.command(0, {fireHeld: true}); sim.advance(5);

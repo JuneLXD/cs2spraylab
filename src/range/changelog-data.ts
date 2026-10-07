@@ -91,6 +91,9 @@ export const latestChanges = {
     {id: 'auto-reload', title: 'Auto reload', items: [
       'An empty magazine reloads by itself once the last shot\'s cycle ends, in the range, AI Duel and Aim Botz, as in CS2.',
     ]},
+    {id: 'input-latency', title: 'Faster shots', items: [
+      'AI Duel and Aim Botz simulate a click on the next frame instead of waiting up to one 128 Hz tick (7.8 ms), and the view stays smooth while that tick runs ahead.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
