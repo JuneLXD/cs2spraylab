@@ -567,7 +567,7 @@ export class RangeEngine {
       this.ray.set(start, delta.normalize());
       const obstruction = this.ray.intersectObjects(this.visibleSolids(), false)[0];
       if (length > .15 && (!obstruction || obstruction.distance >= length - .08))
-        this.shotEffects.trace(this.sim.equipped, shot.index, start, end, this.elapsed, this.traceColor);
+        this.shotEffects.trace(this.sim.equipped, shot.index, start, end, this.elapsed, this.traceColor, this.sim.settings.tracers);
     }
     for(const {physical,targetIndex,head:isHead,healthDamage} of ray.hits) {
       const parent=this.targets[targetIndex];

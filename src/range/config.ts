@@ -33,6 +33,8 @@ export type Settings = {
   /** CS2 bind table and Keyboard & Mouse options. */
   keyboard: KeyboardProfile;
   viewmodel: Viewmodel;
+  /** Your bullet tracers: every round (practice), CS2's per-weapon cadence, or none. */
+  tracers: 'every' | 'native' | 'off';
 };
 export const weaponNames: Record<Weapon, string> = { ak47: 'AK-47', m4a4: 'M4A4', m4a1s: 'M4A1-S', galil: 'Galil AR', famas: 'FAMAS', sg553: 'SG 553', aug: 'AUG', mp9: 'MP9', mp7: 'MP7', mp5sd: 'MP5-SD', mac10: 'MAC-10', ump45: 'UMP-45', p90: 'P90', bizon: 'PP-Bizon', m249: 'M249', negev: 'Negev', cz75a: 'CZ75-Auto',
   usp: 'USP-S', glock: 'Glock-18', hkp2000: 'P2000', p250: 'P250', deagle: 'Desert Eagle', elite: 'Dual Berettas',
@@ -57,7 +59,8 @@ export const defaults: Settings = {
   aspect: 'native',
   crosshair: { color: '#ffeb55', size: 3, gap: 2, thickness: 2, outline: 1, alpha: 1, dot: false, t: false, dynamic: false },
   keyboard: defaultKeyboard,
-  viewmodel: classicViewmodel
+  viewmodel: classicViewmodel,
+  tracers: 'every'
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -97,7 +100,8 @@ export function sanitizeSettings(raw: unknown): Settings {
       dot: c.dot === true, t: c.t === true, dynamic: c.dynamic === true
     },
     keyboard: sanitizeKeyboard(s.keyboard),
-    viewmodel: sanitizeViewmodel(s.viewmodel)
+    viewmodel: sanitizeViewmodel(s.viewmodel),
+    tracers: s.tracers === 'native' || s.tracers === 'off' ? s.tracers : 'every'
   };
 }
 export function sanitizeViewmodel(raw: unknown): Viewmodel {

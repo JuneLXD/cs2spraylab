@@ -37,6 +37,34 @@ test('range resolves hits immediately, flashes at the barrel, and suppressed wea
   expect(errors).toEqual([]);
 });
 
+test('practice tracers follow every round of a held spray to its impact', async ({page}, info) => {
+  test.skip(info.project.name.startsWith('mobile'), 'Desktop mouse workflow');
+  await page.addInitScript(() => {
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'guided', volume: 0}));
+    Object.defineProperty(HTMLElement.prototype, 'requestPointerLock', {value: undefined});
+  });
+  await page.goto('/');
+  await page.evaluate(async () => {
+    const url = performance.getEntriesByType('resource').find(e => e.name.includes('/src/range/engine.ts'))!.name;
+    const {RangeEngine} = await import(/* @vite-ignore */ url), tick = RangeEngine.prototype.tick;
+    RangeEngine.prototype.tick = function(time: number) {(window as any).fxEngine = this; tick.call(this, time);};
+  });
+  await page.waitForFunction(() => (window as any).fxEngine?.loadedTarget && (window as any).fxEngine.modelCache.has('ak47'));
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  const box = (await page.locator('canvas[data-range]').boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down(); await page.waitForTimeout(450);
+  const spray = await page.evaluate(() => {
+    const e = (window as any).fxEngine, fx = e.shotEffects;
+    return {shots: e.sim.shots, traced: fx.nextTrace, beams: fx.beams.visible, lines: fx.tracers.visible};
+  });
+  await page.screenshot({path: `test-results/${info.project.name}-practice-tracers.png`});
+  await page.mouse.up();
+  expect(spray.shots).toBeGreaterThan(2);
+  expect(spray.traced).toBe(spray.shots);
+  expect(spray.beams).toBe(true); expect(spray.lines).toBe(true);
+});
+
 test('knife shop filters by native model and owns every native preview before equipping', async ({page}) => {
   await page.addInitScript(() => {
     localStorage.setItem('spraylab.progression.v1',JSON.stringify({version:2,xp:357885,balance:1000000}));

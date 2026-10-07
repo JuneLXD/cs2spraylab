@@ -788,8 +788,9 @@ export class DuelEngine {
         const endpointAhead = v3(end).sub(this.camera.position).dot(this.camera.getWorldDirection(new THREE.Vector3())) > .1;
         const obstruction = traceSolid(start, delta.clone().normalize(), this.sim.arena, length);
         if (length > .15 && endpointAhead && obstruction.distance >= length - .08) {
+          // Practice tracers apply to your own shots; bots keep CS2's cadence.
           this.shotEffects.trace(shot.equipment, count, start, v3(end), this.animationClock,
-            shot.actorId === 0 ? this.ownTraceColor : this.enemyTraceColor);
+            shot.actorId === 0 ? this.ownTraceColor : this.enemyTraceColor, shot.actorId === 0 ? this.settings.tracers : 'native');
         }
       }
       }

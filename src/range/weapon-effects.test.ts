@@ -1,5 +1,5 @@
 import {describe, expect, it, vi} from 'vitest';
-import {Color, Group, Object3D, Texture, Vector3} from 'three';
+import {Color, Group, Matrix4, Object3D, Quaternion, Texture, Vector3} from 'three';
 import {hasTracer, MuzzleFlashes, ShotEffects} from './weapon-effects';
 
 describe('instant-shot cosmetic effects', () => {
@@ -47,6 +47,24 @@ describe('instant-shot cosmetic effects', () => {
     flashes.fire(anchor, 'usp', .4); expect(flashes.sprites[1].scale.x).toBeLessThan(.04);
     flashes.clear(); expect(flashes.sprites.every(s => !s.visible)).toBe(true);
     flashes.dispose(); expect(dispose).toHaveBeenCalledOnce();
+  });
+  it('draws practice tracers on every round with a visible, longer-lived beam', () => {
+    expect([0, 1, 2].map(i => hasTracer('ak47', i, 'every'))).toEqual([true, true, true]);
+    expect(hasTracer('m4a1s', 0, 'every')).toBe(true);
+    expect(hasTracer('knife', 0, 'every')).toBe(false);
+    expect(hasTracer('ak47', 0, 'off')).toBe(false);
+    const fx = new ShotEffects(new Group(), 4, 4), from = new Vector3(0, 1, 0), end = new Vector3(0, 1, -20);
+    expect(fx.trace('m4a1s', 1, from, end, 0, new Color('#ffffff'), 'every')).toBe(true);
+    expect(fx.trace('m4a1s', 1, from, end, 0, new Color('#ffffff'))).toBe(false);
+    const beam = new Matrix4(); fx.beams.getMatrixAt(0, beam);
+    const position = new Vector3(), scale = new Vector3(); beam.decompose(position, new Quaternion(), scale);
+    expect(position.toArray()).toEqual([0, 1, 0]);
+    expect(scale.z).toBeCloseTo(20);
+    expect(scale.x).toBeGreaterThan(.01);
+    fx.update(.2); expect(fx.beams.visible).toBe(true); expect(fx.tracers.visible).toBe(true);
+    fx.update(.4); expect(fx.beams.visible).toBe(false);
+    fx.beams.getMatrixAt(0, beam); beam.decompose(position, new Quaternion(), scale); expect(scale.z).toBe(0);
+    fx.dispose();
   });
   it('renders Zeus as two pooled electrical wires, not a firearm flame or bullet tracer',()=>{
     const fx=new ShotEffects(new Group(),4,4),from=new Vector3(1,1,1),to=new Vector3(1,1,-2);
