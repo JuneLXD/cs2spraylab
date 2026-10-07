@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {ClipboardPaste, Download, FileUp, Plus, RotateCcw, TriangleAlert, X} from 'lucide-react';
-import type {Settings} from '../config';
+import {sanitizeViewmodel, type Settings} from '../config';
 import {cs2DefaultBinds, defaultKeyboard, duelOnlyCommands, keyboardPage, keysFor, otherBinds, trainerCommands,
   type BindRow, type EnumRow, type KeyboardProfile, type SliderRow} from './profile';
 import {browserReservedKeys, describeKey, displayKey, keyFromCode, keyFromMouseButton} from './keys';
@@ -70,7 +70,8 @@ export function KeyboardSettings({settings, update, notify}: Props) {
   };
   const apply = (result: ImportResult) => {
     update({keyboard: result.profile, ...(result.mouse.sensitivity !== undefined ? {sensitivity: result.mouse.sensitivity} : {}),
-      ...(result.mouse.invertY !== undefined ? {invertY: result.mouse.invertY} : {})});
+      ...(result.mouse.invertY !== undefined ? {invertY: result.mouse.invertY} : {}),
+      ...(Object.keys(result.viewmodel).length ? {viewmodel: sanitizeViewmodel({...settings.viewmodel, ...result.viewmodel})} : {})});
     setReport(result.report); setChange('');
   };
   const importFiles = async (list: FileList | null) => {

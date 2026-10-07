@@ -11,6 +11,11 @@ export function migrateMode(mode: unknown): Mode {
   return typeof mode === 'string' && Object.prototype.hasOwnProperty.call(modeNames, mode) ? mode as Mode : 'duel';
 }
 export type Crosshair = { color: string; size: number; gap: number; thickness: number; outline: number; alpha: number; dot: boolean; t: boolean; dynamic: boolean };
+/** CS2 viewmodel_fov and viewmodel_offset_x/y/z. */
+export type Viewmodel = { fov: number; x: number; y: number; z: number };
+/** CS2's Classic viewmodel position, which the trainer has always used. */
+export const classicViewmodel: Viewmodel = { fov: 68, x: 2.5, y: 0, z: -1.5 };
+export const viewmodelLimits = { fov: [54, 68], x: [-2.5, 2.5], y: [-2, 2], z: [-2, 2] } as const;
 export type Settings = {
   weapon: Weapon; sidearm: Pistol; primaryEnabled: boolean; mode: Mode; sensitivity: number; dpi: number; invertY: boolean;
   moving: boolean; targetSpeed: 'rifle' | 'smg' | 'knife';
@@ -27,6 +32,7 @@ export type Settings = {
   crosshair: Crosshair;
   /** CS2 bind table and Keyboard & Mouse options. */
   keyboard: KeyboardProfile;
+  viewmodel: Viewmodel;
 };
 export const weaponNames: Record<Weapon, string> = { ak47: 'AK-47', m4a4: 'M4A4', m4a1s: 'M4A1-S', galil: 'Galil AR', famas: 'FAMAS', sg553: 'SG 553', aug: 'AUG', mp9: 'MP9', mp7: 'MP7', mp5sd: 'MP5-SD', mac10: 'MAC-10', ump45: 'UMP-45', p90: 'P90', bizon: 'PP-Bizon', m249: 'M249', negev: 'Negev', cz75a: 'CZ75-Auto',
   usp: 'USP-S', glock: 'Glock-18', hkp2000: 'P2000', p250: 'P250', deagle: 'Desert Eagle', elite: 'Dual Berettas',
@@ -50,7 +56,8 @@ export const defaults: Settings = {
   peekScenario: 'mixed', peekDuration: 1, drillPace: 'practice',
   aspect: 'native',
   crosshair: { color: '#ffeb55', size: 3, gap: 2, thickness: 2, outline: 1, alpha: 1, dot: false, t: false, dynamic: false },
-  keyboard: defaultKeyboard
+  keyboard: defaultKeyboard,
+  viewmodel: classicViewmodel
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -89,8 +96,14 @@ export function sanitizeSettings(raw: unknown): Settings {
       outline: numeric(c.outline, 1, 0, 3), alpha: numeric(c.alpha, 1, .1, 1),
       dot: c.dot === true, t: c.t === true, dynamic: c.dynamic === true
     },
-    keyboard: sanitizeKeyboard(s.keyboard)
+    keyboard: sanitizeKeyboard(s.keyboard),
+    viewmodel: sanitizeViewmodel(s.viewmodel)
   };
+}
+export function sanitizeViewmodel(raw: unknown): Viewmodel {
+  const v = (raw && typeof raw === 'object' ? raw : {}) as Partial<Viewmodel>;
+  const value = (key: keyof Viewmodel) => numeric(v[key], classicViewmodel[key], viewmodelLimits[key][0], viewmodelLimits[key][1]);
+  return { fov: value('fov'), x: value('x'), y: value('y'), z: value('z') };
 }
 export function loadSettings(): Settings {
   try {

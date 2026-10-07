@@ -3,13 +3,13 @@ import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {clone as cloneSkeleton} from 'three/examples/jsm/utils/SkeletonUtils.js';
 import {DEG, UNIT, type Vec} from '../actor-physics';
 import {RangeAudio} from '../audio';
-import {gameData,loadoutWeapon, type Settings, type Weapon} from '../config';
+import {gameData,loadoutWeapon, type Settings, type Viewmodel, type Weapon} from '../config';
 import {requestRawLock} from '../input';
 import {mouseAngle, VERTICAL_FOV, zoomRatio} from '../simulation';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
 import {attachBindInput} from '../keybinds/dom-input';
 import {protectedCodes} from '../keybinds/profile';
-import {VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelViewport} from '../viewmodel';
+import {VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelFov, viewmodelOffset, viewmodelViewport} from '../viewmodel';
 import {botConfig, type DuelConfig} from './config';
 import {duelArena, traceSolid} from './geometry';
 import {DuelSimulation} from './simulation';
@@ -67,6 +67,7 @@ export class DuelEngine {
   readonly camera = new THREE.PerspectiveCamera(VERTICAL_FOV, 1, .03, 120);
   readonly viewScene = new THREE.Scene();
   readonly viewCamera = new THREE.PerspectiveCamera(VIEWMODEL_FOV, 1, .01, 10);
+  private viewOffset = VIEWMODEL_OFFSET;
   readonly viewRoot = new THREE.Group();
   readonly actors = new THREE.Group();
   readonly covers = new THREE.Group();
@@ -167,6 +168,7 @@ export class DuelEngine {
     this.shortcuts = new ShortcutGuard(host.closest('.range-stage'));
     this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
     this.binds = new BindRuntime(settings.keyboard, event => this.onBind(event));
+    this.applyViewmodel(settings.viewmodel);
     this.renderer = new THREE.WebGLRenderer({antialias: qualityPolicy(settings.quality).shadows, powerPreference: 'high-performance'});
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -457,6 +459,7 @@ export class DuelEngine {
   setSettings(settings: Settings) {
     if (settings === this.settings) return;
     this.binds.setProfile(settings.keyboard);
+    this.applyViewmodel(settings.viewmodel);
     this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
     const weaponChanged = settings.weapon !== this.settings.weapon || settings.sidearm !== this.settings.sidearm || settings.primaryEnabled !== this.settings.primaryEnabled;
     const qualityChanged = settings.quality !== this.settings.quality;
@@ -466,6 +469,13 @@ export class DuelEngine {
     if (qualityChanged) this.metrics.resetResolution();
     this.meter.configure(settings.showFps);
     this.resize();
+  }
+
+  /** CS2 viewmodel_fov / viewmodel_offset_*: the arms camera and weapon placement. */
+  private applyViewmodel(viewmodel: Viewmodel) {
+    this.viewOffset = viewmodelOffset(viewmodel);
+    const fov = viewmodelFov(viewmodel.fov);
+    if (this.viewCamera.fov !== fov) {this.viewCamera.fov = fov; this.viewCamera.updateProjectionMatrix();}
   }
 
   setConfig(config: DuelConfig) {
@@ -917,8 +927,9 @@ export class DuelEngine {
     this.syncActors(snapshots, this.sim.phase !== 'ready' && !this.paused ? dt : 0);
     this.kick = Math.max(0, this.kick - dt * 8);
     const speed = Math.hypot(player.velocity.x, player.velocity.z);
-    this.viewRoot.position.set(VIEWMODEL_OFFSET.x,
-      VIEWMODEL_OFFSET.y + Math.sin(this.sim.time * 12) * Math.min(speed, 1) * .002 - (player.alive ? 0 : death.weaponDrop * .5), this.kick * .018);
+    const offset = this.viewOffset ?? VIEWMODEL_OFFSET;
+    this.viewRoot.position.set(offset.x,
+      offset.y + Math.sin(this.sim.time * 12) * Math.min(speed, 1) * .002 - (player.alive ? 0 : death.weaponDrop * .5), offset.z + this.kick * .018);
     this.viewRoot.visible = !scoped && (player.alive || deathAge < .25);
     this.viewRoot.rotation.x = this.kick * (player.equipment === 'knife' ? 0 : .035) + view.weaponPitch;
     this.viewRoot.rotation.y = view.weaponYaw;

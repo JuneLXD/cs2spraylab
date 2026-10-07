@@ -58,7 +58,7 @@ export const latestChanges = {
     ]},
     {id: 'controls', title: 'Keybinds & CS2 configs', items: [
       'Settings > Keyboard / Mouse mirrors CS2\'s own page, extracted from the installed game: every bind section and option, with click-to-rebind for keys, mouse buttons and the wheel.',
-      'Import autoexec.cfg and CS2\'s saved cs2_user_keys/convars files. Aliases, toggle scripts, +/- binds, exec chains, sensitivity, zoom sensitivity and duck/walk toggles behave as in CS2; Export writes a matching .cfg.',
+      'Import autoexec.cfg and CS2\'s saved cs2_user_keys/convars files. Aliases, toggle scripts, +/- binds, exec chains, sensitivity, zoom sensitivity, duck/walk toggles and viewmodel FOV/offsets behave as in CS2; Export writes a matching .cfg.',
       'Range, AI Duel and the movement lessons follow your binds, including chorded mouse buttons. HUD hints and fullscreen shortcut protection use your keys; slot 3 cycles knife and Zeus as in CS2.',
     ]},
   ] satisfies readonly ChangelogSection[],

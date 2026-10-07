@@ -1,3 +1,4 @@
+import type {Viewmodel} from '../config';
 import {commandsOf, parseKeyValues, quote, tokenize, type KeyValues} from './console';
 import {browserReservedKeys, canonicalKey, keyboardKeys, mouseKeys} from './keys';
 import {cs2DefaultBinds, defaultKeyboard, expandCommand, keyboardPage, sanitizeKeyboard, trainerCommands, type KeyboardProfile} from './profile';
@@ -15,7 +16,7 @@ export type ImportReport = {
   /** Trainer controls on keys a browser cannot deliver, with the reason. */
   reserved: {key: string; reason: string}[];
 };
-export type ImportResult = {profile: KeyboardProfile; mouse: {sensitivity?: number; invertY?: boolean}; report: ImportReport};
+export type ImportResult = {profile: KeyboardProfile; mouse: {sensitivity?: number; invertY?: boolean}; viewmodel: Partial<Viewmodel>; report: ImportReport};
 
 const known = new Set<string>([...keyboardKeys, ...mouseKeys]);
 const bool = (value: string) => /^(1|true)$/i.test(value.trim());
@@ -101,17 +102,20 @@ export function importCs2Config(files: readonly ImportFile[], base: KeyboardProf
   setting('sensitivity', value => {if (Number(value) > 0) mouse.sensitivity = Math.min(10, Math.max(.05, Number(value)));});
   setting('m_pitch', value => {if (Number(value)) mouse.invertY = Number(value) < 0;});
   if (mouse.invertY !== undefined && !report.settings.includes('m_pitch')) report.settings.push('reverse mouse');
+  const viewmodel: Partial<Viewmodel> = {};
+  for (const [name, key] of [['viewmodel_fov', 'fov'], ['viewmodel_offset_x', 'x'], ['viewmodel_offset_y', 'y'], ['viewmodel_offset_z', 'z']] as const)
+    setting(name, value => {if (value.trim() && Number.isFinite(Number(value))) viewmodel[key] = Number(value);});
 
   for (const [key, command] of binds) {
     const reason = browserReservedKeys[key];
     if (reason && key !== 'ESCAPE' && expandCommand({aliases: Object.fromEntries(aliases)}, command).some(name => trainerCommands.has(name))) report.reserved.push({key, reason});
   }
   const label = files.map(file => file.name.replace(/\\/g, '/').split('/').pop()).join(', ') || 'Pasted config';
-  return {profile: sanitizeKeyboard({...profile, source: {label, at: new Date().toISOString()}}), mouse, report};
+  return {profile: sanitizeKeyboard({...profile, source: {label, at: new Date().toISOString()}}), mouse, viewmodel, report};
 }
 
 /** A cfg that recreates the profile on top of CS2's defaults: `exec spraylab`. */
-export function exportCfg(profile: KeyboardProfile, mouse: {sensitivity: number; invertY: boolean}, date = new Date()) {
+export function exportCfg(profile: KeyboardProfile, mouse: {sensitivity: number; invertY: boolean; viewmodel?: Viewmodel}, date = new Date()) {
   const lines = [
     '// SprayLab keyboard & mouse profile',
     `// Exported ${date.toISOString().slice(0, 10)} against CS2 build ${keyboardPage.build} default binds.`,
@@ -124,7 +128,10 @@ export function exportCfg(profile: KeyboardProfile, mouse: {sensitivity: number;
   lines.push('',
     `sensitivity "${mouse.sensitivity}"`, `zoom_sensitivity_ratio "${profile.zoomSensitivity}"`,
     `option_duck_method "${+profile.duckToggle}"`, `option_speed_method "${+profile.walkToggle}"`,
-    `cl_debounce_zoom "${+!profile.zoomRepeat}"`, `bind "mouse_y" "${mouse.invertY ? '!pitch' : 'pitch'}"`, '');
+    `cl_debounce_zoom "${+!profile.zoomRepeat}"`, `bind "mouse_y" "${mouse.invertY ? '!pitch' : 'pitch'}"`);
+  if (mouse.viewmodel) lines.push(`viewmodel_fov "${mouse.viewmodel.fov}"`, `viewmodel_offset_x "${mouse.viewmodel.x}"`,
+    `viewmodel_offset_y "${mouse.viewmodel.y}"`, `viewmodel_offset_z "${mouse.viewmodel.z}"`);
+  lines.push('');
   return lines.join('\r\n');
 }
 

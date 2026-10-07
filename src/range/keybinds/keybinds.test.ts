@@ -4,6 +4,7 @@ import {parseKeyValues, splitCommands, tokenize} from './console';
 import {bindRows, cs2DefaultBinds, defaultKeyboard, keyboardPage, keysFor, otherBinds, sanitizeKeyboard, trainerDefaultBinds, type KeyboardProfile} from './profile';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from './runtime';
 import {exportCfg, importCs2Config, parseBindLine} from './cs2-import';
+import {classicViewmodel, sanitizeViewmodel} from '../config';
 
 const profile = (patch: Partial<KeyboardProfile> = {}): KeyboardProfile => ({...defaultKeyboard, ...patch});
 function runtime(patch: Partial<KeyboardProfile> = {}) {
@@ -33,6 +34,7 @@ bind "tab" "afk_toggle"
 bind "KP_END" "say .prac"
 bind "F12" "+left;volume 0"
 sensitivity "1.25"
+viewmodel_fov 65; viewmodel_offset_x -0.5; viewmodel_offset_y 1; viewmodel_offset_z -2; viewmodel_presetpos 1;
 exec movement_extras
 host_writeconfig`;
 
@@ -150,7 +152,8 @@ describe('CS2 config import', () => {
   it('rebuilds binds from defaults, user vcfg and autoexec in load order', () => {
     const keys = '"config"\n{\n\t"bindings"\n\t{\n\t\t"MOUSE4"\t\t"<unbound>"\n\t\t"o"\t\t"slot8"\n\t\t"t"\t\t"+use"\n\t}\n}';
     const convars = '"config"\n{\n\t"convars"\n\t{\n\t\t"sensitivity"\t\t"1.06"\n\t\t"option_duck_method"\t\t"false"\n\t\t"cl_debounce_zoom"\t\t"true"\n\t\t"zoom_sensitivity_ratio"\t\t"0.9"\n\t}\n}';
-    const {profile, mouse, report} = importCs2Config([{name: 'autoexec.cfg', text: autoexec}, {name: 'cs2_user_keys_0_slot0.vcfg', text: keys}, {name: 'cs2_user_convars_0_slot0.vcfg', text: convars}], defaultKeyboard);
+    const {profile, mouse, viewmodel, report} = importCs2Config([{name: 'autoexec.cfg', text: autoexec}, {name: 'cs2_user_keys_0_slot0.vcfg', text: keys}, {name: 'cs2_user_convars_0_slot0.vcfg', text: convars}], defaultKeyboard);
+    expect(viewmodel).toEqual({fov: 65, x: -.5, y: 1, z: -2});
     expect(profile.binds).toMatchObject({t: '+forward', g: '+back', f: '+left', h: '+right', j: '+sprint', ALT: '+duck', k: '+jump', o: 'slot8', y: '+voicerecord ;', KP_1: 'say .prac', s: '+back'});
     expect(profile.binds).not.toHaveProperty('w');
     expect(profile.binds['1']).toBe('rifleMode');
@@ -172,11 +175,16 @@ describe('CS2 config import', () => {
   });
   it('exports a cfg that imports back to the same profile', () => {
     const imported = importCs2Config([{name: 'autoexec.cfg', text: autoexec}], defaultKeyboard).profile;
-    const text = exportCfg(imported, {sensitivity: 1.25, invertY: true});
+    const text = exportCfg(imported, {sensitivity: 1.25, invertY: true, viewmodel: {fov: 60, x: 1, y: 1, z: -1}});
     const back = importCs2Config([{name: 'spraylab.cfg', text}], defaultKeyboard);
     expect(back.profile.binds).toEqual(imported.binds);
     expect(back.profile.aliases).toEqual(imported.aliases);
     expect(back.mouse).toEqual({sensitivity: 1.25, invertY: true});
+    expect(back.viewmodel).toEqual({fov: 60, x: 1, y: 1, z: -1});
+  });
+  it('keeps imported viewmodel values within CS2 limits', () => {
+    expect(sanitizeViewmodel({fov: 90, x: -9, y: 'a', z: 1.5})).toEqual({fov: 68, x: -2.5, y: 0, z: 1.5});
+    expect(sanitizeViewmodel(undefined)).toEqual(classicViewmodel);
   });
   it('reads a typed bind line', () => {
     expect(parseBindLine('bind "KP_ENTER" "say_team hi";')).toEqual({key: 'KP_ENTER', command: 'say_team hi'});

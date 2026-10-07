@@ -3,11 +3,11 @@ import {recoilView} from './view-recoil';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { clone as cloneSkeleton } from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { Settings, MeasuredProfile, Weapon, gameData } from './config';
+import { Settings, MeasuredProfile, Weapon, gameData, type Viewmodel } from './config';
 import { DEG, direction, Simulation, Shot, Vec, VERTICAL_FOV, TARGET_Z, type Result } from './simulation';
 import { RangeAudio } from './audio';
 import { requestRawLock } from './input';
-import { VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelViewport } from './viewmodel';
+import { VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelFov, viewmodelOffset, viewmodelViewport } from './viewmodel';
 import { GUIDE_COLORS, SprayDemonstration } from './spray-demonstration';
 import {type Equipment, type Slot} from './equipment';
 import {DrillScenery} from './drill-scene';
@@ -58,6 +58,7 @@ export class RangeEngine {
   camera = new THREE.PerspectiveCamera(VERTICAL_FOV, 1, .025, 250);
   viewScene = new THREE.Scene();
   viewCamera = new THREE.PerspectiveCamera(VIEWMODEL_FOV, 1, .01, 10);
+  private viewOffset = VIEWMODEL_OFFSET;
   viewViewport = viewmodelViewport(1, 1);
   demonstration = new SprayDemonstration();
   mouseDemonstration = new SprayDemonstration('mouse');
@@ -131,6 +132,7 @@ export class RangeEngine {
     this.hitCaption.className = 'hit-caption'; host.append(this.hitCaption);
     this.sim = new Simulation(settings);
     this.binds = new BindRuntime(settings.keyboard, event => this.onBind(event));
+    this.applyViewmodel(settings.viewmodel);
     this.renderer = new THREE.WebGLRenderer({ antialias: qualityPolicy(settings.quality).shadows, powerPreference: 'high-performance', alpha: false });
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -415,8 +417,15 @@ export class RangeEngine {
       this.viewMuzzles.delete(id);
     }
   }
+  /** CS2 viewmodel_fov / viewmodel_offset_*: the arms camera and weapon placement. */
+  private applyViewmodel(viewmodel: Viewmodel) {
+    this.viewOffset = viewmodelOffset(viewmodel);
+    const fov = viewmodelFov(viewmodel.fov);
+    if (this.viewCamera.fov !== fov) {this.viewCamera.fov = fov; this.viewCamera.updateProjectionMatrix();}
+  }
   configure(settings: Settings, measured?: MeasuredProfile) {
     this.binds?.setProfile(settings.keyboard);
+    if (settings.viewmodel) this.applyViewmodel(settings.viewmodel);
     if (this.shortcuts) this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
     if (settings.quality !== this.sim.settings.quality) this.metrics.resetResolution();
     this.meter.configure(settings.showFps);
@@ -788,7 +797,8 @@ export class RangeEngine {
       this.sim.time,this.sim.settings.volume*.55);
     for(const action of this.sim.drainActionEvents())if(action.kind==='reload-cancel')this.audio.cancelAction('range-player');
     this.audio.updateActions(this.sim.time);
-    this.weaponRoot.position.set(VIEWMODEL_OFFSET.x, VIEWMODEL_OFFSET.y + Math.sin(this.elapsed * 12) * Math.min(moving, 1) * .002, this.kick * .015);
+    const offset = this.viewOffset ?? VIEWMODEL_OFFSET;
+    this.weaponRoot.position.set(offset.x, offset.y + Math.sin(this.elapsed * 12) * Math.min(moving, 1) * .002, offset.z + this.kick * .015);
     this.weaponRoot.rotation.x = this.kick * (this.sim.slot===3 ? 0 : .02) + view.weaponPitch;
     this.weaponRoot.rotation.y = view.weaponYaw;
     this.weaponRoot.rotation.z = 0;

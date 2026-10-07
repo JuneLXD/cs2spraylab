@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { Activity, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronDown, Code2 as Github, Crosshair as AimIcon, Download, Eye, Gauge, Gift, History, ListPlus, Maximize, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, ShoppingCart, Target, Upload, Volume2, VolumeX, X } from 'lucide-react';
-import { Crosshair, defaults, gameData, historyModeNames, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol } from './config';
+import { classicViewmodel, Crosshair, defaults, gameData, historyModeNames, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol } from './config';
 import { RangeEngine, RangeStatus } from './engine';
 import { Result } from './simulation';
 import { loadAttempts } from '../lib/storage';
@@ -283,6 +283,13 @@ export default function RangeApp() {
               <Toggle label="Impact pattern (left)" checked={settings.showImpactPattern} onChange={v => update({ showImpactPattern: v })} />
               <Toggle label="Mouse movement (right)" checked={settings.showMousePath} onChange={v => update({ showMousePath: v })} />
               <Toggle label="Animated wall guides" checked={settings.animatedGuides} onChange={animatedGuides => update({animatedGuides})}/>
+              <h2>Viewmodel</h2>
+              <Slider label="Viewmodel FOV" value={settings.viewmodel.fov} min={54} max={68} onChange={fov => update({viewmodel: {...settings.viewmodel, fov}})}/>
+              <Slider label="Viewmodel offset X" value={settings.viewmodel.x} min={-2.5} max={2.5} step={.1} onChange={x => update({viewmodel: {...settings.viewmodel, x}})}/>
+              <Slider label="Viewmodel offset Y" value={settings.viewmodel.y} min={-2} max={2} step={.1} onChange={y => update({viewmodel: {...settings.viewmodel, y}})}/>
+              <Slider label="Viewmodel offset Z" value={settings.viewmodel.z} min={-2} max={2} step={.1} onChange={z => update({viewmodel: {...settings.viewmodel, z}})}/>
+              <button className="secondary" onClick={() => update({viewmodel: classicViewmodel})}><RotateCcw size={15}/>Classic position</button>
+              <p className="setting-explanation">Same values as CS2&apos;s viewmodel_fov and viewmodel_offset_x/y/z (right, forward, up). Import CS2 config under Keyboard / Mouse reads them from autoexec.cfg or CS2&apos;s saved settings.</p>
               <h2>Graphics</h2><label className="select-row">Render quality<select aria-label="Render quality" value={settings.quality} onChange={e => update({ quality: e.target.value as Settings['quality'], ...(e.target.value === 'performance' ? {frameLimit:60} : {}) })}><option value="auto">Adaptive</option><option value="performance">Performance (older PCs)</option><option value="low">Low</option><option value="high">High</option></select></label>
               <label className="select-row">Frame limit<select aria-label="Frame limit" value={settings.frameLimit} onChange={e => update({frameLimit: +e.target.value})}>{[0,30,60,120,144,240].map(n => <option key={n} value={n}>{n ? `${n} FPS` : 'Display refresh rate'}</option>)}</select></label>
               <Toggle label="Show FPS counter" checked={settings.showFps} onChange={showFps => update({showFps})}/>
