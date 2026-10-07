@@ -60,6 +60,9 @@ export const latestChanges = {
       'Bullet tracers default to every round: a visible beam from the muzzle to where each shot lands, widening with distance and lasting about a third of a second.',
       'Settings > Game > Bullet tracers switches between every shot, CS2\'s per-weapon cadence and off. AI Duel bots keep CS2 cadence.',
     ]},
+    {id: 'fullscreen', title: 'Fullscreen', items: [
+      'The Fullscreen button works in AI Duel, and fullscreen shows only the game view. The Duel setup and drill coach panels return when fullscreen ends.',
+    ]},
     {id: 'controls', title: 'Keybinds & CS2 configs', items: [
       'Settings > Keyboard / Mouse mirrors CS2\'s own page, extracted from the installed game: every bind section and option, with click-to-rebind for keys, mouse buttons and the wheel.',
       'Import autoexec.cfg and CS2\'s saved cs2_user_keys/convars files. Aliases, toggle scripts, +/- binds, exec chains, sensitivity, zoom sensitivity, duck/walk toggles and viewmodel FOV/offsets behave as in CS2; Export writes a matching .cfg.',

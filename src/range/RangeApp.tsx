@@ -108,6 +108,7 @@ export default function RangeApp() {
   const [generation, setGeneration] = useState(0);
   const [replay, setReplay] = useState(35);
   const host = useRef<HTMLDivElement>(null), follow = useRef<HTMLDivElement>(null), hitmarker = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLElement>(null);
   const engine = useRef<RangeEngine>();
   const drawer = useRef<HTMLElement>(null);
   const selectedWeapon = loadoutWeapon(settings);
@@ -212,11 +213,11 @@ export default function RangeApp() {
         {settings.mode !== 'duel' && settings.mode !== 'hearing' && <button className="icon-button" title="Reset range" aria-label="Reset range" onClick={() => engine.current?.reset()}><RotateCcw size={18} /></button>}
         {settings.mode !== 'hearing' && <button type="button" className="icon-button fps-toggle" title={settings.showFps ? 'Hide FPS counter' : 'Show FPS counter'} aria-label="Toggle FPS counter" aria-pressed={settings.showFps} onClick={() => update({showFps: !settings.showFps})}><Gauge size={18} aria-hidden="true"/></button>}
         <button className="icon-button" title={settings.volume ? 'Mute' : 'Unmute'} aria-label={settings.volume ? 'Mute' : 'Unmute'} onClick={() => update({ volume: settings.volume ? 0 : .2 })}>{settings.volume ? <Volume2 size={18} /> : <VolumeX size={18} />}</button>
-        {settings.mode !== 'hearing' && <button className="icon-button fullscreen" title="Fullscreen" aria-label="Fullscreen" onClick={() => { if (document.fullscreenElement) void document.exitFullscreen(); else void host.current?.closest('.range-stage')?.requestFullscreen?.().catch(() => setNotice('Fullscreen unavailable in this browser.')); }}><Maximize size={18} /></button>}
+        {settings.mode !== 'hearing' && <button className="icon-button fullscreen" title="Fullscreen" aria-label="Fullscreen" onClick={() => { if (document.fullscreenElement) void document.exitFullscreen(); else void stage.current?.requestFullscreen?.().catch(() => setNotice('Fullscreen unavailable in this browser.')); }}><Maximize size={18} /></button>}
       </div>
     </section>
     <section className="mode-brief" aria-label="Drill purpose"><div><strong>{modeInfo[settings.mode].benefit}</strong><p>{modeInfo[settings.mode].task}</p></div><button onClick={() => {engine.current?.pause(); setTutorial(true);}}><GraduationCap size={19}/>Learn the fundamentals</button></section>
-    <section className={`range-stage${settings.mode === 'duel' ? ' duel-stage' : isDrillMode(settings.mode)?' with-drill':''}`} aria-label="Practice range">
+    <section ref={stage} className={`range-stage${settings.mode === 'duel' ? ' duel-stage' : isDrillMode(settings.mode)?' with-drill':''}`} aria-label="Practice range">
       <XpNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
       {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={!!panel || tutorial || armoryOpen}/> : settings.mode === 'duel' ? <DuelStage settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={() => setSetupHint(false)} suspended={!!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view${showRepFeedback?' has-rep-feedback':''}`}>

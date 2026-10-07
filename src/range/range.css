@@ -153,3 +153,7 @@
 .range-shortcut-warning{position:absolute;left:50%;top:65px;transform:translateX(-50%);max-width:90%;font-size:11px;text-align:center;color:#f0dfb0;background:#1a292ad9;padding:5px 9px;pointer-events:none}
 .appbar:has(.settings-hint){height:auto;flex-wrap:wrap;row-gap:8px;padding-top:8px;padding-bottom:8px}
 .appbar:has(.settings-hint) .main-nav{height:auto;min-height:28px}
+
+/* Real fullscreen: only the game view. Setup and coach panels return when fullscreen ends. */
+.range-stage:fullscreen .duel-controls,.range-stage:fullscreen .drill-panel{display:none}
+.range-stage:-webkit-full-screen .duel-controls,.range-stage:-webkit-full-screen .drill-panel{display:none}

@@ -27,7 +27,7 @@ describe('append-only changelog', () => {
 
   it('covers the accumulated completed features', () => {
     expect(latestChanges.sections.map(section => section.id)).toEqual([
-      'combat', 'weapons', 'movement', 'arenas', 'bot-behavior', 'connection', 'presentation', 'performance', 'tracers', 'controls',
+      'combat', 'weapons', 'movement', 'arenas', 'bot-behavior', 'connection', 'presentation', 'performance', 'tracers', 'fullscreen', 'controls',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'controls')!.items.join(' ')).toContain('autoexec.cfg');
     expect(new Set(latestChanges.sections.map(section => section.id)).size).toBe(latestChanges.sections.length);
