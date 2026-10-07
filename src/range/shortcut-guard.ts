@@ -7,6 +7,8 @@ export class ShortcutGuard {
   private enabled = false;
   private ownsFullscreen = false;
   constructor(private readonly stage: HTMLElement | null) {}
+  /** KeyboardEvent codes to lock in fullscreen (the bound keys), so shortcuts such as Ctrl+W reach the trainer. */
+  codes: readonly string[] = ['KeyW'];
   async enter(enabled: boolean) {
     if (!enabled) {this.release(); return;}
     this.enabled = enabled;
@@ -17,7 +19,7 @@ export class ShortcutGuard {
         await this.stage.requestFullscreen(); this.ownsFullscreen = true;
       }
       if (generation !== this.generation) {if (!this.enabled) this.exitFullscreen(); return;}
-      await keyboard()!.lock(['KeyW']);
+      await keyboard()!.lock([...this.codes]);
       if (generation !== this.generation) {if (!this.enabled) keyboard()?.unlock(); return;}
       this.protected = true;
     } catch {if (generation === this.generation) this.protected = false;}

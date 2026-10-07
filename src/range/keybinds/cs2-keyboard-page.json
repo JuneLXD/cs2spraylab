@@ -1,0 +1,513 @@
+{
+  "build": "2000927",
+  "source": {
+    "layout": "panorama/layout/settings/settings_kbmouse.vxml_c",
+    "layoutSha256": "d979411d55e543a53843edb2a7021e023de7bfd92ace422a403287b4257924ba",
+    "localization": "resource/csgo_english.txt",
+    "defaults": "game/csgo/cfg/user_keys_default.vcfg",
+    "defaultsSha256": "aa07bfee305320de8cef87914d876de763574122b483a4444e5b35c9d19aa175"
+  },
+  "sections": [
+    {
+      "id": "SettingsKeyboardMouse",
+      "title": "Keyboard & Mouse Settings",
+      "rows": [
+        {
+          "kind": "enum",
+          "label": "Reverse Mouse",
+          "bindkey": "mouse_y",
+          "values": [
+            {
+              "label": "Off",
+              "value": "pitch"
+            },
+            {
+              "label": "On",
+              "value": "!pitch"
+            }
+          ]
+        },
+        {
+          "kind": "enum",
+          "label": "Duck Mode",
+          "convar": "option_duck_method",
+          "values": [
+            {
+              "label": "Hold",
+              "value": "0"
+            },
+            {
+              "label": "Toggle",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "kind": "enum",
+          "label": "Walk Mode",
+          "convar": "option_speed_method",
+          "values": [
+            {
+              "label": "Hold",
+              "value": "0"
+            },
+            {
+              "label": "Toggle",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "kind": "enum",
+          "label": "Zoom Button Hold",
+          "convar": "cl_debounce_zoom",
+          "values": [
+            {
+              "label": "Repeat Enabled",
+              "value": "0"
+            },
+            {
+              "label": "Repeat Disabled",
+              "value": "1"
+            }
+          ],
+          "tooltip": "Whether or not holding the zoom button should behave as if it was pressed repeatedly."
+        },
+        {
+          "kind": "slider",
+          "label": "Mouse Sensitivity",
+          "convar": "sensitivity",
+          "min": 0.1,
+          "max": 8,
+          "precision": 2
+        },
+        {
+          "kind": "slider",
+          "label": "Zoom Sensitivity Multiplier",
+          "convar": "zoom_sensitivity_ratio",
+          "min": 0.01,
+          "max": 3,
+          "precision": 2
+        }
+      ]
+    },
+    {
+      "id": "SettingsMovementBinds",
+      "title": "Movement Keys",
+      "rows": [
+        {
+          "kind": "bind",
+          "id": "InvDispBinder",
+          "label": "Toggle Inventory Display",
+          "bind": "show_loadout_toggle"
+        },
+        {
+          "kind": "bind",
+          "id": "MovFwdBinder",
+          "label": "Move Forward",
+          "bind": "+forward"
+        },
+        {
+          "kind": "bind",
+          "id": "MovBkBinder",
+          "label": "Move Backward",
+          "bind": "+back"
+        },
+        {
+          "kind": "bind",
+          "id": "MovLeftBinder",
+          "label": "Move Left (strafe)",
+          "bind": "+left"
+        },
+        {
+          "kind": "bind",
+          "id": "MovRightBinder",
+          "label": "Move Right (strafe)",
+          "bind": "+right"
+        },
+        {
+          "kind": "bind",
+          "id": "WalkBinder",
+          "label": "Walk",
+          "bind": "+sprint"
+        },
+        {
+          "kind": "bind",
+          "id": "DuckBinder",
+          "label": "Duck",
+          "bind": "+duck"
+        },
+        {
+          "kind": "bind",
+          "id": "JumpBinder",
+          "label": "Jump",
+          "bind": "+jump"
+        }
+      ]
+    },
+    {
+      "id": "SettingsWeaponBinds",
+      "title": "Weapon Keys",
+      "rows": [
+        {
+          "kind": "bind",
+          "id": "UseBinder",
+          "label": "Use",
+          "bind": "+use"
+        },
+        {
+          "kind": "bind",
+          "id": "FireBinder",
+          "label": "Fire",
+          "bind": "+attack"
+        },
+        {
+          "kind": "bind",
+          "id": "SecFireBinder",
+          "label": "Secondary Fire",
+          "bind": "+attack2"
+        },
+        {
+          "kind": "bind",
+          "id": "ReloadBinder",
+          "label": "Reload",
+          "bind": "+reload"
+        },
+        {
+          "kind": "bind",
+          "id": "RadialWepMenuBinder",
+          "label": "Radial Weapon Menu",
+          "bind": "+quickinv"
+        },
+        {
+          "kind": "bind",
+          "id": "SelPrevWeaponBinder",
+          "label": "Select Previous Weapon",
+          "bind": "invprev"
+        },
+        {
+          "kind": "bind",
+          "id": "SelLastWeaponBinder",
+          "label": "Select Next Weapon",
+          "bind": "invnext"
+        },
+        {
+          "kind": "bind",
+          "id": "LastWeaponUsedBinder",
+          "label": "Last Weapon Used",
+          "bind": "lastinv"
+        },
+        {
+          "kind": "bind",
+          "id": "DropWeaponBinder",
+          "label": "Drop Weapon",
+          "bind": "drop"
+        },
+        {
+          "kind": "bind",
+          "id": "InspectWeaponBinder",
+          "label": "Inspect Weapon",
+          "bind": "+lookatweapon"
+        },
+        {
+          "kind": "bind",
+          "id": "SwitchHandednessBinder",
+          "label": "Switch Viewmodel Left/Right Hand",
+          "bind": "switchhands"
+        },
+        {
+          "kind": "bind",
+          "id": "BuyMenuBinder",
+          "label": "Buy Menu",
+          "bind": "buymenu"
+        },
+        {
+          "kind": "bind",
+          "id": "AutoBuyBinder",
+          "label": "Autobuy",
+          "bind": "autobuy"
+        },
+        {
+          "kind": "bind",
+          "id": "RebuyBinder",
+          "label": "Rebuy",
+          "bind": "rebuy"
+        },
+        {
+          "kind": "bind",
+          "id": "PrimWpnBinder",
+          "label": "Primary Weapon",
+          "bind": "slot1"
+        },
+        {
+          "kind": "bind",
+          "id": "SecWpnBinder",
+          "label": "Secondary Weapon",
+          "bind": "slot2"
+        },
+        {
+          "kind": "bind",
+          "id": "KnifeBinder",
+          "label": "Melee Weapons",
+          "bind": "slot3"
+        },
+        {
+          "kind": "bind",
+          "id": "CycleGrenadesBinder",
+          "label": "Cycle Grenades",
+          "bind": "slot4"
+        },
+        {
+          "kind": "bind",
+          "id": "BombBinder",
+          "label": "Explosives & Traps",
+          "bind": "slot5"
+        },
+        {
+          "kind": "bind",
+          "id": "HEGrenadeBinder",
+          "label": "HE Grenade",
+          "bind": "slot6"
+        },
+        {
+          "kind": "bind",
+          "id": "FlashBinder",
+          "label": "Flashbang",
+          "bind": "slot7"
+        },
+        {
+          "kind": "bind",
+          "id": "SmkGrenadeBinder",
+          "label": "Smoke Grenade",
+          "bind": "slot8"
+        },
+        {
+          "kind": "bind",
+          "id": "DecGrenadeBinder",
+          "label": "Decoy Grenade",
+          "bind": "slot9"
+        },
+        {
+          "kind": "bind",
+          "id": "MolotovBinder",
+          "label": "Molotov Cocktail / Incendiary Grenade",
+          "bind": "slot10"
+        },
+        {
+          "kind": "bind",
+          "id": "ZeusBinder",
+          "label": "Zeus x27",
+          "bind": "slot11"
+        },
+        {
+          "kind": "bind",
+          "id": "BoostBinder",
+          "label": "Healthshot",
+          "bind": "slot12"
+        },
+        {
+          "kind": "bind",
+          "id": "UtilityBinder",
+          "label": "Utility Items",
+          "bind": "slot13"
+        },
+        {
+          "kind": "bind",
+          "id": "GraffitiBinder",
+          "label": "Graffiti Menu",
+          "bind": "+spray_menu"
+        }
+      ]
+    },
+    {
+      "id": "SettingsUiBinds",
+      "title": "UI Keys",
+      "rows": [
+        {
+          "kind": "bind",
+          "id": "ScoreBinder",
+          "label": "Scoreboard",
+          "bind": "+showscores"
+        },
+        {
+          "kind": "bind",
+          "id": "ShowTeamEquipmentBinder",
+          "label": "Show Team Equipment",
+          "bind": "+cl_show_team_equipment"
+        },
+        {
+          "kind": "bind",
+          "id": "ToggleRadarScale",
+          "label": "Toggle Radar Zoom",
+          "bind": "toggleradarscale"
+        },
+        {
+          "kind": "bind",
+          "id": "VoteBinder",
+          "label": "Call Vote",
+          "bind": "callvote"
+        },
+        {
+          "kind": "bind",
+          "id": "TeamBinder",
+          "label": "Choose Team",
+          "bind": "teammenu"
+        },
+        {
+          "kind": "bind",
+          "id": "ConsoleBinder",
+          "label": "Toggle Console",
+          "bind": "toggleconsole"
+        }
+      ]
+    },
+    {
+      "id": "SettingsCommBinds",
+      "title": "Communication Options",
+      "rows": [
+        {
+          "kind": "bind",
+          "id": "PlayerPingBinder",
+          "label": "Player Ping",
+          "bind": "player_ping"
+        },
+        {
+          "kind": "bind",
+          "id": "CommonRadioBinder",
+          "label": "Radio Message",
+          "bind": "radio"
+        },
+        {
+          "kind": "bind",
+          "id": "CmdRadioBinder",
+          "label": "Command Radio Message",
+          "bind": "radio1"
+        },
+        {
+          "kind": "bind",
+          "id": "StdRadioBinder",
+          "label": "Standard Radio Message",
+          "bind": "radio2"
+        },
+        {
+          "kind": "bind",
+          "id": "ReportRadioMessageBinder",
+          "label": "Report Radio Message",
+          "bind": "radio3"
+        },
+        {
+          "kind": "bind",
+          "id": "TeamMessageBinder",
+          "label": "Team Message",
+          "bind": "messagemode2"
+        },
+        {
+          "kind": "bind",
+          "id": "ChatMessageBinder",
+          "label": "Chat Message",
+          "bind": "messagemode"
+        },
+        {
+          "kind": "bind",
+          "id": "VoiceBinder",
+          "label": "Use Microphone",
+          "bind": "+voicerecord"
+        },
+        {
+          "kind": "bind",
+          "id": "ToggleOpenMic",
+          "label": "Toggle between Open-Mic and Push-To-Talk",
+          "bind": "voice_toggle_open_mic"
+        },
+        {
+          "kind": "bind",
+          "id": "ClutchKey",
+          "label": "Temporarily Disable Incoming Chat",
+          "bind": "clutch_mode_toggle",
+          "tooltip": "Disable voice chat until the end of the round. Useful for temporarily muting noisy teammates when you need to hear clearly. A 'Clutch Key'."
+        }
+      ]
+    },
+    {
+      "id": "SettingsChatWheel",
+      "title": "Chat Wheel Keys",
+      "rows": [
+        {
+          "kind": "bind",
+          "id": "ChatwheelBinder1",
+          "label": "Chat Wheel 1",
+          "bind": "+radialradio"
+        },
+        {
+          "kind": "bind",
+          "id": "ChatwheelBinder2",
+          "label": "Chat Wheel 2",
+          "bind": "+radialradio2"
+        },
+        {
+          "kind": "bind",
+          "id": "ChatwheelBinder3",
+          "label": "Chat Wheel 3",
+          "bind": "+radialradio3"
+        }
+      ]
+    }
+  ],
+  "defaults": {
+    "0": "slot10",
+    "1": "slot1",
+    "2": "slot2",
+    "3": "slot3",
+    "4": "slot4",
+    "5": "slot5",
+    "6": "slot6",
+    "7": "slot7",
+    "8": "slot8",
+    "9": "slot9",
+    "ESCAPE": "cancelselect",
+    "`": "toggleconsole",
+    "TAB": "+showscores",
+    "SPACE": "+jump",
+    ",": "buyammo1",
+    ".": "buyammo2",
+    "a": "+left",
+    "b": "buymenu",
+    "c": "+radialradio",
+    "d": "+right",
+    "e": "+use",
+    "f": "+lookatweapon",
+    "g": "drop",
+    "h": "switchhands",
+    "i": "show_loadout_toggle",
+    "m": "teammenu",
+    "q": "lastinv",
+    "r": "+reload",
+    "s": "+back",
+    "t": "+spray_menu",
+    "u": "messagemode2",
+    "v": "+radialradio2",
+    "w": "+forward",
+    "x": "slot12",
+    "y": "messagemode",
+    "z": "radio",
+    "CTRL": "+duck",
+    "SHIFT": "+sprint",
+    "F3": "autobuy",
+    "F4": "rebuy",
+    "F5": "jpeg",
+    "F6": "save quick",
+    "F7": "load quick",
+    "F10": "cs_quit_prompt",
+    "MWHEELDOWN": "invnext",
+    "MWHEELUP": "invprev",
+    "MOUSE1": "+attack",
+    "MOUSE2": "+attack2",
+    "MOUSE3": "player_ping",
+    "MOUSE4": "+voicerecord",
+    "DEL": "sellbackall"
+  },
+  "analog": {
+    "MOUSE_X": "yaw",
+    "MOUSE_Y": "pitch"
+  }
+}

@@ -5,7 +5,10 @@ import {DEG, UNIT, type Vec} from '../actor-physics';
 import {RangeAudio} from '../audio';
 import {gameData,loadoutWeapon, type Settings, type Weapon} from '../config';
 import {requestRawLock} from '../input';
-import {mouseAngle, VERTICAL_FOV} from '../simulation';
+import {mouseAngle, VERTICAL_FOV, zoomRatio} from '../simulation';
+import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
+import {attachBindInput} from '../keybinds/dom-input';
+import {protectedCodes} from '../keybinds/profile';
 import {VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelViewport} from '../viewmodel';
 import {botConfig, type DuelConfig} from './config';
 import {duelArena, traceSolid} from './geometry';
@@ -73,7 +76,10 @@ export class DuelEngine {
   private readonly acoustics = new AcousticScene([], 'warehouse');
   readonly effects = new THREE.Group();
   readonly audio = new RangeAudio();
-  readonly keys = new Set<string>();
+  /** CS2 bind table for keyboard, mouse buttons and wheel. */
+  readonly binds: BindRuntime;
+  private bindHandle?: {reset(): void};
+  private lastSlot: Slot = 2;
   private readonly cleanup: (() => void)[] = [];
   private readonly observer: ResizeObserver;
   private frame = 0;
@@ -159,6 +165,8 @@ export class DuelEngine {
     this.damageFeedback = new DamageFeedback(host);
     this.meter = new PerformanceMeter(host); this.meter.configure(settings.showFps);
     this.shortcuts = new ShortcutGuard(host.closest('.range-stage'));
+    this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
+    this.binds = new BindRuntime(settings.keyboard, event => this.onBind(event));
     this.renderer = new THREE.WebGLRenderer({antialias: qualityPolicy(settings.quality).shadows, powerPreference: 'high-performance'});
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -448,6 +456,8 @@ export class DuelEngine {
 
   setSettings(settings: Settings) {
     if (settings === this.settings) return;
+    this.binds.setProfile(settings.keyboard);
+    this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
     const weaponChanged = settings.weapon !== this.settings.weapon || settings.sidearm !== this.settings.sidearm || settings.primaryEnabled !== this.settings.primaryEnabled;
     const qualityChanged = settings.quality !== this.settings.quality;
     this.settings = settings;
@@ -471,7 +481,7 @@ export class DuelEngine {
     for (const object of this.dropModels.values()) this.scene.remove(object);
     this.dropModels.clear();
     if (!continuous) {
-      this.keys.clear();
+      this.binds.releaseAll(); this.bindHandle?.reset();
       this.sessionStarted = false;
       this.releaseShortcuts();
       if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
@@ -522,7 +532,7 @@ export class DuelEngine {
 
   pause() {
     if (this.sim.phase === 'ready') return;
-    this.paused = true; this.sim.pause(); this.keys.clear(); this.updateMovement();
+    this.paused = true; this.sim.pause(); this.binds.releaseAll(); this.bindHandle?.reset(); this.updateMovement();
     this.caption = ''; this.captionUntil = 0;
     this.damageFeedback.clear();
     this.releaseShortcuts();
@@ -531,22 +541,19 @@ export class DuelEngine {
     this.report();
   }
 
-  private listen(target: EventTarget, name: string, callback: EventListener) {
-    target.addEventListener(name, callback); this.cleanup.push(() => target.removeEventListener(name, callback));
+  private listen(target: EventTarget, name: string, callback: EventListener, options?: AddEventListenerOptions) {
+    target.addEventListener(name, callback, options); this.cleanup.push(() => target.removeEventListener(name, callback, options));
   }
 
   private bindInput() {
     const canvas = this.renderer.domElement;
     this.listen(canvas, 'pointerdown', ((event: PointerEvent) => {
-      if (event.button === 2 && this.sim.phase === 'fighting' && !this.paused) {
-        event.preventDefault(); this.sim.command(0, {secondaryPressed: true, secondaryHeld: true}); return;
-      }
       if (event.button !== 0) return;
       if (this.sim.phase === 'ready' || this.paused) { void this.enter(); return; }
       if (this.sim.phase !== 'fighting') return;
       this.pointer = event.pointerId; this.pointerX = event.clientX; this.pointerY = event.clientY;
+      // Mouse buttons fire through their binds; touch fires directly.
       if (event.pointerType !== 'mouse') this.sim.command(0, {firePressed: true});
-      else this.sim.command(0, {fireHeld: true, firePressed: true});
       if (!document.pointerLockElement) canvas.setPointerCapture(event.pointerId);
     }) as EventListener);
     this.listen(document, 'pointermove', ((event: PointerEvent) => {
@@ -558,32 +565,24 @@ export class DuelEngine {
         dx = event.clientX - this.pointerX; dy = event.clientY - this.pointerY;
         this.pointerX = event.clientX; this.pointerY = event.clientY;
       }
-      const scale = (event.pointerType === 'mouse' ? mouseAngle(1, this.settings.sensitivity) : .0025) * this.sim.actors[0].weapon.actions.sensitivityScale;
+      const actions = this.sim.actors[0].weapon.actions;
+      const scale = (event.pointerType === 'mouse' ? mouseAngle(1, this.settings.sensitivity) * zoomRatio(actions.zoom, this.settings) : .0025) * actions.sensitivityScale;
       if (dx || dy) this.sim.command(0, {yawDelta: -dx * scale,
         pitchDelta: -dy * scale * (this.settings.invertY ? -1 : 1)});
     }) as EventListener);
     this.listen(document, 'pointerup', ((event: PointerEvent) => {
-      if (event.button === 2) {this.sim.command(0, {secondaryHeld: false}); return;}
       if (this.pointer !== event.pointerId) return;
-      this.pointer = null; this.sim.command(0, {fireHeld: false});
+      this.pointer = null;
+      if (event.pointerType !== 'mouse') this.sim.command(0, {fireHeld: false});
     }) as EventListener);
     this.listen(canvas, 'pointercancel', (() => this.pause()) as EventListener);
     this.listen(canvas, 'contextmenu', (event => event.preventDefault()) as EventListener);
+    this.bindHandle = attachBindInput({canvas, runtime: this.binds, active: () => this.sim.phase !== 'ready' && !this.paused,
+      listen: (target, type, listener, options) => this.listen(target, type, listener, options)});
     this.listen(window, 'keydown', ((event: KeyboardEvent) => {
       if (event.ctrlKey && event.code === 'KeyW' && this.sessionStarted) event.preventDefault();
-      if (event.code === 'Escape' && this.sim.phase !== 'ready') {this.pause(); return;}
-      if (this.sim.phase === 'ready' || this.paused || event.target instanceof HTMLElement && event.target.matches('input,select,button,textarea')) return;
-      if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'ControlRight', 'KeyC', 'Space'].includes(event.code)) {
-        event.preventDefault(); this.keys.add(event.code); this.updateMovement();
-      }
-      if (event.code === 'Space' && !event.repeat) this.sim.command(0,{jumpPressed:true});
-      if (event.code === 'KeyR' && !event.repeat) this.sim.command(0, {reloadPressed: true,reloadHeld:true});
-      if (event.code === 'KeyF' && !event.repeat) {event.preventDefault(); this.inspect();}
-      if (event.code === 'KeyE' && !event.repeat) {event.preventDefault(); this.sim.command(0,{usePressed:true});this.pickup();}
-      if (event.code === 'KeyG' && !event.repeat) {event.preventDefault();this.sim.command(0,{dropPressed:true});}
-      if (['Digit1', 'Digit2', 'Digit3', 'Digit4'].includes(event.code) && !event.repeat) this.equip(Number(event.code.slice(-1)) as Slot);
+      if (event.code === 'Escape' && this.sim.phase !== 'ready') this.pause();
     }) as EventListener);
-    this.listen(window, 'keyup', ((event: KeyboardEvent) => {this.keys.delete(event.code);if(event.code==='KeyR')this.sim.command(0,{reloadHeld:false}); this.updateMovement();}) as EventListener);
     this.listen(window, 'blur', (() => {if (!this.entering) this.pause();}) as EventListener);
     this.listen(document, 'visibilitychange', (() => {if (document.hidden) this.pause();}) as EventListener);
     this.listen(document, 'pointerlockchange', (() => {
@@ -596,13 +595,54 @@ export class DuelEngine {
   }
 
   private updateMovement() {
-    this.sim.command(0, {forward: +this.keys.has('KeyW') - +this.keys.has('KeyS'),
-      side: +this.keys.has('KeyD') - +this.keys.has('KeyA'),
-      walk: this.keys.has('ShiftLeft') || this.keys.has('ShiftRight'),
-      crouch: this.keys.has('ControlLeft') || this.keys.has('ControlRight') || this.keys.has('KeyC'), jump: this.keys.has('Space')});
+    const held = this.binds.isHeld.bind(this.binds);
+    this.sim.command(0, {forward: +held('forward') - +held('back'), side: +held('right') - +held('left'),
+      walk: held('walk'), crouch: held('duck'), jump: held('jump')});
   }
 
-  equip(slot: Slot) {this.sim.command(0,{equipSlot:slot});if(this.sim.phase==='ready')this.sim.equipPlayer(slot); this.report(); this.renderer.domElement.focus({preventScroll: true});}
+  private onBind(event: BindEvent) {
+    const fighting = this.sim.phase === 'fighting' && !this.paused;
+    if (event.kind === 'press' || event.kind === 'release') {
+      const down = event.kind === 'press';
+      switch (event.action) {
+        case 'attack': this.sim.command(0, down ? (fighting ? {fireHeld: true, firePressed: true} : {}) : {fireHeld: false}); return;
+        case 'attack2': this.sim.command(0, down ? (fighting ? {secondaryPressed: true, secondaryHeld: true} : {}) : {secondaryHeld: false}); return;
+        case 'reload': this.sim.command(0, down ? {reloadPressed: true, reloadHeld: true} : {reloadHeld: false}); return;
+        case 'inspect': if (down) this.inspect(); return;
+        case 'use': if (down) {this.sim.command(0, {usePressed: true}); this.pickup();} return;
+        case 'jump': if (down) this.sim.command(0, {jumpPressed: true});
+      }
+      this.updateMovement(); return;
+    }
+    if (event.kind === 'slot') {const slot = trainerSlot(event.slot, this.currentSlot()); if (slot) this.equip(slot);}
+    else if (event.kind === 'lastinv') this.equip(this.lastSlot);
+    else if (event.kind === 'invnext' || event.kind === 'invprev') this.equip(cycleSlot(this.currentSlot(), event.kind === 'invnext' ? 1 : -1, this.availableSlots()));
+    else if (event.kind === 'drop') this.sim.command(0, {dropPressed: true});
+    else if (event.kind === 'cancelselect') this.pause();
+  }
+
+  private currentSlot(): Slot {
+    const id = this.sim.actors[0].weapon.id;
+    return id === 'knife' ? 3 : id === 'zeus' ? 4 : id === this.sim.loadout.sidearm ? 2 : 1;
+  }
+
+  private availableSlots(): Slot[] {
+    const {primary, sidearm} = this.sim.loadout;
+    return ([1, 2, 3, 4] as Slot[]).filter(slot => (slot !== 1 || !!primary) && (slot !== 2 || !!sidearm));
+  }
+
+  /** CS2's "Zoom Button Hold: Repeat Enabled" re-zooms while Secondary Fire stays held. */
+  private repeatZoom() {
+    const weapon = this.sim.actors[0].weapon;
+    if (!this.settings.keyboard.zoomRepeat || this.paused || this.sim.phase !== 'fighting' || weapon.id === 'knife' || !gameData.weapons[weapon.id].zoomLevels) return;
+    if (this.binds.isHeld('attack2') && this.sim.time >= weapon.actions.readyAt) this.sim.command(0, {secondaryPressed: true});
+  }
+
+  equip(slot: Slot) {
+    const current = this.currentSlot();
+    if (current !== slot && this.availableSlots().includes(slot)) this.lastSlot = current;
+    this.sim.command(0,{equipSlot:slot});if(this.sim.phase==='ready')this.sim.equipPlayer(slot); this.report(); this.renderer.domElement.focus({preventScroll: true});
+  }
   pickup() {
     if(!this.sim.nearestPickup())return;
     this.pickupDrawing=true;this.sim.command(0,{pickupPressed:true});
@@ -837,6 +877,7 @@ export class DuelEngine {
     const dt = this.last ? Math.min((timestamp - this.last) / 1000, .25) : 0;
     this.last = timestamp;
     if (this.sessionStarted && this.roundFlow.advance(dt, this.paused, this.config.feedbackSeconds)) this.restart(true);
+    this.repeatZoom();
     this.sim.advance(dt);
     this.syncEnvironment();this.syncDrops();
     const snapshots = this.sim.renderSnapshot();

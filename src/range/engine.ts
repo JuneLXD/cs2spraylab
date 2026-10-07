@@ -24,6 +24,9 @@ import {batchStaticMeshes, disposeResources} from './duel/render-resources';
 import {ImpactCloud} from './impact-cloud';
 import {FrameMetrics, FramePacer, PerformanceMeter, qualityPolicy, renderPixelRatio} from './performance';
 import {ShortcutGuard} from './shortcut-guard';
+import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from './keybinds/runtime';
+import {attachBindInput} from './keybinds/dom-input';
+import {protectedCodes} from './keybinds/profile';
 import {MuzzleFlashes, ShotEffects} from './weapon-effects';
 import {muzzleAnchor, viewMuzzleToWorld} from './duel/tracers';
 import {resolveBulletRay,type PenetrationSolid,type SurfaceContact} from './duel/penetration';
@@ -95,6 +98,8 @@ export class RangeEngine {
   hitCaption = document.createElement('div');
   cleanup: (() => void)[] = [];
   clearInput?: () => void;
+  /** CS2 bind table for keyboard, mouse buttons and wheel. */
+  binds!: BindRuntime;
   modelCache = new Map<Equipment, THREE.Object3D>();
   viewAnimations = new Map<Equipment, ViewAnimation>();
   private wasReloading = false;
@@ -120,10 +125,12 @@ export class RangeEngine {
     this.scope = new ScopeOverlay(host);
     this.meter = new PerformanceMeter(host); this.meter.configure(settings.showFps);
     this.shortcuts = new ShortcutGuard(host.closest('.range-stage'));
+    this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
     this.cues.forEach((cue, i) => { cue.className = `aim-cue ${i ? 'next' : 'now'}`; cue.style.color = i ? GUIDE_COLORS.next : GUIDE_COLORS.now; cue.innerHTML = `<i></i><span>${i ? 'NEXT' : 'NOW'}</span>`; host.append(cue); });
     this.cueLabels = this.cues.map(cue => cue.querySelector('span')!);
     this.hitCaption.className = 'hit-caption'; host.append(this.hitCaption);
     this.sim = new Simulation(settings);
+    this.binds = new BindRuntime(settings.keyboard, event => this.onBind(event));
     this.renderer = new THREE.WebGLRenderer({ antialias: qualityPolicy(settings.quality).shadows, powerPreference: 'high-performance', alpha: false });
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -409,6 +416,8 @@ export class RangeEngine {
     }
   }
   configure(settings: Settings, measured?: MeasuredProfile) {
+    this.binds?.setProfile(settings.keyboard);
+    if (this.shortcuts) this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
     if (settings.quality !== this.sim.settings.quality) this.metrics.resetResolution();
     this.meter.configure(settings.showFps);
     if (!settings.protectShortcuts) this.shortcuts.release();
@@ -622,6 +631,36 @@ export class RangeEngine {
     this.hitmarker.style.opacity = this.hitCaption.style.opacity = '0';
     if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
   }
+  private updateMovement() {
+    const held = this.binds.isHeld.bind(this.binds);
+    this.sim.input = {...this.sim.input, forward: +held('forward') - +held('back'), side: +held('right') - +held('left'),
+      walk: held('walk'), crouch: held('duck'), jump: held('jump')};
+  }
+  private onBind(event: BindEvent) {
+    if (event.kind === 'press' || event.kind === 'release') {
+      const down = event.kind === 'press';
+      switch (event.action) {
+        case 'attack': if (!down) this.sim.release('mouse'); else if (this.loadedTarget && this.modelCache.has(this.sim.equipped)) this.sim.start(); return;
+        case 'attack2': if (down) this.secondary(true); else if (this.sim.actions.isRevolver && this.sim.actions.alternateFire) this.sim.release('mouse'); return;
+        case 'reload': this.sim.reloadHeld = down; if (down) this.sim.reload(true); return;
+        case 'inspect': if (down) this.inspect(); return;
+        case 'use': return;
+        case 'jump': if (down) this.sim.input.jumpPressed = true;
+      }
+      this.updateMovement(); return;
+    }
+    if (event.kind === 'slot') {const slot = trainerSlot(event.slot, this.sim.slot); if (slot) void this.equip(slot);}
+    else if (event.kind === 'lastinv') void this.equip(this.sim.previousSlot);
+    else if (event.kind === 'invnext' || event.kind === 'invprev')
+      void this.equip(cycleSlot(this.sim.slot, event.kind === 'invnext' ? 1 : -1, this.sim.settings.primaryEnabled ? [1, 2, 3, 4] : [2, 3, 4]));
+    else if (event.kind === 'cancelselect') this.pause();
+  }
+  /** CS2's "Zoom Button Hold: Repeat Enabled" re-zooms while Secondary Fire stays held. */
+  private repeatZoom() {
+    const id = this.sim.equipped;
+    if (!this.sim.active || !this.sim.settings.keyboard.zoomRepeat || id === 'knife' || !gameData.weapons[id].zoomLevels) return;
+    if (this.binds.isHeld('attack2') && this.sim.time >= this.sim.actions.readyAt) this.secondary(true);
+  }
   bindInput() {
     const canvas = this.renderer.domElement;
     const listen = (target: EventTarget, type: string, fn: EventListener, options?: AddEventListenerOptions) => {
@@ -630,20 +669,19 @@ export class RangeEngine {
     let pointer: number | null = null, lastX = 0, lastY = 0;
     const capture = (id: number) => { try { canvas.setPointerCapture(id); } catch { /* Some embedded engines reject pointer capture. */ } };
     listen(canvas, 'pointerdown', ((e: PointerEvent) => {
-      if (e.button === 2 && this.sim.active) {e.preventDefault(); this.secondary(true); return;}
       if (e.button !== 0 || !e.isPrimary) return;
       if (!this.loadedTarget || !this.modelCache.has(this.sim.equipped)) return;
-      e.preventDefault();
       void this.audio.unlock(this.sim.equipped);
       if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+        e.preventDefault();
         this.inputStatus = 'Touch'; this.sim.active = true;
         pointer = e.pointerId; lastX = e.clientX; lastY = e.clientY;
         capture(e.pointerId); this.sim.start(true);
-      } else if (!this.sim.active) void this.enter();
+      } else if (!this.sim.active) {e.preventDefault(); void this.enter();}
       else {
+        // Mouse buttons fire through their binds; this only keeps drag aiming without pointer lock.
         pointer = e.pointerId; lastX = e.clientX; lastY = e.clientY;
         if (!document.pointerLockElement) capture(e.pointerId);
-        this.sim.start();
       }
     }) as EventListener);
     listen(document, 'pointermove', ((e: PointerEvent) => {
@@ -655,10 +693,8 @@ export class RangeEngine {
       }
     }) as EventListener);
     listen(document, 'pointerup', ((e: PointerEvent) => {
-      if(e.button===2 && this.sim.actions.isRevolver && this.sim.actions.alternateFire) {this.sim.release(e.pointerType);return;}
-      if (e.button !== 0) return;
       if (pointer === e.pointerId) pointer = null;
-      this.sim.release(e.pointerType);
+      if (e.pointerType !== 'mouse' && e.button === 0) this.sim.release(e.pointerType);
     }) as EventListener);
     listen(canvas, 'pointercancel', (() => { pointer = null; this.pause(); }) as EventListener);
     listen(canvas, 'contextmenu', e => e.preventDefault());
@@ -669,23 +705,13 @@ export class RangeEngine {
     listen(document, 'fullscreenchange', (() => {
       if (this.shortcuts.protected && !document.fullscreenElement) this.pause();
     }) as EventListener);
-    const keys = new Set<string>();
-    const update = () => {
-      this.sim.input = { ...this.sim.input, forward: +keys.has('KeyW') - +keys.has('KeyS'), side: +keys.has('KeyD') - +keys.has('KeyA'), walk: keys.has('ShiftLeft') || keys.has('ShiftRight'), crouch: keys.has('ControlLeft') || keys.has('ControlRight') || keys.has('KeyC'), jump: keys.has('Space') };
-    };
-    this.clearInput = () => { keys.clear(); pointer = null;this.sim.input.jumpPressed=false;this.sim.reloadHeld=false; update(); };
+    const input = attachBindInput({canvas, runtime: this.binds, active: () => this.sim.active, listen});
+    this.clearInput = () => { this.binds.releaseAll(); input.reset(); pointer = null; this.sim.input.jumpPressed = false; this.sim.reloadHeld = false; this.updateMovement(); };
     listen(window, 'keydown', ((e: KeyboardEvent) => {
       if (!this.sim.active || (e.target instanceof HTMLElement && e.target.matches('input,select,textarea,button'))) return;
-      if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ShiftLeft', 'ShiftRight', 'ControlLeft', 'ControlRight', 'KeyC', 'Space'].includes(e.code)) { e.preventDefault(); keys.add(e.code); update(); }
-      if (!e.repeat && ['Digit1','Digit2','Digit3','Digit4'].includes(e.code)) { e.preventDefault(); void this.equip(+e.code.slice(-1) as Slot); }
-      if(!e.repeat&&e.code==='Space')this.sim.input.jumpPressed=true;
-      if (!e.repeat && e.code === 'KeyQ') { e.preventDefault(); void this.equip(this.sim.previousSlot); }
-      if (!e.repeat && e.code === 'KeyR') {this.sim.reloadHeld=true;this.sim.reload(true);}
-      if (!e.repeat && e.code === 'KeyF') {e.preventDefault(); this.inspect();}
       if (e.code === 'Escape') this.pause();
     }) as EventListener);
-    listen(window, 'keyup', ((e: KeyboardEvent) => { keys.delete(e.code);if(e.code==='KeyR')this.sim.reloadHeld=false; update(); }) as EventListener);
-    const blur = () => { keys.clear(); pointer = null; if (!this.entering || document.hidden) this.pause(); };
+    const blur = () => { this.binds.releaseAll(); input.reset(); pointer = null; if (!this.entering || document.hidden) this.pause(); };
     listen(window, 'blur', blur);
     listen(document, 'visibilitychange', () => { if (document.hidden) blur(); });
     listen(canvas, 'webglcontextlost', e => { e.preventDefault(); this.pause(); this.onError('Graphics context lost. Restart the range to recover.'); });
@@ -713,7 +739,7 @@ export class RangeEngine {
     const policy = qualityPolicy(this.sim.settings.quality);
     const dt = this.previous ? Math.min((timestamp - this.previous) / 1000, .25) : 0;
     this.previous = timestamp; this.elapsed += dt;
-    this.sim.advance(dt); this.syncTargets();
+    this.repeatZoom(); this.sim.advance(dt); this.syncTargets();
     const activeLane = this.sim.firing ? this.sim.targetForShot() : 0;
     this.targets.forEach((t, i) => {
       const marker = t.getObjectByName('active-lane') as THREE.Mesh;

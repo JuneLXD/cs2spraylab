@@ -12,7 +12,15 @@ npm run assets:check
 npm run dev -- --host 0.0.0.0
 ```
 
-Open the URL printed by Vite. Phones on the same network can use the LAN address. Tap the range to fire a selected burst or one semi-automatic shot. Desktop controls: mouse firing, WASD, Shift walking, Ctrl/C crouching, Space jumping, 1/2/3/4 for primary/sidearm/knife/Zeus, Q for the previous slot, R to reload (hold for slower silent reload), F to inspect, E to use a door or pick up a dropped weapon, G to drop, right click for scope/burst/R8 alternate fire/knife stab, Esc exit. Distance is determined by your position.
+Open the URL printed by Vite. Phones on the same network can use the LAN address. Tap the range to fire a selected burst or one semi-automatic shot. Default desktop controls are CS2's: mouse firing, WASD, Shift walking, Ctrl crouching, Space jumping, 1/2/3 for primary/sidearm/knife (3 again for Zeus), Q for the last weapon, mouse wheel to cycle, R to reload (hold for slower silent reload), F to inspect, E to use a door or pick up a dropped weapon, G to drop, right click for scope/burst/R8 alternate fire/knife stab, Esc exit. SprayLab adds C to crouch and 4 for the Zeus. Distance is determined by your position.
+
+## Keybinds
+
+Settings > Keyboard / Mouse is CS2's own Keyboard / Mouse page: the same sections, rows, labels and options, extracted from the installed game by `node tools/import-keybinds.mjs` into `src/range/keybinds/cs2-keyboard-page.json`. Click a key to rebind it, `+` to add another key, or × to unbind; keyboard keys, all five mouse buttons and the wheel can be bound. Rows the trainer does not simulate are marked CS2 only and still round-trip.
+
+Import CS2 config reads `autoexec.cfg` (`...\Counter-Strike Global Offensive\game\csgo\cfg`) and the `cs2_user_keys_0_slot0.vcfg` / `cs2_user_convars_0_slot0.vcfg` files CS2 saves in `Steam\userdata\<account>\730\local\cfg`. Files load in CS2's order: stock defaults, saved binds and convars, then cfg scripts with `autoexec.cfg` last; `exec` follows other chosen files. Binds run through a console interpreter with Source semantics: `+`/`-` buttons held per key, keyless `-attack` releases, aliases, and runtime `bind`/`alias` toggle scripts. Sensitivity, Reverse Mouse, zoom sensitivity, duck/walk toggles and Zoom Button Hold are imported too. Export .cfg writes the profile relative to CS2's defaults for `exec spraylab`. Everything stays in the browser; files are never uploaded.
+
+Browsers reserve a few keys (Esc, F11, F12, the Windows keys and Print Screen); the importer flags trainer controls bound to them. Fullscreen shortcut protection locks your bound keys, except Esc, Tab and the Windows keys, so Ctrl+W or Alt+F combinations reach the trainer.
 
 **A fresh clone needs assets.** Extracted Valve models, textures and audio are intentionally excluded from this source repository. See [REVAMP.md](REVAMP.md#local-asset-pipeline) for the reproducible local conversion. The development workspace already has these files. Do not deploy an asset-less build.
 
@@ -76,6 +84,7 @@ For a data engineer: React is the view layer, TypeScript supplies static contrac
 - `src/range/weapon-actions.ts`: scopes, alternate modes, burst state and bolt cycling shared by both simulations.
 - `src/range/progression.ts`, `ProgressionPanel.tsx`, `cosmetics.ts`: XP settlement, unlocks and exclusively owned cosmetic materials.
 - `src/range/achievements.ts`, `AchievementPanel.tsx`: validated-result badges, persistent counters, progress and filters.
+- `src/range/keybinds/`: CS2 key names, console tokenizer, bind interpreter, config import/export, DOM input and the Keyboard / Mouse settings page.
 - `src/range/game-data.json`: extracted weapon parameters and build provenance.
 - `art/build_native.py`, `art/build_range.py`: Blender asset assembly and original architecture.
 

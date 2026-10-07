@@ -1,5 +1,6 @@
 import data from './game-data.json';
 import { nativeRecoilPattern } from './recoil';
+import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybinds/profile';
 
 export type Weapon = keyof typeof data.weapons;
 export type Mode = 'duel' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
@@ -24,6 +25,8 @@ export type Settings = {
   drillPace: 'practice' | 'challenge';
   aspect: 'native' | '16:9' | '16:10' | '4:3' | '5:4';
   crosshair: Crosshair;
+  /** CS2 bind table and Keyboard & Mouse options. */
+  keyboard: KeyboardProfile;
 };
 export const weaponNames: Record<Weapon, string> = { ak47: 'AK-47', m4a4: 'M4A4', m4a1s: 'M4A1-S', galil: 'Galil AR', famas: 'FAMAS', sg553: 'SG 553', aug: 'AUG', mp9: 'MP9', mp7: 'MP7', mp5sd: 'MP5-SD', mac10: 'MAC-10', ump45: 'UMP-45', p90: 'P90', bizon: 'PP-Bizon', m249: 'M249', negev: 'Negev', cz75a: 'CZ75-Auto',
   usp: 'USP-S', glock: 'Glock-18', hkp2000: 'P2000', p250: 'P250', deagle: 'Desert Eagle', elite: 'Dual Berettas',
@@ -46,7 +49,8 @@ export const defaults: Settings = {
   showImpactPattern: true, showMousePath: true,
   peekScenario: 'mixed', peekDuration: 1, drillPace: 'practice',
   aspect: 'native',
-  crosshair: { color: '#ffeb55', size: 3, gap: 2, thickness: 2, outline: 1, alpha: 1, dot: false, t: false, dynamic: false }
+  crosshair: { color: '#ffeb55', size: 3, gap: 2, thickness: 2, outline: 1, alpha: 1, dot: false, t: false, dynamic: false },
+  keyboard: defaultKeyboard
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -84,7 +88,8 @@ export function sanitizeSettings(raw: unknown): Settings {
       size: numeric(c.size, 3, 0, 20), gap: numeric(c.gap, 2, -4, 20), thickness: numeric(c.thickness, defaults.crosshair.thickness, .5, 5),
       outline: numeric(c.outline, 1, 0, 3), alpha: numeric(c.alpha, 1, .1, 1),
       dot: c.dot === true, t: c.t === true, dynamic: c.dynamic === true
-    }
+    },
+    keyboard: sanitizeKeyboard(s.keyboard)
   };
 }
 export function loadSettings(): Settings {

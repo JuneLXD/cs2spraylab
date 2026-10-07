@@ -22,6 +22,8 @@ export type Result = { id: string; weapon: Equipment; mode: Settings['mode'] | '
 export type Input = MoveInput;
 
 export function mouseAngle(count: number, sensitivity: number) { return count * .022 * sensitivity * DEG; }
+/** CS2's zoom_sensitivity_ratio, applied to mouse input while scoped. */
+export const zoomRatio = (zoom: number, settings: Pick<Settings, 'keyboard'>) => zoom ? settings.keyboard?.zoomSensitivity ?? 1 : 1;
 export function targetSpeed(settings: Settings) {
   return (settings.targetSpeed === 'knife' ? 250 : settings.targetSpeed === 'smg' ? 240 : gameData.weapons[settings.weapon].speed) * UNIT;
 }
@@ -239,7 +241,7 @@ export class Simulation {
     this.attempts++; this.onResult(this.latest);
   }
   aim(dx: number, dy: number, touch = false) {
-    const scale = (touch ? .0025 : mouseAngle(1, this.settings.sensitivity)) * this.actions.sensitivityScale;
+    const scale = (touch ? .0025 : mouseAngle(1, this.settings.sensitivity) * zoomRatio(this.actions.zoom, this.settings)) * this.actions.sensitivityScale;
     this.drill?.mouse(Math.hypot(dx,dy)*scale/DEG);
     this.yaw -= dx * scale;
     this.pitch = clamp(this.pitch - dy * scale * (this.settings.invertY ? -1 : 1), -89 * DEG, 89 * DEG);

@@ -19,6 +19,8 @@ import {ProgressionPanel, XpNotification, useProgression} from './ProgressionPan
 import {cosmeticCatalog, cosmeticLabel, cosmeticPreview} from './cosmetics';
 import {Changelog} from './Changelog';
 import {HearingPractice} from './HearingPractice';
+import {KeyboardSettings} from './keybinds/KeyboardSettings';
+import {keyHint, shortcutHint, slotKey} from './keybinds/profile';
 
 function LoadoutFinishes({equipment, profile, controller, onShop, focusRequest}: {equipment: Weapon; profile: ProgressionProfile; controller: ProgressionController; onShop: (equipment: string) => void; focusRequest: number}) {
   const finishes = useRef<HTMLElement>(null);
@@ -76,7 +78,8 @@ function download(name: string, value: unknown) {
 }
 const emptyStatus: RangeStatus = { weapon: 'ak47', equipped:'ak47',slot:1,equipReady:true,magazine:30, active: false, firing: false, shots: 0, hits: 0, heads: 0, remaining: 30, reload: 0, speed: 0, distance: 12, input: 'Ready', audio: 'locked', assets: 'Loading models', fps: 0 };
 type Panel = 'settings' | 'weapons' | 'history' | 'changelog' | null;
-type Tab = 'game' | 'crosshair' | 'data';
+type Tab = 'game' | 'keyboard' | 'crosshair' | 'data';
+const tabNames: Record<Tab, string> = {game: 'Game', keyboard: 'Keyboard / Mouse', crosshair: 'Crosshair', data: 'Data & audio'};
 
 export default function RangeApp() {
   const [progression] = useState(() => createProgressionController({catalog: cosmeticCatalog}));
@@ -224,10 +227,10 @@ export default function RangeApp() {
         {(status.targetHealth ?? [100,100]).map((health, i) => <span key={i} className={health === 0 ? 'down' : ''}>{i ? 'B' : 'A'} <b>{health === 0 ? 'DOWN' : `${Math.ceil(health)} HP`}</b></span>)}
       </div>}
       <div className="equipment-slots" role="group" aria-label="Equipped weapon">
-        {([1,2,3,4] as Slot[]).filter(slot=>slot!==1||settings.primaryEnabled).map(slot=>{const id=slot===1?settings.weapon:slot===2?settings.sidearm:slot===4?'zeus':'knife';return <button key={slot} aria-pressed={status.slot===slot} aria-label={`Equip ${equipmentNames[id]}`} title={`${cosmeticLabel(progressionState.profile, id)} (${slot})`} onClick={()=>{void engine.current?.equip(slot);}}><span>{slot}</span><img src={cosmeticPreview(progressionState.profile, id)} alt=""/></button>;})}
+        {([1,2,3,4] as Slot[]).filter(slot=>slot!==1||settings.primaryEnabled).map(slot=>{const id=slot===1?settings.weapon:slot===2?settings.sidearm:slot===4?'zeus':'knife';return <button key={slot} aria-pressed={status.slot===slot} aria-label={`Equip ${equipmentNames[id]}`} title={`${cosmeticLabel(progressionState.profile, id)} (${slotKey(settings.keyboard, slot)})`} onClick={()=>{void engine.current?.equip(slot);}}><span>{slotKey(settings.keyboard, slot)}</span><img src={cosmeticPreview(progressionState.profile, id)} alt=""/></button>;})}
       </div>
-      <div className="weapon-action-tools"><button className="icon-button" aria-label="Inspect weapon" title="Inspect weapon (F)" onClick={()=>engine.current?.inspect()}><Eye size={16}/></button>
-        {status.equipped !== 'knife' && (gameData.weapons[status.equipped].zoomLevels > 0 || gameData.weapons[status.equipped].hasBurst || gameData.weapons[status.equipped].isRevolver) && <button className="icon-button" aria-label="Secondary weapon mode" title={status.equipped === 'revolver' ? 'Quick alternate shot (right click)' : 'Scope / burst mode (right click)'} onClick={()=>engine.current?.secondary()}><ScanLine size={16}/></button>}</div>
+      <div className="weapon-action-tools"><button className="icon-button" aria-label="Inspect weapon" title={`Inspect weapon (${keyHint(settings.keyboard, '+lookatweapon')})`} onClick={()=>engine.current?.inspect()}><Eye size={16}/></button>
+        {status.equipped !== 'knife' && (gameData.weapons[status.equipped].zoomLevels > 0 || gameData.weapons[status.equipped].hasBurst || gameData.weapons[status.equipped].isRevolver) && <button className="icon-button" aria-label="Secondary weapon mode" title={`${status.equipped === 'revolver' ? 'Quick alternate shot' : 'Scope / burst mode'} (${keyHint(settings.keyboard, '+attack2')})`} onClick={()=>engine.current?.secondary()}><ScanLine size={16}/></button>}</div>
       <div className="follow-origin" ref={follow}><CrosshairView value={settings.crosshair} /></div>
       {settings.mode==='peek'&&status.active&&!!status.drill?.peekDirection&&<div className="peek-direction" role="status" aria-label={`Peek ${status.drill.peekDirection<0?'left':'right'}`}>
         {status.drill.peekDirection<0?<ArrowLeft size={32}/>:<ArrowRight size={32}/>}<span>Peek {status.drill.peekDirection<0?'left':'right'}</span>
@@ -238,11 +241,11 @@ export default function RangeApp() {
       {!status.active && !error && <button className="enter-range" disabled={!assetReady} onClick={start}><Play size={18} fill="currentColor" />{assetReady ? 'Enter range' : 'Loading range'}</button>}
       {error && <div className="range-error" role="alert"><Shield size={24} /><p>{error}</p><button onClick={() => { setError(''); setGeneration(g => g + 1); }}><RotateCcw size={16} />Restart range</button></div>}
       {status.active && <div className="exit-hint"><span>Press ESC to exit</span><button className="icon-button" aria-label="Pause range" title="Pause range (Esc)" onClick={() => engine.current?.pause()}><Pause size={16} /></button></div>}
-      {status.active && status.input !== 'Touch' && !status.shortcutProtected && <div className="range-shortcut-warning" role="status">C to crouch. Ctrl+W may close this tab.</div>}
+      {status.active && status.input !== 'Touch' && !status.shortcutProtected && shortcutHint(settings.keyboard) && <div className="range-shortcut-warning" role="status">{shortcutHint(settings.keyboard)}</div>}
       <div className="range-hud">
         <div className="hud-performance"><span className="hud-stat"><Activity size={17} /><b>{Math.round(status.speed)}</b><small>u/s</small></span><span className="hud-stat"><Target size={17} /><b>{status.distance.toFixed(1)}</b><small>m</small></span></div>
         <div className="hud-result"><small>{settings.mode==='precision'?'MOVEMENT SCORE':'HIT RATE'}</small><strong data-testid="accuracy">{Math.round(score)}<em>{settings.mode==='precision'?'/100':'%'}</em></strong><div className="hit-counts"><span className="head-count"><b>{status.heads}</b> HEAD</span><span className="body-count"><b>{status.hits - status.heads}</b> BODY</span><span className="miss-count"><b>{status.shots - status.hits}</b> MISS</span></div></div>
-        <div className="hud-ammo"><small>{cosmeticLabel(progressionState.profile, status.equipped)}</small><strong data-testid="ammo">{status.slot===3?'--':status.remaining}{status.slot!==3&&status.equipped!=='zeus'&&<em>{`/ ${status.reserve ?? status.magazine}`}</em>}</strong><span>{status.reload?`${status.reloadSilent?'Silent reload':'Reloading'} ${status.reload.toFixed(1)} s`:status.recharge?`Recharge ${Math.ceil(status.recharge)}s`:!status.equipReady?'Drawing':status.firing ? 'Firing' : 'Ready'}</span>{status.slot!==3&&status.equipped!=='zeus'&&<button className="reload-pistol" disabled={status.remaining===status.magazine||!!status.reload||!status.reserve} onClick={()=>engine.current?.sim.reload()} title={`Reload ${equipmentNames[status.equipped]} (R)`}><RotateCcw size={13}/>Reload</button>}</div>
+        <div className="hud-ammo"><small>{cosmeticLabel(progressionState.profile, status.equipped)}</small><strong data-testid="ammo">{status.slot===3?'--':status.remaining}{status.slot!==3&&status.equipped!=='zeus'&&<em>{`/ ${status.reserve ?? status.magazine}`}</em>}</strong><span>{status.reload?`${status.reloadSilent?'Silent reload':'Reloading'} ${status.reload.toFixed(1)} s`:status.recharge?`Recharge ${Math.ceil(status.recharge)}s`:!status.equipReady?'Drawing':status.firing ? 'Firing' : 'Ready'}</span>{status.slot!==3&&status.equipped!=='zeus'&&<button className="reload-pistol" disabled={status.remaining===status.magazine||!!status.reload||!status.reserve} onClick={()=>engine.current?.sim.reload()} title={`Reload ${equipmentNames[status.equipped]} (${keyHint(settings.keyboard, '+reload')})`}><RotateCcw size={13}/>Reload</button>}</div>
       </div>
       </div>
       {isDrillMode(settings.mode)&&<DrillPanel status={status} mode={settings.mode} challenge={settings.drillPace==='challenge'} peekDuration={settings.peekDuration}/>}
@@ -251,12 +254,13 @@ export default function RangeApp() {
     <footer className="statusbar"><span><i className={settings.mode !== 'hearing' && status.active ? 'online' : ''} />{settings.mode === 'hearing' ? 'Hearing practice' : settings.mode === 'duel' ? 'AI Duel' : status.input}</span><span className="status-center">{settings.mode === 'hearing' ? 'Native samples / browser spatial audio' : settings.mode === 'duel' ? 'Simulation' : status.audio === 'unavailable' ? 'Audio unavailable' : status.slot===3?'250 u/s':`${Math.round(60 / equipmentStats(status.equipped).cycle)} RPM`}<span className="desktop-status">Build {gameData.build}</span></span><div className="project-links"><a href="https://github.com/HamzahAlrawi/cs2spraylab" target="_blank" rel="noreferrer"><Github size={14} />Source</a></div></footer>
     {notice && <div className="toast" role="status">{notice}<button className="icon-button" aria-label="Dismiss message" onClick={() => setNotice('')}><X size={15} /></button></div>}
     {panel && <div className="drawer-backdrop" onPointerDown={e => { if (e.target === e.currentTarget) setPanel(null); }}>
-      <aside className={`drawer ${panel === 'history' || panel === 'changelog' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="panel-title" tabIndex={-1} ref={drawer}>
+      <aside className={`drawer ${panel === 'history' || panel === 'changelog' || panel === 'settings' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="panel-title" tabIndex={-1} ref={drawer}>
         <div className="drawer-header"><div><small>SPRAYLAB</small><h1 id="panel-title">{panel === 'settings' ? 'Settings' : panel === 'weapons' ? 'Loadout' : panel === 'changelog' ? 'Changelog' : 'Session history'}</h1></div><button className="icon-button" aria-label="Close panel" onClick={() => setPanel(null)}><X size={21} /></button></div>
         {panel === 'changelog' && <Changelog/>}
         {panel === 'settings' && <>
-          <div className="tabs" role="tablist" aria-label="Settings sections">{(['game', 'crosshair', 'data'] as Tab[]).map(t => <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>{t === 'game' ? 'Game' : t === 'crosshair' ? 'Crosshair' : 'Data & audio'}</button>)}</div>
+          <div className="tabs" role="tablist" aria-label="Settings sections">{(Object.keys(tabNames) as Tab[]).map(t => <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>{tabNames[t]}</button>)}</div>
           <div className="drawer-content" role="tabpanel">
+            {tab === 'keyboard' && <KeyboardSettings settings={settings} update={update} notify={setNotice}/>}
             {tab === 'game' && <>
               <h2>Mouse</h2><div className="two-fields"><label>Sensitivity<NumberField label="Sensitivity" min={.05} max={10} step={.05} value={settings.sensitivity} onCommit={sensitivity => update({ sensitivity })} /></label><label>Mouse DPI<NumberField label="Mouse DPI" min={100} max={32000} step={100} value={settings.dpi} onCommit={dpi => update({ dpi })} /></label></div>
               <div className="readout"><span>cm / 360</span><b>{(360 / (.022 * settings.sensitivity * settings.dpi) * 2.54).toFixed(2)}</b></div>
@@ -309,7 +313,7 @@ export default function RangeApp() {
               {profiles[settings.weapon] && <><p className="data-note">{profiles[settings.weapon]?.source} / build {profiles[settings.weapon]?.build}</p><button className="secondary" onClick={() => { const next = { ...profiles }; delete next[settings.weapon]; setProfiles(next); try { localStorage.setItem('spraylab.profiles.v1', JSON.stringify(next)); } catch { setNotice('Storage unavailable.'); } }}>Remove capture</button></>}
               <button className="secondary" onClick={() => download('spraylab-session.json', { settings, results, legacy, profiles })}><Download size={16} />Export session</button>
             </>}
-          </div><div className="drawer-footer"><button className="secondary" onClick={() => setSettings({ ...defaults, crosshair: { ...defaults.crosshair } })}><RotateCcw size={15} />Restore defaults</button><button className="primary" onClick={() => setPanel(null)}><Check size={16} />Done</button></div>
+          </div><div className="drawer-footer"><button className="secondary" onClick={() => setSettings(s =>({ ...defaults, crosshair: { ...defaults.crosshair }, keyboard: s.keyboard }))}><RotateCcw size={15} />Restore defaults</button><button className="primary" onClick={() => setPanel(null)}><Check size={16} />Done</button></div>
         </>}
         {panel === 'weapons' && <div className="drawer-content arsenal">
           <Toggle label="Carry a primary weapon" checked={settings.primaryEnabled} onChange={primaryEnabled=>update({primaryEnabled})}/>
@@ -331,6 +335,6 @@ export default function RangeApp() {
         </div>}
       </aside>
     </div>}
-    {tutorial && <MovementTutorial close={() => setTutorial(false)} practice={() => {setTutorial(false); update({mode: 'precision', spread: true, drillPace: 'practice'});}}/>}
+    {tutorial && <MovementTutorial keyboard={settings.keyboard} close={() => setTutorial(false)} practice={() => {setTutorial(false); update({mode: 'precision', spread: true, drillPace: 'practice'});}}/>}
   </main>;
 }

@@ -9,6 +9,7 @@ import {DuelScorecard} from './DuelScorecard';
 import type {ProgressionController} from '../progression';
 import {cosmeticPreview, cosmeticLabel} from '../cosmetics';
 import {DuelSetup} from './DuelSetup';
+import {keyHint, shortcutHint, slotKey} from '../keybinds/profile';
 
 const initialStatus: DuelStatus = {phase: 'ready', paused: false, health: 100, armor: 100,
   ammo: 30, reloading: false, enemies: 1, seconds: 0, kills: 0, damage: 0, input: 'Ready', caption: '',
@@ -69,6 +70,7 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   const equipped = status.equipped ?? loadoutWeapon(settings);
   const profile = progression?.getSnapshot().profile;
   const label = (id: typeof equipped) => profile ? cosmeticLabel(profile, id) : equipmentNames[id];
+  const useKey = keyHint(settings.keyboard, '+use', 'Use');
   const crosshairStyle = {'--cross-color': settings.crosshair.color, '--cross-size': `${settings.crosshair.size}px`,
     '--cross-gap': `${settings.crosshair.gap}px`, '--cross-thickness': `${settings.crosshair.thickness}px`,
     '--cross-outline': `${settings.crosshair.outline}px`, opacity: settings.crosshair.alpha} as CSSProperties;
@@ -79,19 +81,19 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
       <div className="duel-topline"><span className="range-badge"><i />AI DUEL</span><span>{status.enemies} {status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} LEFT</span></div>
       <div className="duel-tools"><div className="equipment-slots" role="group" aria-label="Duel equipment">
         {([1,2,3,4] as Slot[]).filter(slot=>(slot!==1||(status.loadout ? !!status.loadout.primary : settings.primaryEnabled))&&(slot!==2||!status.loadout||!!status.loadout.sidearm)).map(slot => {const id = slot === 1 ? status.loadout?.primary ?? settings.weapon : slot === 2 ? status.loadout?.sidearm ?? settings.sidearm : slot===4?'zeus':'knife';
-          return <button key={slot} aria-pressed={equipped === id} title={`${label(id)} (${slot})`} aria-label={`Equip ${equipmentNames[id]}`} onClick={() => engine.current?.equip(slot)}><span>{slot}</span><img src={profile ? cosmeticPreview(profile,id) : `/models/${id}.png`} alt=""/></button>;})}
+          return <button key={slot} aria-pressed={equipped === id} title={`${label(id)} (${slotKey(settings.keyboard, slot)})`} aria-label={`Equip ${equipmentNames[id]}`} onClick={() => engine.current?.equip(slot)}><span>{slotKey(settings.keyboard, slot)}</span><img src={profile ? cosmeticPreview(profile,id) : `/models/${id}.png`} alt=""/></button>;})}
       </div>
-      <div className="weapon-action-tools"><button className="icon-button" aria-label="Inspect weapon" title="Inspect weapon (F)" onClick={()=>engine.current?.inspect()}><Eye size={16}/></button>
-        {equipped !== 'knife' && (gameData.weapons[equipped].zoomLevels > 0 || gameData.weapons[equipped].hasBurst || gameData.weapons[equipped].isRevolver) && <button className="icon-button" aria-label="Secondary weapon mode" title={equipped === 'revolver' ? 'Quick alternate shot (right click)' : 'Scope / burst mode (right click)'} onClick={()=>engine.current?.secondary()}><ScanLine size={16}/></button>}</div>
+      <div className="weapon-action-tools"><button className="icon-button" aria-label="Inspect weapon" title={`Inspect weapon (${keyHint(settings.keyboard, '+lookatweapon')})`} onClick={()=>engine.current?.inspect()}><Eye size={16}/></button>
+        {equipped !== 'knife' && (gameData.weapons[equipped].zoomLevels > 0 || gameData.weapons[equipped].hasBurst || gameData.weapons[equipped].isRevolver) && <button className="icon-button" aria-label="Secondary weapon mode" title={`${equipped === 'revolver' ? 'Quick alternate shot' : 'Scope / burst mode'} (${keyHint(settings.keyboard, '+attack2')})`} onClick={()=>engine.current?.secondary()}><ScanLine size={16}/></button>}</div>
       {playing && <div className="duel-exit"><span>Press ESC to exit</span><button className="icon-button" aria-label="Pause duel" title="Pause duel" onClick={() => engine.current?.pause()}><Pause size={16}/></button></div>}
-      {alive && !status.shortcutProtected && <div className="duel-shortcut-warning" role="status">C to crouch. Ctrl+W may close this tab.</div>}
+      {alive && !status.shortcutProtected && shortcutHint(settings.keyboard) && <div className="duel-shortcut-warning" role="status">{shortcutHint(settings.keyboard)}</div>}
       </div>
       <div className="follow-origin" ref={crosshair} aria-hidden="true"><div className={`crosshair ${settings.crosshair.t ? 't-style' : ''} ${settings.crosshair.size === 0 ? 'dot-only' : ''}`} style={crosshairStyle}>
         <i className="arm top"/><i className="arm right"/><i className="arm bottom"/><i className="arm left"/>{settings.crosshair.dot&&<i className="dot"/>}
       </div></div>
       {status.phase !== 'ready' && status.caption && <div className="duel-caption" role="status">{status.caption}</div>}
-      {alive && status.pickup && <button className="pickup-prompt" title="Pick up weapon (E)" onClick={()=>engine.current?.pickup()}><Hand size={15}/>E <span>Pick up {equipmentNames[status.pickup]}</span></button>}
-      {alive && status.interaction && !status.pickup && <button className="pickup-prompt" title={`${status.interaction} (E)`} onClick={()=>engine.current?.sim.command(0,{usePressed:true})}><Hand size={15}/>E <span>{status.interaction}</span></button>}
+      {alive && status.pickup && <button className="pickup-prompt" title={`Pick up weapon (${useKey})`} onClick={()=>engine.current?.pickup()}><Hand size={15}/>{useKey} <span>Pick up {equipmentNames[status.pickup]}</span></button>}
+      {alive && status.interaction && !status.pickup && <button className="pickup-prompt" title={`${status.interaction} (${useKey})`} onClick={()=>engine.current?.sim.command(0,{usePressed:true})}><Hand size={15}/>{useKey} <span>{status.interaction}</span></button>}
       {status.phase === 'result' && <div className={`duel-result ${status.outcome}`} role="status"><strong>{status.outcome === 'won' ? 'Round won' : status.outcome === 'lost' ? 'Round lost' : 'Draw'}</strong>
         <span>{status.paused ? 'Paused' : `Next round in ${status.nextRoundIn.toFixed(1)}s`}</span>
         {status.review && <><b>{status.review.message}</b><p>{status.review.tip}</p></>}</div>}
@@ -104,7 +106,7 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
       <div className="duel-hud">
         <div className="duel-health"><small>HEALTH</small><strong>{Math.ceil(status.health)}</strong><span><Shield size={13}/>{Math.ceil(status.armor)} armor</span></div>
         <div className="duel-round"><span>{status.kills} KILLS</span><strong>{Math.max(0, Math.ceil(config.roundSeconds - status.seconds))}<small> s</small></strong><span>{Math.round(status.damage)} DAMAGE</span></div>
-        <div className="duel-ammo"><small>{label(equipped)}</small><strong>{equipped === 'knife' ? '--' : status.ammo}{equipped !== 'knife' && equipped!=='zeus' && <em> / {status.reserve ?? equipmentStats(equipped).reserve}</em>}</strong><span>{status.reloading ? status.reloadSilent?'Silent reload':'Reloading' : equipped==='zeus'&&status.recharge?`Recharge ${Math.ceil(status.recharge)}s`:status.input}</span>{equipped !== 'knife' && equipped!=='zeus' && <button className="reload-pistol" title="Reload (R)" disabled={!alive || status.reloading || !status.reserve || status.ammo === equipmentStats(equipped).magazine} onClick={() => engine.current?.sim.command(0, {reloadPressed: true})}><RotateCcw size={13}/>Reload</button>}</div>
+        <div className="duel-ammo"><small>{label(equipped)}</small><strong>{equipped === 'knife' ? '--' : status.ammo}{equipped !== 'knife' && equipped!=='zeus' && <em> / {status.reserve ?? equipmentStats(equipped).reserve}</em>}</strong><span>{status.reloading ? status.reloadSilent?'Silent reload':'Reloading' : equipped==='zeus'&&status.recharge?`Recharge ${Math.ceil(status.recharge)}s`:status.input}</span>{equipped !== 'knife' && equipped!=='zeus' && <button className="reload-pistol" title={`Reload (${keyHint(settings.keyboard, '+reload')})`} disabled={!alive || status.reloading || !status.reserve || status.ammo === equipmentStats(equipped).magazine} onClick={() => engine.current?.sim.command(0, {reloadPressed: true})}><RotateCcw size={13}/>Reload</button>}</div>
       </div>
     </div>
     <aside className="duel-controls" aria-label="Duel settings">

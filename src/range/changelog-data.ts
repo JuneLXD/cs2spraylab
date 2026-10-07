@@ -56,6 +56,11 @@ export const latestChanges = {
       'Fixed untracked dropped weapons accumulating across rounds; allocation-light corpse contacts and sleeping-pose reuse reduce post-kill CPU work.',
       'A toolbar FPS toggle and CPU-aware automatic pose sampling make performance easier to monitor and adapt without changing gameplay timing.',
     ]},
+    {id: 'controls', title: 'Keybinds & CS2 configs', items: [
+      'Settings > Keyboard / Mouse mirrors CS2\'s own page, extracted from the installed game: every bind section and option, with click-to-rebind for keys, mouse buttons and the wheel.',
+      'Import autoexec.cfg and CS2\'s saved cs2_user_keys/convars files. Aliases, toggle scripts, +/- binds, exec chains, sensitivity, zoom sensitivity and duck/walk toggles behave as in CS2; Export writes a matching .cfg.',
+      'Range, AI Duel and the movement lessons follow your binds, including chorded mouse buttons. HUD hints and fullscreen shortcut protection use your keys; slot 3 cycles knife and Zeus as in CS2.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
