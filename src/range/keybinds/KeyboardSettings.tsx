@@ -5,6 +5,8 @@ import {cs2DefaultBinds, defaultKeyboard, duelOnlyCommands, keyboardPage, keysFo
   type BindRow, type EnumRow, type KeyboardProfile, type SliderRow} from './profile';
 import {browserReservedKeys, describeKey, displayKey, keyFromCode, keyFromMouseButton} from './keys';
 import {exportCfg, importCs2Config, parseBindLine, type ImportReport, type ImportResult} from './cs2-import';
+import {crosshairFromCvars, cvarsFromCrosshair} from './crosshair-cvars';
+import {screenMetrics} from '../console-settings';
 import './keybinds.css';
 
 type Props = {settings: Settings; update: (patch: Partial<Settings>) => void; notify: (message: string) => void};
@@ -69,10 +71,15 @@ export function KeyboardSettings({settings, update, notify}: Props) {
     setKeyboard({binds}); setChange(`${displayKey(key)} is unbound.`);
   };
   const apply = (result: ImportResult) => {
+    const metrics = screenMetrics(settings.resolution);
+    const cs2Crosshair = result.crosshair && {cvars: result.crosshair.cvars, screenHeight: result.crosshair.screenHeight ?? metrics.screenHeight};
+    const view = cs2Crosshair && crosshairFromCvars(cs2Crosshair, metrics.cssHeight);
     update({keyboard: result.profile, ...(result.mouse.sensitivity !== undefined ? {sensitivity: result.mouse.sensitivity} : {}),
       ...(result.mouse.invertY !== undefined ? {invertY: result.mouse.invertY} : {}),
-      ...(Object.keys(result.viewmodel).length ? {viewmodel: sanitizeViewmodel({...settings.viewmodel, ...result.viewmodel})} : {})});
-    setReport(result.report); setChange('');
+      ...(Object.keys(result.viewmodel).length ? {viewmodel: sanitizeViewmodel({...settings.viewmodel, ...result.viewmodel})} : {}),
+      ...(cs2Crosshair && view ? {crosshair: view.crosshair, cs2Crosshair, ...(view.follow !== undefined ? {follow: view.follow} : {})} : {})});
+    setReport(view?.notes.length ? {...result.report, settings: [...result.report.settings, ...view.notes.map(note => `crosshair: ${note}`)]} : result.report);
+    setChange('');
   };
   const importFiles = async (list: FileList | null) => {
     if (!list?.length) return;
@@ -85,7 +92,10 @@ export function KeyboardSettings({settings, update, notify}: Props) {
     } catch (error) {notify((error as Error).message);}
   };
   const download = () => {
-    const url = URL.createObjectURL(new Blob([exportCfg(keyboard, settings)], {type: 'text/plain'}));
+    const metrics = screenMetrics(settings.resolution);
+    // Current CS2 builds read the pixel-based crosshair names.
+    const crosshair = cvarsFromCrosshair(settings.crosshair, settings.cs2Crosshair?.screenHeight ?? metrics.screenHeight, metrics.cssHeight);
+    const url = URL.createObjectURL(new Blob([exportCfg(keyboard, {...settings, crosshair: {...crosshair, cvars: {...crosshair.cvars, cl_crosshair_recoil: settings.follow ? '1' : '0'}}})], {type: 'text/plain'}));
     const link = document.createElement('a'); link.href = url; link.download = 'spraylab.cfg'; link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
@@ -142,7 +152,7 @@ export function KeyboardSettings({settings, update, notify}: Props) {
 
     <section id={rowId('import')} className="kb-import" aria-labelledby="kb-import-title">
       <h2 id="kb-import-title">Use your CS2 binds</h2>
-      <p className="setting-explanation">Choose <code>autoexec.cfg</code>, and optionally the <code>cs2_user_keys_0_slot0.vcfg</code> and <code>cs2_user_convars_0_slot0.vcfg</code> files CS2 saves your settings in. They are read in this browser and never uploaded.</p>
+      <p className="setting-explanation">Choose <code>autoexec.cfg</code>, and optionally the <code>cs2_user_keys_0_slot0.vcfg</code> and <code>cs2_user_convars_0_slot0.vcfg</code> files CS2 saves your settings in. Add <code>cs2_video.txt</code> from the same folder so the crosshair is sized for your CS2 resolution. They are read in this browser and never uploaded.</p>
       <div className="kb-actions">
         <label className="secondary file-button"><FileUp size={15}/>Import CS2 config<input type="file" multiple accept=".cfg,.vcfg,.txt"
           aria-label="Import CS2 config files" onChange={event => {void importFiles(event.target.files); event.target.value = '';}}/></label>

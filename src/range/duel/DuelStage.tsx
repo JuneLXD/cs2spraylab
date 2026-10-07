@@ -12,6 +12,7 @@ import {DuelSetup} from './DuelSetup';
 import {keyHint, shortcutHint, slotKey} from '../keybinds/profile';
 import {sanitizeBotzConfig, type BotzConfig} from './botz';
 import {BotzScorecard, BotzSetup, clock} from './BotzPanel';
+import {cvarAssignment} from '../keybinds/console';
 
 const initialStatus: DuelStatus = {phase: 'ready', paused: false, health: 100, armor: 100,
   ammo: 30, reloading: false, enemies: 1, seconds: 0, kills: 0, damage: 0, input: 'Ready', caption: '',
@@ -33,11 +34,14 @@ function loadHint() {
 }
 
 /** AI Duel, or Aim Botz (variant 'botz'): passive respawning bots on the same engine. */
-export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel'}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'botz'}) {
+export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel', onConsole}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'botz';
+  /** Console commands from binds that change app settings, such as crosshair convars. */
+  onConsole?: (args: string[]) => void}) {
   const botzMode = variant === 'botz';
   const [config, setConfig] = useState(loadConfig);
   const [botz, setBotz] = useState(loadBotz);
   const [status, setStatus] = useState<DuelStatus>(initialStatus);
+  const latest = useRef({config, onConsole}); latest.current = {config, onConsole};
   const [hint, setHint] = useState(loadHint);
   const [panel, setPanel] = useState<'setup' | 'review'>('setup');
   const [error, setError] = useState('');
@@ -48,8 +52,15 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
 
   useEffect(() => {
     if (!canvasHost.current) return;
-    try {engine.current = new DuelEngine(canvasHost.current, crosshair.current!, setStatus, setError, settings, config, progression, botzMode ? botz : undefined);}
-    catch {setError('WebGL could not start. Enable hardware acceleration and reload.');}
+    try {
+      engine.current = new DuelEngine(canvasHost.current, crosshair.current!, setStatus, setError, settings, config, progression, botzMode ? botz : undefined);
+      engine.current.onConsole = args => {
+        // cl_radar_scale (e.g. `toggle cl_radar_scale 0.3 1`) zooms the Duel radar; the rest goes to the app.
+        const radar = cvarAssignment(args, name => name === 'cl_radar_scale' ? String(latest.current.config.radarScale) : undefined);
+        if (radar?.name === 'cl_radar_scale') {if (radar.value.trim() && Number.isFinite(Number(radar.value))) update({radarScale: Number(radar.value)}); return;}
+        latest.current.onConsole?.(args);
+      };
+    } catch {setError('WebGL could not start. Enable hardware acceleration and reload.');}
     return () => {engine.current?.dispose(); engine.current = undefined;};
   }, []);
   useEffect(() => {engine.current?.setSettings(settings);}, [settings]);

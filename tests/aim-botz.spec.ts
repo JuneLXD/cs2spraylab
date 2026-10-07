@@ -70,13 +70,13 @@ test('Aim Botz: a timed session ends, is saved, and New session starts the next'
   await page.getByRole('button', {name: 'Start Aim Botz'}).click();
   await expect(page.locator('.duel-round')).toContainText(/30|29/);
   await page.waitForFunction(() => (window as any).botzEngine.models.size === 1, undefined, {timeout: 45000});
-  // A body shot registers without damage in headshot-only mode.
+  // One body shot registers without damage in headshot-only mode.
   await page.evaluate(() => {
     const sim = (window as any).botzEngine.sim, eye = sim.actors[0].position, bot = sim.actors[1];
     const dx = bot.position.x - eye.x, dy = bot.feet + 1.2 - eye.y, dz = bot.position.z - eye.z;
     sim.actors[0].yaw = Math.atan2(-dx, -dz); sim.actors[0].pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
+    sim.command(0, {firePressed: true});
   });
-  await page.mouse.down(); await page.waitForTimeout(40); await page.mouse.up();
   await expect(page.locator('.duel-health')).toContainText('1 / 1 hits');
   expect(await page.evaluate(() => (window as any).botzEngine.sim.actors[1].health)).toBe(100);
   await page.evaluate(() => {const sim = (window as any).botzEngine.sim; for (let i = 0; i < 124; i++) sim.advance(.25);});

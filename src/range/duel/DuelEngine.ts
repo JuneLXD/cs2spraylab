@@ -3,7 +3,7 @@ import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {clone as cloneSkeleton} from 'three/examples/jsm/utils/SkeletonUtils.js';
 import {DEG, UNIT, type Vec} from '../actor-physics';
 import {RangeAudio} from '../audio';
-import {gameData,loadoutWeapon, type Settings, type Viewmodel, type Weapon} from '../config';
+import {gameData,loadoutWeapon,resolutionPixelRatio,viewAspect, type Settings, type Viewmodel, type Weapon} from '../config';
 import {requestRawLock} from '../input';
 import {mouseAngle, VERTICAL_FOV, zoomRatio} from '../simulation';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
@@ -83,6 +83,8 @@ export class DuelEngine {
   readonly audio = new RangeAudio();
   /** CS2 bind table for keyboard, mouse buttons and wheel. */
   readonly binds: BindRuntime;
+  /** Other console commands a bind runs, such as crosshair convars or cl_radar_scale. */
+  onConsole?: (args: string[]) => void;
   private bindHandle?: {reset(): void};
   private lastSlot: Slot = 2;
   private readonly cleanup: (() => void)[] = [];
@@ -532,8 +534,11 @@ export class DuelEngine {
 
   setConfig(config: DuelConfig) {
     if (config === this.config || this.botz) return;
+    // Radar display settings apply live; everything else starts a new round.
+    const round = (value: DuelConfig) => JSON.stringify({...value, radarEnabled: 0, radarRotate: 0, radarScale: 0});
+    const radarOnly = round(config) === round(this.config);
     this.config = config;
-    this.restart();
+    if (!radarOnly) this.restart();
   }
 
   setBotz(botz: BotzConfig) {
@@ -708,6 +713,7 @@ export class DuelEngine {
     else if (event.kind === 'invnext' || event.kind === 'invprev') this.equip(cycleSlot(this.currentSlot(), event.kind === 'invnext' ? 1 : -1, this.availableSlots()));
     else if (event.kind === 'drop') this.sim.command(0, {dropPressed: true});
     else if (event.kind === 'cancelselect') this.pause();
+    else if (event.kind === 'console') this.onConsole?.(event.args);
   }
 
   private currentSlot(): Slot {
@@ -942,10 +948,11 @@ export class DuelEngine {
     const width = this.host.clientWidth, height = this.host.clientHeight;
     if (!width || !height) return;
     this.width = width; this.height = height;
-    this.renderer.setPixelRatio(renderPixelRatio(width, height, devicePixelRatio || 1, this.settings.quality, this.metrics.adaptive));
+    this.renderer.setPixelRatio(renderPixelRatio(width, height, resolutionPixelRatio(this.settings.resolution), this.settings.quality, this.metrics.adaptive));
     this.renderer.setSize(width, height);
-    this.camera.aspect = this.settings.aspect === 'native' ? width / height
-      : this.settings.aspect.split(':').map(Number).reduce((a, b) => a / b);
+    this.camera.aspect = viewAspect(this.settings.resolution, width, height);
+    // CS2 stretches the crosshair with the world.
+    this.crosshair.style.setProperty('--cross-stretch', String(width / height / this.camera.aspect));
     this.sim.playerAspect = this.camera.aspect;
     this.camera.updateProjectionMatrix();
     this.viewCamera.aspect = viewmodelViewport(width, height).aspect;

@@ -1,6 +1,7 @@
 import data from './game-data.json';
 import { nativeRecoilPattern } from './recoil';
 import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybinds/profile';
+import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
 
 export type Weapon = keyof typeof data.weapons;
 export type Mode = 'duel' | 'botz' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
@@ -15,6 +16,27 @@ export function migrateMode(mode: unknown): Mode {
 export type Crosshair = { color: string; size: number; gap: number; thickness: number; outline: number; alpha: number; dot: boolean; t: boolean; dynamic: boolean };
 /** CS2 viewmodel_fov and viewmodel_offset_x/y/z. */
 export type Viewmodel = { fov: number; x: number; y: number; z: number };
+/** CS2 video resolutions. 4:3 and 5:4 fill a widescreen view stretched, like CS2's Stretched scaling mode. */
+export const resolutions = ['native', '1920x1440', '1440x1080', '1280x960', '1024x768', '1280x1024', '1920x1200', '1680x1050',
+  '2560x1440', '1920x1080', '1600x900', '1280x720'] as const;
+export type Resolution = typeof resolutions[number];
+const legacyAspects: Record<string, Resolution> = { '4:3': '1920x1440', '5:4': '1280x1024', '16:10': '1680x1050', '16:9': '1920x1080' };
+export function resolutionSize(resolution: Resolution) {
+  if (resolution === 'native') return undefined;
+  const [width, height] = resolution.split('x').map(Number);
+  return { width, height };
+}
+/** The world camera's aspect: a fixed resolution keeps its own, stretched across the view. */
+export const viewAspect = (resolution: Resolution, width: number, height: number) => {
+  const size = resolutionSize(resolution);
+  return size ? size.width / size.height : width / height;
+};
+/** Render pixels per CSS pixel: a fixed resolution renders as many rows as it has, scaled to the screen. */
+export function resolutionPixelRatio(resolution: Resolution, screenHeight = typeof screen !== 'undefined' ? screen.height : 0,
+  devicePixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1) {
+  const size = resolutionSize(resolution);
+  return size && screenHeight > 0 ? size.height / screenHeight : devicePixelRatio;
+}
 /** CS2's Classic viewmodel position, which the trainer has always used. */
 export const classicViewmodel: Viewmodel = { fov: 68, x: 2.5, y: 0, z: -1.5 };
 export const viewmodelLimits = { fov: [54, 68], x: [-2.5, 2.5], y: [-2, 2], z: [-2, 2] } as const;
@@ -30,13 +52,16 @@ export type Settings = {
   transferAfter: number;
   transferRule: 'bullet' | 'kill';
   drillPace: 'practice' | 'challenge';
-  aspect: 'native' | '16:9' | '16:10' | '4:3' | '5:4';
+  /** CS2 video resolution: its aspect is stretched to fill the view, and it sets the render scale. */
+  resolution: Resolution;
   crosshair: Crosshair;
   /** CS2 bind table and Keyboard & Mouse options. */
   keyboard: KeyboardProfile;
   viewmodel: Viewmodel;
   /** Your bullet tracers: every round (practice), CS2's per-weapon cadence, or none. */
   tracers: 'every' | 'native' | 'off';
+  /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
+  cs2Crosshair?: Cs2Crosshair;
 };
 export const weaponNames: Record<Weapon, string> = { ak47: 'AK-47', m4a4: 'M4A4', m4a1s: 'M4A1-S', galil: 'Galil AR', famas: 'FAMAS', sg553: 'SG 553', aug: 'AUG', mp9: 'MP9', mp7: 'MP7', mp5sd: 'MP5-SD', mac10: 'MAC-10', ump45: 'UMP-45', p90: 'P90', bizon: 'PP-Bizon', m249: 'M249', negev: 'Negev', cz75a: 'CZ75-Auto',
   usp: 'USP-S', glock: 'Glock-18', hkp2000: 'P2000', p250: 'P250', deagle: 'Desert Eagle', elite: 'Dual Berettas',
@@ -58,7 +83,7 @@ export const defaults: Settings = {
   transferAfter: 15, transferRule: 'bullet',
   showImpactPattern: true, showMousePath: true,
   peekScenario: 'mixed', peekDuration: 1, drillPace: 'practice',
-  aspect: 'native',
+  resolution: '1920x1440',
   crosshair: { color: '#ffeb55', size: 3, gap: 2, thickness: 2, outline: 1, alpha: 1, dot: false, t: false, dynamic: false },
   keyboard: defaultKeyboard,
   viewmodel: classicViewmodel,
@@ -75,6 +100,7 @@ const numeric = (v: unknown, fallback: number, min: number, max: number) => type
 export function sanitizeSettings(raw: unknown): Settings {
   const s = (raw && typeof raw === 'object' ? raw : {}) as Partial<Settings>;
   const c = s.crosshair && typeof s.crosshair === 'object' ? s.crosshair : defaults.crosshair;
+  const cs2Crosshair = sanitizeCs2Crosshair(s.cs2Crosshair);
   return {
     weapon: typeof s.weapon === 'string' && Object.prototype.hasOwnProperty.call(weaponNames, s.weapon) ? s.weapon : defaults.weapon,
     sidearm: pistolIds.includes(s.sidearm!) ? s.sidearm! : 'usp',
@@ -94,16 +120,19 @@ export function sanitizeSettings(raw: unknown): Settings {
     quality: ['auto', 'low', 'high', 'performance'].includes(s.quality!) ? s.quality! : 'auto',
     frameLimit: [0,30,60,120,144,240].includes(s.frameLimit!) ? s.frameLimit! : s.quality === 'performance' ? 60 : 0,
     showFps: s.showFps === true, animatedGuides: s.animatedGuides !== false, protectShortcuts: s.protectShortcuts !== false,
-    aspect: ['native', '16:9', '16:10', '4:3', '5:4'].includes(s.aspect!) ? s.aspect! : 'native',
+    // The former Display aspect setting picks the matching resolution; native moves to the new 1920x1440 default.
+    resolution: resolutions.find(value => value === s.resolution) ?? legacyAspects[(s as { aspect?: string }).aspect ?? ''] ?? defaults.resolution,
     crosshair: {
       color: /^#[\da-f]{6}$/i.test(c.color) ? c.color : defaults.crosshair.color,
-      size: numeric(c.size, 3, 0, 20), gap: numeric(c.gap, 2, -4, 20), thickness: numeric(c.thickness, defaults.crosshair.thickness, .5, 5),
-      outline: numeric(c.outline, 1, 0, 3), alpha: numeric(c.alpha, 1, .1, 1),
+      size: numeric(c.size, 3, ...crosshairLimits.size), gap: numeric(c.gap, 2, ...crosshairLimits.gap),
+      thickness: numeric(c.thickness, defaults.crosshair.thickness, ...crosshairLimits.thickness),
+      outline: numeric(c.outline, 1, ...crosshairLimits.outline), alpha: numeric(c.alpha, 1, ...crosshairLimits.alpha),
       dot: c.dot === true, t: c.t === true, dynamic: c.dynamic === true
     },
     keyboard: sanitizeKeyboard(s.keyboard),
     viewmodel: sanitizeViewmodel(s.viewmodel),
-    tracers: s.tracers === 'native' || s.tracers === 'off' ? s.tracers : 'every'
+    tracers: s.tracers === 'native' || s.tracers === 'off' ? s.tracers : 'every',
+    ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }
 export function sanitizeViewmodel(raw: unknown): Viewmodel {

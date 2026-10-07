@@ -63,6 +63,13 @@ export const latestChanges = {
     {id: 'fullscreen', title: 'Fullscreen', items: [
       'The Fullscreen button works in AI Duel, and fullscreen shows only the game view. The Duel setup and drill coach panels return when fullscreen ends.',
     ]},
+    {id: 'display', title: 'Resolution', items: [
+      'Settings > Graphics > Resolution mirrors CS2 and defaults to 1920 x 1440, 4:3 stretched: the world and crosshair stretch to fill the view and the scene renders that many rows. The former Display aspect choice carries over.',
+    ]},
+    {id: 'crosshair', title: 'CS2 crosshair', items: [
+      'Import reads your CS2 crosshair in both naming schemes: the pre-22 September cl_crosshairsize/gap/thickness units and the pixel-based cl_crosshair_length/_gap/_thickness, sized for the resolution in cs2_video.txt. Export writes the pixel-based names.',
+      'Keys bound to console commands work in game: crosshair and colour cycling aliases, toggle and incrementvar, cl_crosshair_recoil, sensitivity, volume, viewmodel and the Duel radar zoom (cl_radar_scale).',
+    ]},
     {id: 'aim-botz', title: 'Aim Botz', items: [
       'A new Aim Botz drill after the aim_botz workshop map: up to 16 bots that never shoot back stand at close, mixed or long range, some on ledges, and respawn at a new spot after each kill.',
       'Bots can stand still, strafe A-D or crouch. Headshot-only damage, respawn delay, timed or endless sessions, Kevlar/helmet and sv_infinite_ammo-style reserves are adjustable.',

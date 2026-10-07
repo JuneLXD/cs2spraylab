@@ -4,7 +4,9 @@ import type {KeyboardProfile} from './profile';
 
 export type HeldAction = 'forward' | 'back' | 'left' | 'right' | 'walk' | 'duck' | 'jump' | 'attack' | 'attack2' | 'reload' | 'use' | 'inspect';
 export type ImpulseCommand = 'lastinv' | 'invnext' | 'invprev' | 'drop' | 'cancelselect';
-export type BindEvent = {kind: 'press' | 'release'; action: HeldAction} | {kind: 'slot'; slot: number} | {kind: ImpulseCommand};
+/** `console` carries any other command, such as a convar set by a crosshair toggle alias. */
+export type BindEvent = {kind: 'press' | 'release'; action: HeldAction} | {kind: 'slot'; slot: number} | {kind: ImpulseCommand}
+  | {kind: 'console'; args: string[]};
 
 // CS2 names first; +moveleft/+moveright/+speed are CS:GO spellings still found in configs.
 const buttons: Readonly<Record<string, HeldAction>> = {
@@ -32,9 +34,14 @@ export class BindRuntime {
   private budget = 0;
   constructor(profile: KeyboardProfile, private readonly emit: (event: BindEvent) => void) {this.load(profile);}
 
-  /** Applies a changed profile. Session-only rebinds made by toggle scripts are discarded. */
+  /**
+   * Applies a changed profile. New binds, aliases or duck/walk toggles discard
+   * session-only rebinds made by toggle scripts; other option changes keep them.
+   */
   setProfile(profile: KeyboardProfile) {
     if (profile === this.profile) return;
+    if (profile.binds === this.profile.binds && profile.aliases === this.profile.aliases &&
+      profile.duckToggle === this.profile.duckToggle && profile.walkToggle === this.profile.walkToggle) {this.profile = profile; return;}
     this.releaseAll(); this.load(profile);
   }
   isHeld(action: HeldAction) {return this.toggled(action) ? this.latched.has(action) : (this.holders.get(action)?.size ?? 0) > 0;}
@@ -110,7 +117,7 @@ export class BindRuntime {
     else if (impulses.has(name)) this.emit({kind: name as ImpulseCommand});
     else {
       const slot = /^slot(\d{1,2})$/.exec(name);
-      if (slot) this.emit({kind: 'slot', slot: Number(slot[1])});
+      this.emit(slot ? {kind: 'slot', slot: Number(slot[1])} : {kind: 'console', args: [name, ...args.slice(1)]});
     }
   }
   private button(action: HeldAction, down: boolean, key: string | undefined) {

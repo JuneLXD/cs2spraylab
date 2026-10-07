@@ -1,5 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {readFileSync} from 'node:fs';
+import {changelogReleases} from '../src/range/changelog-data';
 
 const catalog = JSON.parse(readFileSync('src/range/cosmetics-data.json', 'utf8')).cosmetics as {id: string; equipment: string; label: string}[];
 const ak = catalog.find(item => item.equipment === 'ak47')!;
@@ -101,7 +102,7 @@ test('header changelog preserves history, is keyboard-accessible and does not al
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
   await expect(dialog.getByRole('heading', {name: 'Latest update', exact: true})).toBeVisible();
   await expect(dialog.locator('code')).toHaveText(['49d8ea6', '06774a9']);
-  await expect(dialog.locator('.changelog-section')).toHaveCount(14);
+  await expect(dialog.locator('.changelog-section')).toHaveCount(changelogReleases.flatMap(release => release.sections).length);
   await expect(dialog.getByRole('heading', {name: 'Responsive combat, radar & armor', exact: true})).toHaveCount(1);
   await expect(dialog.getByRole('heading', {name: 'Previous update (49d8ea6)', exact: true})).toHaveCount(1);
   await expect(dialog.getByRole('heading', {name: 'XP, credits & achievements', exact: true})).toHaveCount(1);

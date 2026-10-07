@@ -17,7 +17,7 @@ import {ViewAnimation} from './view-animation';
 import {ScopeOverlay} from './scope-overlay';
 import {applyCosmetic, cosmeticAsset} from './cosmetics';
 import {prepareNativeViewAssembly} from './native-view-actions';
-import {loadoutWeapon, recoilPattern} from './config';
+import {loadoutWeapon, recoilPattern, resolutionPixelRatio, viewAspect} from './config';
 import {REVOLVER_WINDUP} from './weapon-actions';
 import type {DrillMode, ProgressionController} from './progression';
 import {batchStaticMeshes, disposeResources} from './duel/render-resources';
@@ -101,6 +101,8 @@ export class RangeEngine {
   clearInput?: () => void;
   /** CS2 bind table for keyboard, mouse buttons and wheel. */
   binds!: BindRuntime;
+  /** Other console commands a bind runs, such as crosshair convars. */
+  onConsole?: (args: string[]) => void;
   modelCache = new Map<Equipment, THREE.Object3D>();
   viewAnimations = new Map<Equipment, ViewAnimation>();
   private wasReloading = false;
@@ -432,7 +434,11 @@ export class RangeEngine {
     if (!settings.protectShortcuts) this.shortcuts.release();
     this.renderer.shadowMap.enabled = qualityPolicy(settings.quality).shadows;
     this.renderer.shadowMap.needsUpdate = true;
-    if (settings !== this.sim.settings || measured !== this.sim.measured) this.cancelProgression();
+    // Presentation changes, such as a crosshair or volume toggle bound to a key, keep the attempt.
+    const presentation = new Set<keyof Settings>(['crosshair', 'cs2Crosshair', 'volume', 'showFps', 'viewmodel', 'tracers', 'impactSize',
+      'showImpactPattern', 'showMousePath', 'animatedGuides', 'quality', 'frameLimit', 'protectShortcuts']);
+    if ((Object.keys({...settings, ...this.sim.settings}) as (keyof Settings)[]).some(key => !presentation.has(key) && settings[key] !== this.sim.settings[key])
+      || measured !== this.sim.measured) this.cancelProgression();
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace'];
@@ -663,6 +669,7 @@ export class RangeEngine {
     else if (event.kind === 'invnext' || event.kind === 'invprev')
       void this.equip(cycleSlot(this.sim.slot, event.kind === 'invnext' ? 1 : -1, this.sim.settings.primaryEnabled ? [1, 2, 3, 4] : [2, 3, 4]));
     else if (event.kind === 'cancelselect') this.pause();
+    else if (event.kind === 'console') this.onConsole?.(event.args);
   }
   /** CS2's "Zoom Button Hold: Repeat Enabled" re-zooms while Secondary Fire stays held. */
   private repeatZoom() {
@@ -729,10 +736,12 @@ export class RangeEngine {
     const { width, height } = this.host.getBoundingClientRect();
     if (!width || !height) return;
     this.width = width; this.height = height;
-    this.renderer.setPixelRatio(renderPixelRatio(width, height, window.devicePixelRatio || 1, this.sim.settings.quality, this.metrics.adaptive));
+    this.renderer.setPixelRatio(renderPixelRatio(width, height, resolutionPixelRatio(this.sim.settings.resolution), this.sim.settings.quality, this.metrics.adaptive));
     this.renderer.setSize(width, height);
-    const aspect = this.sim.settings.aspect === 'native' ? width / height : this.sim.settings.aspect.split(':').map(Number).reduce((a, b) => a / b);
+    const aspect = viewAspect(this.sim.settings.resolution, width, height);
     this.camera.aspect = aspect;
+    // CS2 stretches the crosshair with the world.
+    this.crosshair?.style.setProperty('--cross-stretch', String(width / height / aspect));
     this.viewViewport = viewmodelViewport(width, height);
     this.viewCamera.aspect = this.viewViewport.aspect;
     this.camera.updateProjectionMatrix(); this.viewCamera.updateProjectionMatrix();

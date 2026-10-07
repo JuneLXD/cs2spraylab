@@ -129,6 +129,9 @@ test('hit captions sit just below the crosshair without covering the score in ev
       await page.getByLabel('Training mode').selectOption(mode);
       if(['peek','precision','burst'].includes(mode))await expect(page.locator('.drill-panel')).toBeVisible();
       else await expect(page.locator('.drill-panel')).toHaveCount(0);
+      // The canvas follows its host on the next resize callback after the drill panel opens or closes.
+      await expect.poll(()=>page.evaluate(()=>document.querySelector('canvas[data-range]')!.getBoundingClientRect().width===
+        document.querySelector('.canvas-host')!.getBoundingClientRect().width)).toBe(true);
       for(const label of ['HEADSHOT','BODY HIT']){
         await page.locator('.hit-caption').evaluate((el,text)=>{el.textContent=text;},label);
         const [caption,c,score]=await page.evaluate(()=>['.hit-caption','canvas[data-range]','.hud-result'].map(selector=>{

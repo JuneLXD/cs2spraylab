@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { defaults, gameData, migrateLegacySettings, migrateMode, parseProfile, recoilPattern, sanitizeSettings, weaponIds } from './config';
+import { defaults, gameData, migrateLegacySettings, migrateMode, parseProfile, recoilPattern, resolutionPixelRatio, sanitizeSettings, viewAspect, weaponIds } from './config';
 import { DEG, direction, groundVelocity, mouseAngle, Simulation, STEP, targetSpeed, UNIT, VERTICAL_FOV, TARGET_Z, SPAWN_Z, JUMP_SPEED, GRAVITY } from './simulation';
 import {REVOLVER_WINDUP} from './weapon-actions';
 
@@ -139,8 +139,22 @@ describe('Compatibility and imported data', () => {
   it('migrates the actual deployed settings shape, including crosshair outline and inversion', () => {
     const s = migrateLegacySettings({ cs2Sensitivity: 1.2, invertMouse: true, followRecoil: true, aspectRatio: '4:3', crosshair: { style: 'dot', color: '#abcdef', outline: false, alpha: .8 } });
     expect(s.invertY).toBe(true); expect(s.follow).toBe(true); expect(s.sensitivity).toBe(1.2);
-    expect(s.aspect).toBe('4:3'); expect(s.crosshair.size).toBe(0); expect(s.crosshair.outline).toBe(0);
+    expect(s.resolution).toBe('1920x1440'); expect(s.crosshair.size).toBe(0); expect(s.crosshair.outline).toBe(0);
     expect(s.crosshair.color).toBe('#abcdef'); expect(s.crosshair.alpha).toBe(.8);
+  });
+  it('defaults to 1920x1440 stretched and maps the former display aspect to a resolution', () => {
+    expect(defaults.resolution).toBe('1920x1440');
+    expect(sanitizeSettings({ aspect: 'native' }).resolution).toBe('1920x1440');
+    expect(sanitizeSettings({ aspect: '16:9' }).resolution).toBe('1920x1080');
+    expect(sanitizeSettings({ aspect: '5:4' }).resolution).toBe('1280x1024');
+    expect(sanitizeSettings({ resolution: 'native', aspect: '4:3' }).resolution).toBe('native');
+    expect(sanitizeSettings({ resolution: '9999x1' }).resolution).toBe('1920x1440');
+    expect(viewAspect('1920x1440', 1920, 1080)).toBeCloseTo(4 / 3);
+    expect(viewAspect('native', 1920, 1080)).toBeCloseTo(16 / 9);
+    // 1440 rows on a 1080-row screen render a third more pixels per CSS pixel; native follows the device.
+    expect(resolutionPixelRatio('1920x1440', 1080, 1)).toBeCloseTo(4 / 3);
+    expect(resolutionPixelRatio('1280x960', 1080, 2)).toBeCloseTo(960 / 1080);
+    expect(resolutionPixelRatio('native', 1080, 2)).toBe(2);
   });
   it('rejects invalid profiles and only accepts full, normalized captures', () => {
     const profile = { weapon: 'ak47', source: 'Measured wall capture', build: '2000908', points: Array.from({ length: 30 }, () => ({ yaw: 0, pitch: 0 })) };
@@ -152,7 +166,8 @@ describe('Compatibility and imported data', () => {
   it('sanitizes corrupted and hostile storage settings', () => {
     const s = sanitizeSettings({ weapon: 'nope', mode: 'nope', sensitivity: NaN, distance: 10000, volume: -1, crosshair: { color: 'url(javascript:bad)', size: 1e6, alpha: null } });
     expect(s.weapon).toBe('ak47'); expect(s.sensitivity).toBe(1); expect('distance' in s).toBe(false);
-    expect(s.volume).toBe(0); expect(s.crosshair.color).toBe(defaults.crosshair.color); expect(s.crosshair.size).toBe(20);
+    // CS2 crosshairs can be longer than the slider: cl_crosshairsize 10 is 23 px at 1080p.
+    expect(s.volume).toBe(0); expect(s.crosshair.color).toBe(defaults.crosshair.color); expect(s.crosshair.size).toBe(60);
   });
 });
 describe('walking distance, jumping and moving lanes', () => {

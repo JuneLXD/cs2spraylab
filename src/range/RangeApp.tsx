@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { Activity, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronDown, Code2 as Github, Crosshair as AimIcon, Download, Eye, Gauge, Gift, History, ListPlus, Maximize, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, ShoppingCart, Target, Upload, Volume2, VolumeX, X } from 'lucide-react';
-import { classicViewmodel, Crosshair, defaults, gameData, historyModeNames, isDuelEngineMode, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol } from './config';
+import { classicViewmodel, Crosshair, defaults, gameData, historyModeNames, isDuelEngineMode, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, resolutions, resolutionSize, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol, type Resolution } from './config';
 import { RangeEngine, RangeStatus } from './engine';
 import { Result } from './simulation';
 import { loadAttempts } from '../lib/storage';
@@ -21,6 +21,7 @@ import {Changelog} from './Changelog';
 import {HearingPractice} from './HearingPractice';
 import {KeyboardSettings} from './keybinds/KeyboardSettings';
 import {keyHint, shortcutHint, slotKey} from './keybinds/profile';
+import {applyConsoleCommand} from './console-settings';
 
 function LoadoutFinishes({equipment, profile, controller, onShop, focusRequest}: {equipment: Weapon; profile: ProgressionProfile; controller: ProgressionController; onShop: (equipment: string) => void; focusRequest: number}) {
   const finishes = useRef<HTMLElement>(null);
@@ -77,6 +78,13 @@ function download(name: string, value: unknown) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 const emptyStatus: RangeStatus = { weapon: 'ak47', equipped:'ak47',slot:1,equipReady:true,magazine:30, active: false, firing: false, shots: 0, hits: 0, heads: 0, remaining: 30, reload: 0, speed: 0, distance: 12, input: 'Ready', audio: 'locked', assets: 'Loading models', fps: 0 };
+const aspectName = (width: number, height: number) => ({'1.33': '4:3', '1.25': '5:4', '1.6': '16:10', '1.78': '16:9'} as Record<string, string>)[String(Math.round(width / height * 100) / 100)] ?? `${width}:${height}`;
+function resolutionLabel(resolution: Resolution) {
+  const size = resolutionSize(resolution);
+  if (!size) return 'Native (fill the window)';
+  const aspect = aspectName(size.width, size.height);
+  return `${size.width} x ${size.height} (${aspect}${aspect === '4:3' || aspect === '5:4' ? ' stretched' : ''})`;
+}
 type Panel = 'settings' | 'weapons' | 'history' | 'changelog' | null;
 type Tab = 'game' | 'keyboard' | 'crosshair' | 'data';
 const tabNames: Record<Tab, string> = {game: 'Game', keyboard: 'Keyboard / Mouse', crosshair: 'Crosshair', data: 'Data & audio'};
@@ -117,7 +125,9 @@ export default function RangeApp() {
   const score = settings.mode==='precision' ? status.drill?.last?.movementScore ?? 0 : status.shots ? status.hits / status.shots * 100 : 0;
   const showRepFeedback=repFeedback?.mode===settings.mode && status.active && !status.firing && !status.hitFlash;
   const update = (patch: Partial<Settings>) => setSettings(s => ({ ...s, ...patch }));
-  const cross = (patch: Partial<Crosshair>) => setSettings(s => ({ ...s, crosshair: { ...s.crosshair, ...patch } }));
+  // A manual edit replaces the CS2 convars; the next bound crosshair command starts from this crosshair.
+  const cross = (patch: Partial<Crosshair>) => setSettings(s => { const next = { ...s, crosshair: { ...s.crosshair, ...patch } }; delete next.cs2Crosshair; return next; });
+  const [consoleCommand] = useState(() => (args: string[]) => setSettings(s => applyConsoleCommand(s, args) ?? s));
   const open = (next: Panel) => { engine.current?.pause(); setSetupHint(false); setPanel(next); };
   useEffect(() => { if (setupHint) markSetupHintSeen(); }, [setupHint]);
   useEffect(() => { if (status.active) setSetupHint(false); }, [status.active]);
@@ -128,6 +138,7 @@ export default function RangeApp() {
     let range: RangeEngine;
     try {
       range = new RangeEngine(host.current!, setStatus, settingsRef.current, follow.current!, hitmarker.current!, setError, progression);
+      range.onConsole = consoleCommand;
       engine.current = range;
       range.sim.attempts = results.length;
       range.sim.onResult = result => {
@@ -219,7 +230,7 @@ export default function RangeApp() {
     <section className="mode-brief" aria-label="Drill purpose"><div><strong>{modeInfo[settings.mode].benefit}</strong><p>{modeInfo[settings.mode].task}</p></div><button onClick={() => {engine.current?.pause(); setTutorial(true);}}><GraduationCap size={19}/>Learn the fundamentals</button></section>
     <section ref={stage} className={`range-stage${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode)?' with-drill':''}`} aria-label="Practice range">
       <XpNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
-      {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={!!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' ? 'botz' : 'duel'} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={() => setSetupHint(false)} suspended={!!panel || tutorial || armoryOpen}/> : <>
+      {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={!!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' ? 'botz' : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={() => setSetupHint(false)} suspended={!!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
       <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
@@ -297,16 +308,18 @@ export default function RangeApp() {
               <label className="select-row">Frame limit<select aria-label="Frame limit" value={settings.frameLimit} onChange={e => update({frameLimit: +e.target.value})}>{[0,30,60,120,144,240].map(n => <option key={n} value={n}>{n ? `${n} FPS` : 'Display refresh rate'}</option>)}</select></label>
               <Toggle label="Show FPS counter" checked={settings.showFps} onChange={showFps => update({showFps})}/>
               <Toggle label="Protect range Ctrl+W" checked={settings.protectShortcuts} onChange={protectShortcuts => update({protectShortcuts})}/>
-              <label className="select-row">Display aspect<select aria-label="Display aspect" value={settings.aspect} onChange={e => update({ aspect: e.target.value as Settings['aspect'] })}>{['native', '16:9', '16:10', '4:3', '5:4'].map(a => <option key={a} value={a}>{a === 'native' ? 'Native viewport' : `${a} stretched`}</option>)}</select></label>
+              <label className="select-row">Resolution<select aria-label="Resolution" value={settings.resolution} onChange={e => update({ resolution: e.target.value as Resolution })}>{resolutions.map(r => <option key={r} value={r}>{resolutionLabel(r)}</option>)}</select></label>
+              <p className="setting-explanation">Like CS2&apos;s Stretched scaling: the world and crosshair are stretched to fill the view, and the scene renders at that many rows. Your hands and weapon keep their proportions.</p>
             </>}
             {tab === 'crosshair' && <>
               <div className="crosshair-preview" aria-label="Crosshair preview"><div className="preview-target" /><CrosshairView value={settings.crosshair} /></div>
               <div className="presets">{Object.entries(presets).map(([name, value]) => <button key={name} onClick={() => cross(value)}><div><CrosshairView value={value} /></div>{name}</button>)}</div>
               <label className="color-row">Color<input type="color" aria-label="Crosshair color" value={settings.crosshair.color} onChange={e => cross({ color: e.target.value })} /></label>
               <div className="swatches">{['#50ff76', '#52edff', '#ffef68', '#ffffff', '#ef79b3', '#f66556'].map(color => <button key={color} style={{ background: color }} aria-label={`Crosshair ${color}`} aria-pressed={settings.crosshair.color === color} onClick={() => cross({ color })}>{settings.crosshair.color === color && <Check size={14} color="#111" />}</button>)}</div>
-              <Slider label="Length" value={settings.crosshair.size} min={0} max={20} step={.5} onChange={v => cross({ size: v })} />
-              <Slider label="Gap" value={settings.crosshair.gap} min={-4} max={20} step={.5} onChange={v => cross({ gap: v })} />
-              <Slider label="Thickness" value={settings.crosshair.thickness} min={.5} max={5} step={.5} onChange={v => cross({ thickness: v })} />
+              {settings.cs2Crosshair && <p className="setting-explanation">Matches your CS2 crosshair convars at {settings.cs2Crosshair.screenHeight}p. Editing here replaces them; keys bound to crosshair convars, such as toggle aliases, still change it in game.</p>}
+              <Slider label="Length" value={settings.crosshair.size} min={0} max={40} step={.5} onChange={v => cross({ size: v })} />
+              <Slider label="Gap" value={settings.crosshair.gap} min={-10} max={30} step={.5} onChange={v => cross({ gap: v })} />
+              <Slider label="Thickness" value={settings.crosshair.thickness} min={.5} max={10} step={.5} onChange={v => cross({ thickness: v })} />
               <Slider label="Outline" value={settings.crosshair.outline} min={0} max={3} step={.5} onChange={v => cross({ outline: v })} />
               <Slider label="Opacity" value={settings.crosshair.alpha} min={.1} max={1} step={.05} onChange={v => cross({ alpha: v })} />
               <Toggle label="Center dot" checked={settings.crosshair.dot} onChange={v => cross({ dot: v })} />

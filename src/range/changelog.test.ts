@@ -27,8 +27,10 @@ describe('append-only changelog', () => {
 
   it('covers the accumulated completed features', () => {
     expect(latestChanges.sections.map(section => section.id)).toEqual([
-      'combat', 'weapons', 'movement', 'arenas', 'bot-behavior', 'connection', 'presentation', 'performance', 'tracers', 'fullscreen', 'aim-botz', 'controls',
+      'combat', 'weapons', 'movement', 'arenas', 'bot-behavior', 'connection', 'presentation', 'performance', 'tracers', 'fullscreen', 'display', 'crosshair', 'aim-botz', 'controls',
     ]);
+    expect(latestChanges.sections.find(section => section.id === 'display')!.items.join(' ')).toContain('1920 x 1440');
+    expect(latestChanges.sections.find(section => section.id === 'crosshair')!.items.join(' ')).toContain('cl_crosshair_length');
     expect(latestChanges.sections.find(section => section.id === 'controls')!.items.join(' ')).toContain('autoexec.cfg');
     expect(latestChanges.sections.find(section => section.id === 'aim-botz')!.items.join(' ')).toContain('respawn');
     expect(new Set(latestChanges.sections.map(section => section.id)).size).toBe(latestChanges.sections.length);

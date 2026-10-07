@@ -35,6 +35,10 @@ test('pausing clears live hit feedback before the entry button returns', async (
 
 test('wall patterns animate, respect reduced motion and can be switched off independently', async ({ page }, info) => {
   test.skip(info.project.name.startsWith('mobile'), 'Wall detail is inspected from the desktop firing line');
+  // The clip regions below assume square pixels, not the default 4:3 stretch.
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({resolution: 'native'}));
+  });
   await page.setViewportSize({width: 1440, height: 1000});
   await page.goto('/');
   await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 45000});
@@ -108,10 +112,10 @@ test('viewmodels stay framed across portrait, landscape, ultrawide and stretched
   await reference.getByLabel('Training mode').selectOption('spray');
   for (const viewport of [{width: 1920, height: 1080}, {width: 1440, height: 1080}, {width: 3440, height: 1440}, {width: 390, height: 844}, {width: 844, height: 390}]) {
     await page.setViewportSize(viewport);
-    for (const aspect of ['native', '4:3']) {
+    for (const aspect of ['native', '1920x1440']) {
       await page.bringToFront();
       await page.getByRole('button', {name: 'Settings', exact: true}).click();
-      await page.getByLabel('Display aspect').selectOption(aspect);
+      await page.getByLabel('Resolution', {exact: true}).selectOption(aspect);
       await page.getByRole('button', {name: 'Done', exact: true}).click();
       await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 45000});
       await page.getByLabel('Training mode').selectOption('spray');
@@ -120,7 +124,7 @@ test('viewmodels stay framed across portrait, landscape, ultrawide and stretched
       await reference.setViewportSize(viewport);
       await reference.bringToFront();
       await reference.getByRole('button', {name: 'Settings', exact: true}).click();
-      await reference.getByLabel('Display aspect').selectOption(aspect);
+      await reference.getByLabel('Resolution', {exact: true}).selectOption(aspect);
       await reference.getByRole('button', {name: 'Done', exact: true}).click();
       const empty = await reference.locator('canvas[data-range]').screenshot({scale: 'css'});
       const meta = await sharp(gun).metadata();
@@ -133,7 +137,7 @@ test('viewmodels stay framed across portrait, landscape, ultrawide and stretched
       expect(changed / (area.width * area.height)).toBeGreaterThan(.045);
       await page.bringToFront();
       await page.getByLabel('Training mode').selectOption('spray');
-      await page.screenshot({path: `test-results/framing-${viewport.width}x${viewport.height}-${aspect.replace(':', '-')}.png`});
+      await page.screenshot({path: `test-results/framing-${viewport.width}x${viewport.height}-${aspect}.png`});
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     }
   }
@@ -180,7 +184,8 @@ test('tracking is retired from the range without relabeling or deleting old resu
   });
   await page.goto('/');
   await expect(page.getByLabel('Training mode')).toHaveValue('guided');
-  await expect(page.getByLabel('Training mode').locator('option')).toHaveCount(8);
+  await expect(page.getByLabel('Training mode').locator('option')).toHaveCount(9);
+  await expect(page.getByLabel('Training mode').locator('option[value="botz"]')).toHaveText('Aim Botz');
   await expect(page.getByLabel('Training mode').locator('option[value="tracking"]')).toHaveCount(0);
   await expect(page.locator('.settings-hint')).toHaveCount(0);
   await page.getByRole('button', {name: 'Session', exact: false}).click();

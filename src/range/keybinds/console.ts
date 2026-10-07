@@ -48,6 +48,36 @@ export const commandsOf = (text: string) => splitCommands(text).map(tokenize).fi
 /** Writes a value the way a cfg file needs it. CS2 cannot escape quotes, so they are dropped. */
 export const quote = (value: string) => `"${value.replace(/"/g, '')}"`;
 
+const sameValue = (a: string, b: string | undefined) => b !== undefined &&
+  (a.trim() !== '' && b.trim() !== '' && Number.isFinite(Number(a)) && Number.isFinite(Number(b)) ? Number(a) === Number(b) : a.toLowerCase() === b.toLowerCase());
+const truthy = (value: string | undefined) => value !== undefined && value.trim() !== '' &&
+  (/^true$/i.test(value.trim()) || Number.isFinite(Number(value)) && Number(value) !== 0);
+
+/**
+ * The convar a console command assigns, and its new value: `name value`,
+ * `toggle name [values...]` (0/1, or the next listed value; the first when the
+ * current value is not listed) or `incrementvar name min max delta` (wraps).
+ */
+export function cvarAssignment(args: readonly string[], current: (name: string) => string | undefined): {name: string; value: string} | undefined {
+  const command = args[0]?.toLowerCase();
+  if (!command) return;
+  if (command === 'toggle') {
+    if (!args[1]) return;
+    const name = args[1].toLowerCase(), now = current(name), values = args.slice(2);
+    if (!values.length) return {name, value: truthy(now) ? '0' : '1'};
+    return {name, value: values[(values.findIndex(value => sameValue(value, now)) + 1) % values.length]};
+  }
+  if (command === 'incrementvar') {
+    const [min, max, delta] = args.slice(2, 5).map(Number);
+    if (!args[1] || args.length < 5 || ![min, max, delta].every(Number.isFinite)) return;
+    const name = args[1].toLowerCase(), now = Number(current(name));
+    let value = (Number.isFinite(now) ? now : min) + delta;
+    if (value > max + 1e-9) value = min; else if (value < min - 1e-9) value = max;
+    return {name, value: String(Number(value.toFixed(6)))};
+  }
+  return args.length >= 2 && /^[a-z_][a-z0-9_]*$/.test(command) ? {name: command, value: args[1]} : undefined;
+}
+
 export type KeyValues = {[key: string]: string | KeyValues};
 
 /** Parses Valve KeyValues text (.vcfg, localization). Later duplicate keys win. */
