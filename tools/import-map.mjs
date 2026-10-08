@@ -93,6 +93,16 @@ const greyBox = [
   [/./, '#9a9587'],
 ];
 const root = doc.getRoot(), materials = new Map();
+// The exporter flattens this layered tint shader into a dark multiplicative
+// factor, omitting its color-replacement/contrast layers. Keep the authored
+// base texture as a readable fallback until that shader can be baked faithfully.
+for (const material of root.listMaterials()) {
+  const native = material.getExtras().vmat;
+  if (native?.ShaderName === 'csgo_environment_blend.vfx' &&
+      /shipping_container/.test(material.getName()) && material.getBaseColorTexture()) {
+    material.setBaseColorFactor([1, 1, 1, material.getBaseColorFactor()[3]]);
+  }
+}
 for (const light of root.listExtensionsUsed().filter(extension => extension.extensionName === 'KHR_lights_punctual')) light.dispose();
 for (const node of root.listNodes()) {
   const label = node.getName().toLowerCase(), mesh = node.getMesh();

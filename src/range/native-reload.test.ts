@@ -2,9 +2,19 @@ import {describe, expect, it} from 'vitest';
 import {equipmentStats, SHELL_RELOAD_START, SHELL_RELOAD_FINISH} from './equipment';
 import {NativeReloadState} from './weapon-actions';
 import evidence from '../../docs/native-gameplay-evidence.json';
+import followup from '../../docs/native-reload-followup-evidence.json';
 import type {Equipment} from './equipment';
 
 describe('reserve-aware reload phases', () => {
+  it.each(followup.reloads.filter(sample=>sample.mode==='normal'))('$weapon empty=$empty matches the follow-up insertion and cancellation evidence',sample=>{
+    const reload=new NativeReloadState(sample.weapon as Equipment);reload.ammo=sample.ammoBefore;
+    const insert=sample.clipInsertFrame/sample.clipFramesPerSecond;
+    expect(Math.abs(sample.insertGameTime-sample.startGameTime-insert)).toBeLessThanOrEqual(followup.demoTickSeconds);
+    expect(Math.abs(sample.endGameTime-sample.startGameTime-reload.stats.reload)).toBeLessThanOrEqual(followup.demoTickSeconds);
+    reload.start(10);reload.advance(10+insert-.001);expect(reload.ammo).toBe(sample.ammoBefore);
+    reload.advance(10+insert);expect(reload.ammo).toBe(sample.ammoAfter);expect(reload.active).toBe(true);
+    reload.cancel();expect(reload.ammo).toBe(sample.ammoAfter);
+  });
   it.each(evidence.reloads)('$weapon matches the recorded insertion and separate attack lock', sample => {
     const reload = new NativeReloadState(sample.weapon as Equipment); reload.ammo = sample.ammoBefore;
     const reserve = reload.reserve, insertAt = sample.clipInsertFrame / sample.clipFramesPerSecond;
@@ -72,6 +82,14 @@ describe('reserve-aware reload phases', () => {
     reload.start(0); reload.advance(SHELL_RELOAD_START + reload.stats.reload); reload.cancel();
     expect(reload.ammo).toBe(4); expect(reload.reserve).toBe(31);
     reload.start(10); reload.advance(100); expect(reload.ammo).toBe(8); expect(reload.reserve).toBe(27);
+  });
+  it('retains actual phase deadlines when a long frame crosses several shell inserts',()=>{
+    const reload=new NativeReloadState('nova');reload.ammo=6;reload.start(10);reload.advance(20);
+    const events=reload.drainActionEvents();
+    expect(events.map(e=>e.kind)).toEqual(['reload-start','reload-shell','reload-shell','reload-end']);
+    expect(events[1].at).toBeCloseTo(10+SHELL_RELOAD_START+reload.stats.reload);
+    expect(events[2].at).toBeCloseTo(10+SHELL_RELOAD_START+2*reload.stats.reload);
+    expect(events[3].at).toBeCloseTo(10+SHELL_RELOAD_START+2*reload.stats.reload+SHELL_RELOAD_FINISH);
   });
   it('does not create reloads for full guns, knives, Zeus or exhausted reserves', () => {
     for (const id of ['ak47', 'knife', 'zeus'] as const) expect(new NativeReloadState(id).start(0)).toBe(false);

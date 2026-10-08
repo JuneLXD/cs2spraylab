@@ -9,6 +9,7 @@ export interface ViewAnimationOptions {reloadEmpty?: boolean; ammo?: number; cha
 
 /** Presentation only: gameplay still owns ammo, deploy delays, and firing permissions. */
 export class ViewAnimation {
+  readonly hasFireMotion: boolean;
   private mixer: THREE.AnimationMixer;
   private actions = new Map<ViewAction, THREE.AnimationAction>();
   private activeActions = new Set<THREE.AnimationAction>();
@@ -18,6 +19,7 @@ export class ViewAnimation {
   private disposed = false;
   constructor(root: THREE.Object3D, clips: THREE.AnimationClip[]) {
     this.mixer = new THREE.AnimationMixer(root);
+    this.hasFireMotion=clips.some(clip=>/^fire(?:-|$)/.test(clip.name)&&Number.isFinite(clip.duration)&&clip.duration>0);
     const names: ViewAction[] = ['idle', 'reload', 'reload-empty', 'draw', 'pickup', 'inspect', 'fire', 'fire-last', 'fire-alt', 'fire-scoped', 'fire-left', 'fire-right', 'fire-left-last', 'fire-right-last', 'idle-empty', 'idle-left-empty', 'charge', 'dryfire', 'draw-alt'];
     for (const clip of clips) {
       if (!names.includes(clip.name as ViewAction)) continue;

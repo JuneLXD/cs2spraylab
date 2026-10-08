@@ -95,7 +95,8 @@ export type ReloadActionEvent = {kind: 'reload-start' | 'reload-shell' | 'reload
 // WPN_RELOAD_ADD_AMMO markers, verified against build 2000927 server demos.
 // Other magazine weapons retain their completion-time fallback until measured.
 // See docs/native-gameplay-comparison.md for recordings and sampling limits.
-const magazineInsertTime: Partial<Record<Equipment, number>> = {ak47: 33 / 30, awp: 60 / 30, usp: 27 / 30, deagle: 23 / 30};
+const magazineInsertTime: Partial<Record<Equipment, number>> = {ak47: 33 / 30, awp: 60 / 30, usp: 27 / 30, deagle: 23 / 30,
+  m4a4: 41 / 30};
 
 /** Ammo changes only on completed insert phases; cancellation cannot mint ammo. */
 export class NativeReloadState {
@@ -156,11 +157,12 @@ export class NativeReloadState {
     }
     while (this.active && work + 1e-9 >= this.remaining) {
       work = Math.max(0, work - this.remaining);
+      const eventTime=this.lastTime-work*(this.silent?this.silentMultiplier:1);
       if (this.phase === 'magazine') {
-        this.emit('reload-end', time); this.cancel(false);
-      } else if (this.phase === 'finish') {this.emit('reload-end', time); this.cancel(false);}
+        this.emit('reload-end', eventTime); this.cancel(false);
+      } else if (this.phase === 'finish') {this.emit('reload-end', eventTime); this.cancel(false);}
       else {
-        if (this.phase === 'shell') {this.ammo++; this.reserve--; this.emit('reload-shell', time);}
+        if (this.phase === 'shell') {this.ammo++; this.reserve--; this.emit('reload-shell', eventTime);}
         this.phase = this.ammo >= this.stats.magazine || this.reserve <= 0 ? 'finish' : 'shell';
         this.remaining = this.phase === 'finish' ? SHELL_RELOAD_FINISH : this.stats.reload;
       }

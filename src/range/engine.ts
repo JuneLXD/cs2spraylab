@@ -9,7 +9,7 @@ import { RangeAudio } from './audio';
 import { requestRawLock } from './input';
 import {InputClock, inputTimestamp} from './input-clock';
 import { createGameRenderer } from './render-context';
-import { VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelFov, viewmodelOffset, viewmodelViewport } from './viewmodel';
+import { VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelFov, viewmodelOffset, viewmodelViewport, viewmodelAspect } from './viewmodel';
 import { GUIDE_COLORS, SprayDemonstration } from './spray-demonstration';
 import {type Equipment, type Slot} from './equipment';
 import {DrillScenery} from './drill-scene';
@@ -533,7 +533,7 @@ export class RangeEngine {
     }
     const animationAmmo = this.sim.loadedAmmo;
     this.viewAnimations.get(this.sim.equipped)?.playFire(this.sim.equipped, {side:animationAmmo % 2 ? 'right' : 'left',lastShot:animationAmmo===0,
-      alternate:this.sim.actions.alternateFire, zoomed:this.sim.actions.zoom > 0, ...(['awp','ssg08'].includes(this.sim.equipped) ? {duration:this.sim.stats.cycle} : {})});
+      alternate:this.sim.actions.alternateFire, zoomed:this.sim.actions.zoom > 0});
     // Moving-target shots use the meshes at their last displayed position.
     // New drills still need an initial scene before their first rendered frame.
     if (this.presentedDrill !== this.sim.drillRevision) this.syncTargets();
@@ -609,7 +609,7 @@ export class RangeEngine {
       this.addImpact(parent,point,physical.distance,parent===expectedTarget?(isHead?this.hitMaterial.color:this.bodyMaterial.color):this.missMaterial.color);
       this.sim.damageTarget(targetIndex,isHead,physical.distance,healthDamage);
     }
-    for(const contact of ray.contacts)this.addImpact(this.impacts,vector(contact.point).addScaledVector(vector(ray.dir),contact.phase==='entry'?-.012:.012),contact.distance,this.missMaterial.color);
+    for(const contact of ray.contacts)this.shotEffects.surfaces.fire(contact.point,contact.normal,contact.material,this.sim.settings.impactSize,this.elapsed);
     if(!ray.contacts.length&&!ray.physical&&ray.wall)this.addImpact(this.impacts,ray.wall.point.clone().addScaledVector(vector(ray.dir),-.012),ray.wall.distance,this.missMaterial.color);
     }
     const target = expectedTarget;
@@ -775,7 +775,7 @@ export class RangeEngine {
     // CS2 stretches the crosshair with the world.
     this.crosshair?.style.setProperty('--cross-stretch', String(width / height / aspect));
     this.viewViewport = viewmodelViewport(width, height);
-    this.viewCamera.aspect = this.viewViewport.aspect;
+    this.viewCamera.aspect = viewmodelAspect(width,height,aspect);
     this.camera.updateProjectionMatrix(); this.viewCamera.updateProjectionMatrix();
   }
   private syncInput(timestamp: number, flush = false) {
@@ -795,7 +795,8 @@ export class RangeEngine {
       return;
     }
     const policy = qualityPolicy(this.sim.settings.quality);
-    const dt = this.previous ? Math.min((timestamp - this.previous) / 1000, .25) : 0;
+    const frameSeconds = this.previous ? Math.max(0,(timestamp - this.previous) / 1000) : 0;
+    const dt = Math.min(frameSeconds,.25);
     this.previous = timestamp; this.elapsed += dt;
     this.repeatZoom(); this.syncTargets();
     const activeLane = this.sim.firing ? this.sim.targetForShot() : 0;
@@ -848,8 +849,9 @@ export class RangeEngine {
     for(const action of this.sim.drainActionEvents())if(action.kind==='reload-cancel')this.audio.cancelAction('range-player');
     this.audio.updateActions(this.sim.time);
     const offset = this.viewOffset ?? VIEWMODEL_OFFSET;
-    this.weaponRoot.position.set(offset.x, offset.y + Math.sin(this.elapsed * 12) * Math.min(moving, 1) * .002, offset.z + this.kick * .015);
-    this.weaponRoot.rotation.x = this.kick * (this.sim.slot===3 ? 0 : .02) + view.weaponPitch;
+    const modelKick=this.viewAnimations.get(this.sim.equipped)?.hasFireMotion?0:this.kick;
+    this.weaponRoot.position.set(offset.x, offset.y + Math.sin(this.elapsed * 12) * Math.min(moving, 1) * .002, offset.z + modelKick * .015);
+    this.weaponRoot.rotation.x = modelKick * (this.sim.slot===3 ? 0 : .02) + view.weaponPitch;
     this.weaponRoot.rotation.y = view.weaponYaw;
     this.weaponRoot.rotation.z = 0;
     const r = this.sim.settings.follow ? this.sim.recoil : { yaw: 0, pitch: 0 };
@@ -891,7 +893,7 @@ export class RangeEngine {
     this.renderer.render(this.viewScene, this.viewCamera);
     this.presentedDrill = this.sim.drillRevision;
     const oldResolution = this.metrics.adaptive;
-    if (this.metrics.sample(dt, performance.now() - cpuStart, this.sim.settings.quality === 'auto', this.sim.active, this.sim.settings.frameLimit)) {
+    if (this.metrics.sample(dt, performance.now() - cpuStart, this.sim.settings.quality === 'auto', this.sim.active, this.sim.settings.frameLimit,frameSeconds)) {
       this.meter.update(this.metrics, this.renderer.getPixelRatio());
       if (oldResolution !== this.metrics.adaptive) this.resize();
     }

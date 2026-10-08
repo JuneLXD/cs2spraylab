@@ -12,7 +12,7 @@ import {mouseAngle, VERTICAL_FOV} from '../simulation';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
 import {attachBindInput} from '../keybinds/dom-input';
 import {protectedCodes} from '../keybinds/profile';
-import {VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelFov, viewmodelOffset, viewmodelViewport} from '../viewmodel';
+import {VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelFov, viewmodelOffset, viewmodelViewport, viewmodelAspect} from '../viewmodel';
 import {botConfig, type DuelConfig} from './config';
 import {acousticSolids, duelArena, traceSolid, type Arena, type Solid} from './geometry';
 import {DuelSimulation} from './simulation';
@@ -942,8 +942,7 @@ export class DuelEngine {
           {side:this.sim.actors[event.actorId].weapon.ammo%2?'right':'left',lastShot:this.sim.actors[event.actorId].weapon.ammo===0});
         if (event.actorId === 0) {
           const weapon = this.sim.actors[0].weapon;
-          this.viewAnimation?.playFire(event.equipment,{side:weapon.ammo%2?'right':'left',lastShot:weapon.ammo===0,alternate:weapon.actions.alternateFire,zoomed:weapon.actions.zoom>0,
-            ...(['awp','ssg08'].includes(event.equipment)?{duration:weapon.actions.base.cycle}:{})});
+          this.viewAnimation?.playFire(event.equipment,{side:weapon.ammo%2?'right':'left',lastShot:weapon.ammo===0,alternate:weapon.actions.alternateFire,zoomed:weapon.actions.zoom>0});
           this.kick = 1;
         }
         const location=event.actorId===0?undefined:this.soundLocation(event.origin);
@@ -965,7 +964,8 @@ export class DuelEngine {
         }
       } else if (event.kind === 'surface') {
         endpoint(event.shotId,event.point);
-        this.shotEffects.impact(v3(event.point),this.settings.impactSize,event.shooter===0?this.ownTraceColor:this.enemyTraceColor,this.animationClock);
+        if(event.normal)this.shotEffects.surfaces.fire(event.point,event.normal,event.material,this.settings.impactSize,this.animationClock);
+        else this.shotEffects.impact(v3(event.point),this.settings.impactSize,event.shooter===0?this.ownTraceColor:this.enemyTraceColor,this.animationClock);
         if(event.phase!=='exit')this.audio.playImpact(['wood','metal','glass'].includes(event.material??'')?event.material as 'wood'|'metal'|'glass':'concrete',
           this.settings.volume*.35,this.soundLocation(event.point));
       }
@@ -1119,7 +1119,7 @@ export class DuelEngine {
     this.crosshair.style.setProperty('--cross-stretch', String(width / height / this.camera.aspect));
     this.sim.playerAspect = this.camera.aspect;
     this.camera.updateProjectionMatrix();
-    this.viewCamera.aspect = viewmodelViewport(width, height).aspect;
+    this.viewCamera.aspect = viewmodelAspect(width,height,this.camera.aspect);
     this.viewCamera.updateProjectionMatrix();
   }
 
@@ -1149,7 +1149,8 @@ export class DuelEngine {
       if (document.hidden) this.last = timestamp;
       return;
     }
-    const dt = this.last ? Math.min((timestamp - this.last) / 1000, .25) : 0;
+    const frameSeconds = this.last ? Math.max(0,(timestamp - this.last) / 1000) : 0;
+    const dt = Math.min(frameSeconds,.25);
     this.last = timestamp;
     if (this.sessionStarted && this.roundFlow.advance(dt, this.paused, this.config.feedbackSeconds)) this.restart(true);
     this.repeatZoom();
@@ -1197,10 +1198,11 @@ export class DuelEngine {
     this.kick = Math.max(0, this.kick - dt * 8);
     const speed = Math.hypot(player.velocity.x, player.velocity.z);
     const offset = this.viewOffset ?? VIEWMODEL_OFFSET;
+    const modelKick=this.viewAnimation?.hasFireMotion?0:this.kick;
     this.viewRoot.position.set(offset.x,
-      offset.y + Math.sin(this.sim.time * 12) * Math.min(speed, 1) * .002 - (player.alive ? 0 : death.weaponDrop * .5), offset.z + this.kick * .018);
+      offset.y + Math.sin(this.sim.time * 12) * Math.min(speed, 1) * .002 - (player.alive ? 0 : death.weaponDrop * .5), offset.z + modelKick * .018);
     this.viewRoot.visible = !scoped && (player.alive || deathAge < .25);
-    this.viewRoot.rotation.x = this.kick * (player.equipment === 'knife' ? 0 : .035) + view.weaponPitch;
+    this.viewRoot.rotation.x = modelKick * (player.equipment === 'knife' ? 0 : .035) + view.weaponPitch;
     this.viewRoot.rotation.y = view.weaponYaw;
     this.viewRoot.rotation.z = 0;
     this.audio.updateListener(this.camera.position, view.yaw, view.pitch);
@@ -1237,7 +1239,7 @@ export class DuelEngine {
     for (const actor of snapshots) if (actor.alive) actor.hitboxes = this.hitboxPoses.get(actor.id)?.capture();
     this.sim.present(snapshots);
     const oldResolution = this.metrics.adaptive;
-    if (this.metrics.sample(dt, performance.now() - cpuStart, this.settings.quality === 'auto', active, this.settings.frameLimit)) {
+    if (this.metrics.sample(dt, performance.now() - cpuStart, this.settings.quality === 'auto', active, this.settings.frameLimit,frameSeconds)) {
       this.meter.update(this.metrics, this.renderer.getPixelRatio());
       if (oldResolution !== this.metrics.adaptive) this.resize();
     }

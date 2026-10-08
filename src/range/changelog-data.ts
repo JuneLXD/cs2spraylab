@@ -152,6 +152,30 @@ export const latestChanges = {
     {id: 'native-damage-camera', title: 'Damage camera response', items: [
       'Taking damage now uses the verified native camera scale on pitch, yaw and roll, reducing exaggerated visual flinch while retaining physical aim punch.',
     ]},
+    {id:'native-shot-effects',title:'Muzzle flashes & tracers',items:[
+      'Native-texture flames, a brief glow and drifting smoke replace the single fixed flash; additive textures now preserve their linear-light brightness.',
+      'CS2-style tracers use the installed trail/rope families, weapon cadence and distance-dependent timing. Hits still register immediately.',
+      'CS2 effects are the new default. Explicitly saved every-shot practice tracers and Off remain unchanged.',
+    ]},
+    {id:'viewmodel-handling',title:'Weapon presentation',items:[
+      'Stretched resolutions now stretch the weapon and arms with the world. Animated barrels keep their projected tracer alignment.',
+      'Native firing clips no longer receive an extra procedural shot kick. AWP and SSG animations use their authored clock alongside bolt sounds; firing cooldowns are unchanged.',
+    ]},
+    {id:'native-map-materials',title:'Textured aim_redline',items:[
+      'Rebuilt aim_redline with the installed CS2 materials: concrete, brick, metal, crates and props now use their textures. Collision and spawns are unchanged.',
+    ]},
+    {id:'surface-feedback',title:'Impact & action feedback',items:[
+      'Surface-aligned concrete, metal, wood and glass bullet marks use decoded native textures and bounded pools.',
+      'Long frames retain each shell insertion and reload-completion deadline instead of assigning all events the end-of-frame time.',
+      'M4A4 ammo now enters on the native insertion marker, including empty reloads; switching away after insertion keeps the new magazine.',
+    ]},
+    {id:'strafe-transitions',title:'Opponent movement presentation',items:[
+      'Direction changes blend between locomotion clips over a short transition. Crouch amount, movement physics and displayed-skeleton hitboxes stay synchronized.',
+    ]},
+    {id:'frame-time-diagnostics',title:'Frame-time diagnostics',items:[
+      'The FPS monitor shows p95 gameplay frame intervals; its tooltip adds p99, worst interval and CPU work.',
+      'Click the monitor after pausing to save recent frame timings for comparison on your own PC. These measurements do not represent physical input latency.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

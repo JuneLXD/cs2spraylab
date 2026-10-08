@@ -2,10 +2,16 @@ import { describe, expect, it } from 'vitest';
 import { PerspectiveCamera, Vector3 } from 'three';
 import { defaults, presets, sanitizeSettings, recoilPattern, weaponIds, gameData } from './config';
 import { GUIDE_COLORS, layoutSprayPattern, mouseCompensation, sprayPlayback } from './spray-demonstration';
-import { VIEWMODEL_FOV, viewmodelViewport } from './viewmodel';
+import { VIEWMODEL_FOV, viewmodelViewport, viewmodelAspect } from './viewmodel';
 import { Simulation, STEP, Vec } from './simulation';
 
 describe('viewmodel presentation', () => {
+  it('applies the same pixel stretch to the weapon and the world',()=>{
+    expect(viewmodelAspect(1920,1080,4/3)).toBeCloseTo(4/3);
+    expect(viewmodelAspect(1920,1080,16/9)).toBeCloseTo(16/9);
+    const vp=viewmodelViewport(3440,1440);
+    expect(vp.aspect/viewmodelAspect(3440,1440,4/3)).toBeCloseTo((3440/1440)/(4/3));
+  });
   it.each([[1920, 1080], [1440, 1080], [1280, 1024], [3440, 1440], [390, 660], [844, 260]])('fits %i x %i without changing proportions or exposing the arm ends', (width, height) => {
     const view = viewmodelViewport(width, height);
     expect(view.x + view.width).toBeCloseTo(width);

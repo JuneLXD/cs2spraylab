@@ -18,6 +18,15 @@ function viewFixture(names = ['idle', 'reload', 'reload-empty', 'draw', 'inspect
 }
 
 describe('native first-person action runtime', () => {
+  it('identifies authored shot motion and plays bolt actions on the clip clock',()=>{
+    const {animation,hand}=viewFixture(['idle','fire']);
+    expect(animation.hasFireMotion).toBe(true);
+    animation.playFire('awp');animation.update(0,1,.6);
+    expect(hand.position.x).toBeCloseTo(.24);
+    animation.update(0,1,.9);expect(animation.activeAction).toBe('fire');
+    animation.dispose();
+    const fallback=viewFixture(['idle']);expect(fallback.animation.hasFireMotion).toBe(false);fallback.animation.dispose();
+  });
   it('samples authored intro/shell/outro ranges and loops inserts without idle dips', () => {
     const root = new THREE.Group(), hand = new THREE.Object3D(); hand.name = 'hand'; root.add(hand);
     const animation = new ViewAnimation(root, [

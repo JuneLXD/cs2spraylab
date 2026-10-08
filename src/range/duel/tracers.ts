@@ -43,6 +43,9 @@ export function muzzleAnchor(root: THREE.Object3D, side?: 'left' | 'right') {
   }
   const anchor = new THREE.Object3D(); anchor.name = side ? `spraylab-muzzle-${side}` : 'spraylab-muzzle'; anchor.position.copy(center).divideScalar(count);
   if (barrelBone) {
+    // Preserve the mesh's forward (+Z) direction in the animated bone's space.
+    const forwardRotation = root.getWorldQuaternion(new THREE.Quaternion());
+    anchor.quaternion.copy(barrelBone.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(forwardRotation));
     root.localToWorld(anchor.position);
     barrelBone.worldToLocal(anchor.position);
     barrelBone.add(anchor);

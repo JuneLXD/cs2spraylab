@@ -768,7 +768,7 @@ export class DuelSimulation {
       for(const contact of ray.contacts) {
         if(contact.kind==='surface') {
           this.emit({kind:'surface',tick:this.tick,shooter:shooter.id,shotId,point:contact.point,surfaceId:contact.surfaceId,
-            phase:contact.phase,material:contact.material,residualDamage:contact.residualDamage});
+            normal:contact.normal,phase:contact.phase,material:contact.material,residualDamage:contact.residualDamage});
           if(contact.phase==='entry'&&contact.environmentId) {
             this.applyEnvironment(damageEnvironmentPiece(this.authoredArena,this.environment,contact.environmentId,contact.residualDamage,
               {x:direction.x*contact.residualDamage*.2,y:0,z:direction.z*contact.residualDamage*.2}),shooter.id);

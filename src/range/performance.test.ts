@@ -43,6 +43,15 @@ const samples = (metrics: FrameMetrics, seconds: number, fps: number, cpu: numbe
   for (let i = 0; i < seconds * fps; i++) metrics.sample(1/fps,cpu,true,active,cap);
 };
 describe('adaptive resolution', () => {
+  it('records real stall intervals beyond the physics cap and keeps them available after pausing',()=>{
+    const metrics=new FrameMetrics();
+    for(let i=0;i<119;i++)metrics.sample(1/240,.7,false,true,0);
+    metrics.sample(.25,12,false,true,0,.8);
+    expect(metrics.worstMs).toBe(800);expect(metrics.p95Ms).toBeCloseTo(1000/240);
+    const report=metrics.report();expect(report.frames[report.frames.length-1]?.intervalMs).toBe(800);
+    metrics.sample(1/15,1,false,false,0);expect(metrics.report().frames).toEqual(report.frames);
+    metrics.sample(1/240,1,false,true,0);expect(metrics.report().frames).toHaveLength(1);
+  });
   it('waits for asset warmup and sustained overload, then remains bounded', () => {
     const metrics = new FrameMetrics();
     samples(metrics,3,30,24); expect(metrics.adaptive).toBe(1);

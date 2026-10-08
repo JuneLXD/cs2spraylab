@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {BoxGeometry, Group, Mesh, MeshBasicMaterial, PerspectiveCamera, Vector3} from 'three';
-import {VIEWMODEL_FOV, viewmodelViewport} from '../viewmodel';
+import {VIEWMODEL_FOV, viewmodelViewport, viewmodelAspect} from '../viewmodel';
 import {muzzleAnchor, viewMuzzleToWorld} from './tracers';
 
 describe('cosmetic muzzle presentation', () => {
@@ -19,7 +19,7 @@ describe('cosmetic muzzle presentation', () => {
   it.each([[1920, 1080, 16 / 9], [1920, 1080, 4 / 3], [3440, 1440, 3440 / 1440], [390, 844, 390 / 844]])(
     'aligns the visible barrel and tracer for %dx%d, world aspect %s', (width, height, aspect) => {
       const viewport = viewmodelViewport(width, height);
-      const view = new PerspectiveCamera(VIEWMODEL_FOV, viewport.aspect, .01, 10);
+      const view = new PerspectiveCamera(VIEWMODEL_FOV, viewmodelAspect(width,height,aspect), .01, 10);
       const world = new PerspectiveCamera(74, aspect, .03, 100);
       world.position.set(4, 1.6, 9); world.rotation.set(.15, .7, 0, 'YXZ'); world.updateMatrixWorld();
       const muzzle = new Vector3(.17, -.08, -.65);

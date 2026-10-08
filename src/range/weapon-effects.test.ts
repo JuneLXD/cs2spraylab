@@ -44,7 +44,8 @@ describe('instant-shot cosmetic effects', () => {
     flashes.update(.2); expect(flashes.sprites[0].visible).toBe(false);
     flashes.fire(anchor, 'knife', .3); expect(flashes.sprites.every(s => !s.visible)).toBe(true);
     flashes.fire(anchor, 'zeus', .3); expect(flashes.sprites.every(s => !s.visible)).toBe(true);
-    flashes.fire(anchor, 'usp', .4); expect(flashes.sprites[1].scale.x).toBeLessThan(.04);
+    flashes.fire(anchor, 'usp', .4); expect(flashes.sprites[1].material.opacity).toBeLessThan(.12);
+    expect(flashes.glows[1].visible).toBe(false);
     flashes.clear(); expect(flashes.sprites.every(s => !s.visible)).toBe(true);
     flashes.dispose(); expect(dispose).toHaveBeenCalledOnce();
   });

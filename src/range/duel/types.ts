@@ -57,5 +57,5 @@ type DuelEventData =
   | {kind: 'sound'; tick: number; actorId: ActorId; sound: 'footstep' | 'landing'; point: Vec}
   | {kind: 'fire'; tick: number; actorId: ActorId; shotId: number; equipment: Equipment; origin: Vec; direction: Vec; pelletDirections?:Vec[]; alternate?:boolean; ordinal?:number}
   | {kind: 'hit'; tick: number; shooter: ActorId; victim: ActorId; shotId: number; group: Hitgroup; point: Vec; healthDamage: number; armorDamage: number; lethal: boolean}
-  | {kind: 'surface'; tick: number; shooter: ActorId; shotId: number; point: Vec; surfaceId: number; phase?: 'entry' | 'exit'; material?: string; residualDamage?: number}
+  | {kind: 'surface'; tick: number; shooter: ActorId; shotId: number; point: Vec; surfaceId: number; normal?:Vec; phase?: 'entry' | 'exit'; material?: string; residualDamage?: number}
   | {kind: 'round'; tick: number; outcome: 'won' | 'lost' | 'draw'; seconds: number};

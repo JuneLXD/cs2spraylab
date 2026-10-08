@@ -30,6 +30,14 @@ export class FramePacer {
 export class FrameMetrics {
   fps = 0;
   cpuMs = 0;
+  p95Ms = 0;
+  p99Ms = 0;
+  worstMs = 0;
+  private intervals=new Float64Array(2048);
+  private costs=new Float64Array(2048);
+  private sampleCount=0;
+  private cursor=0;
+  private wasActive=false;
   adaptive = 1;
   animationHz = policies.auto.animationHz;
   private elapsed = 0;
@@ -43,12 +51,27 @@ export class FrameMetrics {
   animationRate(quality: Settings['quality']) {
     return quality === 'auto' ? this.animationHz : qualityPolicy(quality).animationHz;
   }
-  sample(dt: number, cpuMs: number, adaptive: boolean, active: boolean, cap: number) {
+  sample(dt: number, cpuMs: number, adaptive: boolean, active: boolean, cap: number,frameSeconds=dt) {
     if (dt <= 0 || dt > .25) return false;
-    this.elapsed += dt; this.frames++; this.cpu += cpuMs;
+    if(active&&!this.wasActive) {
+      this.sampleCount=this.cursor=0;
+      this.p95Ms=this.p99Ms=this.worstMs=0;
+      this.elapsed=this.frames=this.cpu=0;
+    }
+    this.wasActive=active;
+    if(active&&Number.isFinite(frameSeconds)&&frameSeconds>0) {
+      this.intervals[this.cursor]=frameSeconds*1000;this.costs[this.cursor]=cpuMs;
+      this.cursor=(this.cursor+1)%this.intervals.length;this.sampleCount=Math.min(this.sampleCount+1,this.intervals.length);
+    }
+    this.elapsed += Number.isFinite(frameSeconds)&&frameSeconds>0?frameSeconds:dt; this.frames++; this.cpu += cpuMs;
     if (this.elapsed < .5) return false;
     this.fps = Math.round(this.frames / this.elapsed);
     this.cpuMs = this.cpu / this.frames;
+    if(this.sampleCount) {
+      const sorted=this.intervals.slice(0,this.sampleCount).sort();
+      this.p95Ms=sorted[Math.ceil(this.sampleCount*.95)-1];this.p99Ms=sorted[Math.ceil(this.sampleCount*.99)-1];
+      this.worstMs=sorted[this.sampleCount-1];
+    }
     const window = this.elapsed;
     this.elapsed = this.frames = this.cpu = 0;
     if (!active) {this.slow = this.fast = this.cpuSlow = this.cpuFast = this.warmup = 0; return true;}
@@ -72,20 +95,41 @@ export class FrameMetrics {
     this.adaptive = 1; this.animationHz = policies.auto.animationHz;
     this.warmup = this.slow = this.fast = this.cpuSlow = this.cpuFast = 0;
   }
+  report() {
+    const frames=[];
+    for(let i=0;i<this.sampleCount;i++) {
+      const index=(this.cursor-this.sampleCount+i+this.intervals.length)%this.intervals.length;
+      frames.push({intervalMs:+this.intervals[index].toFixed(3),cpuMs:+this.costs[index].toFixed(3)});
+    }
+    const sorted=frames.map(frame=>frame.intervalMs).sort((a,b)=>a-b);
+    return {kind:'SprayLab rendered frame timings',note:'Browser render intervals and main-thread work; not physical input latency or GPU duration.',
+      fps:frames.length?1000*frames.length/frames.reduce((sum,frame)=>sum+frame.intervalMs,0):0,
+      p95Ms:sorted[Math.ceil(sorted.length*.95)-1]??0,p99Ms:sorted[Math.ceil(sorted.length*.99)-1]??0,
+      worstMs:sorted[sorted.length-1]??0,frames};
+  }
 }
 
 // Updated at 2 Hz, outside React's gameplay status updates.
 export class PerformanceMeter {
-  private element = document.createElement('output');
+  private element = document.createElement('button');
+  private metrics?:FrameMetrics;
   constructor(host: HTMLElement) {
+    this.element.type='button';
     this.element.className = 'performance-meter'; this.element.hidden = true;
     this.element.setAttribute('aria-label', 'Performance monitor'); host.append(this.element);
+    this.element.addEventListener('click',()=>{
+      if(!this.metrics)return;
+      const url=URL.createObjectURL(new Blob([JSON.stringify(this.metrics.report(),null,2)],{type:'application/json'}));
+      const link=document.createElement('a');link.href=url;link.download='spraylab-frame-times.json';link.click();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+    });
   }
   configure(visible: boolean) {this.element.hidden = !visible;}
   update(metrics: FrameMetrics, ratio: number) {
     if (this.element.hidden) return;
-    this.element.textContent = `${metrics.fps} FPS | ${metrics.fps ? (1000 / metrics.fps).toFixed(1) : '0'} ms`;
-    this.element.title = `CPU frame: ${metrics.cpuMs.toFixed(1)} ms. Render density: ${Math.round(ratio * 100)}%.`;
+    this.metrics=metrics;
+    this.element.textContent = `${metrics.fps} FPS | p95 ${metrics.p95Ms.toFixed(1)} ms`;
+    this.element.title = `CPU frame: ${metrics.cpuMs.toFixed(1)} ms. p99: ${metrics.p99Ms.toFixed(1)} ms. Worst: ${metrics.worstMs.toFixed(1)} ms. Render density: ${Math.round(ratio * 100)}%. Click to save frame timings.`;
   }
   dispose() {this.element.remove();}
 }

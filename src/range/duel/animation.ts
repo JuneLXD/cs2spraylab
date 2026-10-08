@@ -9,6 +9,7 @@ import {DeathPhysics, skeletalDeathLinks, type DeathWorld, type DeathContact} fr
 import {nativeReloadWindow} from '../native-view-actions';
 import type {ReloadPhase} from '../weapon-actions';
 import {syncAnimationActions} from '../animation-actions';
+import {StrafeBlend} from './strafe-blend';
 
 export type DuelPresentationFrame = {reloadRemaining?: number; reloadDuration?: number; deathWorld?: DeathWorld;
   reloadPhase?: ReloadPhase; reloadProgress?: number; deathVelocity?: Vec};
@@ -27,14 +28,15 @@ export function nativeGestureName(equipment: string, action: string, options: We
   return `gesture_${action}${side}${options.crouched && action !== 'fire' ? '_crouch' : ''}_${equipment}`;
 }
 
-export function locomotionWeights(actor: DuelActorSnapshot, family = 'rifle') {
+export function locomotionWeights(actor: DuelActorSnapshot, family = 'rifle',directionWeights?:Float64Array) {
   const speed = Math.hypot(actor.velocity.x, actor.velocity.z);
   const x = actor.velocity.x * Math.cos(actor.yaw) - actor.velocity.z * Math.sin(actor.yaw);
   const z = -actor.velocity.x * Math.sin(actor.yaw) - actor.velocity.z * Math.cos(actor.yaw);
   const compass = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
   const sector = ((Math.atan2(x, z) / (Math.PI / 4)) + 8) % 8;
   const low = Math.floor(sector), blend = sector - low;
-  const directions = speed > .001 ? {[compass[low]]: 1 - blend, [compass[(low + 1) % 8]]: blend} : {n: 1};
+  const directions = directionWeights?Object.fromEntries(compass.map((name,i)=>[name,directionWeights[i]])):
+    speed > .001 ? {[compass[low]]: 1 - blend, [compass[(low + 1) % 8]]: blend} : {n: 1};
   const duck = stanceCurve(actor.duckAmount);
   const moving = clamp(speed / (32 * UNIT), 0, 1);
   const running = clamp((speed / UNIT - 136) / (225 - 136), 0, 1);
@@ -54,6 +56,7 @@ export function locomotionWeights(actor: DuelActorSnapshot, family = 'rifle') {
 // Native eight-direction clips share a gait phase. Direction and stance change their
 // weights, not the playback origin; stride timing follows simulated velocity.
 export class DuelAnimator {
+  private strafeBlend=new StrafeBlend();
   readonly mixer: THREE.AnimationMixer;
   private readonly actions = new Map<string, THREE.AnimationAction>();
   private activeActions = new Set<THREE.AnimationAction>();
@@ -177,7 +180,7 @@ export class DuelAnimator {
     }
     this.aimApplied = false;
     const family = pistolIds.some(id => id === actor.equipment) && this.actions.has('idle_pistol') ? 'pistol' : 'rifle';
-    const {weights, speed, authoredSpeed} = locomotionWeights(actor, family);
+    const {weights, speed, authoredSpeed} = locomotionWeights(actor, family,this.strafeBlend.sample(actor,dt));
     const suffix = actor.equipment === 'hkp2000' ? 'hkp' : actor.equipment;
     if (family === 'pistol' && !this.actions.has(`gesture_idle_${actor.equipment}`)) for (const idle of ['idle', 'idle_crouch']) {
       const name = `${idle}_${suffix}`, duck = stanceCurve(actor.duckAmount);

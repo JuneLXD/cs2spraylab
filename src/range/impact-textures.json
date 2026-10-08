@@ -1,0 +1,29 @@
+{
+  "build": "2000927",
+  "textures": {
+    "concrete": {
+      "url": "/textures/impact-concrete.webp",
+      "source": "materials/decals/concrete/bullethole_concrete_1_color_psd_5d8baebd.vtex_c",
+      "decodedSha256": "b4798b3c530c4b7ec6cf5dff171b24be4ec7682742d3337f9b6b31d3d2d5a359",
+      "sha256": "ac5b1f4613845eb804ad8d98ad8a1fb5fd160a521e06990d35bd1808b18058e5"
+    },
+    "metal": {
+      "url": "/textures/impact-metal.webp",
+      "source": "materials/decals/metal/bullethole_metal_1_color_psd_dd6383dc.vtex_c",
+      "decodedSha256": "4a85c6735b09c1362a4096fc3edc47653d7c47602a4c9b51e50205c4510ec881",
+      "sha256": "a2a6657039d6d7ba6c98904392fd68944c48c2f214ead162625ea1c9e00f2662"
+    },
+    "wood": {
+      "url": "/textures/impact-wood.webp",
+      "source": "materials/decals/wood/shot1_color_tga_cca04ada.vtex_c",
+      "decodedSha256": "cf46e84d0e9a1c398de558eae03fee65341146bc2987813f2880182b26c06575",
+      "sha256": "f1d3fe98b56f2a7bf0496a06a0042fcc10836fc2b2bb0e29cd5a8c7f2bc440a1"
+    },
+    "glass": {
+      "url": "/textures/impact-glass.webp",
+      "source": "materials/decals/glass/shot1_color_psd_797d0fe2.vtex_c",
+      "decodedSha256": "148f9ca204891bdd23eb6d12c6d8d8009b3efba4dd2e599ad4c145cac552727a",
+      "sha256": "d8b4e7ea397f55af67ac80dca15e423118f47b970c09687cdbab06ac21c3715e"
+    }
+  }
+}

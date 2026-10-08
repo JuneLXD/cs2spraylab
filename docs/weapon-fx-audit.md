@@ -1,5 +1,8 @@
 # Weapon Effects And Input Capture
 
+The October 8 follow-up supersedes the initial flash lifetime and texture treatment
+below; see [native presentation follow-up](native-presentation-followup.md).
+
 ## Static Native Sources
 
 `src/range/weapon-fx-data.json` records local CS2 build 2000922, compiled weapon

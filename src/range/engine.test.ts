@@ -16,6 +16,7 @@ function rayFixture() {
   wall.position.set(0, 1, -11); scene.add(wall); scene.updateMatrixWorld(true);
   engine.targetModels = [body]; engine.solids = [wall]; engine.ray = new THREE.Raycaster();
   engine.syncTargets = () => scene.updateMatrixWorld(true);
+  Object.assign(engine,{shotEffects:{surfaces:{fire:vi.fn()}}});
   return { engine, body, wall, target };
 }
 

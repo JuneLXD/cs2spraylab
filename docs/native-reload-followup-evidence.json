@@ -1,0 +1,73 @@
+{
+  "build": "2000927",
+  "demoTickSeconds": 0.015625,
+  "sources": [
+    {
+      "demo": "native_phase3_m4a4_002.dem",
+      "sha256": "f53be58ed36519b8b75a0fe233cad7abf3fc2593947f86a4cdc6659f38d4d774",
+      "video": "native-phase3-m4a4-valid.mkv",
+      "weapon": "m4a4"
+    }
+  ],
+  "reloads": [
+    {
+      "weapon": "m4a4",
+      "mode": "normal",
+      "empty": false,
+      "startGameTime": 272.375,
+      "startTick": 3644,
+      "insertGameTime": 273.75,
+      "insertTick": 3732,
+      "endGameTime": 275.453125,
+      "endTick": 3841,
+      "nextAttackGameTime": 275.4416809082,
+      "ammoBefore": 27,
+      "ammoAfter": 30,
+      "reserveClipsBefore": 4,
+      "reserveClipsAfter": 3,
+      "clipInsertFrame": 41,
+      "clipFramesPerSecond": 30
+    },
+    {
+      "weapon": "m4a4",
+      "mode": "normal",
+      "empty": true,
+      "startGameTime": 279.546875,
+      "startTick": 4103,
+      "insertGameTime": 280.921875,
+      "insertTick": 4191,
+      "endGameTime": 282.625,
+      "endTick": 4300,
+      "nextAttackGameTime": 282.6054992676,
+      "ammoBefore": 0,
+      "ammoAfter": 30,
+      "reserveClipsBefore": 3,
+      "reserveClipsAfter": 2,
+      "clipInsertFrame": 41,
+      "clipFramesPerSecond": 30
+    },
+    {
+      "weapon": "m4a4",
+      "mode": "held",
+      "empty": false,
+      "startGameTime": 284.609375,
+      "startTick": 4427,
+      "insertGameTime": 287.125,
+      "insertTick": 4588,
+      "endGameTime": 289.546875,
+      "endTick": 4743,
+      "nextAttackGameTime": 287.6760559082,
+      "ammoBefore": 27,
+      "ammoAfter": 30,
+      "reserveClipsBefore": 2,
+      "reserveClipsAfter": 1,
+      "clipInsertFrame": 41,
+      "clipFramesPerSecond": 30
+    }
+  ],
+  "notes": [
+    "Normal partial and empty reload insertion agrees with the authored frame-41 marker within one demo tick.",
+    "Held reload: native insertion 2.515625 s and completion 4.9375 s. Existing uniform 2x trainer slowdown is not native parity; held-branch implementation needs separate work.",
+    "The initial empty SourceTV demo and the mislabeled M4A1-S attempt holding an M4A4 are excluded."
+  ]
+}

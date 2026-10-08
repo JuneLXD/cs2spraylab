@@ -1,0 +1,489 @@
+{
+  "build": "2000927",
+  "units": "Source inches; convert by 0.0254",
+  "sources": {
+    "weapon_tracers_assrifle.vpcf": "479ce943334c64987b658c59d715590ae6c919971985929d89f1ac14ff8ec8db",
+    "weapon_tracers_assrifle_aug.vpcf": "7c42f2976bff300c77c7a34d697336c10c3530391ab0a0b6b2488eae7b417e2a",
+    "weapon_tracers_smg.vpcf": "94c053319ca71a9e800a14b915d764f60e7eec4d2afcd094d54b29226a8489e3",
+    "weapon_tracers_mach.vpcf": "0a42eac5f90a0941d782752af9265343e709a53d6c0d8e74602625cc9045e3de",
+    "weapon_tracers_pistol.vpcf": "1f9686fd22f048e9d66712391802fe47f0b090aec16cbeed1c5a2028a6d08f72",
+    "weapon_tracers_rifle.vpcf": "35d3f917e5c4643e2d474c09b1bc7858d09f2ba5726c95c50e57180f169a9672",
+    "weapon_tracers_rifle_ssg.vpcf": "b374954971d3a54a46eaeca27ebf6d11b92abc5b559651f28599e1f170798a68",
+    "weapon_tracers_rifle_scar.vpcf": "0f83ec59edf6ae9696521d4fda3ba3e10a72c606d993d7eb5fca6bd4ce74ec8a",
+    "weapon_tracers_shot.vpcf": "659bc9747c9a58fd7747aa86ed989890a9145f174a2e4a0626cf8e5cea64be03",
+    "weapon_muzzle_flash_assaultrifle_vent_fp.vpcf": "68070aea322cc8b98b655b1cf84327d878206de05bf6b3711b1ed2845ad804f2",
+    "weapon_muzzle_flash_smoke_small2.vpcf": "d1b90101770fa6ecf15081cfc0d3e0513275802bb1a3fed8f1de2afea1246e9e",
+    "weapon_muzzle_flash_pistol_main2.vpcf": "12844ee6e94b10386c56731522bceafde44dda5c591efdaa1368093369359cc2",
+    "weapon_muzzle_flash_pistol_main2_silenced.vpcf": "1dd8f87de178455103fad7230cb2fe71bcdd7178cafc55d70eeb479f3e45606e",
+    "weapon_muzzle_flash_smg_main2.vpcf": "5d9769349f8ba6a717a39dd160f8d4547db9bfe25c5fafe05b34db7a3c405032",
+    "weapon_muzzle_flash_huntingrifle_main2.vpcf": "8e6e7985b7641dfd314c58b9cda0a49478069d3d95e26b587f8a1e11d8c27051",
+    "weapon_muzzle_flash_shotgun_main2.vpcf": "d9a4136ec2a2553484b7948177e897d4336dff826190476752e8e7827ab81261"
+  },
+  "textures": {
+    "vent": {
+      "url": "/textures/weapon-vent.webp",
+      "source": "materials/effects/muzzleflashx.png",
+      "sourceSha256": "7d793855783fea49d76d8b470076a4c09f1e8abe863b850dd0e4c023002b0d2c",
+      "sha256": "50f1322e86d095c0ed69ac07211e16a93afafc22bdc137d0b339b6200d7fec57",
+      "width": 128,
+      "height": 128
+    },
+    "flame": {
+      "url": "/textures/weapon-flame.webp",
+      "source": "materials/effects/muzzleflash4.png",
+      "sourceSha256": "1d5f2f9d5cf3bd2a4770c859662f6b1a6de3cdafe64a6a2176c70f54e1ce2bf2",
+      "sha256": "d6322d599a16bd64def17157305f0ed10d2ce68f55b92a2432fc8616a9c369b7",
+      "width": 256,
+      "height": 256
+    },
+    "glow": {
+      "url": "/textures/weapon-glow.webp",
+      "source": "materials/particle/particle_glow_04.png",
+      "sourceSha256": "f2a803176d5eb1045d3ff7bc921cfd50cc488c425f0f0c35c83d4245054bb52e",
+      "sha256": "f0b2bfb3f1616f0c89f8aa6472cfca71547e647da536cf504f6405303c377b6f",
+      "width": 512,
+      "height": 512
+    },
+    "smoke": {
+      "url": "/textures/weapon-smoke.webp",
+      "source": "materials/particle/smoke1/smoke1_seq0.png",
+      "sourceSha256": "e6ba5964892b07c31da6544270a143296d1ae2900ca5139b21aa7fdab46dcff6",
+      "sha256": "f6c2f22a16740263ed182fca2e74732c866a359ea98503f05defadd39c2a75b1",
+      "width": 160,
+      "height": 112
+    }
+  },
+  "tracers": {
+    "weapon_tracers_assrifle": {
+      "kind": "trail",
+      "speed": 20500,
+      "radius": 1,
+      "trail": [
+        0.085,
+        0.1
+      ],
+      "maxLength": 1200,
+      "lengthFade": 0.08,
+      "radiusScale": 0.5,
+      "alpha": [
+        0.627451,
+        0.686275
+      ],
+      "fadeIn": [
+        0.2,
+        0.3
+      ],
+      "fadeOut": 0.95
+    },
+    "weapon_tracers_assrifle_aug": {
+      "kind": "rope",
+      "controls": [
+        {
+          "input": [
+            0,
+            180
+          ],
+          "output": [
+            0,
+            1.1
+          ]
+        },
+        {
+          "input": [
+            0,
+            20500
+          ],
+          "output": [
+            0.1,
+            1
+          ]
+        }
+      ]
+    },
+    "weapon_tracers_smg": {
+      "kind": "rope",
+      "controls": [
+        {
+          "input": [
+            0,
+            180
+          ],
+          "output": [
+            0,
+            1.1
+          ]
+        },
+        {
+          "input": [
+            0,
+            22000
+          ],
+          "output": [
+            0.05,
+            1
+          ]
+        }
+      ]
+    },
+    "weapon_tracers_mach": {
+      "kind": "rope",
+      "controls": [
+        {
+          "input": [
+            0,
+            300
+          ],
+          "output": [
+            0,
+            1.1
+          ]
+        },
+        {
+          "input": [
+            0,
+            20500
+          ],
+          "output": [
+            0.1,
+            1
+          ]
+        }
+      ]
+    },
+    "weapon_tracers_pistol": {
+      "kind": "trail",
+      "speed": 18000,
+      "radius": 1,
+      "trail": [
+        0.05,
+        0.05
+      ],
+      "maxLength": 900,
+      "lengthFade": 0.05,
+      "radiusScale": 0.5,
+      "alpha": [
+        0.54902,
+        0.803922
+      ],
+      "fadeIn": [
+        0.2,
+        0.35
+      ],
+      "fadeOut": 0.95
+    },
+    "weapon_tracers_rifle": {
+      "kind": "trail",
+      "speed": 30000,
+      "radius": 2,
+      "trail": [
+        0.1,
+        0.1
+      ],
+      "maxLength": 900,
+      "lengthFade": 0.1,
+      "radiusScale": 0.5,
+      "alpha": [
+        0.54902,
+        0.705882
+      ],
+      "fadeIn": [
+        0.2,
+        0.3
+      ],
+      "fadeOut": 0.95
+    },
+    "weapon_tracers_rifle_ssg": {
+      "kind": "trail",
+      "speed": 30000,
+      "radius": 2,
+      "trail": [
+        0.1,
+        0.1
+      ],
+      "maxLength": 900,
+      "lengthFade": 0.1,
+      "radiusScale": 0.5,
+      "alpha": [
+        0.54902,
+        0.705882
+      ],
+      "fadeIn": [
+        0.2,
+        0.3
+      ],
+      "fadeOut": 0.95
+    },
+    "weapon_tracers_rifle_scar": {
+      "kind": "trail",
+      "speed": 30000,
+      "radius": 2,
+      "trail": [
+        0.1,
+        0.1
+      ],
+      "maxLength": 900,
+      "lengthFade": 0.1,
+      "radiusScale": 0.5,
+      "alpha": [
+        0.54902,
+        0.705882
+      ],
+      "fadeIn": [
+        0.2,
+        0.3
+      ],
+      "fadeOut": 0.95
+    },
+    "weapon_tracers_shot": {
+      "kind": "trail",
+      "speed": 24000,
+      "radius": 1,
+      "trail": [
+        0.03,
+        0.05
+      ],
+      "maxLength": 900,
+      "lengthFade": 0.05,
+      "radiusScale": 0.5,
+      "alpha": [
+        0.627451,
+        0.803922
+      ],
+      "fadeIn": [
+        0.15,
+        0.25
+      ],
+      "fadeOut": 0.95
+    }
+  },
+  "flashes": {
+    "rifle": {
+      "life": [
+        0.028,
+        0.03
+      ],
+      "radius": [
+        3,
+        6
+      ],
+      "alpha": [
+        0.745098,
+        0.901961
+      ],
+      "overbright": 4,
+      "texture": "vent",
+      "fade": 0.025
+    },
+    "pistol": {
+      "life": [
+        0.025,
+        0.025
+      ],
+      "radius": [
+        3,
+        5
+      ],
+      "alpha": [
+        0.705882,
+        0.784314
+      ],
+      "overbright": 4,
+      "texture": "flame",
+      "fade": 0.015
+    },
+    "silencedPistol": {
+      "life": [
+        0.025,
+        0.025
+      ],
+      "radius": [
+        3,
+        5
+      ],
+      "alpha": [
+        0.078431,
+        0.117647
+      ],
+      "overbright": 1,
+      "texture": "flame",
+      "fade": 0.015
+    },
+    "smg": {
+      "life": [
+        0.02,
+        0.03
+      ],
+      "radius": [
+        3,
+        5
+      ],
+      "alpha": [
+        0.117647,
+        0.27451
+      ],
+      "overbright": 4,
+      "texture": "flame",
+      "fade": 0.02
+    },
+    "sniper": {
+      "life": [
+        0.0175,
+        0.025
+      ],
+      "radius": [
+        3,
+        6
+      ],
+      "alpha": [
+        0.27451,
+        0.352941
+      ],
+      "overbright": 4,
+      "texture": "flame",
+      "fade": 0.0175
+    },
+    "shotgun": {
+      "life": [
+        0.025,
+        0.025
+      ],
+      "radius": [
+        3,
+        6
+      ],
+      "alpha": [
+        0.2,
+        0.35
+      ],
+      "overbright": 4,
+      "texture": "flame",
+      "fade": 0.025
+    }
+  },
+  "smoke": {
+    "life": 0.2,
+    "alpha": [
+      0.117647,
+      0.235294
+    ],
+    "radius": [
+      4,
+      7
+    ],
+    "endScale": 3,
+    "fade": 0.18,
+    "speed": [
+      100,
+      120
+    ]
+  },
+  "weapons": {
+    "ak47": {
+      "tracer": "weapon_tracers_assrifle"
+    },
+    "m4a4": {
+      "tracer": "weapon_tracers_assrifle"
+    },
+    "m4a1s": {
+      "tracer": "weapon_tracers_assrifle"
+    },
+    "galil": {
+      "tracer": "weapon_tracers_assrifle"
+    },
+    "famas": {
+      "tracer": "weapon_tracers_assrifle"
+    },
+    "sg553": {
+      "tracer": "weapon_tracers_assrifle_aug"
+    },
+    "aug": {
+      "tracer": "weapon_tracers_assrifle_aug"
+    },
+    "mp9": {
+      "tracer": "weapon_tracers_smg"
+    },
+    "mp7": {
+      "tracer": "weapon_tracers_smg"
+    },
+    "mp5sd": {
+      "tracer": "weapon_tracers_smg"
+    },
+    "mac10": {
+      "tracer": "weapon_tracers_smg"
+    },
+    "ump45": {
+      "tracer": "weapon_tracers_smg"
+    },
+    "p90": {
+      "tracer": "weapon_tracers_smg"
+    },
+    "bizon": {
+      "tracer": "weapon_tracers_smg"
+    },
+    "m249": {
+      "tracer": "weapon_tracers_mach"
+    },
+    "negev": {
+      "tracer": "weapon_tracers_mach"
+    },
+    "cz75a": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "usp": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "glock": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "hkp2000": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "p250": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "deagle": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "elite": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "fiveseven": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "tec9": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "revolver": {
+      "tracer": "weapon_tracers_pistol"
+    },
+    "awp": {
+      "tracer": "weapon_tracers_rifle"
+    },
+    "ssg08": {
+      "tracer": "weapon_tracers_rifle_ssg"
+    },
+    "g3sg1": {
+      "tracer": "weapon_tracers_rifle_ssg"
+    },
+    "scar20": {
+      "tracer": "weapon_tracers_rifle_scar"
+    },
+    "knife": {},
+    "nova": {
+      "tracer": "weapon_tracers_shot"
+    },
+    "xm1014": {
+      "tracer": "weapon_tracers_shot"
+    },
+    "mag7": {
+      "tracer": "weapon_tracers_shot"
+    },
+    "sawedoff": {
+      "tracer": "weapon_tracers_shot"
+    },
+    "zeus": {
+      "tracer": "weapon_tracers_taser"
+    }
+  },
+  "limits": "Reduced browser particle subset, not Source 2 graph/shader parity. Muzzle families and non-rifle radius envelopes remain presentation approximations; trail seed, CP3 scaling, some distance operators and two-layer native materials are not reproduced."
+}

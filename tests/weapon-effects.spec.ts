@@ -26,13 +26,22 @@ test('range resolves hits immediately, flashes at the barrel, and suppressed wea
     const count = e.shotEffects.nextTrace;
     for (const weapon of ['usp','m4a1s','mp5sd']) e.shotEffects.trace(weapon,0,new Vector(0,1,0),new Vector(1,1,-20),e.elapsed,e.traceColor);
     return {immediate, projected:projected.toArray(), flash:!!flash, textureReady, original, moved,
+      viewAspect:e.viewCamera.aspect,hasNativeFire:e.viewAnimations.get('ak47').hasFireMotion,
       tracesBefore:count, tracesAfter:e.shotEffects.nextTrace, visibleObjects:e.scene.children.length};
   });
   expect(result.immediate.shots).toBe(1); expect(result.immediate.marks).toBeGreaterThan(0);
   expect(result.immediate.action).toBe('fire'); expect(result.flash).toBe(true); expect(result.textureReady).toBe(true);
+  expect(result.hasNativeFire).toBe(true);
+  expect(result.viewAspect).toBeGreaterThan(0);
   expect(Math.abs(result.projected[0])).toBeLessThan(1); expect(Math.abs(result.projected[1])).toBeLessThan(1);
   expect(result.original).toEqual(result.moved); expect(result.tracesAfter).toBe(result.tracesBefore);
   expect(await canvasColors(page, 'canvas[data-range]')).toBeGreaterThan(8);
+  // Hold a known visual age for a review screenshot; gameplay assertions above use normal timing.
+  await page.evaluate(() => {
+    const e=(window as any).fxEngine, fx=e.viewFlashes, now=e.elapsed;
+    fx.clear();fx.fire(e.viewMuzzles.get('ak47').main,'ak47',now);
+    const update=fx.update.bind(fx);fx.update=()=>update(now+.005);
+  });
   await page.screenshot({path:`research/firing-${info.project.name}.png`});
   expect(errors).toEqual([]);
 });
@@ -40,7 +49,7 @@ test('range resolves hits immediately, flashes at the barrel, and suppressed wea
 test('practice tracers follow every round of a held spray to its impact', async ({page}, info) => {
   test.skip(info.project.name.startsWith('mobile'), 'Desktop mouse workflow');
   await page.addInitScript(() => {
-    localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode: 'guided', volume: 0}));
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode: 'guided', volume: 0, tracers: 'every'}));
     Object.defineProperty(HTMLElement.prototype, 'requestPointerLock', {value: undefined});
   });
   await page.goto('/');

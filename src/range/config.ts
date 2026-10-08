@@ -91,7 +91,7 @@ export const defaults: Settings = {
   crosshair: { color: '#ffeb55', size: 3, gap: 2, thickness: 2, outline: 1, alpha: 1, dot: false, t: false, dynamic: false },
   keyboard: defaultKeyboard,
   viewmodel: classicViewmodel,
-  tracers: 'every'
+  tracers: 'native'
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -138,7 +138,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     },
     keyboard: sanitizeKeyboard(s.keyboard),
     viewmodel: sanitizeViewmodel(s.viewmodel),
-    tracers: s.tracers === 'native' || s.tracers === 'off' ? s.tracers : 'every',
+    tracers: s.tracers === 'every' || s.tracers === 'off' ? s.tracers : 'native',
     ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }
