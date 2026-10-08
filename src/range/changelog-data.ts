@@ -97,6 +97,11 @@ export const latestChanges = {
     {id: 'input-latency', title: 'Faster shots', items: [
       'AI Duel and Aim Botz simulate a click on the next frame instead of waiting up to one 128 Hz tick (7.8 ms), and the view stays smooth while that tick runs ahead.',
     ]},
+    {id: 'reflex', title: 'Fast Aim / Reflex', items: [
+      'A new Fast Aim / Reflex drill after the workshop map: you stand on an island at ground level, and bots wait out of sight behind a ring of walls, then come at you through its gaps, strafing A-D, spamming crouch and edging closer.',
+      'Kill each bot before it reaches the line around your island. One that gets there is counted and starts again, as on the map; bots never attack.',
+      'Choose the gap distance, all eight gaps or the three in front, whether bots strafe or run straight at you, how they crouch, their weapon and respawn delay. Kills, accuracy and arrivals are tracked per session.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

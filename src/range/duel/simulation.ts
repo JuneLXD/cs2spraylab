@@ -30,6 +30,8 @@ import {TerrainTactics} from './terrain-tactics';
 import {actorShadows} from './shadow-scene';
 import {AcousticScene} from '../spatial-audio';
 import {BOTZ_PLAYER_SPAWN, BotzSpawner, BotzStrafe, emptyBotzStats, sanitizeBotzConfig, type BotzConfig, type BotzStats} from './botz';
+import {atMouth, REFLEX_ISLAND, REFLEX_PLAYER_SPAWN, REFLEX_REACH, REFLEX_TOUCH, ReflexCrouch, reflexRing, ReflexSpawner,
+  ReflexStrafe, reflexTarget, type ReflexRun} from './reflex';
 
 type CombatActor = ActorKinematics & TaggingState & {
   id: number;
@@ -104,11 +106,14 @@ export class DuelSimulation {
   private boostFeasibility=new Map<string,boolean>();
   readonly coach = new DuelCoach();
   playerAspect = 16 / 9;
-  /** Aim Botz: passive bots that respawn, with no rounds unless the session is timed. */
+  /** Aim Botz: passive bots that respawn, with no rounds unless the session is timed. On the 'island' map (Fast Aim /
+   * Reflex) they rush you instead of standing in a yard. */
   readonly botz?: BotzConfig;
   readonly botzStats: BotzStats = emptyBotzStats();
   private botzSpawner?: BotzSpawner;
-  private botzLives = new Map<number, {crouch: boolean; strafe?: BotzStrafe}>();
+  private reflexSpawner?: ReflexSpawner;
+  /** Per life: crouched, strafing, or a Reflex run. */
+  private botzLives = new Map<number, {crouch: boolean; strafe?: BotzStrafe; run?: ReflexRun}>();
   private respawnAt = new Map<number, number>();
 
   constructor(config: DuelConfig = sanitizeDuelConfig({}), private seed = 1, arena: Arena = testArena(), private playerWeapon: Weapon = 'ak47', private sidearm: Pistol = 'usp', private hasPrimary = true, botz?: BotzConfig) {
@@ -122,6 +127,14 @@ export class DuelSimulation {
     this.actors = [makeActor(0, 'player', 0, 8, hasPrimary ? playerWeapon : sidearm, this.config.playerHealth, this.config.playerArmor, seed)];
     this.actors[0].armor = this.config.playerArmor ? this.config.playerArmorPoints : 0;
     this.actors[0].helmet = this.config.playerArmor && this.config.playerHelmet;
+    if (this.botz?.map === 'island') {
+      this.actors[0].position = {...REFLEX_PLAYER_SPAWN};
+      this.reflexSpawner = new ReflexSpawner(this.botz, this.arena, seed);
+      // The first bots set off one after another rather than as a single wave.
+      const stagger = Math.min(.45, 3 / this.botz.botCount);
+      for (let id = 1; id <= this.botz.botCount; id++) this.actors.push(this.spawnBot(id, 1, undefined, (id - 1) * stagger));
+      return;
+    }
     if (this.botz) {
       this.actors[0].position = {...BOTZ_PLAYER_SPAWN};
       this.botzSpawner = new BotzSpawner(this.botz, this.arena, seed);
@@ -247,6 +260,7 @@ export class DuelSimulation {
     this.tick++;
     this.time = this.tick * STEP;
     if (this.botz) this.respawnBots();
+    if (this.botz?.map === 'island') this.catchArrivals();
     this.applyEnvironment(advanceEnvironment(this.authoredArena,this.environment,STEP,this.actors.filter(actor=>actor.alive).map(actorBody)),0);
     const actorView = this.snapshot();
     this.previous = actorView;
@@ -344,7 +358,8 @@ export class DuelSimulation {
           return clear(zOnly) ? zOnly : from;
         }, (position, feet, height) => canFitInArena(position, feet, height, this.arena),
         (position, from, to, height) => verticalContact(position, from, to, height, this.arena.solids),
-        arenaMovementEnvironment(this.arena,this.actors.map(other=>({...other,previous:this.previous[other.id]})),actor.id,this.time-STEP,actor.pitch));
+        arenaMovementEnvironment(this.arena,this.actors.filter(other=>!this.passesThrough(actor,other))
+          .map(other=>({...other,previous:this.previous[other.id]})),actor.id,this.time-STEP,actor.pitch));
       const traveled = Math.hypot(next.position.x - actor.position.x, next.position.z - actor.position.z);
       const landed=next.grounded&&!(actor.grounded??actor.feet===0);
       Object.assign(actor,next);
@@ -460,16 +475,26 @@ export class DuelSimulation {
     actor.command = {...actor.command, ...patch};
   }
 
-  /** A fresh Aim Botz life: full health and armor at a new spot, facing you. */
-  private spawnBot(id: number, generation: number, previous?: Vec) {
+  /** A fresh Aim Botz life: full health and armor at a new spot, facing you. A Reflex bot waits out of sight for `hold` seconds. */
+  private spawnBot(id: number, generation: number, previous?: Vec, hold = 0) {
     const botz = this.botz!, player = this.actors[0].position;
     const occupied = this.actors.filter(actor => actor.side === 'enemy' && actor.alive && actor.id !== id).map(actor => actor.position);
-    const spawn = this.botzSpawner!.next(occupied, previous, player);
+    // Entrances with a bot still on its way through them.
+    const reflex = this.reflexSpawner?.next(occupied, player, new Set([...this.botzLives].filter(([other, life]) =>
+      other !== id && this.actors[other]?.alive && life.run && life.run.leg < 2).map(([, life]) => life.run!.entrance)));
+    const spawn: {x: number; z: number; feet: number; elevated?: boolean} = reflex ?? this.botzSpawner!.next(occupied, previous, player);
     const actor = makeActor(id, 'enemy', spawn.x, spawn.z, botz.weapon, botz.health, botz.armor, this.seed);
     actor.generation = generation;
     actor.feet = spawn.feet; actor.position.y = spawn.feet + actor.eyeHeight; actor.grounded = true;
     actor.helmet = botz.armor && botz.helmet;
     actor.yaw = Math.atan2(player.x - spawn.x, player.z - spawn.z) + Math.PI;
+    if (reflex) {
+      const random = randomStream(this.seed, `reflex:life:${id}:${generation}`);
+      this.botzLives.set(id, {crouch: false, run: {entrance: reflex.entrance, route: reflex.route, lane: reflex.lane, leg: 0,
+        goAt: this.time + hold, strafe: botz.movement === 'strafe' ? new ReflexStrafe(random, botz.crouch === 'always') : undefined,
+        crouch: botz.crouch === 'some' ? new ReflexCrouch(random, this.time + hold) : undefined, crouchAlways: botz.crouch === 'always'}});
+      return actor;
+    }
     const random = randomStream(this.seed, `botz:life:${id}:${generation}`);
     this.botzLives.set(id, {crouch: botz.crouch === 'always' || botz.crouch === 'some' && random() < .35,
       strafe: botz.movement === 'strafe' && !spawn.elevated ? new BotzStrafe(random) : undefined});
@@ -491,8 +516,65 @@ export class DuelSimulation {
     const life = this.botzLives.get(actor.id), player = this.actors[0].position;
     const facing = Math.atan2(player.x - actor.position.x, player.z - actor.position.z) + Math.PI;
     const turn = Math.atan2(Math.sin(facing - actor.yaw), Math.cos(facing - actor.yaw)), limit = Math.PI * STEP;
+    const yawDelta = Math.max(-limit, Math.min(limit, turn));
+    if (life?.run) {this.commandReflex(actor, life.run, yawDelta); return;}
     this.commandBot(actor, {forward: 0, side: life?.strafe?.side(this.time) ?? 0, walk: false, crouch: !!life?.crouch, jump: false,
-      fireHeld: false, firePressed: false, yawDelta: Math.max(-limit, Math.min(limit, turn))});
+      fireHeld: false, firePressed: false, yawDelta});
+  }
+
+  /** ADAD mostly sideways with a slight lean `toward` (unit), as in Fast Aim / Reflex. More than 2.5 m to either side of
+   * its lane (the line through `origin` along which `across` measures), the next switch heads back. `lean` scales the
+   * lean: 1 in, 0 none, -1 away. */
+  private edgeIn(position: Vec, yaw: number, toward: {x: number; z: number}, strafe: ReflexStrafe,
+    origin: {x: number; z: number}, across: {x: number; z: number}, lean: number) {
+    const right = {x: Math.cos(yaw), z: -Math.sin(yaw)};
+    const offset = (position.x - origin.x) * across.x + (position.z - origin.z) * across.z;
+    const back = Math.abs(offset) > 2.5 ? -Math.sign(offset * (right.x * across.x + right.z * across.z)) : 0;
+    const keys = strafe.keys(this.time, back === 1 || back === -1 ? back : undefined), forward = keys.forward * lean;
+    return {x: toward.x * forward + right.x * keys.side, z: toward.z * forward + right.z * keys.side};
+  }
+
+  /** Reflex: wait out of sight, run through the entrance, then come at you: straight, or strafing A-D while edging
+   * closer, and spamming crouch if set. Movement is steered in the world and split into forward/side keys for the way
+   * the bot faces (always at you). */
+  private commandReflex(actor: CombatActor, run: ReflexRun, yawDelta: number) {
+    const idle = {walk: false, jump: false, fireHeld: false, firePressed: false, yawDelta};
+    if (this.time + 1e-9 < run.goAt) {this.commandBot(actor, {...idle, forward: 0, side: 0, crouch: run.crouchAlways}); return;}
+    // Bots waiting at a mouth go in turn, each turning solid only once nobody solid stands in its way: none can lock together.
+    if (run.leg === 0 && atMouth(run, actor.position)) run.queuedAt ??= this.time;
+    const clear = run.queuedAt !== undefined && this.actors.every(other => {
+      const life = this.botzLives.get(other.id)?.run;
+      if (other === actor || other.side !== 'enemy' || !other.alive || !life) return true;
+      if (life.leg === 0) return life.entrance !== run.entrance || (life.queuedAt ?? Infinity) >= run.queuedAt!;
+      return Math.max(Math.abs(other.position.x - actor.position.x), Math.abs(other.position.z - actor.position.z)) >= 34 * UNIT;
+    });
+    const target = reflexTarget(run, actor.position, this.actors[0].position, clear), yaw = actor.yaw + yawDelta;
+    const dx = target.x - actor.position.x, dz = target.z - actor.position.z, length = Math.hypot(dx, dz) || 1;
+    // Strafing and ducking wait until the bot is through the gap: it cannot catch the end of a wall or hold up the next one.
+    let wish = {x: dx / length, z: dz / length};
+    // Its lane runs from the island out through its entrance.
+    if (run.leg === 2 && run.strafe) wish = this.edgeIn(actor.position, yaw, wish, run.strafe, REFLEX_ISLAND, {x: -run.lane.z, z: run.lane.x}, 1);
+    this.commandBot(actor, {...idle, forward: -wish.x * Math.sin(yaw) - wish.z * Math.cos(yaw),
+      side: wish.x * Math.cos(yaw) - wish.z * Math.sin(yaw),
+      crouch: run.crouchAlways || run.leg === 2 && !!run.crouch?.crouched(this.time)});
+  }
+
+  /** Reflex bots pass through each other until they reach their gap's mouth: out of sight, nobody can block anyone. */
+  private passesThrough(actor: CombatActor, other: CombatActor) {
+    if (actor === other || actor.side !== 'enemy' || other.side !== 'enemy' || this.botz?.map !== 'island') return false;
+    return this.botzLives.get(actor.id)?.run?.leg === 0 || this.botzLives.get(other.id)?.run?.leg === 0;
+  }
+
+  /** Reflex: a bot that reaches the island counts against you and starts again from behind the walls. */
+  private catchArrivals() {
+    const player = this.actors[0].position;
+    for (const actor of this.actors.slice(1)) {
+      if (!actor.alive) continue;
+      if (reflexRing(actor.position) > REFLEX_REACH && Math.hypot(actor.position.x - player.x, actor.position.z - player.z) > REFLEX_TOUCH) continue;
+      this.botzStats.leaks++;
+      this.actors[actor.id] = this.spawnBot(actor.id, actor.generation + 1, actor.position, this.botz!.respawnSeconds);
+      this.combatActions.delete(actor.id);
+    }
   }
 
   /** sv_infinite_ammo 2 keeps reserves full; 1 also refills the magazine after every shot. */

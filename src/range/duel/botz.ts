@@ -12,10 +12,16 @@ import {randomStream} from './rng';
  */
 export type BotzDistance = 'near' | 'mixed' | 'far';
 export type BotzMovement = 'static' | 'strafe';
+/** On the island, 'some' is crouch spam. */
 export type BotzCrouch = 'never' | 'some' | 'always';
 /** sv_infinite_ammo: 'reserve' = 2 (reload, never run dry), 'magazine' = 1 (never reload). */
 export type BotzAmmo = 'off' | 'reserve' | 'magazine';
+/** 'yard' is Aim Botz; 'island' is Fast Aim / Reflex (reflex.ts), where bots rush you. */
+export type BotzMap = 'yard' | 'island';
+/** Reflex: which gaps bots come through, all eight or the three in front of you. */
+export type BotzApproach = 'around' | 'front';
 export type BotzConfig = {
+  map: BotzMap;
   botCount: number;
   distance: BotzDistance;
   movement: BotzMovement;
@@ -31,12 +37,18 @@ export type BotzConfig = {
   sessionSeconds: number;
   infiniteAmmo: BotzAmmo;
   shortcutProtection: boolean;
+  approach: BotzApproach;
 };
 
 export const botzDefaults: BotzConfig = {
-  botCount: 10, distance: 'mixed', movement: 'static', crouch: 'never', elevated: true, weapon: 'ak47',
+  map: 'yard', botCount: 10, distance: 'mixed', movement: 'static', crouch: 'never', elevated: true, weapon: 'ak47',
   health: 100, armor: true, helmet: true, headshotOnly: false, respawnSeconds: 1, sessionSeconds: 0,
-  infiniteAmmo: 'reserve', shortcutProtection: true,
+  infiniteAmmo: 'reserve', shortcutProtection: true, approach: 'around',
+};
+/** Fast Aim / Reflex, as on the workshop map: knife bots run at you, and you never reload. */
+export const reflexDefaults: BotzConfig = {
+  ...botzDefaults, map: 'island', botCount: 5, movement: 'strafe', crouch: 'some', elevated: false, weapon: 'knife',
+  respawnSeconds: .5, infiniteAmmo: 'magazine',
 };
 export const BOTZ_MAX_BOTS = 16;
 export const botzSessionLengths = [0, 30, 60, 120, 300] as const;
@@ -50,21 +62,24 @@ const pick = <T extends string>(value: unknown, options: readonly T[], fallback:
 
 export function sanitizeBotzConfig(raw: unknown): BotzConfig {
   const input = record(raw);
-  const weapon = input.weapon === 'knife' || weaponIds.some(id => id === input.weapon) ? input.weapon as Equipment : botzDefaults.weapon;
+  const defaults = input.map === 'island' ? reflexDefaults : botzDefaults;
+  const weapon = input.weapon === 'knife' || weaponIds.some(id => id === input.weapon) ? input.weapon as Equipment : defaults.weapon;
   const session = typeof input.sessionSeconds === 'number' && botzSessionLengths.some(length => length === input.sessionSeconds)
-    ? input.sessionSeconds : botzDefaults.sessionSeconds;
+    ? input.sessionSeconds : defaults.sessionSeconds;
   return {
-    botCount: Math.round(finite(input.botCount, botzDefaults.botCount, 1, BOTZ_MAX_BOTS)),
-    distance: pick(input.distance, ['near', 'mixed', 'far'], botzDefaults.distance),
-    movement: pick(input.movement, ['static', 'strafe'], botzDefaults.movement),
-    crouch: pick(input.crouch, ['never', 'some', 'always'], botzDefaults.crouch),
-    elevated: input.elevated !== false, weapon,
-    health: Math.round(finite(input.health, botzDefaults.health, 1, 500)),
+    map: defaults.map,
+    botCount: Math.round(finite(input.botCount, defaults.botCount, 1, BOTZ_MAX_BOTS)),
+    distance: pick(input.distance, ['near', 'mixed', 'far'], defaults.distance),
+    movement: pick(input.movement, ['static', 'strafe'], defaults.movement),
+    crouch: pick(input.crouch, ['never', 'some', 'always'], defaults.crouch),
+    elevated: typeof input.elevated === 'boolean' ? input.elevated : defaults.elevated, weapon,
+    health: Math.round(finite(input.health, defaults.health, 1, 500)),
     armor: input.armor !== false, helmet: input.helmet !== false, headshotOnly: input.headshotOnly === true,
-    respawnSeconds: finite(input.respawnSeconds, botzDefaults.respawnSeconds, 0, 3),
+    respawnSeconds: finite(input.respawnSeconds, defaults.respawnSeconds, 0, 3),
     sessionSeconds: session,
-    infiniteAmmo: pick(input.infiniteAmmo, ['off', 'reserve', 'magazine'], botzDefaults.infiniteAmmo),
+    infiniteAmmo: pick(input.infiniteAmmo, ['off', 'reserve', 'magazine'], defaults.infiniteAmmo),
     shortcutProtection: input.shortcutProtection !== false,
+    approach: pick(input.approach, ['around', 'front'], defaults.approach),
   };
 }
 
@@ -154,9 +169,11 @@ export class BotzStrafe {
   }
 }
 
+/** `leaks`: Reflex bots that reached the island before you killed them. */
 export type BotzStats = {shots: number; hits: number; headHits: number; kills: number; headshots: number; damage: number;
-  headshotStreak: number; bestHeadshotStreak: number};
-export const emptyBotzStats = (): BotzStats => ({shots: 0, hits: 0, headHits: 0, kills: 0, headshots: 0, damage: 0, headshotStreak: 0, bestHeadshotStreak: 0});
+  headshotStreak: number; bestHeadshotStreak: number; leaks: number};
+export const emptyBotzStats = (): BotzStats => ({shots: 0, hits: 0, headHits: 0, kills: 0, headshots: 0, damage: 0, headshotStreak: 0,
+  bestHeadshotStreak: 0, leaks: 0});
 
 export type BotzSummary = BotzStats & {seconds: number; sessionSeconds: number; accuracy: number; headshotRate: number;
   killsPerMinute: number; secondsPerKill: number | null};
@@ -170,17 +187,17 @@ export function botzSummary(stats: BotzStats, seconds: number, sessionSeconds: n
 }
 
 export type BotzHistory = {date: string; weapon: Equipment; distance: BotzDistance; movement: BotzMovement; headshotOnly: boolean;
-  seconds: number; kills: number; headshotRate: number; accuracy: number; killsPerMinute: number};
-const HISTORY_KEY = 'spraylab.botz.history.v1';
+  seconds: number; kills: number; headshotRate: number; accuracy: number; killsPerMinute: number; leaks?: number};
+const historyKeys: Record<BotzMap, string> = {yard: 'spraylab.botz.history.v1', island: 'spraylab.reflex.history.v1'};
 
-export function loadBotzHistory(): BotzHistory[] {
+export function loadBotzHistory(map: BotzMap = 'yard'): BotzHistory[] {
   try {
-    const parsed: unknown = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    const parsed: unknown = JSON.parse(localStorage.getItem(historyKeys[map]) || '[]');
     return Array.isArray(parsed) ? parsed.filter((entry): entry is BotzHistory => !!entry && typeof entry === 'object' &&
       typeof entry.date === 'string' && ['seconds', 'kills', 'headshotRate', 'accuracy', 'killsPerMinute'].every(key => Number.isFinite(entry[key]))).slice(0, 50) : [];
   } catch {return [];}
 }
 
-export function saveBotzHistory(history: BotzHistory[]) {
-  try {localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 50)));} catch { /* Session-only history. */ }
+export function saveBotzHistory(history: BotzHistory[], map: BotzMap = 'yard') {
+  try {localStorage.setItem(historyKeys[map], JSON.stringify(history.slice(0, 50)));} catch { /* Session-only history. */ }
 }

@@ -45,6 +45,7 @@ import {DuelRadar} from './radar';
 import {actorShadows,ActorShadowRenderer} from './shadow-scene';
 import {BOTZ_PLAYER_SPAWN, botzArena, botzDuelConfig, botzSummary, loadBotzHistory, sanitizeBotzConfig, saveBotzHistory,
   type BotzConfig, type BotzHistory, type BotzSummary} from './botz';
+import {REFLEX_ISLAND, REFLEX_ISLAND_HALF, REFLEX_REACH, reflexArena} from './reflex';
 
 export type DuelStatus = {
   phase: 'ready' | 'fighting' | 'result'; paused: boolean; outcome?: 'won' | 'lost' | 'draw';
@@ -172,13 +173,15 @@ export class DuelEngine {
   private botz?: BotzConfig;
   private botzHistory: BotzHistory[] = [];
   private botzRecorded = false;
+  /** Reflex arrivals already shown as a caption. */
+  private arrivalsShown = 0;
   private generations = new Map<number, number>();
 
   constructor(private readonly host: HTMLElement, private readonly crosshair: HTMLElement,
     private readonly onStatus: (status: DuelStatus) => void,
     private readonly onError: (message: string) => void, private settings: Settings, private config: DuelConfig,
     private readonly progression?: ProgressionController, botz?: BotzConfig) {
-    if (botz) {this.botz = sanitizeBotzConfig(botz); this.config = botzDuelConfig(this.botz); this.botzHistory = loadBotzHistory();}
+    if (botz) {this.botz = sanitizeBotzConfig(botz); this.config = botzDuelConfig(this.botz); this.botzHistory = loadBotzHistory(this.botz.map);}
     this.cosmeticKey = JSON.stringify(progression?.getSnapshot().profile.equipped);
     this.sim = this.createSimulation();
     this.radar = new DuelRadar(host);
@@ -194,7 +197,7 @@ export class DuelEngine {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.08;
     this.renderer.domElement.dataset.duel = 'true';
-    this.renderer.domElement.setAttribute('aria-label', this.botz ? 'Aim Botz yard' : 'AI Duel arena');
+    this.renderer.domElement.setAttribute('aria-label', !this.botz ? 'AI Duel arena' : this.botz.map === 'island' ? 'Reflex island' : 'Aim Botz yard');
     this.renderer.domElement.tabIndex = 0;
     host.prepend(this.renderer.domElement);
     this.scene.background = new THREE.Color('#9baaa5');
@@ -242,7 +245,7 @@ export class DuelEngine {
     for (const object of [...this.scene.children]) if (object instanceof THREE.Mesh) this.shell.add(object);
     this.shell.scale.set(this.config.arenaScale, 1, this.config.arenaScale);
     this.scene.add(this.shell); batchStaticMeshes(this.shell);
-    if (this.botz) this.markDistances();
+    if (this.botz?.map === 'island') this.markIsland(); else if (this.botz) this.markDistances();
     this.scene.add(this.actors, this.covers, this.dynamicCovers, this.effects,this.actorShadows.group);
     this.audio.setAcoustics(this.acoustics);
     this.shotEffects = new ShotEffects(this.effects); this.viewFlashes = new MuzzleFlashes(this.viewScene, 2);
@@ -257,9 +260,9 @@ export class DuelEngine {
 
   private createSimulation() {
     const seed = seedForDesign(this.seed++, this.config.mapDesign);
-    const simulation = new DuelSimulation(this.config, seed, this.botz ? botzArena() : duelArena(seed, this.config.arenaScale),
-      this.settings.weapon, this.settings.sidearm, this.settings.primaryEnabled, this.botz);
-    this.botzRecorded = false;
+    const arena = !this.botz ? duelArena(seed, this.config.arenaScale) : this.botz.map === 'island' ? reflexArena(this.botz) : botzArena();
+    const simulation = new DuelSimulation(this.config, seed, arena, this.settings.weapon, this.settings.sidearm, this.settings.primaryEnabled, this.botz);
+    this.botzRecorded = false; this.arrivalsShown = 0;
     simulation.playerAspect = this.camera.aspect;
     return simulation;
   }
@@ -350,6 +353,30 @@ export class DuelEngine {
       label.rotation.x = -Math.PI / 2; label.position.set(-15.5, .006, z + .5); markers.add(label);
     }
     this.scene.add(markers);
+  }
+
+  /** Reflex: the island, marked on the floor, then a dark band ending in an amber line. A bot that reaches the line has
+   * reached you. */
+  private markIsland() {
+    const marks = new THREE.Group(), {x, z} = REFLEX_ISLAND, inner = REFLEX_ISLAND_HALF, outer = REFLEX_REACH, width = outer - inner;
+    const island = new THREE.MeshBasicMaterial({color: '#c9cfc4', transparent: true, opacity: .35, depthWrite: false});
+    const edge = new THREE.MeshBasicMaterial({color: '#e6e3d2', transparent: true, opacity: .7});
+    const band = new THREE.MeshBasicMaterial({color: '#28322f', transparent: true, opacity: .45, depthWrite: false});
+    const line = new THREE.MeshBasicMaterial({color: '#d2ad61'});
+    const add = (size: [number, number, number], position: [number, number, number], material: THREE.Material) => {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), material);
+      mesh.position.set(...position); marks.add(mesh);
+    };
+    add([inner * 2, .004, inner * 2], [x, .003, z], island);
+    for (const side of [-1, 1]) {
+      add([inner * 2 + .05, .006, .05], [x, .005, z + side * inner], edge);
+      add([.05, .006, inner * 2 + .05], [x + side * inner, .005, z], edge);
+      add([outer * 2, .004, width], [x, .003, z + side * (inner + width / 2)], band);
+      add([width, .004, inner * 2], [x + side * (inner + width / 2), .003, z], band);
+      add([outer * 2 + .08, .006, .08], [x, .005, z + side * outer], line);
+      add([.08, .006, outer * 2 + .08], [x + side * outer, .005, z], line);
+    }
+    this.scene.add(marks);
   }
 
   private async loadTarget() {
@@ -624,8 +651,9 @@ export class DuelEngine {
     this.botzRecorded = true;
     this.botzHistory = [{date: new Date().toISOString(), weapon: loadoutWeapon(this.settings), distance: this.botz.distance,
       movement: this.botz.movement, headshotOnly: this.botz.headshotOnly, seconds: summary.seconds, kills: summary.kills,
-      headshotRate: summary.headshotRate, accuracy: summary.accuracy, killsPerMinute: summary.killsPerMinute}, ...this.botzHistory].slice(0, 50);
-    saveBotzHistory(this.botzHistory);
+      headshotRate: summary.headshotRate, accuracy: summary.accuracy, killsPerMinute: summary.killsPerMinute,
+      ...(this.botz.map === 'island' ? {leaks: summary.leaks} : {})}, ...this.botzHistory].slice(0, 50);
+    saveBotzHistory(this.botzHistory, this.botz.map);
   }
 
   restart(continuous = false) {
@@ -1112,6 +1140,10 @@ export class DuelEngine {
         this.sim.time,this.settings.volume*.55,actor.id===0?undefined:this.soundLocation(actor.position));
     }
     this.processEvents(events);
+    if (this.sim.botzStats.leaks > this.arrivalsShown) {
+      this.arrivalsShown = this.sim.botzStats.leaks;
+      this.caption = 'BOT REACHED YOU'; this.captionUntil = this.animationClock + .8;
+    }
     this.audio.updateActions(this.sim.time);
     this.damageFeedback.update(this.animationClock, player.yaw);
     const recoil = this.settings.follow ? viewWeapon.recovery.recoil : {yaw: 0, pitch: 0};
