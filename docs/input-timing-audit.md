@@ -40,10 +40,14 @@ fractional weapon cadence. These establish internal behavior, not measured
 mouse-to-photon latency on the user's PC.
 
 Native recoil camera/viewmodel fractions remain estimates (0.45 and 0.22).
-The local agent resource contains ragdoll PHYS capsules but no independently
-verified gameplay hitbox mapping. Ragdoll shapes are not substituted for bullet
-hitboxes. Complete animated native hitboxes, current-build camera reconstruction,
-and side-by-side CS2 captures remain separate fidelity work. Existing recoil and
+The first inspection of the main DATA/PHYS blocks did not locate gameplay
+hitboxes. A subsequent all-block audit found the native `cstrike` set in embedded
+MDAT blocks: 19 bone-bound shapes with hitgroup IDs, identical across six cached
+agent resources. See `native-resource-fidelity-audit.md`. These shapes are still
+not wired into runtime bullet tracing; their animated transforms need validation.
+Ragdoll shapes are not substituted for bullet hitboxes. Complete animated native
+hitboxes, current-build camera reconstruction, and side-by-side CS2 captures
+remain separate fidelity work. Existing recoil and
 movement audit evidence is preserved; no new exact-CS2 claim is made.
 
 ## Completed checks

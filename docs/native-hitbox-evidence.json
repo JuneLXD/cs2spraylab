@@ -1,0 +1,642 @@
+{
+  "source": "research/cosmetic-actors/agent-sas.vmdl_c",
+  "sourceSha256": "90cbf5a56d58f4f3df58ea77137688583336c5daf3762ffb594f3fe046cd05a3",
+  "sourceManifest": {
+    "signature": "2000927:agents/models/ctm_sas/ctm_sas_variantg.vmdl_c"
+  },
+  "location": "Embedded MDAT.m_hitboxsets; separate from PHYS ragdoll data and DATA.m_refPhysicsHitboxData",
+  "totalMeshBlocks": 5,
+  "totalSets": 5,
+  "distinctSets": [
+    {
+      "sha256": "d7d84cd10424d41f33277f16fde34e2925d66fd822e0a1b28ba248a30c00c3e7",
+      "blocks": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "name": "cstrike",
+      "hitboxes": [
+        {
+          "m_name": "head_0",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "head_0",
+          "m_vMinBounds": [
+            -1,
+            1.8,
+            0
+          ],
+          "m_vMaxBounds": [
+            3.5,
+            0.2,
+            0
+          ],
+          "m_flShapeRadius": 4.3,
+          "m_nBoneNameHash": 1462898209,
+          "m_nGroupId": 1,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 1808069802,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 0
+        },
+        {
+          "m_name": "neck_0",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "neck_0",
+          "m_vMinBounds": [
+            0,
+            -0.4,
+            0
+          ],
+          "m_vMaxBounds": [
+            1.4,
+            -0.2,
+            0
+          ],
+          "m_flShapeRadius": 3.5,
+          "m_nBoneNameHash": 2008498285,
+          "m_nGroupId": 8,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 782516831,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 1
+        },
+        {
+          "m_name": "pelvis",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "pelvis",
+          "m_vMinBounds": [
+            -2.7,
+            1.1,
+            -3.2
+          ],
+          "m_vMaxBounds": [
+            -2.7,
+            1.1,
+            3.2
+          ],
+          "m_flShapeRadius": 6,
+          "m_nBoneNameHash": 162587645,
+          "m_nGroupId": 3,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 183027591,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 2
+        },
+        {
+          "m_name": "spine_0",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "spine_0",
+          "m_vMinBounds": [
+            1.4,
+            0.8,
+            3.1
+          ],
+          "m_vMaxBounds": [
+            1.4,
+            0.8,
+            -3.1
+          ],
+          "m_flShapeRadius": 6,
+          "m_nBoneNameHash": 2276883802,
+          "m_nGroupId": 3,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 2534724329,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 3
+        },
+        {
+          "m_name": "spine_1",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "spine_1",
+          "m_vMinBounds": [
+            3.8,
+            0.8,
+            -2.4
+          ],
+          "m_vMaxBounds": [
+            3.8,
+            0.4,
+            2.4
+          ],
+          "m_flShapeRadius": 6.5,
+          "m_nBoneNameHash": 110709982,
+          "m_nGroupId": 2,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 354078721,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 4
+        },
+        {
+          "m_name": "spine_2",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "spine_2",
+          "m_vMinBounds": [
+            4.8,
+            0.15,
+            -4.1
+          ],
+          "m_vMaxBounds": [
+            4.8,
+            0.15,
+            4.1
+          ],
+          "m_flShapeRadius": 6.2,
+          "m_nBoneNameHash": 322482005,
+          "m_nGroupId": 2,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 2046054068,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 5
+        },
+        {
+          "m_name": "spine_3",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "spine_3",
+          "m_vMinBounds": [
+            2.5,
+            -0.6,
+            -6
+          ],
+          "m_vMaxBounds": [
+            2.5,
+            -0.6,
+            6
+          ],
+          "m_flShapeRadius": 5,
+          "m_nBoneNameHash": 560415250,
+          "m_nGroupId": 2,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 1077269296,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 6
+        },
+        {
+          "m_name": "leg_upper_l",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "leg_upper_l",
+          "m_vMinBounds": [
+            1.3,
+            -0.2,
+            0
+          ],
+          "m_vMaxBounds": [
+            16.5,
+            -0.7,
+            0
+          ],
+          "m_flShapeRadius": 5,
+          "m_nBoneNameHash": 475370876,
+          "m_nGroupId": 6,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 2277339417,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 7
+        },
+        {
+          "m_name": "leg_upper_r",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "leg_upper_r",
+          "m_vMinBounds": [
+            -1.3,
+            0,
+            -0.6
+          ],
+          "m_vMaxBounds": [
+            -16.5,
+            0,
+            -0.7
+          ],
+          "m_flShapeRadius": 5,
+          "m_nBoneNameHash": 609771703,
+          "m_nGroupId": 7,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 2131957604,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 8
+        },
+        {
+          "m_name": "leg_lower_l",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "leg_lower_l",
+          "m_vMinBounds": [
+            0.1,
+            -0.4,
+            0.2
+          ],
+          "m_vMaxBounds": [
+            17,
+            -0.4,
+            0.7
+          ],
+          "m_flShapeRadius": 4,
+          "m_nBoneNameHash": 2883344725,
+          "m_nGroupId": 6,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 1263672057,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 9
+        },
+        {
+          "m_name": "leg_lower_r",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "leg_lower_r",
+          "m_vMinBounds": [
+            -0.1,
+            0,
+            -0.2
+          ],
+          "m_vMaxBounds": [
+            -17,
+            0.4,
+            -0.7
+          ],
+          "m_flShapeRadius": 4,
+          "m_nBoneNameHash": 2098558004,
+          "m_nGroupId": 7,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 2152964731,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 10
+        },
+        {
+          "m_name": "ankle_l",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "ankle_l",
+          "m_vMinBounds": [
+            0,
+            -3.43,
+            -0.52
+          ],
+          "m_vMaxBounds": [
+            8,
+            0.74,
+            0.33
+          ],
+          "m_flShapeRadius": 2.6,
+          "m_nBoneNameHash": 1135864906,
+          "m_nGroupId": 6,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 1355043623,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 11
+        },
+        {
+          "m_name": "ankle_r",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "ankle_r",
+          "m_vMinBounds": [
+            -7.98,
+            -0.75,
+            -0.27
+          ],
+          "m_vMaxBounds": [
+            -0.02,
+            3.44,
+            0.58
+          ],
+          "m_flShapeRadius": 2.6,
+          "m_nBoneNameHash": 236023422,
+          "m_nGroupId": 7,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 2456101402,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 12
+        },
+        {
+          "m_name": "hand_l",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "hand_l",
+          "m_vMinBounds": [
+            0,
+            0.3,
+            0
+          ],
+          "m_vMaxBounds": [
+            3.59,
+            1.15,
+            0.11
+          ],
+          "m_flShapeRadius": 2.3,
+          "m_nBoneNameHash": 2305728263,
+          "m_nGroupId": 4,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 2082526839,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 13
+        },
+        {
+          "m_name": "hand_r",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "hand_r",
+          "m_vMinBounds": [
+            0,
+            -0.3,
+            0.02
+          ],
+          "m_vMaxBounds": [
+            -3.44,
+            -1.17,
+            -0.09
+          ],
+          "m_flShapeRadius": 2.3,
+          "m_nBoneNameHash": 3782808388,
+          "m_nGroupId": 5,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 3327582169,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 14
+        },
+        {
+          "m_name": "arm_upper_l",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "arm_upper_l",
+          "m_vMinBounds": [
+            0,
+            0,
+            0
+          ],
+          "m_vMaxBounds": [
+            11.2,
+            0,
+            0
+          ],
+          "m_flShapeRadius": 3.3,
+          "m_nBoneNameHash": 1291619918,
+          "m_nGroupId": 4,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 2038284911,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 15
+        },
+        {
+          "m_name": "arm_lower_l",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "arm_lower_l",
+          "m_vMinBounds": [
+            0,
+            0,
+            0
+          ],
+          "m_vMaxBounds": [
+            10,
+            0,
+            0
+          ],
+          "m_flShapeRadius": 3,
+          "m_nBoneNameHash": 730178398,
+          "m_nGroupId": 4,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 4200018699,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 16
+        },
+        {
+          "m_name": "arm_upper_r",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "arm_upper_r",
+          "m_vMinBounds": [
+            0,
+            0,
+            0
+          ],
+          "m_vMaxBounds": [
+            -11.2,
+            0,
+            0
+          ],
+          "m_flShapeRadius": 3.3,
+          "m_nBoneNameHash": 1258956371,
+          "m_nGroupId": 5,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 1142910240,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 17
+        },
+        {
+          "m_name": "arm_lower_r",
+          "m_sSurfaceProperty": "playerflesh",
+          "m_sBoneName": "arm_lower_r",
+          "m_vMinBounds": [
+            0,
+            0,
+            0
+          ],
+          "m_vMaxBounds": [
+            -10,
+            0,
+            -0.5
+          ],
+          "m_flShapeRadius": 3,
+          "m_nBoneNameHash": 542075771,
+          "m_nGroupId": 5,
+          "m_nShapeType": 2,
+          "m_bTranslationOnly": false,
+          "m_CRC": 1140688592,
+          "m_cRenderColor": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "m_nHitBoxIndex": 18
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "This confirms native authored geometry and group IDs. Runtime selection, animated bone transforms, coordinate conversion, and ray results still need validation.",
+    "A capsule endpoint/radius set must not be treated as an axis-aligned box."
+  ],
+  "agents": [
+    {
+      "source": "research/cosmetic-actors/agent-ava.vmdl_c",
+      "sourceSha256": "37d673ef1cf8e1575b0a6e32f47dcdf14e42599ca22555c6db8ba9ac6acc4abf",
+      "sets": 5,
+      "distinctSets": 1,
+      "identicalToSas": true,
+      "counts": [
+        19,
+        19,
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "source": "research/cosmetic-actors/agent-dabisi.vmdl_c",
+      "sourceSha256": "39a059fbbe8173babd1a7791b743843b3e211fce0668d08f9234a98b29cfc678",
+      "sets": 3,
+      "distinctSets": 1,
+      "identicalToSas": true,
+      "counts": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "source": "research/cosmetic-actors/agent-darryl.vmdl_c",
+      "sourceSha256": "6b597d52f7a0809d772245647f3e98ec12a31053eb95ab29bca54d6e0d14d067",
+      "sets": 4,
+      "distinctSets": 1,
+      "identicalToSas": true,
+      "counts": [
+        19,
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "source": "research/cosmetic-actors/agent-ricksaw.vmdl_c",
+      "sourceSha256": "03edbc03d9508b77d893dd48c45a320a8a4a74cc2cbb17af72ab0c44267326a0",
+      "sets": 4,
+      "distinctSets": 1,
+      "identicalToSas": true,
+      "counts": [
+        19,
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "source": "research/cosmetic-actors/agent-sas.vmdl_c",
+      "sourceSha256": "90cbf5a56d58f4f3df58ea77137688583336c5daf3762ffb594f3fe046cd05a3",
+      "sets": 5,
+      "distinctSets": 1,
+      "identicalToSas": true,
+      "counts": [
+        19,
+        19,
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "source": "research/cosmetic-actors/agent-slingshot.vmdl_c",
+      "sourceSha256": "fd16354a5e13232e9905d63e920a734c2424e8673cb2fe330e907b8e6f824789",
+      "sets": 4,
+      "distinctSets": 1,
+      "identicalToSas": true,
+      "counts": [
+        19,
+        19,
+        19,
+        19
+      ]
+    }
+  ]
+}
