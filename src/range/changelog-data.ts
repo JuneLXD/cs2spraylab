@@ -136,6 +136,10 @@ export const latestChanges = {
       'Recoil now follows the native recovery cache and fractional-time rotation curve, so frequent mouse input cannot change the spray or tapping recovery.',
       'Carried recoil matches the recorded CS2 AK tap/spray sequence. Slow-firing weapons settle at the native small-angle cutoff, and spray previews use the same recovery as live shots.',
     ]},
+    {id: 'native-hitboxes', title: 'Hits follow animated targets', items: [
+      'Player bullets and Zeus in AI Duel, Aim Botz, Reflex and aim_redline now use CS2\'s nineteen bone-bound hit shapes on the pose shown on screen, including turned heads, crouches, hands and feet.',
+      'Armor, cover and respawn checks remain current. Native neck hits share chest damage and Kevlar protection; missing skeletons keep the existing fallback.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

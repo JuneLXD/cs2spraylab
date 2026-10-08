@@ -105,6 +105,21 @@ describe('event-time input and local presentation', () => {
     expect(sim.drainEvents().some(event => event.kind === 'hit')).toBe(false);
   });
 
+  it.each(['current', 'respawn', 'cover'] as const)('uses displayed capsules with %s life and cover state', scenario => {
+    const sim = combat(), shown = sim.renderSnapshot(), enemy = shown[1];
+    const point = {x: 0, y: sim.actors[0].position.y, z: enemy.position.z};
+    enemy.hitboxes = [{start: point, end: {...point}, radius: .12, group: 'arm', index: 13}];
+    sim.present(shown); sim.actors[1].position.x = 3; sim.actors[1].armor = 0;
+    if (scenario === 'respawn') sim.actors[1].generation++;
+    if (scenario === 'cover') sim.arena.solids.push({center: {x: 0, y: 1.5, z: 0}, size: {x: 3, y: 3, z: 2}, material: 'concrete'});
+    input(sim, {firePressed: true});
+    const hits = sim.drainEvents().filter(event => event.kind === 'hit');
+    if (scenario === 'current') {
+      expect(hits).toEqual([expect.objectContaining({victim: 1, group: 'arm', armorDamage: 0})]);
+      expect(sim.actors[1].health).toBeGreaterThan(460); expect(sim.actors[1].health).toBeLessThan(470);
+    } else {expect(hits).toEqual([]); expect(sim.actors[1].health).toBe(500);}
+  });
+
   it('keeps current cover authoritative for a displayed target', () => {
     const sim = combat(); sim.present(sim.renderSnapshot());
     sim.arena.solids.push({center: {x: 0, y: 1.5, z: 0}, size: {x: 3, y: 3, z: 2}, material: 'concrete'});

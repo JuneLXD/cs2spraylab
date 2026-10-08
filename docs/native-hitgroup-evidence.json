@@ -1,0 +1,237 @@
+{
+  "build": 2000927,
+  "serverSha256": "0109636a2dfc2a2ec3dee2ead2fd45322b179a111013dbfb14d5cd91855a19d0",
+  "armorFunction": "0x1596040",
+  "damageFunction": "0x15464f0",
+  "damageJumpTable": "0x823be4",
+  "method": "Offline Unicorn 2.1.4 emulation of the complete armor-group predicate with supplied armor/helmet fields; no imports or OS calls. Native damage dispatch maps groups 2 and 8 to the identical chest damage/flinch block at 0x1546f30.",
+  "damageBranches": [
+    "0x15471dd",
+    "0x1547002",
+    "0x1546f30",
+    "0x1546fbc",
+    "0x1546f08",
+    "0x1546f08",
+    "0x1546ed0",
+    "0x1546ed0",
+    "0x1546f30"
+  ],
+  "armorCases": [
+    {
+      "group": 0,
+      "armor": 0,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 0,
+      "armor": 0,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 0,
+      "armor": 100,
+      "helmet": false,
+      "protected": true
+    },
+    {
+      "group": 0,
+      "armor": 100,
+      "helmet": true,
+      "protected": true
+    },
+    {
+      "group": 1,
+      "armor": 0,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 1,
+      "armor": 0,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 1,
+      "armor": 100,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 1,
+      "armor": 100,
+      "helmet": true,
+      "protected": true
+    },
+    {
+      "group": 2,
+      "armor": 0,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 2,
+      "armor": 0,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 2,
+      "armor": 100,
+      "helmet": false,
+      "protected": true
+    },
+    {
+      "group": 2,
+      "armor": 100,
+      "helmet": true,
+      "protected": true
+    },
+    {
+      "group": 3,
+      "armor": 0,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 3,
+      "armor": 0,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 3,
+      "armor": 100,
+      "helmet": false,
+      "protected": true
+    },
+    {
+      "group": 3,
+      "armor": 100,
+      "helmet": true,
+      "protected": true
+    },
+    {
+      "group": 4,
+      "armor": 0,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 4,
+      "armor": 0,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 4,
+      "armor": 100,
+      "helmet": false,
+      "protected": true
+    },
+    {
+      "group": 4,
+      "armor": 100,
+      "helmet": true,
+      "protected": true
+    },
+    {
+      "group": 5,
+      "armor": 0,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 5,
+      "armor": 0,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 5,
+      "armor": 100,
+      "helmet": false,
+      "protected": true
+    },
+    {
+      "group": 5,
+      "armor": 100,
+      "helmet": true,
+      "protected": true
+    },
+    {
+      "group": 6,
+      "armor": 0,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 6,
+      "armor": 0,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 6,
+      "armor": 100,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 6,
+      "armor": 100,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 7,
+      "armor": 0,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 7,
+      "armor": 0,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 7,
+      "armor": 100,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 7,
+      "armor": 100,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 8,
+      "armor": 0,
+      "helmet": false,
+      "protected": false
+    },
+    {
+      "group": 8,
+      "armor": 0,
+      "helmet": true,
+      "protected": false
+    },
+    {
+      "group": 8,
+      "armor": 100,
+      "helmet": false,
+      "protected": true
+    },
+    {
+      "group": 8,
+      "armor": 100,
+      "helmet": true,
+      "protected": true
+    }
+  ]
+}

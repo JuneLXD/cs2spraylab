@@ -21,6 +21,7 @@ export const idleCommand = (): ActorCommand => ({forward: 0, side: 0, walk: fals
   yawDelta: 0, pitchDelta: 0, fireHeld: false, firePressed: false, reloadPressed: false});
 export type Hitgroup = 'head' | 'chest' | 'stomach' | 'arm' | 'leg';
 export type DuelActorSnapshot = {
+  hitboxes?: readonly import('./hitboxes').HitCapsule[];
   id: ActorId;
   generation: number;
   side: 'player' | 'enemy';

@@ -10,6 +10,7 @@ import {randomStream} from './rng';
 import {interpolateActors} from './presentation';
 import {createBotTraits} from './skill';
 import {idleCommand, type ActorCommand, type DuelActorSnapshot, type DuelEvent, type Hitgroup} from './types';
+import {traceHitboxes} from './hitboxes';
 import {DuelWeaponState, type FiredRound} from './weapon-state';
 import {verticalContact} from '../actor-collision';
 import {TERRAIN_RULES} from '../terrain';
@@ -726,6 +727,7 @@ export class DuelSimulation {
       // health and armor. A respawn must never inherit its previous life's hit.
       const shown = shooter.id === 0 ? this.displayed?.[current.id] : undefined;
       return {...current, ...(shown ? {position: shown.position, feet: shown.feet,
+        hitboxes: shown.hitboxes,
         duckAmount: shown.duckAmount, yaw: shown.yaw, pitch: shown.pitch,
         alive: current.alive && shown.alive && current.generation === shown.generation} : {}),
         armor:Math.max(0,current.armor-pending.filter(hit=>hit.victim.id===current.id).reduce((sum,hit)=>sum+hit.event.armorDamage,0))};
@@ -741,6 +743,7 @@ export class DuelSimulation {
       for(const target of targets) {
         if(!target.alive||target.id===shooter.id)continue;
         const hit=fired.kind==='melee'?traceMelee(fired.origin,fired.direction,target,Math.min(range,nearest.distance)):
+          target.hitboxes !== undefined ? traceHitboxes(fired.origin,fired.direction,target.hitboxes,Math.min(range,nearest.distance)) :
           traceActor(fired.origin,fired.direction,{...target.position,y:target.feet},target.duckAmount,Math.min(range,nearest.distance));
         if(hit.group&&hit.distance<nearest.distance)nearest={distance:hit.distance,target,group:hit.group};
       }

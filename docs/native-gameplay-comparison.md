@@ -182,6 +182,42 @@ residual recoil through long bolt/pump cycles. Static spray previews and
 imported-capture impulse fitting use the same sampler as live firing. Prediction
 clones the cache, so guidance cannot advance or rebase live recoil state.
 
+## Animated hitboxes (fourth pass)
+
+The player's bullet and Zeus traces in Duel, Aim Botz, Reflex and aim_redline
+now use all 19 extracted `cstrike` capsules, attached to the actual exported
+bones. The renderer captures world-space endpoints after rendering and publishes
+them with the displayed actor generation. This follows the displayed animation
+even when distant animation sampling is throttled. Two pose buffers per actor
+keep the preceding frame intact without allocating capsules every frame.
+
+`tools/verify-native-hitbox-space.mjs` reconstructs native bone transforms from
+inverse-bind matrices in all embedded MDAT mesh blocks. It compares those
+transforms with the GLB node hierarchies for the target and six agent exports.
+All 133 bone comparisons agree: maximum position error is 0.0000216 metres,
+and the local transformation is the 0.0254 unit scale to within 0.0000165.
+No additional axis swap or rotation belongs on the local capsule endpoints.
+Source and exported asset hashes, native endpoints and measured errors are
+retained in `native-hitbox-space-fixture.json`.
+
+The neck's native hitgroup 8 maps to the same damage/flinch branch as chest
+hitgroup 2 in server routine `0x15464f0`. Offline emulation of the armor predicate
+at `0x1596040` verifies 36 armor/helmet/group combinations, including Kevlar
+protection on the neck without a helmet. `tools/verify-native-hitgroups.py`
+and `native-hitgroup-evidence.json` pin those results to server SHA-256
+`0109636a2dfc2a2ec3dee2ead2fd45322b179a111013dbfb14d5cd91855a19d0`.
+The trainer therefore reports neck hits in its existing chest category.
+
+Capsule rays retain entry, exit and the nearest anatomical group. Penetration
+uses the full actor chord, preserving the existing policy for gaps between
+limbs. Current armor/health and current cover remain authoritative; a displayed
+pose cannot hit a new respawn generation. Missing required bones fall back as
+a complete actor to the previous analytic shape set. Bot shots and headless
+simulation retain analytic shapes; the range retains mesh-based scoring.
+Melee hulls and movement collision are unchanged. This matches authored shapes
+to the visible imported animation; it does not reproduce Source 2's full
+animation graph or network lag compensation.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current
@@ -190,9 +226,9 @@ punch values. The native camera multiplies the doubled punch returned by its
 sampler by 0.45, confirming the existing camera fraction; the visible recovery
 trajectory still needs a video comparison. The weapon fraction remains an
 estimate.
-The extracted native hitboxes still need bone-transform and trace validation
-before replacing analytic runtime hit shapes. The retained recordings provide
-references for that work; neither recording a 60 Hz video nor decoding a
+Native hitboxes now follow the imported animation in the rendered Duel modes.
+Full native animation reconstruction and the range's mesh-height hitgroup
+classification remain separate work; neither recording a 60 Hz video nor decoding a
 64 Hz demo establishes mouse-to-photon latency or exact Source 2 equivalence.
 
 ## Validation of this change
@@ -232,3 +268,14 @@ references for that work; neither recording a 60 Hz video nor decoding a
 - Full unit suite: 2,051 pass; only the existing missing fallback model fails.
   One worker and a 30-second case timeout avoided the earlier host-load timeouts.
 - Production build and both Chromium input/firing checks pass.
+
+### Hitbox validation
+
+- 22 new/expanded unit cases cover native definitions, seven exported skeletons,
+  36 armor cases, rotated rays, tangencies, starts inside, penetrated limbs,
+  collateral hits, pose buffering and live generation/cover rules.
+- Full suite: 2,073 pass; only the known missing fallback asset fails.
+- Chromium real-click checks pass on rendered standing, half-crouched and
+  crouched/turned heads, including a target that has moved since that frame.
+- Production build passes. Animation buffers are pooled per actor and released
+  on rebuild, respawn and engine disposal.

@@ -3,6 +3,7 @@ import {equipmentStats, type Equipment} from '../equipment';
 import {pointOnRay, traceActor} from './geometry';
 import type {Hitgroup} from './types';
 import nativeSurfaces from './native-surface-fixture.json';
+import {traceHitboxes, type HitCapsule} from './hitboxes';
 
 export type PenetrationMaterial = 'concrete' | 'metal' | 'wood' | 'plastic' | 'glass' | 'grate' | 'water' | 'flesh';
 export type PenetrationSolid = {
@@ -12,6 +13,7 @@ export type PenetrationSolid = {
   shape?: {kind: 'ramp'; axis: 'x' | 'z'; highSide: -1 | 1};
 };
 export type PenetrationActor = {
+  hitboxes?: readonly HitCapsule[];
   id: number; side: string; position: Vec; feet: number; alive: boolean;
   duckAmount?: number; crouched?: boolean; armor?: number; helmet?: boolean;
 };
@@ -106,6 +108,10 @@ export function raySolidInterval(origin: Vec, direction: Vec, solid: Penetration
 }
 
 function actorInterval(origin: Vec, direction: Vec, actor: PenetrationActor, range: number) {
+  if (actor.hitboxes !== undefined) {
+    const hit = traceHitboxes(origin, direction, actor.hitboxes, range);
+    return hit.group ? {entry: hit.distance, exit: hit.exitDistance, group: hit.group} : undefined;
+  }
   const feet = {...actor.position, y: actor.feet}, duck = actor.duckAmount ?? Number(actor.crouched ?? false);
   const hit = traceActor(origin, direction, feet, duck, range);
   if (!hit.group || !Number.isFinite(hit.distance)) return;

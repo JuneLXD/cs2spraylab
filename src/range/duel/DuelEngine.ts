@@ -18,6 +18,7 @@ import {acousticSolids, duelArena, traceSolid, type Arena, type Solid} from './g
 import {DuelSimulation} from './simulation';
 import type {DuelActorSnapshot, DuelEvent} from './types';
 import {DuelAnimator, nativeGestureClips} from './animation';
+import {NativeHitboxPose} from './native-hitboxes';
 import {batchStaticMeshes, disposeResources, disposeSkeletons} from './render-resources';
 import {fullyOccluded} from './visibility';
 import {muzzleAnchor, viewMuzzleToWorld} from './tracers';
@@ -118,6 +119,7 @@ export class DuelEngine {
   private kills = 0;
   private damage = 0;
   private models = new Map<number, THREE.Group>();
+  private hitboxPoses = new Map<number, NativeHitboxPose>();
   private heldWeapons = new Map<number, THREE.Object3D>();
   private animators = new Map<number, DuelAnimator>();
   private gestureClips=new Map<Equipment,THREE.AnimationClip[]>();
@@ -455,6 +457,7 @@ export class DuelEngine {
     this.botMuzzles.clear();
     disposeSkeletons(this.actors);
     this.actors.clear(); this.models.clear(); this.heldWeapons.clear(); this.generations.clear();
+    this.hitboxPoses.clear();
     if (!this.targetScene) return;
     for (const actor of this.sim.snapshot().slice(1)) this.buildActor(actor);
   }
@@ -462,6 +465,8 @@ export class DuelEngine {
   private buildActor(actor: DuelActorSnapshot) {
     const root = new THREE.Group();
     const model = cloneSkeleton(this.targetScene!);
+    const hitboxes = NativeHitboxPose.bind(model);
+    if (hitboxes) this.hitboxPoses.set(actor.id, hitboxes);
     const held = this.attachWorldWeapon(model, actor.equipment);
     if (held) {held.visible = actor.alive; this.heldWeapons.set(actor.id, held);}
     const muzzle = held ? muzzleAnchor(held) : undefined;
@@ -480,6 +485,7 @@ export class DuelEngine {
     this.animators.get(actor.id)?.dispose(); this.animators.delete(actor.id);
     if (old) {disposeSkeletons(old); this.actors.remove(old);}
     this.models.delete(actor.id); this.heldWeapons.delete(actor.id); this.botMuzzles.delete(actor.id);
+    this.hitboxPoses.delete(actor.id);
     this.deaths.delete(actor.id); this.animationTimes.delete(actor.id);
     if (this.targetScene) this.buildActor(actor);
   }
@@ -1225,6 +1231,7 @@ export class DuelEngine {
     const viewport = viewmodelViewport(this.width, this.height);
     this.renderer.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
     this.renderer.render(this.viewScene, this.viewCamera);
+    for (const actor of snapshots) if (actor.alive) actor.hitboxes = this.hitboxPoses.get(actor.id)?.capture();
     this.sim.present(snapshots);
     const oldResolution = this.metrics.adaptive;
     if (this.metrics.sample(dt, performance.now() - cpuStart, this.settings.quality === 'auto', active, this.settings.frameLimit)) {
@@ -1246,6 +1253,7 @@ export class DuelEngine {
       void model.then(entry => {entry.animation.dispose(); disposeResources([entry.scene]);}, () => undefined);
     this.viewModels.clear(); this.retiredViewModels = [];
     this.gestureClips.clear();
+    this.hitboxPoses.clear();
     this.meter.dispose();
     this.radar.dispose();
     this.actorShadows.dispose();

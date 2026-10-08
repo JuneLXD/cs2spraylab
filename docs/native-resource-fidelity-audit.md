@@ -159,3 +159,11 @@ verification and controlled native recordings are complete. A native client run 
 host cannot establish click-to-photon latency on the user's Windows/RTX 4090
 machine. Ordinary screen capture also cannot measure the physical input or
 monitor scanout portions of that latency.
+
+## Runtime follow-up, October 8
+
+The 19 authored capsules are now bound to rendered Duel-mode skeletons. Native
+inverse-bind transforms were verified against all seven imported models, and
+the current server's neck/chest grouping and armor coverage were checked with
+offline arithmetic. See [the gameplay comparison](native-gameplay-comparison.md#animated-hitboxes-fourth-pass)
+for the runtime scope, generation checks, retained evidence and limitations.

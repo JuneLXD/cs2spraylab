@@ -1,0 +1,330 @@
+{
+  "sourceSha256": "90cbf5a56d58f4f3df58ea77137688583336c5daf3762ffb594f3fe046cd05a3",
+  "source": "research/cosmetic-actors/agent-sas.vmdl_c",
+  "unitScale": 0.0254,
+  "hitboxes": [
+    {
+      "bone": "head_0",
+      "group": "head",
+      "nativeGroup": 1,
+      "index": 0,
+      "start": [
+        -1,
+        1.8,
+        0
+      ],
+      "end": [
+        3.5,
+        0.2,
+        0
+      ],
+      "radius": 4.3
+    },
+    {
+      "bone": "neck_0",
+      "group": "chest",
+      "nativeGroup": 8,
+      "index": 1,
+      "start": [
+        0,
+        -0.4,
+        0
+      ],
+      "end": [
+        1.4,
+        -0.2,
+        0
+      ],
+      "radius": 3.5
+    },
+    {
+      "bone": "pelvis",
+      "group": "stomach",
+      "nativeGroup": 3,
+      "index": 2,
+      "start": [
+        -2.7,
+        1.1,
+        -3.2
+      ],
+      "end": [
+        -2.7,
+        1.1,
+        3.2
+      ],
+      "radius": 6
+    },
+    {
+      "bone": "spine_0",
+      "group": "stomach",
+      "nativeGroup": 3,
+      "index": 3,
+      "start": [
+        1.4,
+        0.8,
+        3.1
+      ],
+      "end": [
+        1.4,
+        0.8,
+        -3.1
+      ],
+      "radius": 6
+    },
+    {
+      "bone": "spine_1",
+      "group": "chest",
+      "nativeGroup": 2,
+      "index": 4,
+      "start": [
+        3.8,
+        0.8,
+        -2.4
+      ],
+      "end": [
+        3.8,
+        0.4,
+        2.4
+      ],
+      "radius": 6.5
+    },
+    {
+      "bone": "spine_2",
+      "group": "chest",
+      "nativeGroup": 2,
+      "index": 5,
+      "start": [
+        4.8,
+        0.15,
+        -4.1
+      ],
+      "end": [
+        4.8,
+        0.15,
+        4.1
+      ],
+      "radius": 6.2
+    },
+    {
+      "bone": "spine_3",
+      "group": "chest",
+      "nativeGroup": 2,
+      "index": 6,
+      "start": [
+        2.5,
+        -0.6,
+        -6
+      ],
+      "end": [
+        2.5,
+        -0.6,
+        6
+      ],
+      "radius": 5
+    },
+    {
+      "bone": "leg_upper_l",
+      "group": "leg",
+      "nativeGroup": 6,
+      "index": 7,
+      "start": [
+        1.3,
+        -0.2,
+        0
+      ],
+      "end": [
+        16.5,
+        -0.7,
+        0
+      ],
+      "radius": 5
+    },
+    {
+      "bone": "leg_upper_r",
+      "group": "leg",
+      "nativeGroup": 7,
+      "index": 8,
+      "start": [
+        -1.3,
+        0,
+        -0.6
+      ],
+      "end": [
+        -16.5,
+        0,
+        -0.7
+      ],
+      "radius": 5
+    },
+    {
+      "bone": "leg_lower_l",
+      "group": "leg",
+      "nativeGroup": 6,
+      "index": 9,
+      "start": [
+        0.1,
+        -0.4,
+        0.2
+      ],
+      "end": [
+        17,
+        -0.4,
+        0.7
+      ],
+      "radius": 4
+    },
+    {
+      "bone": "leg_lower_r",
+      "group": "leg",
+      "nativeGroup": 7,
+      "index": 10,
+      "start": [
+        -0.1,
+        0,
+        -0.2
+      ],
+      "end": [
+        -17,
+        0.4,
+        -0.7
+      ],
+      "radius": 4
+    },
+    {
+      "bone": "ankle_l",
+      "group": "leg",
+      "nativeGroup": 6,
+      "index": 11,
+      "start": [
+        0,
+        -3.43,
+        -0.52
+      ],
+      "end": [
+        8,
+        0.74,
+        0.33
+      ],
+      "radius": 2.6
+    },
+    {
+      "bone": "ankle_r",
+      "group": "leg",
+      "nativeGroup": 7,
+      "index": 12,
+      "start": [
+        -7.98,
+        -0.75,
+        -0.27
+      ],
+      "end": [
+        -0.02,
+        3.44,
+        0.58
+      ],
+      "radius": 2.6
+    },
+    {
+      "bone": "hand_l",
+      "group": "arm",
+      "nativeGroup": 4,
+      "index": 13,
+      "start": [
+        0,
+        0.3,
+        0
+      ],
+      "end": [
+        3.59,
+        1.15,
+        0.11
+      ],
+      "radius": 2.3
+    },
+    {
+      "bone": "hand_r",
+      "group": "arm",
+      "nativeGroup": 5,
+      "index": 14,
+      "start": [
+        0,
+        -0.3,
+        0.02
+      ],
+      "end": [
+        -3.44,
+        -1.17,
+        -0.09
+      ],
+      "radius": 2.3
+    },
+    {
+      "bone": "arm_upper_l",
+      "group": "arm",
+      "nativeGroup": 4,
+      "index": 15,
+      "start": [
+        0,
+        0,
+        0
+      ],
+      "end": [
+        11.2,
+        0,
+        0
+      ],
+      "radius": 3.3
+    },
+    {
+      "bone": "arm_lower_l",
+      "group": "arm",
+      "nativeGroup": 4,
+      "index": 16,
+      "start": [
+        0,
+        0,
+        0
+      ],
+      "end": [
+        10,
+        0,
+        0
+      ],
+      "radius": 3
+    },
+    {
+      "bone": "arm_upper_r",
+      "group": "arm",
+      "nativeGroup": 5,
+      "index": 17,
+      "start": [
+        0,
+        0,
+        0
+      ],
+      "end": [
+        -11.2,
+        0,
+        0
+      ],
+      "radius": 3.3
+    },
+    {
+      "bone": "arm_lower_r",
+      "group": "arm",
+      "nativeGroup": 5,
+      "index": 18,
+      "start": [
+        0,
+        0,
+        0
+      ],
+      "end": [
+        -10,
+        0,
+        -0.5
+      ],
+      "radius": 3
+    }
+  ]
+}
