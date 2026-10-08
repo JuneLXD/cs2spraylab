@@ -2,7 +2,7 @@ import {UNIT, type Vec} from '../actor-physics';
 import {weaponIds} from '../config';
 import type {Equipment} from '../equipment';
 import {sanitizeDuelConfig, type DuelConfig} from './config';
-import {canFitInArena, traceSolid, type Arena, type Solid} from './geometry';
+import {canFitInArena, traceSolid, type Arena, type Solid, type WorkshopMap, type WorkshopSpawn} from './geometry';
 import {randomStream} from './rng';
 
 /**
@@ -16,8 +16,9 @@ export type BotzMovement = 'static' | 'strafe';
 export type BotzCrouch = 'never' | 'some' | 'always';
 /** sv_infinite_ammo: 'reserve' = 2 (reload, never run dry), 'magazine' = 1 (never reload). */
 export type BotzAmmo = 'off' | 'reserve' | 'magazine';
-/** 'yard' is Aim Botz; 'island' is Fast Aim / Reflex (reflex.ts), where bots rush you. */
-export type BotzMap = 'yard' | 'island';
+/** 'yard' is Aim Botz; 'island' is Fast Aim / Reflex (reflex.ts), where bots rush you; 'redline' is Aim Botz on the
+ * imported aim_redline map (workshop.ts). */
+export type BotzMap = 'yard' | 'island' | 'redline';
 /** Reflex: which gaps bots come through, all eight or the three in front of you. */
 export type BotzApproach = 'around' | 'front';
 export type BotzConfig = {
@@ -60,9 +61,12 @@ const finite = (value: unknown, fallback: number, min: number, max: number) => t
   ? Math.max(min, Math.min(max, value)) : fallback;
 const pick = <T extends string>(value: unknown, options: readonly T[], fallback: T): T => options.find(option => option === value) ?? fallback;
 
+/** Aim Botz on aim_redline: bots stand around the warehouse floor, on crates and on the catwalk. */
+export const redlineDefaults: BotzConfig = {...botzDefaults, map: 'redline'};
+
 export function sanitizeBotzConfig(raw: unknown): BotzConfig {
   const input = record(raw);
-  const defaults = input.map === 'island' ? reflexDefaults : botzDefaults;
+  const defaults = input.map === 'island' ? reflexDefaults : input.map === 'redline' ? redlineDefaults : botzDefaults;
   const weapon = input.weapon === 'knife' || weaponIds.some(id => id === input.weapon) ? input.weapon as Equipment : defaults.weapon;
   const session = typeof input.sessionSeconds === 'number' && botzSessionLengths.some(length => length === input.sessionSeconds)
     ? input.sessionSeconds : defaults.sessionSeconds;
@@ -156,6 +160,59 @@ export class BotzSpawner {
   }
 }
 
+/** Aim Botz on an imported map: bots stand on the map's spots in front of the spawn, at the chosen distances and in
+ * view. Spots on crates and catwalks count as ledges. */
+export class WorkshopSpawner {
+  private readonly random: () => number;
+  private readonly spots: readonly (readonly [number, number, number])[];
+  /** Fences, glass and player clips let bullets through but still hide a bot: a spot needs a clear line of sight. */
+  private readonly sight: Arena;
+  constructor(private readonly config: BotzConfig, arena: Arena, seed: number, private readonly spawn: WorkshopSpawn) {
+    this.random = randomStream(seed, 'botz:workshop');
+    this.sight = {...arena, solids: arena.solids.map(solid => solid.shotBlocking === false ? {...solid, shotBlocking: true} : solid)};
+    const [near, far] = botzDistanceBands[config.distance];
+    this.spots = (arena.workshop?.spots ?? []).filter(([x, feet, z]) => {
+      const dx = x - spawn.x, dz = z - spawn.z, distance = Math.hypot(dx, dz);
+      // Within 70 degrees either side of the way the spawn faces (-sin yaw, -cos yaw).
+      return distance >= near && distance <= far && (config.elevated || feet - spawn.y < .4) &&
+        (-Math.sin(spawn.yaw) * dx - Math.cos(spawn.yaw) * dz) / distance >= Math.cos(70 * Math.PI / 180);
+    });
+  }
+
+  next(occupied: readonly Vec[], previous?: Vec, viewer?: Vec): BotzSpawn {
+    if (!this.spots.length) throw new Error('No bot spots on this map in that distance band');
+    const eye = viewer ?? {x: this.spawn.x, y: this.spawn.y + EYE, z: this.spawn.z};
+    // Spacing gives way before sight does.
+    for (let attempt = 0; attempt < 200; attempt++) {
+      const [x, feet, z] = this.spots[Math.floor(this.random() * this.spots.length)], elevated = feet - this.spawn.y >= .4;
+      if (attempt < 100 && (occupied.some(other => Math.hypot(other.x - x, other.z - z) < (elevated ? 1.2 : SPACING)) ||
+        previous && Math.hypot(previous.x - x, previous.z - z) < 3) || !this.visible(eye, {x, y: feet + EYE, z})) continue;
+      return {x, z, feet, elevated};
+    }
+    const [x, feet, z] = this.spots[Math.floor(this.random() * this.spots.length)];
+    return {x, z, feet, elevated: feet - this.spawn.y >= .4};
+  }
+
+  private visible(from: Vec, head: Vec) {
+    const dx = head.x - from.x, dy = head.y - from.y, dz = head.z - from.z, distance = Math.hypot(dx, dy, dz);
+    return distance > .01 && !Number.isFinite(traceSolid(from, {x: dx / distance, y: dy / distance, z: dz / distance}, this.sight, distance - .05).distance);
+  }
+}
+
+/** Where Aim Botz starts you on an imported map: its Aim Botz spot (the nearest floor spot to it), or else the floor
+ * spawn in the middle of a team's row, facing the other side. */
+export function workshopPlayerSpawn(map: Pick<WorkshopMap, 'spawns' | 'spots' | 'aimBotz'>, team: WorkshopSpawn['team'] = 't'): WorkshopSpawn {
+  if (map.aimBotz) {
+    const {x: ax, z: az, yaw} = map.aimBotz;
+    const [x, y, z] = [...map.spots].filter(spot => spot[1] < .05).sort((a, b) => Math.hypot(a[0] - ax, a[2] - az) - Math.hypot(b[0] - ax, b[2] - az))[0];
+    return {team, x, y, z, yaw};
+  }
+  const spawns = map.spawns, row = spawns.filter(spawn => spawn.team === team && spawn.y < .5);
+  const pool = row.length ? row : spawns;
+  const centre = {x: pool.reduce((sum, spawn) => sum + spawn.x, 0) / pool.length, z: pool.reduce((sum, spawn) => sum + spawn.z, 0) / pool.length};
+  return [...pool].sort((a, b) => Math.hypot(a.x - centre.x, a.z - centre.z) - Math.hypot(b.x - centre.x, b.z - centre.z))[0];
+}
+
 /** ADAD strafing: run one way, sometimes stop, then reverse. */
 export class BotzStrafe {
   private direction: -1 | 0 | 1 = 0;
@@ -188,7 +245,8 @@ export function botzSummary(stats: BotzStats, seconds: number, sessionSeconds: n
 
 export type BotzHistory = {date: string; weapon: Equipment; distance: BotzDistance; movement: BotzMovement; headshotOnly: boolean;
   seconds: number; kills: number; headshotRate: number; accuracy: number; killsPerMinute: number; leaks?: number};
-const historyKeys: Record<BotzMap, string> = {yard: 'spraylab.botz.history.v1', island: 'spraylab.reflex.history.v1'};
+const historyKeys: Record<BotzMap, string> = {yard: 'spraylab.botz.history.v1', island: 'spraylab.reflex.history.v1',
+  redline: 'spraylab.redline.history.v1'};
 
 export function loadBotzHistory(map: BotzMap = 'yard'): BotzHistory[] {
   try {

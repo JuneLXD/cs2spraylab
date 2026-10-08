@@ -102,6 +102,11 @@ export const latestChanges = {
       'Kill each bot before it reaches the line around your island. One that gets there is counted and starts again, as on the map; bots never attack.',
       'Choose the gap distance, all eight gaps or the three in front, whether bots strafe or run straight at you, how they crouch, their weapon and respawn delay. Kills, accuracy and arrivals are tracked per session.',
     ]},
+    {id: 'aim-redline', title: 'aim_redline', items: [
+      'A new aim_redline drill: Aim Botz on BOT Reed\'s aim_redline workshop map. Bots stand around the warehouse floor, on the crate stacks and up on the catwalk, always in clear view, and respawn after each kill.',
+      'The map\'s own collision, spawns and layout come from its workshop file. Until CS2\'s stock textures are imported, its surfaces are drawn in flat colours.',
+      'Big maps stay fast: movement, bullets and sight lines only test the collision near them.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

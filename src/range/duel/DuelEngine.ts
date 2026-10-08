@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {MeshoptDecoder} from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import {clone as cloneSkeleton} from 'three/examples/jsm/utils/SkeletonUtils.js';
 import {DEG, UNIT, type Vec} from '../actor-physics';
 import {RangeAudio} from '../audio';
@@ -11,7 +12,7 @@ import {attachBindInput} from '../keybinds/dom-input';
 import {protectedCodes} from '../keybinds/profile';
 import {VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelFov, viewmodelOffset, viewmodelViewport} from '../viewmodel';
 import {botConfig, type DuelConfig} from './config';
-import {duelArena, traceSolid} from './geometry';
+import {acousticSolids, duelArena, traceSolid, type Arena, type Solid} from './geometry';
 import {DuelSimulation} from './simulation';
 import type {DuelActorSnapshot, DuelEvent} from './types';
 import {DuelAnimator, nativeGestureClips} from './animation';
@@ -51,6 +52,8 @@ export type DuelStatus = {
   phase: 'ready' | 'fighting' | 'result'; paused: boolean; outcome?: 'won' | 'lost' | 'draw';
   health: number; armor: number; ammo: number; reloading: boolean; enemies: number;
   seconds: number; kills: number; damage: number; input: string; caption: string;
+  /** An imported map's model is still loading. */
+  mapLoading?: boolean;
   shortcutProtected: boolean;
   nextRoundIn: number;
   equipped?: Equipment; review?: DuelReview; history?: DuelHistory[];
@@ -176,11 +179,14 @@ export class DuelEngine {
   /** Reflex arrivals already shown as a caption. */
   private arrivalsShown = 0;
   private generations = new Map<number, number>();
+  private workshopModel?: THREE.Group;
 
   constructor(private readonly host: HTMLElement, private readonly crosshair: HTMLElement,
     private readonly onStatus: (status: DuelStatus) => void,
     private readonly onError: (message: string) => void, private settings: Settings, private config: DuelConfig,
-    private readonly progression?: ProgressionController, botz?: BotzConfig) {
+    private readonly progression?: ProgressionController, botz?: BotzConfig,
+    /** An imported map (workshop.ts) for Aim Botz: drawn from its model instead of the hall. */
+    private readonly workshop?: Arena) {
     if (botz) {this.botz = sanitizeBotzConfig(botz); this.config = botzDuelConfig(this.botz); this.botzHistory = loadBotzHistory(this.botz.map);}
     this.cosmeticKey = JSON.stringify(progression?.getSnapshot().profile.equipped);
     this.sim = this.createSimulation();
@@ -197,12 +203,14 @@ export class DuelEngine {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.08;
     this.renderer.domElement.dataset.duel = 'true';
-    this.renderer.domElement.setAttribute('aria-label', !this.botz ? 'AI Duel arena' : this.botz.map === 'island' ? 'Reflex island' : 'Aim Botz yard');
+    this.renderer.domElement.setAttribute('aria-label', !this.botz ? 'AI Duel arena' : this.botz.map === 'island' ? 'Reflex island'
+      : this.workshop?.workshop ? this.workshop.workshop.name : 'Aim Botz yard');
     this.renderer.domElement.tabIndex = 0;
     host.prepend(this.renderer.domElement);
-    this.scene.background = new THREE.Color('#9baaa5');
+    // An imported map is seen through its windows: a pale sky, and no haze inside a 40 m hall.
+    this.scene.background = new THREE.Color(this.workshop ? '#c9d4d8' : '#9baaa5');
     // The Aim Botz yard is 48 m deep: keep the far bots out of the haze.
-    this.scene.fog = this.botz ? new THREE.Fog('#9baaa5', 60, 120) : new THREE.Fog('#9baaa5', 36, 75);
+    this.scene.fog = this.workshop ? new THREE.Fog('#c9d4d8', 90, 180) : this.botz ? new THREE.Fog('#9baaa5', 60, 120) : new THREE.Fog('#9baaa5', 36, 75);
     this.scene.add(new THREE.HemisphereLight('#f5f7ef', '#4d5d55', 2));
     this.scene.add(new THREE.AmbientLight('#bec9c3', .7));
     const sun = new THREE.DirectionalLight('#fff4dc', 2.4);
@@ -210,6 +218,22 @@ export class DuelEngine {
     this.viewScene.add(new THREE.HemisphereLight('#ffffff', '#66675b', 1.4));
     const viewLight = new THREE.DirectionalLight('#fff2dd', 2); viewLight.position.set(-2, 4, 2); this.viewScene.add(viewLight);
     this.viewScene.add(this.viewRoot);
+    if (this.workshop) this.loadWorkshopModel(); else this.buildHall();
+    if (this.botz?.map === 'island') this.markIsland(); else if (this.botz?.map === 'yard') this.markDistances();
+    this.scene.add(this.actors, this.covers, this.dynamicCovers, this.effects,this.actorShadows.group);
+    this.audio.setAcoustics(this.acoustics);
+    this.shotEffects = new ShotEffects(this.effects); this.viewFlashes = new MuzzleFlashes(this.viewScene, 2);
+    this.rebuildCovers();
+    this.bindInput();
+    this.observer = new ResizeObserver(() => this.resize()); this.observer.observe(host);
+    this.resize();
+    void this.loadTarget(); void this.loadViewModel(loadoutWeapon(settings));
+    this.report();
+    this.frame = requestAnimationFrame(time => this.tick(time));
+  }
+
+  /** The duel hall: floor, walls, lamps and trim, scaled to the arena. */
+  private buildHall() {
     const floorMaterial = surface('#a5aea3');
     const floorTexture = new THREE.TextureLoader().load('/textures/floor.webp');
     floorTexture.colorSpace = THREE.SRGBColorSpace;
@@ -245,22 +269,38 @@ export class DuelEngine {
     for (const object of [...this.scene.children]) if (object instanceof THREE.Mesh) this.shell.add(object);
     this.shell.scale.set(this.config.arenaScale, 1, this.config.arenaScale);
     this.scene.add(this.shell); batchStaticMeshes(this.shell);
-    if (this.botz?.map === 'island') this.markIsland(); else if (this.botz) this.markDistances();
-    this.scene.add(this.actors, this.covers, this.dynamicCovers, this.effects,this.actorShadows.group);
-    this.audio.setAcoustics(this.acoustics);
-    this.shotEffects = new ShotEffects(this.effects); this.viewFlashes = new MuzzleFlashes(this.viewScene, 2);
-    this.rebuildCovers();
-    this.bindInput();
-    this.observer = new ResizeObserver(() => this.resize()); this.observer.observe(host);
-    this.resize();
-    void this.loadTarget(); void this.loadViewModel(loadoutWeapon(settings));
-    this.report();
-    this.frame = requestAnimationFrame(time => this.tick(time));
+  }
+
+  /** An imported map's world, exported by tools/import-map.mjs. It never moves, so its matrices are set once. */
+  private loadWorkshopModel() {
+    const map = this.workshop?.workshop;
+    if (!map) return;
+    const loader = new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);
+    loader.loadAsync(map.model).then(({scene}) => {
+      if (this.disposed) {disposeResources([scene]); return;}
+      scene.traverse(object => {object.matrixAutoUpdate = false; object.updateMatrix();});
+      scene.updateMatrixWorld(true);
+      this.scene.add(scene); this.workshopModel = scene;
+      this.report();
+    }).catch(() => {
+      if (!this.disposed) this.onError(`The ${map.name} map model is unavailable. Run node tools/import-map.mjs with the map's .vpk, then reload.`);
+    });
+  }
+
+  /** Ragdolls test at most 128 boxes: on an imported map, the ones nearest the body. */
+  private deathBoxes(near?: Vec) {
+    const boxes = this.sim.arena.solids.filter(blocksMovement);
+    if (!this.sim.arena.workshop || !near || boxes.length <= 128) return boxes;
+    const gap = (box: Solid) => Math.hypot(Math.max(0, Math.abs(near.x - box.center.x) - box.size.x / 2),
+      Math.max(0, Math.abs(near.y - box.center.y) - box.size.y / 2), Math.max(0, Math.abs(near.z - box.center.z) - box.size.z / 2));
+    return boxes.map(box => ({box, gap: gap(box)})).sort((a, b) => a.gap - b.gap).slice(0, 128).map(({box}) => box);
   }
 
   private createSimulation() {
     const seed = seedForDesign(this.seed++, this.config.mapDesign);
-    const arena = !this.botz ? duelArena(seed, this.config.arenaScale) : this.botz.map === 'island' ? reflexArena(this.botz) : botzArena();
+    const arena = !this.botz ? duelArena(seed, this.config.arenaScale) : this.botz.map === 'island' ? reflexArena(this.botz)
+      : this.workshop ?? botzArena();
     const simulation = new DuelSimulation(this.config, seed, arena, this.settings.weapon, this.settings.sidearm, this.settings.primaryEnabled, this.botz);
     this.botzRecorded = false; this.arrivalsShown = 0;
     simulation.playerAspect = this.camera.aspect;
@@ -277,7 +317,8 @@ export class DuelEngine {
       glass:new THREE.MeshStandardMaterial({color:'#88b9bb',transparent:true,opacity:.35,roughness:.15,depthWrite:false}),
       water:new THREE.MeshStandardMaterial({color:'#3d767a',transparent:true,opacity:.62,roughness:.28,depthWrite:false}),
     };
-    for (const solid of this.sim.authoredArena.solids) if(!solid.interaction&&solid.active!==false) addArenaCover(solid, this.covers, materials);
+    // An imported map's boxes are invisible collision: its model is what you see.
+    if (!this.sim.authoredArena.workshop) for (const solid of this.sim.authoredArena.solids) if(!solid.interaction&&solid.active!==false) addArenaCover(solid, this.covers, materials);
     for (const volume of this.sim.arena.traversalVolumes??[])addArenaTraversal(volume,this.covers,materials);
     this.environmentModels=createEnvironmentRenderMap(this.sim.authoredArena,this.dynamicCovers,materials);
     batchStaticMeshes(this.covers);
@@ -288,8 +329,8 @@ export class DuelEngine {
     if(this.environmentRevision===this.sim.environment.revision)return;
     this.environmentRevision=this.sim.environment.revision;
     syncEnvironmentRenderMap(this.environmentModels,this.sim.environment);
-    this.acoustics.setBoxes(this.sim.arena.solids.filter(blocksMovement));
-    for(const animator of this.animators.values())animator.setDeathWorld({floor:0,boxes:this.sim.arena.solids.filter(blocksMovement)});
+    this.acoustics.setBoxes(acousticSolids(this.sim.arena));
+    for(const [id,animator] of this.animators)animator.setDeathWorld({floor:0,boxes:this.deathBoxes(this.sim.actors[id]?.position)});
   }
 
   private decorateShell() {
@@ -425,7 +466,7 @@ export class DuelEngine {
     root.add(model); this.actors.add(root); this.models.set(actor.id, root);
     const animator=new DuelAnimator(model, this.targetClips, (actor.id * .317) % 1, actor.equipment);
     animator.addGestureClips(this.gestureClips.get(actor.equipment)??[]);
-    animator.setDeathWorld({floor:0,boxes:this.sim.arena.solids.filter(blocksMovement)});
+    animator.setDeathWorld({floor:0,boxes:this.deathBoxes(actor.position)});
     this.animators.set(actor.id,animator);
     this.generations.set(actor.id, actor.generation);
   }
@@ -1065,6 +1106,7 @@ export class DuelEngine {
       reserve:player.reserve,reloadSilent:player.reloadSilent,recharge:Math.max(0,this.sim.actors[0].weapon.rechargeUntil-this.sim.time),
       enemies: bots.filter(bot => bot.alive).length, seconds: this.sim.time, kills: this.kills,
       damage: this.damage, input: this.inputName, caption: this.animationClock < this.captionUntil ? this.caption : '',
+      mapLoading: !!this.workshop && !this.workshopModel,
       shortcutProtected: this.shortcuts.protected, nextRoundIn: this.roundFlow.remaining(this.config.feedbackSeconds),
       equipped: player.equipment, review: this.sim.coach.review(), history: this.history,
       loadout: this.sim.loadout, pickup: this.sim.nearestPickup()?.equipment, interaction:this.sim.nearestDoor()?.open?'Close door':this.sim.nearestDoor()?'Open door':undefined, arenaDesign: this.sim.arena.design,

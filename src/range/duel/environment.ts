@@ -146,12 +146,32 @@ function boxesOverlap(a: {center: Vec; size: Vec}, b: {center: Vec; size: Vec}) 
 }
 
 // Grounded planar props use bounded swept substeps. This is not a general rigid-body solver.
+// Which solids are doors, movables or breakables, found once per arena: per-tick scans then skip the static rest,
+// which is nearly everything on an imported map.
+const interactiveCache = new WeakMap<readonly Solid[], Map<EnvironmentInteraction['kind'], number[]>>();
+export function solidsOfKind(arena: Arena, kind: EnvironmentInteraction['kind']): readonly number[] {
+  let kinds = interactiveCache.get(arena.solids);
+  if (!kinds) {
+    kinds = new Map();
+    arena.solids.forEach((solid, index) => {
+      if (!solid.interaction) return;
+      if (!kinds!.has(solid.interaction.kind)) kinds!.set(solid.interaction.kind, []);
+      kinds!.get(solid.interaction.kind)!.push(index);
+    });
+    interactiveCache.set(arena.solids, kinds);
+  }
+  return kinds.get(kind) ?? [];
+}
+
 export function advanceEnvironment(arena: Arena, state: EnvironmentState, dt: number,
   occupants: readonly {center: Vec; size: Vec}[] = []): EnvironmentResult {
   if (!Number.isFinite(dt) || dt <= 0) return unchanged(state);
+  const movable = solidsOfKind(arena, 'movable');
+  if (!movable.length) return unchanged(state);
   const elapsed = Math.min(dt, .25), pieces = {...state.pieces}, events: EnvironmentEvent[] = [];
   let changed = false;
-  for (const [index, authored] of arena.solids.entries()) {
+  for (const index of movable) {
+    const authored = arena.solids[index];
     if (authored.interaction?.kind !== 'movable') continue;
     const id = environmentPieceId(authored, index), piece = pieces[id];
     if (!piece?.active || Math.hypot(piece.velocity.x, piece.velocity.z) < 1e-5) continue;

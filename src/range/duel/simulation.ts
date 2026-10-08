@@ -4,7 +4,7 @@ import {botConfig, rosterBehaviors, sanitizeDuelConfig, type DuelConfig} from '.
 import {BotBrain} from './brain';
 import {TacticalBrain} from './tactics';
 import {isKnifeBackstab,resolveDamage} from './damage';
-import {canFitInArena, moveInArena, pointOnRay, testArena, traceActor, traceSolid, type Arena} from './geometry';
+import {acousticSolids, canFitInArena, moveInArena, pointOnRay, testArena, traceActor, traceSolid, type Arena} from './geometry';
 import {observeBot} from './perception';
 import {randomStream} from './rng';
 import {interpolateActors} from './presentation';
@@ -22,14 +22,15 @@ import {DamagePunch} from '../aim-punch';
 import {RadarMemory} from './radar';
 import {resolveBulletRay} from './penetration';
 import {traceMelee} from './melee';
-import {advanceEnvironment,createEnvironmentState,damageEnvironmentPiece,environmentPieceId,environmentSolids,
+import {advanceEnvironment,createEnvironmentState,damageEnvironmentPiece,environmentPieceId,environmentSolids,solidsOfKind,
   useEnvironmentPiece,arenaBoostPOIs,type EnvironmentState,type EnvironmentResult} from './environment';
 import {actorBody,arenaMovementEnvironment,canWalkTo} from './traversal';
 import {TeamTacticsPlanner,BoostPlanner,type TacticalPeer,type TeamContact,type BoostPlan,type BoostPOI} from './coordination';
 import {TerrainTactics} from './terrain-tactics';
 import {actorShadows} from './shadow-scene';
 import {AcousticScene} from '../spatial-audio';
-import {BOTZ_PLAYER_SPAWN, BotzSpawner, BotzStrafe, emptyBotzStats, sanitizeBotzConfig, type BotzConfig, type BotzStats} from './botz';
+import {BOTZ_PLAYER_SPAWN, BotzSpawner, BotzStrafe, emptyBotzStats, sanitizeBotzConfig, WorkshopSpawner, workshopPlayerSpawn,
+  type BotzConfig, type BotzStats} from './botz';
 import {atMouth, REFLEX_ISLAND, REFLEX_PLAYER_SPAWN, REFLEX_REACH, REFLEX_TOUCH, ReflexCrouch, reflexRing, ReflexSpawner,
   ReflexStrafe, reflexTarget, type ReflexRun} from './reflex';
 
@@ -110,7 +111,7 @@ export class DuelSimulation {
    * Reflex) they rush you instead of standing in a yard. */
   readonly botz?: BotzConfig;
   readonly botzStats: BotzStats = emptyBotzStats();
-  private botzSpawner?: BotzSpawner;
+  private botzSpawner?: BotzSpawner | WorkshopSpawner;
   private reflexSpawner?: ReflexSpawner;
   /** Per life: crouched, strafing, or a Reflex run. */
   private botzLives = new Map<number, {crouch: boolean; strafe?: BotzStrafe; run?: ReflexRun}>();
@@ -123,7 +124,7 @@ export class DuelSimulation {
     this.authoredArena = arena;
     this.environment = createEnvironmentState(arena);
     this.arena = {...arena,solids:environmentSolids(arena,this.environment)};
-    this.acoustics.setBoxes(this.arena.solids);
+    this.acoustics.setBoxes(this.arena.solids.length > 128 ? acousticSolids(this.arena) : this.arena.solids);
     this.actors = [makeActor(0, 'player', 0, 8, hasPrimary ? playerWeapon : sidearm, this.config.playerHealth, this.config.playerArmor, seed)];
     this.actors[0].armor = this.config.playerArmor ? this.config.playerArmorPoints : 0;
     this.actors[0].helmet = this.config.playerArmor && this.config.playerHelmet;
@@ -133,6 +134,14 @@ export class DuelSimulation {
       // The first bots set off one after another rather than as a single wave.
       const stagger = Math.min(.45, 3 / this.botz.botCount);
       for (let id = 1; id <= this.botz.botCount; id++) this.actors.push(this.spawnBot(id, 1, undefined, (id - 1) * stagger));
+      return;
+    }
+    if (this.botz && this.arena.workshop) {
+      // An imported map: you start at a spawn, bots stand on its spots.
+      const spawn = workshopPlayerSpawn(this.arena.workshop);
+      Object.assign(this.actors[0], {position: {x: spawn.x, y: spawn.y + 64 * UNIT, z: spawn.z}, feet: spawn.y, yaw: spawn.yaw, grounded: true});
+      this.botzSpawner = new WorkshopSpawner(this.botz, this.arena, seed, spawn);
+      for (let id = 1; id <= this.botz.botCount; id++) this.actors.push(this.spawnBot(id, 1));
       return;
     }
     if (this.botz) {
@@ -359,7 +368,7 @@ export class DuelSimulation {
         }, (position, feet, height) => canFitInArena(position, feet, height, this.arena),
         (position, from, to, height) => verticalContact(position, from, to, height, this.arena.solids),
         arenaMovementEnvironment(this.arena,this.actors.filter(other=>!this.passesThrough(actor,other))
-          .map(other=>({...other,previous:this.previous[other.id]})),actor.id,this.time-STEP,actor.pitch));
+          .map(other=>({...other,previous:this.previous[other.id]})),actor.id,this.time-STEP,actor.pitch,actor.position));
       const traveled = Math.hypot(next.position.x - actor.position.x, next.position.z - actor.position.z);
       const landed=next.grounded&&!(actor.grounded??actor.feet===0);
       Object.assign(actor,next);
@@ -688,7 +697,8 @@ export class DuelSimulation {
   nearestDoor(actorId=0) {
     const actor=this.actors[actorId];if(!actor?.alive)return;
     const forward={x:-Math.sin(actor.yaw),z:-Math.cos(actor.yaw)};
-    return this.authoredArena.solids.flatMap((solid,index)=>{
+    return solidsOfKind(this.authoredArena,'door').flatMap(index=>{
+      const solid=this.authoredArena.solids[index];
       if(solid.interaction?.kind!=='door')return[];
       const id=environmentPieceId(solid,index),piece=this.environment.pieces[id];
       if(!piece?.active)return[];
@@ -709,7 +719,7 @@ export class DuelSimulation {
   private applyEnvironment(result:EnvironmentResult,actorId:number) {
     if(!result.changed)return;
     this.environment=result.state;this.arena.solids=environmentSolids(this.authoredArena,this.environment);
-    this.acoustics.setBoxes(this.arena.solids);
+    this.acoustics.setBoxes(this.arena.solids.length > 128 ? acousticSolids(this.arena) : this.arena.solids);
     for(const event of result.events) {
       if(event.kind==='damaged')continue;
       this.emit({kind:'environment',tick:this.tick,actorId,environmentId:event.id,action:event.kind==='opened'?'open':

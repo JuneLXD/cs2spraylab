@@ -4,10 +4,10 @@ import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybi
 import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
 
 export type Weapon = keyof typeof data.weapons;
-export type Mode = 'duel' | 'botz' | 'reflex' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
-export const modeNames: Record<Mode, string> = { duel: 'AI Duel', botz: 'Aim Botz', reflex: 'Fast Aim / Reflex', guided: 'Guided spray', spray: 'Free spray', transfer: 'Spray transfer', peek: 'Peeking practice', precision: 'Counterstrafing practice', burst: 'Burst & reposition', hearing: 'Hearing practice' };
+export type Mode = 'duel' | 'botz' | 'reflex' | 'redline' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
+export const modeNames: Record<Mode, string> = { duel: 'AI Duel', botz: 'Aim Botz', reflex: 'Fast Aim / Reflex', redline: 'aim_redline', guided: 'Guided spray', spray: 'Free spray', transfer: 'Spray transfer', peek: 'Peeking practice', precision: 'Counterstrafing practice', burst: 'Burst & reposition', hearing: 'Hearing practice' };
 /** Modes that run on the duel engine rather than the static range. */
-export const isDuelEngineMode = (mode: Mode) => mode === 'duel' || mode === 'botz' || mode === 'reflex';
+export const isDuelEngineMode = (mode: Mode) => mode === 'duel' || mode === 'botz' || mode === 'reflex' || mode === 'redline';
 export const historyModeNames = { ...modeNames, tracking: 'Target tracking (retired)' };
 export function migrateMode(mode: unknown): Mode {
   if(typeof mode==='string'&&['weak','ghost','trace','fade','tracking'].includes(mode))return 'guided';

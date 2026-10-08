@@ -10,7 +10,15 @@ export type Solid = {center: Vec; size: Vec; kind?: 'concrete' | 'cargo' | 'crat
 export type CoverLane = {side: -1 | 1; anchor: Vec; edge: Vec; retreat: Vec;
   axis?: {x: number; z: number}; role?: 'entry' | 'flank' | 'camp' | 'offAngle'};
 export type Arena = {minX: number; maxX: number; minZ: number; maxZ: number; solids: Solid[]; lanes?: CoverLane[]; design?: string; seed?: number; pois?: PlacedPOI[]; poiTheme?: POITheme;
-  traversalVolumes?: TraversalVolume[]; traversalLinks?: TraversalLink[]};
+  traversalVolumes?: TraversalVolume[]; traversalLinks?: TraversalLink[];
+  /** An imported CS2 map: its solids are invisible collision for `model`, which is drawn instead of the hall. */
+  workshop?: WorkshopMap};
+export type WorkshopSpawn = {team: 't' | 'ct'; x: number; y: number; z: number; yaw: number};
+export type WorkshopMap = {name: string; credits: string; model: string; spawns: WorkshopSpawn[];
+  /** Where Aim Botz puts you, when not at a team spawn: the floor spot nearest x, z, facing yaw. */
+  aimBotz?: {x: number; z: number; yaw: number};
+  /** Where a bot can stand: x, feet height, z. */
+  spots: readonly (readonly [number, number, number])[]};
 export const testArena = (): Arena => ({minX: -12, maxX: 12, minZ: -20, maxZ: 12, solids: []});
 
 export function duelArena(seed: number, scale = 1, theme?: POITheme): Arena {
@@ -179,9 +187,81 @@ export function traceActor(origin: Vec, direction: Vec, feet: Vec, crouch: boole
 export type SolidTrace = {distance: number; exitDistance: number; surfaceId: number; pieceId?: string; material?: SurfaceMaterial;
   entry?: Vec; exit?: Vec; normal?: Vec; exitNormal?: Vec; thickness: number};
 export function traceSolid(origin: Vec, direction: Vec, arena: Arena, maxDistance = Infinity, state?: EnvironmentState): SolidTrace {
+  if (!validRay(origin, direction, maxDistance)) return {distance: Infinity, exitDistance: Infinity, surfaceId: -1, thickness: 0};
+  const index = rayIndex(arena);
+  return traceCandidates(origin, direction, arena, maxDistance, state, index ? rayCandidates(origin, direction, arena, maxDistance, state, index) : undefined);
+}
+
+/** Every solid, for checking the indexed trace against. */
+export function traceSolidUnindexed(origin: Vec, direction: Vec, arena: Arena, maxDistance = Infinity, state?: EnvironmentState): SolidTrace {
+  if (!validRay(origin, direction, maxDistance)) return {distance: Infinity, exitDistance: Infinity, surfaceId: -1, thickness: 0};
+  return traceCandidates(origin, direction, arena, maxDistance, state);
+}
+
+// Imported maps have thousands of static boxes. Above this many, a ray only tests the boxes in the 2 m columns it
+// crosses (xz), in order along the ray. Arenas with doors or breakables keep the full scan.
+const RAY_INDEX = 256, RAY_CELL = 2;
+type RayIndex = {minX: number; minZ: number; columns: number; rows: number; cells: number[][]};
+const rayIndexes = new WeakMap<readonly Solid[], RayIndex | null>();
+function rayIndex(arena: Arena): RayIndex | null {
+  const cached = rayIndexes.get(arena.solids);
+  if (cached !== undefined) return cached;
+  if (arena.solids.length <= RAY_INDEX || arena.solids.some(solid => solid.interaction)) {rayIndexes.set(arena.solids, null); return null;}
+  let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+  for (const {center: c, size: s} of arena.solids) {
+    minX = Math.min(minX, c.x - s.x / 2); maxX = Math.max(maxX, c.x + s.x / 2);
+    minZ = Math.min(minZ, c.z - s.z / 2); maxZ = Math.max(maxZ, c.z + s.z / 2);
+  }
+  const columns = Math.max(1, Math.ceil((maxX - minX) / RAY_CELL)), rows = Math.max(1, Math.ceil((maxZ - minZ) / RAY_CELL));
+  const cells = Array.from({length: columns * rows}, () => [] as number[]);
+  const column = (x: number) => Math.max(0, Math.min(columns - 1, Math.floor((x - minX) / RAY_CELL)));
+  const row = (z: number) => Math.max(0, Math.min(rows - 1, Math.floor((z - minZ) / RAY_CELL)));
+  arena.solids.forEach(({center: c, size: s}, i) => {
+    for (let r = row(c.z - s.z / 2); r <= row(c.z + s.z / 2); r++) for (let k = column(c.x - s.x / 2); k <= column(c.x + s.x / 2); k++) cells[r * columns + k].push(i);
+  });
+  const index = {minX, minZ, columns, rows, cells};
+  rayIndexes.set(arena.solids, index);
+  return index;
+}
+
+/** Walks the columns along the ray, collecting their solids, until the next column starts beyond the nearest hit
+ * found so far. Any solid entered before that point overlaps a column already walked. */
+function rayCandidates(origin: Vec, direction: Vec, arena: Arena, maxDistance: number, state: EnvironmentState | undefined, index: RayIndex) {
+  const {minX, minZ, columns, rows, cells} = index, maxX = minX + columns * RAY_CELL, maxZ = minZ + rows * RAY_CELL;
+  let start = 0, end = maxDistance;
+  for (const [o, d, lo, hi] of [[origin.x, direction.x, minX, maxX], [origin.z, direction.z, minZ, maxZ]]) {
+    if (Math.abs(d) < 1e-12) {if (o < lo || o > hi) return []; continue;}
+    const a = (lo - o) / d, b = (hi - o) / d;
+    start = Math.max(start, Math.min(a, b)); end = Math.min(end, Math.max(a, b));
+  }
+  if (start > end) return [];
+  const seen = new Set<number>(), found: number[] = [];
+  const x = origin.x + direction.x * start, z = origin.z + direction.z * start;
+  let column = Math.max(0, Math.min(columns - 1, Math.floor((x - minX) / RAY_CELL))), row = Math.max(0, Math.min(rows - 1, Math.floor((z - minZ) / RAY_CELL)));
+  const stepX = direction.x > 0 ? 1 : -1, stepZ = direction.z > 0 ? 1 : -1;
+  const boundary = (cell: number, step: number, lo: number, o: number, d: number) => Math.abs(d) < 1e-12 ? Infinity : (lo + (cell + (step > 0 ? 1 : 0)) * RAY_CELL - o) / d;
+  let nextX = boundary(column, stepX, minX, origin.x, direction.x), nextZ = boundary(row, stepZ, minZ, origin.z, direction.z);
+  const deltaX = Math.abs(direction.x) < 1e-12 ? Infinity : RAY_CELL / Math.abs(direction.x), deltaZ = Math.abs(direction.z) < 1e-12 ? Infinity : RAY_CELL / Math.abs(direction.z);
+  let nearest = maxDistance, entered = start;
+  while (column >= 0 && column < columns && row >= 0 && row < rows && entered <= nearest) {
+    for (const i of cells[row * columns + column]) {
+      if (seen.has(i)) continue;
+      seen.add(i); found.push(i);
+      const solid = resolveEnvironmentSolid(arena.solids[i], i, state);
+      if (!blocksShots(solid)) continue;
+      const interval = raySolidInterval(origin, direction, solid, nearest);
+      if (interval) nearest = Math.min(nearest, interval.entryDistance);
+    }
+    if (nextX < nextZ) {entered = nextX; nextX += deltaX; column += stepX;} else {entered = nextZ; nextZ += deltaZ; row += stepZ;}
+  }
+  return found.sort((a, b) => a - b);
+}
+
+function traceCandidates(origin: Vec, direction: Vec, arena: Arena, maxDistance: number, state: EnvironmentState | undefined, candidates?: readonly number[]): SolidTrace {
   let closest: SolidTrace = {distance: Infinity, exitDistance: Infinity, surfaceId: -1, thickness: 0};
-  if (!validRay(origin, direction, maxDistance)) return closest;
-  for (let index = 0; index < arena.solids.length; index++) {
+  const count = candidates ? candidates.length : arena.solids.length;
+  for (let n = 0; n < count; n++) {
+    const index = candidates ? candidates[n] : n;
     const solid = resolveEnvironmentSolid(arena.solids[index], index, state);
     if (!blocksShots(solid)) continue;
     const {center: c, size: s} = solid;
@@ -208,6 +288,15 @@ export function traceSolidEntries(origin: Vec, direction: Vec, arena: Arena, max
     const interval = blocksShots(solid) ? raySolidInterval(origin, direction, solid, maxDistance) : undefined;
     return interval ? [traceFromInterval(origin, direction, solid, index, interval)] : [];
   }).sort((a, b) => a.distance - b.distance || a.surfaceId - b.surfaceId);
+}
+
+/** Sound occlusion tests at most 128 boxes. An imported map has thousands, mostly small: give it the largest ones above
+ * the floor (walls, containers, crate stacks). */
+export function acousticSolids(arena: Arena): Solid[] {
+  const blocking = arena.solids.filter(blocksMovement);
+  if (blocking.length <= 128) return blocking;
+  return blocking.filter(solid => solid.center.y + solid.size.y / 2 > .05 && blocksShots(solid))
+    .sort((a, b) => b.size.x * b.size.y * b.size.z - a.size.x * a.size.y * a.size.z).slice(0, 128);
 }
 
 export function materialForSurface(arena: Arena, surfaceId: number): SurfaceMaterial | undefined {

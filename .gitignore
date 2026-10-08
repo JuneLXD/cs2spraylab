@@ -8,6 +8,7 @@ public/revamp/models/*
 !public/revamp/models/range-kit.glb
 public/revamp/audio/
 public/revamp/textures/
+public/revamp/maps/
 *.zip
 *.log
 exceptions.txt

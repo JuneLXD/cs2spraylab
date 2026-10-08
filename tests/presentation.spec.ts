@@ -185,9 +185,10 @@ test('tracking is retired from the range without relabeling or deleting old resu
   });
   await page.goto('/');
   await expect(page.getByLabel('Training mode')).toHaveValue('guided');
-  await expect(page.getByLabel('Training mode').locator('option')).toHaveCount(10);
+  await expect(page.getByLabel('Training mode').locator('option')).toHaveCount(11);
   await expect(page.getByLabel('Training mode').locator('option[value="botz"]')).toHaveText('Aim Botz');
   await expect(page.getByLabel('Training mode').locator('option[value="reflex"]')).toHaveText('Fast Aim / Reflex');
+  await expect(page.getByLabel('Training mode').locator('option[value="redline"]')).toHaveText('aim_redline');
   await expect(page.getByLabel('Training mode').locator('option[value="tracking"]')).toHaveCount(0);
   await expect(page.locator('.settings-hint')).toHaveCount(0);
   await page.getByRole('button', {name: 'Session', exact: false}).click();

@@ -28,9 +28,10 @@ describe('append-only changelog', () => {
   it('covers the accumulated completed features', () => {
     expect(latestChanges.sections.map(section => section.id)).toEqual([
       'combat', 'weapons', 'movement', 'arenas', 'bot-behavior', 'connection', 'presentation', 'performance', 'tracers', 'fullscreen', 'display', 'crosshair', 'aim-botz', 'controls',
-      'armory', 'frame-limit', 'auto-reload', 'weapon-switch', 'input-latency', 'reflex',
+      'armory', 'frame-limit', 'auto-reload', 'weapon-switch', 'input-latency', 'reflex', 'aim-redline',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'reflex')!.items.join(' ')).toContain('come at you through its gaps');
+    expect(latestChanges.sections.find(section => section.id === 'aim-redline')!.items.join(' ')).toContain('BOT Reed');
     expect(latestChanges.sections.find(section => section.id === 'armory')!.items.join(' ')).toContain('Every weapon finish, knife, glove and bot agent is unlocked');
     expect(latestChanges.sections.find(section => section.id === 'auto-reload')!.items.join(' ')).toContain('reloads by itself');
     expect(latestChanges.sections.find(section => section.id === 'input-latency')!.items.join(' ')).toContain('next frame');

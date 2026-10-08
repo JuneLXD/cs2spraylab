@@ -26,7 +26,7 @@ export const BotzSetup = memo(function BotzSetup({config, update}: BotzSetupProp
       <option value="static">{island ? 'Run straight at you' : 'Stand still'}</option><option value="strafe">{island ? 'Strafe A-D, edging closer' : 'Strafe (A-D)'}</option></select></label>
     <label className="duel-field"><span>Crouch</span><select aria-label="Bot crouch" value={config.crouch} onChange={event => update({crouch: event.target.value as BotzConfig['crouch']})}>
       <option value="never">Never</option><option value="some">{island ? 'Spam crouch' : 'Some bots'}</option><option value="always">{island ? 'Always (slow)' : 'All bots'}</option></select></label>
-    {!island && <label className="duel-check"><span>Spawn on ledges</span><input aria-label="Spawn on ledges" type="checkbox" checked={config.elevated} disabled={config.distance === 'near'} onChange={event => update({elevated: event.target.checked})}/></label>}
+    {!island && <label className="duel-check"><span>{config.map === 'redline' ? 'Spawn on crates and catwalk' : 'Spawn on ledges'}</span><input aria-label="Spawn on ledges" type="checkbox" checked={config.elevated} disabled={config.distance === 'near' && config.map !== 'redline'} onChange={event => update({elevated: event.target.checked})}/></label>}
     <label className="duel-check"><span>Headshot only</span><input aria-label="Headshot only" type="checkbox" checked={config.headshotOnly} onChange={event => update({headshotOnly: event.target.checked})}/></label>
     <label className="duel-field"><span>Respawn delay <output>{config.respawnSeconds ? `${config.respawnSeconds.toFixed(2)} s` : 'Instant'}</output></span><input aria-label="Respawn delay" type="range" min="0" max="3" step=".25" value={config.respawnSeconds} onChange={event => update({respawnSeconds: +event.target.value})}/></label>
     <label className="duel-field"><span>Session</span><select aria-label="Session length" value={config.sessionSeconds} onChange={event => update({sessionSeconds: +event.target.value})}>
@@ -43,11 +43,10 @@ export const BotzSetup = memo(function BotzSetup({config, update}: BotzSetupProp
   </div>;
 });
 
-export function BotzScorecard({summary, history, island = false}: {summary?: BotzSummary; history: BotzHistory[]; island?: boolean}) {
-  const name = island ? 'Reflex' : 'Aim Botz';
+export function BotzScorecard({summary, history, island = false, name = island ? 'Reflex' : 'Aim Botz'}: {summary?: BotzSummary; history: BotzHistory[]; island?: boolean; name?: string}) {
   const exportHistory = () => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(history, null, 2)], {type: 'application/json'}));
-    const link = document.createElement('a'); link.href = url; link.download = island ? 'spraylab-reflex.json' : 'spraylab-aim-botz.json'; link.click(); URL.revokeObjectURL(url);
+    const link = document.createElement('a'); link.href = url; link.download = `spraylab-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`; link.click(); URL.revokeObjectURL(url);
   };
   const reachedOften = island && !!summary && summary.leaks >= Math.max(3, summary.kills / 3);
   const values: [string, string, string][] = summary ? [
