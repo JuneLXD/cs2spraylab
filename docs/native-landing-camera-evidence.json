@@ -1,0 +1,24 @@
+{
+  "build": 2000927,
+  "source": "native_audit_ak_002.dem",
+  "sourceSha256": "feadebd8538a044283a42ef2e78fa97db98591d9c2565c6fbce22d684b76835c",
+  "sampleInterval": 0.015625,
+  "method": "Sanitized demoparser2 0.42.0 normal-jump landing on Dust II. Field angles use native QAngle signs and network quantization. No account identifiers. Last airborne fall-speed sample does not claim the exact impact speed.",
+  "before": {
+    "gameTime": 900.3125,
+    "airborne": true,
+    "fallVelocityUnits": 281.796875
+  },
+  "landed": {
+    "gameTime": 900.328125,
+    "airborne": false,
+    "cameraAngle": [
+      0.7501525879,
+      0.0,
+      0.0
+    ],
+    "cameraAnchorAt": 900.328125
+  },
+  "expectedPitchDegrees": 0.75,
+  "scope": "Dry stationary-ground pitch. Moving supports, water and heavy-impact roll are excluded."
+}

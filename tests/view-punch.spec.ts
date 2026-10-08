@@ -62,6 +62,20 @@ for (const mode of ['duel', 'guided'] as const) {
       expect(current.kickYaw).toBeCloseTo(first.kickYaw * Math.exp(-18 * age), 6);
       expect(current.pitch).toBe(0); expect(current.yaw).toBe(Math.PI); expect(current.ammo).toBe(29);
     }
+    const landing = await page.evaluate(mode => {
+      const e = (window as any).punchEngine, sim = e.sim;
+      for (let i = 0; i < 8; i++) sim.advance(.25);
+      const actor = mode === 'duel' ? sim.actors[0] : sim;
+      actor.feet = .015; actor.position.y = .015 + 64 * .0254;
+      actor.verticalVelocity = -302 * .0254; actor.grounded = false;
+      sim.advance(1 / 128); e.tick(performance.now() + 2000); cancelAnimationFrame(e.frame);
+      const recovery = mode === 'duel' ? actor.weapon.recovery : actor.recovery;
+      const recoil = recovery.predict(sim.accumulator);
+      return {pitch: actor.pitch, kick: (e.camera.rotation.x - actor.pitch) * 180 / Math.PI - recoil.pitch * .45,
+        age: sim.time + sim.accumulator - actor.landedAt, grounded: actor.grounded};
+    }, mode);
+    expect(landing.grounded).toBe(true); expect(landing.pitch).toBe(0);
+    expect(landing.kick).toBeCloseTo(-.75 * Math.exp(-18 * landing.age), 6);
     expect(errors).toEqual([]);
   });
 }

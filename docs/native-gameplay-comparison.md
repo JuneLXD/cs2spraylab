@@ -262,6 +262,29 @@ They are excluded from the image fit, while all 14 taps/spray shots remain in
 the independently timed demo-anchor check. A reference during the preceding
 landing animation also adds a spurious baseline rotation and is excluded.
 
+## Landing camera pitch (sixth pass)
+
+The same camera service carries a brief downward dip on landing. The recorded
+normal jump changes its pitch anchor to +0.750153 native degrees at the first
+grounded sample, matching a 0.75-degree dip within network quantization.
+`native-landing-camera-evidence.json` retains the neighboring ground/fall-speed
+fields and source demo hash.
+
+`tools/verify-native-landing-camera.py` evaluates the native landing function
+at `0x158b920` with supplied dry, stationary ground. Thirty-two cases verify
+the strict >250 units/s threshold, pitch `max(0.75, speed * 0.001)`, and the
+1024 units/s upper condition. Landing replaces the previous camera pitch;
+it preserves the decayed yaw, then uses the shared exponential camera decay.
+The audit stubs sound/roll, impact notification and bookkeeping calls, so it
+does not establish those behaviors.
+
+Both simulations trigger the pitch change at the physics contact timestamp,
+including an immediate hop after contact. Subsequent grounded steps do not
+restart the dip. Small step-downs do not trigger it. Water and actor-supported
+landings retain their prior presentation until those branches are verified;
+heavy-fall roll is also outside this change. Physical aim and shot directions
+are unaffected.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current
@@ -333,3 +356,12 @@ classification remain separate work; neither recording a 60 Hz video nor decodin
   failure. Production TypeScript/Vite build passes.
 - Seven Chromium checks pass: event-time input, scope/quickscope/rescope,
   animated hitboxes, and immediate/between-tick camera kick in both engines.
+
+### Landing-camera validation
+
+- 32 native pitch cases pass, plus regressions for replacing shot kick,
+  firing during recovery, small step-downs and contact timing in both modes.
+- Full unit suite: 2,084 pass; only the existing missing fallback model fails.
+- Production build and both Chromium camera/landing checks pass.
+- The LAN review page loads all five native clips and six evidence downloads
+  in Chromium, with no page errors or horizontal overflow at desktop/mobile sizes.

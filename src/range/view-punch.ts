@@ -26,5 +26,14 @@ export class ViewPunch {
     this.at = time;
   }
 
+  /** Dry, stationary-ground pitch branch at 0x158b920. Landing replaces
+   * pitch, preserves decayed yaw, and shares the shot camera's decay. */
+  land(fallSpeedUnits: number, time: number) {
+    const speed = f(fallSpeedUnits);
+    if (!(speed > 250 && speed <= 1024)) return;
+    this.angle = {pitch: -Math.max(.75, f(speed * f(.001))), yaw: this.sample(time).yaw};
+    this.at = time;
+  }
+
   reset() {this.angle = {yaw: 0, pitch: 0}; this.at = 0;}
 }

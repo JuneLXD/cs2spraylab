@@ -413,6 +413,8 @@ export class DuelSimulation {
           .map(other=>({...other,previous:this.previous[other.id]})),actor.id,this.time-dt,actor.pitch,actor.position));
       const traveled = Math.hypot(next.position.x - actor.position.x, next.position.z - actor.position.z);
       const landed=next.grounded&&!(actor.grounded??actor.feet===0);
+      if (next.landedAt !== undefined && next.landedAt !== actor.landedAt && next.landingVelocity !== undefined &&
+        !next.waterLevel && next.supportId === undefined) actor.viewPunch.land(-next.landingVelocity / UNIT, next.landedAt);
       Object.assign(actor,next);
       if (landed) this.emitSound(actor, 'landing', next.position);
       const audible = Math.hypot(next.velocity.x, next.velocity.z) > equipmentStats(actor.weapon.id).speed * UNIT * .54;

@@ -1,0 +1,432 @@
+{
+  "build": 2000927,
+  "clientSha256": "99ae5b5724e869de64cc810d7ade089fb18d2fe08dcb8d88982af39f951d1d12",
+  "entry": "0x158b920",
+  "method": "Bounded Unicorn 2.1.4 evaluation of the landing function on dry, stationary ground, living player. Only that function and two tiny native read-only predicates execute. Ground identity/velocity and clock are supplied; camera setter records its argument. Sound/roll, impact notification and final bookkeeping are stubbed. expf uses host math rounded to float32. Result null means no pitch-set call. Heavy landing roll and moving-support/water effects are outside this fixture.",
+  "samples": [
+    {
+      "speed": -1,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": -1,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": 0,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": 0,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": 100,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": 100,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": 249.99,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": 249.99,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": 250,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": 250,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": false
+    },
+    {
+      "speed": 250.01,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.4000000059604645,
+        0.029999999329447746
+      ],
+      "heavyImpact": false
+    },
+    {
+      "speed": 250.01,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.16262786090373993,
+        0.01219708938151598
+      ],
+      "heavyImpact": false
+    },
+    {
+      "speed": 260,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.4000000059604645,
+        0.029999999329447746
+      ],
+      "heavyImpact": false
+    },
+    {
+      "speed": 260,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.16262786090373993,
+        0.01219708938151598
+      ],
+      "heavyImpact": false
+    },
+    {
+      "speed": 301.993,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.4000000059604645,
+        0.029999999329447746
+      ],
+      "heavyImpact": false
+    },
+    {
+      "speed": 301.993,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.16262786090373993,
+        0.01219708938151598
+      ],
+      "heavyImpact": false
+    },
+    {
+      "speed": 349.99,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.4000000059604645,
+        0.029999999329447746
+      ],
+      "heavyImpact": false
+    },
+    {
+      "speed": 349.99,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.16262786090373993,
+        0.01219708938151598
+      ],
+      "heavyImpact": false
+    },
+    {
+      "speed": 350,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.4000000059604645,
+        0.029999999329447746
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 350,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.16262786090373993,
+        0.01219708938151598
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 580,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.4000000059604645,
+        0.029999999329447746
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 580,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.75,
+        0.16262786090373993,
+        0.01219708938151598
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 750,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.7500000596046448,
+        0.4000000059604645,
+        0.029999999329447746
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 750,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.7500000596046448,
+        0.16262786090373993,
+        0.01219708938151598
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 900,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.9000000357627869,
+        0.4000000059604645,
+        0.029999999329447746
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 900,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        0.9000000357627869,
+        0.16262786090373993,
+        0.01219708938151598
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 1024,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        1.0240000486373901,
+        0.4000000059604645,
+        0.029999999329447746
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 1024,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": [
+        1.0240000486373901,
+        0.16262786090373993,
+        0.01219708938151598
+      ],
+      "heavyImpact": true
+    },
+    {
+      "speed": 1024.01,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": true
+    },
+    {
+      "speed": 1024.01,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": true
+    },
+    {
+      "speed": 1200,
+      "age": 0,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": true
+    },
+    {
+      "speed": 1200,
+      "age": 0.05,
+      "previous": [
+        -1.2,
+        0.4,
+        0.03
+      ],
+      "result": null,
+      "heavyImpact": true
+    }
+  ]
+}

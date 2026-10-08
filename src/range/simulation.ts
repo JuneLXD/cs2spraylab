@@ -323,6 +323,8 @@ export class Simulation {
       {...this.environment, time: this.time - dt});
     this.input.jumpPressed = false; this.input.jumpPressOffset = 0;
     const traveled = Math.hypot(next.position.x - this.position.x, next.position.z - this.position.z);
+    if (next.landedAt !== undefined && next.landedAt !== this.landedAt && next.landingVelocity !== undefined &&
+      !next.waterLevel && next.supportId === undefined) this.viewPunch.land(-next.landingVelocity / UNIT, next.landedAt);
     if (next.grounded && !this.grounded) this.onSound(true);
     const audible = Math.hypot(next.velocity.x, next.velocity.z) > weapon.speed * UNIT * .54;
     if (next.grounded && audible && traveled > 0) {

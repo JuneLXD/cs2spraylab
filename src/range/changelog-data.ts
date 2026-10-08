@@ -145,6 +145,10 @@ export const latestChanges = {
       'Camera kick follows the player across weapon switches and updates every rendered frame. Physical shot direction, sensitivity and recoil-follow guidance remain separate.',
       'Verified against 69 native arithmetic samples and all 14 camera anchors in an offline AK tapping and spray recording.',
     ]},
+    {id: 'native-landing-camera', title: 'Landing camera feedback', items: [
+      'Normal jumps now produce CS2’s brief downward camera dip on landing, without changing your aim or bullet direction.',
+      'The dry-ground pitch threshold and decay are verified against native arithmetic and a recorded jump. Small step-downs stay steady.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
