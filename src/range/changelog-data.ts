@@ -181,6 +181,10 @@ export const latestChanges = {
       'Magazine insertion uses installed weapon markers, including separate empty-pistol reloads; ammo remains available after switching away past insertion.',
       'Reload sounds and opponent gestures follow animation progress through speed changes. Fresh native M4A4 recordings verify tap, hold and release behavior.',
     ]},
+    {id: 'native-map-lighting', title: 'aim_redline lighting and materials', items: [
+      'Native baked lighting and skylight shadows bring back the warm floor and walls, contact shading and coloured light around the hall.',
+      'Restored container logos, glowing lamps and transparent fences; corrected the texture coordinates on shipping crates and the tint on roof beams.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

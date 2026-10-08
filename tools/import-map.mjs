@@ -1,7 +1,7 @@
 // Imports a CS2 workshop map (its .vpk) for the duel engine. Writes:
 //  - src/range/duel/maps/<name>.json: collision boxes, spawns and bot spots (committed; see tools/map-collision.mjs);
 //  - public/revamp/maps/<name>.glb: the rendered world (a local asset like the other game assets).
-// Usage: node tools/import-map.mjs <workshop.vpk> [--game <CS2 install folder>] [--keep]
+// Usage: node tools/import-map.mjs <workshop.vpk> [--game <CS2 install folder>] [--python <python with OpenEXR/numpy/Pillow>] [--keep]
 // Workshop maps lean on stock CS2 materials and props. Without --game those are missing, and surfaces get flat colours
 // chosen from their names (a grey-box); with it they come with their textures.
 import fs from 'node:fs';
@@ -12,11 +12,12 @@ import {NodeIO} from '@gltf-transform/core';
 import {ALL_EXTENSIONS} from '@gltf-transform/extensions';
 import {listVpk, readVpkEntry, writeVpk} from './vpk.mjs';
 import {buildMapCollision, writeMapCollision} from './map-collision.mjs';
+import {prepareMapPresentation, restoreMapTextureAlpha, optimizeMapPresentation} from './prepare-map-presentation.mjs';
 
 const args = process.argv.slice(2), option = name => {const i = args.indexOf(name); return i < 0 ? undefined : args.splice(i, 2)[1];};
-const game = option('--game'), keep = args.includes('--keep');
+const game = option('--game'), python = option('--python') ?? 'python3', keep = args.includes('--keep');
 const source = args.find(arg => !arg.startsWith('--'));
-if (!source) throw new Error('Usage: node tools/import-map.mjs <workshop.vpk> [--game <CS2 install folder>] [--keep]');
+if (!source) throw new Error('Usage: node tools/import-map.mjs <workshop.vpk> [--game <CS2 install folder>] [--python <python with OpenEXR/numpy/Pillow>] [--keep]');
 const vrf = path.resolve(process.platform === 'win32' ? '.local-tools/vrf/Source2Viewer-CLI.exe' : '.local-tools/vrf-linux/Source2Viewer-CLI');
 if (!fs.existsSync(vrf)) throw new Error(`Source 2 Viewer CLI missing at ${vrf} (ValveResourceFormat release 20.0)`);
 const gameinfo = game && path.join(game, 'game/csgo/gameinfo.gi');
@@ -69,12 +70,12 @@ fs.mkdirSync('src/range/duel/maps', {recursive: true});
 writeMapCollision(`src/range/duel/maps/${name}.json`, {name, ...data});
 console.log(`collision: ${data.stats.boxes} boxes from ${data.stats.triangles} triangles, ${data.spawns.length} spawns, ${data.stats.spots} spots`);
 
-// The rendered world: decals and shadow-only casters dropped, the map's own lights dropped (the engine lights the
-// scene), and any surface without a material grey-boxed by its name.
+// The rendered world: shadow-only casters dropped, visible native overlays retained, the map's own lights dropped (the engine lights the
+// dynamic actors), and any surface without a material grey-boxed by its name.
 const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
 const doc = await io.read(path.join(work, `render/maps/${name}/world.glb`));
 const greyBox = [
-  [/overlay|blocklight|_shadow\b/, null],
+  [/blocklight|_shadow\b/, null],
   [/shipping_container/, '#7a3328', .45],
   [/chainlink/, '#7d8584', .5, .35],
   [/window|glass|blinds/, '#a7c2c9', .1, .3],
@@ -93,6 +94,28 @@ const greyBox = [
   [/./, '#9a9587'],
 ];
 const root = doc.getRoot(), materials = new Map();
+const lightmap = name === 'aim_redline' && !!gameinfo;
+console.log(prepareMapPresentation(doc, {lightmap}));
+if (gameinfo) {
+  const textureRoot = path.join(work, 'original-textures');
+  fs.mkdirSync(textureRoot, {recursive: true});
+  console.log(await restoreMapTextureAlpha(doc, source => {
+    const output = path.join(textureRoot, source.replace(/\.vtex$/, '.png'));
+    for (const pack of [merged, path.join(game, 'game/csgo/pak01_dir.vpk')]) {
+      if (fs.existsSync(output)) break;
+      execFileSync(vrf, ['-i', pack, '-f', `${source}_c`, '-d', '-o', textureRoot], {stdio: 'pipe'});
+    }
+    return fs.existsSync(output) ? output : null;
+  }));
+}
+if (lightmap) {
+  exported(`maps/${name}/lightmaps/irradiance.vtex_c,maps/${name}/lightmaps/direct_light_shadows.vtex_c`, 'lighting');
+  fs.mkdirSync('public/revamp/maps', {recursive: true});
+  execFileSync(python, ['tools/encode-map-lightmap.py',
+    path.join(work, `lighting/maps/${name}/lightmaps/irradiance.exr`),
+    path.join(work, `lighting/maps/${name}/lightmaps/direct_light_shadows.png`),
+    `public/revamp/maps/${name}`], {stdio: 'inherit'});
+}
 // The exporter flattens this layered tint shader into a dark multiplicative
 // factor, omitting its color-replacement/contrast layers. Keep the authored
 // base texture as a readable fallback until that shader can be baked faithfully.
@@ -124,8 +147,6 @@ for (const node of root.listNodes()) {
 const staged = path.join(work, 'staged.glb'), output = `public/revamp/maps/${name}.glb`;
 await io.write(staged, doc);
 fs.mkdirSync(path.dirname(output), {recursive: true});
-execFileSync(process.execPath, ['node_modules/@gltf-transform/cli/bin/cli.js', 'optimize', staged, output, '--compress', 'meshopt',
-  '--texture-compress', 'webp', '--texture-size', '1024', '--flatten', 'true', '--join', 'true', '--join-named', 'true',
-  '--instance', 'false', '--simplify', 'false'], {stdio: 'pipe'});
+await optimizeMapPresentation(doc, output);
 console.log(`render: ${output} ${(fs.statSync(output).size / 1e6).toFixed(1)} MB`);
 if (keep) console.log(`work files kept in ${work}`); else fs.rmSync(work, {recursive: true, force: true});
