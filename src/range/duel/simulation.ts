@@ -266,7 +266,7 @@ export class DuelSimulation {
     let duration = this.untilTick();
     for (const actor of this.actors) {
       if (!actor.alive) continue;
-      const at = Math.max(actor.equipReadyAt, actor.weapon.nextAttackTime(actor.command));
+      const at = Math.min(actor.weapon.actions.nextEventAt, Math.max(actor.equipReadyAt, actor.weapon.nextAttackTime(actor.command)));
       if (at > this.time + 1e-10) duration = Math.min(duration, at - this.time);
     }
     return duration;

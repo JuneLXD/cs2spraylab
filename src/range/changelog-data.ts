@@ -128,6 +128,10 @@ export const latestChanges = {
       'AK-47, AWP, USP-S and Desert Eagle ammo now loads at the magazine insertion point measured in CS2. Firing still waits for the full reload.',
       'Switching away before insertion keeps the old ammo; switching afterward keeps the new magazine. Magazine weapons consume a whole spare when reloading, including partial reloads.',
     ]},
+    {id: 'native-scope', title: 'CS2 scope transitions', items: [
+      'Scopes now follow the zoom curve and weapon-specific timings verified in native CS2. Sniper scope-out and automatic bolt-action rescope use their distinct transitions.',
+      'Mouse sensitivity follows the changing scope view. Quickscoping no longer waits for the visual zoom to finish, and repeat zoom observes the separate secondary-fire cooldown.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

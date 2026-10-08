@@ -10,8 +10,8 @@ export class ScopeOverlay {
     this.element.innerHTML = '<div class="scope-aperture"><i></i><b></b></div>';
     host.append(this.element);
   }
-  update(actions: WeaponActions, camera: PerspectiveCamera, alive = true) {
-    const fov = scopeVerticalFov(alive ? actions.horizontalFov : 90);
+  update(actions: WeaponActions, camera: PerspectiveCamera, time: number, alive = true) {
+    const fov = scopeVerticalFov(alive ? actions.fovAt(time) : 90);
     if (camera.fov !== fov) {camera.fov = fov; camera.updateProjectionMatrix();}
     const scoped = alive && actions.hidesViewmodel;
     this.element.hidden = !scoped;

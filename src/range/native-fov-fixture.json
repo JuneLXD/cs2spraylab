@@ -1,0 +1,532 @@
+{
+  "build": 2000927,
+  "clientSha256": "99ae5b5724e869de64cc810d7ade089fb18d2fe08dcb8d88982af39f951d1d12",
+  "source": "cs2-game/game/csgo/bin/linuxsteamrt64/libclient.so",
+  "method": "Unicorn emulation of arithmetic-only block; actual-time function call excluded and elapsed time supplied explicitly; no imports or OS calls executed.",
+  "startAddress": "0x152ba7d",
+  "stopAddress": "0x152b9fb",
+  "schemaOffsets": {
+    "start": "0x2a4",
+    "startTime": "0x2a8",
+    "duration": "0x2ac"
+  },
+  "curve": "start + (target - start) * t * t * (3 - 2*t), t = clamp((time - startTime)/duration, 0, 1)",
+  "samples": [
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": -0.01,
+      "fov": 90.0
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0,
+      "fov": 90.0
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.005000000000000001,
+      "fov": 88.5999984741211
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.0125,
+      "fov": 82.1875
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.025,
+      "fov": 65.0
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.037500000000000006,
+      "fov": 47.8125
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.045000000000000005,
+      "fov": 41.400001525878906
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.05,
+      "fov": 40.0
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.15000000000000002,
+      "fov": 40.0
+    },
+    {
+      "start": 40,
+      "target": 10,
+      "duration": 0.05,
+      "elapsed": -0.01,
+      "fov": 40.0
+    },
+    {
+      "start": 40,
+      "target": 10,
+      "duration": 0.05,
+      "elapsed": 0,
+      "fov": 40.0
+    },
+    {
+      "start": 40,
+      "target": 10,
+      "duration": 0.05,
+      "elapsed": 0.005000000000000001,
+      "fov": 39.15999984741211
+    },
+    {
+      "start": 40,
+      "target": 10,
+      "duration": 0.05,
+      "elapsed": 0.0125,
+      "fov": 35.3125
+    },
+    {
+      "start": 40,
+      "target": 10,
+      "duration": 0.05,
+      "elapsed": 0.025,
+      "fov": 25.0
+    },
+    {
+      "start": 40,
+      "target": 10,
+      "duration": 0.05,
+      "elapsed": 0.037500000000000006,
+      "fov": 14.6875
+    },
+    {
+      "start": 40,
+      "target": 10,
+      "duration": 0.05,
+      "elapsed": 0.045000000000000005,
+      "fov": 10.84000015258789
+    },
+    {
+      "start": 40,
+      "target": 10,
+      "duration": 0.05,
+      "elapsed": 0.05,
+      "fov": 10.0
+    },
+    {
+      "start": 40,
+      "target": 10,
+      "duration": 0.05,
+      "elapsed": 0.15000000000000002,
+      "fov": 10.0
+    },
+    {
+      "start": 10,
+      "target": 90,
+      "duration": 0.05,
+      "elapsed": -0.01,
+      "fov": 10.0
+    },
+    {
+      "start": 10,
+      "target": 90,
+      "duration": 0.05,
+      "elapsed": 0,
+      "fov": 10.0
+    },
+    {
+      "start": 10,
+      "target": 90,
+      "duration": 0.05,
+      "elapsed": 0.005000000000000001,
+      "fov": 12.239999771118164
+    },
+    {
+      "start": 10,
+      "target": 90,
+      "duration": 0.05,
+      "elapsed": 0.0125,
+      "fov": 22.5
+    },
+    {
+      "start": 10,
+      "target": 90,
+      "duration": 0.05,
+      "elapsed": 0.025,
+      "fov": 50.0
+    },
+    {
+      "start": 10,
+      "target": 90,
+      "duration": 0.05,
+      "elapsed": 0.037500000000000006,
+      "fov": 77.5
+    },
+    {
+      "start": 10,
+      "target": 90,
+      "duration": 0.05,
+      "elapsed": 0.045000000000000005,
+      "fov": 87.76000213623047
+    },
+    {
+      "start": 10,
+      "target": 90,
+      "duration": 0.05,
+      "elapsed": 0.05,
+      "fov": 90.0
+    },
+    {
+      "start": 10,
+      "target": 90,
+      "duration": 0.05,
+      "elapsed": 0.15000000000000002,
+      "fov": 90.0
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.1,
+      "elapsed": -0.01,
+      "fov": 90.0
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.1,
+      "elapsed": 0,
+      "fov": 90.0
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.1,
+      "elapsed": 0.010000000000000002,
+      "fov": 88.5999984741211
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.1,
+      "elapsed": 0.025,
+      "fov": 82.1875
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.1,
+      "elapsed": 0.05,
+      "fov": 65.0
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.1,
+      "elapsed": 0.07500000000000001,
+      "fov": 47.8125
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.1,
+      "elapsed": 0.09000000000000001,
+      "fov": 41.400001525878906
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.1,
+      "elapsed": 0.1,
+      "fov": 40.0
+    },
+    {
+      "start": 90,
+      "target": 40,
+      "duration": 0.1,
+      "elapsed": 0.2,
+      "fov": 40.0
+    },
+    {
+      "start": 73,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": -0.01,
+      "fov": 73.0
+    },
+    {
+      "start": 73,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0,
+      "fov": 73.0
+    },
+    {
+      "start": 73,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.005000000000000001,
+      "fov": 72.07599639892578
+    },
+    {
+      "start": 73,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.0125,
+      "fov": 67.84375
+    },
+    {
+      "start": 73,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.025,
+      "fov": 56.5
+    },
+    {
+      "start": 73,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.037500000000000006,
+      "fov": 45.15625
+    },
+    {
+      "start": 73,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.045000000000000005,
+      "fov": 40.92399978637695
+    },
+    {
+      "start": 73,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.05,
+      "fov": 40.0
+    },
+    {
+      "start": 73,
+      "target": 40,
+      "duration": 0.05,
+      "elapsed": 0.15000000000000002,
+      "fov": 40.0
+    }
+  ],
+  "sensitivity": {
+    "startAddress": "0x1860345",
+    "stopAddress": "0x18603b8",
+    "minimumFov": 10,
+    "samples": [
+      {
+        "fov": 90.0,
+        "zoomRatio": 0.75,
+        "scale": 1.0
+      },
+      {
+        "fov": 90.0,
+        "zoomRatio": 1.0,
+        "scale": 1.0
+      },
+      {
+        "fov": 90.0,
+        "zoomRatio": 1.25,
+        "scale": 1.0
+      },
+      {
+        "fov": 89.99,
+        "zoomRatio": 0.75,
+        "scale": 0.7416666746139526
+      },
+      {
+        "fov": 89.99,
+        "zoomRatio": 1.0,
+        "scale": 0.9888888597488403
+      },
+      {
+        "fov": 89.99,
+        "zoomRatio": 1.25,
+        "scale": 1.236111044883728
+      },
+      {
+        "fov": 82.1875,
+        "zoomRatio": 0.75,
+        "scale": 0.6833333373069763
+      },
+      {
+        "fov": 82.1875,
+        "zoomRatio": 1.0,
+        "scale": 0.9111111164093018
+      },
+      {
+        "fov": 82.1875,
+        "zoomRatio": 1.25,
+        "scale": 1.1388888359069824
+      },
+      {
+        "fov": 65.0,
+        "zoomRatio": 0.75,
+        "scale": 0.5416666269302368
+      },
+      {
+        "fov": 65.0,
+        "zoomRatio": 1.0,
+        "scale": 0.7222222089767456
+      },
+      {
+        "fov": 65.0,
+        "zoomRatio": 1.25,
+        "scale": 0.9027777910232544
+      },
+      {
+        "fov": 47.8125,
+        "zoomRatio": 0.75,
+        "scale": 0.3916666507720947
+      },
+      {
+        "fov": 47.8125,
+        "zoomRatio": 1.0,
+        "scale": 0.5222222208976746
+      },
+      {
+        "fov": 47.8125,
+        "zoomRatio": 1.25,
+        "scale": 0.6527777910232544
+      },
+      {
+        "fov": 40.0,
+        "zoomRatio": 0.75,
+        "scale": 0.3333333432674408
+      },
+      {
+        "fov": 40.0,
+        "zoomRatio": 1.0,
+        "scale": 0.4444444477558136
+      },
+      {
+        "fov": 40.0,
+        "zoomRatio": 1.25,
+        "scale": 0.5555555820465088
+      },
+      {
+        "fov": 39.999,
+        "zoomRatio": 0.75,
+        "scale": 0.32499998807907104
+      },
+      {
+        "fov": 39.999,
+        "zoomRatio": 1.0,
+        "scale": 0.4333333373069763
+      },
+      {
+        "fov": 39.999,
+        "zoomRatio": 1.25,
+        "scale": 0.5416666865348816
+      },
+      {
+        "fov": 15.0,
+        "zoomRatio": 0.75,
+        "scale": 0.125
+      },
+      {
+        "fov": 15.0,
+        "zoomRatio": 1.0,
+        "scale": 0.1666666716337204
+      },
+      {
+        "fov": 15.0,
+        "zoomRatio": 1.25,
+        "scale": 0.2083333432674408
+      },
+      {
+        "fov": 10.0,
+        "zoomRatio": 0.75,
+        "scale": 0.0833333358168602
+      },
+      {
+        "fov": 10.0,
+        "zoomRatio": 1.0,
+        "scale": 0.1111111119389534
+      },
+      {
+        "fov": 10.0,
+        "zoomRatio": 1.25,
+        "scale": 0.1388888955116272
+      },
+      {
+        "fov": 5.0,
+        "zoomRatio": 0.75,
+        "scale": 0.0833333358168602
+      },
+      {
+        "fov": 5.0,
+        "zoomRatio": 1.0,
+        "scale": 0.1111111119389534
+      },
+      {
+        "fov": 5.0,
+        "zoomRatio": 1.25,
+        "scale": 0.1388888955116272
+      }
+    ]
+  },
+  "ironSight": {
+    "startAddress": "0x23bc270",
+    "stopAddress": "0x23bc2c4",
+    "bias": 0.2,
+    "caller": "0x14dd633",
+    "fovCaller": "0x14de8b0",
+    "samples": [
+      {
+        "progress": 0,
+        "alpha": 0.0,
+        "fov": 90.0
+      },
+      {
+        "progress": 0.1,
+        "alpha": 0.027027029544115067,
+        "fov": 88.78378367051482
+      },
+      {
+        "progress": 0.25,
+        "alpha": 0.07692307978868484,
+        "fov": 86.53846140950918
+      },
+      {
+        "progress": 0.5,
+        "alpha": 0.20000000298023224,
+        "fov": 80.99999986588955
+      },
+      {
+        "progress": 0.75,
+        "alpha": 0.4285714328289032,
+        "fov": 70.71428552269936
+      },
+      {
+        "progress": 0.9,
+        "alpha": 0.6923076510429382,
+        "fov": 58.84615570306778
+      },
+      {
+        "progress": 1,
+        "alpha": 1.0,
+        "fov": 45.0
+      }
+    ]
+  }
+}

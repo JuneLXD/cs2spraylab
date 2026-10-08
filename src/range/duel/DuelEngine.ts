@@ -8,7 +8,7 @@ import {gameData,loadoutWeapon,resolutionPixelRatio,viewAspect, type Settings, t
 import {requestRawLock} from '../input';
 import {InputClock, inputTimestamp} from '../input-clock';
 import {createGameRenderer} from '../render-context';
-import {mouseAngle, VERTICAL_FOV, zoomRatio} from '../simulation';
+import {mouseAngle, VERTICAL_FOV} from '../simulation';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
 import {attachBindInput} from '../keybinds/dom-input';
 import {protectedCodes} from '../keybinds/profile';
@@ -806,7 +806,9 @@ export class DuelEngine {
         this.pointerX = event.clientX; this.pointerY = event.clientY;
       }
       const actions = this.sim.actors[0].weapon.actions;
-      const scale = (event.pointerType === 'mouse' ? mouseAngle(1, this.settings.sensitivity) * zoomRatio(actions.zoom, this.settings) : .0025) * actions.sensitivityScale;
+      const mouse = event.pointerType === 'mouse';
+      const scale = (mouse ? mouseAngle(1, this.settings.sensitivity) : .0025) *
+        actions.sensitivityAt(this.sim.time + this.sim.accumulator, mouse ? this.settings.keyboard.zoomSensitivity : 1);
       if (dx || dy) this.sim.command(0, {yawDelta: -dx * scale,
         pitchDelta: -dy * scale * (this.settings.invertY ? -1 : 1)});
     }) as EventListener, {capture: true});
@@ -886,7 +888,7 @@ export class DuelEngine {
   private repeatZoom() {
     const weapon = this.sim.actors[0].weapon;
     if (!this.settings.keyboard.zoomRepeat || this.paused || this.sim.phase !== 'fighting' || weapon.id === 'knife' || !gameData.weapons[weapon.id].zoomLevels) return;
-    if (this.binds.isHeld('attack2') && this.sim.time >= weapon.actions.readyAt) this.sim.command(0, {secondaryPressed: true});
+    if (this.binds.isHeld('attack2') && this.sim.time >= weapon.actions.secondaryReadyAt) this.sim.command(0, {secondaryPressed: true});
   }
 
   equip(slot: Slot) {
@@ -1180,7 +1182,7 @@ export class DuelEngine {
     if (!player.alive) this.camera.position.y = deathFeet(player, deathAge, this.sim.arena.solids,
       this.sim.actors[0].verticalVelocity) + death.height;
     this.camera.rotation.set(view.pitch + (player.alive ? 0 : death.pitch), view.yaw, punch.roll * DEG + (player.alive ? 0 : death.roll), 'YXZ');
-    const scoped = this.scope.update(viewWeapon.actions, this.camera, player.alive);
+    const scoped = this.scope.update(viewWeapon.actions, this.camera, this.sim.time + this.sim.accumulator, player.alive);
     this.camera.updateMatrixWorld();
     this.syncActors(snapshots, this.sim.phase !== 'ready' && !this.paused ? dt : 0);
     this.kick = Math.max(0, this.kick - dt * 8);

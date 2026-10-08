@@ -1,0 +1,464 @@
+{
+  "build": 2000927,
+  "demo": "native_audit_zoom_modes_001.dem",
+  "demoSha256": "1ac400f77f2b94d7fa08b8015dc71f2bc19680aa15148274486a2189eb4f4605",
+  "method": "Offline no-bot SourceTV recording, 64 Hz samples; weapon identity comes from weapon_fire events because this parser version returns no active_weapon_name for five of these rifles.",
+  "weapons": [
+    {
+      "silenced": false,
+      "tick": 386,
+      "weapon": "weapon_awp"
+    },
+    {
+      "silenced": false,
+      "tick": 942,
+      "weapon": "weapon_ssg08"
+    },
+    {
+      "silenced": false,
+      "tick": 1498,
+      "weapon": "weapon_g3sg1"
+    },
+    {
+      "silenced": false,
+      "tick": 2058,
+      "weapon": "weapon_scar20"
+    },
+    {
+      "silenced": false,
+      "tick": 2583,
+      "weapon": "weapon_aug"
+    },
+    {
+      "silenced": false,
+      "tick": 3115,
+      "weapon": "weapon_sg556"
+    }
+  ],
+  "transitions": [
+    {
+      "tick": 0,
+      "gameTime": 1088.9375,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.1000000015,
+      "m_flFOVTime": 678.5143432617,
+      "zoom": 1.0,
+      "primaryTick": 86848,
+      "secondaryTick": 86886
+    },
+    {
+      "tick": 51,
+      "gameTime": 1089.734375,
+      "m_iFOV": 0,
+      "m_iFOVStart": 40,
+      "m_flFOVRate": 0.0,
+      "m_flFOVTime": 1089.734375,
+      "zoom": 0.0,
+      "primaryTick": 139614,
+      "secondaryTick": 139614
+    },
+    {
+      "tick": 311,
+      "gameTime": 1093.796875,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1093.7836914062,
+      "zoom": 1.0,
+      "primaryTick": 139764,
+      "secondaryTick": 140042
+    },
+    {
+      "tick": 335,
+      "gameTime": 1094.171875,
+      "m_iFOV": 10,
+      "m_iFOVStart": 40,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1094.1586914062,
+      "zoom": 2.0,
+      "primaryTick": 139764,
+      "secondaryTick": 140090
+    },
+    {
+      "tick": 360,
+      "gameTime": 1094.5625,
+      "m_iFOV": 90,
+      "m_iFOVStart": 66,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1094.5493164062,
+      "zoom": 0.0,
+      "primaryTick": 139764,
+      "secondaryTick": 140140
+    },
+    {
+      "tick": 385,
+      "gameTime": 1094.953125,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1094.9399414062,
+      "zoom": 1.0,
+      "primaryTick": 139764,
+      "secondaryTick": 140190
+    },
+    {
+      "tick": 386,
+      "gameTime": 1094.96875,
+      "m_iFOV": 90,
+      "m_iFOVStart": 78,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1094.9555664062,
+      "zoom": 1.0,
+      "primaryTick": 140340,
+      "secondaryTick": 140376
+    },
+    {
+      "tick": 479,
+      "gameTime": 1096.421875,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.1000000015,
+      "m_flFOVTime": 1096.4105224609,
+      "zoom": 1.0,
+      "primaryTick": 140340,
+      "secondaryTick": 140376
+    },
+    {
+      "tick": 589,
+      "gameTime": 1098.140625,
+      "m_iFOV": 0,
+      "m_iFOVStart": 40,
+      "m_flFOVRate": 0.0,
+      "m_flFOVTime": 1098.140625,
+      "zoom": 0.0,
+      "primaryTick": 140690,
+      "secondaryTick": 140690
+    },
+    {
+      "tick": 867,
+      "gameTime": 1102.484375,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1102.4711914062,
+      "zoom": 1.0,
+      "primaryTick": 140842,
+      "secondaryTick": 141154
+    },
+    {
+      "tick": 892,
+      "gameTime": 1102.875,
+      "m_iFOV": 15,
+      "m_iFOVStart": 40,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1102.8618164062,
+      "zoom": 2.0,
+      "primaryTick": 140842,
+      "secondaryTick": 141204
+    },
+    {
+      "tick": 916,
+      "gameTime": 1103.25,
+      "m_iFOV": 90,
+      "m_iFOVStart": 67,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1103.2368164062,
+      "zoom": 0.0,
+      "primaryTick": 140842,
+      "secondaryTick": 141252
+    },
+    {
+      "tick": 941,
+      "gameTime": 1103.640625,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1103.6274414062,
+      "zoom": 1.0,
+      "primaryTick": 140842,
+      "secondaryTick": 141302
+    },
+    {
+      "tick": 942,
+      "gameTime": 1103.65625,
+      "m_iFOV": 90,
+      "m_iFOVStart": 78,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1103.6430664062,
+      "zoom": 1.0,
+      "primaryTick": 141426,
+      "secondaryTick": 141462
+    },
+    {
+      "tick": 1022,
+      "gameTime": 1104.90625,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.1000000015,
+      "m_flFOVTime": 1104.8930664062,
+      "zoom": 1.0,
+      "primaryTick": 141426,
+      "secondaryTick": 141462
+    },
+    {
+      "tick": 1146,
+      "gameTime": 1106.84375,
+      "m_iFOV": 0,
+      "m_iFOVStart": 40,
+      "m_flFOVRate": 0.0,
+      "m_flFOVTime": 1106.84375,
+      "zoom": 0.0,
+      "primaryTick": 141804,
+      "secondaryTick": 141804
+    },
+    {
+      "tick": 1423,
+      "gameTime": 1111.171875,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1111.1630859375,
+      "zoom": 1.0,
+      "primaryTick": 141954,
+      "secondaryTick": 142266
+    },
+    {
+      "tick": 1447,
+      "gameTime": 1111.546875,
+      "m_iFOV": 15,
+      "m_iFOVStart": 40,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1111.5380859375,
+      "zoom": 2.0,
+      "primaryTick": 141954,
+      "secondaryTick": 142314
+    },
+    {
+      "tick": 1472,
+      "gameTime": 1111.9375,
+      "m_iFOV": 90,
+      "m_iFOVStart": 67,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1111.9289550781,
+      "zoom": 0.0,
+      "primaryTick": 141954,
+      "secondaryTick": 142364
+    },
+    {
+      "tick": 1497,
+      "gameTime": 1112.328125,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1112.3195800781,
+      "zoom": 1.0,
+      "primaryTick": 141954,
+      "secondaryTick": 142414
+    },
+    {
+      "tick": 1701,
+      "gameTime": 1115.515625,
+      "m_iFOV": 0,
+      "m_iFOVStart": 40,
+      "m_flFOVRate": 0.0,
+      "m_flFOVTime": 1115.515625,
+      "zoom": 0.0,
+      "primaryTick": 142914,
+      "secondaryTick": 142914
+    },
+    {
+      "tick": 1982,
+      "gameTime": 1119.90625,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1119.900390625,
+      "zoom": 1.0,
+      "primaryTick": 143074,
+      "secondaryTick": 143384
+    },
+    {
+      "tick": 2007,
+      "gameTime": 1120.296875,
+      "m_iFOV": 15,
+      "m_iFOVStart": 40,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1120.2907714844,
+      "zoom": 2.0,
+      "primaryTick": 143074,
+      "secondaryTick": 143434
+    },
+    {
+      "tick": 2032,
+      "gameTime": 1120.6875,
+      "m_iFOV": 90,
+      "m_iFOVStart": 67,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1120.681640625,
+      "zoom": 0.0,
+      "primaryTick": 143074,
+      "secondaryTick": 143484
+    },
+    {
+      "tick": 2056,
+      "gameTime": 1121.0625,
+      "m_iFOV": 40,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.0500000007,
+      "m_flFOVTime": 1121.056640625,
+      "zoom": 1.0,
+      "primaryTick": 143074,
+      "secondaryTick": 143532
+    },
+    {
+      "tick": 2261,
+      "gameTime": 1124.265625,
+      "m_iFOV": 0,
+      "m_iFOVStart": 40,
+      "m_flFOVRate": 0.0,
+      "m_flFOVTime": 1124.265625,
+      "zoom": 0.0,
+      "primaryTick": 144034,
+      "secondaryTick": 144034
+    },
+    {
+      "tick": 2532,
+      "gameTime": 1128.5,
+      "m_iFOV": 45,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.1000000015,
+      "m_flFOVTime": 1128.4877929688,
+      "zoom": 1.0,
+      "primaryTick": 144194,
+      "secondaryTick": 144484
+    },
+    {
+      "tick": 2557,
+      "gameTime": 1128.890625,
+      "m_iFOV": 90,
+      "m_iFOVStart": 45,
+      "m_flFOVRate": 0.125,
+      "m_flFOVTime": 1128.8784179688,
+      "zoom": 0.0,
+      "primaryTick": 144194,
+      "secondaryTick": 144534
+    },
+    {
+      "tick": 2582,
+      "gameTime": 1129.28125,
+      "m_iFOV": 45,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.1000000015,
+      "m_flFOVTime": 1129.2690429688,
+      "zoom": 1.0,
+      "primaryTick": 144194,
+      "secondaryTick": 144584
+    },
+    {
+      "tick": 2787,
+      "gameTime": 1132.484375,
+      "m_iFOV": 0,
+      "m_iFOVStart": 45,
+      "m_flFOVRate": 0.0,
+      "m_flFOVTime": 1132.484375,
+      "zoom": 0.0,
+      "primaryTick": 145086,
+      "secondaryTick": 145086
+    },
+    {
+      "tick": 3064,
+      "gameTime": 1136.8125,
+      "m_iFOV": 45,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.1000000015,
+      "m_flFOVTime": 1136.8002929688,
+      "zoom": 1.0,
+      "primaryTick": 145238,
+      "secondaryTick": 145548
+    },
+    {
+      "tick": 3089,
+      "gameTime": 1137.203125,
+      "m_iFOV": 90,
+      "m_iFOVStart": 45,
+      "m_flFOVRate": 0.125,
+      "m_flFOVTime": 1137.1909179688,
+      "zoom": 0.0,
+      "primaryTick": 145238,
+      "secondaryTick": 145598
+    },
+    {
+      "tick": 3114,
+      "gameTime": 1137.59375,
+      "m_iFOV": 45,
+      "m_iFOVStart": 90,
+      "m_flFOVRate": 0.1000000015,
+      "m_flFOVTime": 1137.5815429688,
+      "zoom": 1.0,
+      "primaryTick": 145238,
+      "secondaryTick": 145648
+    }
+  ],
+  "caveats": [
+    "Sampling is not an exact sub-tick timestamp or physical input-latency measurement.",
+    "Attack tick fields are retained without conversion; their serialized representation needs separate decoding.",
+    "All transition samples, including initial scope state and weapon changes, are retained."
+  ],
+  "slowMotionAug": {
+    "video": "native-aug-scope-002.mkv",
+    "videoSha256": "dd81913972a45c3606d9d0c45f314aac808d958ff151f9a931766dca83d68d31",
+    "timescale": 0.05,
+    "measurements": [
+      {
+        "direction": "in",
+        "points": 33,
+        "fits": [
+          {
+            "model": "native-bias",
+            "rmseDegrees": 0.1338964118808806,
+            "start": 3.058447265625,
+            "duration": 2.0056477864583337
+          },
+          {
+            "model": "smoothstep",
+            "rmseDegrees": 2.235317900977208,
+            "start": 3.3259277343750004,
+            "duration": 2.53515625
+          },
+          {
+            "model": "linear",
+            "rmseDegrees": 2.780831155310339,
+            "start": 3.6369140625000003,
+            "duration": 1.9037109375
+          }
+        ]
+      },
+      {
+        "direction": "out",
+        "points": 38,
+        "fits": [
+          {
+            "model": "native-bias",
+            "rmseDegrees": 0.13545292688987953,
+            "start": 11.072705078124999,
+            "duration": 2.508902994791667
+          },
+          {
+            "model": "smoothstep",
+            "rmseDegrees": 3.169763957457546,
+            "start": 10.535286458333333,
+            "duration": 2.3046223958333334
+          },
+          {
+            "model": "linear",
+            "rmseDegrees": 3.06886126211877,
+            "start": 10.618961588541667,
+            "duration": 2.151920572916666
+          }
+        ]
+      }
+    ]
+  },
+  "excludedCapture": "native-aug-scope-001.mkv held a USP-S after inventory commands were issued in one frame. It is excluded; the corrected capture separates equip commands with waits and its demo identifies AUG."
+}

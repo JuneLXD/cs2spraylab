@@ -704,7 +704,7 @@ export class RangeEngine {
   private repeatZoom() {
     const id = this.sim.equipped;
     if (!this.sim.active || !this.sim.settings.keyboard.zoomRepeat || id === 'knife' || !gameData.weapons[id].zoomLevels) return;
-    if (this.binds.isHeld('attack2') && this.sim.time >= this.sim.actions.readyAt) this.secondary(true);
+    if (this.binds.isHeld('attack2') && this.sim.time >= this.sim.actions.secondaryReadyAt) this.secondary(true);
   }
   bindInput() {
     const canvas = this.renderer.domElement;
@@ -821,7 +821,7 @@ export class RangeEngine {
     const visualRecoil = this.sim.slot === 3 ? {yaw: 0, pitch: 0} : this.sim.recovery.predict(this.sim.accumulator);
     const view = recoilView(this.sim.yaw, this.sim.pitch, visualRecoil);
     this.camera.rotation.set(view.pitch, view.yaw, 0, 'YXZ');
-    const scoped = this.scope.update(this.sim.actions, this.camera);
+    const scoped = this.scope.update(this.sim.actions, this.camera, this.sim.time + this.sim.accumulator);
     this.weaponRoot.visible = !scoped;
     this.crosshair.style.visibility = scoped || this.sim.equipped !== 'knife' && !gameData.weapons[this.sim.equipped].showCrosshair ? 'hidden' : '';
     this.camera.updateMatrixWorld();

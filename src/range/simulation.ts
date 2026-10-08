@@ -23,7 +23,6 @@ export type Input = MoveInput;
 
 export function mouseAngle(count: number, sensitivity: number) { return count * .022 * sensitivity * DEG; }
 /** CS2's zoom_sensitivity_ratio, applied to mouse input while scoped. */
-export const zoomRatio = (zoom: number, settings: Pick<Settings, 'keyboard'>) => zoom ? settings.keyboard?.zoomSensitivity ?? 1 : 1;
 export function targetSpeed(settings: Settings) {
   return (settings.targetSpeed === 'knife' ? 250 : settings.targetSpeed === 'smg' ? 240 : gameData.weapons[settings.weapon].speed) * UNIT;
 }
@@ -236,7 +235,8 @@ export class Simulation {
     this.attempts++; this.onResult(this.latest);
   }
   aim(dx: number, dy: number, touch = false) {
-    const scale = (touch ? .0025 : mouseAngle(1, this.settings.sensitivity) * zoomRatio(this.actions.zoom, this.settings)) * this.actions.sensitivityScale;
+    const scale = (touch ? .0025 : mouseAngle(1, this.settings.sensitivity)) *
+      this.actions.sensitivityAt(this.time + this.accumulator, touch ? 1 : this.settings.keyboard.zoomSensitivity);
     this.drill?.mouse(Math.hypot(dx,dy)*scale/DEG);
     this.yaw -= dx * scale;
     this.pitch = clamp(this.pitch - dy * scale * (this.settings.invertY ? -1 : 1), -89 * DEG, 89 * DEG);
@@ -299,7 +299,7 @@ export class Simulation {
   private untilTick() { return (Math.floor((this.time + 1e-10) / STEP) + 1) * STEP - this.time; }
   private untilEvent() {
     let duration = this.untilTick();
-    const at = this.reloadState.active ? this.reloadState.nextEventAt : this.firing ? this.nextShot : Infinity;
+    const at = Math.min(this.actions.nextEventAt, this.reloadState.active ? this.reloadState.nextEventAt : this.firing ? this.nextShot : Infinity);
     if (at > this.time + 1e-10) duration = Math.min(duration, at - this.time);
     return duration;
   }
