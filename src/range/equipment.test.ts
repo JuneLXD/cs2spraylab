@@ -20,7 +20,8 @@ describe('Always-available sidearm and knife',()=>{
     sim.start();expect(shots).toHaveBeenCalledTimes(2);
     sim.start();sim.advance(.1);expect(shots).toHaveBeenCalledTimes(2);
     sim.advance(.08);expect(shots).toHaveBeenCalledTimes(3);
-    expect(shots.mock.calls[2][0].at-shots.mock.calls[1][0].at).toBeGreaterThanOrEqual(.17);
+    // Exact event-time deadlines can differ by a floating-point ulp.
+    expect(shots.mock.calls[2][0].at-shots.mock.calls[1][0].at).toBeGreaterThanOrEqual(.17 - 1e-9);
   });
   it('reloads an empty pistol by itself, preserves ammo when switching and uses the installed reload duration',()=>{
     const sim=new Simulation(defaults);const shots=vi.fn();sim.onShot=shots;sim.equip(2);sim.active=true;sim.time=1;

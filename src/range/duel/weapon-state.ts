@@ -56,6 +56,18 @@ export class DuelWeaponState {
     this.actionEvents = []; return events;
   }
 
+  /** An already requested shot must sample movement/recovery at its deadline,
+   * even when the weapon cycle does not divide the 128 Hz movement grid. */
+  nextAttackTime(command: WeaponCommand) {
+    if (this.reload.active) return this.reload.until;
+    const alternate = this.id === 'revolver' && !!(command.secondaryHeld || command.secondaryPressed);
+    if (!this.pendingPress && !this.burstLeft && !command.firePressed &&
+      !(command.fireHeld && (this.actions.stats.fullAuto || this.id === 'knife')) && !alternate &&
+      !(this.id === 'knife' && command.secondaryHeld)) return Infinity;
+    if (this.ammo <= 0 && this.id !== 'knife') return Infinity;
+    return Math.max(this.nextShotAt, this.actions.readyAt, this.actions.chargeReadyAt);
+  }
+
   advancePassive(time: number, dt: number, crouch = false, airborne = false) {
     if (this.id === 'zeus') {
       const stats = equipmentStats(this.id);

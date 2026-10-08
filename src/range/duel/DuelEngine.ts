@@ -6,6 +6,7 @@ import {DEG, UNIT, type Vec} from '../actor-physics';
 import {RangeAudio} from '../audio';
 import {gameData,loadoutWeapon,resolutionPixelRatio,viewAspect, type Settings, type Viewmodel, type Weapon} from '../config';
 import {requestRawLock} from '../input';
+import {InputClock, inputTimestamp} from '../input-clock';
 import {createGameRenderer} from '../render-context';
 import {mouseAngle, VERTICAL_FOV, zoomRatio} from '../simulation';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
@@ -98,6 +99,7 @@ export class DuelEngine {
   private readonly observer: ResizeObserver;
   private frame = 0;
   private last = 0;
+  private readonly inputClock = new InputClock();
   private statusAt = 0;
   private disposed = false;
   private paused = false;
@@ -711,7 +713,7 @@ export class DuelEngine {
       this.releaseShortcuts();
       if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
     }
-    this.sim = this.createSimulation(); this.kills = this.damage = 0;
+    this.sim = this.createSimulation(); this.inputClock.reset(performance.now()); this.kills = this.damage = 0;
     this.shell.scale.set(this.config.arenaScale, 1, this.config.arenaScale);
     this.damageFeedback.clear(); this.wasReloading = false;
     this.roundFlow.reset(); this.deaths.clear();
@@ -732,6 +734,7 @@ export class DuelEngine {
     if (this.sim.phase === 'ready') {this.sim.start(); this.beginProgression();} else this.sim.resume();
     this.sessionStarted = true;
     this.paused = false;
+    this.inputClock.reset(performance.now());
     this.renderer.domElement.focus({preventScroll: true});
     const coarse = matchMedia('(pointer: coarse)').matches;
     const supported = typeof this.renderer.domElement.requestPointerLock === 'function';
@@ -784,11 +787,17 @@ export class DuelEngine {
       if (this.sim.phase !== 'fighting') return;
       this.pointer = event.pointerId; this.pointerX = event.clientX; this.pointerY = event.clientY;
       // Mouse buttons fire through their binds; touch fires directly.
-      if (event.pointerType !== 'mouse') {this.sim.command(0, {firePressed: true}); this.sim.stepEarly();}
+      if (event.pointerType !== 'mouse') {
+        this.syncInput(event.timeStamp, true);
+        this.sim.command(0, {firePressed: true}); this.sim.processInput();
+      }
       if (!document.pointerLockElement) canvas.setPointerCapture(event.pointerId);
     }) as EventListener);
-    this.listen(document, 'pointermove', ((event: PointerEvent) => {
+    // Capture look before the bind listener handles a chorded button edge on
+    // the same pointer event; a flick's final delta belongs to that click.
+    this.listen(window, 'pointermove', ((event: PointerEvent) => {
       if (this.sim.phase !== 'fighting' || this.paused) return;
+      this.syncInput(event.timeStamp);
       let dx = 0, dy = 0;
       if (document.pointerLockElement === canvas && event.pointerType === 'mouse') {
         dx = event.movementX; dy = event.movementY;
@@ -800,7 +809,7 @@ export class DuelEngine {
       const scale = (event.pointerType === 'mouse' ? mouseAngle(1, this.settings.sensitivity) * zoomRatio(actions.zoom, this.settings) : .0025) * actions.sensitivityScale;
       if (dx || dy) this.sim.command(0, {yawDelta: -dx * scale,
         pitchDelta: -dy * scale * (this.settings.invertY ? -1 : 1)});
-    }) as EventListener);
+    }) as EventListener, {capture: true});
     this.listen(document, 'pointerup', ((event: PointerEvent) => {
       if (this.pointer !== event.pointerId) return;
       this.pointer = null;
@@ -809,6 +818,7 @@ export class DuelEngine {
     this.listen(canvas, 'pointercancel', (() => this.pause()) as EventListener);
     this.listen(canvas, 'contextmenu', (event => event.preventDefault()) as EventListener);
     this.bindHandle = attachBindInput({canvas, runtime: this.binds, active: () => this.sim.phase !== 'ready' && !this.paused,
+      beforeInput: timestamp => this.syncInput(timestamp, true), afterInput: () => {if (!this.paused) this.sim.processInput();},
       listen: (target, type, listener, options) => this.listen(target, type, listener, options)});
     this.listen(window, 'keydown', ((event: KeyboardEvent) => {
       if (event.ctrlKey && event.code === 'KeyW' && this.sessionStarted) event.preventDefault();
@@ -831,6 +841,13 @@ export class DuelEngine {
       walk: held('walk'), crouch: held('duck'), jump: held('jump')});
   }
 
+  private syncInput(timestamp: number, flush = false) {
+    const now = inputTimestamp(timestamp);
+    if (this.paused || this.sim.phase !== 'fighting') { this.inputClock.reset(now); return; }
+    this.inputClock.advance(now, elapsed => this.sim.advance(elapsed));
+    if (flush) this.sim.flushInput();
+  }
+
   private onBind(event: BindEvent) {
     const fighting = this.sim.phase === 'fighting' && !this.paused;
     if (event.kind === 'press' || event.kind === 'release') {
@@ -838,8 +855,6 @@ export class DuelEngine {
       switch (event.action) {
         case 'attack':
           this.sim.command(0, down ? (fighting ? {fireHeld: true, firePressed: true} : {}) : {fireHeld: false});
-          // Fire on the next frame rather than at the next tick boundary.
-          if (down && fighting) this.sim.stepEarly();
           return;
         case 'attack2': this.sim.command(0, down ? (fighting ? {secondaryPressed: true, secondaryHeld: true} : {}) : {secondaryHeld: false}); return;
         case 'reload': this.sim.command(0, down ? {reloadPressed: true, reloadHeld: true} : {reloadHeld: false}); return;
@@ -1117,17 +1132,19 @@ export class DuelEngine {
   private tick(timestamp: number) {
     if (this.disposed) return;
     this.frame = requestAnimationFrame(time => this.tick(time));
+    const cpuStart = performance.now();
     const active = this.sim.phase !== 'ready' && !this.paused;
+    // Simulation and input share a clock even when a graphics cap skips a draw.
+    if (document.hidden) this.inputClock.reset(performance.now());
+    else this.syncInput(performance.now());
     if (document.hidden || !this.pacer.ready(timestamp, active ? this.settings.frameLimit : 15)) {
       if (document.hidden) this.last = timestamp;
       return;
     }
-    const cpuStart = performance.now();
     const dt = this.last ? Math.min((timestamp - this.last) / 1000, .25) : 0;
     this.last = timestamp;
     if (this.sessionStarted && this.roundFlow.advance(dt, this.paused, this.config.feedbackSeconds)) this.restart(true);
     this.repeatZoom();
-    this.sim.advance(dt);
     this.syncEnvironment();this.syncDrops();
     const snapshots = this.sim.renderSnapshot();
     const events=this.sim.drainEvents();
@@ -1145,7 +1162,9 @@ export class DuelEngine {
     }
     this.wasReloading = player.reloading;
     this.viewAnimationElapsed += active ? dt : 0;
-    if (this.viewAnimationElapsed >= 1 / this.metrics.animationRate(this.settings.quality)) {
+    // First-person handling follows every displayed frame, independently of
+    // the cheaper distant-bot animation sampling policy.
+    if (this.viewAnimationElapsed > 0) {
     this.viewAnimation?.update(Math.max(0,viewWeapon.reloadUntil-this.sim.time), viewWeapon.reload.phaseDuration||equipmentStats(player.equipment).reload, this.viewAnimationElapsed,
       {reloadEmpty:viewWeapon.reloadEmpty,ammo:viewWeapon.ammo,equipment:viewWeapon.id,reloadPhase:viewWeapon.reloadPhase,
         reloadProgress:viewWeapon.reload.progress,charging:viewWeapon.actions.charging,chargeDuration:REVOLVER_WINDUP});
@@ -1204,6 +1223,7 @@ export class DuelEngine {
     const viewport = viewmodelViewport(this.width, this.height);
     this.renderer.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
     this.renderer.render(this.viewScene, this.viewCamera);
+    this.sim.present(snapshots);
     const oldResolution = this.metrics.adaptive;
     if (this.metrics.sample(dt, performance.now() - cpuStart, this.settings.quality === 'auto', active, this.settings.frameLimit)) {
       this.meter.update(this.metrics, this.renderer.getPixelRatio());

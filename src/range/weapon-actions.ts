@@ -23,6 +23,7 @@ export class WeaponActions {
   }
   get stats() {return this.zoom > 0 || this.burst || this.alternateFire ? this.alternate : this.isRevolver && !this.charging ? this.idleRevolver : this.base;}
   get charging() {return this.chargedAt !== undefined && !this.alternateFire;}
+  get chargeReadyAt() {return this.chargedAt ?? 0;}
   get horizontalFov() {return this.zoom && this.id !== 'knife' ? gameData.weapons[this.id].zoomFov[this.zoom - 1] : 90;}
   get sensitivityScale() {return this.horizontalFov / 90;}
   get hidesViewmodel() {return this.zoom > 0 && this.id !== 'knife' && gameData.weapons[this.id].hideWhenZoomed;}

@@ -119,6 +119,11 @@ export const latestChanges = {
       'A first visit opens aim_redline with the AWP: three bots at long range strafe A-D and close in from the floor, respawn instantly and wear Kevlar without a helmet, and you never reload.',
       'Graphics start at High render quality with the FPS counter on, and the range\'s Ctrl+W protection starts off. Saved settings stay as they are.',
     ]},
+    {id: 'input-timing', title: 'Input timing & handling', items: [
+      'Mouse buttons and movement keys use their event time. Short strafes are preserved, clicks no longer advance the world into the future, and weapon cycles keep their fractional timing.',
+      'Your movement predicts through the next frame using the same collision rules. Shots follow displayed target positions, with live armor and protection against hitting a previous bot life.',
+      'First-person weapon animation follows every rendered frame. Simulation continues between capped draws, and your existing sensitivity, zoom and resolution stay intact.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

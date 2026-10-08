@@ -27,7 +27,7 @@ describe('dropped weapon pickups', () => {
     expect(sim.loadout).toEqual({primary: 'awp', sidearm: 'usp'});
     expect(sim.actors[0].weapon.ammo).toBe(4);
     expect(sim.actors[0].equipReadyAt).toBe(sim.time + gameData.weapons.awp.deploy);
-    expect(sim.drainEvents()).toContainEqual({kind: 'pickup', tick: 0, actorId: 0, dropId: 1, equipment: 'awp'});
+    expect(sim.drainEvents()).toContainEqual({kind: 'pickup', tick: 0, at: 0, actorId: 0, dropId: 1, equipment: 'awp'});
     expect(sim.drops.find(drop=>drop.id===1)?.picked).toBe(true);
     expect(sim.drainEvents().some(event=>event.kind==='pickup'&&event.dropId===1)).toBe(false);
     expect(sim.drops.some(drop=>drop.id!==1&&drop.equipment==='ak47'&&!drop.picked)).toBe(true);

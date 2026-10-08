@@ -1,8 +1,8 @@
 import {clamp, STEP} from '../actor-physics';
 import type {DuelActorSnapshot} from './types';
 
-export function interpolateActors(previous: DuelActorSnapshot[], current: DuelActorSnapshot[], remainder: number) {
-  const alpha = clamp(remainder / STEP, 0, 1);
+export function interpolateActors(previous: DuelActorSnapshot[], current: DuelActorSnapshot[], remainder: number, duration = STEP) {
+  const alpha = duration > 0 ? clamp(remainder / duration, 0, 1) : 1;
   const lerp = (a: number, b: number) => a + (b - a) * alpha;
   return current.map((actor, index) => {
     const before = previous[index];

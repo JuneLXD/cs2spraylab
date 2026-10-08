@@ -4,6 +4,7 @@ import { RangeEngine } from './engine';
 import { defaults, modeNames, Mode, Weapon } from './config';
 import { Simulation } from './simulation';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {InputClock} from './input-clock';
 
 function rayFixture() {
   // Exercise the renderer's actual ray casting without allocating a WebGL context.
@@ -22,7 +23,7 @@ it.each([true, false])('keeps touch or genuinely unsupported capture usable (tou
   const engine = Object.create(RangeEngine.prototype) as RangeEngine;
   const request = vi.fn().mockRejectedValue(new Error('Touch must not request pointer lock'));
   const guard = {enter:vi.fn().mockResolvedValue(undefined)};
-  Object.assign(engine,{enterRevision:0,sim:{active:false,equipped:'ak47',settings:defaults},
+  Object.assign(engine,{enterRevision:0,inputClock:new InputClock(),sim:{active:false,equipped:'ak47',settings:defaults},
     renderer:{domElement:{focus:vi.fn(),requestPointerLock:coarse ? request : undefined}},
     audio:{unlock:vi.fn().mockResolvedValue(undefined)},shortcuts:guard});
   vi.stubGlobal('matchMedia',()=>({matches:coarse}));
@@ -160,6 +161,8 @@ it('preserves native target units and origin instead of fitting its loading pose
   engine.targets = [new THREE.Group(), new THREE.Group()];
   engine.targetModels = []; engine.mixers = []; engine.targetActions = [];
   engine.onError = vi.fn();
+  // This fixture owns only the target, not the asynchronous weapon cache.
+  engine['preloadModels'] = vi.fn();
   try {
     await engine.loadTarget();
     expect(engine.onError).not.toHaveBeenCalled();

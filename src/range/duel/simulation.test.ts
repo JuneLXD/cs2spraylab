@@ -139,29 +139,30 @@ describe('headless combat fixtures', () => {
     expect(sim.drainEvents().some(event => event.kind === 'action' && event.actorId === 0 && event.action === 'reload-start')).toBe(true);
   });
 
-  it('simulates a click on the next frame instead of waiting for the next tick boundary', () => {
+  it('simulates a click at elapsed input time without borrowing a future tick', () => {
     const sim = new DuelSimulation(sanitizeDuelConfig({playerHealth: 500}), 42, testArena());
     sim.start(); sim.actors[0].yaw += Math.PI;
     sim.advance(STEP + .001); sim.drainEvents();
     const tick = sim.tick;
-    sim.command(0, {firePressed: true, fireHeld: true});
     sim.advance(.002);
     expect(sim.tick).toBe(tick);
+    sim.flushInput();
+    sim.command(0, {firePressed: true, fireHeld: true});
     expect(sim.stepEarly()).toBe(true);
-    expect(sim.tick).toBe(tick + 1);
+    expect(sim.tick).toBe(tick);
+    expect(sim.time).toBeCloseTo(STEP + .003);
+    expect(sim.accumulator).toBe(0);
     expect(sim.drainEvents().some(event => event.kind === 'fire' && event.actorId === 0)).toBe(true);
-    // At most one tick ahead of real time: later frames wait until it is repaid.
-    expect(sim.stepEarly()).toBe(false);
-    sim.advance(2 * STEP - .004); expect(sim.tick).toBe(tick + 1);
-    sim.advance(.002); expect(sim.tick).toBe(tick + 2);
+    sim.stepEarly(); expect(sim.drainEvents().filter(event => event.kind === 'fire')).toEqual([]);
+    sim.advance(STEP - .003); expect(sim.tick).toBe(tick + 1);
   });
 
-  it('keeps the presented view continuous while a tick runs ahead', () => {
+  it('keeps the predicted local view continuous when input flushes a partial tick', () => {
     const sim = new DuelSimulation(sanitizeDuelConfig({playerHealth: 500}), 42, testArena());
     sim.start(); sim.command(0, {forward: 1});
     for (let i = 0; i < 20; i++) sim.advance(.007);
     const before = sim.renderSnapshot()[0].position;
-    sim.command(0, {firePressed: true}); expect(sim.stepEarly()).toBe(true);
+    sim.flushInput(); sim.command(0, {firePressed: true}); sim.processInput();
     const after = sim.renderSnapshot()[0].position;
     expect(Math.hypot(after.x - before.x, after.y - before.y, after.z - before.z)).toBeLessThan(1e-9);
     sim.advance(.004);

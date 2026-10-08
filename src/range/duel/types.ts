@@ -48,7 +48,8 @@ export type DuelActorSnapshot = {
   actionAt?: number;
   supportingActor?: number;
 };
-export type DuelEvent =
+export type DuelEvent = DuelEventData & {at?: number};
+type DuelEventData =
   | {kind: 'action'; tick: number; actorId: ActorId; equipment: Equipment; action: string; silent?: boolean}
   | {kind: 'environment'; tick: number; actorId: ActorId; environmentId: string; action: 'open' | 'close' | 'break' | 'move'; point: Vec}
   | {kind: 'pickup'; tick: number; actorId: ActorId; dropId: number; equipment: Equipment}

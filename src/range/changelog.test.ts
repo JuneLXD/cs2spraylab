@@ -28,7 +28,7 @@ describe('append-only changelog', () => {
   it('covers the accumulated completed features', () => {
     expect(latestChanges.sections.map(section => section.id)).toEqual([
       'combat', 'weapons', 'movement', 'arenas', 'bot-behavior', 'connection', 'presentation', 'performance', 'tracers', 'fullscreen', 'display', 'crosshair', 'aim-botz', 'controls',
-      'armory', 'frame-limit', 'auto-reload', 'weapon-switch', 'input-latency', 'reflex', 'aim-redline', 'botz-movement', 'low-latency', 'defaults',
+      'armory', 'frame-limit', 'auto-reload', 'weapon-switch', 'input-latency', 'reflex', 'aim-redline', 'botz-movement', 'low-latency', 'defaults', 'input-timing',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'reflex')!.items.join(' ')).toContain('come at you through its gaps');
     expect(latestChanges.sections.find(section => section.id === 'aim-redline')!.items.join(' ')).toContain('BOT Reed');

@@ -88,8 +88,9 @@ export class DuelSimulation {
   private controlledBots = new Set<number>();
   private lastCalloutAt = new Map<number, number>();
   private previous: DuelActorSnapshot[] = [];
-  /** The snapshot before `previous`, presented while a tick runs ahead of real time. */
-  private earlier: DuelActorSnapshot[] = [];
+  private history: {at: number; actors: DuelActorSnapshot[]}[] = [];
+  private nextThinkAt = STEP;
+  private displayed?: DuelActorSnapshot[];
   private combatActions = new Map<number,{action:DuelActorSnapshot['action'];at:number}>();
   private usedAt = new Map<number,number>();
   private hasSidearm = true;
@@ -252,31 +253,63 @@ export class DuelSimulation {
   advance(elapsed: number) {
     if (this.phase !== 'fighting' || this.paused) return;
     this.accumulator += Math.min(Math.max(elapsed, 0), .25);
-    while (this.accumulator + 1e-10 >= STEP && this.phase === 'fighting') {
-      this.step(); this.accumulator -= STEP;
+    let duration = this.untilEvent();
+    while (this.accumulator + 1e-10 >= duration && this.phase === 'fighting') {
+      this.accumulator = Math.max(0, this.accumulator - duration);
+      this.step(duration);
+      duration = this.untilEvent();
     }
   }
 
-  /** Runs the next tick now rather than at its boundary, so a click is simulated by the next frame instead of up to
-   * a tick (7.8 ms) later. It stays at most one tick ahead of real time: later frames wait until time catches up. */
+  private untilTick() { return (Math.floor((this.time + 1e-10) / STEP) + 1) * STEP - this.time; }
+  private untilEvent() {
+    let duration = this.untilTick();
+    for (const actor of this.actors) {
+      if (!actor.alive) continue;
+      const at = Math.max(actor.equipReadyAt, actor.weapon.nextAttackTime(actor.command));
+      if (at > this.time + 1e-10) duration = Math.min(duration, at - this.time);
+    }
+    return duration;
+  }
+
+  /** Finish elapsed time with the OLD input before applying a key/button edge.
+   * Retain the fixed 128 Hz grid; never borrow a future tick to fire a shot. */
+  flushInput() {
+    if (this.phase !== 'fighting' || this.paused || this.accumulator <= 1e-10) return;
+    const duration = this.accumulator;
+    this.accumulator = 0;
+    this.step(duration);
+  }
+
+  /** Consume action edges at their actual event time, without advancing bots,
+   * movement, cooldowns, or recovery. Used after the input clock has caught up. */
+  processInput() { this.step(0, true); }
+
+  /** Kept for callers outside the browser engine; no future simulation debt. */
   stepEarly() {
-    if (this.phase !== 'fighting' || this.paused || this.accumulator < 0) return false;
-    this.earlier = this.previous;
-    this.accumulator -= STEP;
-    this.step();
+    if (this.phase !== 'fighting' || this.paused) return false;
+    this.flushInput();
+    this.processInput();
     return true;
   }
 
-  step() {
+  step(dt = STEP, playerOnly = false) {
     if (this.phase !== 'fighting' || this.paused) return;
-    this.tick++;
-    this.time = this.tick * STEP;
-    if (this.botz) this.respawnBots();
-    if (this.botz?.map === 'island') this.catchArrivals();
-    this.applyEnvironment(advanceEnvironment(this.authoredArena,this.environment,STEP,this.actors.filter(actor=>actor.alive).map(actorBody)),0);
+    if (dt > 0) {
+      this.history.push({at: this.time, actors: this.snapshot()});
+      while (this.history.length > 2 && this.history[1].at < this.time - STEP * 2) this.history.shift();
+    }
+    this.time += dt;
+    this.tick = Math.floor((this.time + 1e-10) / STEP);
+    if (!playerOnly) {
+      if (this.botz) this.respawnBots();
+      if (this.botz?.map === 'island') this.catchArrivals();
+      this.applyEnvironment(advanceEnvironment(this.authoredArena,this.environment,dt,this.actors.filter(actor=>actor.alive).map(actorBody)),0);
+    }
     const actorView = this.snapshot();
     this.previous = actorView;
-    if (!this.botz && this.tick % 4 === 1) {
+    if (!playerOnly && !this.botz && this.time + 1e-10 >= this.nextThinkAt) {
+      this.nextThinkAt += STEP * 4;
       const shadows=actorShadows(actorView,this.arena);
       this.coach.observe(this.time, actorView[0], actorView.slice(1).flatMap(opponent => {
         const visible = observeBot(this.time, actorView[0], [opponent], this.arena,
@@ -329,6 +362,7 @@ export class DuelSimulation {
       this.terrainCommand=this.terrainTactics.plan(this.time,peers,this.arena,this.environment,this.boostPlan?.assignments.map(item=>item.actorId));
     }
     for (const actor of this.actors.slice(1)) {
+      if (playerOnly) break;
       if (!actor.alive || this.controlledBots.has(actor.id)) continue;
       if (this.botz) {this.commandBotz(actor); continue;}
       const brain = this.brains.get(actor.id);
@@ -342,8 +376,9 @@ export class DuelSimulation {
     const movementActors=this.boostPlan?[this.actors[0],...this.actors.slice(1).sort((a,b)=>
       Number(b.id===this.boostPlan!.assignments[0].actorId)-Number(a.id===this.boostPlan!.assignments[0].actorId))]:this.actors;
     for (const actor of movementActors) {
+      if (playerOnly && actor.id !== 0) continue;
       if (!actor.alive) continue;
-      actor.punch.advance(STEP, actor.weapon.recovery.angle);
+      actor.punch.advance(dt, actor.weapon.recovery.angle);
       const command = actor.command;
       if(command.dropPressed)this.dropWeapon(actor);
       if(command.usePressed)this.useEnvironment(actor.id);
@@ -351,14 +386,14 @@ export class DuelSimulation {
       if (actor.id === 0 && command.equipSlot) {this.equipPlayer(command.equipSlot); command.equipSlot = undefined;}
       actor.yaw += command.yawDelta;
       actor.pitch = Math.max(-89 * DEG, Math.min(89 * DEG, actor.pitch + command.pitchDelta));
-      recoverTagging(actor, STEP, actor.grounded ?? actor.feet === 0);
+      recoverTagging(actor, dt, actor.grounded ?? actor.feet === 0);
       const zoomBefore=actor.weapon.actions.zoom;
       // Bots scope before firing. They use the same mode-specific speed/accuracy
       // data as the player, without learning anything about hidden positions.
       if (actor.id !== 0 && actor.weapon.id !== 'knife' && gameData.weapons[actor.weapon.id].zoomLevels && !actor.weapon.actions.zoom && !actor.weapon.actions.pendingZoom && command.fireHeld) {
         actor.weapon.actions.secondary(this.time);
       }
-      const next = advanceActor(actor, command, actor.weapon.actions.stats.speed * UNIT, STEP,
+      const next = advanceActor(actor, command, actor.weapon.actions.stats.speed * UNIT, dt,
         (from, desired, feet, height) => {
           const staticPosition = moveInArena(from, desired, feet, height, this.arena);
           const clear = (position: Vec) => this.actors.every(other => other === actor || !other.alive ||
@@ -371,7 +406,7 @@ export class DuelSimulation {
         }, (position, feet, height) => canFitInArena(position, feet, height, this.arena),
         (position, from, to, height) => verticalContact(position, from, to, height, this.arena.solids),
         arenaMovementEnvironment(this.arena,this.actors.filter(other=>!this.passesThrough(actor,other))
-          .map(other=>({...other,previous:this.previous[other.id]})),actor.id,this.time-STEP,actor.pitch,actor.position));
+          .map(other=>({...other,previous:this.previous[other.id]})),actor.id,this.time-dt,actor.pitch,actor.position));
       const traveled = Math.hypot(next.position.x - actor.position.x, next.position.z - actor.position.z);
       const landed=next.grounded&&!(actor.grounded??actor.feet===0);
       Object.assign(actor,next);
@@ -389,11 +424,11 @@ export class DuelSimulation {
         if(door && !this.environment.pieces[door.id]?.open && this.time-(this.usedAt.get(actor.id)??-Infinity)>1)
           this.useEnvironment(actor.id);
       }
-      for (const state of actor.inventory.values()) if (state !== actor.weapon) state.advancePassive(this.time,STEP, (actor.duckAmount ?? 0) >= .95, !actor.grounded);
+      for (const state of actor.inventory.values()) if (state !== actor.weapon) state.advancePassive(this.time,dt, (actor.duckAmount ?? 0) >= .95, !actor.grounded);
       // CS2 reloads the player's empty magazine by itself once the last shot's cycle ends. Bots reload through their brain.
       const autoReload = actor.id === 0 && actor.weapon.ammo === 0 && !actor.weapon.reload.active &&
         this.time + 1e-9 >= Math.max(actor.weapon.nextShotAt, actor.weapon.actions.readyAt, actor.equipReadyAt);
-      const fired = actor.weapon.advance(this.time, STEP, this.time < actor.equipReadyAt
+      const fired = actor.weapon.advance(this.time, dt, this.time < actor.equipReadyAt
         ? {...command, fireHeld: false, firePressed: false, secondaryHeld: false, secondaryPressed: false}
         : autoReload ? {...command, reloadPressed: true} : command, actor);
       if (this.botz && actor.id === 0) this.refillAmmo(actor);
@@ -685,8 +720,16 @@ export class DuelSimulation {
   }
 
   private resolveShot(shooter: CombatActor, fired: FiredRound, shotId: number, pending: PendingHit[]) {
-    const targets=this.snapshot().map(current=>({...current,
-      armor:Math.max(0,current.armor-pending.filter(hit=>hit.victim.id===current.id).reduce((sum,hit)=>sum+hit.event.armorDamage,0))}));
+    const targets=this.snapshot().map(current=>{
+      // Local training has no network delay to simulate. Test player bullets
+      // against the pose actually submitted to the screen, retaining LIVE life,
+      // health and armor. A respawn must never inherit its previous life's hit.
+      const shown = shooter.id === 0 ? this.displayed?.[current.id] : undefined;
+      return {...current, ...(shown ? {position: shown.position, feet: shown.feet,
+        duckAmount: shown.duckAmount, yaw: shown.yaw, pitch: shown.pitch,
+        alive: current.alive && shown.alive && current.generation === shown.generation} : {}),
+        armor:Math.max(0,current.armor-pending.filter(hit=>hit.victim.id===current.id).reduce((sum,hit)=>sum+hit.event.armorDamage,0))};
+    });
     const addHit=(victim:CombatActor,group:Hitgroup,point:Vec,direction:Vec,damage:{healthDamage:number;armorDamage:number})=>{
       pending.push({victim,weapon:fired.weapon,direction,event:{kind:'hit',tick:this.tick,shooter:shooter.id,victim:victim.id,shotId,group,point,
         healthDamage:damage.healthDamage,armorDamage:damage.armorDamage,lethal:false}});
@@ -753,14 +796,32 @@ export class DuelSimulation {
   renderSnapshot() {
     const current = this.snapshot();
     if (this.paused || this.phase !== 'fighting') return current;
-    // While a tick runs ahead, the presented moment lies between the two ticks before it, so nothing jumps.
-    const presented = this.accumulator < 0 ? interpolateActors(this.earlier, this.previous, this.accumulator + STEP)
-      : interpolateActors(this.previous, current, this.accumulator);
-    // Mouse look is immediate, even on frames between fixed simulation ticks.
-    presented[0].yaw = current[0].yaw + this.actors[0].command.yawDelta;
-    presented[0].pitch = Math.max(-89 * DEG, Math.min(89 * DEG, current[0].pitch + this.actors[0].command.pitchDelta));
+    const at = this.time + this.accumulator - STEP;
+    let before = this.history[0];
+    for (const sample of this.history) { if (sample.at > at) break; before = sample; }
+    const after = this.history.find(sample => sample.at > at) ?? {at: this.time, actors: current};
+    const poses = before ? interpolateActors(before.actors, after.actors, at - before.at, after.at - before.at) : current;
+    const presented = current.map((actor, index) => {
+      const pose = poses[index];
+      return pose && actor.alive && actor.generation === pose.generation ? {...actor,
+        position: pose.position, velocity: pose.velocity, feet: pose.feet, duckAmount: pose.duckAmount,
+        yaw: pose.yaw, pitch: pose.pitch} : actor;
+    });
+    // Only the local player is predicted, using the same terrain/hull solver.
+    // Prediction is read-only: it cannot consume input, RNG, shots or recovery.
+    const actor = this.actors[0], command = actor.command;
+    const yaw = actor.yaw + command.yawDelta;
+    const pitch = Math.max(-89 * DEG, Math.min(89 * DEG, actor.pitch + command.pitchDelta));
+    const predicted = actor.alive && this.accumulator > 1e-10 ? advanceActor({...actor, yaw}, command,
+      actor.weapon.actions.stats.speed * UNIT, this.accumulator, undefined, undefined, undefined,
+      arenaMovementEnvironment(this.arena, this.actors, actor.id, this.time, pitch, actor.position)) : actor;
+    presented[0] = {...current[0], position: {...predicted.position}, velocity: {...predicted.velocity},
+      feet: predicted.feet, duckAmount: predicted.duckAmount ?? 0, yaw, pitch};
     return presented;
   }
+
+  /** Called only after a rendered frame; inspecting renderSnapshot is pure. */
+  present(snapshots: DuelActorSnapshot[]) { this.displayed = snapshots; }
 
   nearestDoor(actorId=0) {
     const actor=this.actors[actorId];if(!actor?.alive)return;
@@ -817,7 +878,7 @@ export class DuelSimulation {
 
   private emit(event: DuelEvent) {
     if (this.events.length === 512) this.events.shift();
-    this.events.push(event);
+    this.events.push({...event, at: this.time});
   }
 
   private emitSound(actor: CombatActor, sound: 'footstep' | 'landing', point: Vec) {

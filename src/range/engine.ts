@@ -7,6 +7,7 @@ import { Settings, MeasuredProfile, Weapon, gameData, type Viewmodel } from './c
 import { DEG, direction, Simulation, Shot, Vec, VERTICAL_FOV, TARGET_Z, type Result } from './simulation';
 import { RangeAudio } from './audio';
 import { requestRawLock } from './input';
+import {InputClock, inputTimestamp} from './input-clock';
 import { createGameRenderer } from './render-context';
 import { VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelFov, viewmodelOffset, viewmodelViewport } from './viewmodel';
 import { GUIDE_COLORS, SprayDemonstration } from './spray-demonstration';
@@ -93,6 +94,8 @@ export class RangeEngine {
   private coverSolids:PenetrationSolid[]=[];
   observer: ResizeObserver;
   disposed = false; frame = 0; previous = 0; elapsed = 0; statusTime = 0;
+  private readonly inputClock = new InputClock();
+  private presentedDrill = -1;
   inputStatus = 'Ready'; assetStatus = 'Loading models'; loadedTarget = false;
   crosshair: HTMLElement; hitmarker: HTMLElement;
   cues = [document.createElement('div'), document.createElement('div')];
@@ -531,7 +534,9 @@ export class RangeEngine {
     const animationAmmo = this.sim.loadedAmmo;
     this.viewAnimations.get(this.sim.equipped)?.playFire(this.sim.equipped, {side:animationAmmo % 2 ? 'right' : 'left',lastShot:animationAmmo===0,
       alternate:this.sim.actions.alternateFire, zoomed:this.sim.actions.zoom > 0, ...(['awp','ssg08'].includes(this.sim.equipped) ? {duration:this.sim.stats.cycle} : {})});
-    this.syncTargets();
+    // Moving-target shots use the meshes at their last displayed position.
+    // New drills still need an initial scene before their first rendered frame.
+    if (this.presentedDrill !== this.sim.drillRevision) this.syncTargets();
     const expectedIndex=this.sim.targetForShot(shot.index);
     const expectedTarget = this.targets[expectedIndex];
     const meshes=this.targetModels.filter(model=>model.parent?.visible).flatMap(scoringMeshes);
@@ -637,6 +642,7 @@ export class RangeEngine {
     const revision = ++this.enterRevision;
     this.entering = true;
     this.sim.active = true;
+    this.inputClock.reset(performance.now());
     this.renderer.domElement.focus({ preventScroll: true });
     void this.audio.unlock(this.sim.equipped);
     // Fullscreen consumes user activation. Request pointer lock first, without
@@ -712,6 +718,7 @@ export class RangeEngine {
       if (!this.loadedTarget || !this.modelCache.has(this.sim.equipped)) return;
       void this.audio.unlock(this.sim.equipped);
       if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+        this.syncInput(e.timeStamp, true);
         e.preventDefault();
         this.inputStatus = 'Touch'; this.sim.active = true;
         pointer = e.pointerId; lastX = e.clientX; lastY = e.clientY;
@@ -723,14 +730,15 @@ export class RangeEngine {
         if (!document.pointerLockElement) capture(e.pointerId);
       }
     }) as EventListener);
-    listen(document, 'pointermove', ((e: PointerEvent) => {
+    listen(window, 'pointermove', ((e: PointerEvent) => {
       if (!this.sim.active) return;
+      this.syncInput(e.timeStamp);
       if (document.pointerLockElement === canvas && e.pointerType === 'mouse') this.sim.aim(e.movementX, e.movementY);
       else if (e.pointerId === pointer) {
         this.sim.aim(e.clientX - lastX, e.clientY - lastY, e.pointerType !== 'mouse');
         lastX = e.clientX; lastY = e.clientY;
       }
-    }) as EventListener);
+    }) as EventListener, {capture: true});
     listen(document, 'pointerup', ((e: PointerEvent) => {
       if (pointer === e.pointerId) pointer = null;
       if (e.pointerType !== 'mouse' && e.button === 0) this.sim.release(e.pointerType);
@@ -744,7 +752,8 @@ export class RangeEngine {
     listen(document, 'fullscreenchange', (() => {
       if (this.shortcuts.protected && !document.fullscreenElement) this.pause();
     }) as EventListener);
-    const input = attachBindInput({canvas, runtime: this.binds, active: () => this.sim.active, listen});
+    const input = attachBindInput({canvas, runtime: this.binds, active: () => this.sim.active, listen,
+      beforeInput: timestamp => this.syncInput(timestamp, true)});
     this.clearInput = () => { this.binds.releaseAll(); input.reset(); pointer = null; this.sim.input.jumpPressed = false; this.sim.reloadHeld = false; this.updateMovement(); };
     listen(window, 'keydown', ((e: KeyboardEvent) => {
       if (!this.sim.active || (e.target instanceof HTMLElement && e.target.matches('input,select,textarea,button'))) return;
@@ -769,18 +778,26 @@ export class RangeEngine {
     this.viewCamera.aspect = this.viewViewport.aspect;
     this.camera.updateProjectionMatrix(); this.viewCamera.updateProjectionMatrix();
   }
+  private syncInput(timestamp: number, flush = false) {
+    const now = inputTimestamp(timestamp);
+    if (!this.sim.active) { this.inputClock.reset(now); return; }
+    this.inputClock.advance(now, elapsed => this.sim.advance(elapsed));
+    if (flush) this.sim.flushInput();
+  }
   tick(timestamp: number) {
     if (this.disposed) return;
     this.frame = requestAnimationFrame(t => this.tick(t));
+    const cpuStart = performance.now();
+    if (document.hidden) this.inputClock.reset(performance.now());
+    else this.syncInput(performance.now());
     if (document.hidden || !this.pacer.ready(timestamp, this.sim.active ? this.sim.settings.frameLimit : 15)) {
       if (document.hidden) this.previous = timestamp;
       return;
     }
-    const cpuStart = performance.now();
     const policy = qualityPolicy(this.sim.settings.quality);
     const dt = this.previous ? Math.min((timestamp - this.previous) / 1000, .25) : 0;
     this.previous = timestamp; this.elapsed += dt;
-    this.repeatZoom(); this.sim.advance(dt); this.syncTargets();
+    this.repeatZoom(); this.syncTargets();
     const activeLane = this.sim.firing ? this.sim.targetForShot() : 0;
     this.targets.forEach((t, i) => {
       const marker = t.getObjectByName('active-lane') as THREE.Mesh;
@@ -817,7 +834,7 @@ export class RangeEngine {
     const drawing = Math.max(0,this.sim.equipReadyAt-this.sim.time);
     const reloadRemaining = Math.max(0, this.sim.reloadState.until - this.sim.time);
     const reloading = reloadRemaining > 0;
-    if (animate) this.viewAnimations.get(this.sim.equipped)?.update(reloadRemaining, this.sim.reloadState.phaseDuration||this.sim.stats.reload, this.animationElapsed, {reloadEmpty: this.sim.reloadEmpty,
+    this.viewAnimations.get(this.sim.equipped)?.update(reloadRemaining, this.sim.reloadState.phaseDuration||this.sim.stats.reload, this.sim.active ? dt : 0, {reloadEmpty: this.sim.reloadEmpty,
       equipment:this.sim.equipped,reloadPhase:this.sim.reloadState.phase,reloadProgress:this.sim.reloadState.progress,
       ammo:this.sim.loadedAmmo,charging:this.sim.actions.charging,chargeDuration:REVOLVER_WINDUP});
     if (animate) this.animationElapsed = 0;
@@ -871,6 +888,7 @@ export class RangeEngine {
     this.renderer.autoClear = false; this.renderer.clearDepth();
     const v = this.viewViewport; this.renderer.setViewport(v.x, v.y, v.width, v.height);
     this.renderer.render(this.viewScene, this.viewCamera);
+    this.presentedDrill = this.sim.drillRevision;
     const oldResolution = this.metrics.adaptive;
     if (this.metrics.sample(dt, performance.now() - cpuStart, this.sim.settings.quality === 'auto', this.sim.active, this.sim.settings.frameLimit)) {
       this.meter.update(this.metrics, this.renderer.getPixelRatio());

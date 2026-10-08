@@ -38,13 +38,10 @@ export class Simulation {
   lastJumpPressTime?: number; pendingJumpPressTime?: number; landedAt?: number; landingVelocity?: number;
   landingVelocityXY?: {x: number; z: number}; supportId?: ActorKinematics['supportId'];
   moveMode: ActorKinematics['moveMode'] = 'ground'; waterLevel: ActorKinematics['waterLevel'] = 0; ladderDetached = false;
-  private previousPosition?: Vec;
   renderPosition() {
-    if (!this.active || !this.previousPosition) return this.position;
-    const alpha = clamp(this.accumulator / STEP, 0, 1);
-    return {x: this.previousPosition.x + (this.position.x - this.previousPosition.x) * alpha,
-      y: this.previousPosition.y + (this.position.y - this.previousPosition.y) * alpha,
-      z: this.previousPosition.z + (this.position.z - this.previousPosition.z) * alpha};
+    if (!this.active || this.accumulator <= 1e-10) return this.position;
+    return advanceActor(this, this.input, this.stats.speed * UNIT, this.accumulator,
+      undefined, undefined, undefined, this.environment).position;
   }
   targetX = 0; targetVelocity = 0; targetSign = 1;
   targetHealth = [100, 100];
@@ -151,7 +148,6 @@ export class Simulation {
   onResult: (result: Result) => void = () => {};
   constructor(public settings: Settings, private readonly random?: () => number) {this.slot = settings.primaryEnabled ? 1 : 2; this.pattern = recoilPattern(loadoutWeapon(settings)); this.configure(settings);}
   configure(s: Settings, measured?: MeasuredProfile) {
-    this.previousPosition = undefined;
     const changedMode = s.mode !== this.settings.mode;
     const leavingPositionedDrill = isDrillMode(this.settings.mode);
     this.cancel(); this.settings = s; this.measured = measured;
@@ -209,7 +205,6 @@ export class Simulation {
     return {time:this.time,position:this.position,yaw:this.yaw,pitch:this.pitch,velocity:this.velocity,speedCap:this.stats.speed*UNIT,input:this.input,feet:this.feet,grounded:this.grounded};
   }
   newDrill(resetPosition = false) {
-    this.previousPosition = undefined;
     if (!isDrillMode(this.settings.mode)) return;
     const scenario = createScenario(this.settings.mode, this.drillRound++, this.settings.peekScenario);
     if (resetPosition || this.settings.mode === 'peek') {
@@ -273,7 +268,6 @@ export class Simulation {
   }
   cancel() {
     this.burstLeft = 0;
-    this.previousPosition = undefined;
     if (this.firing) this.finish();
     this.active = false; this.input = idleInput(); this.velocity = { x: 0, z: 0 };
     this.reloadHeld = false;
@@ -297,10 +291,23 @@ export class Simulation {
   advance(elapsed: number) {
     if (!this.active) return;
     this.accumulator += Math.min(Math.max(elapsed, 0), .25);
-    while (this.accumulator + 1e-10 >= STEP) { this.step(STEP); this.accumulator -= STEP; }
+    let duration = this.untilEvent();
+    while (this.accumulator + 1e-10 >= duration) {
+      this.accumulator = Math.max(0, this.accumulator - duration); this.step(duration); duration = this.untilEvent();
+    }
+  }
+  private untilTick() { return (Math.floor((this.time + 1e-10) / STEP) + 1) * STEP - this.time; }
+  private untilEvent() {
+    let duration = this.untilTick();
+    const at = this.reloadState.active ? this.reloadState.until : this.firing ? this.nextShot : Infinity;
+    if (at > this.time + 1e-10) duration = Math.min(duration, at - this.time);
+    return duration;
+  }
+  flushInput() {
+    if (!this.active || this.accumulator <= 1e-10) return;
+    const duration = this.accumulator; this.accumulator = 0; this.step(duration);
   }
   step(dt: number) {
-    this.previousPosition = {...this.position};
     this.time += dt;
     this.actions.advance(this.time);
     const weapon = this.stats;

@@ -30,6 +30,9 @@ for (const frameLimit of [30, 240]) for (const shooter of [0, 1]) {
       e.sim.actors[1 - shooter].health = 1;
       e.sim.actors[shooter].weapon.random = () => 0;
       e.sim.command(1, {}); e.sim.command(2, {});
+      // This fixture teleports actors into a new scene before firing. Publish
+      // that scene too; player rays intentionally retain the last shown pose.
+      e.sim.present(e.sim.snapshot());
       const onStatus = e.onStatus, processEvents = e.processEvents;
       let hitFrame = -1, deadPoseOnHitFrame = false;
       const timeout = setTimeout(() => reject(new Error('No hit feedback published')), 2000);
