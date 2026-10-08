@@ -1,0 +1,62 @@
+{
+  "build": "2000927",
+  "demo": "native_reload_gate_001.dem",
+  "sha256": "18aa47897cdf52ce325fb6eb97e587452ebc84cf8da23ff52fce34643c11cd3e",
+  "video": "native-reload-gate-001.mkv",
+  "demoTickSeconds": 0.015625,
+  "reloads": [
+    {
+      "mode": "tap-then-hold",
+      "weapon": "m4a4",
+      "startGameTime": 228.78125,
+      "insertSeconds": 1.375,
+      "endSeconds": 3.078125,
+      "ammoBefore": 27,
+      "ammoAfter": 30,
+      "inputEdges": [
+        {
+          "at": 0.09375,
+          "held": false
+        },
+        {
+          "at": 0.46875,
+          "held": true
+        }
+      ]
+    },
+    {
+      "mode": "hold-release-hold",
+      "weapon": "m4a4",
+      "startGameTime": 233.859375,
+      "insertSeconds": 1.765625,
+      "endSeconds": 3.484375,
+      "ammoBefore": 27,
+      "ammoAfter": 30,
+      "inputEdges": [
+        {
+          "at": 1.0,
+          "held": false
+        },
+        {
+          "at": 1.296875,
+          "held": true
+        }
+      ]
+    },
+    {
+      "mode": "held",
+      "weapon": "m4a4",
+      "startGameTime": 240.171875,
+      "insertSeconds": 2.515625,
+      "endSeconds": 4.9375,
+      "ammoBefore": 27,
+      "ammoAfter": 30,
+      "inputEdges": []
+    }
+  ],
+  "notes": [
+    "Live offline CS2; synthetic X11 input, 64 Hz demo samples, 60 Hz video. No physical latency claim.",
+    "Gate emulation plus clip markers predict insertion and end within two demo samples.",
+    "The generic reserve field is uninitialized before the first insert in this demo and is excluded."
+  ]
+}

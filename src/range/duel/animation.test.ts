@@ -52,6 +52,15 @@ describe('native weapon layers and dynamic death hooks', () => {
     expect(f.spine.quaternion.x).toBeCloseTo(Math.sin(.8 * .35 / 2), 5);
     a.pitch = 0; f.animator.update(a, 0); expect(f.spine.quaternion.x).toBeCloseTo(0); f.animator.dispose();
   });
+  it('uses reload work for a held magazine gesture when wall time remaining is longer than the clip', () => {
+    const f = fixture(), a = actor(); a.reloading = true;
+    f.animator.playAction('ak47', 'reload', {duration: 2});
+    f.animator.update(a, .01, undefined, {reloadDuration: 2, reloadRemaining: 3, reloadProgress: .5, reloadPhase: 'magazine'});
+    expect(f.spine.quaternion.x).toBeGreaterThan(.2);
+    const pose = f.spine.quaternion.clone();
+    f.animator.update(a, .1, undefined, {reloadDuration: 2, reloadRemaining: 2.9, reloadProgress: .5, reloadPhase: 'magazine'});
+    expect(f.spine.quaternion.angleTo(pose)).toBeLessThan(1e-6); f.animator.dispose();
+  });
   it('refreshes only the required aim chains without changing world-space pitch', () => {
     const f = fixture(); f.animator.dispose();
     const low = new THREE.Bone(), middle = new THREE.Bone(); low.name = 'spine_0'; middle.name = 'spine_1';

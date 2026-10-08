@@ -3,9 +3,26 @@ import {equipmentStats, SHELL_RELOAD_START, SHELL_RELOAD_FINISH} from './equipme
 import {NativeReloadState} from './weapon-actions';
 import evidence from '../../docs/native-gameplay-evidence.json';
 import followup from '../../docs/native-reload-followup-evidence.json';
+import liveGate from '../../docs/native-reload-gate-live.json';
+import emptyLive from '../../docs/native-empty-reload-live.json';
 import type {Equipment} from './equipment';
 
 describe('reserve-aware reload phases', () => {
+  it.each(liveGate.reloads)('matches fresh native $mode insertion and completion', sample => {
+    const reload = new NativeReloadState('m4a4'); reload.ammo = sample.ammoBefore; reload.start(0, true);
+    let insertion = 0;
+    const edges = [...sample.inputEdges];
+    while (reload.active) {
+      const at = Math.min(reload.nextEventAt, edges[0]?.at ?? Infinity);
+      const edge = edges[0]?.at === at ? edges.shift() : undefined;
+      const ammo = reload.ammo;
+      reload.advance(at, edge?.held);
+      if (reload.ammo > ammo) insertion = at;
+    }
+    const ended = reload.drainActionEvents().find(event => event.kind === 'reload-end')!.at;
+    expect(Math.abs(insertion - sample.insertSeconds)).toBeLessThan(2 * liveGate.demoTickSeconds);
+    expect(Math.abs(ended - sample.endSeconds)).toBeLessThan(2 * liveGate.demoTickSeconds);
+  });
   it.each(followup.reloads.filter(sample=>sample.mode==='normal'))('$weapon empty=$empty matches the follow-up insertion and cancellation evidence',sample=>{
     const reload=new NativeReloadState(sample.weapon as Equipment);reload.ammo=sample.ammoBefore;
     const insert=sample.clipInsertFrame/sample.clipFramesPerSecond;
@@ -55,16 +72,46 @@ describe('reserve-aware reload phases', () => {
     expect(reload.ammo).toBe(2); expect(reload.reserve).toBe(15);
     expect(reload.drainActionEvents().map(e => e.kind)).toEqual(['reload-start', 'reload-cancel']);
   });
-  it('accounts for hold-R changes using elapsed work, not a new shortened deadline', () => {
+  it('delays held silence, integrates preceding work and disallows re-entry after release', () => {
     const reload = new NativeReloadState('ak47'); reload.ammo = 0;
-    reload.start(0, true); expect(reload.until).toBeCloseTo(reload.stats.reload * 2);
-    reload.advance(1, false); expect(reload.until).toBeCloseTo(1 + reload.stats.reload - .5);
-    reload.advance(1.5, true); expect(reload.until).toBeCloseTo(1.5 + (reload.stats.reload - 1) * 2);
-    expect(reload.nextEventAt).toBeCloseTo(1.7);
-    reload.advance(1.699, true); expect(reload.ammo).toBe(0);
-    reload.advance(1.7, true); expect(reload.ammo).toBe(30); expect(reload.active).toBe(true);
-    reload.advance(reload.until - .001, true); expect(reload.active).toBe(true);
-    reload.advance(reload.until, true); expect(reload.ammo).toBe(30); expect(reload.reserve).toBe(60);
+    reload.start(0, true); expect(reload.silent).toBe(false);
+    reload.advance(.199, true); expect(reload.silent).toBe(false);
+    reload.advance(.2, true); expect(reload.silent).toBe(true);
+    reload.advance(1, false); expect(reload.progress * reload.phaseDuration).toBeCloseTo(.6);
+    const deadline = 1 + (reload.stats.reload - .6) / .99;
+    expect(reload.until).toBeCloseTo(deadline);
+    reload.advance(1.5, true); expect(reload.silent).toBe(false); expect(reload.until).toBeCloseTo(deadline);
+    const insert = 1 + (1.1 - .6) / .99;
+    reload.advance(insert - .001); expect(reload.ammo).toBe(0);
+    reload.advance(insert); expect(reload.ammo).toBe(30);
+    reload.advance(deadline); expect(reload.active).toBe(false); expect(reload.reserve).toBe(60);
+  });
+  it('matches the recorded held M4 insertion and end within two native samples', () => {
+    const sample = followup.reloads.find(row => row.mode === 'held')!;
+    const reload = new NativeReloadState('m4a4'); reload.ammo = sample.ammoBefore; reload.start(0, true);
+    const insertion = .2 + (41 / 30 - .2) * 2;
+    expect(Math.abs(insertion - (sample.insertGameTime - sample.startGameTime))).toBeLessThan(2 * followup.demoTickSeconds);
+    expect(Math.abs(reload.until - (sample.endGameTime - sample.startGameTime))).toBeLessThan(2 * followup.demoTickSeconds);
+    reload.advance(insertion - .001); expect(reload.ammo).toBe(sample.ammoBefore);
+    reload.advance(insertion); expect(reload.ammo).toBe(30); expect(reload.silent).toBe(true);
+    const end = reload.until;
+    reload.advance(.2 + (62 / 30 - .2) * 2); expect(reload.silent).toBe(false);
+    expect(reload.until).toBeCloseTo(end); reload.advance(end); expect(reload.active).toBe(false);
+  });
+  it.each(emptyLive.reloads)('matches live Deagle insertion with empty=$empty', sample => {
+    const insert = sample.clipInsertFrame / sample.clipFramesPerSecond;
+    expect(Math.abs(insert - sample.insertSeconds)).toBeLessThan(emptyLive.demoTickSeconds);
+    const reload = new NativeReloadState('deagle'); reload.ammo = sample.ammoBefore; reload.start(0);
+    reload.advance(insert - .001); expect(reload.ammo).toBe(sample.ammoBefore);
+    reload.advance(insert); expect(reload.ammo).toBe(sample.ammoAfter); expect(reload.active).toBe(true);
+    expect(Math.abs(reload.until - sample.endSeconds)).toBeLessThan(emptyLive.demoTickSeconds);
+  });
+  it('a short tap and later hold keep normal timing', () => {
+    const reload = new NativeReloadState('m4a4'); reload.ammo = 4; reload.start(0, true);
+    reload.advance(.05, false); reload.advance(.45, true);
+    expect(reload.silent).toBe(false); expect(reload.until).toBeCloseTo(reload.stats.reload);
+    reload.advance(reload.until, true); expect(reload.active).toBe(false);
+    expect(reload.drainActionEvents().map(e => e.kind)).toEqual(['reload-start', 'reload-end']);
   });
   it.each(['nova', 'xm1014', 'sawedoff'] as const)('%s inserts shells individually and finishes after interruption', id => {
     const reload = new NativeReloadState(id); reload.ammo = 0;
@@ -101,11 +148,11 @@ describe('reserve-aware reload phases', () => {
     reload.advance(.1); reload.interrupt(); expect(reload.until).toBeCloseTo(SHELL_RELOAD_FINISH);
     reload.advance(SHELL_RELOAD_FINISH); expect(reload.active).toBe(false); expect(reload.ammo).toBe(1);
   });
-  it('keeps the completion event silent flag from the interval that completed it', () => {
+  it('restores loud playback before completion when the authored silent section ends', () => {
     const reload = new NativeReloadState('mag7'); reload.ammo = 0; reload.start(0, true);
     reload.advance(reload.until, false);
     const events = reload.drainActionEvents();
-    expect(events[events.length - 1]).toMatchObject({kind: 'reload-end', silent: true});
+    expect(events[events.length - 1]).toMatchObject({kind: 'reload-end', silent: false});
     expect(reload.silent).toBe(false);
   });
   it('rejects invalid silent speed coefficients', () => {

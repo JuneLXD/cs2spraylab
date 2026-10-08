@@ -176,6 +176,11 @@ export const latestChanges = {
       'The FPS monitor shows p95 gameplay frame intervals; its tooltip adds p99, worst interval and CPU work.',
       'Click the monitor after pausing to save recent frame timings for comparison on your own PC. These measurements do not represent physical input latency.',
     ]},
+    {id:'native-held-reload',title:'Native reload timing',items:[
+      'Holding reload now waits 200 ms and slows only the animation’s marked section. Releasing reload prevents silence from restarting during that reload.',
+      'Magazine insertion uses installed weapon markers, including separate empty-pistol reloads; ammo remains available after switching away past insertion.',
+      'Reload sounds and opponent gestures follow animation progress through speed changes. Fresh native M4A4 recordings verify tap, hold and release behavior.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

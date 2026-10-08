@@ -14,8 +14,9 @@ export function weaponModeStats(id: Equipment, alternate = false) {
 export const equipmentIds = Object.keys(equipmentNames) as Equipment[];
 export const equipmentData = data;
 
-// These engine-side transitions are estimates, not extracted vdata fields.
+// Installed native reload gate selects 0.5 playback speed after its hold delay.
 export const SILENT_RELOAD_MULTIPLIER = 2;
+// Shell phase durations remain estimates, not extracted vdata fields.
 export const SHELL_RELOAD_START = .5;
 export const SHELL_RELOAD_FINISH = .2;
 // Installed research/convars.txt and Valve's 2024-02-06 release notes agree.

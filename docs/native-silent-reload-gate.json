@@ -1,0 +1,177 @@
+{
+  "binarySha256": "99ae5b5724e869de64cc810d7ade089fb18d2fe08dcb8d88982af39f951d1d12",
+  "function": "0x148b5b0",
+  "scope": "Offline execution of native hold eligibility, timer, silent flag and playback-rate selection; owner/input/clock helpers shimmed, attack deadlines expired.",
+  "cases": {
+    "holdThenRelease": [
+      {
+        "time": 10,
+        "held": true,
+        "section": true,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": true,
+        "holdStart": 10.0
+      },
+      {
+        "time": 10.19,
+        "held": true,
+        "section": true,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": true,
+        "holdStart": 10.0
+      },
+      {
+        "time": 10.21,
+        "held": true,
+        "section": true,
+        "rate": 0.5,
+        "silent": true,
+        "eligible": true,
+        "holdStart": 10.0
+      },
+      {
+        "time": 10.8,
+        "held": true,
+        "section": true,
+        "rate": 0.5,
+        "silent": true,
+        "eligible": true,
+        "holdStart": 10.0
+      },
+      {
+        "time": 10.9,
+        "held": false,
+        "section": true,
+        "rate": 0.9900000095367432,
+        "silent": false,
+        "eligible": false,
+        "holdStart": 0.0
+      },
+      {
+        "time": 11.2,
+        "held": true,
+        "section": true,
+        "rate": 0.9900000095367432,
+        "silent": false,
+        "eligible": false,
+        "holdStart": 0.0
+      }
+    ],
+    "sectionEnd": [
+      {
+        "time": 10,
+        "held": true,
+        "section": true,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": true,
+        "holdStart": 10.0
+      },
+      {
+        "time": 10.21,
+        "held": true,
+        "section": true,
+        "rate": 0.5,
+        "silent": true,
+        "eligible": true,
+        "holdStart": 10.0
+      },
+      {
+        "time": 12,
+        "held": true,
+        "section": false,
+        "rate": 0.9900000095367432,
+        "silent": false,
+        "eligible": true,
+        "holdStart": 0.0
+      },
+      {
+        "time": 12.4,
+        "held": true,
+        "section": false,
+        "rate": 0.9900000095367432,
+        "silent": false,
+        "eligible": true,
+        "holdStart": 0.0
+      }
+    ],
+    "shortTapThenHold": [
+      {
+        "time": 10,
+        "held": true,
+        "section": true,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": true,
+        "holdStart": 10.0
+      },
+      {
+        "time": 10.05,
+        "held": false,
+        "section": true,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": false,
+        "holdStart": 0.0
+      },
+      {
+        "time": 10.3,
+        "held": true,
+        "section": true,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": false,
+        "holdStart": 0.0
+      },
+      {
+        "time": 11,
+        "held": true,
+        "section": true,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": false,
+        "holdStart": 0.0
+      }
+    ],
+    "delayedWindow": [
+      {
+        "time": 10,
+        "held": true,
+        "section": false,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": true,
+        "holdStart": 0.0
+      },
+      {
+        "time": 10.5,
+        "held": true,
+        "section": true,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": true,
+        "holdStart": 10.5
+      },
+      {
+        "time": 10.69,
+        "held": true,
+        "section": true,
+        "rate": 1.0,
+        "silent": false,
+        "eligible": true,
+        "holdStart": 10.5
+      },
+      {
+        "time": 10.71,
+        "held": true,
+        "section": true,
+        "rate": 0.5,
+        "silent": true,
+        "eligible": true,
+        "holdStart": 10.5
+      }
+    ]
+  }
+}

@@ -44,7 +44,8 @@ describe('native range discharge and ammo controller', () => {
   it('completes finite MAG-7 magazine reloads and cannot reload an exhausted reserve', () => {
     const sim = make('mag7'); sim.reloadState.ammo = 2; sim.reloadState.reserve = 1;
     expect(sim.reload()).toBe(true); expect(sim.start()).toBe(false);
-    runTo(sim, equipmentStats('mag7').reload - STEP); expect(sim.loadedAmmo).toBe(2);
+    runTo(sim, 32 / 30 - STEP); expect(sim.loadedAmmo).toBe(2);
+    runTo(sim, 32 / 30 + STEP); expect(sim.loadedAmmo).toBe(1); expect(sim.start()).toBe(false);
     runTo(sim, equipmentStats('mag7').reload); expect(sim.loadedAmmo).toBe(1); expect(sim.reserveAmmo).toBe(0);
     expect(sim.reload()).toBe(false); expect(sim.drainActionEvents().map(event => event.kind)).toEqual(['reload-start', 'reload-end']);
   });
@@ -60,13 +61,16 @@ describe('native range discharge and ammo controller', () => {
     sim.step(sim.equipReadyAt - sim.time);
     expect(sim.start()).toBe(true); expect(sim.loadedAmmo).toBe(29);
   });
-  it('supports held-R silent reload and prospective mode changes', () => {
+  it('shares the native hold delay and release eligibility with the range', () => {
     const sim = make('ak47'); sim.reloadState.ammo = 0; sim.reloadHeld = true;
-    sim.reload(); expect(sim.reloadSilent).toBe(true); expect(sim.primaryReloadAt).toBeCloseTo(sim.stats.reload * 2);
-    sim.step(1); sim.reloadHeld = false; sim.step(.5);
-    expect(sim.primaryReloadAt).toBeCloseTo(1.5 + sim.stats.reload - .75);
+    sim.reload(); expect(sim.reloadSilent).toBe(false);
+    sim.step(.2); expect(sim.reloadSilent).toBe(true);
+    sim.step(.8); sim.reloadHeld = false; sim.step(0);
+    const deadline = 1 + (sim.stats.reload - .6) / .99;
+    expect(sim.primaryReloadAt).toBeCloseTo(deadline);
+    sim.reloadHeld = true; sim.step(.5); expect(sim.reloadSilent).toBe(false);
     sim.step(sim.primaryReloadAt - sim.time); expect(sim.loadedAmmo).toBe(30); expect(sim.reserveAmmo).toBe(60);
-    expect(sim.drainActionEvents().map(event => event.kind)).toEqual(['reload-start', 'reload-mode', 'reload-end']);
+    expect(sim.drainActionEvents().map(event => event.kind)).toEqual(['reload-start', 'reload-mode', 'reload-mode', 'reload-end']);
   });
   it.each(['nova', 'xm1014', 'sawedoff'] as const)('%s queues an empty reload interruption until one shell and finish are complete', id => {
     const sim = make(id, false), shots: Shot[] = []; sim.onShot = shot => shots.push(shot);

@@ -62,7 +62,7 @@ export type DueSoundCue = SoundCue & {actorId: string | number};
 /** Simulation-clock driven, one bounded timeline per actor. No asynchronous late sounds. */
 export class ActionSoundTimeline {
   private active = new Map<string | number, {timeline: SoundTimeline; start: number; duration: number;
-    cursor: number; local: boolean}>();
+    cursor: number; local: boolean; progressAt?: number; progressTime?: number}>();
   private actors = new Map<string | number, ActorSoundState>();
   constructor(private timelines: SoundTimelines = nativeSoundTimelines, readonly capacity = 32) {}
   setTimelines(timelines: SoundTimelines) {this.clear(); this.timelines = timelines;}
@@ -95,6 +95,13 @@ export class ActionSoundTimeline {
       this.start(actor.id, actor.equipment, action, now,
         {duration: actor.reloadDuration, local: actor.local, elapsed});
     }
+    const state = this.active.get(actor.id);
+    if (state && actor.reloading && Number.isFinite(actor.reloadProgress)) {
+      // Cues follow animation work through the hold gate and its 0.99-rate tail.
+      // Draw/fire timelines still use wall time; reloads receive a progress sample.
+      state.progressTime = Math.max(0, Math.min(1, actor.reloadProgress!)) * state.duration;
+      state.progressAt = now;
+    }
     if (!this.actors.has(actor.id) && this.actors.size >= this.capacity) {
       const first = this.actors.keys().next().value!; this.actors.delete(first); this.cancel(first);
     }
@@ -105,15 +112,16 @@ export class ActionSoundTimeline {
     const due: DueSoundCue[] = [];
     for (const [id, state] of this.active) {
       if (now < state.start) {this.cancel(id); continue;}
+      const elapsed = state.progressTime ?? now - state.start;
       while (state.cursor < state.timeline.cues.length) {
         const cue = state.timeline.cues[state.cursor];
-        const at = state.start + cue.time / state.timeline.duration * state.duration;
-        if (at > now + 1e-8) break;
+        const offset = cue.time / state.timeline.duration * state.duration;
+        if (offset > elapsed + 1e-8) break;
         state.cursor++;
         // Do not dump a reload's entire foley after a paused/background frame.
-        if (now - at <= .2 && (state.local || cue.audience !== 'local')) due.push({...cue, actorId: id});
+        if (elapsed - offset <= .2 && now - (state.progressAt ?? now) <= .2 && (state.local || cue.audience !== 'local')) due.push({...cue, actorId: id});
       }
-      if (state.cursor >= state.timeline.cues.length || now > state.start + state.duration) this.cancel(id);
+      if (state.cursor >= state.timeline.cues.length || elapsed > state.duration) this.cancel(id);
     }
     return due;
   }

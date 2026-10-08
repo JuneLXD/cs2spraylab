@@ -1,0 +1,626 @@
+{
+  "build": "2000927",
+  "gate": {
+    "holdDelay": 0.2,
+    "slowRate": 0.5,
+    "releasedRate": 0.99,
+    "binarySha256": "99ae5b5724e869de64cc810d7ade089fb18d2fe08dcb8d88982af39f951d1d12",
+    "function": "0x148b5b0"
+  },
+  "weapons": {
+    "ak47": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_ak/reload_ak.vnmclip_c",
+        "sha256": "2b215e9df130368e007b3c7c707efff8ceba3f50a467da2fece3105722dc9326",
+        "fps": 30,
+        "duration": 2.433333333333333,
+        "insert": 1.1,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.9
+          }
+        ]
+      }
+    },
+    "m4a4": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_m4a4/reload_m4a4.vnmclip_c",
+        "sha256": "12b9ae63f5940edfa3f5e9158eede93c6a2c09f8d888ac2e68ef9f6211561cde",
+        "fps": 30,
+        "duration": 3.066666666666667,
+        "insert": 1.3666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.066666666666667
+          }
+        ]
+      }
+    },
+    "m4a1s": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/_default_rifle/reload_rifle.vnmclip_c",
+        "sha256": "60ba659f90c215e76e51c723f65536b9245fcc81c456920f3a859ac77916624c",
+        "fps": 30,
+        "duration": 3.066666666666667,
+        "insert": 1.3666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.066666666666667
+          }
+        ]
+      }
+    },
+    "galil": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_galilar/reload_galilar.vnmclip_c",
+        "sha256": "28f2d05c1514901d2eb7a950d2baa14d3d4bc371b2915698892e9f86450e511e",
+        "fps": 30,
+        "duration": 3.033333333333333,
+        "insert": 1.1666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.2
+          }
+        ]
+      }
+    },
+    "famas": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_famas/reload_famas.vnmclip_c",
+        "sha256": "c6b16b343a604327b5b63d8fd3efc07c4804e075bf8f6286906ad7d1705bafdc",
+        "fps": 30,
+        "duration": 3.3,
+        "insert": 1.6666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.7333333333333334
+          }
+        ]
+      }
+    },
+    "sg553": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_sg556/reload_sg556.vnmclip_c",
+        "sha256": "a8998d78af9c598a40c1c53dbff46673350aa6d5ff823416e3e192dc4b9c0cb9",
+        "fps": 30,
+        "duration": 2.7666666666666666,
+        "insert": 1.0333333333333334,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.2333333333333334
+          }
+        ]
+      }
+    },
+    "aug": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_aug/reload_aug.vnmclip_c",
+        "sha256": "b9fb8bd5ba436e6d392a79c115ef7bb77b2065c657064bcec410c728b09cbd75",
+        "fps": 30,
+        "duration": 3.7666666666666666,
+        "insert": 1.5666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.966666666666667
+          }
+        ]
+      }
+    },
+    "mp9": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_mp9/reload_mp9.vnmclip_c",
+        "sha256": "f3929dd19580f1e8ccf5c9fa250a00a96b59316217a019e7cdac60709c0b6b8f",
+        "fps": 30,
+        "duration": 2.1333333333333333,
+        "insert": 0.8666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.6666666666666667
+          }
+        ]
+      }
+    },
+    "mp7": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_mp7/reload_mp7.vnmclip_c",
+        "sha256": "a980db9a304f8b6531a55b07f1e2839e491baf7ce21eebe9edaad472ebde729f",
+        "fps": 30,
+        "duration": 3.1333333333333333,
+        "insert": 1.4333333333333333,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.433333333333333
+          }
+        ]
+      }
+    },
+    "mp5sd": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_mp5sd/reload_mp5sd.vnmclip_c",
+        "sha256": "94eb6c12abf8e8be7505c51be2106007fcb22dfb1ac9463c215737589819386a",
+        "fps": 30,
+        "duration": 2.966666666666667,
+        "insert": 2,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.533333333333333
+          }
+        ]
+      }
+    },
+    "mac10": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_mac10/reload_mac10.vnmclip_c",
+        "sha256": "0be9945e55e1962b3754b6381e90442842c5923621d2cae6110cdba83f5884fd",
+        "fps": 30,
+        "duration": 2.566666666666667,
+        "insert": 1.2,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.1333333333333333
+          }
+        ]
+      }
+    },
+    "ump45": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_ump45/reload_ump45.vnmclip_c",
+        "sha256": "1f7a26ebcc154e2be9d2d2dae4b8bb724c8f332eacbf6352319ae16215feb53e",
+        "fps": 30,
+        "duration": 3.433333333333333,
+        "insert": 1.5333333333333334,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.5
+          }
+        ]
+      }
+    },
+    "p90": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_p90/reload_p90.vnmclip_c",
+        "sha256": "94a35335a61d18e88df62c060bd12978d9db5cf008b71ea8d489bb687c256b33",
+        "fps": 30,
+        "duration": 3.3666666666666667,
+        "insert": 2,
+        "silent": [
+          {
+            "start": 0,
+            "end": 3.066666666666667
+          }
+        ]
+      }
+    },
+    "bizon": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_bizon/reload_bizon.vnmclip_c",
+        "sha256": "65236ec77b7c4230d8ce001158a17dee84cdb96ab6a7e471e8242898ce1b9171",
+        "fps": 30,
+        "duration": 2.433333333333333,
+        "insert": 1.1333333333333333,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.9666666666666666
+          }
+        ]
+      }
+    },
+    "m249": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_m249/reload_m249.vnmclip_c",
+        "sha256": "93cc3dbdfdce7de235eac7a8c83446811089f68d4cdd16ffeabecf0406bee1d3",
+        "fps": 60,
+        "duration": 5.7,
+        "insert": 3.7333333333333334,
+        "silent": [
+          {
+            "start": 0,
+            "end": 4.716666666666667
+          }
+        ]
+      }
+    },
+    "negev": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_negev/reload_negev.vnmclip_c",
+        "sha256": "b35c527d2c2d143322edeed705b3852a4828c5688a45194db7b961bd2600403d",
+        "fps": 30,
+        "duration": 5.7,
+        "insert": 3.8333333333333335,
+        "silent": [
+          {
+            "start": 0,
+            "end": 4.866666666666666
+          }
+        ]
+      }
+    },
+    "cz75a": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/pistol_cz75a/reload_cz75a.vnmclip_c",
+        "sha256": "3e129c3be5018becd0e73b0887c7c9f86a755ac511dc09a87b18b1db64b38e56",
+        "fps": 30,
+        "duration": 2.7333333333333334,
+        "insert": 1.5666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.2666666666666666
+          }
+        ]
+      },
+      "empty": {
+        "source": "animation/anims/viewmodel/pistol/pistol_cz75a/reload_empty_cz75a.vnmclip_c",
+        "sha256": "c2c0daf45de37dc3012749edacd625cb195a0b5fc4fdf27b154f609adc917f1c",
+        "fps": 30,
+        "duration": 2.7333333333333334,
+        "insert": 1.6666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.033333333333333
+          }
+        ]
+      }
+    },
+    "usp": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/_default_pistol/reload_pistol.vnmclip_c",
+        "sha256": "53c36e0c35848970115dec77f6eedf1f494f2908a2e2552d4b5523d1397c568b",
+        "fps": 30,
+        "duration": 2.1666666666666665,
+        "insert": 0.9,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.6333333333333333
+          }
+        ]
+      },
+      "empty": {
+        "source": "animation/anims/viewmodel/pistol/_default_pistol/reload_empty_pistol.vnmclip_c",
+        "sha256": "a31da599b80e195956d2516cca029735f03ae0f0d7f77ddd324730e681988067",
+        "fps": 30,
+        "duration": 2.1666666666666665,
+        "insert": 1,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.5333333333333334
+          }
+        ]
+      }
+    },
+    "glock": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/pistol_glock18/reload_glock.vnmclip_c",
+        "sha256": "1b071c1e597fc69bb7d97f703165cff91ec193517bd1f018717ea899fddef341",
+        "fps": 30,
+        "duration": 2.2666666666666666,
+        "insert": 0.9333333333333333,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.7333333333333334
+          }
+        ]
+      },
+      "empty": {
+        "source": "animation/anims/viewmodel/pistol/pistol_glock18/reload_empty_glock.vnmclip_c",
+        "sha256": "7c7a6e0c468a4b6550e5aeafa8f5c516f2dfa69304f1117ebd91ecbf19fc5d91",
+        "fps": 30,
+        "duration": 2.2666666666666666,
+        "insert": 1.2666666666666666,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.6333333333333333
+          }
+        ]
+      }
+    },
+    "hkp2000": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/pistol_hkp2000/reload_hkp.vnmclip_c",
+        "sha256": "18d21152fd96d5afb43d85325408acfd1f65bba8f55a99a088eabf7902847b4e",
+        "fps": 30,
+        "duration": 2.2666666666666666,
+        "insert": 0.9333333333333333,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.7
+          }
+        ]
+      },
+      "empty": {
+        "source": "animation/anims/viewmodel/pistol/pistol_hkp2000/reload_empty_hkp.vnmclip_c",
+        "sha256": "be25e36835aa423770cee9538f53c86a466bf4536ae1505e1e6043918b1f8f8a",
+        "fps": 30,
+        "duration": 2.2666666666666666,
+        "insert": 1.2,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.6666666666666667
+          }
+        ]
+      }
+    },
+    "p250": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/pistol_p250/reload_p250.vnmclip_c",
+        "sha256": "dfd0b275093eee84a13fa918ed55427f994284ccc0927507aeb1e9d1f7cfe59e",
+        "fps": 30,
+        "duration": 2.2666666666666666,
+        "insert": 0.9333333333333333,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.7666666666666666
+          }
+        ]
+      },
+      "empty": {
+        "source": "animation/anims/viewmodel/pistol/pistol_p250/reload_empty_p250.vnmclip_c",
+        "sha256": "ec6983d57d21c709a93ca5f36eb92ae6c06050e53c04dd2f48dbf3bd91dd498c",
+        "fps": 30,
+        "duration": 2.2666666666666666,
+        "insert": 1.2,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.6333333333333333
+          }
+        ]
+      }
+    },
+    "deagle": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.vnmclip_c",
+        "sha256": "7e2ff25139ac3d60014573d474d04411e960f69c3a424ac01c330324bf0bedf5",
+        "fps": 30,
+        "duration": 2.2,
+        "insert": 0.7666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.6333333333333333
+          }
+        ]
+      },
+      "empty": {
+        "source": "animation/anims/viewmodel/pistol/pistol_deagle/reload_empty_deagle.vnmclip_c",
+        "sha256": "f48d4078720c0ba77adef868f00c0860fd81bb3537addfe80517932d85fc0c4f",
+        "fps": 30,
+        "duration": 2.2,
+        "insert": 1.0333333333333334,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.6333333333333333
+          }
+        ]
+      }
+    },
+    "elite": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/pistol_elite/reload_elite.vnmclip_c",
+        "sha256": "9d0531803ac255d6b4ea81dfea5df7121196355583a1152f8fcd9cec2bb77857",
+        "fps": 30,
+        "duration": 3.7666666666666666,
+        "insert": 2.933333333333333,
+        "silent": [
+          {
+            "start": 0,
+            "end": 3.7333333333333334
+          }
+        ]
+      }
+    },
+    "fiveseven": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/pistol_fiveseven/reload_fiveseven.vnmclip_c",
+        "sha256": "72e1fa63c41eadee476e61b7b0e7ede0f8d8bb5284080d2c22166f78ab123fe7",
+        "fps": 30,
+        "duration": 2.2666666666666666,
+        "insert": 0.9666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.7333333333333334
+          }
+        ]
+      },
+      "empty": {
+        "source": "animation/anims/viewmodel/pistol/pistol_fiveseven/reload_empty_fiveseven.vnmclip_c",
+        "sha256": "6b72f961754ccbba280b2d817000909102ec58d122839965222f5c36e78189da",
+        "fps": 30,
+        "duration": 2.2666666666666666,
+        "insert": 1.2,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.7
+          }
+        ]
+      }
+    },
+    "tec9": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/pistol_tec9/reload_tec9.vnmclip_c",
+        "sha256": "6ed534e7d151557bfda7f1c9081e8c4e41828410344cc2ba43345d7bf2680a97",
+        "fps": 30,
+        "duration": 2.566666666666667,
+        "insert": 1.4333333333333333,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.1333333333333333
+          }
+        ]
+      }
+    },
+    "revolver": {
+      "normal": {
+        "source": "animation/anims/viewmodel/pistol/pistol_revolver/reload_revolver.vnmclip_c",
+        "sha256": "af1c3dd419f5faac76faa4914b87dd5539011e8d88226324eb2cc5b64b1d3665",
+        "fps": 30,
+        "duration": 2.2666666666666666,
+        "insert": 1.9666666666666666,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.1666666666666665
+          }
+        ]
+      }
+    },
+    "awp": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_awp/reload_awp.vnmclip_c",
+        "sha256": "f61b73ccd670cf97a25be18c438db977460c2763a048719c8414dd3c229905b5",
+        "fps": 30,
+        "duration": 3.6666666666666665,
+        "insert": 2,
+        "silent": [
+          {
+            "start": 0,
+            "end": 3.1333333333333333
+          }
+        ]
+      }
+    },
+    "ssg08": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_ssg08/reload_ssg08.vnmclip_c",
+        "sha256": "e4db260517abe3274a380239443832524a23fe515780b2c9e946bb99c8076751",
+        "fps": 30,
+        "duration": 3.7,
+        "insert": 2,
+        "silent": [
+          {
+            "start": 0,
+            "end": 3.1666666666666665
+          }
+        ]
+      }
+    },
+    "g3sg1": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_g3sg1/reload_g3sg1.vnmclip_c",
+        "sha256": "ec0ccb5bd4f1139b9716cb33bf10c712e1ecbaafcefaeb621de4000a7e08b6dd",
+        "fps": 30,
+        "duration": 4.666666666666667,
+        "insert": 2.6666666666666665,
+        "silent": [
+          {
+            "start": 0,
+            "end": 3.966666666666667
+          }
+        ]
+      }
+    },
+    "scar20": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_scar20/reload_scar20.vnmclip_c",
+        "sha256": "47208de65327a76008eb665c48759970373047d13b70e82eb95a3dbdf0722e25",
+        "fps": 30,
+        "duration": 3.066666666666667,
+        "insert": 1.5333333333333334,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.6666666666666665
+          }
+        ]
+      },
+      "empty": {
+        "source": "animation/anims/viewmodel/rifle/rifle_scar20/reload_empty_scar20.vnmclip_c",
+        "sha256": "8c1862e396455e7cbf7ed542d20fbbe99fb05169bb855fb4991472197d838f8d",
+        "fps": 30,
+        "duration": 3.066666666666667,
+        "insert": 1.4666666666666666,
+        "silent": [
+          {
+            "start": 0,
+            "end": 2.1
+          }
+        ]
+      }
+    },
+    "nova": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_nova/reload_nova.vnmclip_c",
+        "sha256": "205f737bac764eb6e961b775be3f63e9a36bfc1bd2183d1ed5e9040e18534e75",
+        "fps": 30,
+        "duration": 1.6333333333333333,
+        "insert": 0.6666666666666666,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.5
+          }
+        ]
+      }
+    },
+    "xm1014": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_xm1014/reload_xm1014.vnmclip_c",
+        "sha256": "d5c7e5997a77b530ba2189d7f9038e6682ce19eeb2525ae4de569910cd505b54",
+        "fps": 30,
+        "duration": 1.7333333333333334,
+        "insert": 1.0333333333333334,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.3666666666666667
+          }
+        ]
+      }
+    },
+    "mag7": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_mag7/reload_mag7.vnmclip_c",
+        "sha256": "55d997dbe9266411b2136e01c4834ecfb91834df609b5929dc8b6a997f18db23",
+        "fps": 30,
+        "duration": 2.466666666666667,
+        "insert": 1.0666666666666667,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.9666666666666666
+          }
+        ]
+      }
+    },
+    "sawedoff": {
+      "normal": {
+        "source": "animation/anims/viewmodel/rifle/rifle_sawedoff/reload_sawedoff.vnmclip_c",
+        "sha256": "7bcd5d1a649c66c8283eb99f3246435b0cf74b9e514033358d0f4fd553bba069",
+        "fps": 30,
+        "duration": 1.7333333333333334,
+        "insert": 0.6666666666666666,
+        "silent": [
+          {
+            "start": 0,
+            "end": 1.4333333333333333
+          }
+        ]
+      }
+    }
+  }
+}

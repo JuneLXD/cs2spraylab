@@ -85,8 +85,9 @@ describe('per-actor native sound timeline', () => {
     t.sync(state, 0); t.sync({...state, reloadProgress: .5}, .3);
     expect(t.update(.3).map(cue => cue.key)).toEqual(['shell']);
     expect(t.update(.3)).toEqual([]);
-    t.sync(state, .6); expect(t.update(.9).map(cue => cue.key)).toEqual(['shell']);
+    t.sync(state, .6); t.sync({...state, reloadProgress: .5}, .9); expect(t.update(.9).map(cue => cue.key)).toEqual(['shell']);
     t.sync({...state, reloadPhase: 'finish', reloadDuration: .8}, 1.2);
+    t.sync({...state, reloadPhase: 'finish', reloadDuration: .8, reloadProgress: .5}, 1.6);
     expect(t.update(1.6).map(cue => cue.key)).toEqual(['finish']);
   });
   it('suppresses a silent phase and resumes loud cues at current progress without replay', () => {
@@ -94,7 +95,18 @@ describe('per-actor native sound timeline', () => {
     t.sync(state, 0); t.sync({...state, silent: true, reloadProgress: .1}, .2);
     expect(t.update(.2)).toEqual([]);
     t.sync({...state, silent: false, reloadProgress: .6}, 1.2);
-    expect(t.update(1.2)).toEqual([]); expect(t.update(1.8).map(cue => cue.key)).toEqual(['bolt']);
+    expect(t.update(1.2)).toEqual([]); t.sync({...state, reloadProgress: .9}, 1.8); expect(t.update(1.8).map(cue => cue.key)).toEqual(['bolt']);
+  });
+  it('waits for reload animation progress instead of advancing cues on wall time', () => {
+    const t = make(), state = {id: 0, equipment: 'ak47', alive: true, reloading: true, reloadDuration: 2, reloadProgress: 0};
+    t.sync(state, 0);
+    t.sync({...state, reloadProgress: .05}, .2); expect(t.update(.2)).toEqual([]);
+    t.sync({...state, reloadProgress: .1}, .3); expect(t.update(.3).map(c => c.key)).toEqual(['out']);
+    t.sync({...state, silent: true, reloadProgress: .2}, .5); expect(t.update(1)).toEqual([]);
+    t.sync({...state, reloadProgress: .6}, 2); expect(t.update(2)).toEqual([]);
+    t.sync({...state, reloadProgress: .8}, 2.6); expect(t.update(2.6)).toEqual([]);
+    t.sync({...state, reloadProgress: .9}, 2.8); expect(t.update(2.8).map(c => c.key)).toEqual(['bolt']);
+    expect(t.update(2.8)).toEqual([]);
   });
   it('bounds actor allocations and guards nonfinite clocks and random inputs', () => {
     const t = make(); for (let n = 0; n < 100; n++) t.start(n, 'ak47', 'reload', 0);

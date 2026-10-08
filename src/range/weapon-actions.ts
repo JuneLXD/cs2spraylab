@@ -1,6 +1,7 @@
 import {gameData} from './config';
 import {equipmentStats, weaponModeStats, SILENT_RELOAD_MULTIPLIER, SHELL_RELOAD_START, SHELL_RELOAD_FINISH, type Equipment} from './equipment';
 import {ScopeTransition, scopeSensitivity} from './scope-transition';
+import {ReloadClock, reloadClip, reloadSilentWindows} from './reload-clock';
 
 // Trainer estimate: vdata exposes R8 fire modes but not its engine-side windup.
 // Keep this separate from the audited native weapon parameters.
@@ -92,94 +93,89 @@ export type ReloadPhase = 'idle' | 'magazine' | 'start' | 'shell' | 'finish';
 export type ReloadActionEvent = {kind: 'reload-start' | 'reload-shell' | 'reload-end' | 'reload-cancel' | 'reload-mode';
   at: number; silent: boolean; phase: ReloadPhase; ammo: number; reserve: number};
 
-// WPN_RELOAD_ADD_AMMO markers, verified against build 2000927 server demos.
-// Other magazine weapons retain their completion-time fallback until measured.
-// See docs/native-gameplay-comparison.md for recordings and sampling limits.
-const magazineInsertTime: Partial<Record<Equipment, number>> = {ak47: 33 / 30, awp: 60 / 30, usp: 27 / 30, deagle: 23 / 30,
-  m4a4: 41 / 30};
-
 /** Ammo changes only on completed insert phases; cancellation cannot mint ammo. */
 export class NativeReloadState {
   ammo: number;
   reserve: number;
   phase: ReloadPhase = 'idle';
   empty = false;
-  silent = false;
   startedAt = 0;
-  private lastTime = 0;
-  private remaining = 0;
+  private readonly clock: ReloadClock;
   private magazineInserted = false;
   private events: ReloadActionEvent[] = [];
   readonly stats;
   constructor(readonly id: Equipment, readonly silentMultiplier = SILENT_RELOAD_MULTIPLIER) {
     if (!Number.isFinite(silentMultiplier) || silentMultiplier < 1) throw new Error('Invalid silent reload multiplier');
+    this.clock = new ReloadClock(1 / silentMultiplier);
     this.stats = equipmentStats(id);
     this.ammo = this.stats.magazine; this.reserve = this.stats.reserve;
   }
   get active() {return this.phase !== 'idle';}
   get phaseDuration() {return this.phase === 'idle' ? 0 : this.phase === 'start' ? SHELL_RELOAD_START
     : this.phase === 'finish' ? SHELL_RELOAD_FINISH : this.stats.reload;}
-  get progress() {return this.phaseDuration ? Math.max(0, Math.min(1, 1 - this.remaining / this.phaseDuration)) : 0;}
-  get until() {return this.active ? this.lastTime + this.remaining * (this.silent ? this.silentMultiplier : 1) : 0;}
-  // Insertion and attack readiness are independent deadlines. Splitting the
-  // simulation here lets a holster on either side of insertion keep the right ammo.
+  get silent() {return this.active && this.clock.silent;}
+  get progress() {return this.phaseDuration ? Math.max(0, Math.min(1, this.clock.position / this.phaseDuration)) : 0;}
+  get until() {return this.active ? this.clock.at(this.phaseDuration) : 0;}
   get nextEventAt() {
-    return this.phase === 'magazine' && !this.magazineInserted
-      ? this.lastTime + this.workUntilInsert * (this.silent ? this.silentMultiplier : 1) : this.until;
+    if (!this.active) return 0;
+    const work = this.phase === 'magazine' && !this.magazineInserted ? this.insertAt : this.phaseDuration;
+    return Math.min(this.clock.nextBoundary, this.clock.at(work));
   }
-  private get workUntilInsert() {
-    return Math.max(0, this.remaining - this.stats.reload + (magazineInsertTime[this.id] ?? this.stats.reload));
-  }
-  start(time: number, silent = false) {
+  private get insertAt() {return Math.min(this.stats.reload, reloadClip(this.id, this.empty)?.insert ?? this.stats.reload);}
+  private windows() {return reloadSilentWindows(this.id, this.empty, this.phase, this.phaseDuration);}
+  start(time: number, held = false) {
     if (this.active || this.id === 'knife' || this.id === 'zeus' || this.ammo >= this.stats.magazine || this.reserve <= 0) return false;
-    this.empty = this.ammo === 0; this.silent = silent; this.startedAt = this.lastTime = time;
+    this.empty = this.ammo === 0; this.startedAt = time;
     this.phase = this.stats.reloadsSingleShells ? 'start' : 'magazine';
-    this.remaining = this.phase === 'start' ? SHELL_RELOAD_START : this.stats.reload;
-    this.magazineInserted = false;
+    this.clock.reset(time, held, this.windows()); this.magazineInserted = false;
     this.emit('reload-start', time);
     return true;
   }
   advance(time: number, reloadHeld?: boolean) {
-    // Integrate the preceding interval at its preceding rate. Changing modes
-    // cannot retroactively accelerate already elapsed reload time.
-    let work = Math.max(0, time - this.lastTime) / (this.silent ? this.silentMultiplier : 1);
-    this.lastTime = Math.max(this.lastTime, time);
-    if (this.phase === 'magazine' && !this.magazineInserted && work + 1e-9 >= this.workUntilInsert) {
-      if (this.id !== 'knife' && gameData.weapons[this.id].reserveAsClips) {
-        // Reserves are stored in rounds throughout the trainer, but this native
-        // flag means a partial magazine is discarded and a whole spare is used.
-        this.ammo = Math.min(this.stats.magazine, this.reserve); this.reserve -= this.ammo;
-      } else {
-        const inserted = Math.min(this.stats.magazine - this.ammo, this.reserve);
-        this.ammo += inserted; this.reserve -= inserted;
+    if (!Number.isFinite(time) || time < this.clock.now) return;
+    while (this.active && this.clock.now < time - 1e-9) {
+      const at = Math.min(time, this.nextEventAt), silent = this.silent;
+      this.clock.advance(at);
+      if (silent !== this.silent) this.emit('reload-mode', at);
+      if (this.phase === 'magazine' && !this.magazineInserted && this.clock.position + 1e-9 >= this.insertAt) {
+        if (this.id !== 'knife' && gameData.weapons[this.id].reserveAsClips) {
+          // Native clip reserves discard the partial magazine. Internally the
+          // trainer stores spare rounds, including partial saved reserves.
+          this.ammo = Math.min(this.stats.magazine, this.reserve); this.reserve -= this.ammo;
+        } else {
+          const inserted = Math.min(this.stats.magazine - this.ammo, this.reserve);
+          this.ammo += inserted; this.reserve -= inserted;
+        }
+        this.magazineInserted = true;
       }
-      this.magazineInserted = true;
-    }
-    while (this.active && work + 1e-9 >= this.remaining) {
-      work = Math.max(0, work - this.remaining);
-      const eventTime=this.lastTime-work*(this.silent?this.silentMultiplier:1);
-      if (this.phase === 'magazine') {
-        this.emit('reload-end', eventTime); this.cancel(false);
-      } else if (this.phase === 'finish') {this.emit('reload-end', eventTime); this.cancel(false);}
-      else {
-        if (this.phase === 'shell') {this.ammo++; this.reserve--; this.emit('reload-shell', eventTime);}
-        this.phase = this.ammo >= this.stats.magazine || this.reserve <= 0 ? 'finish' : 'shell';
-        this.remaining = this.phase === 'finish' ? SHELL_RELOAD_FINISH : this.stats.reload;
+      if (this.clock.position + 1e-9 >= this.phaseDuration) {
+        if (this.phase === 'magazine' || this.phase === 'finish') {this.emit('reload-end', at); this.cancel(false);}
+        else {
+          if (this.phase === 'shell') {this.ammo++; this.reserve--; this.emit('reload-shell', at);}
+          this.phase = this.ammo >= this.stats.magazine || this.reserve <= 0 ? 'finish' : 'shell';
+          const wasSilent = this.silent;
+          this.clock.phase(this.windows());
+          if (wasSilent !== this.silent) this.emit('reload-mode', at);
+        }
       }
     }
-    if (this.active) this.remaining -= work;
-    if (reloadHeld !== undefined && this.active && this.silent !== reloadHeld) {
-      this.silent = reloadHeld; this.emit('reload-mode', time);
+    // New input applies at its timestamp, after preceding work is integrated.
+    if (reloadHeld !== undefined && this.active) {
+      const silent = this.silent; this.clock.setHeld(reloadHeld);
+      if (silent !== this.silent) this.emit('reload-mode', time);
     }
   }
   interrupt() {
     if (!this.active || !this.stats.reloadsSingleShells || this.ammo <= 0) return false;
-    if (this.phase !== 'finish') {this.phase = 'finish'; this.remaining = SHELL_RELOAD_FINISH;}
+    if (this.phase !== 'finish') {
+      this.phase = 'finish'; const silent = this.silent; this.clock.phase(this.windows());
+      if (silent !== this.silent) this.emit('reload-mode', this.clock.now);
+    }
     return true;
   }
   cancel(notify = true) {
-    if (this.active && notify) this.emit('reload-cancel', this.lastTime);
-    this.phase = 'idle'; this.remaining = 0; this.silent = false;
+    if (this.active && notify) this.emit('reload-cancel', this.clock.now);
+    this.phase = 'idle';
   }
   drainActionEvents() {const events = this.events; this.events = []; return events;}
   private emit(kind: ReloadActionEvent['kind'], at: number) {

@@ -1,0 +1,35 @@
+{
+  "build": "2000927",
+  "demo": "native_reload_deagle_empty_002.dem",
+  "sha256": "aa0c7cceda6d3d1afef7113b76c8795d02c5dbf8ecac1ed9c2cd3fffce2313dd",
+  "demoTickSeconds": 0.015625,
+  "reloads": [
+    {
+      "weapon": "deagle",
+      "empty": false,
+      "startGameTime": 571.375,
+      "insertSeconds": 0.765625,
+      "endSeconds": 2.1875,
+      "ammoBefore": 5,
+      "ammoAfter": 7,
+      "clipInsertFrame": 23,
+      "clipFramesPerSecond": 30
+    },
+    {
+      "weapon": "deagle",
+      "empty": true,
+      "startGameTime": 577.78125,
+      "insertSeconds": 1.03125,
+      "endSeconds": 2.1875,
+      "ammoBefore": 0,
+      "ammoAfter": 7,
+      "clipInsertFrame": 31,
+      "clipFramesPerSecond": 30
+    }
+  ],
+  "notes": [
+    "Normal manual reload and empty automatic reload, verified Desert Eagle identity.",
+    "Both insertion markers agree within one 64 Hz sample. Reported reload flag completion is sampled; separate attack-ready time remains 2.2 seconds.",
+    "The first attempt held an M4A4 and is excluded."
+  ]
+}

@@ -240,8 +240,10 @@ export class DuelAnimator {
     if (!actor.reloading && this.gesture?.name.includes('reload')) this.gesture = undefined;
     if (this.gesture) {
       const gesture = this.gesture, action = this.actions.get(gesture.name)!;
-      gesture.elapsed = frame.reloadRemaining !== undefined && gesture.name.includes('reload')
-        ? Math.max(0, gesture.duration - frame.reloadRemaining) : gesture.elapsed + dt;
+      gesture.elapsed = gesture.name.includes('reload') && Number.isFinite(frame.reloadProgress)
+        ? clamp(frame.reloadProgress!, 0, 1) * gesture.duration
+        : frame.reloadRemaining !== undefined && gesture.name.includes('reload')
+          ? Math.max(0, gesture.duration - frame.reloadRemaining) : gesture.elapsed + dt;
       const window = gesture.name.includes('reload') ? nativeReloadWindow(actor.equipment, frame.reloadPhase) : undefined;
       const phaseProgress = Number.isFinite(frame.reloadProgress) ? clamp(frame.reloadProgress!, 0, 1) : gesture.elapsed / gesture.duration;
       if (!window && gesture.elapsed >= gesture.duration) this.gesture = undefined;

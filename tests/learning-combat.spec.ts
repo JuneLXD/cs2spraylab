@@ -195,28 +195,34 @@ test('lessons two and three are completable with manual movement and preserve th
 test('native reload moves the hands and magazine, returns to idle, and keeps HUD controls apart', async ({page}, info) => {
   await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', weapon: 'ak47', quality: 'auto'})));
   await page.goto('/'); await captureEngine(page, 'duel');
-  const sample = (remaining: number) => page.evaluate(remaining => {
+  const sample = (remaining: number, held = false) => page.evaluate(({remaining, held}) => {
     const e = (window as any).lessonEngine;
     cancelAnimationFrame(e.frame);
     const weapon = e.sim.actors[0].weapon;
     weapon.reload.cancel(false); e.viewAnimation.cancel();
     if (remaining > 0) {
       weapon.ammo = weapon.actions.base.magazine - 1;
-      weapon.reload.start(0); weapon.reload.advance(weapon.actions.base.reload - remaining);
+      weapon.reload.start(0, held);
+      const work = weapon.actions.base.reload - remaining;
+      weapon.reload.advance(held ? .2 + (work - .2) * 2 : work);
     }
     e.viewAnimationElapsed = 1 / 30;
-    e.sim.time = remaining > 0 ? weapon.actions.base.reload - remaining : 0;
+    const work = weapon.actions.base.reload - remaining;
+    e.sim.time = remaining > 0 ? held ? .2 + (work - .2) * 2 : work : 0;
     e.last = performance.now(); e.pacer.ready(e.last, 0); e.tick(e.last); cancelAnimationFrame(e.frame);
     const scene = e.viewRoot.children[0]; scene.updateMatrixWorld(true);
     const hand = scene.getObjectByName('hand_L');
     const position = hand.getWorldPosition(hand.position.clone()).toArray();
-    return {position, loaded: !!e.viewAnimation, ammo: weapon.ammo, reserve: weapon.reserve, reloading: weapon.reload.active};
-  }, remaining);
+    return {position, loaded: !!e.viewAnimation, ammo: weapon.ammo, reserve: weapon.reserve, reloading: weapon.reload.active, silent: weapon.reload.silent};
+  }, {remaining, held});
   const idle = await sample(0), midway = await sample(1.2);
   expect(idle.loaded).toBe(true);
   expect(midway).toMatchObject({ammo: 30, reserve: 60, reloading: true});
   expect(Math.hypot(...idle.position.map((v: number, i: number) => v - midway.position[i]))).toBeGreaterThan(.05);
   await page.locator('.duel-view').screenshot({path: `test-results/native-reload-${info.project.name}.png`});
+  const held = await sample(1.2, true);
+  expect(held).toMatchObject({ammo: 30, reloading: true, silent: true});
+  held.position.forEach((value: number, i: number) => expect(value).toBeCloseTo(midway.position[i], 5));
   const restored = await sample(0);
   expect(restored.position).toEqual(idle.position);
   await page.evaluate(() => {

@@ -55,8 +55,8 @@ individual-shell behavior. The parser's `total_ammo_left` field returned zero
 in this build and was **not** used as reserve evidence.
 
 Unmeasured magazine weapons retain insertion at completion as a fallback.
-Empty-reload animation branches and the existing estimated silent-reload speed
-still need native measurements; normal partial-reload evidence is not proof
+The later `native-reload-clock.md` verifies the held gate and imports separate
+empty-reload markers. The normal partial-reload measurements below are not proof
 of those cases. Silent mode continues to integrate elapsed work at its preceding
 rate, so changing mode cannot move insertion retroactively.
 

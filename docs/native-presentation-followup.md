@@ -73,10 +73,9 @@ Long reload updates now timestamp shell insertion/completion at each crossed
 phase deadline. Additional live M4A4 measurements validate normal partial and empty reload
 insertion at frame 41/30 seconds. Its attack lock remains 3.066667 seconds.
 `native-reload-followup-evidence.json` records the demo hash and observed
-deadlines. Held reloads revealed a remaining mismatch: native insertion at
-2.515625 seconds and completion at 4.9375 seconds do not match the existing
-uniform 2x approximation. That branch needs a separate native timing model;
-other weapons and interrupted held reloads still need more measurements.
+deadlines. The held mismatch was subsequently corrected using the installed gate,
+fresh normal/empty markers and new live tap/hold/release recordings. See
+`native-reload-clock.md` for evidence, errors and the remaining shell estimates.
 The M4A1-S attempt was rejected after the demo identified an M4A4; its retry
 froze before verified recording, so no M4A1-S timing was changed.
 
@@ -128,4 +127,4 @@ PC; software WebGL on this host is a functional test only.
   page at `http://192.168.0.18:5191`. No public deployment was performed.
 
 The map download increased from 5.7 to 21.4 MB and carries more draw calls.
-Its rendering cost on the user's 4090 remains to be measured with the frame report.
+The user subsequently reported stable 500 FPS and 2.1 ms frame time on the 4090 in Chrome, including firing. This is user-reported browser timing, not physical latency.
