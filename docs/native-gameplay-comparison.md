@@ -74,6 +74,13 @@ rate, so changing mode cannot move insertion retroactively.
   0.078125 seconds. Again the difference is one demo tick. Input release in the
   native sequence prevents interpreting its final stop as an identical held
   input test. This is a consistency check, not complete movement parity.
+- The recorded crouch/stand transitions retain 25 amount/speed samples in
+  `src/range/native-duck-fixture.json`. Replaying from each transition's first
+  sample at 64 Hz agrees within 0.000001; the existing 128 Hz implementation
+  stays within 0.003 of the native duck amount. Four regression cases retain
+  that comparison. Initial key-edge timing and full camera height animation
+  are not established by this partial-trajectory replay. No crouch-rate tuning
+  was justified, so the movement constants are unchanged.
 - Native AK `last_shot_time` advances by 0.10 seconds through the recorded
   spray, within floating-point precision, matching the imported firing cycle.
 - AWP automatic rescope occurs 1.453125 seconds after each sampled shot,
@@ -365,3 +372,15 @@ classification remain separate work; neither recording a 60 Hz video nor decodin
 - Production build and both Chromium camera/landing checks pass.
 - The LAN review page loads all five native clips and six evidence downloads
   in Chromium, with no page errors or horizontal overflow at desktop/mobile sizes.
+
+### Added CPU work
+
+A bounded Node 22 check on this Ryzen 5 7640HS host measured the added
+capsule-capture stage at approximately 0.0042 ms for three actors and 0.0246 ms
+for sixteen actors (median of 40 blocks of 250 captures after warm-up). Each
+actor kept exactly two pose buffers. Player recoil prediction plus camera-kick
+sampling measured 0.0028 ms by the same method. These isolated CPU timings
+exclude animation, simulation, rendering and browser/OS scheduling; they do
+not establish frame rate or physical input latency on this host or the user's
+Windows machine. Raw measurements remain in
+`../native-audit/reports/fidelity-cpu-cost.json`.

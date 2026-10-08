@@ -1,0 +1,148 @@
+{
+  "build": 2000927,
+  "source": "native_audit_ak_002.dem",
+  "sourceSha256": "feadebd8538a044283a42ef2e78fa97db98591d9c2565c6fbce22d684b76835c",
+  "sampleInterval": 0.015625,
+  "method": "Sanitized duck_amount and duck_speed fields from the existing offline AK movement demo. Each trajectory starts at its first nontrivial transition sample; initial input-edge timing is not inferred from these samples. Native updates are sampled at 64 Hz.",
+  "phases": [
+    {
+      "name": "crouch",
+      "held": true,
+      "startsAt": 897.875,
+      "samples": [
+        {
+          "elapsed": 0.0,
+          "amount": 0.0341046825,
+          "speed": 6.0212402344
+        },
+        {
+          "elapsed": 0.015625,
+          "amount": 0.1099561229,
+          "speed": 6.0681152344
+        },
+        {
+          "elapsed": 0.03125,
+          "amount": 0.1863934994,
+          "speed": 6.1149902344
+        },
+        {
+          "elapsed": 0.046875,
+          "amount": 0.2634168267,
+          "speed": 6.1618652344
+        },
+        {
+          "elapsed": 0.0625,
+          "amount": 0.3410260677,
+          "speed": 6.2087402344
+        },
+        {
+          "elapsed": 0.078125,
+          "amount": 0.4192212522,
+          "speed": 6.2556152344
+        },
+        {
+          "elapsed": 0.09375,
+          "amount": 0.4980023801,
+          "speed": 6.3024902344
+        },
+        {
+          "elapsed": 0.109375,
+          "amount": 0.5773694515,
+          "speed": 6.3493652344
+        },
+        {
+          "elapsed": 0.125,
+          "amount": 0.6573224664,
+          "speed": 6.3962402344
+        },
+        {
+          "elapsed": 0.140625,
+          "amount": 0.7378613949,
+          "speed": 6.4431152344
+        },
+        {
+          "elapsed": 0.15625,
+          "amount": 0.8189862967,
+          "speed": 6.4899902344
+        },
+        {
+          "elapsed": 0.171875,
+          "amount": 0.9006971121,
+          "speed": 6.5368652344
+        },
+        {
+          "elapsed": 0.1875,
+          "amount": 0.9829938412,
+          "speed": 6.5837402344
+        },
+        {
+          "elapsed": 0.203125,
+          "amount": 1.0,
+          "speed": 6.6306152344
+        }
+      ]
+    },
+    {
+      "name": "stand",
+      "held": false,
+      "startsAt": 898.890625,
+      "samples": [
+        {
+          "elapsed": 0.0,
+          "amount": 0.9573691487,
+          "speed": 6.0212402344
+        },
+        {
+          "elapsed": 0.015625,
+          "amount": 0.8625548482,
+          "speed": 6.0681152344
+        },
+        {
+          "elapsed": 0.03125,
+          "amount": 0.7670081258,
+          "speed": 6.1149902344
+        },
+        {
+          "elapsed": 0.046875,
+          "amount": 0.6707289815,
+          "speed": 6.1618652344
+        },
+        {
+          "elapsed": 0.0625,
+          "amount": 0.5737174153,
+          "speed": 6.2087402344
+        },
+        {
+          "elapsed": 0.078125,
+          "amount": 0.4759734273,
+          "speed": 6.2556152344
+        },
+        {
+          "elapsed": 0.09375,
+          "amount": 0.3774970174,
+          "speed": 6.3024902344
+        },
+        {
+          "elapsed": 0.109375,
+          "amount": 0.2782881856,
+          "speed": 6.3493652344
+        },
+        {
+          "elapsed": 0.125,
+          "amount": 0.1783469319,
+          "speed": 6.3962402344
+        },
+        {
+          "elapsed": 0.140625,
+          "amount": 0.0776732564,
+          "speed": 6.4431152344
+        },
+        {
+          "elapsed": 0.15625,
+          "amount": 0.0,
+          "speed": 6.4899902344
+        }
+      ]
+    }
+  ]
+}
