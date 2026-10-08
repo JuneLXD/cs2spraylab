@@ -86,5 +86,17 @@
     "velocity": "0x150cee0",
     "firingImpulse": "0x1515420",
     "scope": "72 offline emulated recovery samples plus all 14 recorded AK tap/spray anchors. Fixed 128 Hz cache, quaternion interpolation, small-angle cutoff, exponential tail, and half-tick angle/velocity offset. Video camera trajectory and complete shot direction remain separate checks."
+  },
+  "cameraAudit": {
+    "build": "2000927",
+    "inspectedAt": "2026-10-08",
+    "clientSha256": "99ae5b5724e869de64cc810d7ade089fb18d2fe08dcb8d88982af39f951d1d12",
+    "composition": "0x152be73",
+    "impulse": "0x1515609..0x1515668",
+    "decay": "0x1525280",
+    "aimFraction": 0.45,
+    "impulseFraction": 0.055,
+    "decayExponent": 18,
+    "scope": "69 offline arithmetic cases and all 14 recorded AK camera anchors (maximum 0.000639 degree replay difference). Limited 157-frame spray-video comparison supports the added term; full camera trajectory and viewmodel animation parity remain unverified."
   }
 }

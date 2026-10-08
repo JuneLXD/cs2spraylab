@@ -2,6 +2,7 @@ import {equipmentStats, isPumpShotgun, knifeModel, ZEUS_RECHARGE_SECONDS, type E
 import {DEG, UNIT, type Vec} from '../actor-physics';
 import type {DamagePunch} from '../aim-punch';
 import {WeaponRecovery} from '../ballistics';
+import type {RecoilAngle} from '../recoil';
 import {direction as aimDirection, shotDirections} from '../shot-model';
 import type {ActorCommand} from './types';
 import {NativeReloadState, WeaponActions, type ReloadActionEvent} from '../weapon-actions';
@@ -10,6 +11,7 @@ export type FiredRound = {
   origin: Vec; direction: Vec; weapon: Equipment; ordinal: number;
   kind: 'bullet' | 'pellets' | 'melee' | 'zeus'; attack: 'primary' | 'secondary';
   maxDistance: number; pelletDirections?: Vec[]; firstSlash?: boolean;
+  viewPunch?: RecoilAngle;
 };
 export type WeaponActionEvent = ReloadActionEvent | {kind: 'zeus-discharge' | 'zeus-ready'; at: number};
 export type WeaponCommand = ActorCommand & {reloadHeld?: boolean};
@@ -167,6 +169,7 @@ export class DuelWeaponState {
     }
     this.pendingPress = false;
     return {origin: {...actor.position}, direction, weapon: this.id, ordinal: this.ordinal++,
+      ...(this.id !== 'zeus' ? {viewPunch: this.recovery.lastViewPunch} : {}),
       kind: this.id === 'zeus' ? 'zeus' : directions.length > 1 ? 'pellets' : 'bullet',
       attack: this.actions.alternateFire ? 'secondary' : 'primary', maxDistance: stats.range * UNIT,
       ...(directions.length > 1 ? {pelletDirections: directions} : {})};

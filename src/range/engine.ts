@@ -819,7 +819,8 @@ export class RangeEngine {
     }
     this.camera.position.copy(vector(this.sim.renderPosition()));
     const visualRecoil = this.sim.slot === 3 ? {yaw: 0, pitch: 0} : this.sim.recovery.predict(this.sim.accumulator);
-    const view = recoilView(this.sim.yaw, this.sim.pitch, visualRecoil);
+    const viewPunch = this.sim.viewPunch.sample(this.sim.time + this.sim.accumulator);
+    const view = recoilView(this.sim.yaw, this.sim.pitch, visualRecoil, viewPunch);
     this.camera.rotation.set(view.pitch, view.yaw, 0, 'YXZ');
     const scoped = this.scope.update(this.sim.actions, this.camera, this.sim.time + this.sim.accumulator);
     this.weaponRoot.visible = !scoped;
@@ -869,7 +870,7 @@ export class RangeEngine {
       const target = this.sim.targetPosition(this.sim.targetForShot(index));
       const p = visible ? this.sim.predictedRecoil(i===1) : {yaw:0,pitch:0};
       const angles = guidanceAngles(this.sim.position, target, p,
-        this.sim.settings.follow ? this.sim.recoil : visualRecoil, this.sim.settings.follow);
+        this.sim.settings.follow ? this.sim.recoil : visualRecoil, this.sim.settings.follow, viewPunch);
       const aim = direction(angles.yaw, angles.pitch);
       const point = vector(aim).multiplyScalar(10).add(this.camera.position).project(this.camera);
       cue.hidden = !visible || point.z > 1 || Math.abs(point.x) > .95 || Math.abs(point.y) > .88;

@@ -1,4 +1,5 @@
 import { Angle, clamp, gameData, loadoutWeapon, MeasuredProfile, recoilPattern, Settings } from './config';
+import {ViewPunch} from './view-punch';
 import {equipmentForSlot, equipmentStats, isPumpShotgun, knifeModel, ZEUS_RECHARGE_SECONDS, type Equipment, type Slot} from './equipment';
 import {createScenario, DrillCoach, isDrillMode, RANGE_WALLS, REPOSITION_SHOTS, type CoachSample, type DrillMetrics} from './drills';
 import {WeaponRecovery} from './ballistics';
@@ -48,6 +49,7 @@ export class Simulation {
   input = idleInput(); active = false; firing = false; automatic = false;
   readyAt = 0; nextShot = 0; startedAt = 0; shots = 0; hits = 0; heads = 0;
   recoil: Angle = { yaw: 0, pitch: 0 };
+  readonly viewPunch = new ViewPunch();
   pattern: Angle[]; latest?: Result; measured?: MeasuredProfile;
   samples: ImpactSample[] = []; attempts = 0;
   lastShotAt = -Infinity;
@@ -108,7 +110,7 @@ export class Simulation {
     if(!state){state=new WeaponRecovery(this.stats,this.slot===1?this.measured?.points:undefined);this.recoveryStates.set(this.equipped,state);}
     return state;
   }
-  resetRecovery(){this.recoveryStates.clear();this.recoil={yaw:0,pitch:0};}
+  resetRecovery(){this.recoveryStates.clear();this.recoil={yaw:0,pitch:0};this.viewPunch.reset();}
   predictedRecoil(next=false){
     if (this.equipped === 'knife' || this.equipped === 'zeus') return {yaw: 0, pitch: 0};
     const due=this.firing?this.nextShot:Math.max(this.time,this.shotReady.get(this.equipped) ?? 0,this.burstEnd);
@@ -404,7 +406,9 @@ export class Simulation {
       weaponId:this.equipped,alternateFire:this.actions.alternateFire,recoilIndex:this.recovery.index,seed:ordinal+1}, weapon.pellets, this.random);
     const index = this.shots++;
     this.reloadState.ammo--; this.shotOrdinals.set(this.equipped, ordinal + 1);
-    if (this.equipped !== 'zeus') this.recovery.fire();
+    if (this.equipped !== 'zeus') {
+      this.recovery.fire(); this.viewPunch.add(this.recovery.lastViewPunch, this.time);
+    }
     else {
       this.rechargeTimes.set('zeus', this.time + ZEUS_RECHARGE_SECONDS);
       this.actionEvents.push({kind: 'zeus-discharge', at: this.time, equipment: 'zeus'});

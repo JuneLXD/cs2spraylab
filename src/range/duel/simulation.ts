@@ -21,6 +21,7 @@ import {DuelCoach} from './coaching';
 import {coveredSpawns} from './spawns';
 import {applyTagging, recoverTagging, type TaggingState} from '../tagging';
 import {DamagePunch} from '../aim-punch';
+import {ViewPunch} from '../view-punch';
 import {RadarMemory} from './radar';
 import {resolveBulletRay} from './penetration';
 import {traceMelee} from './melee';
@@ -42,6 +43,7 @@ type CombatActor = ActorKinematics & TaggingState & {
   side: 'player' | 'enemy';
   pitch: number;
   punch: DamagePunch;
+  viewPunch: ViewPunch;
   deathDirection?: Vec;
   health: number;
   armor: number;
@@ -64,6 +66,7 @@ const makeActor = (id: number, side: CombatActor['side'], x: number, z: number, 
   health, armor: armored ? 100 : 0, helmet: armored, alive: true,
   flinchStack: 1, velocityModifier: 1,
   punch: new DamagePunch(randomStream(seed, `damage-punch:${id}`)),
+  viewPunch: new ViewPunch(),
   weapon: new DuelWeaponState(weapon, randomStream(seed, `shot:${id}`)), command: idleCommand(),
   stepDistance: 0,
   inventory: new Map(), equipReadyAt: 0,
@@ -444,6 +447,7 @@ export class DuelSimulation {
       command.usePressed=command.pickupPressed=command.dropPressed=command.jumpPressed=false;
       command.jumpPressOffset=0;
       if (!fired) continue;
+      if (fired.viewPunch) actor.viewPunch.add(fired.viewPunch, this.time);
       if (actor.id === 0 && this.botz) {if (fired.kind !== 'melee') this.botzStats.shots++;}
       else if (actor.id === 0) this.coach.shot(this.snapshot()[0]);
       const shotId = this.shotId++;

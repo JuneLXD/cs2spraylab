@@ -1,10 +1,11 @@
 import {DEG} from './actor-physics';
 import type {RecoilAngle} from './recoil';
 
-// Source-style view tracking is presentation only. ShotAim continues to use the
-// full physical recoil once. The 0.45 view fraction is a tuning prior, not a
-// measured reconstruction of the current CS2 camera animation system.
-export function recoilView(yaw: number, pitch: number, recoil: RecoilAngle) {
-  return {yaw: yaw - recoil.yaw * DEG * .45, pitch: pitch + recoil.pitch * DEG * .45,
+// Native camera composition (build 2000927, 0x152be73): full camera kick plus
+// 0.45 of physical aim punch. Both are presentation only. Weapon model motion
+// remains an approximation; the separate .22 model fraction is not measured.
+export function recoilView(yaw: number, pitch: number, recoil: RecoilAngle, kick?: RecoilAngle) {
+  return {yaw: yaw - (recoil.yaw * .45 + (kick?.yaw ?? 0)) * DEG,
+    pitch: pitch + (recoil.pitch * .45 + (kick?.pitch ?? 0)) * DEG,
     weaponYaw: -recoil.yaw * DEG * .22, weaponPitch: recoil.pitch * DEG * .22};
 }

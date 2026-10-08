@@ -27,9 +27,11 @@ describe('guidance and physical head trajectory', () => {
 it.each([false, true])('compensates scheduled recoil separately from current camera/crosshair recoil (follow=%s)', follow => {
   const origin = {x: -2, y: 1.2, z: 25}, target = {x: 1, y: 0, z: 0};
   const shotRecoil = {yaw: 1.6, pitch: 6.2}, shown = {yaw: -.5, pitch: 3.1};
-  const guide = guidanceAngles(origin, target, shotRecoil, shown, follow);
+  const kick = {yaw: .3, pitch: 1.1};
+  const guide = guidanceAngles(origin, target, shotRecoil, shown, follow, kick);
   const fraction = follow ? 1 : .45;
-  const raw = {yaw: guide.yaw + shown.yaw * DEG * fraction, pitch: guide.pitch - shown.pitch * DEG * fraction};
+  const raw = {yaw: guide.yaw + (shown.yaw * fraction + (follow ? 0 : kick.yaw)) * DEG,
+    pitch: guide.pitch - (shown.pitch * fraction + (follow ? 0 : kick.pitch)) * DEG};
   const ray = direction(raw.yaw - shotRecoil.yaw * DEG, raw.pitch + shotRecoil.pitch * DEG);
   const t = (target.z - origin.z) / ray.z;
   expect(origin.x + ray.x * t).toBeCloseTo(target.x, 10);

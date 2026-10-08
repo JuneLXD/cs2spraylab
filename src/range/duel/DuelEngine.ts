@@ -1181,7 +1181,8 @@ export class DuelEngine {
     const visualRecoil = viewWeapon.recovery.predict(this.sim.accumulator);
     const punch = this.sim.actors[0].punch.predict(this.paused || this.sim.phase !== 'fighting' ? 0 : this.sim.accumulator,
       viewWeapon.recovery.angle);
-    const view = recoilView(player.yaw - punch.yaw * DEG, player.pitch + punch.pitch * DEG, visualRecoil);
+    const viewPunch = this.sim.actors[0].viewPunch.sample(this.sim.time + this.sim.accumulator);
+    const view = recoilView(player.yaw - punch.yaw * DEG, player.pitch + punch.pitch * DEG, visualRecoil, viewPunch);
     const deathAge = this.animationClock - (this.deaths.get(0) ?? this.animationClock);
     const death = deathView(deathAge, player.position.y - player.feet);
     this.camera.position.set(player.position.x, player.position.y, player.position.z);

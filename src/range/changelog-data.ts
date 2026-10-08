@@ -140,6 +140,11 @@ export const latestChanges = {
       'Player bullets and Zeus in AI Duel, Aim Botz, Reflex and aim_redline now use CS2\'s nineteen bone-bound hit shapes on the pose shown on screen, including turned heads, crouches, hands and feet.',
       'Armor, cover and respawn checks remain current. Native neck hits share chest damage and Kevlar protection; missing skeletons keep the existing fallback.',
     ]},
+    {id: 'native-camera-kick', title: 'Native shot camera kick', items: [
+      'Each shot now adds CS2’s immediate camera kick, which decays separately from the slower aim recoil in the range, AI Duel and Aim Botz.',
+      'Camera kick follows the player across weapon switches and updates every rendered frame. Physical shot direction, sensitivity and recoil-follow guidance remain separate.',
+      'Verified against 69 native arithmetic samples and all 14 camera anchors in an offline AK tapping and spray recording.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

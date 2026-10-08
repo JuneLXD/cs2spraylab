@@ -1,5 +1,6 @@
 import {recoilTable,type RecoilAngle,type RecoilParameters} from './recoil';
 import {PunchRecovery} from './punch-recovery';
+import {viewPunchImpulse} from './view-punch';
 
 export type AccuracyParameters=RecoilParameters&{
   stand:number;crouch:number;move:number;fire:number;spread:number;recovery:number;
@@ -61,12 +62,16 @@ export class WeaponRecovery {
   angle=ZERO();velocity=ZERO();index=0;penalty:number;lastShot=-Infinity;time=0;
   private punch=new PunchRecovery();private anchorAt=0;private roll=0;
   private impulses:RecoilAngle[];
+  private viewImpulses:RecoilAngle[];
+  lastViewPunch:RecoilAngle=ZERO();
   constructor(public weapon:AccuracyParameters,capture?:RecoilAngle[]){
     this.penalty=weapon.stand;
     this.impulses=capture?captureImpulses(weapon,capture):recoilTable(weapon).map(p=>{
       const radians=Math.fround(p.angle*Math.fround(Math.PI/180));
       return {yaw:Math.fround(Math.sin(radians)*p.magnitude),pitch:Math.fround(Math.cos(radians)*p.magnitude)};
     });
+    this.viewImpulses=capture?this.impulses.map(p=>({yaw:p.yaw*.055,pitch:p.pitch*.055}))
+      :recoilTable(weapon).map(p=>viewPunchImpulse(p.angle,p.magnitude));
   }
   get recoil(){return{yaw:this.angle.yaw*2,pitch:this.angle.pitch*2};}
   setParameters(weapon: AccuracyParameters) {
@@ -78,6 +83,7 @@ export class WeaponRecovery {
       const radians = Math.fround(p.angle * Math.fround(Math.PI / 180));
       return {yaw: Math.fround(Math.sin(radians) * p.magnitude), pitch: Math.fround(Math.cos(radians) * p.magnitude)};
     });
+    this.viewImpulses = recoilTable(weapon).map(p => viewPunchImpulse(p.angle, p.magnitude));
   }
   advance(dt:number,crouch=false,airborne=false){
     const baseline=airborne?this.weapon.stand+(this.weapon.jump ?? 0):crouch?this.weapon.crouch:this.weapon.stand;
@@ -96,6 +102,7 @@ export class WeaponRecovery {
   fire(){
     const recoil=this.recoil;
     const impulse=this.impulses[Math.floor(this.index)%this.impulses.length];
+    this.lastViewPunch=this.viewImpulses[Math.floor(this.index)%this.viewImpulses.length];
     // Native 0x1515420 samples the carried angle at command + 1 tick, but
     // velocity and its new anchor at command + half a tick (64 Hz clock).
     const carried=this.punch.sample(this.time-this.anchorAt+1/128);

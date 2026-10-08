@@ -218,14 +218,59 @@ Melee hulls and movement collision are unchanged. This matches authored shapes
 to the visible imported animation; it does not reproduce Source 2's full
 animation graph or network lag compensation.
 
+## Camera shot kick (fifth pass)
+
+The native camera adds two separate firing terms: 0.45 of full physical aim
+punch, plus `m_vecCsViewPunchAngle`. The composition at `0x152be73` confirms
+that the existing 0.45 camera fraction is correct. SprayLab was missing the
+second term, which gives a shot immediate visual impact before slower aim
+recoil builds.
+
+At `0x1515609`, each shot multiplies its recoil-table magnitude by 0.055,
+then applies sine/cosine of that shot's recoil angle and adds the result to
+the decayed camera angle. The getter at `0x1525280` applies `exp(-18 * age)`;
+`view_punch_decay` defaults to 18. This component has no 1/32-degree cutoff.
+Its time anchor is the firing command, separate from the half-tick offset
+on physical aim-punch anchors.
+
+`tools/verify-native-view-punch.py` evaluates these bounded arithmetic paths
+from the hash-pinned client. Thirty-six impulse cases and 33 decay cases
+match the implementation within 0.0000001 degrees. The sanitized
+`native-view-punch-anchor-fixture.json` retains all 14 AK camera anchors from
+the tapping/spray demo. A complete replay differs by at most 0.000639 degrees,
+including network-angle quantization and native absolute float-clock rounding;
+the regression permits 0.001 degrees. The earlier landing kick is excluded
+from this firing-only replay.
+
+Both browser engines now add camera kick each shot and sample it at render
+time. The state belongs to the actor, so holstering does not clear or freeze it.
+Bullets and mouse sensitivity remain independent of this presentation term.
+Centered-crosshair guides compensate it; recoil-follow guides and crosshairs
+continue to project the actual recoil-only firing direction. Session resets
+clear the state. Imported recoil captures use inferred impulses for this term,
+so those user-provided profiles do not have the same native evidence.
+
+A secondary image check tracks static scene features through 157 frames of the
+native AK spray/recovery video (14.4–17 seconds; stationary reference at 14.2).
+Adding camera kick lowers the two-axis RMS difference from 0.29 to 0.15 degrees
+with a single fitted clock offset and no fitted amplitude. The result is
+similar under both plausible 16:9 and stretched 4:3 camera intrinsics. This
+supports the missing component; it does not establish exact rendered-camera
+parity. The video has capture/simulation timing differences, and the earlier
+tapping frames do not align with the spray under one constant clock offset.
+They are excluded from the image fit, while all 14 taps/spray shots remain in
+the independently timed demo-anchor check. A reference during the preceding
+landing animation also adds a spurious baseline rotation and is excluded.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current
 camera recoil angle. They cannot be fitted directly to video as instantaneous
 punch values. The native camera multiplies the doubled punch returned by its
-sampler by 0.45, confirming the existing camera fraction; the visible recovery
-trajectory still needs a video comparison. The weapon fraction remains an
-estimate.
+sampler by 0.45, confirming the existing camera fraction. Camera kick now has
+native arithmetic and demo-anchor evidence, plus a limited spray-video check.
+Full camera and weapon-model trajectories remain partly verified; the weapon
+fraction is an estimate.
 Native hitboxes now follow the imported animation in the rendered Duel modes.
 Full native animation reconstruction and the range's mesh-height hitgroup
 classification remain separate work; neither recording a 60 Hz video nor decoding a
@@ -279,3 +324,12 @@ classification remain separate work; neither recording a 60 Hz video nor decodin
   crouched/turned heads, including a target that has moved since that frame.
 - Production build passes. Animation buffers are pooled per actor and released
   on rebuild, respawn and engine disposal.
+
+### Camera-kick validation
+
+- 69 emulated arithmetic samples and all 14 native AK camera anchors pass,
+  alongside holster/reset, immutable sampling and guide-alignment regressions.
+- Full unit suite: 2,079 pass; the existing missing fallback model is the only
+  failure. Production TypeScript/Vite build passes.
+- Seven Chromium checks pass: event-time input, scope/quickscope/rescope,
+  animated hitboxes, and immediate/between-tick camera kick in both engines.
