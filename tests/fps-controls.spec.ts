@@ -1,5 +1,10 @@
 import {expect, test} from '@playwright/test';
 
+// Written for the first visit before aim_redline and the AWP became the defaults: AI Duel with the AK-47 at Auto quality.
+test.beforeEach(async ({page}) => page.addInitScript(() => {
+  if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', weapon: 'ak47', quality: 'auto'}));
+}));
+
 test('FPS controls work before mouse capture across browser engines', async ({page}) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');

@@ -3,7 +3,7 @@ import {expect, test} from '@playwright/test';
 test('weapon drops have one rendered owner and do not accumulate after lethal feedback or round resets', async ({page}, info) => {
   test.skip(info.project.name !== 'chromium');
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', volume: 0, quality: 'performance'})));
+  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', mode: 'duel', volume: 0, quality: 'performance'})));
   await page.goto('/');
   await page.evaluate(async () => {
     const url = performance.getEntriesByType('resource').find(entry => entry.name.includes('/duel/DuelEngine.ts'))!.name;

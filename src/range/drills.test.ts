@@ -168,7 +168,7 @@ describe('Drill lifecycle',()=>{
     expect(sim.drillRound).toBe(2);expect(sim.drill?.finished).toBe(false);
   });
   it('requires repositioning between six-round bursts',()=>{
-    const sim=new Simulation({...defaults,mode:'burst'});
+    const sim=new Simulation({...defaults,weapon:'ak47',mode:'burst'});
     sim.onShot=s=>sim.samples.push({x:0,y:0,hit:true,head:false,bullet:s.index+1});
     sim.start(true);for(let i=0;i<3;i++)sim.advance(.2);expect(sim.drill?.shots).toBe(6);
     for(let i=0;i<10;i++)sim.advance(.2);
@@ -180,7 +180,7 @@ describe('Drill lifecycle',()=>{
     expect(sim.drillRound).toBe(2);
   });
   it('caps a reposition rep at six shots even across multiple trigger presses',()=>{
-    const sim=new Simulation({...defaults,mode:'burst'});
+    const sim=new Simulation({...defaults,weapon:'ak47',mode:'burst'});
     sim.onShot=s=>sim.samples.push({x:0,y:0,hit:true,head:false,bullet:s.index+1});
     sim.start();sim.advance(.15);sim.release('mouse');
     expect(sim.drill?.shots).toBe(2);
@@ -198,7 +198,7 @@ describe('Drill lifecycle',()=>{
     expect(sim.drillCompleted).toBe(1);expect(sim.drillRound).toBe(2);
   });
   it('keeps headshots and accurate-shot totals accumulating for the whole configured peeking window',()=>{
-    const sim=new Simulation({...defaults,mode:'peek',peekDuration:2.5,burst:5});
+    const sim=new Simulation({...defaults,weapon:'ak47',mode:'peek',peekDuration:2.5,burst:5});
     sim.onShot=s=>sim.samples.push({x:0,y:0,hit:true,head:true,bullet:s.index+1});
     sim.start(true);for(let i=0;i<6;i++)sim.advance(.2);
     expect(sim.drill?.shots).toBeGreaterThan(10);expect(sim.drill?.finished).toBe(false);

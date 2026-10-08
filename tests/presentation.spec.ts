@@ -4,7 +4,7 @@ import sharp from 'sharp';
 test.beforeEach(async ({page}, info) => {
   if (info.title.startsWith('first-visit')) return;
   await page.addInitScript(() => {
-    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'peek'}));
+    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode: 'peek'}));
   });
 });
 
@@ -37,7 +37,7 @@ test('wall patterns animate, respect reduced motion and can be switched off inde
   test.skip(info.project.name.startsWith('mobile'), 'Wall detail is inspected from the desktop firing line');
   // The clip regions below assume square pixels, not the default 4:3 stretch.
   await page.addInitScript(() => {
-    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({resolution: 'native'}));
+    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', weapon: 'ak47', quality: 'auto', resolution: 'native'}));
   });
   await page.setViewportSize({width: 1440, height: 1000});
   await page.goto('/');
@@ -103,7 +103,7 @@ test('viewmodels stay framed across portrait, landscape, ultrawide and stretched
   await page.goto('/');
   const reference = await page.context().newPage();
   await reference.addInitScript(() => {
-    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'peek'}));
+    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode: 'peek'}));
   });
   await reference.emulateMedia({reducedMotion: 'reduce'});
   await reference.route('**/models/view-ak47.glb', route => route.fulfill({contentType: 'application/json', body: JSON.stringify({asset: {version: '2.0'}, scene: 0, scenes: [{nodes: []}], nodes: []})}));
@@ -146,6 +146,8 @@ test('viewmodels stay framed across portrait, landscape, ultrawide and stretched
 });
 
 test('first-visit Settings hint is noticeable, dismissible and not repeated', async ({page}, info) => {
+  // A first visit opens aim_redline, whose map takes a while under software WebGL.
+  test.setTimeout(180000);
   await page.goto('/');
   await expect(page.locator('.settings-hint')).toBeVisible();
   await expect(page.locator('.hint-arrow')).toHaveCSS('animation-name', 'settings-arrow');
@@ -159,7 +161,7 @@ test('first-visit Settings hint is noticeable, dismissible and not repeated', as
   const hint = (await page.locator('.settings-hint').boundingBox())!;
   expect(hint.x).toBeGreaterThanOrEqual(0);
   expect(hint.x + hint.width).toBeLessThanOrEqual(page.viewportSize()!.width);
-  await expect(page.getByRole('button', {name: 'Enter duel', exact: true})).toBeEnabled({timeout: 45000});
+  await expect(page.getByRole('button', {name: 'Start aim_redline', exact: true})).toBeEnabled({timeout: 120000});
   await page.screenshot({path: `test-results/${info.project.name}-first-visit.png`});
   await page.getByRole('button', {name: 'Dismiss settings hint', exact: true}).click();
   await expect(page.locator('.settings-hint')).toHaveCount(0);
@@ -180,7 +182,7 @@ test('first-visit hint opens Settings and respects reduced motion', async ({page
 
 test('tracking is retired from the range without relabeling or deleting old results', async ({page}) => {
   await page.addInitScript(() => {
-    localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'tracking'}));
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode: 'tracking'}));
     localStorage.setItem('spraylab.results.v2', JSON.stringify([{id: 'old-tracking', weapon: 'ak47', mode: 'tracking', shots: 0, hits: 0, heads: 0, seconds: 30, tracking: 72, date: '2026-09-01T12:00:00Z', samples: []}]));
   });
   await page.goto('/');

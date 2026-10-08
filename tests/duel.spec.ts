@@ -1,6 +1,11 @@
 import {expect, test} from '@playwright/test';
 import sharp from 'sharp';
 
+// Written for the first visit before aim_redline and the AWP became the defaults: AI Duel with the AK-47 at Auto quality.
+test.beforeEach(async ({page}) => page.addInitScript(() => {
+  if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', weapon: 'ak47', quality: 'auto'}));
+}));
+
 const desktopSmoke = new Set(['chromium', 'brave', 'opera-gx']);
 
 test('compact duel arenas persist for small rosters and safely expand for five bots', async ({page}, info) => {

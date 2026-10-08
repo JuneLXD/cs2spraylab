@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 
 test.beforeEach(async ({page}) => {
   await page.addInitScript(() => {
-    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'peek'}));
+    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode: 'peek'}));
   });
 });
 

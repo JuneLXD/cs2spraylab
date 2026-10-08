@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
-import { defaults, gameData, migrateLegacySettings, migrateMode, parseProfile, recoilPattern, resolutionPixelRatio, sanitizeSettings, viewAspect, weaponIds } from './config';
+import { defaults, gameData, loadSettings, migrateLegacySettings, migrateMode, parseProfile, recoilPattern, resolutionPixelRatio, sanitizeSettings, viewAspect, weaponIds } from './config';
 import { DEG, direction, groundVelocity, mouseAngle, Simulation, STEP, targetSpeed, UNIT, VERTICAL_FOV, TARGET_Z, SPAWN_Z, JUMP_SPEED, GRAVITY } from './simulation';
 import {REVOLVER_WINDUP} from './weapon-actions';
 
-const make = (extra = {}) => new Simulation({ ...defaults, mode:'guided', ...extra, crosshair: { ...defaults.crosshair } });
+const make = (extra = {}) => new Simulation({ ...defaults, weapon: 'ak47', mode:'guided', ...extra, crosshair: { ...defaults.crosshair } });
 const run = (s: Simulation, seconds: number, fps = 60) => { for (let i = 0; i < Math.round(seconds * fps); i++) s.advance(1 / fps); };
 
 describe('Source scale and input', () => {
@@ -46,7 +46,7 @@ describe('Source scale and input', () => {
   it('applies weapon, MP9 and knife speed profiles', () => {
     expect(targetSpeed({ ...defaults, targetSpeed: 'knife' }) / UNIT).toBe(250);
     expect(targetSpeed({ ...defaults, targetSpeed: 'smg' }) / UNIT).toBe(240);
-    expect(targetSpeed(defaults) / UNIT).toBeCloseTo(215, 9);
+    expect(targetSpeed({ ...defaults, weapon: 'ak47' }) / UNIT).toBeCloseTo(215, 9);
   });
   it('reverses a moving target and remains bounded', () => {
     const s = make({ moving: true }); s.active = true;
@@ -110,7 +110,7 @@ describe('Shot scheduling and independent drills', () => {
     expect(s.shots).toBe(1); expect(s.active).toBe(false); expect(s.velocity.x).toBe(0); expect(s.input.side).toBe(0);
   });
   it('migrates retired tracking to an ordinary guided shooting attempt', () => {
-    const s = new Simulation(sanitizeSettings({mode: 'tracking', burst: 5}));
+    const s = new Simulation(sanitizeSettings({mode: 'tracking', weapon: 'ak47', burst: 5}));
     s.start(true); run(s, 1);
     expect(s.latest?.mode).toBe('guided'); expect(s.latest?.shots).toBe(5); expect(s.latest?.tracking).toBe(0);
   });
@@ -126,7 +126,7 @@ describe('Shot scheduling and independent drills', () => {
   });
   it('consolidates retired training modes into guided spray', () => {
     for (const mode of ['weak', 'ghost', 'trace', 'fade', 'tracking']) expect(migrateMode(mode)).toBe('guided');
-    for (const mode of ['__proto__', 'toString', 'unknown']) expect(migrateMode(mode)).toBe('duel');
+    for (const mode of ['__proto__', 'toString', 'unknown']) expect(migrateMode(mode)).toBe(defaults.mode);
     expect(migrateMode('transfer')).toBe('transfer');
   });
   it('the same angular shot grows linearly with distance, including 100m', () => {
@@ -165,7 +165,7 @@ describe('Compatibility and imported data', () => {
   });
   it('sanitizes corrupted and hostile storage settings', () => {
     const s = sanitizeSettings({ weapon: 'nope', mode: 'nope', sensitivity: NaN, distance: 10000, volume: -1, crosshair: { color: 'url(javascript:bad)', size: 1e6, alpha: null } });
-    expect(s.weapon).toBe('ak47'); expect(s.sensitivity).toBe(1); expect('distance' in s).toBe(false);
+    expect(s.weapon).toBe(defaults.weapon); expect(s.sensitivity).toBe(1); expect('distance' in s).toBe(false);
     // CS2 crosshairs can be longer than the slider: cl_crosshairsize 10 is 23 px at 1080p.
     expect(s.volume).toBe(0); expect(s.crosshair.color).toBe(defaults.crosshair.color); expect(s.crosshair.size).toBe(60);
   });
@@ -198,7 +198,18 @@ describe('walking distance, jumping and moving lanes', () => {
   });
   it('ships the requested first-run defaults', () => {
     expect(defaults.sensitivity * defaults.dpi).toBe(800); expect(defaults.volume).toBe(.2);
-    expect(defaults.crosshair.color).toBe('#ffeb55'); expect(defaults.mode).toBe('duel');
+    expect(defaults.crosshair.color).toBe('#ffeb55');
+    // aim_redline with the AWP, High quality, the FPS counter on and range Ctrl+W unprotected.
+    expect(defaults).toMatchObject({mode: 'redline', weapon: 'awp', quality: 'high', frameLimit: 0, lowLatency: true, showFps: true, protectShortcuts: false});
+  });
+  it('starts a first visit from the defaults; an old profile keeps the overlay off and Ctrl+W protected', () => {
+    const values = new Map<string, string>();
+    vi.stubGlobal('localStorage', {getItem: (key: string) => values.get(key) ?? null});
+    try {
+      expect(loadSettings()).toEqual(defaults);
+      values.set('spraylab.settings.v1', JSON.stringify({cs2Sensitivity: 2}));
+      expect(loadSettings()).toMatchObject({sensitivity: 2, showFps: false, protectShortcuts: true});
+    } finally { vi.unstubAllGlobals(); }
   });
   it('preserves walking distance across spray modes but resets after a positioned drill', () => {
     const simulation = make();

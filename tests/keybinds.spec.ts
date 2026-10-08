@@ -1,6 +1,11 @@
 import {expect, test, type Page} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
 
+// Written for the first visit before aim_redline and the AWP became the defaults: AI Duel with the AK-47 at Auto quality.
+test.beforeEach(async ({page}) => page.addInitScript(() => {
+  if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', weapon: 'ak47', quality: 'auto'}));
+}));
+
 const autoexec = `// TFGH movement with a sniper toggle
 bind "t" "+forward"; bind "g" "+back"; bind "f" "+left"; bind "h" "+right"
 bind "j" "+sprint"; bind "ALT" "+duck"; bind "k" +jump;

@@ -2,6 +2,11 @@ import {expect, test, type Page} from '@playwright/test';
 import sharp from 'sharp';
 import {readFileSync} from 'node:fs';
 import {canvasColors} from './render-frame';
+
+// Written for the first visit before aim_redline and the AWP became the defaults: AI Duel with the AK-47 at Auto quality.
+test.beforeEach(async ({page}) => page.addInitScript(() => {
+  if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', weapon: 'ak47', quality: 'auto'}));
+}));
 const desktopProjects=['chromium','brave','opera-gx'];
 const emeraldDefinition=JSON.parse(readFileSync('src/range/cosmetics-data.json','utf8')).cosmetics.find((item:any)=>item.id==='knife-butterfly-emerald');
 

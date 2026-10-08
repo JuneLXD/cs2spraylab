@@ -72,7 +72,7 @@ test('transfer and spread choices persist, with mode-specific recommendations', 
 
 test('live guide projection sends scheduled shots into the head at long range and while crouched', async ({page}, info) => {
   test.skip(info.project.name !== 'chromium', 'Detailed physical projection sweep runs once');
-  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'guided', spread: false})));
+  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode: 'guided', spread: false})));
   await page.goto('/'); await captureEngine(page, 'range');
   const results = await page.evaluate(async () => {
     const e = (window as any).lessonEngine, s = e.sim, V = e.camera.position.constructor;

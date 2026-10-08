@@ -1,5 +1,10 @@
 import {expect, test} from '@playwright/test';
 
+// Written for the first visit before aim_redline and the AWP became the defaults: AI Duel with the AK-47 at Auto quality.
+test.beforeEach(async ({page}) => page.addInitScript(() => {
+  if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', weapon: 'ak47', quality: 'auto'}));
+}));
+
 test('spatial footsteps and gunfire turn with the listener and attenuate behind cover', async ({page}) => {
   await page.goto('/');
   const result = await page.evaluate(async () => {

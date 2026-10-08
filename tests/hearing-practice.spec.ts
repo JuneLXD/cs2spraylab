@@ -193,7 +193,7 @@ test('320px touch board and controls fit without horizontal overflow', async ({p
 
 test('integrated drill releases 3D resources and stops playback across settings and mode switches', async ({page}, info) => {
   const errors = await setup(page);
-  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({mode:'duel', volume:.7, quality:'performance'})));
+  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', mode:'duel', volume:.7, quality:'performance'})));
   await page.goto('/');
   await expect(page.locator('canvas[data-duel]')).toBeVisible();
   await page.getByLabel('Training mode').selectOption('hearing');

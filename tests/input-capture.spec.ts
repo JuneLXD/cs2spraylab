@@ -156,7 +156,7 @@ async function mouseOnlyAim(page: Page, mode: Mode) {
 test.beforeEach(async ({page}, info) => {
   test.skip(info.project.name.startsWith('mobile') && !info.title.startsWith('mobile entry'), 'Desktop mouse capture regression');
   await page.addInitScript(() => {
-    localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', volume: 0, quality: 'performance', frameLimit: 60, protectShortcuts: true}));
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', mode: 'duel', volume: 0, quality: 'performance', frameLimit: 60, protectShortcuts: true}));
     localStorage.setItem('spraylab.duel.v1', JSON.stringify({skill: 1, behavior: 'patient', playerHealth: 500, shortcutProtection: true}));
     window.inputCaptureEvents = [];
     for (const type of ['pointerlockchange', 'pointerlockerror', 'fullscreenchange', 'visibilitychange', 'blur', 'focus']) {

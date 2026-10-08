@@ -63,7 +63,11 @@ const finite = (value: unknown, fallback: number, min: number, max: number) => t
 const pick = <T extends string>(value: unknown, options: readonly T[], fallback: T): T => options.find(option => option === value) ?? fallback;
 
 /** Aim Botz on aim_redline: bots stand around the warehouse floor, on crates and on the catwalk. */
-export const redlineDefaults: BotzConfig = {...botzDefaults, map: 'redline'};
+/** aim_redline: three bots at long range, strafing A-D and closing in from the floor; instant respawns, no reloads. */
+export const redlineDefaults: BotzConfig = {
+  ...botzDefaults, map: 'redline', botCount: 3, distance: 'far', movement: 'close', elevated: false, helmet: false,
+  respawnSeconds: 0, infiniteAmmo: 'magazine',
+};
 
 export function sanitizeBotzConfig(raw: unknown): BotzConfig {
   const input = record(raw);
@@ -80,7 +84,8 @@ export function sanitizeBotzConfig(raw: unknown): BotzConfig {
     crouch: defaults.map === 'island' && input.crouch === 'spam' ? 'some' : pick(input.crouch, ['never', 'some', 'always', 'spam'], defaults.crouch),
     elevated: typeof input.elevated === 'boolean' ? input.elevated : defaults.elevated, weapon,
     health: Math.round(finite(input.health, defaults.health, 1, 500)),
-    armor: input.armor !== false, helmet: input.helmet !== false, headshotOnly: input.headshotOnly === true,
+    armor: typeof input.armor === 'boolean' ? input.armor : defaults.armor,
+    helmet: typeof input.helmet === 'boolean' ? input.helmet : defaults.helmet, headshotOnly: input.headshotOnly === true,
     respawnSeconds: finite(input.respawnSeconds, defaults.respawnSeconds, 0, 3),
     sessionSeconds: session,
     infiniteAmmo: pick(input.infiniteAmmo, ['off', 'reserve', 'magazine'], defaults.infiniteAmmo),

@@ -3,7 +3,7 @@ import {canvasColors} from './render-frame';
 
 test('range resolves hits immediately, flashes at the barrel, and suppressed weapons never trace', async ({page}, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({mode:'guided',volume:0,spread:false})));
+  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode:'guided',volume:0,spread:false})));
   await page.goto('/');
   await page.evaluate(async () => {
     const url = performance.getEntriesByType('resource').find(e => e.name.includes('/src/range/engine.ts'))!.name;
@@ -40,7 +40,7 @@ test('range resolves hits immediately, flashes at the barrel, and suppressed wea
 test('practice tracers follow every round of a held spray to its impact', async ({page}, info) => {
   test.skip(info.project.name.startsWith('mobile'), 'Desktop mouse workflow');
   await page.addInitScript(() => {
-    localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'guided', volume: 0}));
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode: 'guided', volume: 0}));
     Object.defineProperty(HTMLElement.prototype, 'requestPointerLock', {value: undefined});
   });
   await page.goto('/');
@@ -67,7 +67,7 @@ test('practice tracers follow every round of a held spray to its impact', async 
 
 test('knife armory filters by native model and equips any native finish with its preview', async ({page}) => {
   await page.addInitScript(() => {
-    localStorage.setItem('spraylab.range.v2', JSON.stringify({mode:'guided',volume:0}));
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode:'guided',volume:0}));
   });
   await page.goto('/');
   await page.locator('.weapon-select').click();

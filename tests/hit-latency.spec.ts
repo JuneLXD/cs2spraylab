@@ -6,7 +6,7 @@ for (const frameLimit of [30, 240]) for (const shooter of [0, 1]) {
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.addInitScript(frameLimit => {
-      localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', volume: 0, quality: 'performance', frameLimit}));
+      localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', mode: 'duel', volume: 0, quality: 'performance', frameLimit}));
       localStorage.setItem('spraylab.duel.v1', JSON.stringify({botCount: 2, skill: 1, behavior: 'patient'}));
     }, frameLimit);
     await page.goto('/');

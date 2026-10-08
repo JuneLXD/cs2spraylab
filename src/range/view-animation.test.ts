@@ -207,8 +207,8 @@ describe('reload and lesson continuity', () => {
     animation.dispose();
   });
   it('blocks range fire during reload and cancels reload when changing slots', () => {
-    const sim = new Simulation({...defaults, mode: 'spray'}); sim.active = true;
-    sim.ammoFor(defaults.weapon).ammo--;
+    const sim = new Simulation({...defaults, weapon: 'ak47', mode: 'spray'}); sim.active = true;
+    sim.ammoFor('ak47').ammo--;
     expect(sim.reload()).toBe(true); expect(sim.start()).toBe(false);
     for (let n = 0; n < 400; n++) sim.step(STEP);
     expect(sim.primaryReloadAt).toBe(0); expect(sim.start()).toBe(true);

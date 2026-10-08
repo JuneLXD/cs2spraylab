@@ -58,7 +58,7 @@ describe('aim_redline', () => {
   });
 
   it('bots on crates and the catwalk stay up there, and walls stop you', () => {
-    const sim = redlineSim({botCount: 16, distance: 'far'}, 5);
+    const sim = redlineSim({botCount: 16, distance: 'far', movement: 'static', elevated: true}, 5);
     const raised = sim.actors.slice(1).filter(bot => bot.feet > .4).map(bot => ({id: bot.id, feet: bot.feet}));
     expect(raised.length).toBeGreaterThan(0);
     sim.start(); runFor(sim, 1);
@@ -98,7 +98,7 @@ describe('aim_redline', () => {
   it.each(['strafe', 'close'] as const)('%s: bots on the catwalk and crates move about up there and never step off', movement => {
     let checked = 0;
     for (const seed of [1, 2, 3]) {
-      const sim = redlineSim({botCount: 16, distance: 'far', movement, crouch: 'spam'}, seed);
+      const sim = redlineSim({botCount: 16, distance: 'far', movement, crouch: 'spam', elevated: true}, seed);
       const raised = new Map(sim.actors.slice(1).filter(bot => bot.feet > .4).map(bot => [bot.id, {feet: bot.feet, x: bot.position.x, z: bot.position.z, moved: 0}]));
       sim.start();
       for (let tick = 0; tick < 15 * 128; tick++) {
@@ -112,6 +112,14 @@ describe('aim_redline', () => {
       for (const spot of raised.values()) {expect(spot.moved).toBeGreaterThan(.3); checked++;}
     }
     expect(checked).toBeGreaterThan(5);
+  });
+
+  it('defaults to three bots at long range, strafing and closing in from the floor, with instant respawns and no reloads', () => {
+    expect(sanitizeBotzConfig({map: 'redline'})).toMatchObject({botCount: 3, distance: 'far', movement: 'close', crouch: 'never',
+      elevated: false, headshotOnly: false, respawnSeconds: 0, sessionSeconds: 0, infiniteAmmo: 'magazine', weapon: 'ak47',
+      health: 100, armor: true, helmet: false, shortcutProtection: true});
+    // Aim Botz keeps its own.
+    expect(sanitizeBotzConfig({})).toMatchObject({botCount: 10, distance: 'mixed', movement: 'static', elevated: true, helmet: true});
   });
 
   it('16 strafing bots simulate well inside real time', () => {

@@ -29,7 +29,7 @@ describe('interactive movement lessons', () => {
 
 describe('transfer configuration', () => {
   it('transfers on the configured bullet, limited to the current burst', () => {
-    const sim = new Simulation({...defaults, mode: 'transfer', transferAfter: 7});
+    const sim = new Simulation({...defaults, weapon: 'ak47', mode: 'transfer', transferAfter: 7});
     expect(sim.targetForShot(6)).toBe(0); expect(sim.targetForShot(7)).toBe(1);
     sim.settings.burst = 5;
     expect(sim.targetForShot(3)).toBe(0); expect(sim.targetForShot(4)).toBe(1);

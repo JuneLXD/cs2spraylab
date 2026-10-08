@@ -5,7 +5,7 @@ const weaponIds = Object.keys(JSON.parse(readFileSync('src/range/game-data.json'
 
 test.beforeEach(async ({page}) => {
   await page.addInitScript(() => {
-    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'peek'}));
+    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode: 'peek'}));
   });
 });
 
@@ -103,9 +103,11 @@ test('moving targets animate in shooting modes without starting a burst', async 
 });
 
 test('blocked storage still allows rendering and settings changes', async ({ page }) => {
+  // Without storage the app starts from the defaults: aim_redline, whose map takes a while under software WebGL.
+  test.setTimeout(180000);
   await page.addInitScript(() => Object.defineProperty(window, 'localStorage', { get: () => { throw new DOMException('Blocked', 'SecurityError'); } }));
   await page.goto('/');
-  await expect(page.getByRole('button', { name: 'Enter duel', exact: true })).toBeEnabled({timeout: 45000});
+  await expect(page.getByRole('button', { name: 'Start aim_redline', exact: true })).toBeEnabled({timeout: 120000});
   await expect(page.locator('canvas[data-duel]')).toBeVisible();
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByLabel('Invert mouse Y').check();

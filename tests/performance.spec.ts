@@ -18,7 +18,7 @@ test('guided Deagle survives repeated taps, reloads and weapon switching', async
   test.setTimeout(90000);
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   const mobile = info.project.name.startsWith('mobile');
-  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2',JSON.stringify({mode:'guided',sidearm:'deagle',primaryEnabled:false,volume:0,protectShortcuts:false})));
+  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2',JSON.stringify({weapon: 'ak47', quality: 'auto', mode:'guided',sidearm:'deagle',primaryEnabled:false,volume:0,protectShortcuts:false})));
   await page.goto('/'); await rangeEngine(page);
   await page.getByRole('button',{name:'Enter range',exact:true}).click();
   const canvas = page.locator('canvas[data-range]');
@@ -165,7 +165,7 @@ test('memoized Duel setup keeps weapons, overrides and radar controls editable',
 
 test('range reserves Ctrl+W when supported and releases protection on pause', async ({page},info) => {
   test.skip(info.project.name !== 'chromium');
-  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2',JSON.stringify({mode:'guided',sidearm:'deagle',primaryEnabled:false,volume:0})));
+  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2',JSON.stringify({weapon: 'ak47', quality: 'auto', mode:'guided',sidearm:'deagle',primaryEnabled:false,volume:0})));
   await page.goto('/'); await rangeEngine(page);
   await page.getByRole('button',{name:'Enter range',exact:true}).click();
   await expect.poll(() => page.evaluate(() => (window as any).performanceEngine.shortcuts.protected)).toBe(true);

@@ -11,7 +11,7 @@ export const isDuelEngineMode = (mode: Mode) => mode === 'duel' || mode === 'bot
 export const historyModeNames = { ...modeNames, tracking: 'Target tracking (retired)' };
 export function migrateMode(mode: unknown): Mode {
   if(typeof mode==='string'&&['weak','ghost','trace','fade','tracking'].includes(mode))return 'guided';
-  return typeof mode === 'string' && Object.prototype.hasOwnProperty.call(modeNames, mode) ? mode as Mode : 'duel';
+  return typeof mode === 'string' && Object.prototype.hasOwnProperty.call(modeNames, mode) ? mode as Mode : defaults.mode;
 }
 export type Crosshair = { color: string; size: number; gap: number; thickness: number; outline: number; alpha: number; dot: boolean; t: boolean; dynamic: boolean };
 /** CS2 viewmodel_fov and viewmodel_offset_x/y/z. */
@@ -80,10 +80,10 @@ export const weaponIds = (Object.keys(weaponNames) as Weapon[]).filter(id => id 
 export const gameData = data;
 export const loadoutWeapon = (settings: Pick<Settings, 'weapon' | 'sidearm' | 'primaryEnabled'>): Weapon => settings.primaryEnabled ? settings.weapon : settings.sidearm;
 export const defaults: Settings = {
-  weapon: 'ak47', sidearm: 'usp', primaryEnabled: true, mode: 'duel', sensitivity: 1, dpi: 800, invertY: false,
+  weapon: 'awp', sidearm: 'usp', primaryEnabled: true, mode: 'redline', sensitivity: 1, dpi: 800, invertY: false,
   moving: false, targetSpeed: 'rifle', follow: false, volume: 0.2,
-  spread: true, burst: 0, quality: 'auto', impactSize: 1.5,
-  frameLimit: 0, showFps: false, animatedGuides: true, protectShortcuts: true, lowLatency: true,
+  spread: true, burst: 0, quality: 'high', impactSize: 1.5,
+  frameLimit: 0, showFps: true, animatedGuides: true, protectShortcuts: false, lowLatency: true,
   transferAfter: 15, transferRule: 'bullet',
   showImpactPattern: true, showMousePath: true,
   peekScenario: 'mixed', peekDuration: 1, drillPace: 'practice',
@@ -121,9 +121,10 @@ export function sanitizeSettings(raw: unknown): Settings {
     peekDuration: numeric(s.peekDuration,1,.5,10),
     drillPace: s.drillPace === 'challenge' ? 'challenge' : 'practice',
     burst: [0, 5, 10, 15].includes(s.burst!) ? s.burst! : 0,
-    quality: ['auto', 'low', 'high', 'performance'].includes(s.quality!) ? s.quality! : 'auto',
+    quality: ['auto', 'low', 'high', 'performance'].includes(s.quality!) ? s.quality! : defaults.quality,
     frameLimit: s.frameLimit === 0 || Number.isInteger(s.frameLimit) && s.frameLimit! >= frameLimitRange[0] && s.frameLimit! <= frameLimitRange[1]
       ? s.frameLimit! : s.quality === 'performance' ? 60 : 0,
+    // A profile saved before these settings existed keeps what it had then: no FPS overlay, Ctrl+W protected.
     showFps: s.showFps === true, animatedGuides: s.animatedGuides !== false, protectShortcuts: s.protectShortcuts !== false,
     lowLatency: s.lowLatency !== false,
     // The former Display aspect setting picks the matching resolution; native moves to the new 1920x1440 default.
@@ -150,9 +151,10 @@ export function loadSettings(): Settings {
   try {
     const saved = localStorage.getItem('spraylab.range.v2');
     if (saved) return sanitizeSettings(JSON.parse(saved));
-    const old = JSON.parse(localStorage.getItem('spraylab.settings.v1') || '{}');
-    return migrateLegacySettings(old);
-  } catch { return sanitizeSettings({}); }
+    const old = localStorage.getItem('spraylab.settings.v1');
+    // A first visit starts from the defaults.
+    return old ? migrateLegacySettings(JSON.parse(old)) : sanitizeSettings(defaults);
+  } catch { return sanitizeSettings(defaults); }
 }
 export function migrateLegacySettings(old: Record<string, unknown> | null): Settings {
   const s = old || {};

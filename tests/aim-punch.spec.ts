@@ -2,7 +2,7 @@ import {expect, test} from '@playwright/test';
 
 async function enginePage(page: import('@playwright/test').Page) {
   await page.addInitScript(() => {
-    localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', volume: 0, quality: 'performance', follow: true}));
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', mode: 'duel', volume: 0, quality: 'performance', follow: true}));
     localStorage.setItem('spraylab.duel.v1', JSON.stringify({botCount: 1, health: 500, playerHealth: 500}));
   });
   await page.goto('/');

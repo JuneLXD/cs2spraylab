@@ -115,6 +115,10 @@ export const latestChanges = {
     {id: 'low-latency', title: 'Low-latency rendering', items: [
       'Settings > Graphics > Low-latency rendering, on by default, asks Chrome and Edge to show each frame without waiting for the page compositor, so the view follows the mouse about a frame sooner. It can tear, like V-Sync off.',
     ]},
+    {id: 'defaults', title: 'New defaults', items: [
+      'A first visit opens aim_redline with the AWP: three bots at long range strafe A-D and close in from the floor, respawn instantly and wear Kevlar without a helmet, and you never reload.',
+      'Graphics start at High render quality with the FPS counter on, and the range\'s Ctrl+W protection starts off. Saved settings stay as they are.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

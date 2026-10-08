@@ -10,7 +10,7 @@ const finishCount = (equipment: string) => catalog.filter(item => item.equipment
 test.beforeEach(async ({page}) => {
   await page.addInitScript(({ak, deagle}) => {
     if (sessionStorage.getItem('loadout-changelog-seeded')) return;
-    localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'awp', sidearm: 'deagle', primaryEnabled: true, volume: 0}));
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', quality: 'auto', weapon: 'awp', sidearm: 'deagle', primaryEnabled: true, volume: 0}));
     localStorage.setItem('spraylab.progression.v1', JSON.stringify({version: 2, xp: 357885, balance: 10000,
       owned: [ak.id, ...deagle.map(item => item.id)], equipped: {ak47: ak.id, deagle: deagle[1].id}}));
     sessionStorage.setItem('loadout-changelog-seeded', '1');

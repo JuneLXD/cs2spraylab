@@ -4,7 +4,7 @@ import {canvasColors} from './render-frame';
 test('native new weapons fire, reload and recharge inside the app on desktop and mobile',async({page},info)=>{
   test.setTimeout(90000);
   const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
-  await page.addInitScript(()=>localStorage.setItem('spraylab.range.v2',JSON.stringify({volume:0,protectShortcuts:false,quality:'performance'})));
+  await page.addInitScript(()=>localStorage.setItem('spraylab.range.v2',JSON.stringify({mode: 'duel', weapon: 'ak47', volume:0,protectShortcuts:false,quality:'performance'})));
   await page.goto('/');
   await page.evaluate(async()=>{
     const url=performance.getEntriesByType('resource').find(entry=>entry.name.includes('/duel/DuelEngine.ts'))!.name;
