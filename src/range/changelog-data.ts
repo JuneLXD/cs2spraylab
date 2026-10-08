@@ -110,6 +110,7 @@ export const latestChanges = {
     {id: 'botz-movement', title: 'Aim Botz bot movement', items: [
       'Aim Botz and aim_redline bots can strafe A-D and close in, as in Fast Aim / Reflex: mostly sideways with short stops, edging toward you until about 6 m away.',
       'A new crouch option makes about half the bots spam crouch, at a person\'s pace.',
+      'Bots on ledges, crates and the aim_redline catwalk move too: at an edge they slide along it or turn back, and never step off.',
     ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;

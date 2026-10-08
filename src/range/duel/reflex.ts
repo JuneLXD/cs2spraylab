@@ -141,6 +141,11 @@ export class ReflexStrafe {
     }
     return {forward: this.side ? this.lean : 0, side: this.side};
   }
+  /** Turn back now, as at the edge of a ledge. */
+  flip(time: number) {
+    this.last = this.last === 1 ? -1 : 1; this.side = this.last;
+    this.until = time + (this.crawling ? .6 + this.random() * .5 : .35 + this.random() * .45);
+  }
 }
 
 /** Crouch spam at a person's pace: down for 0.45-0.8 s, up for 0.5-1.1 s, over and over. That is slow enough for CS2's

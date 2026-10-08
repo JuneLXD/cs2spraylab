@@ -226,6 +226,11 @@ export class BotzStrafe {
     else {this.direction = this.direction === 0 ? (this.random() < .5 ? -1 : 1) : this.direction === 1 ? -1 : 1; this.until = time + .3 + this.random() * .7;}
     return this.direction;
   }
+  /** Turn back now, as at the edge of a ledge. */
+  flip(time: number) {
+    this.direction = this.direction === 1 ? -1 : 1; this.until = time + .3 + this.random() * .7;
+    return this.direction;
+  }
 }
 
 /** `leaks`: Reflex bots that reached the island before you killed them. */

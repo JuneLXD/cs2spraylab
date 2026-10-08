@@ -12,6 +12,7 @@ import {createBotTraits} from './skill';
 import {idleCommand, type ActorCommand, type DuelActorSnapshot, type DuelEvent, type Hitgroup} from './types';
 import {DuelWeaponState, type FiredRound} from './weapon-state';
 import {verticalContact} from '../actor-collision';
+import {TERRAIN_RULES} from '../terrain';
 import {FOOTSTEP_RANGE, footstepGain, gunshotGain, gunshotRange} from '../sound-model';
 import {proficiency} from './awareness';
 import {equipmentForSlot, equipmentStats, type Equipment, type Slot} from '../equipment';
@@ -24,7 +25,7 @@ import {resolveBulletRay} from './penetration';
 import {traceMelee} from './melee';
 import {advanceEnvironment,createEnvironmentState,damageEnvironmentPiece,environmentPieceId,environmentSolids,solidsOfKind,
   useEnvironmentPiece,arenaBoostPOIs,type EnvironmentState,type EnvironmentResult} from './environment';
-import {actorBody,arenaMovementEnvironment,canWalkTo} from './traversal';
+import {actorBody,arenaMovementEnvironment,arenaTerrainNear,canWalkTo} from './traversal';
 import {TeamTacticsPlanner,BoostPlanner,type TacticalPeer,type TeamContact,type BoostPlan,type BoostPOI} from './coordination';
 import {TerrainTactics} from './terrain-tactics';
 import {actorShadows} from './shadow-scene';
@@ -113,8 +114,9 @@ export class DuelSimulation {
   readonly botzStats: BotzStats = emptyBotzStats();
   private botzSpawner?: BotzSpawner | WorkshopSpawner;
   private reflexSpawner?: ReflexSpawner;
-  /** Per life: crouched, strafing, a Reflex run, or closing in on you (a lane: its spawn and the line across it). */
-  private botzLives = new Map<number, {crouch: boolean; strafe?: BotzStrafe; run?: ReflexRun; spam?: ReflexCrouch;
+  /** Per life: crouched, strafing, a Reflex run, or closing in on you (a lane: its spawn and the line across it).
+   * `ledge`: the height of the ledge, crate or catwalk it stands on, which it must not walk off. */
+  private botzLives = new Map<number, {crouch: boolean; strafe?: BotzStrafe; run?: ReflexRun; spam?: ReflexCrouch; ledge?: number;
     close?: {strafe: ReflexStrafe; origin: {x: number; z: number}; across: {x: number; z: number}}}>();
   private respawnAt = new Map<number, number>();
 
@@ -507,12 +509,12 @@ export class DuelSimulation {
     }
     const random = randomStream(this.seed, `botz:life:${id}:${generation}`);
     const toYou = {x: player.x - spawn.x, z: player.z - spawn.z}, length = Math.hypot(toYou.x, toYou.z) || 1;
-    // Bots on crates and ledges stay put, or they would walk off.
     this.botzLives.set(id, {crouch: botz.crouch === 'always' || botz.crouch === 'some' && random() < .35,
-      strafe: botz.movement === 'strafe' && !spawn.elevated ? new BotzStrafe(random) : undefined,
-      close: botz.movement === 'close' && !spawn.elevated ? {strafe: new ReflexStrafe(random), origin: {x: spawn.x, z: spawn.z},
+      strafe: botz.movement === 'strafe' ? new BotzStrafe(random) : undefined,
+      close: botz.movement === 'close' ? {strafe: new ReflexStrafe(random), origin: {x: spawn.x, z: spawn.z},
         across: {x: -toYou.z / length, z: toYou.x / length}} : undefined,
-      spam: botz.crouch === 'spam' && random() < .5 ? new ReflexCrouch(random, this.time) : undefined});
+      spam: botz.crouch === 'spam' && random() < .5 ? new ReflexCrouch(random, this.time) : undefined,
+      ledge: spawn.elevated ? spawn.feet : undefined});
     return actor;
   }
 
@@ -534,17 +536,62 @@ export class DuelSimulation {
     const yawDelta = Math.max(-limit, Math.min(limit, turn));
     if (life?.run) {this.commandReflex(actor, life.run, yawDelta); return;}
     const crouch = !!life?.crouch || !!life?.spam?.crouched(this.time);
+    const yaw = actor.yaw + yawDelta, right = {x: Math.cos(yaw), z: -Math.sin(yaw)};
     if (life?.close) {
       // Edge in to 6 m, strafe there, and back off inside 4 m: bots that brush past each other slide, and would end up
       // on top of you.
       const dx = player.x - actor.position.x, dz = player.z - actor.position.z, distance = Math.hypot(dx, dz) || 1;
-      const wish = this.edgeIn(actor.position, actor.yaw + yawDelta, {x: dx / distance, z: dz / distance}, life.close.strafe,
+      let wish = this.edgeIn(actor.position, yaw, {x: dx / distance, z: dz / distance}, life.close.strafe,
         life.close.origin, life.close.across, distance > 6 ? 1 : distance < 4 ? -1 : 0);
-      this.commandBot(actor, {...this.keysFor(wish, actor.yaw + yawDelta), walk: false, crouch, jump: false, fireHeld: false, firePressed: false, yawDelta});
+      if (life.ledge !== undefined) wish = this.stayOn(actor, life.ledge, wish, right, () => life.close!.strafe.flip(this.time));
+      this.commandBot(actor, {...this.keysFor(wish, yaw), walk: false, crouch, jump: false, fireHeld: false, firePressed: false, yawDelta});
       return;
     }
-    this.commandBot(actor, {forward: 0, side: life?.strafe?.side(this.time) ?? 0, walk: false, crouch, jump: false,
-      fireHeld: false, firePressed: false, yawDelta});
+    const side = life?.strafe?.side(this.time) ?? 0, strafe = life?.strafe;
+    if (life?.ledge !== undefined && strafe) {
+      const wish = this.stayOn(actor, life.ledge, {x: right.x * side, z: right.z * side}, right, () => strafe.flip(this.time));
+      this.commandBot(actor, {...this.keysFor(wish, yaw), walk: false, crouch, jump: false, fireHeld: false, firePressed: false, yawDelta});
+      return;
+    }
+    this.commandBot(actor, {forward: 0, side, walk: false, crouch, jump: false, fireHeld: false, firePressed: false, yawDelta});
+  }
+
+  /** A bot on a ledge, crate or catwalk never steps off it. At the edge it drops its lean and keeps strafing, sliding
+   * along the edge up to 60 degrees off its line (crates are square to the map, its line to you is not), or turns back
+   * (`turn`). Still sliding toward an edge, it presses against the slide, as a counter-strafe does. */
+  private stayOn(actor: CombatActor, level: number, wish: {x: number; z: number}, right: {x: number; z: number}, turn: () => void) {
+    const {x: vx, z: vz} = actor.velocity, speed = Math.hypot(vx, vz);
+    if (speed > .5 && !this.footing(actor, {x: vx, z: vz}, level)) return {x: -vx / speed, z: -vz / speed};
+    if (this.footing(actor, wish, level)) return wish;
+    const side = Math.sign(wish.x * right.x + wish.z * right.z) || 1;
+    const slide = (sign: number) => [0, 30, -30, 60, -60].map(degrees => {
+      const angle = degrees * DEG, cos = Math.cos(angle) * sign, sin = Math.sin(angle) * sign;
+      return {x: right.x * cos - right.z * sin, z: right.x * sin + right.z * cos};
+    }).find(direction => this.footing(actor, direction, level));
+    const along = slide(side);
+    if (along) return along;
+    turn();
+    return slide(-side) ?? {x: 0, z: 0};
+  }
+
+  /** Can a bot keep to `level` (the height of its ledge; a lip or a step is fine) a stride ahead in `direction`: floor
+   * there, and room for its body? The stride grows with speed, so it can stop in time; at the edge its hull still
+   * stands on the ledge with its centre a little past it. */
+  private footing(actor: CombatActor, direction: {x: number; z: number}, level: number) {
+    const length = Math.hypot(direction.x, direction.z);
+    if (length < 1e-6) return true;
+    const reach = .1 + Math.hypot(actor.velocity.x, actor.velocity.z) * .15, {hullRadius: r, standingHeight} = TERRAIN_RULES;
+    const x = actor.position.x + direction.x / length * reach, z = actor.position.z + direction.z / length * reach;
+    let top = -Infinity;
+    for (const solid of arenaTerrainNear(this.arena, {x, y: actor.feet, z})) {
+      const height = solid.center.y + solid.size.y / 2, dx = Math.abs(x - solid.center.x), dz = Math.abs(z - solid.center.z);
+      if (height <= level + .25) {
+        if (height > top && dx <= solid.size.x / 2 && dz <= solid.size.z / 2) top = height;
+      // A wall, or a crate it would climb onto.
+      } else if (solid.center.y - solid.size.y / 2 < actor.feet + standingHeight && dx < solid.size.x / 2 + r && dz < solid.size.z / 2 + r) return false;
+    }
+    return Math.abs(top - level) <= .25 && !this.actors.some(other => other !== actor && other.alive &&
+      Math.abs(other.position.x - x) < 2 * r && Math.abs(other.position.z - z) < 2 * r && Math.abs(other.feet - actor.feet) < standingHeight);
   }
 
   /** ADAD mostly sideways with a slight lean `toward` (unit), as in Fast Aim / Reflex. More than 2.5 m to either side of

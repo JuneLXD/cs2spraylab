@@ -191,9 +191,9 @@ describe('Aim Botz: closing in and crouch spam', () => {
     for (const bot of sim.actors.slice(1)) expect(Math.abs(bot.position.x)).toBeLessThan(18);
   });
 
-  it('about half the bots spam crouch, at a person\'s pace; bots on ledges stay put', () => {
+  it('about half the bots spam crouch, at a person\'s pace; bots on ledges never step off', () => {
     const sim = botzSim({botCount: 16, crouch: 'spam', movement: 'close', distance: 'far'}, 2);
-    const ledges = sim.actors.slice(1).filter(bot => bot.feet > 0).map(bot => ({id: bot.id, at: {...bot.position}}));
+    const ledges = sim.actors.slice(1).filter(bot => bot.feet > 0).map(bot => ({id: bot.id, feet: bot.feet}));
     expect(ledges.length).toBeGreaterThan(0);
     const changes = sim.actors.map(() => 0), last = sim.actors.map(() => false);
     sim.start();
@@ -205,8 +205,28 @@ describe('Aim Botz: closing in and crouch spam', () => {
     expect(spammers.length).toBeGreaterThanOrEqual(4); expect(spammers.length).toBeLessThanOrEqual(12);
     // Down and up about once a second at most: under 25 changes in 10 s.
     for (const count of spammers) expect(count).toBeLessThan(25);
-    // Crouching lowers the eyes, so compare where they stand.
-    for (const {id, at} of ledges) expect([sim.actors[id].position.x, sim.actors[id].position.z]).toEqual([at.x, at.z]);
+    for (const {id, feet} of ledges) expect(sim.actors[id].feet).toBeCloseTo(feet, 3);
+  });
+});
+
+describe('Aim Botz: bots on ledges', () => {
+  it.each(['strafe', 'close'] as const)('%s: they move about on their ledge and never step off it', movement => {
+    let checked = 0;
+    for (const seed of [1, 2, 3, 4]) {
+      const sim = botzSim({botCount: 16, distance: 'far', movement}, seed);
+      const ledges = new Map(sim.actors.slice(1).filter(bot => bot.feet > 0).map(bot => [bot.id, {feet: bot.feet, x: bot.position.x, z: bot.position.z, moved: 0}]));
+      sim.start();
+      for (let tick = 0; tick < 15 * 128; tick++) {
+        sim.step();
+        for (const [id, ledge] of ledges) {
+          const bot = sim.actors[id];
+          expect(Math.abs(bot.feet - ledge.feet), `bot ${id} at tick ${tick}`).toBeLessThanOrEqual(.25);
+          ledge.moved = Math.max(ledge.moved, Math.hypot(bot.position.x - ledge.x, bot.position.z - ledge.z));
+        }
+      }
+      for (const ledge of ledges.values()) {expect(ledge.moved).toBeGreaterThan(.3); checked++;}
+    }
+    expect(checked).toBeGreaterThan(4);
   });
 });
 

@@ -33,6 +33,7 @@ describe('append-only changelog', () => {
     expect(latestChanges.sections.find(section => section.id === 'reflex')!.items.join(' ')).toContain('come at you through its gaps');
     expect(latestChanges.sections.find(section => section.id === 'aim-redline')!.items.join(' ')).toContain('BOT Reed');
     expect(latestChanges.sections.find(section => section.id === 'botz-movement')!.items.join(' ')).toContain('close in');
+    expect(latestChanges.sections.find(section => section.id === 'botz-movement')!.items.join(' ')).toContain('never step off');
     expect(latestChanges.sections.find(section => section.id === 'armory')!.items.join(' ')).toContain('Every weapon finish, knife, glove and bot agent is unlocked');
     expect(latestChanges.sections.find(section => section.id === 'auto-reload')!.items.join(' ')).toContain('reloads by itself');
     expect(latestChanges.sections.find(section => section.id === 'input-latency')!.items.join(' ')).toContain('next frame');

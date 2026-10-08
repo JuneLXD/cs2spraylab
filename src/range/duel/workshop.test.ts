@@ -95,6 +95,25 @@ describe('aim_redline', () => {
     for (const bot of sim.actors.slice(1)) expect(canFitInArena(bot.position, bot.feet, HULL, arena)).toBe(true);
   });
 
+  it.each(['strafe', 'close'] as const)('%s: bots on the catwalk and crates move about up there and never step off', movement => {
+    let checked = 0;
+    for (const seed of [1, 2, 3]) {
+      const sim = redlineSim({botCount: 16, distance: 'far', movement, crouch: 'spam'}, seed);
+      const raised = new Map(sim.actors.slice(1).filter(bot => bot.feet > .4).map(bot => [bot.id, {feet: bot.feet, x: bot.position.x, z: bot.position.z, moved: 0}]));
+      sim.start();
+      for (let tick = 0; tick < 15 * 128; tick++) {
+        sim.step();
+        for (const [id, spot] of raised) {
+          const bot = sim.actors[id];
+          expect(Math.abs(bot.feet - spot.feet), `bot ${id} at tick ${tick}`).toBeLessThanOrEqual(.25);
+          spot.moved = Math.max(spot.moved, Math.hypot(bot.position.x - spot.x, bot.position.z - spot.z));
+        }
+      }
+      for (const spot of raised.values()) {expect(spot.moved).toBeGreaterThan(.3); checked++;}
+    }
+    expect(checked).toBeGreaterThan(5);
+  });
+
   it('16 strafing bots simulate well inside real time', () => {
     const sim = redlineSim({botCount: 16, movement: 'strafe', distance: 'mixed', elevated: false});
     sim.start(); runFor(sim, 1);
