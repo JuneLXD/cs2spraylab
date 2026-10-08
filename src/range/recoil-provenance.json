@@ -71,12 +71,20 @@
   },
   "verification": "Numeric RNG and full recoil tables match isolated, hash-pinned machine-code emulation. Full angular trajectories require native capture validation.",
   "limitations": [
-    "Euler rather than quaternion interpolation",
-    "Recovery formulas inspected, not end-to-end native-capture verified",
     "Numeric Source RNG seed support is explicit; native command seed derivation is not implemented",
     "Native spread transformations and tables inspected; JavaScript trigonometry and complete shot directions are not native-capture verified",
     "128 Hz continuous recovery evaluation rather than native 64 Hz accuracy updates",
-    "Fixed-step rather than subtick shot timing",
-    "Imported capture interruption behavior uses fitted impulses"
-  ]
+    "Imported capture interruption behavior uses fitted impulses",
+    "Recovery anchors are native-capture verified; rendered camera trajectory and physical shot directions are not fully verified"
+  ],
+  "recoveryAudit": {
+    "build": "2000927",
+    "inspectedAt": "2026-10-08",
+    "platform": "Linux x86-64",
+    "clientSha256": "99ae5b5724e869de64cc810d7ade089fb18d2fe08dcb8d88982af39f951d1d12",
+    "sampler": "0x15147a0",
+    "velocity": "0x150cee0",
+    "firingImpulse": "0x1515420",
+    "scope": "72 offline emulated recovery samples plus all 14 recorded AK tap/spray anchors. Fixed 128 Hz cache, quaternion interpolation, small-angle cutoff, exponential tail, and half-tick angle/velocity offset. Video camera trajectory and complete shot direction remain separate checks."
+  }
 }

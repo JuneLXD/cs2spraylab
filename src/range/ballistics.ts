@@ -1,4 +1,5 @@
-import {integratePunch,recoilTable,type RecoilAngle,type RecoilParameters} from './recoil';
+import {recoilTable,type RecoilAngle,type RecoilParameters} from './recoil';
+import {PunchRecovery} from './punch-recovery';
 
 export type AccuracyParameters=RecoilParameters&{
   stand:number;crouch:number;move:number;fire:number;spread:number;recovery:number;
@@ -30,24 +31,21 @@ export function airborneInaccuracy(w:AccuracyParameters,verticalSpeedUnits:numbe
   return clamp(apex+(initial-apex)*fraction,0,2*initial);
 }
 
-function evolve(angle:RecoilAngle,velocity:RecoilAngle,seconds:number){
-  while(seconds>1e-9){const dt=Math.min(seconds,1/128);({angle,velocity}=integratePunch(angle,velocity,dt));seconds-=dt;}
-  return {angle,velocity};
-}
-
 // A full-auto capture does not encode recovery. Fit impulses to its sample
 // points, then use the same recovered damping for interrupted capture playback.
 function captureImpulses(w:AccuracyParameters,points:RecoilAngle[]){
-  let angle=ZERO(),velocity=ZERO();
+  let previous=new PunchRecovery();
   return points.map((_,i)=>{
+    const elapsed=i?w.cycle:0,angle=previous.sample(elapsed+1/128),velocity=previous.velocity(elapsed);
+    const sampleAt=(v:RecoilAngle)=>new PunchRecovery(angle,{...v,roll:0}).sample(w.cycle,false);
     const desired=points[Math.min(i+1,points.length-1)];
     let guess={...velocity};
     for(let n=0;n<12;n++){
-      const sample=evolve(angle,guess,w.cycle).angle;
+      const sample=sampleAt(guess);
       const error={yaw:desired.yaw/2-sample.yaw,pitch:desired.pitch/2-sample.pitch};
       if(Math.hypot(error.yaw,error.pitch)<1e-5)break;
-      const a=evolve(angle,{...guess,yaw:guess.yaw+.1},w.cycle).angle;
-      const b=evolve(angle,{...guess,pitch:guess.pitch+.1},w.cycle).angle;
+      const a=sampleAt({...guess,yaw:guess.yaw+.1});
+      const b=sampleAt({...guess,pitch:guess.pitch+.1});
       const xx=(a.yaw-sample.yaw)/.1,xy=(b.yaw-sample.yaw)/.1,yx=(a.pitch-sample.pitch)/.1,yy=(b.pitch-sample.pitch)/.1;
       const determinant=xx*yy-xy*yx;
       if(Math.abs(determinant)<1e-10)break;
@@ -55,12 +53,13 @@ function captureImpulses(w:AccuracyParameters,points:RecoilAngle[]){
       guess.pitch+=(error.pitch*xx-error.yaw*yx)/determinant;
     }
     const impulse={yaw:guess.yaw-velocity.yaw,pitch:guess.pitch-velocity.pitch};
-    ({angle,velocity}=evolve(angle,guess,w.cycle));return impulse;
+    previous=new PunchRecovery(angle,{...guess,roll:0});return impulse;
   });
 }
 
 export class WeaponRecovery {
   angle=ZERO();velocity=ZERO();index=0;penalty:number;lastShot=-Infinity;time=0;
+  private punch=new PunchRecovery();private anchorAt=0;private roll=0;
   private impulses:RecoilAngle[];
   constructor(public weapon:AccuracyParameters,capture?:RecoilAngle[]){
     this.penalty=weapon.stand;
@@ -89,19 +88,27 @@ export class WeaponRecovery {
     const decayTime=Math.max(0,this.time+dt-Math.max(this.time,this.lastShot+this.weapon.cycle+1/64));
     this.index*=Math.pow(10,-2*decayTime);
     if(this.index<=.1)this.index=0;
-    ({angle:this.angle,velocity:this.velocity}=evolve(this.angle,this.velocity,dt));
     this.time+=dt;
+    const elapsed=this.time-this.anchorAt,angle=this.punch.sample(elapsed),velocity=this.punch.velocity(elapsed);
+    this.angle={yaw:angle.yaw,pitch:angle.pitch};this.roll=angle.roll;
+    this.velocity={yaw:velocity.yaw,pitch:velocity.pitch};
   }
   fire(){
     const recoil=this.recoil;
     const impulse=this.impulses[Math.floor(this.index)%this.impulses.length];
+    // Native 0x1515420 samples the carried angle at command + 1 tick, but
+    // velocity and its new anchor at command + half a tick (64 Hz clock).
+    const carried=this.punch.sample(this.time-this.anchorAt+1/128);
+    this.angle={yaw:carried.yaw,pitch:carried.pitch};this.roll=carried.roll;
     this.velocity={yaw:Math.fround(this.velocity.yaw+impulse.yaw),pitch:Math.fround(this.velocity.pitch+impulse.pitch)};
+    this.punch=new PunchRecovery({...this.angle,roll:this.roll},{...this.velocity,roll:0});this.anchorAt=this.time;
     this.penalty+=this.weapon.fire;this.index++;this.lastShot=this.time;
     return recoil;
   }
   predict(seconds:number,afterShot=false){
     const copy=Object.assign(Object.create(WeaponRecovery.prototype),this) as WeaponRecovery;
     copy.angle={...this.angle};copy.velocity={...this.velocity};
+    copy.punch=this.punch.clone();
     if(afterShot)copy.fire();copy.advance(seconds);return copy.recoil;
   }
   inaccuracy(speedRatio:number,walking=false,airborne=false,verticalSpeedUnits=0){

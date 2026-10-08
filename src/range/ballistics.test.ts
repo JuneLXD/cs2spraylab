@@ -55,12 +55,15 @@ describe('Persistent shot state',()=>{
     expect(shots[1].recoil.yaw).toBeCloseTo(now.yaw,5);expect(shots[1].recoil.pitch).toBeCloseTo(now.pitch,5);
     expect(shots[2].recoil.yaw).toBeCloseTo(next.yaw,5);expect(shots[2].recoil.pitch).toBeCloseTo(next.pitch,5);
   });
-  it.each(weaponIds.filter(id=>gameData.weapons[id].recoilMagnitude>0))('%s rapid taps retain recoil and firing inaccuracy',weapon=>{
+  it.each(weaponIds.filter(id=>gameData.weapons[id].recoilMagnitude>0))('%s taps preserve recovery and add firing inaccuracy',weapon=>{
     const s=new Simulation({...defaults,weapon,spread:false});const shots:Shot[]=[];
     s.onShot=shot=>shots.push(shot);
     s.start(false,weapon==='revolver');s.release('mouse');advance(s,s.stats.cycle+STEP);
     const before=s.recovery.penalty;s.start(false,weapon==='revolver');s.release('mouse');
-    expect(shots).toHaveLength(2);expect(shots[1].recoil.pitch).toBeGreaterThan(0);
+    expect(shots).toHaveLength(2);
+    // Slow bolt/pump cycles finish below the native 1/32-degree cutoff.
+    if(['awp','ssg08','nova','mag7','sawedoff'].includes(weapon))expect(shots[1].recoil).toEqual({yaw:0,pitch:0});
+    else expect(shots[1].recoil.pitch).toBeGreaterThan(0);
     expect(s.recovery.penalty).toBeGreaterThan(before);
     advance(s,Math.max(3,s.stats.recovery*6));expect(s.recovery.index).toBe(0);
     expect(Math.hypot(s.recovery.recoil.yaw,s.recovery.recoil.pitch)).toBeLessThan(.001);
@@ -76,7 +79,7 @@ describe('Persistent shot state',()=>{
     expect(state.recoil).toEqual({yaw:0,pitch:0});expect(state.penalty).toBe(weapon.stand);
   });
   it('predicts guidance without mutating weapon state',()=>{
-    const s=new Simulation(defaults);s.start();s.release('mouse');advance(s,.2);
+    const s=new Simulation({...defaults,weapon:'ak47'});s.start();s.release('mouse');advance(s,.2);
     const before=JSON.stringify(s.recovery);
     const next=s.predictedRecoil(true);expect(next.pitch).toBeGreaterThan(0);
     expect(JSON.stringify(s.recovery)).toBe(before);

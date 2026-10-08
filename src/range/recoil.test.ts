@@ -64,6 +64,6 @@ describe('installed CS2 recoil math', () => {
     expect(a).toEqual(nativeRecoilPattern(gameData.weapons[weapon]));
     expect(a).toHaveLength(gameData.weapons[weapon].magazine);
     expect(a[0]).toEqual({ yaw: 0, pitch: 0 });
-    expect(a.slice(1).every(p => Number.isFinite(p.yaw) && p.pitch > 0 && p.pitch < 45)).toBe(true);
+    expect(a.slice(1).every(p => Number.isFinite(p.yaw) && p.pitch >= 0 && p.pitch < 45)).toBe(true);
   });
 });

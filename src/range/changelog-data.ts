@@ -132,6 +132,10 @@ export const latestChanges = {
       'Scopes now follow the zoom curve and weapon-specific timings verified in native CS2. Sniper scope-out and automatic bolt-action rescope use their distinct transitions.',
       'Mouse sensitivity follows the changing scope view. Quickscoping no longer waits for the visual zoom to finish, and repeat zoom observes the separate secondary-fire cooldown.',
     ]},
+    {id: 'native-recovery', title: 'Consistent recoil recovery', items: [
+      'Recoil now follows the native recovery cache and fractional-time rotation curve, so frequent mouse input cannot change the spray or tapping recovery.',
+      'Carried recoil matches the recorded CS2 AK tap/spray sequence. Slow-firing weapons settle at the native small-angle cutoff, and spray previews use the same recovery as live shots.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

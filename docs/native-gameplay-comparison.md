@@ -146,13 +146,49 @@ those branches. Both browser modes now apply this changing scale at the input
 event's simulation time. This validates the angular calculation, not physical
 DPI, operating-system input processing or mouse-to-photon latency.
 
+## Recoil recovery (third pass)
+
+`tools/verify-native-recovery.py` emulates the complete recovery sampler at
+`0x15147a0` from the same hash-pinned client. It supplies a preallocated cache,
+base angles, impulse velocities and times. Only math imports are substituted
+with host math rounded to float32; installed `libtier0.so` forwards these
+functions to libm. No engine, allocator or operating-system call runs.
+The 72 checked-in samples cover fractional times, the 128-step cache, its
+exponential tail, the angle clamp and the 1/32-degree cutoff. Typical samples
+agree within 0.00001 physical degrees; deliberately extreme angles near
+89 degrees use a 0.00012-degree tolerance for floating-point differences.
+
+Recovery now samples a cache anchored to the last firing impulse. Previously,
+each input update integrated a partial recovery step, so the angle depended on
+how often simulation time was flushed. The new path generates full 128 Hz
+samples and interpolates their quaternions with the native polynomial blend.
+Velocity is evaluated analytically from its original impulse. Updates at
+64, 128, 240, 500, 1,000 and 8,000 Hz now preserve the same recoil curve.
+This is a timing-partition regression, not a physical USB polling-rate test.
+
+The firing routine at `0x1515420` samples the carried angle at command time
+plus one 64 Hz tick, but samples velocity and stores its new anchor at command
+time plus half a tick. Thus a new impulse carries an angle sampled 1/128 second
+ahead of the velocity. The sanitized `native-recoil-anchor-fixture.json`
+retains all 14 predictable angle/velocity anchors from the AK tap/spray demo.
+Every consecutive native angle carry matches independently within 0.000002
+degrees; a complete trainer replay agrees within 0.00001 raw angle degrees and
+0.00003 velocity units. The demo's doubled integer-tick decoding is normalized
+only for these anchors, corroborated by the native routine and 100 ms cadence.
+These base fields are not instantaneous camera angles.
+
+The physical small-angle cutoff now reaches zero instead of leaving tiny
+residual recoil through long bolt/pump cycles. Static spray previews and
+imported-capture impulse fitting use the same sampler as live firing. Prediction
+clones the cache, so guidance cannot advance or rebase live recoil state.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current
 camera recoil angle. They cannot be fitted directly to video as instantaneous
 punch values. The native camera multiplies the doubled punch returned by its
-sampler by 0.45, confirming the existing camera fraction; complete recovery
-trajectories still need a video comparison. The weapon fraction remains an
+sampler by 0.45, confirming the existing camera fraction; the visible recovery
+trajectory still needs a video comparison. The weapon fraction remains an
 estimate.
 The extracted native hitboxes still need bone-transform and trace validation
 before replacing analytic runtime hit shapes. The retained recordings provide
@@ -188,3 +224,11 @@ references for that work; neither recording a 60 Hz video nor decoding a
   the rendered midpoint FOV, firing during scope-in and automatic rescope.
 - These tests drive simulation time explicitly; software-rendered browser frame
   times are not presented as measurements of the user's hardware latency.
+
+### Recoil validation
+
+- 11 new tests cover 72 arithmetic samples, all 14 recorded firing anchors,
+  six update rates, immutable prediction and out-of-order render sampling.
+- Full unit suite: 2,051 pass; only the existing missing fallback model fails.
+  One worker and a 30-second case timeout avoided the earlier host-load timeouts.
+- Production build and both Chromium input/firing checks pass.
