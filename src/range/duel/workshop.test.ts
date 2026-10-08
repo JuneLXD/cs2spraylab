@@ -86,6 +86,15 @@ describe('aim_redline', () => {
     }
   });
 
+  it('closing-in bots work their way toward you around the crates', () => {
+    const sim = redlineSim({botCount: 10, movement: 'close', crouch: 'spam', elevated: false, distance: 'far'}, 4);
+    const player = sim.actors[0].position, range = () => sim.actors.slice(1).map(bot => Math.hypot(bot.position.x - player.x, bot.position.z - player.z));
+    const start = range().reduce((a, b) => a + b) / 10;
+    sim.start(); runFor(sim, 30);
+    expect(range().reduce((a, b) => a + b) / 10).toBeLessThan(start - 5);
+    for (const bot of sim.actors.slice(1)) expect(canFitInArena(bot.position, bot.feet, HULL, arena)).toBe(true);
+  });
+
   it('16 strafing bots simulate well inside real time', () => {
     const sim = redlineSim({botCount: 16, movement: 'strafe', distance: 'mixed', elevated: false});
     sim.start(); runFor(sim, 1);

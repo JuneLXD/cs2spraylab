@@ -160,6 +160,56 @@ describe('Aim Botz play', () => {
   });
 });
 
+describe('Aim Botz: closing in and crouch spam', () => {
+  it('keeps the new options, and the island keeps its own', () => {
+    expect(sanitizeBotzConfig({movement: 'close', crouch: 'spam'})).toMatchObject({movement: 'close', crouch: 'spam'});
+    expect(sanitizeBotzConfig({map: 'island', movement: 'close', crouch: 'spam'})).toMatchObject({movement: 'strafe', crouch: 'some'});
+  });
+
+  it('bots strafe A-D mostly sideways and edge closer, holding about 4-6 m away', () => {
+    const sim = botzSim({botCount: 8, movement: 'close', elevated: false, distance: 'mixed'}, 6);
+    const range = () => sim.actors.slice(1).map(bot => Math.hypot(bot.position.x - BOTZ_PLAYER_SPAWN.x, bot.position.z - BOTZ_PLAYER_SPAWN.z));
+    const start = range();
+    let sideways = 0, moving = 0, nearest = Infinity;
+    sim.start();
+    for (let tick = 0; tick < 40 * 128; tick++) {
+      sim.step();
+      const [player, ...bots] = sim.snapshot();
+      for (const bot of bots) {
+        const to = {x: player.position.x - bot.position.x, z: player.position.z - bot.position.z}, distance = Math.hypot(to.x, to.z);
+        nearest = Math.min(nearest, distance);
+        if (Math.hypot(bot.velocity.x, bot.velocity.z) < 1) continue;
+        moving++;
+        const along = (bot.velocity.x * to.x + bot.velocity.z * to.z) / distance, across = (bot.velocity.z * to.x - bot.velocity.x * to.z) / distance;
+        if (Math.abs(across) > Math.abs(along)) sideways++;
+      }
+    }
+    const end = range();
+    expect(end.reduce((a, b) => a + b) / end.length).toBeLessThan(start.reduce((a, b) => a + b) / start.length - 8);
+    expect(sideways / moving).toBeGreaterThan(.6);
+    expect(nearest).toBeGreaterThan(3);
+    for (const bot of sim.actors.slice(1)) expect(Math.abs(bot.position.x)).toBeLessThan(18);
+  });
+
+  it('about half the bots spam crouch, at a person\'s pace; bots on ledges stay put', () => {
+    const sim = botzSim({botCount: 16, crouch: 'spam', movement: 'close', distance: 'far'}, 2);
+    const ledges = sim.actors.slice(1).filter(bot => bot.feet > 0).map(bot => ({id: bot.id, at: {...bot.position}}));
+    expect(ledges.length).toBeGreaterThan(0);
+    const changes = sim.actors.map(() => 0), last = sim.actors.map(() => false);
+    sim.start();
+    for (let tick = 0; tick < 10 * 128; tick++) {
+      sim.step();
+      for (const bot of sim.snapshot().slice(1)) {if (bot.crouched !== last[bot.id]) changes[bot.id]++; last[bot.id] = bot.crouched;}
+    }
+    const spammers = changes.slice(1).filter(count => count >= 4);
+    expect(spammers.length).toBeGreaterThanOrEqual(4); expect(spammers.length).toBeLessThanOrEqual(12);
+    // Down and up about once a second at most: under 25 changes in 10 s.
+    for (const count of spammers) expect(count).toBeLessThan(25);
+    // Crouching lowers the eyes, so compare where they stand.
+    for (const {id, at} of ledges) expect([sim.actors[id].position.x, sim.actors[id].position.z]).toEqual([at.x, at.z]);
+  });
+});
+
 describe('Aim Botz stats', () => {
   it('summarizes accuracy, headshot rate and pace', () => {
     expect(botzSummary({...emptyBotzStats(), shots: 10, hits: 7, kills: 4, headshots: 3}, 120, 0))

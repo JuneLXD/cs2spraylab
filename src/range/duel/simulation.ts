@@ -113,8 +113,9 @@ export class DuelSimulation {
   readonly botzStats: BotzStats = emptyBotzStats();
   private botzSpawner?: BotzSpawner | WorkshopSpawner;
   private reflexSpawner?: ReflexSpawner;
-  /** Per life: crouched, strafing, or a Reflex run. */
-  private botzLives = new Map<number, {crouch: boolean; strafe?: BotzStrafe; run?: ReflexRun}>();
+  /** Per life: crouched, strafing, a Reflex run, or closing in on you (a lane: its spawn and the line across it). */
+  private botzLives = new Map<number, {crouch: boolean; strafe?: BotzStrafe; run?: ReflexRun; spam?: ReflexCrouch;
+    close?: {strafe: ReflexStrafe; origin: {x: number; z: number}; across: {x: number; z: number}}}>();
   private respawnAt = new Map<number, number>();
 
   constructor(config: DuelConfig = sanitizeDuelConfig({}), private seed = 1, arena: Arena = testArena(), private playerWeapon: Weapon = 'ak47', private sidearm: Pistol = 'usp', private hasPrimary = true, botz?: BotzConfig) {
@@ -505,8 +506,13 @@ export class DuelSimulation {
       return actor;
     }
     const random = randomStream(this.seed, `botz:life:${id}:${generation}`);
+    const toYou = {x: player.x - spawn.x, z: player.z - spawn.z}, length = Math.hypot(toYou.x, toYou.z) || 1;
+    // Bots on crates and ledges stay put, or they would walk off.
     this.botzLives.set(id, {crouch: botz.crouch === 'always' || botz.crouch === 'some' && random() < .35,
-      strafe: botz.movement === 'strafe' && !spawn.elevated ? new BotzStrafe(random) : undefined});
+      strafe: botz.movement === 'strafe' && !spawn.elevated ? new BotzStrafe(random) : undefined,
+      close: botz.movement === 'close' && !spawn.elevated ? {strafe: new ReflexStrafe(random), origin: {x: spawn.x, z: spawn.z},
+        across: {x: -toYou.z / length, z: toYou.x / length}} : undefined,
+      spam: botz.crouch === 'spam' && random() < .5 ? new ReflexCrouch(random, this.time) : undefined});
     return actor;
   }
 
@@ -527,7 +533,17 @@ export class DuelSimulation {
     const turn = Math.atan2(Math.sin(facing - actor.yaw), Math.cos(facing - actor.yaw)), limit = Math.PI * STEP;
     const yawDelta = Math.max(-limit, Math.min(limit, turn));
     if (life?.run) {this.commandReflex(actor, life.run, yawDelta); return;}
-    this.commandBot(actor, {forward: 0, side: life?.strafe?.side(this.time) ?? 0, walk: false, crouch: !!life?.crouch, jump: false,
+    const crouch = !!life?.crouch || !!life?.spam?.crouched(this.time);
+    if (life?.close) {
+      // Edge in to 6 m, strafe there, and back off inside 4 m: bots that brush past each other slide, and would end up
+      // on top of you.
+      const dx = player.x - actor.position.x, dz = player.z - actor.position.z, distance = Math.hypot(dx, dz) || 1;
+      const wish = this.edgeIn(actor.position, actor.yaw + yawDelta, {x: dx / distance, z: dz / distance}, life.close.strafe,
+        life.close.origin, life.close.across, distance > 6 ? 1 : distance < 4 ? -1 : 0);
+      this.commandBot(actor, {...this.keysFor(wish, actor.yaw + yawDelta), walk: false, crouch, jump: false, fireHeld: false, firePressed: false, yawDelta});
+      return;
+    }
+    this.commandBot(actor, {forward: 0, side: life?.strafe?.side(this.time) ?? 0, walk: false, crouch, jump: false,
       fireHeld: false, firePressed: false, yawDelta});
   }
 
@@ -541,6 +557,11 @@ export class DuelSimulation {
     const back = Math.abs(offset) > 2.5 ? -Math.sign(offset * (right.x * across.x + right.z * across.z)) : 0;
     const keys = strafe.keys(this.time, back === 1 || back === -1 ? back : undefined), forward = keys.forward * lean;
     return {x: toward.x * forward + right.x * keys.side, z: toward.z * forward + right.z * keys.side};
+  }
+
+  /** A world-space move as forward/side keys for a bot facing `yaw`. */
+  private keysFor(wish: {x: number; z: number}, yaw: number) {
+    return {forward: -wish.x * Math.sin(yaw) - wish.z * Math.cos(yaw), side: wish.x * Math.cos(yaw) - wish.z * Math.sin(yaw)};
   }
 
   /** Reflex: wait out of sight, run through the entrance, then come at you: straight, or strafing A-D while edging

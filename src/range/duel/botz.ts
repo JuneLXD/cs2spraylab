@@ -11,9 +11,10 @@ import {randomStream} from './rng';
  * first-bullet accuracy and headshots at chosen distances.
  */
 export type BotzDistance = 'near' | 'mixed' | 'far';
-export type BotzMovement = 'static' | 'strafe';
-/** On the island, 'some' is crouch spam. */
-export type BotzCrouch = 'never' | 'some' | 'always';
+/** 'close': strafe A-D mostly sideways while edging toward you, as in Fast Aim / Reflex. */
+export type BotzMovement = 'static' | 'strafe' | 'close';
+/** 'some' bots crouch and stay down; 'spam': about half the bots crouch spam. On the island, 'some' is crouch spam. */
+export type BotzCrouch = 'never' | 'some' | 'always' | 'spam';
 /** sv_infinite_ammo: 'reserve' = 2 (reload, never run dry), 'magazine' = 1 (never reload). */
 export type BotzAmmo = 'off' | 'reserve' | 'magazine';
 /** 'yard' is Aim Botz; 'island' is Fast Aim / Reflex (reflex.ts), where bots rush you; 'redline' is Aim Botz on the
@@ -74,8 +75,9 @@ export function sanitizeBotzConfig(raw: unknown): BotzConfig {
     map: defaults.map,
     botCount: Math.round(finite(input.botCount, defaults.botCount, 1, BOTZ_MAX_BOTS)),
     distance: pick(input.distance, ['near', 'mixed', 'far'], defaults.distance),
-    movement: pick(input.movement, ['static', 'strafe'], defaults.movement),
-    crouch: pick(input.crouch, ['never', 'some', 'always'], defaults.crouch),
+    // The island has its own rush: closing in is its strafing, and its 'some' is already crouch spam.
+    movement: defaults.map === 'island' && input.movement === 'close' ? 'strafe' : pick(input.movement, ['static', 'strafe', 'close'], defaults.movement),
+    crouch: defaults.map === 'island' && input.crouch === 'spam' ? 'some' : pick(input.crouch, ['never', 'some', 'always', 'spam'], defaults.crouch),
     elevated: typeof input.elevated === 'boolean' ? input.elevated : defaults.elevated, weapon,
     health: Math.round(finite(input.health, defaults.health, 1, 500)),
     armor: input.armor !== false, helmet: input.helmet !== false, headshotOnly: input.headshotOnly === true,

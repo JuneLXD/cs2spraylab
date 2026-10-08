@@ -107,6 +107,10 @@ export const latestChanges = {
       'The map\'s own collision, spawns and layout come from its workshop file. Until CS2\'s stock textures are imported, its surfaces are drawn in flat colours.',
       'Big maps stay fast: movement, bullets and sight lines only test the collision near them.',
     ]},
+    {id: 'botz-movement', title: 'Aim Botz bot movement', items: [
+      'Aim Botz and aim_redline bots can strafe A-D and close in, as in Fast Aim / Reflex: mostly sideways with short stops, edging toward you until about 6 m away.',
+      'A new crouch option makes about half the bots spam crouch, at a person\'s pace.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

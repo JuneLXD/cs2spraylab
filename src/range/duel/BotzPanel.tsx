@@ -23,9 +23,11 @@ export const BotzSetup = memo(function BotzSetup({config, update}: BotzSetupProp
     {island && <label className="duel-field"><span>Bots come from</span><select aria-label="Bot approach" value={config.approach} onChange={event => update({approach: event.target.value as BotzConfig['approach']})}>
       <option value="around">All around</option><option value="front">In front</option></select></label>}
     <label className="duel-field"><span>Movement</span><select aria-label="Bot movement" value={config.movement} onChange={event => update({movement: event.target.value as BotzConfig['movement']})}>
-      <option value="static">{island ? 'Run straight at you' : 'Stand still'}</option><option value="strafe">{island ? 'Strafe A-D, edging closer' : 'Strafe (A-D)'}</option></select></label>
+      <option value="static">{island ? 'Run straight at you' : 'Stand still'}</option><option value="strafe">{island ? 'Strafe A-D, edging closer' : 'Strafe (A-D)'}</option>
+      {!island && <option value="close">Strafe A-D and close in</option>}</select></label>
     <label className="duel-field"><span>Crouch</span><select aria-label="Bot crouch" value={config.crouch} onChange={event => update({crouch: event.target.value as BotzConfig['crouch']})}>
-      <option value="never">Never</option><option value="some">{island ? 'Spam crouch' : 'Some bots'}</option><option value="always">{island ? 'Always (slow)' : 'All bots'}</option></select></label>
+      <option value="never">Never</option><option value="some">{island ? 'Spam crouch' : 'Some bots'}</option><option value="always">{island ? 'Always (slow)' : 'All bots'}</option>
+      {!island && <option value="spam">Spam crouch (half the bots)</option>}</select></label>
     {!island && <label className="duel-check"><span>{config.map === 'redline' ? 'Spawn on crates and catwalk' : 'Spawn on ledges'}</span><input aria-label="Spawn on ledges" type="checkbox" checked={config.elevated} disabled={config.distance === 'near' && config.map !== 'redline'} onChange={event => update({elevated: event.target.checked})}/></label>}
     <label className="duel-check"><span>Headshot only</span><input aria-label="Headshot only" type="checkbox" checked={config.headshotOnly} onChange={event => update({headshotOnly: event.target.checked})}/></label>
     <label className="duel-field"><span>Respawn delay <output>{config.respawnSeconds ? `${config.respawnSeconds.toFixed(2)} s` : 'Instant'}</output></span><input aria-label="Respawn delay" type="range" min="0" max="3" step=".25" value={config.respawnSeconds} onChange={event => update({respawnSeconds: +event.target.value})}/></label>
