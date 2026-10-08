@@ -45,8 +45,9 @@ test('Fast Aim / Reflex: stand on the island, shoot an incoming bot, and see one
   // You start on the island, at ground level.
   expect(await page.evaluate(() => (window as any).reflexEngine.sim.actors[0].feet)).toBe(0);
   // Step the bot through its gap (polling frames could miss it under software rendering), then put the crosshair on
-  // its head and fire, all in one go.
-  await page.evaluate(() => {
+  // its head and fire, all in one go. The drill runs in real time while the models load, so a bot may already have
+  // reached you by now: count from here.
+  const before = await page.evaluate(() => {
     const sim = (window as any).reflexEngine.sim, inside = () => {
       const bot = sim.actors[1];
       return Math.max(Math.abs(bot.position.x), Math.abs(bot.position.z + 6)) < 8;
@@ -55,20 +56,22 @@ test('Fast Aim / Reflex: stand on the island, shoot an incoming bot, and see one
     const eye = sim.actors[0].position, bot = sim.actors[1];
     const dx = bot.position.x - eye.x, dy = bot.feet + 1.62 - eye.y, dz = bot.position.z - eye.z;
     sim.actors[0].yaw = Math.atan2(-dx, -dz); sim.actors[0].pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
+    const reached = sim.botzStats.leaks, generation = bot.generation;
     sim.command(0, {firePressed: true}); sim.stepEarly();
+    return {reached, generation};
   });
   await expect(page.locator('.duel-round')).toContainText('1 KILLS');
-  await expect(page.locator('.duel-round')).toContainText('0 REACHED YOU');
+  await expect(page.locator('.duel-round')).toContainText(`${before.reached} REACHED YOU`);
   await expect(page.locator('.duel-health')).toContainText('1 / 1 hits');
   // It comes back after the delay with a fresh model, out of sight behind the walls.
   await expect.poll(() => page.evaluate(() => {
     const engine = (window as any).reflexEngine;
     return [engine.sim.actors[1].alive, engine.sim.actors[1].generation, engine.generations.get(1), engine.deaths.has(1)];
-  }), {timeout: 5000}).toEqual([true, 2, 2, false]);
+  }), {timeout: 5000}).toEqual([true, before.generation + 1, before.generation + 1, false]);
   // Leave it: when it reaches the island it is counted, captioned and starts again.
   await expect(page.locator('.duel-caption')).toHaveText('BOT REACHED YOU', {timeout: 20000});
-  await expect(page.locator('.duel-round')).toContainText('1 REACHED YOU');
-  expect(await page.evaluate(() => (window as any).reflexEngine.sim.actors[1].generation)).toBeGreaterThanOrEqual(3);
+  await expect(page.locator('.duel-round')).toContainText(`${before.reached + 1} REACHED YOU`);
+  expect(await page.evaluate(() => (window as any).reflexEngine.sim.actors[1].generation)).toBeGreaterThanOrEqual(before.generation + 2);
   expect(await page.evaluate(() => (window as any).reflexEngine.sim.actors[0].health)).toBe(100);
   const stats = await sharp(await canvas.screenshot({path: `test-results/${info.project.name}-reflex.png`})).stats();
   expect(stats.channels.slice(0, 3).every(channel => channel.stdev > 12)).toBe(true);
