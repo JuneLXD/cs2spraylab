@@ -6,6 +6,7 @@ import {DEG, UNIT, type Vec} from '../actor-physics';
 import {RangeAudio} from '../audio';
 import {gameData,loadoutWeapon,resolutionPixelRatio,viewAspect, type Settings, type Viewmodel, type Weapon} from '../config';
 import {requestRawLock} from '../input';
+import {createGameRenderer} from '../render-context';
 import {mouseAngle, VERTICAL_FOV, zoomRatio} from '../simulation';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
 import {attachBindInput} from '../keybinds/dom-input';
@@ -198,7 +199,7 @@ export class DuelEngine {
     this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
     this.binds = new BindRuntime(settings.keyboard, event => this.onBind(event));
     this.applyViewmodel(settings.viewmodel);
-    this.renderer = new THREE.WebGLRenderer({antialias: qualityPolicy(settings.quality).shadows, powerPreference: 'high-performance'});
+    this.renderer = createGameRenderer({antialias: qualityPolicy(settings.quality).shadows, lowLatency: settings.lowLatency});
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.08;

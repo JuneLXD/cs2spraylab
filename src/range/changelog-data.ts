@@ -112,6 +112,9 @@ export const latestChanges = {
       'A new crouch option makes about half the bots spam crouch, at a person\'s pace.',
       'Bots on ledges, crates and the aim_redline catwalk move too: at an edge they slide along it or turn back, and never step off.',
     ]},
+    {id: 'low-latency', title: 'Low-latency rendering', items: [
+      'Settings > Graphics > Low-latency rendering, on by default, asks Chrome and Edge to show each frame without waiting for the page compositor, so the view follows the mouse about a frame sooner. It can tear, like V-Sync off.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

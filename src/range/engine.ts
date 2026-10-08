@@ -7,6 +7,7 @@ import { Settings, MeasuredProfile, Weapon, gameData, type Viewmodel } from './c
 import { DEG, direction, Simulation, Shot, Vec, VERTICAL_FOV, TARGET_Z, type Result } from './simulation';
 import { RangeAudio } from './audio';
 import { requestRawLock } from './input';
+import { createGameRenderer } from './render-context';
 import { VIEWMODEL_FOV, VIEWMODEL_OFFSET, viewmodelFov, viewmodelOffset, viewmodelViewport } from './viewmodel';
 import { GUIDE_COLORS, SprayDemonstration } from './spray-demonstration';
 import {type Equipment, type Slot} from './equipment';
@@ -136,7 +137,7 @@ export class RangeEngine {
     this.sim = new Simulation(settings);
     this.binds = new BindRuntime(settings.keyboard, event => this.onBind(event));
     this.applyViewmodel(settings.viewmodel);
-    this.renderer = new THREE.WebGLRenderer({ antialias: qualityPolicy(settings.quality).shadows, powerPreference: 'high-performance', alpha: false });
+    this.renderer = createGameRenderer({antialias: qualityPolicy(settings.quality).shadows, lowLatency: settings.lowLatency});
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.1;

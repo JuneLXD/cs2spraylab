@@ -47,6 +47,8 @@ export type Settings = {
   moving: boolean; targetSpeed: 'rifle' | 'smg' | 'knife';
   follow: boolean; volume: number; spread: boolean; burst: number; quality: 'auto' | 'low' | 'high' | 'performance';
   frameLimit: number; showFps: boolean; animatedGuides: boolean; protectShortcuts: boolean;
+  /** Desynchronized (low-latency) canvas; see render-context.ts. */
+  lowLatency: boolean;
   showImpactPattern: boolean; showMousePath: boolean;
   peekScenario: 'mixed' | 'common' | 'deep' | 'off-angle' | 'elevated';
   peekDuration: number;
@@ -81,7 +83,7 @@ export const defaults: Settings = {
   weapon: 'ak47', sidearm: 'usp', primaryEnabled: true, mode: 'duel', sensitivity: 1, dpi: 800, invertY: false,
   moving: false, targetSpeed: 'rifle', follow: false, volume: 0.2,
   spread: true, burst: 0, quality: 'auto', impactSize: 1.5,
-  frameLimit: 0, showFps: false, animatedGuides: true, protectShortcuts: true,
+  frameLimit: 0, showFps: false, animatedGuides: true, protectShortcuts: true, lowLatency: true,
   transferAfter: 15, transferRule: 'bullet',
   showImpactPattern: true, showMousePath: true,
   peekScenario: 'mixed', peekDuration: 1, drillPace: 'practice',
@@ -123,6 +125,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     frameLimit: s.frameLimit === 0 || Number.isInteger(s.frameLimit) && s.frameLimit! >= frameLimitRange[0] && s.frameLimit! <= frameLimitRange[1]
       ? s.frameLimit! : s.quality === 'performance' ? 60 : 0,
     showFps: s.showFps === true, animatedGuides: s.animatedGuides !== false, protectShortcuts: s.protectShortcuts !== false,
+    lowLatency: s.lowLatency !== false,
     // The former Display aspect setting picks the matching resolution; native moves to the new 1920x1440 default.
     resolution: resolutions.find(value => value === s.resolution) ?? legacyAspects[(s as { aspect?: string }).aspect ?? ''] ?? defaults.resolution,
     crosshair: {
