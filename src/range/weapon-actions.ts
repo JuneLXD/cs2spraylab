@@ -66,6 +66,11 @@ export type ReloadPhase = 'idle' | 'magazine' | 'start' | 'shell' | 'finish';
 export type ReloadActionEvent = {kind: 'reload-start' | 'reload-shell' | 'reload-end' | 'reload-cancel' | 'reload-mode';
   at: number; silent: boolean; phase: ReloadPhase; ammo: number; reserve: number};
 
+// WPN_RELOAD_ADD_AMMO markers, verified against build 2000927 server demos.
+// Other magazine weapons retain their completion-time fallback until measured.
+// See docs/native-gameplay-comparison.md for recordings and sampling limits.
+const magazineInsertTime: Partial<Record<Equipment, number>> = {ak47: 33 / 30, awp: 60 / 30, usp: 27 / 30, deagle: 23 / 30};
+
 /** Ammo changes only on completed insert phases; cancellation cannot mint ammo. */
 export class NativeReloadState {
   ammo: number;
@@ -76,6 +81,7 @@ export class NativeReloadState {
   startedAt = 0;
   private lastTime = 0;
   private remaining = 0;
+  private magazineInserted = false;
   private events: ReloadActionEvent[] = [];
   readonly stats;
   constructor(readonly id: Equipment, readonly silentMultiplier = SILENT_RELOAD_MULTIPLIER) {
@@ -88,11 +94,21 @@ export class NativeReloadState {
     : this.phase === 'finish' ? SHELL_RELOAD_FINISH : this.stats.reload;}
   get progress() {return this.phaseDuration ? Math.max(0, Math.min(1, 1 - this.remaining / this.phaseDuration)) : 0;}
   get until() {return this.active ? this.lastTime + this.remaining * (this.silent ? this.silentMultiplier : 1) : 0;}
+  // Insertion and attack readiness are independent deadlines. Splitting the
+  // simulation here lets a holster on either side of insertion keep the right ammo.
+  get nextEventAt() {
+    return this.phase === 'magazine' && !this.magazineInserted
+      ? this.lastTime + this.workUntilInsert * (this.silent ? this.silentMultiplier : 1) : this.until;
+  }
+  private get workUntilInsert() {
+    return Math.max(0, this.remaining - this.stats.reload + (magazineInsertTime[this.id] ?? this.stats.reload));
+  }
   start(time: number, silent = false) {
     if (this.active || this.id === 'knife' || this.id === 'zeus' || this.ammo >= this.stats.magazine || this.reserve <= 0) return false;
     this.empty = this.ammo === 0; this.silent = silent; this.startedAt = this.lastTime = time;
     this.phase = this.stats.reloadsSingleShells ? 'start' : 'magazine';
     this.remaining = this.phase === 'start' ? SHELL_RELOAD_START : this.stats.reload;
+    this.magazineInserted = false;
     this.emit('reload-start', time);
     return true;
   }
@@ -101,11 +117,21 @@ export class NativeReloadState {
     // cannot retroactively accelerate already elapsed reload time.
     let work = Math.max(0, time - this.lastTime) / (this.silent ? this.silentMultiplier : 1);
     this.lastTime = Math.max(this.lastTime, time);
+    if (this.phase === 'magazine' && !this.magazineInserted && work + 1e-9 >= this.workUntilInsert) {
+      if (this.id !== 'knife' && gameData.weapons[this.id].reserveAsClips) {
+        // Reserves are stored in rounds throughout the trainer, but this native
+        // flag means a partial magazine is discarded and a whole spare is used.
+        this.ammo = Math.min(this.stats.magazine, this.reserve); this.reserve -= this.ammo;
+      } else {
+        const inserted = Math.min(this.stats.magazine - this.ammo, this.reserve);
+        this.ammo += inserted; this.reserve -= inserted;
+      }
+      this.magazineInserted = true;
+    }
     while (this.active && work + 1e-9 >= this.remaining) {
       work = Math.max(0, work - this.remaining);
       if (this.phase === 'magazine') {
-        const inserted = Math.min(this.stats.magazine - this.ammo, this.reserve);
-        this.ammo += inserted; this.reserve -= inserted; this.emit('reload-end', time); this.cancel(false);
+        this.emit('reload-end', time); this.cancel(false);
       } else if (this.phase === 'finish') {this.emit('reload-end', time); this.cancel(false);}
       else {
         if (this.phase === 'shell') {this.ammo++; this.reserve--; this.emit('reload-shell', time);}

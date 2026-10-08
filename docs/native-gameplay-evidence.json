@@ -1,0 +1,91 @@
+{
+  "build": 2000927,
+  "steamBuild": 25738536,
+  "recorded": "2026-10-08",
+  "map": "de_dust2",
+  "demoTickSeconds": 0.015625,
+  "method": "SourceTV demos decoded with demoparser2 0.42.0; native client video at 60 Hz; offline, no bots, normal partial reloads. Authoring markers select continuous deadlines; demo samples validate them within one tick.",
+  "reloads": [
+    {
+      "weapon": "ak47",
+      "demo": "native_audit_ak_002.dem",
+      "demoSha256": "feadebd8538a044283a42ef2e78fa97db98591d9c2565c6fbce22d684b76835c",
+      "startTick": 3755,
+      "insertTick": 3826,
+      "startGameTime": 905.4375,
+      "insertGameTime": 906.546875,
+      "nextAttackGameTime": 907.9041748047,
+      "ammoBefore": 16,
+      "ammoAfter": 30,
+      "clipInsertFrame": 33,
+      "clipFramesPerSecond": 30
+    },
+    {
+      "weapon": "awp",
+      "demo": "native_audit_awp_002.dem",
+      "demoSha256": "d0a07ff5c7cf0c9e19d40a6b0254727877317608fe7ba49edac3250abd99bcd4",
+      "startTick": 626,
+      "insertTick": 755,
+      "startGameTime": 1260.40625,
+      "insertGameTime": 1262.421875,
+      "nextAttackGameTime": 1264.0728759766,
+      "ammoBefore": 3,
+      "ammoAfter": 5,
+      "clipInsertFrame": 60,
+      "clipFramesPerSecond": 30
+    },
+    {
+      "weapon": "usp",
+      "demo": "native_audit_awp_001.dem",
+      "demoSha256": "4a3cdbbbdedc39d5c1233fb2e44c467203d5a4105ac571545f8caf46e044886d",
+      "startTick": 3247,
+      "insertTick": 3305,
+      "startGameTime": 1046.59375,
+      "insertGameTime": 1047.5,
+      "nextAttackGameTime": 1048.7937011719,
+      "ammoBefore": 10,
+      "ammoAfter": 12,
+      "clipInsertFrame": 27,
+      "clipFramesPerSecond": 30
+    },
+    {
+      "weapon": "deagle",
+      "demo": "native_audit_deagle_001.dem",
+      "demoSha256": "0fdd476a1650f7a58af769d789bdaaebc41469f88b457eaadf97abe2053772be",
+      "startTick": 2824,
+      "insertTick": 2873,
+      "startGameTime": 1477.109375,
+      "insertGameTime": 1477.875,
+      "nextAttackGameTime": 1479.3093261719,
+      "ammoBefore": 6,
+      "ammoAfter": 7,
+      "clipInsertFrame": 23,
+      "clipFramesPerSecond": 30
+    }
+  ],
+  "deagleCancellation": [
+    {
+      "startGameTime": 1471.375,
+      "holsterGameTime": 1471.828125,
+      "returnGameTime": 1472.125,
+      "ammoBefore": 4,
+      "ammoAfter": 4,
+      "reserveClipsConsumed": 0
+    },
+    {
+      "startGameTime": 1473.984375,
+      "holsterGameTime": 1474.9375,
+      "returnGameTime": 1475.25,
+      "ammoBefore": 3,
+      "ammoAfter": 7,
+      "reserveClipsConsumed": 1
+    }
+  ],
+  "reserveEvidence": "Deagle HUD starts with 3 reserve clips and finishes with 1 after one pre-insert cancellation and two committed partial reloads. Parser total_ammo_left is unsupported here and was not used.",
+  "caveats": [
+    "The awp_001 filename is misleading: active_weapon_name verifies USP-S during its measured reload.",
+    "Single normal partial-reload samples do not establish empty or silent reload timing.",
+    "Demo ammo and input transitions are tick sampled; position-derived velocity is not instantaneous engine velocity.",
+    "Capture frame rate is not a physical click-to-photon measurement."
+  ]
+}

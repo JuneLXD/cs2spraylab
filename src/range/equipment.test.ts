@@ -30,7 +30,8 @@ describe('Always-available sidearm and knife',()=>{
     expect(sim.pistolAmmo).toBe(0);expect(sim.reloadState.active).toBe(true);expect(sim.start()).toBe(false);
     expect(sim.reloadState.startedAt-shots.mock.calls[11][0].at).toBeCloseTo(sim.stats.cycle,1);
     expect(sim.pistolReloadAt-sim.reloadState.startedAt).toBeCloseTo(equipmentData.weapons.usp.reload);
-    for(let i=0;i<8;i++)sim.advance(.25);expect(sim.pistolAmmo).toBe(0);
+    for(let i=0;i<8;i++)sim.advance(.25);
+    expect(sim.pistolAmmo).toBe(12);expect(sim.reloadState.active).toBe(true);expect(sim.start()).toBe(false);
     sim.advance(.25);expect(sim.pistolAmmo).toBe(12);
     sim.start();sim.equip(3);sim.equip(2);expect(sim.pistolAmmo).toBe(11);
   });

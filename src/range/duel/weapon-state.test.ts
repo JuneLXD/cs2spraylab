@@ -10,6 +10,18 @@ const actor = () => ({position: {x: 0, y: 64 * UNIT, z: 0}, velocity: {x: 0, z: 
   pitch: 0, feet: 0, verticalVelocity: 0, duckAmount: 0});
 
 describe('duel and range ballistic parity', () => {
+  it('keeps an inserted AWP magazine locked until the native reload deadline', () => {
+    const duel = new DuelWeaponState('awp', () => 0, {spread: false}); duel.ammo = 3;
+    duel.advance(10, 0, {...idleCommand(), reloadPressed: true}, actor());
+    expect(duel.nextAttackTime(idleCommand())).toBe(12);
+    expect(duel.advance(12, 2, {...idleCommand(), firePressed: true, fireHeld: true}, actor())).toBeUndefined();
+    expect(duel.ammo).toBe(5); expect(duel.reserve).toBe(5);
+    const ready = duel.reloadUntil;
+    expect(duel.nextAttackTime(idleCommand())).toBeCloseTo(ready);
+    expect(duel.advance(ready - .001, ready - 12 - .001, idleCommand(), actor())).toBeUndefined();
+    expect(duel.advance(ready, .001, {...idleCommand(), firePressed: true, fireHeld: true}, actor())).toBeDefined();
+    expect(duel.ammo).toBe(4); expect(duel.reserve).toBe(5);
+  });
   for (const weapon of weaponIds.filter(id => gameData.weapons[id].fullAuto)) it(`${weapon}: preserves fractional automatic cadence and shared recoil`, () => {
     const range = new Simulation({...defaults, mode: 'guided', weapon, spread: false, burst: 0});
     const duel = new DuelWeaponState(weapon, () => 0, {spread: false});

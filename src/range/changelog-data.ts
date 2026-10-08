@@ -124,6 +124,10 @@ export const latestChanges = {
       'Your movement predicts through the next frame using the same collision rules. Shots follow displayed target positions, with live armor and protection against hitting a previous bot life.',
       'First-person weapon animation follows every rendered frame. Simulation continues between capped draws, and your existing sensitivity, zoom and resolution stay intact.',
     ]},
+    {id: 'native-reload', title: 'CS2 reload timing', items: [
+      'AK-47, AWP, USP-S and Desert Eagle ammo now loads at the magazine insertion point measured in CS2. Firing still waits for the full reload.',
+      'Switching away before insertion keeps the old ammo; switching afterward keeps the new magazine. Magazine weapons consume a whole spare when reloading, including partial reloads.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

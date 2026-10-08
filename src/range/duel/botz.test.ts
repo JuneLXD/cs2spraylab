@@ -126,7 +126,7 @@ describe('Aim Botz play', () => {
     sim.command(0, {reloadPressed: true});
     runFor(sim, 4);
     expect(sim.actors[0].weapon.ammo).toBe(30);
-    expect(sim.actors[0].weapon.reserve).toBe(mode === 'off' ? reserve - 5 : reserve);
+    expect(sim.actors[0].weapon.reserve).toBe(mode === 'off' ? reserve - 30 : reserve);
   });
 
   it('ends a timed session, and keeps an endless one going', () => {

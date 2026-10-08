@@ -3,7 +3,8 @@
 This follow-up inspects cached resources, a fresh native CS2 installation,
 and their use in SprayLab. It distinguishes resource values from a
 running-engine comparison.
-No gameplay tuning is changed by this audit.
+The initial resource audit did not change gameplay. Subsequent live captures
+validated the reload corrections in `native-gameplay-comparison.md`.
 
 ## Fresh installation verification
 
@@ -25,10 +26,10 @@ SteamCMD downloaded and validated App 730 into `../cs2-game/`: Steam build
   `sv_stopspeed = 80`, `sv_gravity = 800`, and `sv_jump_impulse = 301.993`.
   This verifies constants, not complete movement behavior.
 
-Steam's graphical sign-in window was reached after supplying missing i386
-graphics/runtime libraries in a private mount namespace. The graphical game
-client still needs a signed-in Steam session before controlled recordings
-can begin. No native gameplay recording is claimed.
+Steam and the graphical game client run successfully after supplying missing
+i386 graphics/runtime libraries in a private mount namespace. Signed-in,
+offline native recordings and SourceTV samples are now complete for the
+sequences documented in `native-gameplay-comparison.md`.
 
 ## Verified cached evidence
 
@@ -89,10 +90,11 @@ duration. Selected DMX exports confirm a nominal 30 Hz authoring timebase
 | USP `reload_pistol` add ammo | 27 | 0.90 s | 2.20 s |
 | Deagle `reload_deagle` add ammo | 23 | 0.7667 s | 2.20 s |
 
-These are authored event positions, not yet verified wall-clock deadlines.
-Active animation-graph branches, playback rates, empty reloads, silent reloads
-and interruption behavior can affect gameplay interpretation. In particular,
-inserting ammo and allowing the next attack are separate concepts.
+Live normal partial reloads now confirm these event positions within one
+64 Hz demo tick. Deagle weapon-switch tests also confirm that insertion
+persists through cancellation. Active animation-graph branches, playback rates,
+empty reloads and silent reloads still require separate validation. Inserting
+ammo and allowing the next attack are separate concepts.
 
 The fresh `viewmodel.vnmgraph_c` provides concrete evidence for the playback
 rate caveat: its `weapon_action_speedscale` control parameter is connected
@@ -104,9 +106,9 @@ The AWP firing clip contains bolt-back and bolt-forward sound events at frames
 animation duration also differs from the 1.455-second weapon firing interval.
 Replacing firing cooldowns with full animation durations would be incorrect.
 
-The existing audio importer consumes sound events and shotgun phase windows.
-It does not export `WPN_RELOAD_ADD_AMMO` to the gameplay reload controller;
-magazine ammunition currently commits at the weapon's attack-lock completion.
+The audio importer consumes sound events and shotgun phase windows. The gameplay
+controller now uses the four live-validated insertion markers above, independently
+of attack-lock completion. Other magazines retain the completion-time fallback.
 
 ## Additional fields and their use
 
@@ -152,9 +154,8 @@ Portable SteamCMD and FFmpeg were prepared in `../native-audit/`; no system
 packages were installed or upgraded. FFmpeg encoded a 120-frame synthetic
 clip successfully and supports capturing an individual X11 window.
 
-Game download/validation, a server console probe, and selected fresh-resource
-comparisons are complete. Graphical client verification and actual CS2
-recordings remain separate checks. A native client run on this Linux
+Game validation, server probes, fresh-resource comparisons, graphical client
+verification and controlled native recordings are complete. A native client run on this Linux
 host cannot establish click-to-photon latency on the user's Windows/RTX 4090
 machine. Ordinary screen capture also cannot measure the physical input or
 monitor scanout portions of that latency.

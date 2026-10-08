@@ -299,7 +299,7 @@ export class Simulation {
   private untilTick() { return (Math.floor((this.time + 1e-10) / STEP) + 1) * STEP - this.time; }
   private untilEvent() {
     let duration = this.untilTick();
-    const at = this.reloadState.active ? this.reloadState.until : this.firing ? this.nextShot : Infinity;
+    const at = this.reloadState.active ? this.reloadState.nextEventAt : this.firing ? this.nextShot : Infinity;
     if (at > this.time + 1e-10) duration = Math.min(duration, at - this.time);
     return duration;
   }

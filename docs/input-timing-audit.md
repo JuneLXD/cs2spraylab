@@ -46,8 +46,10 @@ MDAT blocks: 19 bone-bound shapes with hitgroup IDs, identical across six cached
 agent resources. See `native-resource-fidelity-audit.md`. These shapes are still
 not wired into runtime bullet tracing; their animated transforms need validation.
 Ragdoll shapes are not substituted for bullet hitboxes. Complete animated native
-hitboxes, current-build camera reconstruction, and side-by-side CS2 captures
-remain separate fidelity work. Existing recoil and
+hitboxes and current-build camera reconstruction remain separate fidelity work.
+Controlled native captures now cover the comparisons in
+`native-gameplay-comparison.md`, including the corrected reload behavior.
+Existing recoil and
 movement audit evidence is preserved; no new exact-CS2 claim is made.
 
 ## Completed checks

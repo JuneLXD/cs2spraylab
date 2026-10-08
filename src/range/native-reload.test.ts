@@ -1,16 +1,43 @@
 import {describe, expect, it} from 'vitest';
 import {equipmentStats, SHELL_RELOAD_START, SHELL_RELOAD_FINISH} from './equipment';
 import {NativeReloadState} from './weapon-actions';
+import evidence from '../../docs/native-gameplay-evidence.json';
+import type {Equipment} from './equipment';
 
 describe('reserve-aware reload phases', () => {
-  it('inserts only the missing ammunition, at completion, preserving the old partial magazine', () => {
-    const reload = new NativeReloadState('ak47'); reload.ammo = 11; reload.reserve = 9;
+  it.each(evidence.reloads)('$weapon matches the recorded insertion and separate attack lock', sample => {
+    const reload = new NativeReloadState(sample.weapon as Equipment); reload.ammo = sample.ammoBefore;
+    const reserve = reload.reserve, insertAt = sample.clipInsertFrame / sample.clipFramesPerSecond;
+    expect(Math.abs(sample.insertGameTime - sample.startGameTime - insertAt)).toBeLessThanOrEqual(evidence.demoTickSeconds);
+    expect(Math.abs(sample.nextAttackGameTime - sample.startGameTime - reload.stats.reload)).toBeLessThan(.001);
     expect(reload.start(10)).toBe(true);
-    reload.advance(10 + reload.stats.reload - .001); expect(reload.ammo).toBe(11);
-    reload.advance(10 + reload.stats.reload); expect(reload.ammo).toBe(20); expect(reload.reserve).toBe(0);
-    expect(reload.active).toBe(false); expect(reload.start(20)).toBe(false);
+    expect(reload.nextEventAt).toBeCloseTo(10 + insertAt);
+    reload.advance(10 + insertAt - .001); expect(reload.ammo).toBe(sample.ammoBefore);
+    reload.advance(10 + insertAt); expect(reload.ammo).toBe(sample.ammoAfter);
+    expect(reload.reserve).toBe(reserve - reload.stats.magazine);
+    expect(reload.active).toBe(true); expect(reload.until).toBeCloseTo(10 + reload.stats.reload);
+    expect(reload.nextEventAt).toBe(reload.until);
+    reload.advance(reload.until - .001); expect(reload.active).toBe(true);
+    reload.advance(reload.until); expect(reload.active).toBe(false);
+    expect(reload.ammo).toBe(sample.ammoAfter); expect(reload.reserve).toBe(reserve - reload.stats.magazine);
     expect(reload.drainActionEvents().map(e => e.kind)).toEqual(['reload-start', 'reload-end']);
     expect(reload.drainActionEvents()).toEqual([]);
+  });
+  it.each(evidence.deagleCancellation)('retains the native ammo after a Deagle holster at $holsterGameTime', sample => {
+    const reload = new NativeReloadState('deagle'); reload.ammo = sample.ammoBefore;
+    const reserve = reload.reserve;
+    reload.start(sample.startGameTime); reload.advance(sample.holsterGameTime); reload.cancel();
+    reload.advance(sample.returnGameTime + 10);
+    expect(reload.ammo).toBe(sample.ammoAfter);
+    expect(reload.reserve).toBe(reserve - sample.reserveClipsConsumed * reload.stats.magazine);
+    expect(reload.active).toBe(false); expect(reload.until).toBe(0);
+    expect(reload.drainActionEvents().map(e => e.kind)).toEqual(['reload-start', 'reload-cancel']);
+  });
+  it('commits exactly one magazine across a long step, and handles a partial saved reserve', () => {
+    const reload = new NativeReloadState('ak47'); reload.ammo = 11; reload.reserve = 9;
+    reload.start(10); reload.advance(100); reload.advance(101);
+    expect(reload.ammo).toBe(9); expect(reload.reserve).toBe(0); expect(reload.start(102)).toBe(false);
+    expect(reload.drainActionEvents().map(e => e.kind)).toEqual(['reload-start', 'reload-end']);
   });
   it('cancels magazine reloads without minting or losing ammo', () => {
     const reload = new NativeReloadState('mag7'); reload.ammo = 2;
@@ -23,7 +50,10 @@ describe('reserve-aware reload phases', () => {
     reload.start(0, true); expect(reload.until).toBeCloseTo(reload.stats.reload * 2);
     reload.advance(1, false); expect(reload.until).toBeCloseTo(1 + reload.stats.reload - .5);
     reload.advance(1.5, true); expect(reload.until).toBeCloseTo(1.5 + (reload.stats.reload - 1) * 2);
-    reload.advance(reload.until - .001, true); expect(reload.ammo).toBe(0);
+    expect(reload.nextEventAt).toBeCloseTo(1.7);
+    reload.advance(1.699, true); expect(reload.ammo).toBe(0);
+    reload.advance(1.7, true); expect(reload.ammo).toBe(30); expect(reload.active).toBe(true);
+    reload.advance(reload.until - .001, true); expect(reload.active).toBe(true);
     reload.advance(reload.until, true); expect(reload.ammo).toBe(30); expect(reload.reserve).toBe(60);
   });
   it.each(['nova', 'xm1014', 'sawedoff'] as const)('%s inserts shells individually and finishes after interruption', id => {

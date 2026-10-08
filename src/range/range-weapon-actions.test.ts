@@ -45,8 +45,20 @@ describe('native range discharge and ammo controller', () => {
     const sim = make('mag7'); sim.reloadState.ammo = 2; sim.reloadState.reserve = 1;
     expect(sim.reload()).toBe(true); expect(sim.start()).toBe(false);
     runTo(sim, equipmentStats('mag7').reload - STEP); expect(sim.loadedAmmo).toBe(2);
-    runTo(sim, equipmentStats('mag7').reload); expect(sim.loadedAmmo).toBe(3); expect(sim.reserveAmmo).toBe(0);
+    runTo(sim, equipmentStats('mag7').reload); expect(sim.loadedAmmo).toBe(1); expect(sim.reserveAmmo).toBe(0);
     expect(sim.reload()).toBe(false); expect(sim.drainActionEvents().map(event => event.kind)).toEqual(['reload-start', 'reload-end']);
+  });
+  it('shows inserted AK ammo while blocking fire, then preserves it through a switch', () => {
+    const sim = make('ak47', false); sim.reloadState.ammo = 16;
+    sim.reload(); sim.step(1.1);
+    expect(sim.loadedAmmo).toBe(30); expect(sim.reserveAmmo).toBe(60);
+    expect(sim.start()).toBe(false);
+    sim.equip(2); sim.equip(1);
+    expect(sim.loadedAmmo).toBe(30); expect(sim.reserveAmmo).toBe(60);
+    expect(sim.reloadPhase).toBe('idle');
+    expect(sim.start()).toBe(false); // Switching still requires the deploy delay.
+    sim.step(sim.equipReadyAt - sim.time);
+    expect(sim.start()).toBe(true); expect(sim.loadedAmmo).toBe(29);
   });
   it('supports held-R silent reload and prospective mode changes', () => {
     const sim = make('ak47'); sim.reloadState.ammo = 0; sim.reloadHeld = true;

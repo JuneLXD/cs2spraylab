@@ -59,7 +59,7 @@ export class DuelWeaponState {
   /** An already requested shot must sample movement/recovery at its deadline,
    * even when the weapon cycle does not divide the 128 Hz movement grid. */
   nextAttackTime(command: WeaponCommand) {
-    if (this.reload.active) return this.reload.until;
+    if (this.reload.active) return this.reload.nextEventAt;
     const alternate = this.id === 'revolver' && !!(command.secondaryHeld || command.secondaryPressed);
     if (!this.pendingPress && !this.burstLeft && !command.firePressed &&
       !(command.fireHeld && (this.actions.stats.fullAuto || this.id === 'knife')) && !alternate &&

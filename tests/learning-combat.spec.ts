@@ -193,6 +193,7 @@ test('lessons two and three are completable with manual movement and preserve th
 });
 
 test('native reload moves the hands and magazine, returns to idle, and keeps HUD controls apart', async ({page}, info) => {
+  await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', weapon: 'ak47', quality: 'auto'})));
   await page.goto('/'); await captureEngine(page, 'duel');
   const sample = (remaining: number) => page.evaluate(remaining => {
     const e = (window as any).lessonEngine;
@@ -209,10 +210,11 @@ test('native reload moves the hands and magazine, returns to idle, and keeps HUD
     const scene = e.viewRoot.children[0]; scene.updateMatrixWorld(true);
     const hand = scene.getObjectByName('hand_L');
     const position = hand.getWorldPosition(hand.position.clone()).toArray();
-    return {position, loaded: !!e.viewAnimation};
+    return {position, loaded: !!e.viewAnimation, ammo: weapon.ammo, reserve: weapon.reserve, reloading: weapon.reload.active};
   }, remaining);
   const idle = await sample(0), midway = await sample(1.2);
   expect(idle.loaded).toBe(true);
+  expect(midway).toMatchObject({ammo: 30, reserve: 60, reloading: true});
   expect(Math.hypot(...idle.position.map((v: number, i: number) => v - midway.position[i]))).toBeGreaterThan(.05);
   await page.locator('.duel-view').screenshot({path: `test-results/native-reload-${info.project.name}.png`});
   const restored = await sample(0);
