@@ -54,10 +54,20 @@ for angle in [[-1.09936, -.56816, 0], [-1.8, .4, .03], [0, 0, 0]]:
   assert u.reg_read(UC_X86_REG_RIP) == end
   packed = u.reg_read(UC_X86_REG_XMM0)
   samples.append(dict(angle=angle, elapsed=elapsed, result=[value(packed), value(packed >> 32), value(u.reg_read(UC_X86_REG_XMM1))]))
+composition = []
+for previous in [[0, 0, 0], [-1.1, -.57, .03], [10, -25, 4]]:
+ for physical in [[0, 0, 0], [-6, 2, 4], [-12, -.5, -27], [7, -4, 1]]:
+  u.mem_write(base, struct.pack('<3f', *previous))
+  u.reg_write(UC_X86_REG_R12, base); u.reg_write(UC_X86_REG_RBP, frame)
+  u.reg_write(UC_X86_REG_XMM0, bits(physical[0]) | bits(physical[1]) << 32)
+  u.reg_write(UC_X86_REG_XMM1, bits(physical[2]))
+  u.emu_start(0x152bf2c, 0x152bf69, count=100)
+  assert u.reg_read(UC_X86_REG_RIP) == 0x152bf69
+  composition.append(dict(previous=previous, physical=physical, result=list(struct.unpack('<3f', u.mem_read(base, 12)))))
 report = dict(build=2000927, clientSha256=sha, impulseEntry='0x1515609..0x1515668', decayEntry='0x1525280',
  method='Bounded offline Unicorn 2.1.4 x86-64 evaluation. Supplied camera/time state; no engine, OS, file or allocation calls. sinf, cosf and expf use host math rounded to float32. Native QAngle signs; default view_punch_decay=18.',
- shots=shots, samples=samples)
+ shots=shots, samples=samples, compositionEntry='0x152bf2c..0x152bf69', composition=composition)
 fixture = Path(__file__).resolve().parents[1] / 'src/range/native-view-punch-fixture.json'
 if a.write: fixture.write_text(json.dumps(report, indent=2) + '\n')
 else: assert json.loads(fixture.read_text()) == report
-print('Verified', len(shots), 'native camera impulses and', len(samples), 'decay samples')
+print('Verified', len(shots), 'native camera impulses and', len(samples), 'decay samples and', len(composition), 'camera compositions')

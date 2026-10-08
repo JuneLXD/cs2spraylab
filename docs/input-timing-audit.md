@@ -39,18 +39,12 @@ prediction; displayed-target hits; respawn isolation; live armor/cover; and exac
 fractional weapon cadence. These establish internal behavior, not measured
 mouse-to-photon latency on the user's PC.
 
-Native recoil camera/viewmodel fractions remain estimates (0.45 and 0.22).
-The first inspection of the main DATA/PHYS blocks did not locate gameplay
-hitboxes. A subsequent all-block audit found the native `cstrike` set in embedded
-MDAT blocks: 19 bone-bound shapes with hitgroup IDs, identical across six cached
-agent resources. See `native-resource-fidelity-audit.md`. These shapes are still
-not wired into runtime bullet tracing; their animated transforms need validation.
-Ragdoll shapes are not substituted for bullet hitboxes. Complete animated native
-hitboxes and current-build camera reconstruction remain separate fidelity work.
-Controlled native captures now cover the comparisons in
-`native-gameplay-comparison.md`, including the corrected reload behavior.
-Existing recoil and
-movement audit evidence is preserved; no new exact-CS2 claim is made.
+The subsequent `native-gameplay-comparison.md` verifies the 0.45 recoil camera
+fraction, separate shot kick, scope interpolation and recoil recovery. The 0.22
+weapon-model fraction remains estimated. Its hitbox pass also validates all 19
+native `cstrike` capsules against seven exported skeletons and connects them
+to displayed-pose player traces in the Duel renderer. Range mesh hitgroup
+classification and complete native animation remain separate work.
 
 ## Completed checks
 

@@ -1,5 +1,10 @@
 # Combat Physics Audit
 
+Current follow-up: [Native CS2 comparison](native-gameplay-comparison.md)
+records the later build-2000927 recoil recovery, camera, scope, reload and
+animated-hitbox verification. Earlier camera-fraction/recovery limitations in
+this historical audit are superseded where that comparison supplies evidence.
+
 Audit: 2026-10-04. Installed build: **2000924**. This is an offline browser
 trainer, not game integration. No game process, memory, DLL loading, or OS
 imports are involved in the numeric verification tools.

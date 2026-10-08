@@ -292,6 +292,17 @@ landings retain their prior presentation until those branches are verified;
 heavy-fall roll is also outside this change. Physical aim and shot directions
 are unaffected.
 
+## Damage camera composition correction
+
+The combined getter at `0x1515920` returns physical punch; the camera at
+`0x152bf3b` and `0x152bf47` scales its pitch, yaw and roll by 0.45. Duel had
+applied damage punch at full scale before adding the correctly scaled weapon
+recoil. The camera now uses 0.45 for both. The shot ray and the existing damage
+recovery model are unchanged. A browser regression injects a known damage
+angle and independently checks all three camera axes against the retained
+physical shot angles. This verifies camera composition, not a new native
+measurement of the complete damage-recovery trajectory.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current
@@ -305,6 +316,11 @@ Native hitboxes now follow the imported animation in the rendered Duel modes.
 Full native animation reconstruction and the range's mesh-height hitgroup
 classification remain separate work; neither recording a 60 Hz video nor decoding a
 64 Hz demo establishes mouse-to-photon latency or exact Source 2 equivalence.
+
+The resource audit also retains unverified ladder inaccuracy and Negev
+firing-movement modifier behavior. Native command/subtick seed derivation,
+full viewmodel animation and physical input delivery still require separate
+comparisons; the verified components above do not establish complete parity.
 
 ## Validation of this change
 
@@ -384,3 +400,14 @@ exclude animation, simulation, rendering and browser/OS scheduling; they do
 not establish frame rate or physical input latency on this host or the user's
 Windows machine. Raw measurements remain in
 `../native-audit/reports/fidelity-cpu-cost.json`.
+
+### Final damage-camera validation
+
+- Twelve additional bounded native camera compositions pass; the browser
+  confirms pitch, yaw and roll use the native scale while shot angles retain
+  their physical values.
+- Final full suite: 2,089 pass; the one failure still requires the pre-existing
+  missing `public/models/ak47.json` fallback asset. Production build passes.
+- Both Chromium camera checks pass after the correction. A fresh-profile visit
+  to the built LAN preview loads aim_redline and fires through the UI without
+  page errors or failed asset requests.

@@ -117,16 +117,17 @@ of attack-lock completion. Other magazines retain the completion-time fallback.
 | Primary/alternate movement speeds, spread, recoil parameters, recovery and scope timings | Imported and matches the cached native data | Validate how the engine combines them over time |
 | `m_flInaccuracyLadder` | Not imported into `game-data.json`; firing accuracy has no ladder-specific input | Trace the native combination with other accuracy terms |
 | Negev `m_flAttackMovespeedFactor = 0.5` | Movement uses the ordinary weapon speed; no use of this factor found | Establish when the native firing-state modifier starts and ends |
-| SG 553/AUG iron-sight pull-up/down, pivot and looseness fields | Not imported; scope FOV switches immediately | Reconstruct the native transition, not just the final FOV |
+| SG 553/AUG iron-sight pull-up/down, pivot and looseness fields | Native FOV transitions now verified and implemented | Viewmodel pivot/looseness remain separate animation work; see `native-gameplay-comparison.md` |
 | `m_flFlinchVelocityModifierLarge/Small` | Already imported separately in `tagging-data.json` | Not a missing-data finding |
 | `m_flInaccuracyReload = 0` for all 35 entries | Omitted | No nonzero missing behavior demonstrated by this field |
 | Negev pitch-shift and alternate-sound threshold | Not imported | Determine audio semantics before interpreting these as aim pitch |
 
 ## Camera, movement and tapping limits
 
-`view-recoil.ts` still uses estimated camera and weapon fractions of 0.45 and
-0.22. Native animation clips alone do not establish these values. The renderer
-also layers generic kick and bob over the imported animation.
+`native-gameplay-comparison.md` now verifies the 0.45 camera fraction, separate
+shot kick, recovery sampler and ordinary landing pitch against build 2000927.
+The 0.22 weapon fraction remains an estimate. The renderer still layers generic
+weapon kick and bob over the imported animation.
 
 Movement/recovery evidence spans several builds: acceleration fixtures are
 from 2000919; weapon tables from 2000924; cached agent/action manifests from

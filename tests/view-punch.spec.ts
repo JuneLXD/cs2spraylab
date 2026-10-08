@@ -76,6 +76,21 @@ for (const mode of ['duel', 'guided'] as const) {
     }, mode);
     expect(landing.grounded).toBe(true); expect(landing.pitch).toBe(0);
     expect(landing.kick).toBeCloseTo(-.75 * Math.exp(-18 * landing.age), 6);
+    if (mode === 'duel') {
+      const damage = await page.evaluate(() => {
+        const e = (window as any).punchEngine, actor = e.sim.actors[0];
+        actor.viewPunch.reset(); actor.weapon.recovery.advance(3);
+        actor.punch.angle = {pitch: 3, yaw: -1, roll: 2};
+        e.sim.accumulator = 0;
+        e.tick(performance.now() + 3000); cancelAnimationFrame(e.frame);
+        return {pitch: (e.camera.rotation.x - actor.pitch) * 180 / Math.PI,
+          yaw: (actor.yaw - e.camera.rotation.y) * 180 / Math.PI,
+          roll: e.camera.rotation.z * 180 / Math.PI, shot: actor.punch.shot};
+      });
+      expect(damage.pitch).toBeCloseTo(2.7, 7); expect(damage.yaw).toBeCloseTo(-.9, 7);
+      expect(damage.roll).toBeCloseTo(1.8, 7);
+      expect(damage.shot).toEqual({pitch: 6, yaw: -2, roll: 4});
+    }
     expect(errors).toEqual([]);
   });
 }

@@ -1,5 +1,10 @@
 # Shared movement, animation and continuous-round audit
 
+Current follow-up: [Native CS2 comparison](native-gameplay-comparison.md)
+records the later build-2000927 recoil recovery, camera, scope, reload and
+animated-hitbox verification. Earlier camera-fraction/recovery limitations in
+this historical audit are superseded where that comparison supplies evidence.
+
 Date: 2026-09-28. Installed CS2: ClientVersion 2000918, PatchVersion 1.41.8.5,
 SourceRevision 11039926 (`game/csgo/steam.inf`). This app uses static game data
 and local asset exports only. No game process, memory or live input integration.

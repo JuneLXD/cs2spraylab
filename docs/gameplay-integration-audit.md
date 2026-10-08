@@ -1,5 +1,10 @@
 # Gameplay Integration Audit
 
+Current follow-up: [Native CS2 comparison](native-gameplay-comparison.md)
+records the later build-2000927 recoil recovery, camera, scope, reload and
+animated-hitbox verification. Earlier camera-fraction/recovery limitations in
+this historical audit are superseded where that comparison supplies evidence.
+
 Date: 2026-10-05. Source baseline: `49d8ea6`. Frontend-only, offline training.
 No process hooks, live game memory, input injection, game automation or native
 DLL loading. Offline numeric tools emulate hash-pinned arithmetic blocks only.

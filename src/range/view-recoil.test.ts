@@ -2,12 +2,23 @@ import {describe, expect, it} from 'vitest';
 import {DEG, STEP} from './actor-physics';
 import {defaults} from './config';
 import {Simulation} from './simulation';
-import {recoilView} from './view-recoil';
+import {AIM_PUNCH_CAMERA_SCALE, recoilView} from './view-recoil';
+import native from './native-view-punch-fixture.json';
 import {direction, shotDirection} from './shot-model';
 import {WeaponRecovery} from './ballistics';
 import {gameData} from './config';
 
 describe('shared camera presentation', () => {
+  it('matches 12 native camera compositions, including full aim punch from damage', () => {
+    for (const row of native.composition) {
+      const view = recoilView(0, 0, {pitch: -row.physical[0], yaw: -row.physical[1]},
+        {pitch: -row.previous[0], yaw: -row.previous[1]});
+      expect(Math.abs(-view.pitch / DEG - row.result[0])).toBeLessThan(.000002);
+      expect(Math.abs(view.yaw / DEG - row.result[1])).toBeLessThan(.000002);
+      expect(Math.abs(row.previous[2] + row.physical[2] * AIM_PUNCH_CAMERA_SCALE - row.result[2])).toBeLessThan(.000002);
+    }
+  });
+
   it('renders recoil without feeding it back into physical aim or mouse sensitivity', () => {
     const recoil = {yaw: 2, pitch: 7};
     const shot = direction(.3 - recoil.yaw * DEG, .1 + recoil.pitch * DEG);

@@ -23,7 +23,7 @@ import {batchStaticMeshes, disposeResources, disposeSkeletons} from './render-re
 import {fullyOccluded} from './visibility';
 import {muzzleAnchor, viewMuzzleToWorld} from './tracers';
 import type {SpatialSound} from '../spatial-audio';
-import {recoilView} from '../view-recoil';
+import {AIM_PUNCH_CAMERA_SCALE, recoilView} from '../view-recoil';
 import {RoundFlow, deathView, deathFeet} from './round-flow';
 import {type Equipment, type Slot} from '../equipment';
 import {DamageFeedback} from './damage-feedback';
@@ -1182,13 +1182,15 @@ export class DuelEngine {
     const punch = this.sim.actors[0].punch.predict(this.paused || this.sim.phase !== 'fighting' ? 0 : this.sim.accumulator,
       viewWeapon.recovery.angle);
     const viewPunch = this.sim.actors[0].viewPunch.sample(this.sim.time + this.sim.accumulator);
-    const view = recoilView(player.yaw - punch.yaw * DEG, player.pitch + punch.pitch * DEG, visualRecoil, viewPunch);
+    const view = recoilView(player.yaw - punch.yaw * DEG * AIM_PUNCH_CAMERA_SCALE,
+      player.pitch + punch.pitch * DEG * AIM_PUNCH_CAMERA_SCALE, visualRecoil, viewPunch);
     const deathAge = this.animationClock - (this.deaths.get(0) ?? this.animationClock);
     const death = deathView(deathAge, player.position.y - player.feet);
     this.camera.position.set(player.position.x, player.position.y, player.position.z);
     if (!player.alive) this.camera.position.y = deathFeet(player, deathAge, this.sim.arena.solids,
       this.sim.actors[0].verticalVelocity) + death.height;
-    this.camera.rotation.set(view.pitch + (player.alive ? 0 : death.pitch), view.yaw, punch.roll * DEG + (player.alive ? 0 : death.roll), 'YXZ');
+    this.camera.rotation.set(view.pitch + (player.alive ? 0 : death.pitch), view.yaw,
+      punch.roll * DEG * AIM_PUNCH_CAMERA_SCALE + (player.alive ? 0 : death.roll), 'YXZ');
     const scoped = this.scope.update(viewWeapon.actions, this.camera, this.sim.time + this.sim.accumulator, player.alive);
     this.camera.updateMatrixWorld();
     this.syncActors(snapshots, this.sim.phase !== 'ready' && !this.paused ? dt : 0);

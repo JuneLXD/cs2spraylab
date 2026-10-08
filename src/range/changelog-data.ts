@@ -149,6 +149,9 @@ export const latestChanges = {
       'Normal jumps now produce CS2’s brief downward camera dip on landing, without changing your aim or bullet direction.',
       'The dry-ground pitch threshold and decay are verified against native arithmetic and a recorded jump. Small step-downs stay steady.',
     ]},
+    {id: 'native-damage-camera', title: 'Damage camera response', items: [
+      'Taking damage now uses the verified native camera scale on pitch, yaw and roll, reducing exaggerated visual flinch while retaining physical aim punch.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
