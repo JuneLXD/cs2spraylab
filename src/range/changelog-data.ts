@@ -207,6 +207,10 @@ export const latestChanges = {
       'Escape returns to Play with Resume and New Session. Menus remain visible in fullscreen and keep the current scene mounted.',
       'Bot and duel configurations retain their existing saves. Settings, sound, FPS, fullscreen, the tutorial and history remain reachable from the menu.',
     ]},
+    {id: 'ui-loadout', title: 'Full-screen loadout', items: [
+      'Choose separate primary and sidearm slots, browse weapon categories and inspect a large finish preview with game-derived weapon stats.',
+      'Every finish, knife, glove and agent remains unlocked, with selected finishes saved between visits. The Armory and achievements stay available.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

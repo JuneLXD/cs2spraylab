@@ -1,0 +1,137 @@
+.range-app .drawer.sl-loadout-page, .range-app .drawer.sl-session-page {
+  width: 100%;
+  border: 0;
+  background: radial-gradient(ellipse at 48% 40%, #202b35, #090c10 75%);
+}
+.sl-loadout-screen {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 64px minmax(0, 1fr);
+  min-width: 0;
+}
+.sl-screen-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  background: #06090bb3;
+  border-bottom: 1px solid var(--sl-hairline);
+}
+.sl-screen-title h1 {
+  font: 700 24px var(--sl-font-display);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+.sl-loadout-body {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr) 420px;
+  gap: 20px;
+  padding: 22px 28px;
+  min-height: 0;
+}
+.sl-loadout-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow: auto;
+}
+.sl-loadout-slots > .sl-tile {
+  width: 100%;
+  min-height: 80px;
+  display: flex;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 10px 12px;
+  gap: 12px;
+  background: var(--sl-row-alt);
+}
+.sl-loadout-slots img {
+  width: 74px;
+  height: 60px;
+  object-fit: contain;
+}
+.sl-loadout-slots b {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+}
+.sl-loadout-slots small, .sl-weapon-details small {
+  display: block;
+  color: var(--sl-text-3);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+}
+.sl-loadout-slots > .sl-button {margin-top: auto;}
+.sl-weapon-stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+.sl-weapon-stage .sl-tabs {flex-wrap: nowrap; overflow-x: auto;}
+.sl-weapon-stage .sl-tabs button {padding: 16px 10px; font-size: 14px;}
+.sl-weapon-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 8px;
+  padding-top: 12px;
+}
+.sl-weapon-tiles .sl-tile {
+  flex-direction: column;
+  font-size: 12px;
+  padding: 10px;
+  background: #080c1077;
+}
+.sl-weapon-tiles img {width: 100%; height: 44px; object-fit: contain;}
+.sl-weapon-hero {flex: 1; min-height: 130px; display: grid; place-items: center;}
+.sl-weapon-hero img {width: 95%; height: 100%; max-height: 410px; object-fit: contain; filter: drop-shadow(0 15px 18px #0007);}
+.sl-hero-agent img {max-height: 470px;}
+.sl-weapon-details {display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px;}
+.sl-weapon-details h2 {font: 600 33px var(--sl-font-display); margin: 0; color: var(--sl-text); text-transform: none;}
+.sl-weapon-details dl {display: flex; gap: 8px; margin: 0;}
+.sl-weapon-details dl > div {border: 1px solid var(--sl-hairline); padding: 8px 10px;}
+.sl-weapon-details dt {font: 700 10px var(--sl-font-display); color: var(--sl-text-3); text-transform: uppercase; letter-spacing: 1px;}
+.sl-weapon-details dd {margin: 5px 0 0; font: 700 18px var(--sl-font-display);}
+.sl-finishes {background: var(--sl-panel); border: 1px solid var(--sl-hairline); min-width: 0; min-height: 0; display: flex; flex-direction: column;}
+.sl-finishes > header {display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid var(--sl-hairline); gap: 10px;}
+.sl-finishes h2 {font: 700 15px var(--sl-font-display); margin: 0; color: var(--sl-text); letter-spacing: 1px;}
+.sl-finishes h2 span {color: var(--sl-text-3);}
+.sl-finish-grid {display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; padding: 12px; overflow: auto; align-content: start;}
+.sl-finish-grid > button {position: relative; padding: 12px 9px; min-height: 145px; flex-direction: column; align-items: stretch; background: linear-gradient(150deg,#1b242c,#11161b); text-align: left; font-size: 12px;}
+.sl-finish-grid img {width: 100%; height: 80px; object-fit: contain;}
+.sl-finish-grid span {overflow-wrap: anywhere;}
+.sl-equipped-tag {position: absolute; top: 6px; left: 6px; display: flex; align-items: center; gap: 3px; padding: 2px 4px; background: var(--sl-text); color: #101419; font: 700 10px var(--sl-font-display); text-transform: uppercase;}
+.progression-armory {background: #11171d; border-radius: 2px; border-color: var(--sl-hairline-strong);}
+.progression-armory .progression-choice {background: #192129; border-radius: 2px; border-color: var(--sl-hairline-strong);}
+.progression-armory .progression-choice.is-equipped {background: #26333f; border-color: white;}
+.progression-armory .progression-tabs button[aria-selected=true] {background: var(--sl-row-active); border-color: var(--sl-text); color: white;}
+.progression-armory .progression-item-action {background: #212d37; border-color: var(--sl-hairline-strong); border-radius: 2px;}
+@media(max-width:1200px) {
+  .sl-loadout-body {grid-template-columns: 210px minmax(0,1fr) 300px; gap: 14px; padding: 18px;}
+  .sl-finish-grid {grid-template-columns: repeat(2,minmax(0,1fr));}
+  .sl-loadout-slots img {width: 55px;}
+  .sl-weapon-stage .sl-tabs button {padding: 14px 8px; font-size: 12px;}
+  .sl-weapon-tiles {grid-template-columns: repeat(3,minmax(0,1fr));}
+}
+@media(max-width:800px) {
+  .sl-loadout-body {display: block; overflow: auto; padding: 14px;}
+  .sl-loadout-slots {display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); overflow: visible;}
+  .sl-loadout-slots > .sl-setting-row, .sl-loadout-slots > .sl-button {grid-column: 1/-1;}
+  .sl-loadout-slots > .sl-tile {flex-direction: column; padding: 8px; gap: 2px; text-align: center;}
+  .sl-loadout-slots b {font-size: 11px;}
+  .sl-loadout-slots small {font-size: 9px;}
+  .sl-loadout-slots img {height: 36px;}
+  .sl-weapon-stage {margin-top: 18px;}
+  .sl-weapon-tiles {grid-template-columns: repeat(4,minmax(0,1fr));}
+  .sl-weapon-hero {height: 230px; flex: none;}
+  .sl-weapon-hero img {max-height: 225px;}
+  .sl-weapon-details h2 {font-size: 28px;}
+  .sl-weapon-details dl {width: 100%; flex-wrap: wrap;}
+  .sl-weapon-details dl > div {flex: 1; padding: 8px;}
+  .sl-finishes {margin-top: 20px;}
+  .sl-finish-grid {grid-template-columns: repeat(3,minmax(0,1fr)); max-height: 600px;}
+  .sl-finish-grid > button {min-height: 130px; font-size: 11px;}
+  .sl-finish-grid img {height: 65px;}
+}

@@ -1,3 +1,4 @@
+import {LoadoutScreen} from './ui/screens/LoadoutScreen';
 import {TopNav, type MenuScreen} from './ui/TopNav';
 import {PlayScreen} from './ui/screens/PlayScreen';
 import {useBotzConfig, useDuelConfig} from './ui/useDrillConfig';
@@ -31,28 +32,6 @@ import {keyHint, shortcutHint, slotKey} from './keybinds/profile';
 import {applyConsoleCommand} from './console-settings';
 import {SliderRow as Slider, SwitchRow as Toggle, NumberField} from './ui/primitives';
 import {frameLimitOptions, useDisplayRate} from './display-rate';
-
-function LoadoutFinishes({equipment, profile, controller, onArmory, focusRequest}: {equipment: Weapon; profile: ProgressionProfile; controller: ProgressionController; onArmory: (equipment: string) => void; focusRequest: number}) {
-  const finishes = useRef<HTMLElement>(null);
-  const handledFocusRequest = useRef(focusRequest);
-  useEffect(() => {
-    if (focusRequest === handledFocusRequest.current) return;
-    handledFocusRequest.current = focusRequest;
-    finishes.current?.scrollIntoView({block: 'start'});
-    const equipped = finishes.current?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]');
-    (equipped ?? finishes.current?.querySelector<HTMLButtonElement>('button[aria-pressed]'))?.focus({preventScroll: true});
-  }, [equipment, focusRequest]);
-  return <section ref={finishes} className="loadout-finishes" aria-label={`${weaponNames[equipment]} skins`}><header><h3>{weaponNames[equipment]} finishes</h3>
-    <button type="button" className="finish-armory" onClick={() => onArmory(equipment)} aria-label="Open the armory: weapon finishes, knives, gloves and agents" title="Weapon finishes, knives, gloves and agents"><Paintbrush size={13}/>Armory</button></header>
-    <div>{cosmeticsForEquipment(controller.catalog, equipment).map(item => {
-      const equipped = equippedCosmetic(profile, controller.catalog, equipment)?.id === item.id;
-      return <button key={item.id} type="button" className={equipped ? 'selected' : ''} aria-pressed={equipped}
-        title={item.label} aria-label={`Equip ${weaponNames[equipment]} skin ${item.label}`}
-        onClick={() => controller.equip(equipment, item.id)}>
-        <img src={item.imageUrl} alt="" loading="lazy"/><span>{item.label}</span>{equipped && <Check size={13}/>}
-      </button>;
-    })}</div></section>;
-}
 
 function readResults(): Result[] {
   try {
@@ -95,8 +74,6 @@ export default function RangeApp() {
     setDuelMenu(previous => Object.keys(value).every(key => previous[key as keyof DuelMenuStatus] === value[key as keyof DuelMenuStatus]) ? previous : value);
     if (screenRef.current === 'game' && (value.paused || !value.playing || value.result)) setScreen(value.result ? 'results' : 'play');
   }, []);
-  const [finishSlot, setFinishSlot] = useState<1 | 2>(1);
-  const [finishFocusRequest, setFinishFocusRequest] = useState(0);
   const [results, setResults] = useState(readResults);
   const resultsRef=useRef(results);resultsRef.current=results;
   const [repFeedback,setRepFeedback]=useState<(RepFeedback&{id:string;mode:Mode})|null>(null);
@@ -181,6 +158,7 @@ export default function RangeApp() {
     const previous = document.activeElement as HTMLElement | null;
     drawer.current?.focus();
     const key = (e: KeyboardEvent) => {
+      if (document.querySelector('dialog[open]')) return;
       if (e.key === 'Escape') { e.preventDefault(); setPanel(null); }
       if (e.key === 'Tab') {
         const elements = drawer.current?.querySelectorAll<HTMLElement>('button:not(:disabled):not([tabindex="-1"]),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]');
@@ -276,23 +254,12 @@ export default function RangeApp() {
       {settings.mode === 'hearing' && screen === 'game' && <button className="sl-hearing-back" onClick={() => navigate('play')}>Back to Play</button>}
     {notice && <div className="toast" role="status">{notice}<button className="icon-button" aria-label="Dismiss message" onClick={() => setNotice('')}><X size={15} /></button></div>}
     {panel && <div className="drawer-backdrop" onPointerDown={e => { if (e.target === e.currentTarget) setPanel(null); }}>
-      <aside className={`drawer ${panel === 'settings' ? 'sl-settings-page' : ''} ${panel === 'history' || panel === 'changelog' || panel === 'settings' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="panel-title" tabIndex={-1} ref={drawer}>
-        {panel !== 'settings' && <div className="drawer-header"><div><small>SPRAYLAB</small><h1 id="panel-title">{panel === 'weapons' ? 'Loadout' : panel === 'changelog' ? 'Changelog' : 'Session history'}</h1></div><button className="icon-button" aria-label="Close panel" onClick={() => setPanel(null)}><X size={21} /></button></div>}
+      <aside className={`drawer ${panel === 'settings' ? 'sl-settings-page' : panel === 'weapons' ? 'sl-loadout-page' : ''} ${panel === 'history' || panel === 'changelog' || panel === 'settings' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="panel-title" tabIndex={-1} ref={drawer}>
+        {panel !== 'settings' && panel !== 'weapons' && <div className="drawer-header"><div><small>SPRAYLAB</small><h1 id="panel-title">{panel === 'changelog' ? 'Changelog' : 'Session history'}</h1></div><button className="icon-button" aria-label="Close panel" onClick={() => setPanel(null)}><X size={21} /></button></div>}
         {panel === 'changelog' && <Changelog/>}
         {panel === 'settings' && <SettingsScreen settings={settings} profiles={profiles} update={update} cross={cross} close={closePanel} notify={setNotice} importProfile={importProfile}
           restore={restoreSettings} removeCapture={removeCapture} exportSession={exportSession}/>}
-        {panel === 'weapons' && <div className="drawer-content arsenal">
-          <Toggle label="Carry a primary weapon" checked={settings.primaryEnabled} onChange={primaryEnabled=>update({primaryEnabled})}/>
-          <label className="select-row">Sidearm<select aria-label="Sidearm" value={settings.sidearm} onChange={e=>update({sidearm:e.target.value as Pistol})}>{pistolIds.map(id=><option key={id} value={id}>{weaponNames[id]}</option>)}</select></label>
-          {settings.primaryEnabled && settings.weapon !== settings.sidearm && <label className="select-row">Finishes for<select aria-label="Skin weapon" value={finishSlot} onChange={e=>setFinishSlot(+e.target.value as 1 | 2)}><option value="1">{weaponNames[settings.weapon]}</option><option value="2">{weaponNames[settings.sidearm]}</option></select></label>}
-          <LoadoutFinishes equipment={settings.primaryEnabled && finishSlot === 1 ? settings.weapon : settings.sidearm} profile={progressionState.profile} controller={progression} focusRequest={finishFocusRequest} onArmory={id=>{setPanel(null);setArmoryRequest(id);}}/>
-          <h2>Weapons</h2>{weaponIds.map(id => <button className={`weapon-item ${selectedWeapon === id ? 'chosen' : ''}`} key={id} onClick={() => {
-            const sidearm = pistolIds.includes(id as Pistol);
-            update(sidearm ? {sidearm: id as Pistol, primaryEnabled:false} : {weapon:id,primaryEnabled:true});
-            if (cosmeticsForEquipment(progression.catalog, id).some(item => !item.isDefault)) {
-              setFinishSlot(sidearm ? 2 : 1); setFinishFocusRequest(request => request + 1);
-            } else setPanel(null);
-          }}><img src={cosmeticPreview(progressionState.profile,id)} alt={weaponNames[id]} /><span><b>{weaponNames[id]}</b><small>{gameData.weapons[id].magazine} rounds <i /> {Math.round(60 / gameData.weapons[id].cycle)} RPM</small></span>{id === selectedWeapon && <Check size={18} />}</button>)}</div>}
+        {panel === 'weapons' && <LoadoutScreen settings={settings} update={update} profile={progressionState.profile} controller={progression} armory={setArmoryRequest} close={closePanel}/>}
         {panel === 'history' && <div className="drawer-content history">
           <div className="session-summary"><div><small>ATTEMPTS</small><b>{results.length}</b></div><div><small>AVG. HIT RATE</small><b>{results.filter(r => r.shots).length ? Math.round(results.filter(r => r.shots).reduce((n, r) => n + r.hits / r.shots * 100, 0) / results.filter(r => r.shots).length) : 0}%</b></div><button className="icon-button" aria-label="Export history" title="Export history" onClick={() => download('spraylab-history.json', { results, legacy })}><Download size={18} /></button></div>
           {selected && <section className="replay"><div className="section-title"><h2>{equipmentNames[selected.weapon]} / {historyModeNames[selected.mode]}</h2><span>{selected.mode === 'tracking' ? `${selected.tracking.toFixed(1)}%` : `${selected.hits}/${selected.shots}`}</span></div>{selected.drill&&<DrillReview value={selected.drill}/>} {selected.samples.length > 0 && <><svg viewBox="0 0 400 240" role="img" aria-label="Shot replay, metres relative to target head"><path d="M200 0V240M0 120H400" stroke="#47524d" strokeDasharray="3 5" /><circle cx="200" cy="120" r="10" fill="none" stroke="#8daba0" /><path d="M182 139h36v42h-36z" fill="#394943" />{selected.samples.slice(0, replay).map((s, i) => <g key={i}><circle cx={200 + Math.max(-190, Math.min(190, s.x * 70))} cy={120 - Math.max(-110, Math.min(110, s.y * 70))} r="3" fill={s.head ? '#e6cf6b' : s.hit ? '#6ddbb1' : '#ed9186'} /><title>Round {s.bullet}: {s.x.toFixed(2)}m, {s.y.toFixed(2)}m</title></g>)}</svg><Slider label="Replay round" value={replay} min={0} max={selected.samples.length} onChange={setReplay} /></>}</section>}
