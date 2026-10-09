@@ -36,10 +36,14 @@ describe('CS2 crosshair convars', () => {
 
   it('reads the pixel-based names, scaled from the height they were authored at', () => {
     const pixels = {cl_crosshair_length: '8', cl_crosshair_thickness: '1', cl_crosshair_gap: '4', cl_crosshair_screen_height: '1080'};
-    // The current renderer draws an odd thickness's gap a pixel closer.
-    expect(view(pixels).crosshair).toMatchObject({size: 8, thickness: 1, gap: 3});
+    // The gap is the centre-to-bar distance whatever the thickness (client, build 2000930).
+    expect(view(pixels).crosshair).toMatchObject({size: 8, thickness: 1, gap: 4});
     expect(view({...pixels, cl_crosshair_thickness: '2'}).crosshair).toMatchObject({thickness: 2, gap: 4});
-    expect(view(pixels, 1440, 1440).crosshair).toMatchObject({size: 11, thickness: 1, gap: 4});
+    // Rescaled to 1440: 8 * 4/3 = 10.67 -> 11, 4 * 4/3 = 5.33 -> 5, thickness 1.33 -> 1.
+    expect(view(pixels, 1440, 1440).crosshair).toMatchObject({size: 11, thickness: 1, gap: 5});
+    // Tiny values survive a downscale as one pixel; a zero gap stays zero.
+    expect(view({...pixels, cl_crosshair_gap: '1', cl_crosshair_thickness: '1'}, 540, 540).crosshair).toMatchObject({thickness: 1, gap: 1});
+    expect(view({...pixels, cl_crosshair_gap: '0'}, 540, 540).crosshair).toMatchObject({gap: 0});
   });
 
   it('uses whichever naming scheme set a size last', () => {
@@ -68,7 +72,7 @@ describe('CS2 crosshair convars', () => {
   it('round-trips a trainer crosshair through the pixel names', () => {
     const crosshair = {...defaults.crosshair, size: 6, gap: 3, thickness: 1, color: '#12abef', alpha: .5, dot: true, t: true, dynamic: true};
     const source = cvarsFromCrosshair(crosshair, 1080, 1080);
-    expect(source.cvars).toMatchObject({cl_crosshair_length: '6', cl_crosshair_gap: '4', cl_crosshair_thickness: '1', cl_crosshairstyle: '0',
+    expect(source.cvars).toMatchObject({cl_crosshair_length: '6', cl_crosshair_gap: '3', cl_crosshair_thickness: '1', cl_crosshairstyle: '0',
       cl_crosshaircolor_r: '18', cl_crosshaircolor_g: '171', cl_crosshaircolor_b: '239', cl_crosshaircolor_a: '128'});
     expect(crosshairFromCvars(source, 1080).crosshair).toEqual({...crosshair, alpha: .5});
   });

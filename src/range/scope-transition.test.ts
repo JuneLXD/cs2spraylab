@@ -24,6 +24,15 @@ describe('native scope transitions', () => {
     expect(action.sensitivityAt(1.0125, .75)).toBeCloseTo(82 / 90 * .75);
     expect(action.sensitivityAt(1.05, .75)).toBeCloseTo(40 / 90 * .75);
     action.holster(); expect(action.sensitivityAt(2, .75)).toBe(1);
+    // Zooming out: the target FOV is 90 again, so sensitivity is back to full while the camera is still widening.
+    const out = new WeaponActions('awp');
+    out.secondary(1); out.secondary(1.5); out.secondary(2);
+    expect(out.zoom).toBe(0); expect(out.fovAt(2.0125)).toBeLessThan(89);
+    expect(out.sensitivityAt(2.0125, .75)).toBe(1);
+    // Zooming in still follows the transition, and the second level follows it from the first.
+    const deeper = new WeaponActions('awp');
+    deeper.secondary(1); deeper.secondary(1.5);
+    expect(deeper.zoom).toBe(2); expect(deeper.sensitivityAt(1.5125, .75)).toBeCloseTo(Math.max(10, Math.trunc(deeper.fovAt(1.5125))) / 90 * .75);
   });
   it('matches the distinct native iron-sight FOV bias at each sampled amount', () => {
     for (const row of fixture.ironSight.samples) expect(ironSightFov(row.progress, 45)).toBeCloseTo(row.fov, 5);

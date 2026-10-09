@@ -410,6 +410,43 @@ or deep in a spray. `tools` keep nothing new for this pass; the decompiled routi
 `native-audit/rea/out/client-*.c`. The client analysis itself took 90 minutes at one core under a 4-hour
 cap (the 90-minute cap of the first attempt discarded it, see the memory note).
 
+## Crosshair geometry, scoped sensitivity and viewmodel motion (ninth pass, client)
+
+Read from `libclient.so` (build 2000930) on 2026-10-09 with the convar tracer
+(`native-audit/rea/trace.py`: string, registration, the convar object's data pointer, its readers).
+
+Crosshair (the classic bar styles the trainer draws): every value is a whole number of pixels. The
+bar thickness t is rounded (at least 1) and split as ceil(t/2) pixels before the centre line and
+floor(t/2) after it, for the horizontal bars, the vertical bars and the centre dot (a t-sized
+square). The gap g is clamped at 0 and is the distance from the truncated screen centre to a bar's
+inner edge: the left bar ends at floor(cx - g), the right starts at ceil(cx + g), the same vertically;
+T-style skips the top bar. Outline mode comes from `cl_crosshair_drawoutline` (0, 1 or 2) and the
+colour alpha is scaled by the fade factor. When the screen height differs from
+`cl_crosshair_screen_height`, the game multiplies length, gap, thickness, split distance and the
+dynamic spread limit by the ratio, rounds, keeps at least one pixel (the gap keeps its sign) and
+writes the values back. The trainer's import now rescales the same way, no longer pulls the gap in
+by one pixel for odd thicknesses, lays the bars out on the odd-thickness split and never draws a
+negative gap. Not reproduced: the circle of style 7 (this build's default: classic bars plus a ring
+whose radius is the dynamic spread offset), the quadrant and square styles, and the two outline
+modes' exact rendering.
+
+Scoped sensitivity: the client multiplies mouse input by max(trunc(current FOV), trunc(target
+FOV)) / trunc(default FOV) times `zoom_sensitivity_ratio` (and by `sensitivity`). Zooming in follows
+the FOV transition, as the trainer already did; zooming out uses the target of 90 at once, so
+sensitivity is back to full while the camera is still widening. `WeaponActions.sensitivityAt` now
+takes the larger of the two FOVs.
+
+Viewmodel motion: this build has no bob or sway convars (`cl_bob*`, `cl_viewmodel_shift*`,
+`viewmodel_recoil` and `view_recoil_tracking` do not exist in the client), and the viewmodel
+animation graphs (`animation/graphs/viewmodel/viewmodel.vnmgraph` with one referenced graph per
+weapon) carry only draw, fire, reload, inspect, idle and settle clips with variation and speed-scale
+parameters, nothing driven by movement or look input. The AK's graph references a single fire clip,
+so there is no fire variation to add. The trainer's clip set matches; its 2 mm walking bob is
+below visibility and stays. The weapon's share of the recoil kick remains unverified: the viewmodel
+entity has no symbol or convar to find it by. Bot world models are a known gap: `target.glb` holds
+idle and east/west run clips only, while the game blends eight directions, walk and crouch cycles;
+adding those needs the Windows model export.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current

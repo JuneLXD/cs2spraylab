@@ -10,6 +10,10 @@ import {cvarAssignment, parseKeyValues, type KeyValues} from './console';
  * - since: cl_crosshair_length / _gap / _thickness in pixels at
  *   cl_crosshair_screen_height, the resolution they were authored at.
  * screenHeight is the height CS2 renders at (cs2_video.txt setting.defaultresheight).
+ * Geometry verified against the client (build 2000930): bars are whole-pixel rectangles, the gap is the distance
+ * from the screen centre to a bar's inner edge (never below 0), an odd thickness puts the extra pixel before the
+ * centre line, the dot is a thickness-sized square, and at another screen height the game rescales every value,
+ * rounds it and keeps at least one pixel (the gap keeps its sign).
  */
 export type Cs2Crosshair = {cvars: Record<string, string>; screenHeight: number};
 
@@ -55,10 +59,11 @@ export function crosshairFromCvars({cvars, screenHeight}: Cs2Crosshair, cssHeigh
   const unit = screenHeight / 480, authored = number('cl_crosshair_screen_height', screenHeight) || screenHeight, k = screenHeight / authored;
   const pixelThickness = newer('cl_crosshair_thickness', 'cl_crosshairthickness'), pixelLength = newer('cl_crosshair_length', 'cl_crosshairsize');
   const pixelGap = newer('cl_crosshair_gap', 'cl_crosshairgap');
-  const thickness = pixelThickness ? Math.max(1, Math.round(number('cl_crosshair_thickness', 1) * k)) : Math.max(1, bround(number('cl_crosshairthickness', .5) * unit));
-  const length = pixelLength ? Math.max(0, Math.round(number('cl_crosshair_length', 0) * k)) : Math.max(0, bround(number('cl_crosshairsize', 5) * unit));
-  // The current renderer draws an odd thickness's gap one pixel closer than the legacy one did.
-  const gap = pixelGap ? Math.round(number('cl_crosshair_gap', 0) * k) - thickness % 2 : Math.trunc(4 + number('cl_crosshairgap', 1));
+  // The game's rescale to another screen height: rounded, at least one pixel, the gap keeping its sign.
+  const rescale = (value: number) => k === 1 ? value : value > 0 ? Math.max(1, bround(value * k)) : value < 0 ? Math.min(-1, bround(value * k)) : 0;
+  const thickness = pixelThickness ? Math.max(1, rescale(number('cl_crosshair_thickness', 1))) : Math.max(1, bround(number('cl_crosshairthickness', .5) * unit));
+  const length = pixelLength ? Math.max(0, rescale(number('cl_crosshair_length', 0))) : Math.max(0, bround(number('cl_crosshairsize', 5) * unit));
+  const gap = pixelGap ? rescale(number('cl_crosshair_gap', 0)) : Math.trunc(4 + number('cl_crosshairgap', 1));
   const rawStyle = Math.round(number('cl_crosshairstyle', 4));
   const style = rawStyle > 5 || pixelThickness || pixelLength || pixelGap ? clamp(rawStyle, [0, 9]) : legacyStyles[clamp(rawStyle, [0, 5])];
   const preset = has('cl_crosshaircolor') ? Math.round(number('cl_crosshaircolor', 5)) : 5;
@@ -88,7 +93,7 @@ export function cvarsFromCrosshair(crosshair: Crosshair, screenHeight: number, c
   const [r, g, b] = [1, 3, 5].map(index => parseInt(crosshair.color.slice(index, index + 2), 16));
   return {screenHeight, cvars: {
     cl_crosshairstyle: crosshair.dynamic ? '0' : '4', cl_crosshair_length: String(Math.round(crosshair.size * toPixels)),
-    cl_crosshair_thickness: String(thickness), cl_crosshair_gap: String(Math.round(crosshair.gap * toPixels) + thickness % 2),
+    cl_crosshair_thickness: String(thickness), cl_crosshair_gap: String(Math.round(crosshair.gap * toPixels)),
     cl_crosshair_screen_height: String(screenHeight), cl_crosshaircolor: '5',
     cl_crosshaircolor_r: String(r), cl_crosshaircolor_g: String(g), cl_crosshaircolor_b: String(b),
     cl_crosshaircolor_a: String(Math.round(crosshair.alpha * 255)), cl_crosshairdot: crosshair.dot ? '1' : '0', cl_crosshair_t: crosshair.t ? '1' : '0',

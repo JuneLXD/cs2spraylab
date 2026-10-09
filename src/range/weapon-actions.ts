@@ -31,8 +31,10 @@ export class WeaponActions {
   get chargeReadyAt() {return this.chargedAt ?? 0;}
   get horizontalFov() {return this.zoom && this.id !== 'knife' ? gameData.weapons[this.id].zoomFov[this.zoom - 1] : 90;}
   fovAt(time: number) {return this.scopeTransition.at(time);}
+  /** The client scales mouse input by the larger of the current and the target FOV over the default: zooming in
+   * follows the transition, zooming out snaps back to full sensitivity the moment it starts (libclient, build 2000930). */
   sensitivityAt(time: number, zoomRatio = 1) {
-    return scopeSensitivity(this.fovAt(time), zoomRatio);
+    return scopeSensitivity(Math.max(this.fovAt(time), this.horizontalFov), zoomRatio);
   }
   get hidesViewmodel() {return this.zoom > 0 && this.id !== 'knife' && gameData.weapons[this.id].hideWhenZoomed;}
   get burstCycle() {return this.id === 'knife' ? 0 : gameData.weapons[this.id].burstCycle;}

@@ -272,6 +272,11 @@ export const latestChanges = {
       'Three Pop-only switches in its setup: Mute gun sound (the hit sound stays), Hide bullet impacts (no miss marks on the wall) and Hide HUD (only the crosshair and the hit flash stay over the view).',
       'A master volume slider sits in the top bar next to mute on every screen; it is the same level as the Audio setting, every sound goes through it, and unmuting restores the level you had.',
     ]},
+    {id: 'client-crosshair-zoom', title: 'Crosshair pixels and scoped sensitivity from the CS2 client', items: [
+      'Crosshair geometry now follows the client\'s draw code: the gap is the distance from the centre to a bar\'s inner edge whatever the thickness (the old one-pixel correction for odd thicknesses is gone), bars and the dot sit on whole pixels with an odd thickness\'s extra pixel before the centre line, a negative gap draws as zero, and a crosshair authored at another screen height is rescaled the way the game does it (rounded, at least one pixel).',
+      'Scoped sensitivity uses the larger of the current and the target field of view: zooming in still follows the transition, zooming out returns to full sensitivity the moment it starts, as in the game.',
+      'Checked and left alone: the game\'s viewmodel graphs hold no movement bob or sway, only draw, fire, reload, inspect, idle and settle clips, so the weapon stays still while you move, as it already did here.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
