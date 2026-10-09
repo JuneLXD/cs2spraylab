@@ -37,6 +37,9 @@ test('deathmatch on aim_redline: sides, a kill without a round end, and respawns
   await expect(page.locator('.duel-topline')).toContainText('DEATHMATCH');
   await expect(page.getByRole('button', {name: 'Enter deathmatch'})).toBeVisible({timeout: 120000});
   await page.getByLabel('Protect Ctrl+W').uncheck();
+  // Ammo mode: normal reserves by default; pick Never reload (sv_infinite_ammo 1) for this session.
+  await expect(page.getByLabel('Infinite ammo')).toHaveValue('off');
+  await page.getByLabel('Infinite ammo').selectOption('magazine');
   await exposeEngine(page);
   // You start on a T spawn; the bots on CT spawns on the far side.
   expect(await page.evaluate(() => {
@@ -73,6 +76,8 @@ test('deathmatch on aim_redline: sides, a kill without a round end, and respawns
   });
   await expect(page.locator('.duel-round')).toContainText('1 KILLS', {timeout: 15000});
   await page.evaluate(() => (window as any).dmEngine.sim.command(0, {fireHeld: false}));
+  // Never reload: the magazine is full again after the burst, and the choice is saved with the Deathmatch setup.
+  expect(await page.evaluate(() => [(window as any).dmEngine.sim.actors[0].weapon.ammo, JSON.parse(localStorage.getItem('spraylab.deathmatch.v1')!).infiniteAmmo])).toEqual([30, 'magazine']);
   // No round ends: the bot is back on the CT side after the delay with a new life.
   await expect.poll(() => page.evaluate(() => {const bot = (window as any).dmEngine.sim.actors[1]; return [bot.alive, bot.generation, bot.position.x > 15, (window as any).dmEngine.sim.phase];}),
     {timeout: 8000}).toEqual([true, 2, true, 'fighting']);

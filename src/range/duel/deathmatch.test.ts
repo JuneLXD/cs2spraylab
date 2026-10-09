@@ -1,5 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {UNIT, type Vec} from '../actor-physics';
+import {equipmentStats} from '../equipment';
 import {sanitizeDuelConfig, type DuelConfig} from './config';
 import {traceSolid, type Arena} from './geometry';
 import {routeTo} from './navigation';
@@ -145,5 +146,31 @@ describe('deathmatch on aim_redline', () => {
     runFor(sim, 10);
     expect(performance.now() - started).toBeLessThan(4000);
     expect(sim.phase).toBe('fighting');
+  });
+
+  it('your ammo mode: never reload keeps the magazine full, infinite reserve keeps reserves full, normal reserves run down', () => {
+    expect(sanitizeDuelConfig({}).infiniteAmmo).toBe('off');
+    expect(sanitizeDuelConfig({infiniteAmmo: 'magazine'}).infiniteAmmo).toBe('magazine');
+    expect(sanitizeDuelConfig({infiniteAmmo: 'always'}).infiniteAmmo).toBe('off');
+    const {magazine, reserve} = equipmentStats('ak47');
+    // A knife bot and a tough player: hold the trigger for 7 s (the AK empties after 3 s and reloads by itself).
+    const hold = (infiniteAmmo: DuelConfig['infiniteAmmo']) => {
+      const sim = deathmatch({botCount: 1, weapons: ['knife'], playerHealth: 500, infiniteAmmo});
+      sim.start();
+      sim.command(0, {firePressed: true, fireHeld: true});
+      runFor(sim, 7);
+      const shots = sim.drainEvents().filter(event => event.kind === 'fire' && event.actorId === 0).length;
+      const weapon = sim.actors[0].weapon;
+      expect(sim.actors[0].generation).toBe(1);
+      return {shots, ammo: weapon.ammo, reserve: weapon.reserve, reloading: weapon.reload.active};
+    };
+    const normal = hold('off');
+    expect(normal.shots).toBeGreaterThanOrEqual(magazine); expect(normal.reserve).toBe(reserve - magazine);
+    const endless = hold('reserve');
+    expect(endless.shots).toBeGreaterThanOrEqual(magazine); expect(endless.reserve).toBe(reserve);
+    expect(endless.ammo).toBeLessThan(magazine);
+    const never = hold('magazine');
+    expect(never.shots).toBeGreaterThan(normal.shots);
+    expect(never).toMatchObject({ammo: magazine, reserve, reloading: false});
   });
 });

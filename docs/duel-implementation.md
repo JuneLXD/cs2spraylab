@@ -107,6 +107,12 @@ engine's round flow, scorecard history and progression attempts stay idle; `deat
 counts the player's kills and deaths and the HUD shows kills, deaths, the session clock and a
 "Respawning in" overlay while dead.
 
+Ammo mode (same day): `DuelConfig.infiniteAmmo` takes the Aim Botz values ('off', 'reserve' =
+sv_infinite_ammo 2, 'magazine' = sv_infinite_ammo 1). The Deathmatch setup offers it as "Ammo";
+`refillAmmo` applies it to the player after every weapon advance, exactly as in Aim Botz, and the
+bots keep normal magazines so their reload windows stay. `useDuelConfig` pins it to 'off' for
+round-based duels, which never show the control.
+
 Bots use `BotBrain` on the imported map (the tactical brain needs authored cover lanes) with a
 `BotNavigator`: routes from `routeTo` with lenient endpoints, since spawns tucked against crates
 sit inside the navigation margin, and roaming goals drawn from the map's navigable floor spots

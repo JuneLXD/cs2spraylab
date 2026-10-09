@@ -247,6 +247,9 @@ export const latestChanges = {
     {id: 'play-fullscreen-exit', title: 'Exit fullscreen from Play', items: [
       'The Play footer shows an Exit fullscreen button while fullscreen is on, and the top-bar fullscreen control now reads Exit fullscreen with a matching icon instead of a one-way Fullscreen button.',
     ]},
+    {id: 'deathmatch-ammo', title: 'Ammo mode in Deathmatch', items: [
+      'The Deathmatch setup has the Ammo selection from Aim Botz: Normal reserves, Infinite reserve (you still reload but never run dry, sv_infinite_ammo 2) or Never reload (sv_infinite_ammo 1). It applies to you only; the bots keep normal magazines and their reload windows.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

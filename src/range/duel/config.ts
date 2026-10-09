@@ -1,5 +1,6 @@
 import {weaponIds, type Weapon} from '../config';
 import type {Equipment} from '../equipment';
+import type {BotzAmmo} from './botz';
 import {randomStream} from './rng';
 import {arenaDesigns} from './arena-layout';
 
@@ -40,6 +41,8 @@ export type DuelConfig = {
   overrides: BotOverride[];
   /** Deathmatch on an imported map: seconds until a dead player or bot respawns on its own side. 0 = round-based duel. */
   respawnSeconds: number;
+  /** Deathmatch only: sv_infinite_ammo for you. 'reserve' = 2 (reload, never run dry), 'magazine' = 1 (never reload); bots keep normal magazines. */
+  infiniteAmmo: BotzAmmo;
 };
 
 export const duelDefaults: DuelConfig = {
@@ -51,6 +54,7 @@ export const duelDefaults: DuelConfig = {
   arenaScale: 1,
   mapDesign: 'random',
   respawnSeconds: 0,
+  infiniteAmmo: 'off',
 };
 
 const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' && !Array.isArray(value)
@@ -62,6 +66,7 @@ const skill = (value: unknown): SkillLevel => value === '10+' ? '10+' : typeof v
   ? value as SkillLevel : duelDefaults.skill;
 const weapon = (value: unknown): value is Equipment => value==='knife'||typeof value === 'string' && weaponIds.some(id => id === value);
 const behaviors: BotBehavior[] = ['mixed', 'holder', 'patient', 'aggressive'];
+const ammoModes: BotzAmmo[] = ['off', 'reserve', 'magazine'];
 const behavior = (value: unknown): BotBehavior => behaviors.find(item => item === value) ?? duelDefaults.behavior;
 
 export function sanitizeDuelConfig(raw: unknown): DuelConfig {
@@ -96,6 +101,7 @@ export function sanitizeDuelConfig(raw: unknown): DuelConfig {
     mapDesign: arenaDesigns.find(name => name === input.mapDesign) ?? 'random',
     shortcutProtection: input.shortcutProtection !== false, overrides,
     respawnSeconds: Math.round(finite(input.respawnSeconds, duelDefaults.respawnSeconds, 0, 10) * 2) / 2,
+    infiniteAmmo: ammoModes.find(mode => mode === input.infiniteAmmo) ?? duelDefaults.infiniteAmmo,
   };
 }
 

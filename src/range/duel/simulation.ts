@@ -465,7 +465,7 @@ export class DuelSimulation {
       const fired = actor.weapon.advance(this.time, dt, this.time < actor.equipReadyAt
         ? {...command, fireHeld: false, firePressed: false, secondaryHeld: false, secondaryPressed: false}
         : autoReload ? {...command, reloadPressed: true} : command, actor);
-      if (this.botz && actor.id === 0) this.refillAmmo(actor);
+      if ((this.botz || this.deathmatch) && actor.id === 0) this.refillAmmo(actor);
       if(zoomBefore!==actor.weapon.actions.zoom)this.emit({kind:'action',tick:this.tick,actorId:actor.id,equipment:actor.weapon.id,
         action:actor.weapon.actions.zoom?'scope-in':'scope-out'});
       for(const action of actor.weapon.drainActionEvents()) {
@@ -791,9 +791,9 @@ export class DuelSimulation {
     }
   }
 
-  /** sv_infinite_ammo 2 keeps reserves full; 1 also refills the magazine after every shot. */
+  /** sv_infinite_ammo for you in Aim Botz and Deathmatch: 2 keeps reserves full; 1 also refills the magazine after every shot. */
   private refillAmmo(actor: CombatActor) {
-    const mode = this.botz?.infiniteAmmo;
+    const mode = this.botz ? this.botz.infiniteAmmo : this.deathmatch ? this.config.infiniteAmmo : 'off';
     if (!mode || mode === 'off') return;
     for (const state of new Set([actor.weapon, ...actor.inventory.values()])) {
       if (state.id === 'knife' || state.id === 'zeus') continue;
