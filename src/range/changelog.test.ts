@@ -31,7 +31,7 @@ describe('append-only changelog', () => {
       'armory', 'frame-limit', 'auto-reload', 'weapon-switch', 'input-latency', 'reflex', 'aim-redline', 'botz-movement', 'low-latency', 'defaults', 'input-timing', 'native-reload', 'native-scope', 'native-recovery', 'native-hitboxes', 'native-camera-kick', 'native-landing-camera', 'native-damage-camera',
       'native-shot-effects','viewmodel-handling','native-map-materials','surface-feedback','strafe-transitions','frame-time-diagnostics','native-held-reload','native-map-lighting','native-floor-decals','ui-foundation','ui-hud','ui-settings','ui-play','ui-loadout','ui-home-results','ui-kill-feed','ui-navigation-polish',
       'native-movement-rules', 'native-landing-accuracy', 'dynamic-crosshair', 'deathmatch',
-      'play-fullscreen-exit', 'deathmatch-ammo', 'spawn-unstick', 'native-audio-mix', 'pop-mode', 'pop-ammo-sound', 'pop-quiet', 'client-crosshair-zoom', 'server-tick-fire', 'bots-hit-reactions', 'deathmatch-protection-fullscreen', 'native-movement-integration', 'held-trigger-continuity', 'native-r8-windup',
+      'play-fullscreen-exit', 'deathmatch-ammo', 'spawn-unstick', 'native-audio-mix', 'pop-mode', 'pop-ammo-sound', 'pop-quiet', 'client-crosshair-zoom', 'server-tick-fire', 'bots-hit-reactions', 'deathmatch-protection-fullscreen', 'native-movement-integration', 'held-trigger-continuity', 'native-r8-windup', 'native-follow-recoil',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'reflex')!.items.join(' ')).toContain('come at you through its gaps');
     expect(latestChanges.sections.find(section => section.id === 'aim-redline')!.items.join(' ')).toContain('BOT Reed');

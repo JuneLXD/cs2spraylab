@@ -301,6 +301,10 @@ export const latestChanges = {
     {id: 'native-r8-windup', title: 'Verified revolver windup', items: [
       'The R8 primary trigger now winds up for the native thirteen server ticks (203.125 ms), replacing the 200 ms estimate in both engines.',
     ]},
+    {id: 'native-follow-recoil', title: 'Follow recoil on the rendered frame', items: [
+      'Follow recoil and range guides now use the same recoil sample as the camera on every rendered frame, removing up to four pixels of stale recoil in the measured AK spray.',
+      'The follow crosshair uses the client\'s pixel snapping and center deadband; damage moves the camera without being added to the crosshair\'s target direction.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

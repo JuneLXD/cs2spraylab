@@ -54,3 +54,9 @@ still needs the prepared recording; the existing schedule policy is unchanged.
 Pass 13 replaces the estimated R8 windup with the current server's thirteen-tick
 deadline (203.125 ms), backed by 62 bounded native arithmetic cases. Full R8
 animation and physical input latency remain outside that comparison.
+
+Pass 14 aligns follow-recoil and range guides to the camera's rendered recoil
+sample and verifies the client pixel conversion. The former stale sample could
+differ by 4.01 pixels in a deterministic 240 Hz AK spray. The 0.22 weapon fraction,
+landing weapon dip, crouch eye curve and exact framebuffer/DPR parity remain
+unverified; no tuning was made without evidence.

@@ -31,6 +31,7 @@ import {fullyOccluded} from './visibility';
 import {muzzleAnchor, viewMuzzleToWorld} from './tracers';
 import type {SpatialSound} from '../spatial-audio';
 import {AIM_PUNCH_CAMERA_SCALE, recoilView} from '../view-recoil';
+import {followCrosshairDirection, followCrosshairOffset} from '../crosshair-follow';
 import {RoundFlow, deathView, deathFeet} from './round-flow';
 import {type Equipment, type Slot} from '../equipment';
 import {DamageFeedback} from './damage-feedback';
@@ -1278,13 +1279,11 @@ export class DuelEngine {
     }
     this.audio.updateActions(this.sim.time);
     this.damageFeedback.update(this.animationClock, player.yaw);
-    const recoil = this.settings.follow ? viewWeapon.recovery.recoil : {yaw: 0, pitch: 0};
-    const yaw = player.yaw - (recoil.yaw + punch.yaw) * DEG, pitch = player.pitch + (recoil.pitch + punch.pitch) * DEG;
-    const followPoint = this.followPoint.set(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch),
-      -Math.cos(yaw) * Math.cos(pitch)).multiplyScalar(10).add(this.camera.position).project(this.camera);
-    if (!this.settings.follow) followPoint.set(0, 0, 0);
+    const followPoint = this.followPoint.copy(followCrosshairDirection(player.yaw, player.pitch, visualRecoil))
+      .multiplyScalar(10).add(this.camera.position).project(this.camera);
+    const crosshairOffset = followCrosshairOffset(this.settings.follow ? followPoint : {x: 0, y: 0}, this.width, this.height);
     this.crosshair.style.visibility = player.alive && !scoped && (player.equipment==='knife'||gameData.weapons[player.equipment].showCrosshair) ? '' : 'hidden';
-    this.crosshair.style.transform = `translate(${followPoint.x * this.width / 2}px, ${-followPoint.y * this.height / 2}px)`;
+    this.crosshair.style.transform = `translate(${crosshairOffset.x}px, ${crosshairOffset.y}px)`;
     // The dynamic gap is the live accuracy cone (penalty, movement, air, spread)
     // projected to the screen, as the game's HUD does, not a speed heuristic.
     if (this.settings.crosshair.dynamic) {

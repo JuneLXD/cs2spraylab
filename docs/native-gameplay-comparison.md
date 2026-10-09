@@ -613,6 +613,40 @@ Status: matched for deadline arithmetic, not the full revolver animation or
 physical input-to-command latency. These readiness comparisons do not settle
 whether a fresh early press changes the subsequent native firing schedule.
 
+## Follow-recoil presentation (fourteenth pass, 2026-10-09)
+
+The current client SHA-256 is
+`eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1`.
+The HUD follow-recoil caller samples predictable weapon punch at presentation
+time, adds it to input angles and projects through the current camera. It does
+not add the separate damage punch to that target direction, although damage
+still moves the camera. Its pixel block ceilings projected coordinates and
+keeps each axis at the truncated center when within one pixel of the center.
+The static source chain is retained in `../native-audit/reports/client-feel-evidence.json`.
+
+`tools/verify-native-follow-crosshair.py` verifies 12 direction cases and 30
+pixel cases from the native instructions in
+`src/range/native-follow-crosshair-fixture.json`. Both renderers now use the
+same render-time recoil sample as the camera, instead of the preceding
+simulation sample, and apply that pixel conversion. Range guides use that
+displayed sample too. `tools/probe-follow-crosshair.mjs` measures a deterministic
+240 Hz AK magazine at 1920 x 1080: the old stale sample diverged by up to
+0.323450 degrees / 4.011252 pixels; including pixel snapping, the largest total
+correction is 4.669296 pixels. The sample mismatch is now zero.
+
+Status: matched for the bounded direction/pixel arithmetic; applied in the
+trainer's existing CSS HUD viewport. Full native framebuffer/DPR/stretching
+equivalence is not established. The native verifier supplies view angles and
+projection inputs and substitutes math imports, rather than running CS2.
+
+No new evidence justifies changing the 0.45 camera scale or estimated 0.22
+weapon fraction. The exact `view_recoil_tracking` name is absent in the current
+client, while `weapon_land_dip_amt` registration has no identified direct
+value readers in bounded client/server searches. Indirect readers remain
+possible. The client eye getter consumes interpolated view offsets, but the
+crouch setter curve was not traced. Those weapon/camera effects remain
+unchanged pending a controlled recording with world and weapon landmarks.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current

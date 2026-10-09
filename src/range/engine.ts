@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {recoilView} from './view-recoil';
+import {followCrosshairDirection, followCrosshairOffset} from './crosshair-follow';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { clone as cloneSkeleton } from 'three/examples/jsm/utils/SkeletonUtils.js';
@@ -969,13 +970,10 @@ export class RangeEngine {
     this.weaponRoot.rotation.x = modelKick * (this.sim.slot===3 ? 0 : .02) + view.weaponPitch;
     this.weaponRoot.rotation.y = view.weaponYaw;
     this.weaponRoot.rotation.z = 0;
-    const r = this.sim.settings.follow ? this.sim.recoil : { yaw: 0, pitch: 0 };
-    const point = new THREE.Vector3(-Math.tan(-this.sim.yaw + r.yaw * DEG), 0, -1);
-    // Project the recoil-only direction with the same camera, excluding random spread.
-    const yaw = this.sim.yaw - r.yaw * DEG, pitch = this.sim.pitch + r.pitch * DEG;
-    point.set(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch)).multiplyScalar(10).add(this.camera.position).project(this.camera);
-    if (!this.sim.settings.follow) point.set(0, 0, 0);
-    this.crosshair.style.transform = `translate(${point.x * this.width / 2}px, ${-point.y * this.height / 2}px)`;
+    const point = vector(followCrosshairDirection(this.sim.yaw, this.sim.pitch, visualRecoil))
+      .multiplyScalar(10).add(this.camera.position).project(this.camera);
+    const crosshairOffset = followCrosshairOffset(this.sim.settings.follow ? point : {x: 0, y: 0}, this.width, this.height);
+    this.crosshair.style.transform = `translate(${crosshairOffset.x}px, ${crosshairOffset.y}px)`;
     // The dynamic gap is the live accuracy cone (penalty, movement, air, spread)
     // projected to the screen, as the game's HUD does, not a speed heuristic.
     if (this.sim.settings.crosshair.dynamic) {
@@ -994,8 +992,7 @@ export class RangeEngine {
       if (!visible) {cue.hidden = true; return;}
       const target = this.sim.targetPosition(this.sim.targetForShot(index));
       const p = visible ? this.sim.predictedRecoil(i===1) : {yaw:0,pitch:0};
-      const angles = guidanceAngles(this.sim.position, target, p,
-        this.sim.settings.follow ? this.sim.recoil : visualRecoil, this.sim.settings.follow, viewPunch);
+      const angles = guidanceAngles(this.sim.position, target, p, visualRecoil, this.sim.settings.follow, viewPunch);
       const aim = direction(angles.yaw, angles.pitch);
       const point = vector(aim).multiplyScalar(10).add(this.camera.position).project(this.camera);
       cue.hidden = !visible || point.z > 1 || Math.abs(point.x) > .95 || Math.abs(point.y) > .88;
