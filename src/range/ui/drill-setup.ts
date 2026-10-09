@@ -5,9 +5,11 @@ import type {DuelConfig} from '../duel/config';
 /** Restore practice controls without changing input, video, cosmetics or the chosen drill. */
 export function rangeDrillDefaults(mode: Mode): Partial<Settings> {
   const {burst, peekScenario, peekDuration, drillPace, follow, transferRule, transferAfter,
-    impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides} = defaults;
+    impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides,
+    popSize, popCount, popSpacing, popDistance, popColor} = defaults;
   return {burst, peekScenario, peekDuration, drillPace, follow, transferRule, transferAfter,
-    impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides, spread: mode !== 'guided'};
+    impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides, spread: mode !== 'guided',
+    popSize, popCount, popSpacing, popDistance, popColor};
 }
 export function drillSetupSummary(settings: Settings, botz: BotzConfig, duel: DuelConfig): string {
   if (['botz', 'reflex', 'redline'].includes(settings.mode)) {
@@ -16,6 +18,7 @@ export function drillSetupSummary(settings: Settings, botz: BotzConfig, duel: Du
   }
   if (settings.mode === 'duel') return `${duel.botCount} ${duel.botCount === 1 ? 'opponent' : 'opponents'} · skill ${duel.skill} · ${duel.roundSeconds}s rounds`;
   if (settings.mode === 'deathmatch') return `${duel.botCount} ${duel.botCount === 1 ? 'opponent' : 'opponents'} · skill ${duel.skill} · ${duel.respawnSeconds}s respawns · ${duel.infiniteAmmo === 'magazine' ? 'never reload · ' : duel.infiniteAmmo === 'reserve' ? 'infinite reserve · ' : ''}aim_redline`;
+  if (settings.mode === 'pop') return `${settings.popCount} ${settings.popCount === 1 ? 'ball' : 'balls'} · ${settings.popSize} cm · ${settings.popSpacing} m apart · ${settings.popDistance} m away`;
   if (settings.mode === 'hearing') return 'Locate footsteps and shots by direction and distance';
   return `${settings.burst ? `${settings.burst}-shot bursts` : 'full magazine'} · ${settings.spread ? 'spread on' : 'spread off'} · ${settings.moving ? 'moving target' : 'stationary target'}`;
 }

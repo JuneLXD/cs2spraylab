@@ -1,8 +1,24 @@
-import {memo} from 'react';
+import {memo, useId} from 'react';
 import {gameData, isDuelEngineMode, loadoutWeapon, weaponNames, type Settings} from '../../config';
-import {SliderRow as Slider, SwitchRow as Toggle} from '../primitives';
+import {popColors, popLimits} from '../../pop';
+import {SettingRow, SliderRow as Slider, SwitchRow as Toggle} from '../primitives';
 export const TrainingSettings = memo(function TrainingSettings({settings, update}: {settings: Settings; update: (patch: Partial<Settings>) => void}) {
   const weapon = gameData.weapons[loadoutWeapon(settings)];
+  const colorId = useId();
+  if (settings.mode === 'pop') return <>
+    <h2>Pop</h2>
+    <Slider label="Ball size" value={settings.popSize} min={popLimits.size[0]} max={popLimits.size[1]} suffix=" cm" onChange={popSize => update({popSize})}/>
+    <Slider label="Balls at once" value={settings.popCount} min={popLimits.count[0]} max={popLimits.count[1]} onChange={popCount => update({popCount})}/>
+    <Slider label="Space between balls" value={settings.popSpacing} min={popLimits.spacing[0]} max={popLimits.spacing[1]} step={.1} suffix=" m" onChange={popSpacing => update({popSpacing})}/>
+    <Slider label="Distance to the balls" value={settings.popDistance} min={popLimits.distance[0]} max={popLimits.distance[1]} step={.5} suffix=" m" onChange={popDistance => update({popDistance})}/>
+    <SettingRow label="Ball color" htmlFor={colorId} className="sl-color-row"><div className="sl-color-control">
+      <input id={colorId} aria-label="Ball color" type="color" value={settings.popColor} onChange={event => update({popColor: event.target.value})}/>
+      <div className="sl-swatches" role="group" aria-label="Ball color presets">{popColors.map(([name, value]) => <button key={value} type="button" aria-label={`${name} balls`} title={name} aria-pressed={settings.popColor === value} style={{background: value}} onClick={() => update({popColor: value})}/>)}</div>
+    </div></SettingRow>
+    <Toggle label="Practice spread" checked={settings.spread} onChange={spread => update({spread})}/>
+    <label className="select-row">Bullet tracers<select aria-label="Bullet tracers" value={settings.tracers} onChange={e => update({tracers: e.target.value as Settings['tracers']})}><option value="every">Every shot (practice)</option><option value="native">CS2 effects & cadence</option><option value="off">Off</option></select></label>
+    <p className="setting-explanation">Balls float on a dark wall ahead of you at the chosen distance. Each shot pops the first ball it crosses and a new one appears elsewhere, at least the chosen space from the others. Recoil and spread apply as in CS2; misses mark the wall.</p>
+  </>;
   return <>              <h2>Training</h2><label className="select-row">Burst length<select aria-label="Burst length" value={settings.burst} onChange={e => update({ burst: +e.target.value })}><option value="0">Full magazine</option><option value="5">5 rounds</option><option value="10">10 rounds</option><option value="15">15 rounds</option></select></label>
               <label className="select-row">Peeking angles<select aria-label="Peeking angles" value={settings.peekScenario} onChange={e=>update({peekScenario:e.target.value as Settings['peekScenario']})}><option value="mixed">Mixed situations</option><option value="common">Common angles</option><option value="deep">Deep holds</option><option value="off-angle">Off-angles</option><option value="elevated">Elevated holds</option></select></label>
               <Slider label="Peeking target duration" value={settings.peekDuration} min={.5} max={10} step={.25} suffix=" s" onChange={peekDuration=>update({peekDuration})}/>

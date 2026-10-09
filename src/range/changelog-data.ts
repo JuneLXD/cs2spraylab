@@ -257,6 +257,11 @@ export const latestChanges = {
       'Every imported sound now carries its CS2 mix group and level (Weapons 0.6, Footsteps 0.8, hit feedback 1.0, bullet impacts 0.3, foley 1.0), and your own shots, steps and hit sounds use the game\'s distance curve at their native offsets. Hit confirmations and the helmet dink are about 5 dB louder relative to your gunshot, as in the game; your gunshot is about 2.5 dB quieter.',
       'Enemy gunshots add CS2\'s distant layer (its own samples, level and curve) beyond about 20 m, and sounds the game varies in pitch now vary the same way.',
     ]},
+    {id: 'pop-mode', title: 'Pop: a Refrag-style aim warm-up', items: [
+      'A new Aim warm-up drill, Pop: bright balls float on a dark wall ahead of you, each shot pops the first ball it crosses and a new one appears elsewhere. Recoil and spread apply as in CS2, misses mark the wall, and the HUD counts pops, hit rate and pops per minute; a pause records the session.',
+      'Its setup sets the ball size (8-80 cm), how many float at once (1-12), the minimum space between them, the distance from you (3-40 m) and the ball colour, from presets or any colour.',
+      'Popping a ball plays a synthesized pop, a short downward bloop with a click, on top of the shot.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

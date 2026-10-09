@@ -565,3 +565,11 @@ html, body, #root {
   .sl-top-nav .main-nav > button > svg {width: 16px;}
   .sl-menu-layer .settings-hint {top: 104px;}
 }
+
+/* Pop setup: colour picker with presets. */
+.sl-color-control{display:flex;align-items:center;gap:10px}
+.sl-color-control input[type=color]{width:46px;height:30px;padding:2px;border:1px solid rgba(255,255,255,.18);border-radius:6px;background:none;cursor:pointer}
+.sl-swatches{display:flex;gap:6px}
+.sl-swatches button{width:22px;height:22px;border-radius:50%;border:2px solid rgba(0,0,0,.35);cursor:pointer;padding:0}
+.sl-swatches button[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.3)}
+

@@ -4,8 +4,8 @@ import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybi
 import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
 
 export type Weapon = keyof typeof data.weapons;
-export type Mode = 'duel' | 'deathmatch' | 'botz' | 'reflex' | 'redline' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
-export const modeNames: Record<Mode, string> = { duel: 'AI Duel', deathmatch: 'Deathmatch: aim_redline', botz: 'Aim Botz', reflex: 'Fast Aim / Reflex', redline: 'aim_redline', guided: 'Guided spray', spray: 'Free spray', transfer: 'Spray transfer', peek: 'Peeking practice', precision: 'Counterstrafing practice', burst: 'Burst & reposition', hearing: 'Hearing practice' };
+export type Mode = 'duel' | 'deathmatch' | 'botz' | 'reflex' | 'redline' | 'pop' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
+export const modeNames: Record<Mode, string> = { duel: 'AI Duel', deathmatch: 'Deathmatch: aim_redline', botz: 'Aim Botz', reflex: 'Fast Aim / Reflex', redline: 'aim_redline', pop: 'Pop', guided: 'Guided spray', spray: 'Free spray', transfer: 'Spray transfer', peek: 'Peeking practice', precision: 'Counterstrafing practice', burst: 'Burst & reposition', hearing: 'Hearing practice' };
 /** Modes that run on the duel engine rather than the static range. */
 export const isDuelEngineMode = (mode: Mode) => mode === 'duel' || mode === 'deathmatch' || mode === 'botz' || mode === 'reflex' || mode === 'redline';
 export const historyModeNames = { ...modeNames, tracking: 'Target tracking (retired)' };
@@ -64,6 +64,8 @@ export type Settings = {
   viewmodel: Viewmodel;
   /** Your bullet tracers: every round (practice), CS2's per-weapon cadence, or none. */
   tracers: 'every' | 'native' | 'off';
+  /** Pop: ball diameter in cm, balls at once, minimum space between them (m), distance from you (m), ball colour. */
+  popSize: number; popCount: number; popSpacing: number; popDistance: number; popColor: string;
   /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
   cs2Crosshair?: Cs2Crosshair;
 };
@@ -91,7 +93,8 @@ export const defaults: Settings = {
   crosshair: { color: '#ffeb55', size: 3, gap: 2, thickness: 2, outline: 1, alpha: 1, dot: false, t: false, dynamic: false },
   keyboard: defaultKeyboard,
   viewmodel: classicViewmodel,
-  tracers: 'native'
+  tracers: 'native',
+  popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d',
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -139,6 +142,9 @@ export function sanitizeSettings(raw: unknown): Settings {
     keyboard: sanitizeKeyboard(s.keyboard),
     viewmodel: sanitizeViewmodel(s.viewmodel),
     tracers: s.tracers === 'every' || s.tracers === 'off' ? s.tracers : 'native',
+    popSize: Math.round(numeric(s.popSize, defaults.popSize, 8, 80)), popCount: Math.round(numeric(s.popCount, defaults.popCount, 1, 12)),
+    popSpacing: numeric(s.popSpacing, defaults.popSpacing, .2, 5), popDistance: numeric(s.popDistance, defaults.popDistance, 3, 40),
+    popColor: typeof s.popColor === 'string' && /^#[\da-f]{6}$/i.test(s.popColor) ? s.popColor.toLowerCase() : defaults.popColor,
     ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }

@@ -98,7 +98,7 @@ it('collateral range shots damage both physical meshes but count one scored disc
   body.geometry.dispose();secondBody.geometry.dispose();wall.geometry.dispose();
 });
 
-it.each(Object.keys(modeNames).filter(mode => mode !== 'hearing') as Mode[])('shows distinct head/body feedback for actual hits in %s mode',mode=>{
+it.each(Object.keys(modeNames).filter(mode => mode !== 'hearing' && mode !== 'pop') as Mode[])('shows distinct head/body feedback for actual hits in %s mode',mode=>{
   const {engine,body,wall,target}=rayFixture();
   engine.sim=new Simulation({...defaults,mode});
   Object.assign(engine, {attemptTargets: new Set(), viewAnimations: new Map(), viewMuzzles: new Map(), viewFlashes: {fire: vi.fn()},acoustics:{setBoxes:vi.fn()}});

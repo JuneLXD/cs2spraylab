@@ -190,6 +190,32 @@ export class RangeAudio {
   playHit(head: boolean, armor: boolean, victim: boolean, volume: number, spatial?: SpatialSound) {
     this.playEvent(`${victim ? 'hurt' : 'hit'}-${head ? armor ? 'helmet' : 'head' : armor ? 'armor' : 'body'}`, volume, spatial, 0, EAR_TO_GUN_UNITS);
   }
+  private noise?: AudioBuffer;
+  /** Pop mode: a synthesized pop, a sine bloop sweeping down over 180 ms with a short band-passed click, pitched a little
+   * at random; several pops at once ring a touch higher. */
+  playPop(volume: number, count = 1) {
+    const ctx = this.context;
+    if (!ctx || ctx.state !== 'running' || !this.master || !Number.isFinite(volume) || volume <= 0 || this.disposed) return false;
+    const now = ctx.currentTime, level = Math.min(1, volume) * .9;
+    const base = 700 * (1 + (Math.random() - .5) * .16) * (count > 1 ? 1.15 : 1);
+    const tone = ctx.createOscillator(), toneGain = ctx.createGain();
+    tone.type = 'sine';
+    tone.frequency.setValueAtTime(base * 1.6, now); tone.frequency.exponentialRampToValueAtTime(base * .55, now + .12);
+    toneGain.gain.setValueAtTime(0, now); toneGain.gain.linearRampToValueAtTime(level, now + .004); toneGain.gain.exponentialRampToValueAtTime(.001, now + .18);
+    tone.connect(toneGain); toneGain.connect(this.master);
+    if (!this.noise) {
+      this.noise = ctx.createBuffer(1, Math.max(1, Math.round(ctx.sampleRate * .08)), ctx.sampleRate);
+      const data = this.noise.getChannelData(0); for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    }
+    const click = ctx.createBufferSource(), band = ctx.createBiquadFilter(), clickGain = ctx.createGain();
+    click.buffer = this.noise; band.type = 'bandpass'; band.frequency.value = 2600; band.Q.value = .9;
+    clickGain.gain.setValueAtTime(level * .7, now); clickGain.gain.exponentialRampToValueAtTime(.001, now + .05);
+    click.connect(band); band.connect(clickGain); clickGain.connect(this.master);
+    tone.onended = () => {tone.disconnect(); toneGain.disconnect();};
+    click.onended = () => {click.disconnect(); band.disconnect(); clickGain.disconnect();};
+    tone.start(now); tone.stop(now + .2); click.start(now); click.stop(now + .07);
+    return true;
+  }
   setAcoustics(scene?: AcousticScene) {this.acoustics = scene;}
   /** Call for every actor each simulation frame; local and remote use the same timeline. */
   syncActor(state: ActorSoundState, now: number, volume: number, spatial?: SpatialSound) {

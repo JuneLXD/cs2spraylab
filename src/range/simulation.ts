@@ -8,6 +8,7 @@ import {direction, shotDirections} from './shot-model';
 import {TERRAIN_RULES} from './terrain';
 import {resolveDamage} from './duel/damage';
 import {NativeReloadState, WeaponActions, type ReloadActionEvent} from './weapon-actions';
+import {POP_SPAWN, PopField, popConfig} from './pop';
 
 export {DEG, GRAVITY, JUMP_SPEED, STEP, UNIT, airVelocity, groundVelocity, idleInput, direction};
 export const VERTICAL_FOV = 2 * Math.atan(.75) / DEG;
@@ -73,6 +74,8 @@ export class Simulation {
     if (!state) {state = new WeaponActions(this.equipped); this.actionStates.set(this.equipped, state);}
     return state;
   }
+  /** Pop mode: the balls and the session tally; `popStartedAt` is the first shot of the session. */
+  pop?: PopField; popStartedAt = 0; private popPublishedShots = 0; private popPlaced = false;
   drill?: DrillCoach; drillRound = 0; drillPassed = 0; drillCompleted = 0;
   drillResult?: DrillMetrics; nextDrillAt = 0; repositionFrom?: Vec; repositionYaw = 0; drillRevision = 0;
   get equipped() { return equipmentForSlot(this.slot, this.settings.weapon, this.settings.sidearm); }
@@ -150,7 +153,7 @@ export class Simulation {
   constructor(public settings: Settings, private readonly random?: () => number) {this.slot = settings.primaryEnabled ? 1 : 2; this.pattern = recoilPattern(loadoutWeapon(settings)); this.configure(settings);}
   configure(s: Settings, measured?: MeasuredProfile) {
     const changedMode = s.mode !== this.settings.mode;
-    const leavingPositionedDrill = isDrillMode(this.settings.mode);
+    const leavingPositionedDrill = isDrillMode(this.settings.mode) || this.settings.mode === 'pop';
     this.cancel(); this.settings = s; this.measured = measured;
     if (!s.primaryEnabled && this.slot === 1) this.slot = 2;
     this.actionStates.clear(); this.restock();
@@ -166,6 +169,25 @@ export class Simulation {
       this.eyeHeight = 64 * UNIT; this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0; this.duckRecoveryOrigin = undefined;
       this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
     } }
+    if (s.mode === 'pop') {
+      this.pop = new PopField(popConfig(s), POP_SPAWN, this.random ?? Math.random); this.popPublishedShots = 0;
+      // A fresh simulation starts in Pop too (the constructor configures with the mode already set).
+      if (changedMode || !this.popPlaced) {
+        this.popPlaced = true;
+        this.position = {...POP_SPAWN}; this.yaw = this.pitch = this.feet = this.verticalVelocity = this.duckAmount = 0;
+        this.velocity = {x: 0, z: 0}; this.eyeHeight = 64 * UNIT; this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0;
+        this.duckRecoveryOrigin = undefined; this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
+      }
+    } else {this.pop = undefined; this.popPlaced = false;}
+  }
+  /** Pop keeps one running tally per session; a pause records it once per new shots. */
+  publishPopResult() {
+    const pop = this.pop;
+    if (!pop || !pop.shots || pop.shots === this.popPublishedShots) return;
+    this.popPublishedShots = pop.shots;
+    this.latest = {id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, weapon: this.equipped, mode: 'pop', shots: pop.shots, hits: pop.pops,
+      heads: 0, seconds: this.time - this.popStartedAt, tracking: 0, date: new Date().toISOString(), samples: []};
+    this.attempts++; this.onResult(this.latest);
   }
   equip(slot: Slot) {
     if (slot === 1 && !this.settings.primaryEnabled) return false;
@@ -282,12 +304,13 @@ export class Simulation {
     this.firing = false; this.automatic = false;
     this.actions.chargeTrigger(this.time, false);
     this.readyAt = this.time;
-    if (this.shots && !this.drill) this.publishResult();
+    if (this.shots && !this.drill && !this.pop) this.publishResult();
   }
   reset() {
     this.cancel(); this.readyAt = this.time; this.shots = this.hits = this.heads = 0;
     this.latest = undefined;
     this.restock(); this.resetRecovery(); this.actionStates.clear(); this.resetMovementHistory();
+    this.pop?.reset(); this.popPublishedShots = 0;
     if (isDrillMode(this.settings.mode)) { this.drillResult = undefined; this.newDrill(true); }
   }
   advance(elapsed: number) {
@@ -410,6 +433,7 @@ export class Simulation {
       airborne:!this.grounded,verticalSpeedUnits:this.verticalVelocity/UNIT,spread:this.settings.spread,
       weaponId:this.equipped,alternateFire:this.actions.alternateFire,recoilIndex:this.recovery.index,seed:ordinal+1}, weapon.pellets, this.random);
     const index = this.shots++;
+    if (this.pop) {if (!this.pop.shots) this.popStartedAt = this.time; this.pop.shots++;}
     this.reloadState.ammo--; this.shotOrdinals.set(this.equipped, ordinal + 1);
     if (this.equipped !== 'zeus') {
       this.recovery.fire(); this.viewPunch.add(this.recovery.lastViewPunch, this.time);

@@ -96,7 +96,7 @@ export default function RangeApp() {
   const drawer = useRef<HTMLElement>(null);
   const selectedWeapon = loadoutWeapon(settings);
   const assetReady = status.assets === 'Models ready' && status.weapon === selectedWeapon;
-  const score = settings.mode==='precision' ? status.drill?.last?.movementScore ?? 0 : status.shots ? status.hits / status.shots * 100 : 0;
+  const score = settings.mode==='precision' ? status.drill?.last?.movementScore ?? 0 : settings.mode === 'pop' ? status.pop?.shots ? status.pop.pops / status.pop.shots * 100 : 0 : status.shots ? status.hits / status.shots * 100 : 0;
   const showRepFeedback=repFeedback?.mode===settings.mode && status.active && !status.firing && !status.hitFlash;
   const update = useCallback((patch: Partial<Settings>) => setSettings(s => ({ ...s, ...patch })), []);
   // A manual edit replaces the CS2 convars; the next bound crosshair command starts from this crosshair.
@@ -149,8 +149,9 @@ export default function RangeApp() {
           setRepFeedback({id:result.id,mode:result.mode,...makeRepFeedback(result.mode,result.drill,previous)});
         } else if (result.shots && result.mode !== 'tracking') {
           setRepFeedback({id: result.id, mode: result.mode, passed: result.hits / result.shots >= .7,
-            message: `${result.hits}/${result.shots} hits / ${result.heads} head hits`,
-            tip: result.hits / result.shots < .5 ? 'Start on the head, stop moving, then correct recoil as it climbs. Use shorter bursts until the first shots connect.'
+            message: result.mode === 'pop' ? `${result.hits}/${result.shots} balls popped` : `${result.hits}/${result.shots} hits / ${result.heads} head hits`,
+            tip: result.mode === 'pop' ? (result.hits / result.shots < .5 ? 'Flick to the ball, stop, then tap. Bigger or closer balls make an easier warm-up.' : 'Keep the rhythm: flick, settle, tap. Smaller balls or more space between them push it further.')
+              : result.hits / result.shots < .5 ? 'Start on the head, stop moving, then correct recoil as it climbs. Use shorter bursts until the first shots connect.'
               : 'Keep the same starting aim. Check the wall marks for shots that drifted away as the spray continued.'});
         }
         resultsRef.current=[result,...resultsRef.current].slice(0,100);
@@ -257,10 +258,17 @@ export default function RangeApp() {
           <StatBlock className="hud-stat" icon={Target} value={status.distance.toFixed(1)} unit="m" label="DISTANCE"/>
         </div>
         <ScoreBar className="hud-result">
-          <ScoreCell value={status.heads} label="HEAD" tone="gold"/>
-          <ScoreCell value={status.hits - status.heads} label="BODY" tone="blue"/>
-          <ScoreCell value={<>{Math.round(score)}<em>{settings.mode === 'precision' ? '/100' : '%'}</em></>} label={settings.mode === 'precision' ? 'MOVEMENT SCORE' : 'HIT RATE'} testId="accuracy"/>
-          <ScoreCell value={status.shots - status.hits} label="MISS" tone="miss"/>
+          {settings.mode === 'pop' ? <>
+            <ScoreCell value={status.pop?.pops ?? 0} label="POPS" tone="gold"/>
+            <ScoreCell value={<>{Math.round(score)}<em>%</em></>} label="HIT RATE" testId="accuracy"/>
+            <ScoreCell value={(status.pop?.shots ?? 0) - (status.pop?.pops ?? 0)} label="MISS" tone="miss"/>
+            <ScoreCell value={status.pop?.seconds ? Math.round(status.pop.pops / status.pop.seconds * 60) : 0} label="POPS / MIN" tone="blue"/>
+          </> : <>
+            <ScoreCell value={status.heads} label="HEAD" tone="gold"/>
+            <ScoreCell value={status.hits - status.heads} label="BODY" tone="blue"/>
+            <ScoreCell value={<>{Math.round(score)}<em>{settings.mode === 'precision' ? '/100' : '%'}</em></>} label={settings.mode === 'precision' ? 'MOVEMENT SCORE' : 'HIT RATE'} testId="accuracy"/>
+            <ScoreCell value={status.shots - status.hits} label="MISS" tone="miss"/>
+          </>}
         </ScoreBar>
         <AmmoBlock reloadProgress={status.reloadProgress} className="hud-ammo" label={cosmeticLabel(progressionState.profile, status.equipped)} testId="ammo" compactSeparator
           ammo={status.slot === 3 ? '--' : status.remaining} reserve={status.slot !== 3 && status.equipped !== 'zeus' ? status.reserve ?? status.magazine : undefined}

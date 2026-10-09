@@ -46,6 +46,8 @@ export type RangeStatus = {
   input: string; audio: string; assets: string; fps: number; shortcutProtected?: boolean;
   equipped: Equipment; slot: Slot; equipReady: boolean; magazine: number;
   targetHealth?: number[];
+  /** Pop mode: the session tally. */
+  pop?: {pops: number; shots: number; seconds: number};
   drill?: {round:number; completed:number; passed:number; scenario:string; covered:boolean; exposure:Exposure; side:number; peekDirection?:number; phase:'prepare'|'exposed'|'feedback'|'reposition'; accurate:boolean; error:number; remaining?:number; last?:DrillMetrics};
 };
 const vector = (v: Vec) => new THREE.Vector3(v.x, v.y, v.z);
@@ -69,6 +71,17 @@ export class RangeEngine {
   drillScenery = new DrillScenery(); drillRevision = -1;
   weaponRoot = new THREE.Group();
   targets = [new THREE.Group(), new THREE.Group()];
+  /** Pop mode: the balls by id, their burst animations, the dark wall behind them, and the lights it dims. */
+  pop = new THREE.Group();
+  private popMeshes = new Map<number, THREE.Mesh>();
+  private popBursts: {mesh: THREE.Mesh; at: number; radius: number}[] = [];
+  private popBackdrop?: THREE.Mesh;
+  private popGeometry = new THREE.SphereGeometry(1, 32, 20);
+  popMaterial = new THREE.MeshStandardMaterial({color: '#ff6a4d', emissive: '#ff6a4d', emissiveIntensity: .8, roughness: .35, metalness: 0, fog: false});
+  private popColorApplied = '';
+  private popAtmosphere = false;
+  private hemi!: THREE.HemisphereLight; private sun!: THREE.DirectionalLight;
+  private readonly sceneLook = {background: '#c7d1d1', fog: [100, 230] as const, hemi: 1.35, sun: 2.2, environment: .3};
   targetModels: THREE.Object3D[] = [];
   mixers: THREE.AnimationMixer[] = [];
   targetActions: THREE.AnimationAction[][] = [];
@@ -195,8 +208,8 @@ export class RangeEngine {
     this.scene.environment = this.viewScene.environment = this.environment.texture;
     this.scene.environmentIntensity = .3; this.viewScene.environmentIntensity = .32;
     room.dispose(); pmrem.dispose();
-    this.scene.add(new THREE.HemisphereLight('#f1f6fa', '#626850', 1.35));
-    const sun = new THREE.DirectionalLight('#fff4df', 2.2); sun.position.set(-15, 24, TARGET_Z + 18);
+    this.hemi = new THREE.HemisphereLight('#f1f6fa', '#626850', 1.35); this.scene.add(this.hemi);
+    const sun = this.sun = new THREE.DirectionalLight('#fff4df', 2.2); sun.position.set(-15, 24, TARGET_Z + 18);
     sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.camera.left = -18; sun.shadow.camera.right = 18;
     sun.shadow.camera.top = 18; sun.shadow.camera.bottom = -35; sun.shadow.normalBias = .025;
     sun.target.position.set(0, 0, TARGET_Z + 3); this.scene.add(sun, sun.target);
@@ -268,7 +281,7 @@ export class RangeEngine {
       marker.name = 'active-lane'; marker.rotation.x = -Math.PI / 2; marker.position.y = .015; target.add(marker);
       this.scene.add(target);
     });
-    this.scene.add(this.impacts);
+    this.scene.add(this.impacts, this.pop);
     this.syncTargets();
     // Collision references retain their geometry and baked world matrix after batching.
     this.scene.updateMatrixWorld(true);
@@ -280,7 +293,7 @@ export class RangeEngine {
       if (this.renderer) this.renderer.shadowMap.needsUpdate = true;
     }
     this.targets.forEach((target, i) => {
-      target.visible = i === 0 || this.sim.settings.mode === 'transfer';
+      target.visible = (i === 0 || this.sim.settings.mode === 'transfer') && this.sim.settings.mode !== 'pop';
       target.position.copy(vector(this.sim.targetPosition(i)));
       target.updateMatrixWorld(true);
     });
@@ -464,22 +477,23 @@ export class RangeEngine {
     this.renderer.shadowMap.needsUpdate = true;
     // Presentation changes, such as a crosshair or volume toggle bound to a key, keep the attempt.
     const presentation = new Set<keyof Settings>(['crosshair', 'cs2Crosshair', 'volume', 'showFps', 'viewmodel', 'tracers', 'impactSize',
-      'showImpactPattern', 'showMousePath', 'animatedGuides', 'quality', 'frameLimit', 'protectShortcuts']);
+      'showImpactPattern', 'showMousePath', 'animatedGuides', 'quality', 'frameLimit', 'protectShortcuts', 'popColor']);
     if ((Object.keys({...settings, ...this.sim.settings}) as (keyof Settings)[]).some(key => !presentation.has(key) && settings[key] !== this.sim.settings[key])
       || measured !== this.sim.measured) this.cancelProgression();
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
-    const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace'];
+    const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
+      'popSize', 'popCount', 'popSpacing', 'popDistance'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = settings.invertY !== this.sim.settings.invertY;
       this.sim.settings = settings;
       this.resizeImpacts();
       if (changedInversion) this.updateDemonstration();
-      this.demonstration.mesh.visible = settings.showImpactPattern && !this.sim.drill && this.sim.slot!==3;
-      this.mouseDemonstration.mesh.visible = settings.showMousePath && !this.sim.drill && this.sim.slot!==3;
-      this.resize(); return;
+      this.demonstration.mesh.visible = settings.showImpactPattern && this.guidesAllowed;
+      this.mouseDemonstration.mesh.visible = settings.showMousePath && this.guidesAllowed;
+      this.syncPop(); this.resize(); return;
     }
-    this.clearInput?.(); this.sim.configure(settings, measured);
+    this.clearInput?.(); this.sim.configure(settings, measured); this.syncPop(true);
     if (changedWeapon) {this.sim.slot = settings.primaryEnabled ? 1 : 2; this.sim.pattern = recoilPattern(loadoutWeapon(settings), measured);}
     this.updateDemonstration();
     this.clearImpacts(); this.syncTargets(); this.resize();
@@ -487,10 +501,12 @@ export class RangeEngine {
     if (changedWeapon) void this.setWeapon(loadoutWeapon(settings));
     else if (changedSidearm && this.sim.slot === 2) void this.setWeapon(settings.sidearm);
   }
+  /** Wall guides belong to the spray drills: never in a positioned drill, with the knife out, or in Pop. */
+  private get guidesAllowed() {return !this.sim.drill && this.sim.slot !== 3 && this.sim.settings.mode !== 'pop';}
   updateDemonstration() {
     const weapon = this.sim.equipped === 'knife' ? loadoutWeapon(this.sim.settings) : this.sim.equipped;
-    this.demonstration.mesh.visible = this.sim.settings.showImpactPattern && !this.sim.drill && this.sim.slot!==3;
-    this.mouseDemonstration.mesh.visible = this.sim.settings.showMousePath && !this.sim.drill && this.sim.slot!==3;
+    this.demonstration.mesh.visible = this.sim.settings.showImpactPattern && this.guidesAllowed;
+    this.mouseDemonstration.mesh.visible = this.sim.settings.showMousePath && this.guidesAllowed;
     this.demonstration.setPattern(weapon, this.sim.pattern, gameData.weapons[weapon].cycle, this.elapsed);
     this.mouseDemonstration.setPattern(weapon, this.sim.pattern, gameData.weapons[weapon].cycle, this.elapsed, this.sim.settings.invertY);
   }
@@ -529,13 +545,14 @@ export class RangeEngine {
     this.acoustics.setBoxes(this.coverSolids);return this.coverSolids;
   }
   shot(shot: Shot) {
-    if (!shot.melee && !this.attemptId) {
+    if (!shot.melee && !this.attemptId && !this.sim.pop) {
       this.attemptTargets.clear();
       this.attemptId = this.progression?.beginDrill(this.sim.settings.mode as DrillMode, String(this.attemptRevision)) ?? null;
     }
     const animationAmmo = this.sim.loadedAmmo;
     this.viewAnimations.get(this.sim.equipped)?.playFire(this.sim.equipped, {side:animationAmmo % 2 ? 'right' : 'left',lastShot:animationAmmo===0,
       alternate:this.sim.actions.alternateFire, zoomed:this.sim.actions.zoom > 0});
+    if (this.sim.pop) {this.popShot(shot); return;}
     // Moving-target shots use the meshes at their last displayed position.
     // New drills still need an initial scene before their first rendered frame.
     if (this.presentedDrill !== this.sim.drillRevision) this.syncTargets();
@@ -634,6 +651,96 @@ export class RangeEngine {
     this.audio.playAction('range-player',this.sim.equipped,shot.attack==='secondary'?'fire-alt':'fire',this.sim.time,
       {local:true,volume:this.sim.settings.volume});
   }
+
+  /** Pop: every ray pops the first ball it crosses; misses mark the dark wall behind them. Knife swings count too. */
+  private popShot(shot: Shot) {
+    const pop = this.sim.pop!;
+    const muzzles = this.viewMuzzles.get(this.sim.equipped), muzzle = muzzles?.main ?? muzzles?.[this.sim.loadedAmmo % 2 ? 'right' : 'left'];
+    if (!shot.melee) this.viewFlashes.fire(muzzle, this.sim.equipped, this.elapsed);
+    let popped = 0;
+    for (const dir of shot.pelletDirections ?? [shot.direction]) {
+      const hit = pop.hit(shot.origin, dir, shot.maxDistance);
+      const end = hit ? vector(hit.point) : this.popBackdropPoint(shot.origin, dir, shot.maxDistance);
+      if (hit) popped++;
+      else if (end) this.addImpact(this.impacts, end.clone().addScaledVector(vector(dir), -.012), end.distanceTo(vector(shot.origin)), this.missMaterial.color);
+      if (muzzle && !shot.melee && end) {
+        this.viewScene.updateMatrixWorld(true);
+        const start = viewMuzzleToWorld(muzzle.getWorldPosition(new THREE.Vector3()), this.viewCamera, this.camera, this.width, this.height);
+        if (start.distanceTo(end) > .15) this.shotEffects.trace(this.sim.equipped, shot.index, start, end, this.elapsed, this.traceColor, this.sim.settings.tracers);
+      }
+    }
+    if (shot.melee) this.sim.resolveMeleeHit(shot.ordinal, popped > 0);
+    this.kick = 1; this.hitTime = .45;
+    this.hitmarker.style.color = this.hitCaption.style.color = popped ? '#ffdc59' : '#ff7469';
+    this.hitCaption.textContent = popped > 1 ? `${popped} POPS` : popped ? 'POP' : 'MISS';
+    if (popped) this.audio.playPop(this.sim.settings.volume, popped);
+    if (shot.melee) this.audio.playKnife(shot.attack === 'secondary' ? 'stab' : 'slash', this.sim.settings.volume);
+    else {
+      this.audio.play(this.sim.equipped, this.sim.settings.volume);
+      this.audio.playAction('range-player', this.sim.equipped, shot.attack === 'secondary' ? 'fire-alt' : 'fire', this.sim.time, {local: true, volume: this.sim.settings.volume});
+    }
+  }
+  private popBackdropPoint(origin: Vec, dir: Vec, maxDistance: number) {
+    if (!this.popBackdrop) return undefined;
+    this.ray.set(vector(origin), vector(dir));
+    const hit = this.ray.intersectObject(this.popBackdrop, false)[0];
+    return hit && hit.distance <= maxDistance ? hit.point : undefined;
+  }
+  /** Mirrors the simulation's balls as glowing spheres, animates the popped ones away, and keeps the dark wall behind them. */
+  private syncPop(rebuild = false) {
+    const pop = this.sim.pop;
+    this.pop.visible = !!pop;
+    if (!pop) {
+      if (this.popMeshes.size || this.popBursts.length || this.popBackdrop) {this.pop.clear(); this.popMeshes.clear(); this.popBursts = []; this.popBackdrop = undefined;}
+      this.setPopAtmosphere(false); return;
+    }
+    this.setPopAtmosphere(true);
+    if (rebuild) {this.pop.clear(); this.popMeshes.clear(); this.popBursts = []; this.popBackdrop = undefined; this.clearImpacts();}
+    if (this.popColorApplied !== this.sim.settings.popColor) {
+      this.popColorApplied = this.sim.settings.popColor;
+      this.popMaterial.color.set(this.popColorApplied); this.popMaterial.emissive.set(this.popColorApplied);
+    }
+    const {region, config} = pop;
+    if (!this.popBackdrop) {
+      const width = Math.max(24, region.halfW * 2 + 6), height = Math.max(8, region.halfH * 2 + 4);
+      this.popBackdrop = new THREE.Mesh(new THREE.PlaneGeometry(width, height), new THREE.MeshStandardMaterial({color: '#151a28', roughness: .95, fog: false}));
+      this.popBackdrop.position.set(region.x, Math.max(height / 2, region.y), region.z - config.size - .5);
+      this.popBackdrop.name = 'pop-backdrop'; this.pop.add(this.popBackdrop);
+    }
+    for (const ball of pop.drainPopped()) {
+      const mesh = this.popMeshes.get(ball.id); if (!mesh) continue;
+      this.popMeshes.delete(ball.id);
+      const burst = this.popMaterial.clone(); burst.transparent = true; mesh.material = burst;
+      this.popBursts.push({mesh, at: this.elapsed, radius: ball.radius});
+    }
+    const live = new Set<number>();
+    for (const ball of pop.balls) {
+      live.add(ball.id);
+      let mesh = this.popMeshes.get(ball.id);
+      if (!mesh) {mesh = new THREE.Mesh(this.popGeometry, this.popMaterial); mesh.name = `pop-ball-${ball.id}`; this.popMeshes.set(ball.id, mesh); this.pop.add(mesh);}
+      mesh.position.set(ball.x, ball.y, ball.z); mesh.scale.setScalar(ball.radius);
+    }
+    for (const [id, mesh] of this.popMeshes) if (!live.has(id)) {this.popMeshes.delete(id); mesh.removeFromParent();}
+    this.popBursts = this.popBursts.filter(({mesh, at, radius}) => {
+      const t = (this.elapsed - at) / .18;
+      if (t >= 1) {mesh.removeFromParent(); (mesh.material as THREE.Material).dispose(); return false;}
+      mesh.scale.setScalar(radius * (1 + .9 * t)); (mesh.material as THREE.MeshStandardMaterial).opacity = 1 - t;
+      return true;
+    });
+  }
+  /** Pop darkens the range: black sky and near fog, dim lights, so the glowing balls stand out. */
+  private setPopAtmosphere(on: boolean) {
+    const fog = this.scene.fog as THREE.Fog;
+    if (on) {fog.near = 1.5; fog.far = (this.sim.pop?.config.distance ?? 12) + 8;}
+    if (on === this.popAtmosphere) return;
+    this.popAtmosphere = on;
+    const look = this.sceneLook, dark = '#07080d';
+    (this.scene.background as THREE.Color).set(on ? dark : look.background); fog.color.set(on ? dark : look.background);
+    if (!on) {fog.near = look.fog[0]; fog.far = look.fog[1];}
+    this.hemi.intensity = on ? .16 : look.hemi; this.sun.intensity = on ? .12 : look.sun;
+    this.scene.environmentIntensity = on ? .05 : look.environment;
+    this.renderer.shadowMap.needsUpdate = true;
+  }
   private addImpact(parent:THREE.Object3D,point:THREE.Vector3,distance:number,color:THREE.Color) {
     this.impactClouds??=new Map();let cloud=this.impactClouds.get(parent);
     if(!cloud){cloud=new ImpactCloud(this.markerGeometry,parent===this.impacts?200:60,parent);this.impactClouds.set(parent,cloud);}
@@ -672,7 +779,7 @@ export class RangeEngine {
     this.enterRevision = (this.enterRevision ?? 0) + 1; this.entering = false;
     this.shortcuts?.release();
     this.clearInput?.();
-    this.sim.cancel();
+    this.sim.publishPopResult(); this.sim.cancel();
     this.hitTime = 0;
     this.hitmarker.style.opacity = this.hitCaption.style.opacity = '0';
     if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
@@ -800,7 +907,7 @@ export class RangeEngine {
     const frameSeconds = this.previous ? Math.max(0,(timestamp - this.previous) / 1000) : 0;
     const dt = Math.min(frameSeconds,.25);
     this.previous = timestamp; this.elapsed += dt;
-    this.repeatZoom(); this.syncTargets();
+    this.repeatZoom(); this.syncTargets(); this.syncPop();
     const activeLane = this.sim.firing ? this.sim.targetForShot() : 0;
     this.targets.forEach((t, i) => {
       const marker = t.getObjectByName('active-lane') as THREE.Mesh;
@@ -912,6 +1019,7 @@ export class RangeEngine {
       const drill=this.sim.drill;
       this.onStatus({ weapon: loadoutWeapon(this.sim.settings), equipped:this.sim.equipped,slot:this.sim.slot,equipReady:this.sim.time>=this.sim.equipReadyAt,
         magazine:this.sim.slot===1?this.sim.burstSize:this.sim.stats.magazine, targetHealth: [...this.sim.targetHealth],
+        pop: this.sim.pop ? {pops: this.sim.pop.pops, shots: this.sim.pop.shots, seconds: this.sim.pop.shots ? this.sim.time - this.sim.popStartedAt : 0} : undefined,
         active: this.sim.active, firing: this.sim.firing, hitFlash:this.hitTime>0, shots: drill?.shots ?? this.sim.shots, hits: drill?.hits ?? this.sim.hits, heads: drill?.heads ?? this.sim.heads,
         remaining:this.sim.slot===3?0:this.sim.loadedAmmo,reserve:this.sim.reserveAmmo,reloadSilent:this.sim.reloadSilent,
         recharge:Math.max(0,this.sim.rechargeUntil-this.sim.time),reload: reloadRemaining, reloadProgress: reloading ? this.sim.reloadState.progress : undefined,
@@ -920,7 +1028,7 @@ export class RangeEngine {
           phase:drill.finished?(this.sim.repositionFrom?'reposition':'feedback'):drill.visible?'exposed':'prepare',accurate:drill.accurate,error:drill.error,
           remaining:this.sim.settings.mode==='peek' && drill.firstShotAt!==null ? Math.max(0,this.sim.settings.peekDuration-(this.sim.time-drill.firstShotAt)) : undefined,
           last:this.sim.settings.mode==='peek' && drill.shots>0 ? drill.result() : this.sim.drillResult}} : {}),
-        speed: moving / .0254, distance, input: this.inputStatus, shortcutProtected: this.shortcuts.protected, audio: this.audio.status, assets: this.assetStatus, fps: this.metrics.fps });
+        speed: moving / .0254, distance: this.sim.pop ? this.sim.pop.config.distance : distance, input: this.inputStatus, shortcutProtected: this.shortcuts.protected, audio: this.audio.status, assets: this.assetStatus, fps: this.metrics.fps });
     }
   }
   disposeObject(root: THREE.Object3D) {
@@ -938,6 +1046,7 @@ export class RangeEngine {
     disposeResources([this.scene, ...this.solids]); this.modelCache.forEach(m => this.disposeObject(m));
     this.viewAnimations.forEach(animation => animation.dispose());
     this.scope.dispose();
+    this.popGeometry.dispose(); this.popMaterial.dispose(); this.popBackdrop?.geometry.dispose(); (this.popBackdrop?.material as THREE.Material | undefined)?.dispose();
     this.markerGeometry.dispose(); this.missMaterial.dispose(); this.hitMaterial.dispose(); this.bodyMaterial.dispose();
     this.cues.forEach(c => c.remove()); this.hitCaption.remove();
     this.environment?.dispose(); this.renderer.dispose(); this.renderer.domElement.remove();

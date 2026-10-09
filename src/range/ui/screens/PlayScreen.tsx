@@ -1,7 +1,7 @@
 import {RecentSessions} from '../RecentSessions';
 import type {RecentSession} from '../session-data';
 import {memo, useEffect, useState} from 'react';
-import {Check, Crosshair, GraduationCap, Headphones, Minimize, MoveHorizontal, RotateCcw, Target, Zap} from 'lucide-react';
+import {Check, Circle, Crosshair, GraduationCap, Headphones, Minimize, MoveHorizontal, RotateCcw, Target, Zap} from 'lucide-react';
 import {modeNames, type Mode, type Settings} from '../../config';
 import {modeInfo} from '../../mode-info';
 import {cosmeticLabel, cosmeticPreview} from '../../cosmetics';
@@ -25,7 +25,7 @@ export const PlayScreen = memo(function PlayScreen({settings, profile, update, s
   return <section className="sl-play sl-menu-page" aria-label="Play setup">
     <div className="sl-play-heading"><Tabs label="Drill categories" value={category} items={drillCategories} onChange={setCategory}/><select aria-label="Training mode" value={settings.mode} onChange={event => selectMode(event.target.value as Mode)}>{Object.entries(modeNames).map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></div>
     <div className="sl-play-body"><div className="sl-play-main"><div className="sl-drill-tiles">{drillCategories.find(item => item.id === category)!.modes.map(mode => {
-      const Icon = mode === 'hearing' ? Headphones : mode === 'precision' || mode === 'peek' ? MoveHorizontal : mode === 'reflex' ? Zap : mode === 'guided' ? Crosshair : Target;
+      const Icon = mode === 'pop' ? Circle : mode === 'hearing' ? Headphones : mode === 'precision' || mode === 'peek' ? MoveHorizontal : mode === 'reflex' ? Zap : mode === 'guided' ? Crosshair : Target;
       return <Tile key={mode} selected={mode === settings.mode} onClick={() => selectMode(mode)} className={`sl-drill-tile sl-drill-${mode}`}>
         <div className="sl-drill-art" aria-hidden="true"><div className="sl-map-lines"/>{['botz','redline','deathmatch'].includes(mode) ? <img src="/models/target.png" alt=""/> : <Icon size={58} strokeWidth={1}/>}<span>{mode === 'redline' || mode === 'deathmatch' ? 'AIM_REDLINE' : mode === 'reflex' ? 'FAST AIM / REFLEX' : modeNames[mode]}</span></div>
         <div><h2>{modeNames[mode]}</h2><p>{modeInfo[mode].benefit}</p></div>{settings.mode === mode && <Check className="sl-selected-check" size={20}/>}
