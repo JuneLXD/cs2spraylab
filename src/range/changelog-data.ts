@@ -314,6 +314,10 @@ export const latestChanges = {
       'Standing jumps now use the measured launch velocity. Crouching in midair shifts the collision origin by nine Source units, correcting the extra jump height.',
       'The crouch camera now follows the recorded eye and origin offsets, including its short return after the standing hull is restored.',
     ]},
+    {id: 'native-scheduled-recoil', title: 'Recoil at the scheduled shot time', items: [
+      'Held-fire recoil now starts at each shot’s exact schedule and decays through its processing tick. Fresh AK recordings reduced the measured recoil error from 0.338 degrees to less than 0.000003 degrees.',
+      'Bullets and next-shot guides sample the same scheduled recoil; firing cadence is unchanged.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

@@ -159,15 +159,16 @@ export class DuelWeaponState {
       this.burstEnd = scheduled + this.actions.burstCycle;
     }
     const speedRatio = Math.hypot(actor.velocity.x, actor.velocity.z) / (stats.speed * UNIT);
+    const processingDelay = Math.max(0, time - scheduled);
     const directions = shotDirections({
-      yaw: actor.yaw, pitch: actor.pitch, recoil: this.recovery.recoil, punch, weapon: stats,
+      yaw: actor.yaw, pitch: actor.pitch, recoil: this.recovery.recoilBefore(processingDelay), punch, weapon: stats,
       recovery: this.recovery, speedRatio, walking: command.walk, airborne,
       verticalSpeedUnits: actor.verticalVelocity / UNIT, spread: this.options.spread !== false,
       weaponId: this.id, alternateFire: this.actions.alternateFire,
       recoilIndex: this.recovery.index, seed: this.ordinal + 1,
     }, stats.pellets, this.random);
     const direction = directions[0];
-    if (this.id !== 'zeus') this.recovery.fire();
+    if (this.id !== 'zeus') this.recovery.fire(processingDelay);
     this.actions.afterShot(time);
     this.ammo--;
     if (isPumpShotgun(this.id)) this.pumpUntil = scheduled + stats.cycle;

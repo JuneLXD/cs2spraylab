@@ -123,16 +123,16 @@ export class Simulation {
   predictedRecoil(next=false){
     if (this.equipped === 'knife' || this.equipped === 'zeus') return {yaw: 0, pitch: 0};
     const due=this.firing?this.nextShot:Math.max(this.time,this.shotReady.get(this.equipped) ?? 0,this.burstEnd);
-    // A held or queued shot is processed on the server tick at or after its schedule; a press at a ready weapon fires now.
-    const processedAt=(at:number)=>this.firing||at>this.time+1e-9?tickAligned(at):at;
-    const scheduledDelay=(at:number)=>Math.max(0,Math.ceil((processedAt(at)-this.time)/STEP-1e-8))*STEP;
-    const delay=scheduledDelay(due);
-    if(!next)return this.recovery.predict(delay);
+    // Punch follows the exact scheduled command time even when a held shot is
+    // processed on the following server tick.
+    const delay=Math.max(0,due-this.time);
+    const processingDelay=Math.max(0,this.time-due);
+    if(!next)return processingDelay?this.recovery.recoilBefore(processingDelay):this.recovery.predict(delay);
     const state=Object.assign(Object.create(WeaponRecovery.prototype),this.recovery) as WeaponRecovery;
     state.advance(delay);
     const cadence = this.actions.burst && this.burstLeft !== 1 ? this.actions.burstInterval : this.stats.cycle;
     const following = this.actions.burst && this.burstLeft === 1 ? this.burstEnd : due + cadence;
-    return state.predict(scheduledDelay(following)-delay,true);
+    return state.predict(Math.max(0,following-this.time)-delay,true,processingDelay);
   }
   get burstSize() {
     if (this.slot === 3 || this.settings.mode === 'precision') return 1;
@@ -478,7 +478,8 @@ export class Simulation {
     // now, like the game's stale next-attack time; one processed on the next tick keeps its exact schedule.
     if (this.time - this.nextShot > SERVER_TICK + 1e-9) this.nextShot = this.time;
     if (this.actions.burst && !this.burstLeft) {this.burstLeft = 3; this.burstEnd = this.nextShot + this.actions.burstCycle;}
-    this.recoil = this.equipped === 'zeus' ? {yaw: 0, pitch: 0} : this.recovery.recoil;
+    const processingDelay = Math.max(0, this.time - this.nextShot);
+    this.recoil = this.equipped === 'zeus' ? {yaw: 0, pitch: 0} : this.recovery.recoilBefore(processingDelay);
     if (this.equipped === 'zeus') this.recovery.penalty = !this.grounded ? weapon.stand + weapon.jump : this.duckAmount >= .95 ? weapon.crouch : weapon.stand;
     const ordinal = this.shotOrdinals.get(this.equipped) ?? 0;
     const directions = shotDirections({yaw:this.yaw,pitch:this.pitch,recoil:this.recoil,weapon,recovery:this.recovery,
@@ -490,7 +491,7 @@ export class Simulation {
     this.reloadState.ammo--;
     if (this.pop) this.refillPopAmmo(); this.shotOrdinals.set(this.equipped, ordinal + 1);
     if (this.equipped !== 'zeus') {
-      this.recovery.fire(); this.viewPunch.add(this.recovery.lastViewPunch, this.time);
+      this.recovery.fire(processingDelay); this.viewPunch.add(this.recovery.lastViewPunch, this.time);
     }
     else {
       this.rechargeTimes.set('zeus', this.time + ZEUS_RECHARGE_SECONDS);

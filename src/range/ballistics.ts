@@ -74,6 +74,12 @@ export class WeaponRecovery {
       :recoilTable(weapon).map(p=>viewPunchImpulse(p.angle,p.magnitude));
   }
   get recoil(){return{yaw:this.angle.yaw*2,pitch:this.angle.pitch*2};}
+  /** Held fire is processed on a server tick, but its punch uses the exact
+   * scheduled command time. Delay is local to this recovery clock. */
+  recoilBefore(delay=0){
+    const angle=this.punch.sample(this.time-this.anchorAt-Math.max(0,delay));
+    return {yaw:angle.yaw*2,pitch:angle.pitch*2};
+  }
   setParameters(weapon: AccuracyParameters) {
     if (this.weapon === weapon) return;
     // Preserve accumulated firing error while switching stance/zoom baselines.
@@ -105,24 +111,32 @@ export class WeaponRecovery {
   land(landingSpeedUnits:number){
     this.penalty+=(this.weapon.land ?? 0)*Math.max(0,landingSpeedUnits);
   }
-  fire(){
-    const recoil=this.recoil;
+  fire(processingDelay=0){
+    const shotTime=this.time-Math.max(0,processingDelay),elapsed=shotTime-this.anchorAt;
+    const recoil=this.recoilBefore(processingDelay);
     const impulse=this.impulses[Math.floor(this.index)%this.impulses.length];
     this.lastViewPunch=this.viewImpulses[Math.floor(this.index)%this.viewImpulses.length];
     // Native 0x1515420 samples the carried angle at command + 1 tick, but
     // velocity and its new anchor at command + half a tick (64 Hz clock).
-    const carried=this.punch.sample(this.time-this.anchorAt+1/128);
+    const carried=this.punch.sample(elapsed+1/128),velocity=this.punch.velocity(elapsed);
     this.angle={yaw:carried.yaw,pitch:carried.pitch};this.roll=carried.roll;
-    this.velocity={yaw:Math.fround(this.velocity.yaw+impulse.yaw),pitch:Math.fround(this.velocity.pitch+impulse.pitch)};
-    this.punch=new PunchRecovery({...this.angle,roll:this.roll},{...this.velocity,roll:0});this.anchorAt=this.time;
-    this.penalty+=this.weapon.fire;this.index++;this.lastShot=this.time;
+    this.velocity={yaw:Math.fround(velocity.yaw+impulse.yaw),pitch:Math.fround(velocity.pitch+impulse.pitch)};
+    this.punch=new PunchRecovery({...this.angle,roll:this.roll},{...this.velocity,roll:0});this.anchorAt=shotTime;
+    this.penalty+=this.weapon.fire;this.index++;this.lastShot=shotTime;
+    // Rendering stays at the processed time; only the impulse's anchor and the
+    // bullet's pre-shot punch are sampled at the earlier schedule.
+    if(processingDelay>0){
+      const angle=this.punch.sample(processingDelay),currentVelocity=this.punch.velocity(processingDelay);
+      this.angle={yaw:angle.yaw,pitch:angle.pitch};this.roll=angle.roll;
+      this.velocity={yaw:currentVelocity.yaw,pitch:currentVelocity.pitch};
+    }
     return recoil;
   }
-  predict(seconds:number,afterShot=false){
+  predict(seconds:number,afterShot=false,processingDelay=0){
     const copy=Object.assign(Object.create(WeaponRecovery.prototype),this) as WeaponRecovery;
     copy.angle={...this.angle};copy.velocity={...this.velocity};
     copy.punch=this.punch.clone();
-    if(afterShot)copy.fire();copy.advance(seconds);return copy.recoil;
+    if(afterShot)copy.fire(processingDelay);copy.advance(seconds);return copy.recoil;
   }
   inaccuracy(speedRatio:number,walking=false,airborne=false,verticalSpeedUnits=0){
     return Math.min(1,this.penalty+movementInaccuracy(this.weapon,speedRatio,walking)+(airborne?airborneInaccuracy(this.weapon,verticalSpeedUnits):0));

@@ -1,0 +1,7709 @@
+{
+  "baseline": "c488943f9721462b15066a3faafa5879ca001a6b",
+  "vdataSha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b",
+  "binaries": {
+    "libclient.so": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+    "libserver.so": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a"
+  },
+  "statComparisons": 2730,
+  "statMismatches": [],
+  "taggingComparisons": 108,
+  "taggingMismatches": [],
+  "spread": [
+    {
+      "weaponId": "ak47",
+      "alternateFire": false,
+      "recoilIndex": 0,
+      "count": 100000,
+      "meanRadius": 0.5007937092169521,
+      "meanSquaredRadius": 0.3338236564107496,
+      "bins": [
+        9981,
+        9833,
+        9945,
+        9970,
+        10176,
+        10165,
+        9901,
+        10033,
+        9995,
+        10001
+      ]
+    },
+    {
+      "weaponId": "revolver",
+      "alternateFire": true,
+      "recoilIndex": 0,
+      "count": 100000,
+      "meanRadius": 0.6661763436032424,
+      "meanSquaredRadius": 0.5324606362065117,
+      "bins": [
+        5078,
+        5482,
+        5803,
+        6197,
+        6766,
+        7445,
+        8406,
+        10344,
+        13083,
+        31396
+      ]
+    },
+    {
+      "weaponId": "negev",
+      "alternateFire": false,
+      "recoilIndex": 0,
+      "count": 100000,
+      "meanRadius": 0.8889327622399169,
+      "meanSquaredRadius": 0.8365656232852419,
+      "bins": [
+        1307,
+        1391,
+        1633,
+        1828,
+        2140,
+        2530,
+        3214,
+        4170,
+        6813,
+        74974
+      ]
+    },
+    {
+      "weaponId": "negev",
+      "alternateFire": false,
+      "recoilIndex": 1,
+      "count": 100000,
+      "meanRadius": 0.7998920508873514,
+      "meanSquaredRadius": 0.7108513393664248,
+      "bins": [
+        2550,
+        2833,
+        3136,
+        3534,
+        3883,
+        4556,
+        5480,
+        7162,
+        10602,
+        56264
+      ]
+    },
+    {
+      "weaponId": "negev",
+      "alternateFire": false,
+      "recoilIndex": 2,
+      "count": 100000,
+      "meanRadius": 0.6661763436032424,
+      "meanSquaredRadius": 0.5324606362065117,
+      "bins": [
+        5078,
+        5482,
+        5803,
+        6197,
+        6766,
+        7445,
+        8406,
+        10344,
+        13083,
+        31396
+      ]
+    },
+    {
+      "weaponId": "negev",
+      "alternateFire": false,
+      "recoilIndex": 3,
+      "count": 100000,
+      "meanRadius": 0.5007937092169521,
+      "meanSquaredRadius": 0.3338236564107496,
+      "bins": [
+        9981,
+        9833,
+        9945,
+        9970,
+        10176,
+        10165,
+        9901,
+        10033,
+        9995,
+        10001
+      ]
+    }
+  ],
+  "tagging": [
+    {
+      "held": "ak47",
+      "first": {
+        "flinchStack": 0.4,
+        "velocityModifier": 0.26584615384615384
+      },
+      "second": {
+        "flinchStack": 0.07,
+        "velocityModifier": 0.21823529411764706
+      },
+      "afterHalfSecond": {
+        "flinchStack": 0.245,
+        "velocityModifier": 0.41823529411764704
+      }
+    },
+    {
+      "held": "awp",
+      "first": {
+        "flinchStack": 0.4,
+        "velocityModifier": 0.22892307692307692
+      },
+      "second": {
+        "flinchStack": 0.07,
+        "velocityModifier": 0.2
+      },
+      "afterHalfSecond": {
+        "flinchStack": 0.245,
+        "velocityModifier": 0.4
+      }
+    },
+    {
+      "held": "knife",
+      "first": {
+        "flinchStack": 0.4,
+        "velocityModifier": 0.35200000000000004
+      },
+      "second": {
+        "flinchStack": 0.07,
+        "velocityModifier": 0.27999999999999997
+      },
+      "afterHalfSecond": {
+        "flinchStack": 0.245,
+        "velocityModifier": 0.48
+      }
+    }
+  ],
+  "recoilComparison": [
+    {
+      "demo": "native_audit_ak_002.dem",
+      "beforeMaxAngleError": 0.3594419680891449,
+      "afterMaxAngleError": 0.0017296654720583492,
+      "afterMaxVelocityError": 0.049930944571783535,
+      "beforeErrors": [
+        0,
+        0.2041294537845842,
+        0.11697586065559844,
+        0.32565564148741766,
+        0.23902238584682323,
+        0.015293323170301739,
+        0.22692436763842394,
+        0.10265006628909651,
+        0.3594419680891449,
+        0.21168775935315698,
+        0.03309736123029229
+      ],
+      "afterErrors": [
+        0,
+        0.0003198643354653537,
+        0.0016581152366435831,
+        0.0017296654720583492,
+        0.0013966597100128091,
+        0.001015433125787691,
+        0.0006653393402832504,
+        0.00044741871960935045,
+        0.0002838627788641942,
+        0.00019337739302338012,
+        0.00013326004398725186
+      ]
+    },
+    {
+      "demo": "native_phase3_m4a4_002.dem",
+      "beforeMaxAngleError": 0.34481255281810047,
+      "afterMaxAngleError": 3.4266191367637657e-06,
+      "afterMaxVelocityError": 3.069957466663336e-05,
+      "beforeErrors": [
+        0,
+        0.1626244698233279,
+        0.008981610052384065,
+        0.05069548259944627,
+        0.1511680870496246,
+        0.2538960798637431,
+        0.34481255281810047,
+        0.10881883705088556,
+        0.11304738199394757,
+        0.17106781096873974,
+        0.2817138508890117,
+        0.06929036492716657,
+        0.0949649606049343,
+        0.17764615837323577,
+        0.24385509858669593,
+        0.02470439090554245,
+        0.04416479936578443,
+        0.1336160619671089,
+        0.2320288779752075,
+        0.03669868919495034,
+        0.040567818214040555,
+        0.16108726434368928,
+        0.23115905911789447,
+        0.020688821921902186,
+        0.026201458002142165,
+        0.10832396421434554,
+        0.21948921510476352,
+        0.013568092369449131,
+        0.014369221887901894,
+        0.11507406865418214
+      ],
+      "afterErrors": [
+        0,
+        1.501712528671799e-08,
+        1.8344927209980978e-07,
+        1.82653228523303e-07,
+        4.854060495760063e-07,
+        7.19125778199056e-07,
+        9.652456486643342e-07,
+        5.146836054077906e-07,
+        1.9524501984309195e-06,
+        2.1457672119140625e-06,
+        1.4354699347963684e-06,
+        1.1091109553532836e-06,
+        1.3328003749250113e-06,
+        1.5993604499100135e-06,
+        1.6689300537109375e-06,
+        1.6731821116945983e-06,
+        1.1920928955078125e-06,
+        1.6561083781063325e-06,
+        2.633419279381576e-06,
+        2.1981106894714567e-06,
+        3.337860107421875e-06,
+        3.4266191367637657e-06,
+        1.92040069860429e-06,
+        1.5200827839302395e-06,
+        6.743495761743046e-07,
+        1.925092197103818e-06,
+        9.762250992154597e-07,
+        1.922192036699903e-06,
+        1.9304912973286683e-06,
+        2.132480599880018e-06
+      ]
+    },
+    {
+      "demo": "native_phase3_m4a1s_001.dem",
+      "beforeMaxAngleError": 0.3383604155981806,
+      "afterMaxAngleError": 4.3962213789429135e-06,
+      "afterMaxVelocityError": 3.088786075725869e-05,
+      "beforeErrors": [
+        0,
+        0.1344580465974953,
+        0.2020373632044499,
+        0.03563691072232251,
+        0.05016278796363168,
+        0.14473693083520864,
+        0.2475763625181364,
+        0.3383604155981806,
+        0.10046679152537523,
+        0.087513054934188,
+        0.17751850775429062,
+        0.28702439341837,
+        0.06515954421470357,
+        0.08639820653307463,
+        0.13068938277579528,
+        0.24655332242835248,
+        0.014040098699154676,
+        0.05377018468552296,
+        0.11731629843817862,
+        0.247787492081226,
+        0.03994250875977987,
+        0.06783725326058486,
+        0.11274877632804002,
+        0.22815006426964288,
+        0.006169952787335044,
+        0.009477965033238006,
+        0.1026236252566144,
+        0.21538833009849598,
+        0.01703293533649418,
+        0.05859082137346318
+      ],
+      "afterErrors": [
+        0,
+        1.501712528671799e-08,
+        1.2128666487410446e-07,
+        1.884864366154897e-07,
+        4.885139799331534e-07,
+        7.19125778199056e-07,
+        4.995779578161303e-07,
+        4.995779578161303e-07,
+        1.7133095683818828e-06,
+        1.6731821116945983e-06,
+        9.610960183499514e-07,
+        1.5078914929239175e-06,
+        2.2437012463472736e-06,
+        1.8659205248950158e-06,
+        2.1490760299348767e-06,
+        1.6858739404357613e-06,
+        1.7192608239479015e-06,
+        1.984037992607741e-06,
+        2.8709398695927367e-06,
+        2.5259995580216755e-06,
+        3.3399881663613077e-06,
+        4.3962213789429135e-06,
+        1.917927641059302e-06,
+        6.435162687805052e-07,
+        1.066240299940009e-06,
+        2.4027400458748785e-06,
+        1.4502435994859263e-06,
+        1.445643047766078e-06,
+        1.9353160971467757e-06,
+        2.218221910706567e-06
+      ]
+    },
+    {
+      "demo": "native_reaudit_recovery_001.dem",
+      "beforeMaxAngleError": 0.23533713049468385,
+      "afterMaxAngleError": 2.1490760299348767e-06,
+      "afterMaxVelocityError": 1.528856233776226e-05,
+      "beforeErrors": [
+        0,
+        0.23533713049468385,
+        0.17892865790795162,
+        0.021333976373110172,
+        0.23064796193847745,
+        0.11462301990160831
+      ],
+      "afterErrors": [
+        0,
+        5.978176151047874e-08,
+        1.78901224511662e-07,
+        5.960930120637898e-07,
+        1.6689310931331301e-06,
+        2.1490760299348767e-06
+      ]
+    },
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "beforeMaxAngleError": 0.33819934578088895,
+      "afterMaxAngleError": 2.3871641629339203e-06,
+      "afterMaxVelocityError": 7.688768146799611e-06,
+      "beforeErrors": [
+        0,
+        0.21099974767911575,
+        0.12977438158901028,
+        0.33819934578088895,
+        0.2525699128874127,
+        0.030529794590557303,
+        0.23929818262757105,
+        0.1166390167073697
+      ],
+      "afterErrors": [
+        0,
+        4.2782630771398544e-09,
+        1.788527352237374e-07,
+        4.76837158203125e-07,
+        1.430511474609375e-06,
+        1.9110702922202824e-06,
+        2.3871641629339203e-06,
+        1.4354699347963684e-06
+      ]
+    }
+  ],
+  "hitboxes": {
+    "capsulesEqual": true,
+    "positionErrors": [
+      {
+        "model": "target",
+        "maxPositionError": 1.3228747780993879e-05,
+        "maxLocalMapError": 1.0044576004286654e-05
+      },
+      {
+        "model": "agent-ava",
+        "maxPositionError": 1.2967457131873965e-05,
+        "maxLocalMapError": 9.722800228040285e-06
+      },
+      {
+        "model": "agent-dabisi",
+        "maxPositionError": 2.1048295968197913e-05,
+        "maxLocalMapError": 1.599323029166655e-05
+      },
+      {
+        "model": "agent-darryl",
+        "maxPositionError": 1.2747746023097771e-05,
+        "maxLocalMapError": 9.586355267821034e-06
+      },
+      {
+        "model": "agent-ricksaw",
+        "maxPositionError": 8.94321076832856e-06,
+        "maxLocalMapError": 6.626878250592938e-06
+      },
+      {
+        "model": "agent-sas",
+        "maxPositionError": 1.3228747780993879e-05,
+        "maxLocalMapError": 1.0044576004286654e-05
+      },
+      {
+        "model": "agent-slingshot",
+        "maxPositionError": 2.1567016574651806e-05,
+        "maxLocalMapError": 1.6463127802568422e-05
+      }
+    ],
+    "priorDumpSha256": "7058d1222fce2d76140809828e0d3a5550fb0e229d921275183535d376aab201"
+  },
+  "demos": [
+    {
+      "demo": "native_audit_ak_002.dem",
+      "sha256": "feadebd8538a044283a42ef2e78fa97db98591d9c2565c6fbce22d684b76835c",
+      "actualWeapons": [
+        "AK-47"
+      ],
+      "standSamples": 3999,
+      "shotSamples": 14,
+      "maxShotPenaltyError": 0.0007264845394918257,
+      "maxFireThenDecayError": 1.2654740311202062e-09
+    },
+    {
+      "demo": "native_phase3_m4a4_002.dem",
+      "sha256": "f53be58ed36519b8b75a0fe233cad7abf3fc2593947f86a4cdc6659f38d4d774",
+      "actualWeapons": [
+        "M4A4"
+      ],
+      "standSamples": 5036,
+      "shotSamples": 36,
+      "maxShotPenaltyError": 0.0007049587656828352,
+      "maxFireThenDecayError": 3.471123551784805e-09
+    },
+    {
+      "demo": "native_phase3_m4a1s_001.dem",
+      "sha256": "2783d539fca2df90766626d2b498c184673103260c746d2376dad942708bad76",
+      "actualWeapons": [
+        "M4A4"
+      ],
+      "standSamples": 5238,
+      "shotSamples": 34,
+      "maxShotPenaltyError": 0.006999999806563313,
+      "maxFireThenDecayError": 0.00629504092737315
+    },
+    {
+      "demo": "native_audit_deagle_001.dem",
+      "sha256": "0fdd476a1650f7a58af769d789bdaaebc41469f88b457eaadf97abe2053772be",
+      "actualWeapons": [
+        "Desert Eagle",
+        "knife"
+      ],
+      "standSamples": 3027,
+      "shotSamples": 5,
+      "maxShotPenaltyError": 0.0031335129485529772,
+      "maxFireThenDecayError": 9.419980018243734e-09
+    },
+    {
+      "demo": "native_reaudit_recovery_001.dem",
+      "sha256": "9f2616be8f3232651f2b2be130b48dbf3881709f35d302d9b656aded4a659f50",
+      "actualWeapons": [
+        "AK-47"
+      ],
+      "standSamples": 1127,
+      "shotSamples": 8,
+      "maxShotPenaltyError": 0.0007264840982026278,
+      "maxFireThenDecayError": 1.2298639155694513e-09
+    },
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "sha256": "37b6f44d6c8ca327d580f9eeb289928eb917d0ec9b7e05e8dfc241eced4b9442",
+      "actualWeapons": [
+        "AK-47",
+        "knife_t"
+      ],
+      "standSamples": 1237,
+      "shotSamples": 22,
+      "maxShotPenaltyError": 0.0007264852151720701,
+      "maxFireThenDecayError": 0.0007264834003352493
+    }
+  ],
+  "weaponTiming": {
+    "ak47": {
+      "cycle": 0.1,
+      "deploy": 1,
+      "reload": 2.466667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.1,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.109375,
+            0.203125,
+            0.3125,
+            0.40625,
+            0.5,
+            0.609375,
+            0.703125
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.109375,
+            0.203125,
+            0.3125,
+            0.40625,
+            0.5,
+            0.609375,
+            0.703125
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 1.1015625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.466667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.5999999999999996,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.172390909090904,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.1015625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.466667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.5999999999999996,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.172390909090904,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        }
+      ]
+    },
+    "m4a4": {
+      "cycle": 0.09,
+      "deploy": 1.133333,
+      "reload": 3.066667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.09,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.09375,
+            0.1875,
+            0.28125,
+            0.375,
+            0.453125,
+            0.546875,
+            0.640625
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.09375,
+            0.1875,
+            0.28125,
+            0.375,
+            0.453125,
+            0.546875,
+            0.640625
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 1.3671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 120
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.066667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 90
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 2.5390625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 120
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 120
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.9333333333333336,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.943434680134671,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 90
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.3671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 120
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.066667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 90
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.5390625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 120
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 120
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.9333333333333336,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.943434680134671,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 90
+            }
+          ]
+        }
+      ]
+    },
+    "m4a1s": {
+      "cycle": 0.1,
+      "deploy": 1.133333,
+      "reload": 3.066667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.1,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.109375,
+            0.203125,
+            0.3125,
+            0.40625,
+            0.5,
+            0.609375,
+            0.703125
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.109375,
+            0.203125,
+            0.3125,
+            0.40625,
+            0.5,
+            0.609375,
+            0.703125
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 1.3671875,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.066667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 2.5390625,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.9333333333333336,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.943434680134671,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.3671875,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.066667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.5390625,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.9333333333333336,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.943434680134671,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            }
+          ]
+        }
+      ]
+    },
+    "galil": {
+      "cycle": 0.09,
+      "deploy": 1.1,
+      "reload": 3.033333,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.09,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.09375,
+            0.1875,
+            0.28125,
+            0.375,
+            0.453125,
+            0.546875,
+            0.640625
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.09375,
+            0.1875,
+            0.28125,
+            0.375,
+            0.453125,
+            0.546875,
+            0.640625
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 34,
+          "insertions": [
+            {
+              "at": 1.171875,
+              "ammo": 35
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 34,
+              "reserve": 140
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.033333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 35,
+              "reserve": 105
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 34,
+          "insertions": [
+            {
+              "at": 2.140625,
+              "ammo": 35
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 34,
+              "reserve": 140
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 34,
+              "reserve": 140
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.2,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 35,
+              "reserve": 105
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.041750505050497,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 35,
+              "reserve": 105
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.171875,
+              "ammo": 35
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 140
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.033333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 35,
+              "reserve": 105
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.140625,
+              "ammo": 35
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 140
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 140
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.2,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 35,
+              "reserve": 105
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.041750505050497,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 35,
+              "reserve": 105
+            }
+          ]
+        }
+      ]
+    },
+    "famas": {
+      "cycle": 0.09,
+      "deploy": 1,
+      "reload": 3.3,
+      "fullAuto": true,
+      "hasBurst": true,
+      "burstCycle": 0.55,
+      "burstInterval": 0.075,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.09,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.09375,
+            0.1875,
+            0.28125,
+            0.375,
+            0.453125,
+            0.546875,
+            0.640625
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0.3125,
+            0.375,
+            0.453125,
+            0.859375,
+            0.9375,
+            1,
+            1.40625,
+            1.484375
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 24,
+          "insertions": [
+            {
+              "at": 1.671875,
+              "ammo": 25
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 24,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.3,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 75
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 24,
+          "insertions": [
+            {
+              "at": 3.140625,
+              "ammo": 25
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 24,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 24,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-mode",
+              "at": 5.266666666666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 75
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.839057239057234,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 75
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.671875,
+              "ammo": 25
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.3,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 75
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 3.140625,
+              "ammo": 25
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-mode",
+              "at": 5.266666666666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 75
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.839057239057234,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 75
+            }
+          ]
+        }
+      ]
+    },
+    "sg553": {
+      "cycle": 0.11,
+      "deploy": 1,
+      "reload": 2.766667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 1,
+      "zoomFov": [
+        45,
+        90
+      ],
+      "zoomTime": [
+        0.06,
+        0.1,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.11,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.125,
+            0.234375,
+            0.34375,
+            0.453125,
+            0.5625,
+            0.671875,
+            0.78125
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.125,
+            0.234375,
+            0.34375,
+            0.453125,
+            0.5625,
+            0.671875,
+            0.78125
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 1.0390625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.766667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 1.8671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.266666666666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.805387542087537,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.0390625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.766667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.8671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.266666666666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.805387542087537,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        }
+      ]
+    },
+    "aug": {
+      "cycle": 0.1,
+      "deploy": 1.16667,
+      "reload": 3.2,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 1,
+      "zoomFov": [
+        45,
+        90
+      ],
+      "zoomTime": [
+        0.06,
+        0.1,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.1,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.109375,
+            0.203125,
+            0.3125,
+            0.40625,
+            0.5,
+            0.609375,
+            0.703125
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.109375,
+            0.203125,
+            0.3125,
+            0.40625,
+            0.5,
+            0.609375,
+            0.703125
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 1.40625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.2,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 2.6015625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 5.733333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.969023569023567,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.40625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.2,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.6015625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 5.733333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.969023569023567,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        }
+      ]
+    },
+    "mp9": {
+      "cycle": 0.07,
+      "deploy": 1.2,
+      "reload": 2.133333,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.07,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.078125,
+            0.140625,
+            0.21875,
+            0.28125,
+            0.359375,
+            0.421875,
+            0.5
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.078125,
+            0.140625,
+            0.21875,
+            0.28125,
+            0.359375,
+            0.421875,
+            0.5
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 0.8671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.133333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 1.5390625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.1333333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.6047134680134634,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 0.8671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.133333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.5390625,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.1333333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.6047134680134634,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            }
+          ]
+        }
+      ]
+    },
+    "mp7": {
+      "cycle": 0.08,
+      "deploy": 1,
+      "reload": 3.166667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.08,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.09375,
+            0.171875,
+            0.25,
+            0.328125,
+            0.40625,
+            0.484375,
+            0.5625
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.09375,
+            0.171875,
+            0.25,
+            0.328125,
+            0.40625,
+            0.484375,
+            0.5625
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 1.4375,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.166667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 2.671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.666666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.407407744107736,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.4375,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.166667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.666666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.407407744107736,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        }
+      ]
+    },
+    "mp5sd": {
+      "cycle": 0.08,
+      "deploy": 1,
+      "reload": 2.966667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.08,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.09375,
+            0.171875,
+            0.25,
+            0.328125,
+            0.40625,
+            0.484375,
+            0.5625
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.09375,
+            0.171875,
+            0.25,
+            0.328125,
+            0.40625,
+            0.484375,
+            0.5625
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.966667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 3.8046875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.866666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.304377441077437,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.966667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 3.8046875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.866666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.304377441077437,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        }
+      ]
+    },
+    "mac10": {
+      "cycle": 0.075,
+      "deploy": 1,
+      "reload": 2.566667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.075,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.078125,
+            0.15625,
+            0.234375,
+            0.3125,
+            0.375,
+            0.453125,
+            0.53125
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.078125,
+            0.15625,
+            0.234375,
+            0.3125,
+            0.375,
+            0.453125,
+            0.53125
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 1.203125,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.566667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 2.203125,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.066666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.504377441077437,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.203125,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.566667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.203125,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 90
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.066666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.504377441077437,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 60
+            }
+          ]
+        }
+      ]
+    },
+    "ump45": {
+      "cycle": 0.09,
+      "deploy": 1,
+      "reload": 3.466667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.09,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.09375,
+            0.1875,
+            0.28125,
+            0.375,
+            0.453125,
+            0.546875,
+            0.640625
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.09375,
+            0.1875,
+            0.28125,
+            0.375,
+            0.453125,
+            0.546875,
+            0.640625
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 24,
+          "insertions": [
+            {
+              "at": 1.5390625,
+              "ammo": 25
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 24,
+              "reserve": 75
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.466667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 50
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 24,
+          "insertions": [
+            {
+              "at": 2.8671875,
+              "ammo": 25
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 24,
+              "reserve": 75
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 24,
+              "reserve": 75
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.8,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 50
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.776431313131304,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 50
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.5390625,
+              "ammo": 25
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 75
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.466667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 50
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.8671875,
+              "ammo": 25
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 75
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 75
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.8,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 50
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.776431313131304,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 25,
+              "reserve": 50
+            }
+          ]
+        }
+      ]
+    },
+    "p90": {
+      "cycle": 0.07,
+      "deploy": 1,
+      "reload": 3.366667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.07,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.078125,
+            0.140625,
+            0.21875,
+            0.28125,
+            0.359375,
+            0.421875,
+            0.5
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.078125,
+            0.140625,
+            0.21875,
+            0.28125,
+            0.359375,
+            0.421875,
+            0.5
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 49,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 50
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 49,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.366667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 50,
+              "reserve": 50
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 49,
+          "insertions": [
+            {
+              "at": 3.8046875,
+              "ammo": 50
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 49,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 49,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-mode",
+              "at": 5.933333333333334,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 50,
+              "reserve": 50
+            },
+            {
+              "kind": "reload-end",
+              "at": 6.236363973063971,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 50,
+              "reserve": 50
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 50
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.366667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 50,
+              "reserve": 50
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 3.8046875,
+              "ammo": 50
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-mode",
+              "at": 5.933333333333334,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 50,
+              "reserve": 50
+            },
+            {
+              "kind": "reload-end",
+              "at": 6.236363973063971,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 50,
+              "reserve": 50
+            }
+          ]
+        }
+      ]
+    },
+    "bizon": {
+      "cycle": 0.08,
+      "deploy": 1.1,
+      "reload": 2.433333,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.08,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.09375,
+            0.171875,
+            0.25,
+            0.328125,
+            0.40625,
+            0.484375,
+            0.5625
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.09375,
+            0.171875,
+            0.25,
+            0.328125,
+            0.40625,
+            0.484375,
+            0.5625
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 63,
+          "insertions": [
+            {
+              "at": 1.140625,
+              "ammo": 64
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 63,
+              "reserve": 128
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.433333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 64,
+              "reserve": 64
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 63,
+          "insertions": [
+            {
+              "at": 2.0703125,
+              "ammo": 64
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 63,
+              "reserve": 128
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 63,
+              "reserve": 128
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.733333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 64,
+              "reserve": 64
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.2047134680134635,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 64,
+              "reserve": 64
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.140625,
+              "ammo": 64
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 128
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.433333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 64,
+              "reserve": 64
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.0703125,
+              "ammo": 64
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 128
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 128
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.733333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 64,
+              "reserve": 64
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.2047134680134635,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 64,
+              "reserve": 64
+            }
+          ]
+        }
+      ]
+    },
+    "m249": {
+      "cycle": 0.08,
+      "deploy": 1.1,
+      "reload": 5.7,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.08,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.09375,
+            0.171875,
+            0.25,
+            0.328125,
+            0.40625,
+            0.484375,
+            0.5625
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.09375,
+            0.171875,
+            0.25,
+            0.328125,
+            0.40625,
+            0.484375,
+            0.5625
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 99,
+          "insertions": [
+            {
+              "at": 3.734375,
+              "ammo": 100
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 99,
+              "reserve": 200
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.7,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 100,
+              "reserve": 100
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 99,
+          "insertions": [
+            {
+              "at": 7.2734375,
+              "ammo": 100
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 99,
+              "reserve": 200
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 99,
+              "reserve": 200
+            },
+            {
+              "kind": "reload-mode",
+              "at": 9.233333333333334,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 100,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-end",
+              "at": 10.226599326599318,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 100,
+              "reserve": 100
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 3.734375,
+              "ammo": 100
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 200
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.7,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 100,
+              "reserve": 100
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 7.2734375,
+              "ammo": 100
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 200
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 200
+            },
+            {
+              "kind": "reload-mode",
+              "at": 9.233333333333334,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 100,
+              "reserve": 100
+            },
+            {
+              "kind": "reload-end",
+              "at": 10.226599326599318,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 100,
+              "reserve": 100
+            }
+          ]
+        }
+      ]
+    },
+    "negev": {
+      "cycle": 0.075,
+      "deploy": 1.1,
+      "reload": 5.7,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.075,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.078125,
+            0.15625,
+            0.234375,
+            0.3125,
+            0.375,
+            0.453125,
+            0.53125
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.078125,
+            0.15625,
+            0.234375,
+            0.3125,
+            0.375,
+            0.453125,
+            0.53125
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 149,
+          "insertions": [
+            {
+              "at": 3.8359375,
+              "ammo": 150
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 149,
+              "reserve": 300
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.7,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 150,
+              "reserve": 150
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 149,
+          "insertions": [
+            {
+              "at": 7.46875,
+              "ammo": 150
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 149,
+              "reserve": 300
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 149,
+              "reserve": 300
+            },
+            {
+              "kind": "reload-mode",
+              "at": 9.533333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 150,
+              "reserve": 150
+            },
+            {
+              "kind": "reload-end",
+              "at": 10.375084175084169,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 150,
+              "reserve": 150
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 3.8359375,
+              "ammo": 150
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 300
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.7,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 150,
+              "reserve": 150
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 7.46875,
+              "ammo": 150
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 300
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 300
+            },
+            {
+              "kind": "reload-mode",
+              "at": 9.533333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 150,
+              "reserve": 150
+            },
+            {
+              "kind": "reload-end",
+              "at": 10.375084175084169,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 150,
+              "reserve": 150
+            }
+          ]
+        }
+      ]
+    },
+    "cz75a": {
+      "cycle": 0.1,
+      "deploy": 1.83333,
+      "reload": 2.733333,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.1,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.109375,
+            0.203125,
+            0.3125,
+            0.40625,
+            0.5,
+            0.609375,
+            0.703125
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.109375,
+            0.203125,
+            0.3125,
+            0.40625,
+            0.5,
+            0.609375,
+            0.703125
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 11,
+          "insertions": [
+            {
+              "at": 1.5703125,
+              "ammo": 12
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 11,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.733333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 11,
+          "insertions": [
+            {
+              "at": 2.9375,
+              "ammo": 12
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 11,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 11,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.333333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.804713468013463,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.671875,
+              "ammo": 12
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.733333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 3.140625,
+              "ammo": 12
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.8666666666666663,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.573737037037031,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            }
+          ]
+        }
+      ]
+    },
+    "usp": {
+      "cycle": 0.17,
+      "deploy": 1,
+      "reload": 2.2,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.17,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 11,
+          "insertions": [
+            {
+              "at": 0.90625,
+              "ammo": 12
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 11,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.2,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 11,
+          "insertions": [
+            {
+              "at": 1.6015625,
+              "ammo": 12
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 11,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 11,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.0666666666666664,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.639057239057234,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1,
+              "ammo": 12
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.2,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.8046875,
+              "ammo": 12
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-mode",
+              "at": 2.8666666666666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.540067340067334,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 12
+            }
+          ]
+        }
+      ]
+    },
+    "glock": {
+      "cycle": 0.15,
+      "deploy": 1,
+      "reload": 2.266667,
+      "fullAuto": false,
+      "hasBurst": true,
+      "burstCycle": 0.5,
+      "burstInterval": 0.05,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.3,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0.3125,
+            0.359375,
+            0.40625
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 0.9375,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 1.671875,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.2666666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.805387542087537,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.2734375,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.3359375,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.0666666666666664,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.7063976430976373,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 40
+            }
+          ]
+        }
+      ]
+    },
+    "hkp2000": {
+      "cycle": 0.17,
+      "deploy": 1,
+      "reload": 2.266667,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.17,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 12,
+          "insertions": [
+            {
+              "at": 0.9375,
+              "ammo": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 52
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 39
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 12,
+          "insertions": [
+            {
+              "at": 1.671875,
+              "ammo": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 52
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 52
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.1999999999999997,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 39
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.7723909090909036,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 39
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.203125,
+              "ammo": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 52
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 39
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.203125,
+              "ammo": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 52
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 52
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.1333333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 39
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.7393942760942704,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 39
+            }
+          ]
+        }
+      ]
+    },
+    "p250": {
+      "cycle": 0.15,
+      "deploy": 1,
+      "reload": 2.266667,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.3,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 12,
+          "insertions": [
+            {
+              "at": 0.9375,
+              "ammo": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 39
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 26
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 12,
+          "insertions": [
+            {
+              "at": 1.671875,
+              "ammo": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 39
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 12,
+              "reserve": 39
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.333333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 26
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.8383841750841703,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 26
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.203125,
+              "ammo": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 39
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 26
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.203125,
+              "ammo": 13
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 39
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 39
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.0666666666666664,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 26
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.7063976430976373,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 13,
+              "reserve": 26
+            }
+          ]
+        }
+      ]
+    },
+    "deagle": {
+      "cycle": 0.225,
+      "deploy": 1,
+      "reload": 2.2,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.225,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 6,
+          "insertions": [
+            {
+              "at": 0.7734375,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 6,
+              "reserve": 21
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.2,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 7,
+              "reserve": 14
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 6,
+          "insertions": [
+            {
+              "at": 1.3359375,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 6,
+              "reserve": 21
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 6,
+              "reserve": 21
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.0666666666666664,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 7,
+              "reserve": 14
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.639057239057234,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 7,
+              "reserve": 14
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.0390625,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 21
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.2,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 7,
+              "reserve": 14
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.8671875,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 21
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 21
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.0666666666666664,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 7,
+              "reserve": 14
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.639057239057234,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 7,
+              "reserve": 14
+            }
+          ]
+        }
+      ]
+    },
+    "elite": {
+      "cycle": 0.12,
+      "deploy": 1,
+      "reload": 3.766667,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.12,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 2.9375,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.766667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 29,
+          "insertions": [
+            {
+              "at": 5.671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 29,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 7.266666666666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-end",
+              "at": 7.300337037037036,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.9375,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.766667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 5.671875,
+              "ammo": 30
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 60
+            },
+            {
+              "kind": "reload-mode",
+              "at": 7.266666666666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-end",
+              "at": 7.300337037037036,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 30,
+              "reserve": 30
+            }
+          ]
+        }
+      ]
+    },
+    "fiveseven": {
+      "cycle": 0.15,
+      "deploy": 1,
+      "reload": 2.266667,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.3,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 0.96875,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 1.734375,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.2666666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.805387542087537,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.203125,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.203125,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.1999999999999997,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.7723909090909036,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        }
+      ]
+    },
+    "tec9": {
+      "cycle": 0.12,
+      "deploy": 1,
+      "reload": 2.566667,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.12,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 17,
+          "insertions": [
+            {
+              "at": 1.4375,
+              "ammo": 18
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 17,
+              "reserve": 54
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.566667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 18,
+              "reserve": 36
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 17,
+          "insertions": [
+            {
+              "at": 2.671875,
+              "ammo": 18
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 17,
+              "reserve": 54
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 17,
+              "reserve": 54
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.066666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 18,
+              "reserve": 36
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.504377441077437,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 18,
+              "reserve": 36
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.4375,
+              "ammo": 18
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 54
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.566667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 18,
+              "reserve": 36
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.671875,
+              "ammo": 18
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 54
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 54
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.066666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 18,
+              "reserve": 36
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.504377441077437,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 18,
+              "reserve": 36
+            }
+          ]
+        }
+      ]
+    },
+    "revolver": {
+      "cycle": 0.5,
+      "deploy": 1.166667,
+      "reload": 2.266667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.4,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0.203125,
+            0.703125,
+            1.203125,
+            1.703125
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.40625,
+            0.8125,
+            1.203125,
+            1.609375,
+            2
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 7,
+          "insertions": [
+            {
+              "at": 1.96875,
+              "ammo": 8
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 7,
+              "reserve": 16
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 8,
+              "reserve": 8
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 7,
+          "insertions": [
+            {
+              "at": 3.734375,
+              "ammo": 8
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 7,
+              "reserve": 16
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 7,
+              "reserve": 16
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.133333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 8,
+              "reserve": 8
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.23434377104377,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 8,
+              "reserve": 8
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.96875,
+              "ammo": 8
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 16
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.266667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 8,
+              "reserve": 8
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 3.734375,
+              "ammo": 8
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 16
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 16
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4.133333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 8,
+              "reserve": 8
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.23434377104377,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 8,
+              "reserve": 8
+            }
+          ]
+        }
+      ]
+    },
+    "awp": {
+      "cycle": 1.455,
+      "deploy": 1.266667,
+      "reload": 3.666667,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 2,
+      "zoomFov": [
+        40,
+        10
+      ],
+      "zoomTime": [
+        0.05,
+        0.05,
+        0.05
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 1.455,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 4,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 5
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 4,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 5
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 4,
+          "insertions": [
+            {
+              "at": 3.8046875,
+              "ammo": 5
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 4,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 4,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-mode",
+              "at": 6.066666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 5
+            },
+            {
+              "kind": "reload-end",
+              "at": 6.605387542087537,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 5
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 5
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 5
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 3.8046875,
+              "ammo": 5
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-mode",
+              "at": 6.066666666666666,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 5
+            },
+            {
+              "kind": "reload-end",
+              "at": 6.605387542087537,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 5
+            }
+          ]
+        }
+      ]
+    },
+    "ssg08": {
+      "cycle": 1.25,
+      "deploy": 1,
+      "reload": 3.7,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 2,
+      "zoomFov": [
+        40,
+        15
+      ],
+      "zoomTime": [
+        0.05,
+        0.05,
+        0.05
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 1.25,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 9,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 10
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 9,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.7,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 10,
+              "reserve": 10
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 9,
+          "insertions": [
+            {
+              "at": 3.8046875,
+              "ammo": 10
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 9,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 9,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-mode",
+              "at": 6.133333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 10,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-end",
+              "at": 6.672053872053867,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 10,
+              "reserve": 10
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 10
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.7,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 10,
+              "reserve": 10
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 3.8046875,
+              "ammo": 10
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-mode",
+              "at": 6.133333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 10,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-end",
+              "at": 6.672053872053867,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 10,
+              "reserve": 10
+            }
+          ]
+        }
+      ]
+    },
+    "g3sg1": {
+      "cycle": 0.25,
+      "deploy": 1,
+      "reload": 4.666667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 2,
+      "zoomFov": [
+        40,
+        15
+      ],
+      "zoomTime": [
+        0.05,
+        0.05,
+        0.05
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.25,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1,
+            1.25,
+            1.5,
+            1.75
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1,
+            1.25,
+            1.5,
+            1.75
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 2.671875,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 5.140625,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 7.733333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-end",
+              "at": 8.440404377104372,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.671875,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.666667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 5.140625,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 7.733333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-end",
+              "at": 8.440404377104372,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        }
+      ]
+    },
+    "scar20": {
+      "cycle": 0.25,
+      "deploy": 1,
+      "reload": 3.066667,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 2,
+      "zoomFov": [
+        40,
+        15
+      ],
+      "zoomTime": [
+        0.05,
+        0.05,
+        0.05
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.25,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1,
+            1.25,
+            1.5,
+            1.75
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1,
+            1.25,
+            1.5,
+            1.75
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 1.5390625,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.066667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 19,
+          "insertions": [
+            {
+              "at": 2.8671875,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 19,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 5.133333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-end",
+              "at": 5.53737407407407,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.46875,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.066667,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2.734375,
+              "ammo": 20
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 40
+            },
+            {
+              "kind": "reload-mode",
+              "at": 4,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.976431313131304,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 20,
+              "reserve": 20
+            }
+          ]
+        }
+      ]
+    },
+    "nova": {
+      "cycle": 0.88,
+      "deploy": 1,
+      "reload": 0.466667,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": true,
+      "alternateCycle": 0.88,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 7,
+          "insertions": [
+            {
+              "at": 0.96875,
+              "ammo": 8
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 7,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 0.9666669999999999,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 8,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-end",
+              "at": 1.166667,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 8,
+              "reserve": 31
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 7,
+          "insertions": [
+            {
+              "at": 1.734375,
+              "ammo": 8
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 7,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "start",
+              "ammo": 7,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.7333340000000002,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 8,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-mode",
+              "at": 2.069334,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 8,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.1016572323232325,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 8,
+              "reserve": 31
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 0.96875,
+              "ammo": 1
+            },
+            {
+              "at": 1.4375,
+              "ammo": 2
+            },
+            {
+              "at": 1.90625,
+              "ammo": 3
+            },
+            {
+              "at": 2.3671875,
+              "ammo": 4
+            },
+            {
+              "at": 2.8359375,
+              "ammo": 5
+            },
+            {
+              "at": 3.3046875,
+              "ammo": 6
+            },
+            {
+              "at": 3.7734375,
+              "ammo": 7
+            },
+            {
+              "at": 4.234375,
+              "ammo": 8
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 0,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 0.9666669999999999,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 1,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.4333339999999999,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 2,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.9000009999999998,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 3,
+              "reserve": 29
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2.3666679999999998,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 4,
+              "reserve": 28
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2.833335,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 5,
+              "reserve": 27
+            },
+            {
+              "kind": "reload-shell",
+              "at": 3.300002,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 6,
+              "reserve": 26
+            },
+            {
+              "kind": "reload-shell",
+              "at": 3.7666690000000003,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 25
+            },
+            {
+              "kind": "reload-shell",
+              "at": 4.233336,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 8,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.433336000000001,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 8,
+              "reserve": 24
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.734375,
+              "ammo": 1
+            },
+            {
+              "at": 2.671875,
+              "ammo": 2
+            },
+            {
+              "at": 3.6015625,
+              "ammo": 3
+            },
+            {
+              "at": 4.5390625,
+              "ammo": 4
+            },
+            {
+              "at": 5.46875,
+              "ammo": 5
+            },
+            {
+              "at": 6.40625,
+              "ammo": 6
+            },
+            {
+              "at": 7.3359375,
+              "ammo": 7
+            },
+            {
+              "at": 8.2734375,
+              "ammo": 8
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 0,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "start",
+              "ammo": 0,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.7333340000000002,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 1,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2.666668,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 2,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-shell",
+              "at": 3.600002,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 3,
+              "reserve": 29
+            },
+            {
+              "kind": "reload-shell",
+              "at": 4.533336,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 4,
+              "reserve": 28
+            },
+            {
+              "kind": "reload-shell",
+              "at": 5.466670000000001,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 5,
+              "reserve": 27
+            },
+            {
+              "kind": "reload-shell",
+              "at": 6.400004000000001,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 6,
+              "reserve": 26
+            },
+            {
+              "kind": "reload-shell",
+              "at": 7.333338000000001,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 25
+            },
+            {
+              "kind": "reload-shell",
+              "at": 8.266672000000002,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 8,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-mode",
+              "at": 8.602672000000002,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 8,
+              "reserve": 24
+            },
+            {
+              "kind": "reload-end",
+              "at": 8.634995232323234,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 8,
+              "reserve": 24
+            }
+          ]
+        }
+      ]
+    },
+    "xm1014": {
+      "cycle": 0.35,
+      "deploy": 1,
+      "reload": 0.6,
+      "fullAuto": true,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": true,
+      "alternateCycle": 0.35,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0,
+            0.359375,
+            0.703125,
+            1.0625,
+            1.40625,
+            1.75
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0,
+            0.359375,
+            0.703125,
+            1.0625,
+            1.40625,
+            1.75
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 6,
+          "insertions": [
+            {
+              "at": 1.1015625,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 6,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.1,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-end",
+              "at": 1.3,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 31
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 6,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 6,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "start",
+              "ammo": 6,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-mode",
+              "at": 2.0615384615384613,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.2324786324786325,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 31
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.1015625,
+              "ammo": 1
+            },
+            {
+              "at": 1.703125,
+              "ammo": 2
+            },
+            {
+              "at": 2.3046875,
+              "ammo": 3
+            },
+            {
+              "at": 2.90625,
+              "ammo": 4
+            },
+            {
+              "at": 3.5,
+              "ammo": 5
+            },
+            {
+              "at": 4.1015625,
+              "ammo": 6
+            },
+            {
+              "at": 4.703125,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 0,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.1,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 1,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.7000000000000002,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 2,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2.3000000000000003,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 3,
+              "reserve": 29
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2.9000000000000004,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 4,
+              "reserve": 28
+            },
+            {
+              "kind": "reload-shell",
+              "at": 3.5,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 5,
+              "reserve": 27
+            },
+            {
+              "kind": "reload-shell",
+              "at": 4.1,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 6,
+              "reserve": 26
+            },
+            {
+              "kind": "reload-shell",
+              "at": 4.699999999999999,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 25
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.8999999999999995,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 25
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 2,
+              "ammo": 1
+            },
+            {
+              "at": 3.203125,
+              "ammo": 2
+            },
+            {
+              "at": 4.40625,
+              "ammo": 3
+            },
+            {
+              "at": 5.6015625,
+              "ammo": 4
+            },
+            {
+              "at": 6.8046875,
+              "ammo": 5
+            },
+            {
+              "at": 8,
+              "ammo": 6
+            },
+            {
+              "at": 9.203125,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 0,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "start",
+              "ammo": 0,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 1,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-shell",
+              "at": 3.2,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 2,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-shell",
+              "at": 4.4,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 3,
+              "reserve": 29
+            },
+            {
+              "kind": "reload-shell",
+              "at": 5.6000000000000005,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 4,
+              "reserve": 28
+            },
+            {
+              "kind": "reload-shell",
+              "at": 6.800000000000001,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 5,
+              "reserve": 27
+            },
+            {
+              "kind": "reload-shell",
+              "at": 8,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 6,
+              "reserve": 26
+            },
+            {
+              "kind": "reload-shell",
+              "at": 9.2,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 25
+            },
+            {
+              "kind": "reload-mode",
+              "at": 9.26153846153846,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 25
+            },
+            {
+              "kind": "reload-end",
+              "at": 9.432478632478631,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 25
+            }
+          ]
+        }
+      ]
+    },
+    "mag7": {
+      "cycle": 0.85,
+      "deploy": 1,
+      "reload": 2.5,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.85,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 4,
+          "insertions": [
+            {
+              "at": 1.0703125,
+              "ammo": 5
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 4,
+              "reserve": 15
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.5,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 10
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 4,
+          "insertions": [
+            {
+              "at": 1.9375,
+              "ammo": 5
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 4,
+              "reserve": 15
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 4,
+              "reserve": 15
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.733333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.272053872053867,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 10
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.0703125,
+              "ammo": 5
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 15
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.5,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 10
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.9375,
+              "ammo": 5
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 15
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "magazine",
+              "ammo": 0,
+              "reserve": 15
+            },
+            {
+              "kind": "reload-mode",
+              "at": 3.733333333333333,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 10
+            },
+            {
+              "kind": "reload-end",
+              "at": 4.272053872053867,
+              "silent": false,
+              "phase": "magazine",
+              "ammo": 5,
+              "reserve": 10
+            }
+          ]
+        }
+      ]
+    },
+    "sawedoff": {
+      "cycle": 0.85,
+      "deploy": 1,
+      "reload": 0.466667,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": true,
+      "alternateCycle": 0.85,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 6,
+          "insertions": [
+            {
+              "at": 0.96875,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 6,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 0.9666669999999999,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-end",
+              "at": 1.166667,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 31
+            }
+          ]
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 6,
+          "insertions": [
+            {
+              "at": 1.734375,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 6,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "start",
+              "ammo": 6,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.7333340000000002,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-mode",
+              "at": 1.9833340000000002,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-end",
+              "at": 2.059091575757576,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 31
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 0.96875,
+              "ammo": 1
+            },
+            {
+              "at": 1.4375,
+              "ammo": 2
+            },
+            {
+              "at": 1.90625,
+              "ammo": 3
+            },
+            {
+              "at": 2.3671875,
+              "ammo": 4
+            },
+            {
+              "at": 2.8359375,
+              "ammo": 5
+            },
+            {
+              "at": 3.3046875,
+              "ammo": 6
+            },
+            {
+              "at": 3.7734375,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 0,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 0.9666669999999999,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 1,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.4333339999999999,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 2,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.9000009999999998,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 3,
+              "reserve": 29
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2.3666679999999998,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 4,
+              "reserve": 28
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2.833335,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 5,
+              "reserve": 27
+            },
+            {
+              "kind": "reload-shell",
+              "at": 3.300002,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 6,
+              "reserve": 26
+            },
+            {
+              "kind": "reload-shell",
+              "at": 3.7666690000000003,
+              "silent": false,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 25
+            },
+            {
+              "kind": "reload-end",
+              "at": 3.9666690000000004,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 25
+            }
+          ]
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [
+            {
+              "at": 1.734375,
+              "ammo": 1
+            },
+            {
+              "at": 2.671875,
+              "ammo": 2
+            },
+            {
+              "at": 3.6015625,
+              "ammo": 3
+            },
+            {
+              "at": 4.5390625,
+              "ammo": 4
+            },
+            {
+              "at": 5.46875,
+              "ammo": 5
+            },
+            {
+              "at": 6.40625,
+              "ammo": 6
+            },
+            {
+              "at": 7.3359375,
+              "ammo": 7
+            }
+          ],
+          "events": [
+            {
+              "kind": "reload-start",
+              "at": 0,
+              "silent": false,
+              "phase": "start",
+              "ammo": 0,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-mode",
+              "at": 0.2,
+              "silent": true,
+              "phase": "start",
+              "ammo": 0,
+              "reserve": 32
+            },
+            {
+              "kind": "reload-shell",
+              "at": 1.7333340000000002,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 1,
+              "reserve": 31
+            },
+            {
+              "kind": "reload-shell",
+              "at": 2.666668,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 2,
+              "reserve": 30
+            },
+            {
+              "kind": "reload-shell",
+              "at": 3.600002,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 3,
+              "reserve": 29
+            },
+            {
+              "kind": "reload-shell",
+              "at": 4.533336,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 4,
+              "reserve": 28
+            },
+            {
+              "kind": "reload-shell",
+              "at": 5.466670000000001,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 5,
+              "reserve": 27
+            },
+            {
+              "kind": "reload-shell",
+              "at": 6.400004000000001,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 6,
+              "reserve": 26
+            },
+            {
+              "kind": "reload-shell",
+              "at": 7.333338000000001,
+              "silent": true,
+              "phase": "shell",
+              "ammo": 7,
+              "reserve": 25
+            },
+            {
+              "kind": "reload-mode",
+              "at": 7.583338000000001,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 25
+            },
+            {
+              "kind": "reload-end",
+              "at": 7.659095575757577,
+              "silent": false,
+              "phase": "finish",
+              "ammo": 7,
+              "reserve": 25
+            }
+          ]
+        }
+      ]
+    },
+    "zeus": {
+      "cycle": 0.15,
+      "deploy": 1,
+      "reload": 5,
+      "fullAuto": false,
+      "hasBurst": false,
+      "burstCycle": 0,
+      "burstInterval": 0,
+      "zoomLevels": 0,
+      "zoomFov": [
+        90,
+        90
+      ],
+      "zoomTime": [
+        0,
+        0,
+        0
+      ],
+      "reloadsSingleShells": false,
+      "alternateCycle": 0.3,
+      "trainerShots": [
+        {
+          "alternate": false,
+          "shots": [
+            0
+          ]
+        },
+        {
+          "alternate": true,
+          "shots": [
+            0
+          ]
+        }
+      ],
+      "reloadSamples": [
+        {
+          "empty": false,
+          "silent": false,
+          "initial": 0,
+          "insertions": [],
+          "events": []
+        },
+        {
+          "empty": false,
+          "silent": true,
+          "initial": 0,
+          "insertions": [],
+          "events": []
+        },
+        {
+          "empty": true,
+          "silent": false,
+          "initial": 0,
+          "insertions": [],
+          "events": []
+        },
+        {
+          "empty": true,
+          "silent": true,
+          "initial": 0,
+          "insertions": [],
+          "events": []
+        }
+      ]
+    }
+  }
+}
