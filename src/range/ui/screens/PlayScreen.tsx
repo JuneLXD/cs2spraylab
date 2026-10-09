@@ -1,3 +1,5 @@
+import {RecentSessions} from '../RecentSessions';
+import type {RecentSession} from '../session-data';
 import {memo, useEffect, useState} from 'react';
 import {Check, Crosshair, GraduationCap, Headphones, MoveHorizontal, RotateCcw, Target, Zap} from 'lucide-react';
 import {modeNames, type Mode, type Settings} from '../../config';
@@ -8,7 +10,8 @@ import {categoryFor, drillCategories} from '../drill-catalog';
 import {Button, Tabs, Tile} from '../primitives';
 import {TrainingSettings} from './TrainingSettings';
 
-export const PlayScreen = memo(function PlayScreen({settings, profile, update, selectMode, controlsRef, ready, resume, input, startLabel, start, newSession, loadout, openSettings, tutorial, reset}: {
+export const PlayScreen = memo(function PlayScreen({settings, profile, update, selectMode, controlsRef, ready, resume, input, startLabel, start, newSession, loadout, openSettings, tutorial, reset, recent, history}: {
+  recent: RecentSession[]; history: () => void;
   settings: Settings; profile: ProgressionProfile; update: (patch: Partial<Settings>) => void; selectMode: (mode: Mode) => void;
   controlsRef: (element: HTMLDivElement | null) => void; ready: boolean; resume: boolean; input: string; startLabel: string;
   start: () => void; newSession: () => void; loadout: () => void; openSettings: () => void; tutorial: () => void; reset: () => void;
@@ -26,6 +29,7 @@ export const PlayScreen = memo(function PlayScreen({settings, profile, update, s
       </Tile>;
     })}</div>
     <section className="sl-drill-brief mode-brief"><small>{info.benefit}</small><h1>{modeNames[settings.mode]}</h1><p>{info.task}</p><div className="sl-fact-chips"><span>{settings.mode === 'redline' ? 'MAP BY BOT REED' : 'LOCAL PRACTICE'}</span><span>{settings.mode === 'guided' && !settings.spread ? 'SPREAD OFF' : 'CS2 WEAPON DATA'}</span></div></section>
+    <RecentSessions rows={recent.filter(row=>row.mode===settings.mode)} open={history} limit={3} title="Last sessions"/>
     <button className="sl-learn" onClick={tutorial}><GraduationCap size={23}/><span><strong>Learn the fundamentals</strong><small>Movement, counter-strafing and shot timing</small></span></button>
     </div><aside className="sl-setup-panel" aria-label="Drill setup"><div ref={controlsRef}/>{!['duel','botz','reflex','redline'].includes(settings.mode) && <><header><div><small>DRILL SETUP</small><h2>{modeNames[settings.mode]}</h2></div><Button aria-label="Reset range" onClick={reset}><RotateCcw size={16}/></Button></header><div className="sl-range-setup">{settings.mode === 'hearing' ? <p>Start practice to choose sounds and locate their direction and distance.</p> : <TrainingSettings settings={settings} update={update}/>}</div></>}</aside></div>
     <footer className="sl-play-footer"><div className="sl-loadout-chips">{[...(settings.primaryEnabled ? [settings.weapon] : []), settings.sidearm].map((id, index) => <button key={`${id}-${index}`} onClick={loadout}><img src={cosmeticPreview(profile, id)} alt=""/><span><small>{index === 0 && settings.primaryEnabled ? 'PRIMARY' : 'SIDEARM'}</small>{cosmeticLabel(profile, id)}</span></button>)}</div><Button className="sl-mouse-settings" onClick={openSettings}>Mouse & crosshair</Button><div className="sl-ready"><strong>{ready ? resume ? 'PAUSED' : 'READY' : 'LOADING'}</strong><small>{input.includes('blocked') ? input : modeNames[settings.mode]}</small></div>{resume && <Button onClick={newSession}>New session</Button>}<Button primary className="sl-go" aria-label={startLabel} disabled={!ready} onClick={start}>{resume ? 'Resume' : 'Go'}</Button></footer>

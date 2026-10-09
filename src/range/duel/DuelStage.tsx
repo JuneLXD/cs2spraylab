@@ -44,6 +44,8 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   // aim_redline's collision and spawns load as a separate chunk before the engine can start.
   const [workshop, setWorkshop] = useState<Arena>();
   const [status, setStatus] = useState<DuelStatus>(initialStatus);
+  const statusRef = useRef(status);
+  const reportStatus = useCallback((value: DuelStatus) => {statusRef.current = value; setStatus(value);}, []);
   const latest = useRef({config, onConsole}); latest.current = {config, onConsole};
   const [hint, setHint] = useState(loadHint);
   const [panel, setPanel] = useState<'setup' | 'review'>('setup');
@@ -63,7 +65,7 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   useEffect(() => {
     if (!canvasHost.current || redlineMode && !workshop) return;
     try {
-      engine.current = new DuelEngine(canvasHost.current, crosshair.current!, setStatus, setError, settings, config, progression, botzMode ? botz : undefined, workshop);
+      engine.current = new DuelEngine(canvasHost.current, crosshair.current!, reportStatus, setError, settings, config, progression, botzMode ? botz : undefined, workshop);
       engine.current.onConsole = args => {
         // cl_radar_scale (e.g. `toggle cl_radar_scale 0.3 1`) zooms the Duel radar; the rest goes to the app.
         const radar = cvarAssignment(args, name => name === 'cl_radar_scale' ? String(latest.current.config.radarScale) : undefined);
@@ -85,9 +87,9 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
     const overrides = [...config.overrides]; overrides[index] = enabled ? {...botConfig(config, index)} : {}; update({overrides});
   }, [config, update]);
   useImperativeHandle(engineRef, () => ({
-    enter: async () => {dismissHint(); onEnter(); await engine.current?.enter();},
+    enter: async () => {dismissHint(); onEnter(); if (botzMode && engine.current?.sim.phase === 'result') engine.current.restart(); await engine.current?.enter();},
     newSession: async () => {engine.current?.restart(); await engine.current?.enter();},
-    restart: () => engine.current?.restart(), pause: () => engine.current?.pause(), snapshot: () => status,
+    restart: () => engine.current?.restart(), pause: () => engine.current?.pause(), snapshot: () => statusRef.current,
   }), [status, onEnter]);
   const ready = !!engine.current && !error && (!redlineMode || !!workshop && !status.mapLoading);
   useEffect(() => onMenuStatus({ready, playing: status.phase !== 'ready' && !status.paused, paused: status.paused,

@@ -9,6 +9,7 @@ import './range/ui/primitives.css';
 import './range/hud/hud.css';
 import './range/ui/shell.css';
 import './range/ui/loadout.css';
+import './range/ui/menus.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

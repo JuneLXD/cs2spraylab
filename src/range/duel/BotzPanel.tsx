@@ -45,7 +45,7 @@ export const BotzSetup = memo(function BotzSetup({config, update}: BotzSetupProp
   </div>;
 });
 
-export function BotzScorecard({summary, history, island = false, name = island ? 'Reflex' : 'Aim Botz'}: {summary?: BotzSummary; history: BotzHistory[]; island?: boolean; name?: string}) {
+export function BotzScorecard({summary, history, island = false, name = island ? 'Reflex' : 'Aim Botz', headlineStats = true}: {headlineStats?: boolean; summary?: BotzSummary; history: BotzHistory[]; island?: boolean; name?: string}) {
   const exportHistory = () => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(history, null, 2)], {type: 'application/json'}));
     const link = document.createElement('a'); link.href = url; link.download = `spraylab-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`; link.click(); URL.revokeObjectURL(url);
@@ -66,7 +66,7 @@ export function BotzScorecard({summary, history, island = false, name = island ?
   return <section className="duel-analysis" aria-label={`${name} stats`}>
     <div className="duel-coach"><Target size={18}/><strong>{!summary?.shots ? 'Shoot a bot to start your stats' : reachedOften ? 'Bots are reaching you' : summary.headshotRate >= 60 ? 'Clean headshots' : summary.accuracy < 40 ? 'Slow down your first shot' : 'Keep your crosshair at head height'}</strong>
       <p>{!summary?.shots ? island ? 'Watch the gaps at head height. Stats count from your first shot.' : 'Flick to the head, stop, and tap. Stats count from your first shot.' : reachedOften ? 'Take the closest bot first, and rest your crosshair at head height on the gap the next one will come through.' : summary.accuracy < 40 ? 'Stop moving and let the crosshair settle before you click. Speed comes after accuracy.' : 'Pre-aim where the next head will be, then make one small correction.'}</p></div>
-    {summary && <dl>{values.map(([label, value, help]) => <div key={label}><dt title={help}>{label}</dt><dd>{value}</dd></div>)}</dl>}
+    {summary && <dl>{values.filter(([label]) => headlineStats || !['Kills','Headshot kills','Accuracy','Kills per minute'].includes(label)).map(([label, value, help]) => <div key={label}><dt title={help}>{label}</dt><dd>{value}</dd></div>)}</dl>}
     <div className="duel-history-title"><strong>Recent sessions</strong><button className="icon-button" title={`Export ${name} history`} aria-label={`Export ${name} history`} disabled={!history.length} onClick={exportHistory}><Download size={16}/></button></div>
     {!history.length && <p className="duel-analysis-empty">Sessions are saved when time runs out or you start a new one.</p>}
     <ol>{history.slice(0, 10).map((entry, index) => <li key={`${entry.date}-${index}`}><span>{entry.kills} kills / {island ? `${entry.leaks ?? 0} reached` : `${entry.headshotRate.toFixed(0)}% HS`}

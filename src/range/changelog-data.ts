@@ -211,6 +211,11 @@ export const latestChanges = {
       'Choose separate primary and sidearm slots, browse weapon categories and inspect a large finish preview with game-derived weapon stats.',
       'Every finish, knife, glove and agent remains unlocked, with selected finishes saved between visits. The Armory and achievements stay available.',
     ]},
+    {id: 'ui-home-results', title: 'Home and session results', items: [
+      'Home shows your equipped agent, current drill, recent sessions and the latest changes. Launch still opens Play on your last drill.',
+      'Session history brings range replays, Aim Botz, Reflex, aim_redline and AI Duel together with their existing exports and feedback.',
+      'Timed practice opens a full Results screen with the completed scores, coaching, setup and New Session. Pointer capture waits no longer let an intermediate ready report cancel the start.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

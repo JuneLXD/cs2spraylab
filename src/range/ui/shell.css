@@ -524,3 +524,18 @@ html, body, #root {
 .sl-setup-panel .duel-controls .tabs {border-color: var(--sl-hairline);}
 .sl-setup-panel .duel-controls .tabs button[aria-selected=true] {border-color: var(--sl-text); color: white;}
 .sl-setup-panel .duel-controls input[type=range] {accent-color: var(--sl-text);}
+.sl-engine-error {
+  position: absolute;
+  z-index: 50;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(430px, 90%);
+  padding: 24px;
+  background: #131b23;
+  border: 1px solid var(--sl-danger);
+  display: grid;
+  gap: 16px;
+  text-align: center;
+}
+.sl-engine-error button {padding: 12px; background: var(--sl-go); color: white;}
