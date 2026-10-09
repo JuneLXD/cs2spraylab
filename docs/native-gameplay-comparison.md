@@ -596,6 +596,23 @@ R8-specific, not the generic primary readiness check. The new readiness fixture
 keeps those comparators separate and does not claim to resolve that scheduling
 question. The prepared native capture protocol includes the missing cases.
 
+## R8 windup (thirteenth pass, 2026-10-09)
+
+The current server's revolver initializer adds thirteen 64 Hz ticks to the
+command tick/ratio pair, retaining the fraction. Ordinary primary readiness
+and R8 postponed readiness compare distinct deadlines against that same
+command representation. `tools/verify-native-fire-readiness.py` runs these
+bounded native instruction paths from the hash-pinned current server and
+retains 20 initialization plus 42 readiness cases in
+`src/range/native-fire-readiness-fixture.json`.
+
+The trainer's explicitly estimated 200 ms windup is now 13/64 s = 203.125 ms.
+The shared action controller applies it in both engines; releasing before the
+deadline cancels the windup, and alternate fire retains its immediate path.
+Status: matched for deadline arithmetic, not the full revolver animation or
+physical input-to-command latency. These readiness comparisons do not settle
+whether a fresh early press changes the subsequent native firing schedule.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current

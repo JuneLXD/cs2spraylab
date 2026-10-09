@@ -298,6 +298,9 @@ export const latestChanges = {
       'In the range, holding fire through a reload or weapon draw now fires when the weapon becomes ready. Pressing during those actions works too; releasing before readiness cancels the shot.',
       'Configured practice bursts still stop at their selected length, and pause or reset clears held input.',
     ]},
+    {id: 'native-r8-windup', title: 'Verified revolver windup', items: [
+      'The R8 primary trigger now winds up for the native thirteen server ticks (203.125 ms), replacing the 200 ms estimate in both engines.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

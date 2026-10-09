@@ -50,3 +50,7 @@ Pass 12 preserves physical held fire through range reload/deploy, backed by the
 current native item dispatcher and reproducible before/after probes. Released
 early taps do not queue a later shot. Native early-press schedule preservation
 still needs the prepared recording; the existing schedule policy is unchanged.
+
+Pass 13 replaces the estimated R8 windup with the current server's thirteen-tick
+deadline (203.125 ms), backed by 62 bounded native arithmetic cases. Full R8
+animation and physical input latency remain outside that comparison.

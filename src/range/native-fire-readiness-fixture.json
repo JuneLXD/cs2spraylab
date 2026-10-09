@@ -1,0 +1,741 @@
+{
+  "build": "2000930",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "method": "Bounded native instruction emulation: R8 deadline initialization, tick/ratio normalization and addition, and ordinary-primary/R8 readiness comparators. The command clock is supplied and the setter argument captured. No engine or OS calls execute.",
+  "windupTicks": 13,
+  "tickInterval": 0.015625,
+  "windupSeconds": 0.203125,
+  "limitations": [
+    "Does not measure physical click latency or the time until the first engine command processes a press.",
+    "Readiness arithmetic does not establish whether a fresh early press preserves or resets the later firing schedule.",
+    "Does not emulate full item-postframe, reload/deploy gates, release handling, or complete revolver attack animation."
+  ],
+  "windup": [
+    {
+      "command": {
+        "tick": 0,
+        "ratio": 0.0
+      },
+      "ready": {
+        "tick": 13,
+        "ratio": 0.0
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 0,
+        "ratio": 0.125
+      },
+      "ready": {
+        "tick": 13,
+        "ratio": 0.125
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 0,
+        "ratio": 0.5
+      },
+      "ready": {
+        "tick": 13,
+        "ratio": 0.5
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 0,
+        "ratio": 0.875
+      },
+      "ready": {
+        "tick": 13,
+        "ratio": 0.875
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 0,
+        "ratio": 0.9990000128746033
+      },
+      "ready": {
+        "tick": 13,
+        "ratio": 0.9990000128746033
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "ready": {
+        "tick": 113,
+        "ratio": 0.0
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 100,
+        "ratio": 0.125
+      },
+      "ready": {
+        "tick": 113,
+        "ratio": 0.125
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 100,
+        "ratio": 0.5
+      },
+      "ready": {
+        "tick": 113,
+        "ratio": 0.5
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 100,
+        "ratio": 0.875
+      },
+      "ready": {
+        "tick": 113,
+        "ratio": 0.875
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "ready": {
+        "tick": 113,
+        "ratio": 0.9990000128746033
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 12345,
+        "ratio": 0.0
+      },
+      "ready": {
+        "tick": 12358,
+        "ratio": 0.0
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 12345,
+        "ratio": 0.125
+      },
+      "ready": {
+        "tick": 12358,
+        "ratio": 0.125
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 12345,
+        "ratio": 0.5
+      },
+      "ready": {
+        "tick": 12358,
+        "ratio": 0.5
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 12345,
+        "ratio": 0.875
+      },
+      "ready": {
+        "tick": 12358,
+        "ratio": 0.875
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 12345,
+        "ratio": 0.9990000128746033
+      },
+      "ready": {
+        "tick": 12358,
+        "ratio": 0.9990000128746033
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 1000000,
+        "ratio": 0.0
+      },
+      "ready": {
+        "tick": 1000013,
+        "ratio": 0.0
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 1000000,
+        "ratio": 0.125
+      },
+      "ready": {
+        "tick": 1000013,
+        "ratio": 0.125
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 1000000,
+        "ratio": 0.5
+      },
+      "ready": {
+        "tick": 1000013,
+        "ratio": 0.5
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 1000000,
+        "ratio": 0.875
+      },
+      "ready": {
+        "tick": 1000013,
+        "ratio": 0.875
+      },
+      "ticks": 13
+    },
+    {
+      "command": {
+        "tick": 1000000,
+        "ratio": 0.9990000128746033
+      },
+      "ready": {
+        "tick": 1000013,
+        "ratio": 0.9990000128746033
+      },
+      "ticks": 13
+    }
+  ],
+  "readiness": [
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 99,
+        "ratio": 0.9990000128746033
+      },
+      "ready": false
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.125
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.5
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 101,
+        "ratio": 0.0
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 99,
+        "ratio": 0.9990000128746033
+      },
+      "ready": false
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "ready": false
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.125
+      },
+      "ready": false
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.5
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 101,
+        "ratio": 0.0
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 99,
+        "ratio": 0.9990000128746033
+      },
+      "ready": false
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "ready": false
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.125
+      },
+      "ready": false
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "ready": false
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.5
+      },
+      "ready": false
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "ready": true
+    },
+    {
+      "kind": "primary",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 101,
+        "ratio": 0.0
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 99,
+        "ratio": 0.9990000128746033
+      },
+      "ready": false
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.125
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.5
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "command": {
+        "tick": 101,
+        "ratio": 0.0
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 99,
+        "ratio": 0.9990000128746033
+      },
+      "ready": false
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "ready": false
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.125
+      },
+      "ready": false
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.5
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "command": {
+        "tick": 101,
+        "ratio": 0.0
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 99,
+        "ratio": 0.9990000128746033
+      },
+      "ready": false
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.0
+      },
+      "ready": false
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.125
+      },
+      "ready": false
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.25
+      },
+      "ready": false
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.5
+      },
+      "ready": false
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "ready": true
+    },
+    {
+      "kind": "revolver",
+      "due": {
+        "tick": 100,
+        "ratio": 0.9990000128746033
+      },
+      "command": {
+        "tick": 101,
+        "ratio": 0.0
+      },
+      "ready": true
+    }
+  ]
+}

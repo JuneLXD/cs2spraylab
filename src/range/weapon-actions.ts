@@ -3,9 +3,10 @@ import {equipmentStats, weaponModeStats, SILENT_RELOAD_MULTIPLIER, SHELL_RELOAD_
 import {ScopeTransition, scopeSensitivity} from './scope-transition';
 import {ReloadClock, reloadClip, reloadSilentWindows} from './reload-clock';
 
-// Trainer estimate: vdata exposes R8 fire modes but not its engine-side windup.
-// Keep this separate from the audited native weapon parameters.
-export const REVOLVER_WINDUP = .2;
+// Native postponed-fire initialization adds thirteen 64 Hz ticks to the
+// command's tick/ratio pair, preserving its fraction (build 2000930).
+// tools/verify-native-fire-readiness.py retains the bounded arithmetic fixture.
+export const REVOLVER_WINDUP = 13 / 64;
 
 // Mode-specific values are exported from weapons.vdata, never inferred from class.
 export class WeaponActions {
