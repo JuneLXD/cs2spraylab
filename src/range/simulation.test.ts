@@ -199,7 +199,7 @@ describe('walking distance, jumping and moving lanes', () => {
     const s = make(); s.active = true; s.input.jump = true;
     let apex = 0;
     for (let i = 0; i < 256; i++) { s.advance(STEP); apex = Math.max(apex, s.feet); }
-    expect(apex).toBeCloseTo(JUMP_SPEED ** 2 / (2 * GRAVITY), 3);
+    expect(apex).toBeCloseTo((JUMP_SPEED - GRAVITY / 256) ** 2 / (2 * GRAVITY), 3);
     expect(s.feet).toBe(0); expect(s.position.y).toBe(64 * UNIT);
     s.input.jump = false; s.advance(STEP); s.input.jump = true; s.advance(STEP); expect(s.feet).toBeGreaterThan(0);
   });

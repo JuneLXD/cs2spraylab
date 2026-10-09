@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {advanceActor, GRAVITY, idleInput, JUMP_SPEED, resetActorMovementHistory, STEP, UNIT, type ActorKinematics} from './actor-physics';
+import {advanceActor, GRAVITY, idleInput, jumpLaunchSpeed, resetActorMovementHistory, STEP, UNIT, type ActorKinematics} from './actor-physics';
 import {acceptedJumpPress, ballisticContactTime, groundLandingFactor, isBhopPress, jumpLandingFactor} from './actor-jump';
 import native from './native-terrain-fixture.json';
 
@@ -59,7 +59,7 @@ describe('post-January-2026 jump rules', () => {
   it('processes explicit wheel presses even with jumpHeld true', () => {
     const actor = {...standing(), jumpHeld: true};
     const next = advanceActor(actor, {...input, jumpPressed: true}, 250 * UNIT, STEP);
-    expect(next.verticalVelocity).toBeCloseTo(JUMP_SPEED - GRAVITY * STEP);
+    expect(next.verticalVelocity).toBeCloseTo(jumpLaunchSpeed(false) - GRAVITY * STEP);
   });
   it('preserves timestamped jump behavior when the input edge falls inside a slice', () => {
     const a = advanceActor(standing(), {...input, jumpPressOffset: STEP / 2}, 250 * UNIT, STEP);
@@ -70,7 +70,7 @@ describe('post-January-2026 jump rules', () => {
   });
   it('does not lose a jump press exactly at the slice boundary', () => {
     const actor = advanceActor(standing(), {...input, jumpPressOffset: STEP}, 250 * UNIT, STEP);
-    expect(actor.verticalVelocity).toBe(JUMP_SPEED); expect(actor.lastJumpPressTime).toBe(STEP);
+    expect(actor.verticalVelocity).toBe(jumpLaunchSpeed(false)); expect(actor.lastJumpPressTime).toBe(STEP);
   });
   it('permits autobhop only when the environment explicitly enables it', () => {
     let actor = standing(), jumps = 0;
@@ -88,7 +88,7 @@ describe('post-January-2026 jump rules', () => {
     const reset = resetActorMovementHistory(actor);
     expect(reset.lastJumpPressTime).toBeUndefined(); expect(reset.landedAt).toBeUndefined();
     expect(reset.supportId).toBeUndefined(); expect(reset.position).toEqual(actor.position);
-    expect(advanceActor(reset, input, 250 * UNIT, STEP).verticalVelocity).toBeCloseTo(JUMP_SPEED - GRAVITY * STEP);
+    expect(advanceActor(reset, input, 250 * UNIT, STEP).verticalVelocity).toBeCloseTo(jumpLaunchSpeed(false) - GRAVITY * STEP);
   });
   it('keeps flat callback and terrain-context movement identical through repeated jumps and crouch', () => {
     let callbacks = standing(), terrain = standing();

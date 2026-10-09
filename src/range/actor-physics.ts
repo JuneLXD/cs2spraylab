@@ -13,6 +13,9 @@ export const SERVER_TICK = 1 / 64;
 export const tickAligned = (time: number) => Math.ceil(time / SERVER_TICK - 1e-7) * SERVER_TICK;
 export const GRAVITY = 800 * UNIT;
 export const JUMP_SPEED = 301.993 * UNIT;
+// Native modern standing launches subtract half one 128 Hz interval of gravity.
+// A crouched/ducking launch uses the full impulse (native_reaudit_airduck_003).
+export const jumpLaunchSpeed = (ducking: boolean) => JUMP_SPEED - (ducking ? 0 : GRAVITY / 256);
 export const DUCK_SECONDS = 1 / 6.4;
 export const UNDUCK_SECONDS = 1 / 8;
 
@@ -29,6 +32,9 @@ export type ActorKinematics = {
   verticalVelocity: number;
   eyeHeight: number;
   duckAmount?: number;
+  /** Native camera offsets in metres; root compensates an airborne hull-origin change. */
+  duckViewOffset?: number;
+  duckRootOffset?: number;
   duckSpeed?: number;
   crouchHeld?: boolean;
   duckCooldown?: number;
@@ -175,22 +181,33 @@ export function advanceActor(
   const bhop = isBhopPress(validPress ? time : undefined, actor.landedAt, rules);
   let verticalVelocity = actor.verticalVelocity;
   if (wantsJump && supported) {
-    verticalVelocity = JUMP_SPEED * (actor.landedAt === undefined ? 1 :
+    verticalVelocity = jumpLaunchSpeed(crouch || currentDuck > 0) * (actor.landedAt === undefined ? 1 :
       jumpLandingFactor(actor.landingVelocity ?? 0, time - actor.landedAt));
     pendingJumpPressTime = undefined;
   }
   const airborne = !supported || verticalVelocity > 0;
   let duckAmount = clamp(currentDuck + (wantsDuck ? .8 * duckSpeed : -Math.max(1.5, duckSpeed)) * dt, 0, 1);
+  // FinishDuck/FinishUnDuck complete in air, preserving the hull centre:
+  // the 72-to-54-unit height change moves its origin by nine units.
+  if (airborne) duckAmount = wantsDuck ? 1 : 0;
   let duckCurve = stanceCurve(duckAmount);
   const floor = world?.floor === null ? -Infinity : world?.floor ?? 0;
-  let feet = Math.max(floor, actor.feet + (airborne ? (duckCurve - previousCurve) * 18 * UNIT : 0));
+  let feet = Math.max(floor, actor.feet + (airborne ? (duckCurve - previousCurve) * 9 * UNIT : 0));
   // Releasing crouch requires room for the full standing hull, not just the
   // next interpolation step. In air the hull expands downwards.
-  const standingFeet = Math.max(floor, actor.feet - (airborne ? previousCurve * 18 * UNIT : 0));
+  const standingFeet = Math.max(floor, actor.feet - (airborne ? previousCurve * 9 * UNIT : 0));
   if (duckAmount < currentDuck && !canOccupy(actor.position, standingFeet, 72 * UNIT)) {
     duckAmount = currentDuck;
     duckCurve = previousCurve; feet = actor.feet;
   }
+  const approach = (value: number, target: number, amount: number) => value + clamp(target - value, -amount, amount);
+  const oldRootOffset = actor.duckRootOffset ?? 0;
+  // Root compensation belongs to the stance change, never to a floor repair
+  // or the terrain/support displacement performed elsewhere in this step.
+  const duckOriginShift = airborne && duckAmount !== currentDuck ? feet - Math.max(floor, actor.feet) : 0;
+  const duckRootOffset = approach(oldRootOffset - duckOriginShift, 0, 90 * UNIT * dt);
+  const duckViewOffset = approach(actor.duckViewOffset ?? actor.eyeHeight - 64 * UNIT - oldRootOffset,
+    -18 * UNIT * duckAmount, 90 * UNIT * dt);
   if (duckAmount === 1 && currentDuck < 1) duckCooldown = .4;
   const wishX = side * Math.cos(actor.yaw) - forward * Math.sin(actor.yaw);
   const wishZ = -side * Math.sin(actor.yaw) - forward * Math.cos(actor.yaw);
@@ -306,7 +323,7 @@ export function advanceActor(
     if (isBhopPress(pendingJumpPressTime, landedAt, rules) || rules?.autoBhop && jump) {
       const remainder = dt - landingOffset;
       velocity = clampJumpSpeed(velocity, runningSpeed, rules);
-      verticalVelocity = JUMP_SPEED * jumpLandingFactor(landingVelocity, 0);
+      verticalVelocity = jumpLaunchSpeed(crouch || duckAmount > 0) * jumpLandingFactor(landingVelocity, 0);
       pendingJumpPressTime = undefined;
       const bounceFeet = feet + verticalVelocity * remainder - GRAVITY * remainder * remainder / 2;
       const bounce = vertical(resolved, feet, bounceFeet, hullHeight);
@@ -329,11 +346,11 @@ export function advanceActor(
   velocity.x = clamp(velocity.x, -TERRAIN_RULES.maxVelocity, TERRAIN_RULES.maxVelocity);
   velocity.z = clamp(velocity.z, -TERRAIN_RULES.maxVelocity, TERRAIN_RULES.maxVelocity);
   verticalVelocity = clamp(verticalVelocity, -TERRAIN_RULES.maxVelocity, TERRAIN_RULES.maxVelocity);
-  const eyeHeight = (64 - 18 * duckCurve) * UNIT;
+  const eyeHeight = 64 * UNIT + duckViewOffset + duckRootOffset;
   return {
     position: { x: resolved.x, y: feet + eyeHeight, z: resolved.z }, velocity,
     yaw: actor.yaw, feet, verticalVelocity, eyeHeight, duckAmount, jumpHeld: jump, grounded: contact.grounded,
-    duckSpeed, crouchHeld: crouch, duckCooldown, duckRecoveryOrigin,
+    duckSpeed, duckViewOffset, duckRootOffset, crouchHeld: crouch, duckCooldown, duckRecoveryOrigin,
     velocityModifier: actor.velocityModifier,
     movementTime: time + dt, lastJumpPressTime: pressed ? time : actor.lastJumpPressTime, pendingJumpPressTime,
     landedAt, landingVelocity, landingVelocityXY,

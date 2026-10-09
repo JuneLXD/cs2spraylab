@@ -310,6 +310,10 @@ export const latestChanges = {
       'Both AUG viewmodel variants and their reload sounds were rebuilt from the same current animation, keeping the magazine motion, ammo counter and foley aligned.',
       'A fresh comparison checked every weapon\'s imported primary/alternate stats; the AUG reload was the only parameter change found.',
     ]},
+    {id: 'native-air-duck-camera', title: 'Recorded jump and crouch response', items: [
+      'Standing jumps now use the measured launch velocity. Crouching in midair shifts the collision origin by nine Source units, correcting the extra jump height.',
+      'The crouch camera now follows the recorded eye and origin offsets, including its short return after the standing hull is restored.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

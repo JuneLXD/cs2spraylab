@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {advanceActor, GRAVITY, idleInput, JUMP_SPEED, STEP, UNIT, type ActorKinematics} from './actor-physics';
+import {advanceActor, GRAVITY, idleInput, jumpLaunchSpeed, STEP, UNIT, type ActorKinematics} from './actor-physics';
 import {fitsHull, verticalContact} from './actor-collision';
 import {jumpLandingFactor} from './actor-jump';
 
@@ -10,16 +10,16 @@ const contact = (position: ActorKinematics['position'], from: number, to: number
   verticalContact(position, from, to, height, [box]);
 
 describe('shared vertical movement', () => {
-  it('tucks the feet without pulling the airborne eye down', () => {
-    let standing = actor(), ducking = actor();
-    // A fresh key edge consumes crouch speed; allow the resulting transition
-    // to finish rather than assuming an always-rested 6.4/s transition.
+  it('tucks the feet nine units while the airborne eye settles smoothly', () => {
+    const airborne = {...actor(), feet: 100 * UNIT, position: {x: 0, y: 164 * UNIT, z: 0}, verticalVelocity: 3};
+    let standing = airborne, ducking = airborne;
     for (let tick = 0; tick < 32; tick++) {
-      standing = advanceActor(standing, {...idleInput(), jump: true}, 250 * UNIT, STEP);
-      ducking = advanceActor(ducking, {...idleInput(), jump: true, crouch: true}, 250 * UNIT, STEP);
-      expect(ducking.position.y).toBeCloseTo(standing.position.y, 8);
+      standing = advanceActor(standing, idleInput(), 250 * UNIT, STEP);
+      ducking = advanceActor(ducking, {...idleInput(), crouch: true}, 250 * UNIT, STEP);
+      if (tick === 0) expect(ducking.position.y).toBeCloseTo(standing.position.y, 8);
     }
-    expect(ducking.feet - standing.feet).toBeCloseTo(18 * UNIT);
+    expect(ducking.feet - standing.feet).toBeCloseTo(9 * UNIT);
+    expect(ducking.position.y - standing.position.y).toBeCloseTo(-9 * UNIT);
     expect(ducking.duckAmount).toBe(1);
   });
 
@@ -38,7 +38,7 @@ describe('shared vertical movement', () => {
     expect(a.position.y).toBeCloseTo(1 + 64 * UNIT);
     const jumping = advanceActor(a, {...idleInput(), jump: true}, 250 * UNIT, STEP, undefined, undefined, contact);
     expect(jumping.grounded).toBe(false);
-    expect(jumping.verticalVelocity).toBeCloseTo(JUMP_SPEED * jumpLandingFactor(a.landingVelocity ?? 0,
+    expect(jumping.verticalVelocity).toBeCloseTo(jumpLaunchSpeed(false) * jumpLandingFactor(a.landingVelocity ?? 0,
       (a.movementTime ?? 0) - (a.landedAt ?? 0)) - GRAVITY * STEP);
   });
 

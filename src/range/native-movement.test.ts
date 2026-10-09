@@ -119,6 +119,10 @@ describe('installed-build movement arithmetic', () => {
     expect(actor.duckAmount).toBeCloseTo(.5);
     actor = advanceActor(actor, idleInput(), 215 * UNIT, UNDUCK_SECONDS / 2);
     expect(actor.duckAmount).toBe(0);
+    // The native camera approaches its target at 90 u/s and can finish after
+    // the duck amount reaches zero (fresh demo ground-unduck ticks 552–554).
+    expect(actor.eyeHeight).toBeLessThan(64 * UNIT);
+    actor = advanceActor(actor, idleInput(), 215 * UNIT, .1);
     expect(actor.eyeHeight).toBe(64 * UNIT);
   });
 

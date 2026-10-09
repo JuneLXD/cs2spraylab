@@ -34,6 +34,7 @@ export class Simulation {
   velocity = { x: 0, z: 0 }; yaw = 0; pitch = 0;
   feet = 0; verticalVelocity = 0; eyeHeight = 64 * UNIT; duckAmount = 0; jumpHeld = false;
   duckSpeed = 8; crouchHeld = false; duckCooldown = 0; duckRecoveryOrigin?: {x: number; z: number};
+  duckViewOffset = 0; duckRootOffset = 0;
   grounded = true;
   velocityModifier = 1; movementTime = 0;
   lastJumpPressTime?: number; pendingJumpPressTime?: number; landedAt?: number; landingVelocity?: number;
@@ -175,6 +176,7 @@ export class Simulation {
     else { this.drill = undefined; this.drillRevision++; if (changedMode && leavingPositionedDrill) {
       this.position = {x:0,y:64*UNIT,z:SPAWN_Z}; this.yaw = this.pitch = this.feet = this.verticalVelocity = this.duckAmount = 0;
       this.eyeHeight = 64 * UNIT; this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0; this.duckRecoveryOrigin = undefined;
+      this.duckViewOffset = this.duckRootOffset = 0;
       this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
     } }
     if (s.mode === 'pop') {
@@ -184,6 +186,7 @@ export class Simulation {
         this.popPlaced = true;
         this.position = {...POP_SPAWN}; this.yaw = this.pitch = this.feet = this.verticalVelocity = this.duckAmount = 0;
         this.velocity = {x: 0, z: 0}; this.eyeHeight = 64 * UNIT; this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0;
+        this.duckViewOffset = this.duckRootOffset = 0;
         this.duckRecoveryOrigin = undefined; this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
       }
     } else {this.pop = undefined; this.popPlaced = false;}
@@ -252,6 +255,7 @@ export class Simulation {
       this.velocity = {x:0,z:0}; this.feet = this.verticalVelocity = this.duckAmount = 0; this.eyeHeight = 64*UNIT;
       this.grounded = true; this.jumpHeld = false;
       this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0; this.duckRecoveryOrigin = undefined;
+      this.duckViewOffset = this.duckRootOffset = 0;
       this.resetMovementHistory();
     } else scenario.spawn = {...this.position};
     this.drill = new DrillCoach(this.settings.mode, scenario, this.time);
@@ -399,6 +403,7 @@ export class Simulation {
     this.feet = next.feet; this.verticalVelocity = next.verticalVelocity;
     this.eyeHeight = next.eyeHeight; this.duckAmount = next.duckAmount ?? 0; this.jumpHeld = next.jumpHeld;
     this.duckSpeed = next.duckSpeed ?? 8; this.crouchHeld = next.crouchHeld ?? false;
+    this.duckViewOffset = next.duckViewOffset ?? 0; this.duckRootOffset = next.duckRootOffset ?? 0;
     this.duckCooldown = next.duckCooldown ?? 0; this.duckRecoveryOrigin = next.duckRecoveryOrigin;
     this.velocityModifier = next.velocityModifier ?? 1; this.movementTime = next.movementTime ?? this.time;
     this.lastJumpPressTime = next.lastJumpPressTime; this.pendingJumpPressTime = next.pendingJumpPressTime;

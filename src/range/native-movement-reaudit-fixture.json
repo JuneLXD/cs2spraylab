@@ -1,0 +1,477 @@
+{
+  "source": "native_reaudit_airduck_003.dem",
+  "sha256": "b2e4254179264568f323339cb87b22d1217b9447c88b4a419fb75b9d88e0ceb8",
+  "sampleInterval": 0.015625,
+  "units": "Source units and seconds",
+  "limits": [
+    "Server movement state; not rendered camera frames.",
+    "Origin residual uses two earlier samples and gravity, with network position quantization.",
+    "Jump timestamp fields use 128 intervals per second; demo samples are 64 Hz."
+  ],
+  "launch": [
+    {
+      "tick": 282,
+      "duckAmount": 0.0,
+      "velocity": 298.8683776855469
+    },
+    {
+      "tick": 476,
+      "duckAmount": 1.0,
+      "velocity": 301.9933776855469
+    },
+    {
+      "tick": 670,
+      "duckAmount": 0.0,
+      "velocity": 298.8683776855469
+    },
+    {
+      "tick": 873,
+      "duckAmount": 0.0,
+      "velocity": 298.8683776855469
+    }
+  ],
+  "originChanges": [
+    {
+      "tick": 681,
+      "previous2": 152.40625,
+      "previous1": 155.0625,
+      "actual": 166.53125,
+      "ballisticResidual": 9.0078125,
+      "beforeAmount": 0.0,
+      "afterAmount": 1.0
+    },
+    {
+      "tick": 882,
+      "previous2": 144.390625,
+      "previous1": 147.578125,
+      "actual": 159.5625,
+      "ballisticResidual": 8.9921875,
+      "beforeAmount": 0.0,
+      "afterAmount": 1.0
+    },
+    {
+      "tick": 894,
+      "previous2": 178.640625,
+      "previous1": 179.46875,
+      "actual": 171.109375,
+      "ballisticResidual": -8.9921875,
+      "beforeAmount": 1.0,
+      "afterAmount": 0.0
+    }
+  ],
+  "phases": [
+    {
+      "name": "groundDuck",
+      "held": true,
+      "air": false,
+      "samples": [
+        {
+          "tick": 412,
+          "amount": 0.035284996032714844,
+          "speed": 6.02197265625,
+          "viewOffset": -0.6351299285888672,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 413,
+          "amount": 0.11114559322595596,
+          "speed": 6.06884765625,
+          "viewOffset": -2.0006206035614014,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 414,
+          "amount": 0.18759211897850037,
+          "speed": 6.11572265625,
+          "viewOffset": -3.3766582012176514,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 415,
+          "amount": 0.26462459564208984,
+          "speed": 6.16259765625,
+          "viewOffset": -4.763242721557617,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 416,
+          "amount": 0.3422430157661438,
+          "speed": 6.20947265625,
+          "viewOffset": -6.160374164581299,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 417,
+          "amount": 0.42044734954833984,
+          "speed": 6.25634765625,
+          "viewOffset": -7.566624164581299,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 418,
+          "amount": 0.49923762679100037,
+          "speed": 6.30322265625,
+          "viewOffset": -8.97287368774414,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 419,
+          "amount": 0.5786138772964478,
+          "speed": 6.35009765625,
+          "viewOffset": -10.37912368774414,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 420,
+          "amount": 0.6585760116577148,
+          "speed": 6.39697265625,
+          "viewOffset": -11.78537368774414,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 421,
+          "amount": 0.7391241192817688,
+          "speed": 6.44384765625,
+          "viewOffset": -13.19162368774414,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 422,
+          "amount": 0.8202581405639648,
+          "speed": 6.49072265625,
+          "viewOffset": -14.59787368774414,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 423,
+          "amount": 0.9019781351089478,
+          "speed": 6.53759765625,
+          "viewOffset": -16.00412368774414,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 424,
+          "amount": 0.9842840433120728,
+          "speed": 6.58447265625,
+          "viewOffset": -17.41037368774414,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 425,
+          "amount": 1.0,
+          "speed": 6.63134765625,
+          "viewOffset": -18.0,
+          "rootOffset": 0.0
+        }
+      ]
+    },
+    {
+      "name": "groundUnduck",
+      "held": false,
+      "air": false,
+      "samples": [
+        {
+          "tick": 542,
+          "amount": 0.9114656448364258,
+          "speed": 6.0439453125,
+          "viewOffset": -16.681640625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 543,
+          "amount": 0.8162965774536133,
+          "speed": 6.0908203125,
+          "viewOffset": -15.275390625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 544,
+          "amount": 0.7203950881958008,
+          "speed": 6.1376953125,
+          "viewOffset": -13.869140625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 545,
+          "amount": 0.6237611770629883,
+          "speed": 6.1845703125,
+          "viewOffset": -12.462890625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 546,
+          "amount": 0.5263948440551758,
+          "speed": 6.2314453125,
+          "viewOffset": -11.056640625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 547,
+          "amount": 0.4282960891723633,
+          "speed": 6.2783203125,
+          "viewOffset": -9.650390625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 548,
+          "amount": 0.3294649124145508,
+          "speed": 6.3251953125,
+          "viewOffset": -8.244140625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 549,
+          "amount": 0.22990131378173828,
+          "speed": 6.3720703125,
+          "viewOffset": -6.837890625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 550,
+          "amount": 0.12960529327392578,
+          "speed": 6.4189453125,
+          "viewOffset": -5.431640625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 551,
+          "amount": 0.02857685089111328,
+          "speed": 6.4658203125,
+          "viewOffset": -4.025390625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 552,
+          "amount": 0.0,
+          "speed": 6.5126953125,
+          "viewOffset": -2.619140625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 553,
+          "amount": 0.0,
+          "speed": 6.5595703125,
+          "viewOffset": -1.212890625,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 554,
+          "amount": 0.0,
+          "speed": 6.6064453125,
+          "viewOffset": -0.0,
+          "rootOffset": 0.0
+        }
+      ]
+    },
+    {
+      "name": "airDuck",
+      "held": true,
+      "air": true,
+      "samples": [
+        {
+          "tick": 681,
+          "amount": 1.0,
+          "speed": 6.03662109375,
+          "viewOffset": -1.0986328125,
+          "rootOffset": -7.9013671875
+        },
+        {
+          "tick": 682,
+          "amount": 1.0,
+          "speed": 6.08349609375,
+          "viewOffset": -2.5048828125,
+          "rootOffset": -6.4951171875
+        },
+        {
+          "tick": 683,
+          "amount": 1.0,
+          "speed": 6.13037109375,
+          "viewOffset": -3.9111328125,
+          "rootOffset": -5.0888671875
+        },
+        {
+          "tick": 684,
+          "amount": 1.0,
+          "speed": 6.17724609375,
+          "viewOffset": -5.3173828125,
+          "rootOffset": -3.6826171875
+        },
+        {
+          "tick": 685,
+          "amount": 1.0,
+          "speed": 6.22412109375,
+          "viewOffset": -6.7236328125,
+          "rootOffset": -2.2763671875
+        },
+        {
+          "tick": 686,
+          "amount": 1.0,
+          "speed": 6.27099609375,
+          "viewOffset": -8.1298828125,
+          "rootOffset": -0.8701171875
+        },
+        {
+          "tick": 687,
+          "amount": 1.0,
+          "speed": 6.31787109375,
+          "viewOffset": -9.5361328125,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 688,
+          "amount": 1.0,
+          "speed": 6.36474609375,
+          "viewOffset": -10.9423828125,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 689,
+          "amount": 1.0,
+          "speed": 6.41162109375,
+          "viewOffset": -12.3486328125,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 690,
+          "amount": 1.0,
+          "speed": 6.45849609375,
+          "viewOffset": -13.7548828125,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 691,
+          "amount": 1.0,
+          "speed": 6.50537109375,
+          "viewOffset": -15.1611328125,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 692,
+          "amount": 1.0,
+          "speed": 6.55224609375,
+          "viewOffset": -16.5673828125,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 693,
+          "amount": 1.0,
+          "speed": 6.59912109375,
+          "viewOffset": -17.9736328125,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 694,
+          "amount": 1.0,
+          "speed": 6.64599609375,
+          "viewOffset": -18.0,
+          "rootOffset": 0.0
+        }
+      ]
+    },
+    {
+      "name": "airUnduck",
+      "held": false,
+      "air": true,
+      "samples": [
+        {
+          "tick": 894,
+          "amount": 0.0,
+          "speed": 4.569091796875,
+          "viewOffset": -16.67724609375,
+          "rootOffset": 8.80224609375
+        },
+        {
+          "tick": 895,
+          "amount": 0.0,
+          "speed": 4.615966796875,
+          "viewOffset": -15.27099609375,
+          "rootOffset": 7.39599609375
+        },
+        {
+          "tick": 896,
+          "amount": 0.0,
+          "speed": 4.662841796875,
+          "viewOffset": -13.86474609375,
+          "rootOffset": 5.98974609375
+        },
+        {
+          "tick": 897,
+          "amount": 0.0,
+          "speed": 4.709716796875,
+          "viewOffset": -12.45849609375,
+          "rootOffset": 4.58349609375
+        },
+        {
+          "tick": 898,
+          "amount": 0.0,
+          "speed": 4.756591796875,
+          "viewOffset": -11.05224609375,
+          "rootOffset": 3.17724609375
+        },
+        {
+          "tick": 899,
+          "amount": 0.0,
+          "speed": 4.803466796875,
+          "viewOffset": -9.64599609375,
+          "rootOffset": 1.77099609375
+        },
+        {
+          "tick": 900,
+          "amount": 0.0,
+          "speed": 4.850341796875,
+          "viewOffset": -8.23974609375,
+          "rootOffset": 0.36474609375
+        },
+        {
+          "tick": 901,
+          "amount": 0.0,
+          "speed": 4.897216796875,
+          "viewOffset": -6.83349609375,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 902,
+          "amount": 0.0,
+          "speed": 4.944091796875,
+          "viewOffset": -5.42724609375,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 903,
+          "amount": 0.0,
+          "speed": 4.990966796875,
+          "viewOffset": -4.02099609375,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 904,
+          "amount": 0.0,
+          "speed": 5.037841796875,
+          "viewOffset": -2.61474609375,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 905,
+          "amount": 0.0,
+          "speed": 5.084716796875,
+          "viewOffset": -1.20849609375,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 906,
+          "amount": 0.0,
+          "speed": 5.131591796875,
+          "viewOffset": -0.0,
+          "rootOffset": 0.0
+        },
+        {
+          "tick": 907,
+          "amount": 0.0,
+          "speed": 5.178466796875,
+          "viewOffset": -0.0,
+          "rootOffset": 0.0
+        }
+      ]
+    }
+  ]
+}
