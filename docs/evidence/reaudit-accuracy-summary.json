@@ -1,0 +1,4039 @@
+{
+  "coverage": {
+    "acceptedRecordings": 21,
+    "acceptedRows": 40408,
+    "acceptedShots": 152,
+    "excluded": [
+      {
+        "demo": "native_audit_ak_001.dem",
+        "reason": "No usable consecutive player rows."
+      },
+      {
+        "demo": "native_phase3_m4a4_001.dem",
+        "reason": "No usable consecutive player rows."
+      },
+      {
+        "demo": "native_reaudit_airduck_001.dem",
+        "reason": "Capture interrupted by Alt+Space window-menu/minimization; retained for diagnosis only."
+      }
+    ],
+    "rawWeaponNames": {
+      "native_audit_ak_001.dem": [],
+      "native_audit_ak_002.dem": [
+        "AK-47"
+      ],
+      "native_audit_aug_scope_001.dem": [
+        "USP-S"
+      ],
+      "native_audit_aug_scope_002.dem": [
+        "AUG"
+      ],
+      "native_audit_awp_001.dem": [
+        "USP-S",
+        "knife",
+        "AK-47"
+      ],
+      "native_audit_awp_002.dem": [
+        "AWP",
+        "knife"
+      ],
+      "native_audit_deagle_001.dem": [
+        "Desert Eagle",
+        "knife"
+      ],
+      "native_audit_scope_slow_001.dem": [
+        "AWP"
+      ],
+      "native_audit_scope_slow_002.dem": [
+        "AWP"
+      ],
+      "native_audit_tv_probe.dem": [
+        "AK-47"
+      ],
+      "native_audit_zoom_modes_001.dem": [
+        "AWP",
+        "USP-S",
+        null
+      ],
+      "native_phase3_m4a1s_001.dem": [
+        "M4A4"
+      ],
+      "native_phase3_m4a4_001.dem": [],
+      "native_phase3_m4a4_002.dem": [
+        "M4A4"
+      ],
+      "native_reaudit_airduck_001.dem": [
+        "AK-47"
+      ],
+      "native_reaudit_airduck_003.dem": [
+        "AK-47"
+      ],
+      "native_reaudit_footsteps_001.dem": [
+        "AK-47"
+      ],
+      "native_reaudit_footsteps_awp_001.dem": [
+        "AWP"
+      ],
+      "native_reaudit_movement_001.dem": [
+        "AK-47"
+      ],
+      "native_reaudit_recovery_001.dem": [
+        "AK-47"
+      ],
+      "native_reaudit_shooting_001.dem": [
+        "AK-47",
+        "knife_t"
+      ],
+      "native_reload_deagle_empty_001.dem": [
+        "M4A4"
+      ],
+      "native_reload_deagle_empty_002.dem": [
+        "Desert Eagle"
+      ],
+      "native_reload_gate_001.dem": [
+        "M4A4"
+      ]
+    }
+  },
+  "method": "One-step native snapshot replay plus independently bounded native instruction grid. Candidate ordering is an inference tested against observed tick rows, not an emulation of item-postframe or movement ordering.",
+  "productionComparison": "Calls current WeaponRecovery at two 1/128 s advances per native tick with captured events. This is a class replay, not an end-to-end simulation/input replay.",
+  "nativeGridScope": "35 supplied trainer parameter sets x both supplied modes; USP/M4A1-S trainer defaults select silenced values. These are arithmetic inputs, not native gameplay captures of 70 modes. Turning/stack/ladders are outside this bounded grid.",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "vdataSha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b",
+  "grid": {
+    "summary": {
+      "rows": 39648,
+      "maxPenaltyError": 0,
+      "maxIndexError": 0,
+      "penaltyOver1e6": 0,
+      "indexOver1e6": 0
+    },
+    "before": {
+      "maxPenaltyError": 3.484269017750563e-8,
+      "maxIndexError": 0.9019644367533175
+    },
+    "mismatches": []
+  },
+  "demos": [
+    {
+      "demo": "native_audit_ak_001.dem",
+      "sha256": "2956a11f15de8d45acf77941e9fc3f9dda3e54ad524325091b61e4d55698d8b6",
+      "exclusion": "No usable consecutive player rows.",
+      "summary": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "resets": 0
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": []
+    },
+    {
+      "demo": "native_audit_ak_002.dem",
+      "sha256": "feadebd8538a044283a42ef2e78fa97db98591d9c2565c6fbce22d684b76835c",
+      "exclusion": null,
+      "summary": {
+        "rows": 4145,
+        "maxPenaltyError": 2.6822090098965745e-7,
+        "maxIndexError": 8.881784197001252e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 2.6822090098965745e-7,
+        "maxIndexError": 8.881784197001252e-16,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0014778250289986562,
+        "maxIndexError": 1
+      },
+      "stable": {
+        "rows": 4141,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 8.881784197001252e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 14,
+        "maxPenaltyError": 4.787836793695988e-16,
+        "maxIndexError": 2.220446049250313e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 1,
+        "maxPenaltyError": 4.0766001685454967e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 1,
+        "maxPenaltyError": 2.2898349882893854e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 2,
+        "maxPenaltyError": 2.6822090098965745e-7,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.0007264843203300328,
+        "maxStableIndexError": 0.22807603206188176
+      },
+      "transitionExamples": [
+        {
+          "tick": 25,
+          "gameTime": 847.15625,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.202637776732445,
+            "index": 0
+          },
+          "fallVelocity": 312.484375,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.2026377022266388,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -7.450580621903846e-8,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -6.84487379831733e-8,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.2026377022266388,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -7.450580621903846e-8,
+          "indexError": 0,
+          "beforePenaltyError": -6.716423173180885e-8,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 3428,
+          "gameTime": 900.328125,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.19590274989605,
+            "index": 0
+          },
+          "fallVelocity": 281.796875,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.195903018116951,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 2.6822090098965745e-7,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 2.668758373181035e-7,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.195903018116951,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 2.6822090098965745e-7,
+          "indexError": 0,
+          "beforePenaltyError": 2.694095776190064e-7,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 3755,
+          "gameTime": 905.4375,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.006429684348404,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.0064296843484044075,
+            "index": 1,
+            "last": 904.23291015625
+          },
+          "cumulativePenaltyError": 4.0766001685454967e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.0000013194366425056323,
+          "cumulativeBeforeIndexError": -1,
+          "candidate": {
+            "penalty": 0.0064296843484044075,
+            "index": 1,
+            "last": 904.23291015625
+          },
+          "penaltyError": 4.0766001685454967e-16,
+          "indexError": 0,
+          "beforePenaltyError": 1.965695470979023e-10,
+          "beforeIndexError": -1
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_aug_scope_001.dem",
+      "sha256": "85e948f0be0e9578d9f57be2c384b4c036f879e0660b239229504369bc7ea24d",
+      "exclusion": null,
+      "summary": {
+        "rows": 116,
+        "maxPenaltyError": 4.709774237277031e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.709774237277031e-16,
+        "maxIndexError": 0,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 4.631711680858075e-16,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 116,
+        "maxPenaltyError": 4.709774237277031e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 4.597017211338539e-17,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": []
+    },
+    {
+      "demo": "native_audit_aug_scope_002.dem",
+      "sha256": "083ef8600700dd3d7de30b12362a7d3eb9c594fee3bfdf91206da4e99107b6ca",
+      "exclusion": null,
+      "summary": {
+        "rows": 137,
+        "maxPenaltyError": 4.77048955893622e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.77048955893622e-16,
+        "maxIndexError": 0,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0011220173910256271,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 135,
+        "maxPenaltyError": 4.77048955893622e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 2,
+        "maxPenaltyError": 4.709774237277031e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 2.2719006103483208e-10,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": [
+        {
+          "tick": 86,
+          "gameTime": 3041.71875,
+          "weapon": "aug",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.004802017472684,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.004802017472684383,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 3.8337388819087437e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.0011220173910256271,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.004802017472684383,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 3.8337388819087437e-16,
+          "indexError": 0,
+          "beforePenaltyError": -1.5764342262136743e-10,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 111,
+          "gameTime": 3042.109375,
+          "weapon": "aug",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.004900000058115,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.004900000058114529,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -4.709774237277031e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -4.657732532997727e-16,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.004900000058114529,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -4.709774237277031e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.709774237277031e-16,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_awp_001.dem",
+      "sha256": "4a3cdbbbdedc39d5c1233fb2e44c467203d5a4105ac571545f8caf46e044886d",
+      "exclusion": null,
+      "summary": {
+        "rows": 3859,
+        "maxPenaltyError": 4.98732999343332e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.98732999343332e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "resets": 2
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.005086191375077112,
+        "maxIndexError": 1
+      },
+      "stable": {
+        "rows": 3857,
+        "maxPenaltyError": 4.98732999343332e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 3,
+        "maxPenaltyError": 4.787836793695988e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 1,
+        "maxPenaltyError": 2.38524477946811e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 1,
+        "maxPenaltyError": 3.469446951953614e-17,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.005086192167803857,
+        "maxStableIndexError": 0.05780325422211141
+      },
+      "transitionExamples": [
+        {
+          "tick": 3247,
+          "gameTime": 1046.59375,
+          "weapon": "usp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.004900249186903,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.004900249186903238,
+            "index": 1,
+            "last": 1044.748046875
+          },
+          "cumulativePenaltyError": 2.38524477946811e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 2.6988140951200723e-8,
+          "cumulativeBeforeIndexError": -1,
+          "candidate": {
+            "penalty": 0.004900249186903238,
+            "index": 1,
+            "last": 1044.748046875
+          },
+          "penaltyError": 2.38524477946811e-16,
+          "indexError": 0,
+          "beforePenaltyError": -9.85505947681542e-13,
+          "beforeIndexError": -1
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_awp_002.dem",
+      "sha256": "d0a07ff5c7cf0c9e19d40a6b0254727877317608fe7ba49edac3250abd99bcd4",
+      "exclusion": null,
+      "summary": {
+        "rows": 1235,
+        "maxPenaltyError": 4.96564594998361e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.96564594998361e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "resets": 2
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.07354830523005838,
+        "maxIndexError": 0.9932266374423455
+      },
+      "stable": {
+        "rows": 1225,
+        "maxPenaltyError": 4.96564594998361e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 3,
+        "maxPenaltyError": 2.498001805406602e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 1,
+        "maxPenaltyError": 9.280770596475918e-17,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 1,
+        "maxPenaltyError": 2.498001805406602e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 9,
+        "maxPenaltyError": 4.3021142204224816e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 4.132568079406873e-9,
+        "maxStableIndexError": 0.0380892931675586
+      },
+      "transitionExamples": [
+        {
+          "tick": 286,
+          "gameTime": 1255.09375,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073004767298698,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 4.3021142204224816e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100476720370298,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 4.3021142204224816e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.081865526139872e-9,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 338,
+          "gameTime": 1255.90625,
+          "weapon": "awp",
+          "mode": 0,
+          "shot": true,
+          "exactShot": 1255.8974609375,
+          "deadlineValid": true,
+          "fractional": true,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.080799996852875,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.08079999685287476,
+            "index": 1,
+            "last": 1255.8974609375
+          },
+          "cumulativePenaltyError": -2.498001805406602e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.053849998861551035,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.08079999685287476,
+            "index": 1,
+            "last": 1255.8974609375
+          },
+          "penaltyError": -2.498001805406602e-16,
+          "indexError": 0,
+          "beforePenaltyError": 0.053849998861551035,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 431,
+          "gameTime": 1257.359375,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073004767298698,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300476729869843,
+            "index": 1,
+            "last": 1255.8974609375
+          },
+          "cumulativePenaltyError": 4.3021142204224816e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100142536838071,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300476729869843,
+            "index": 1,
+            "last": 1255.8974609375
+          },
+          "penaltyError": 4.3021142204224816e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.081865526139872e-9,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 508,
+          "gameTime": 1258.5625,
+          "weapon": "awp",
+          "mode": 0,
+          "shot": true,
+          "exactShot": 1258.5537109375,
+          "deadlineValid": true,
+          "fractional": true,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.080799996852875,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.08079999685287476,
+            "index": 1,
+            "last": 1258.5537109375
+          },
+          "cumulativePenaltyError": -2.498001805406602e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.05384999995955489,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.08079999685287476,
+            "index": 1,
+            "last": 1258.5537109375
+          },
+          "penaltyError": -2.498001805406602e-16,
+          "indexError": 0,
+          "beforePenaltyError": 0.053849998861551035,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 601,
+          "gameTime": 1260.015625,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073004767298698,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300476729869843,
+            "index": 1,
+            "last": 1258.5537109375
+          },
+          "cumulativePenaltyError": 4.3021142204224816e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.0710014253683126,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300476729869843,
+            "index": 1,
+            "last": 1258.5537109375
+          },
+          "penaltyError": 4.3021142204224816e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.081865526139872e-9,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 626,
+          "gameTime": 1260.40625,
+          "weapon": "awp",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.007251938804984,
+            "index": 1.165481686592102
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.007251938804984093,
+            "index": 1.165481686592102,
+            "last": 1258.5537109375
+          },
+          "cumulativePenaltyError": 9.280770596475918e-17,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.07354830523005838,
+          "cumulativeBeforeIndexError": -0.9932266374423455,
+          "candidate": {
+            "penalty": 0.007251938804984093,
+            "index": 1.165481686592102,
+            "last": 1258.5537109375
+          },
+          "penaltyError": 9.280770596475918e-17,
+          "indexError": 0,
+          "beforePenaltyError": 0.07354805804789076,
+          "beforeIndexError": -1.0000000196983811
+        },
+        {
+          "tick": 1072,
+          "gameTime": 1267.375,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073004767298698,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 1258.5537109375
+          },
+          "cumulativePenaltyError": 4.3021142204224816e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100476720370309,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 1258.5537109375
+          },
+          "penaltyError": 4.3021142204224816e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.081865526139872e-9,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 1108,
+          "gameTime": 1267.9375,
+          "weapon": "awp",
+          "mode": 0,
+          "shot": true,
+          "exactShot": 1267.926513671875,
+          "deadlineValid": true,
+          "fractional": true,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.080799996852875,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.08079999685287476,
+            "index": 1,
+            "last": 1267.926513671875
+          },
+          "cumulativePenaltyError": -2.498001805406602e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.053849998861551035,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.08079999685287476,
+            "index": 1,
+            "last": 1267.926513671875
+          },
+          "penaltyError": -2.498001805406602e-16,
+          "indexError": 0,
+          "beforePenaltyError": 0.053849998861551035,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 1201,
+          "gameTime": 1269.390625,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073004767298698,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300476729869843,
+            "index": 1,
+            "last": 1267.926513671875
+          },
+          "cumulativePenaltyError": 4.3021142204224816e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100142536838071,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300476729869843,
+            "index": 1,
+            "last": 1267.926513671875
+          },
+          "penaltyError": 4.3021142204224816e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.081865526139872e-9,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_deagle_001.dem",
+      "sha256": "0fdd476a1650f7a58af769d789bdaaebc41469f88b457eaadf97abe2053772be",
+      "exclusion": null,
+      "summary": {
+        "rows": 3027,
+        "maxPenaltyError": 4.98732999343332e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.98732999343332e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "resets": 3
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.004740399629393849,
+        "maxIndexError": 1.010480794506278
+      },
+      "stable": {
+        "rows": 3023,
+        "maxPenaltyError": 4.98732999343332e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 5,
+        "maxPenaltyError": 3.7470027081099033e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 3,
+        "maxPenaltyError": 4.753142324176451e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 1,
+        "maxPenaltyError": 1.3010426069826053e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.003133509265795198,
+        "maxStableIndexError": 0.07233008240138084
+      },
+      "transitionExamples": [
+        {
+          "tick": 2457,
+          "gameTime": 1471.375,
+          "weapon": "deagle",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.043599288910627,
+            "index": 2.233852624893188
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.043599288910627365,
+            "index": 2.2338526248931885,
+            "last": 1471.0302734375
+          },
+          "cumulativePenaltyError": 3.677613769070831e-16,
+          "cumulativeIndexError": 4.440892098500626e-16,
+          "cumulativeBeforePenaltyError": 0.0017867216621124185,
+          "cumulativeBeforeIndexError": -1.010480794506278,
+          "candidate": {
+            "penalty": 0.043599288910627365,
+            "index": 2.2338526248931885,
+            "last": 1471.0302734375
+          },
+          "penaltyError": 3.677613769070831e-16,
+          "indexError": 4.440892098500626e-16,
+          "beforePenaltyError": 1.2013522260323484e-9,
+          "beforeIndexError": -0.9999999837063072
+        },
+        {
+          "tick": 2624,
+          "gameTime": 1473.984375,
+          "weapon": "deagle",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.019522830843925,
+            "index": 1.25482964515686
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.019522830843925476,
+            "index": 1.2548296451568604,
+            "last": 1473.4521484375
+          },
+          "cumulativePenaltyError": 4.753142324176451e-16,
+          "cumulativeIndexError": 4.440892098500626e-16,
+          "cumulativeBeforePenaltyError": 0.0006936376728407592,
+          "cumulativeBeforeIndexError": -0.9937356623940605,
+          "candidate": {
+            "penalty": 0.019522830843925476,
+            "index": 1.2548296451568604,
+            "last": 1473.4521484375
+          },
+          "penaltyError": 4.753142324176451e-16,
+          "indexError": 4.440892098500626e-16,
+          "beforePenaltyError": 4.71637073146125e-10,
+          "beforeIndexError": -1.0000000130830091
+        },
+        {
+          "tick": 2824,
+          "gameTime": 1477.109375,
+          "weapon": "deagle",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.018831895664334,
+            "index": 1.237137317657471
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.018831895664334297,
+            "index": 1.2371373176574707,
+            "last": 1476.5615234375
+          },
+          "cumulativePenaltyError": 2.983724378680108e-16,
+          "cumulativeIndexError": -2.220446049250313e-16,
+          "cumulativeBeforePenaltyError": 0.0006635464711927178,
+          "cumulativeBeforeIndexError": -0.9941705572434291,
+          "candidate": {
+            "penalty": 0.018831895664334297,
+            "index": 1.2371373176574707,
+            "last": 1476.5615234375
+          },
+          "penaltyError": 2.983724378680108e-16,
+          "indexError": -2.220446049250313e-16,
+          "beforePenaltyError": 7.270002551351684e-10,
+          "beforeIndexError": -1.0000000024076683
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_scope_slow_001.dem",
+      "sha256": "6d8fe4c9ce2ec99255d04abf70b6c7b1a6389f9e0d5297fc29a74034afa337e4",
+      "exclusion": null,
+      "summary": {
+        "rows": 146,
+        "maxPenaltyError": 4.753142324176451e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.753142324176451e-16,
+        "maxIndexError": 0,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.07100476720370298,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 145,
+        "maxPenaltyError": 4.753142324176451e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 1,
+        "maxPenaltyError": 4.3021142204224816e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 4.132568079406873e-9,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": [
+        {
+          "tick": 101,
+          "gameTime": 376.578125,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073004767298698,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 4.3021142204224816e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100476720370298,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 4.3021142204224816e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.081865526139872e-9,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_scope_slow_002.dem",
+      "sha256": "0a82470f4ef21e57c43a49182bb49b3b28c773c131db09732e41dbf19d94c1ee",
+      "exclusion": null,
+      "summary": {
+        "rows": 404,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.07100476720370298,
+        "maxIndexError": 0.10681996456856217
+      },
+      "stable": {
+        "rows": 401,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 1,
+        "maxPenaltyError": 3.608224830031759e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 3,
+        "maxPenaltyError": 4.3021142204224816e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.005327079445124255,
+        "maxStableIndexError": 0.06346469147758138
+      },
+      "transitionExamples": [
+        {
+          "tick": 182,
+          "gameTime": 675.859375,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073004767298698,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 4.3021142204224816e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100476720370298,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 4.3021142204224816e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.081865526139872e-9,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 233,
+          "gameTime": 676.65625,
+          "weapon": "awp",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.080799996852875,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.08079999685287476,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -2.498001805406602e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -2.498001805406602e-16,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.08079999685287476,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -2.498001805406602e-16,
+          "indexError": 0,
+          "beforePenaltyError": -2.498001805406602e-16,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 352,
+          "gameTime": 678.515625,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073007762432098,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300776243209839,
+            "index": 1,
+            "last": 677.059326171875
+          },
+          "cumulativePenaltyError": 3.885780586188048e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100442050178071,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300776243209839,
+            "index": 1,
+            "last": 677.059326171875
+          },
+          "penaltyError": 3.885780586188048e-16,
+          "indexError": 0,
+          "beforePenaltyError": 1.7358676163148345e-9,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_tv_probe.dem",
+      "sha256": "f0265d218a95659eb590d4a10819ae84da859ee3f69f7cab1b0b56de5b6141c5",
+      "exclusion": null,
+      "summary": {
+        "rows": 186,
+        "maxPenaltyError": 2.2898349882893854e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 2.2898349882893854e-16,
+        "maxIndexError": 0,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 2.328306636031896e-9,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 186,
+        "maxPenaltyError": 2.2898349882893854e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 2.168559810888926e-10,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": []
+    },
+    {
+      "demo": "native_audit_zoom_modes_001.dem",
+      "sha256": "1ac400f77f2b94d7fa08b8015dc71f2bc19680aa15148274486a2189eb4f4605",
+      "exclusion": null,
+      "summary": {
+        "rows": 963,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "resets": 8
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.07100476720370309,
+        "maxIndexError": 0.10200768657196865
+      },
+      "stable": {
+        "rows": 958,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 1,
+        "maxPenaltyError": 2.498001805406602e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 5,
+        "maxPenaltyError": 4.3021142204224816e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 5.0758606900958014e-9,
+        "maxStableIndexError": 0.0186829779094696
+      },
+      "transitionExamples": [
+        {
+          "tick": 311,
+          "gameTime": 1093.796875,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073004767298698,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 4.3021142204224816e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100476720370298,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 4.3021142204224816e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.081865526139872e-9,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 360,
+          "gameTime": 1094.5625,
+          "weapon": "awp",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.080799996852875,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.08079999685287476,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -2.498001805406602e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -2.498001805406602e-16,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.08079999685287476,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -2.498001805406602e-16,
+          "indexError": 0,
+          "beforePenaltyError": -2.498001805406602e-16,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 385,
+          "gameTime": 1094.953125,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073004767298698,
+            "index": 0
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 4.3021142204224816e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100476720370309,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300476729869843,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 4.3021142204224816e-16,
+          "indexError": 0,
+          "beforePenaltyError": -4.081865526139872e-9,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 386,
+          "gameTime": 1094.96875,
+          "weapon": "awp",
+          "mode": 0,
+          "shot": true,
+          "exactShot": 1094.95556640625,
+          "deadlineValid": true,
+          "fractional": true,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.122298829257488,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.12229882925748825,
+            "index": 1,
+            "last": 1094.95556640625
+          },
+          "cumulativePenaltyError": 2.498001805406602e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.01235116645693804,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.12229882925748825,
+            "index": 1,
+            "last": 1094.95556640625
+          },
+          "penaltyError": 2.498001805406602e-16,
+          "indexError": 0,
+          "beforePenaltyError": 0.01235116645693804,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 479,
+          "gameTime": 1096.421875,
+          "weapon": "awp",
+          "mode": 1,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": true,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.073007337749004,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.07300733774900436,
+            "index": 1,
+            "last": 1094.95556640625
+          },
+          "cumulativePenaltyError": 3.608224830031759e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.07100399581868672,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.07300733774900436,
+            "index": 1,
+            "last": 1094.95556640625
+          },
+          "penaltyError": 3.608224830031759e-16,
+          "indexError": 0,
+          "beforePenaltyError": -3.2474205546861867e-9,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_phase3_m4a1s_001.dem",
+      "sha256": "2783d539fca2df90766626d2b498c184673103260c746d2376dad942708bad76",
+      "exclusion": null,
+      "summary": {
+        "rows": 5238,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 8.881784197001252e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 8.881784197001252e-16,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0014880967216604965,
+        "maxIndexError": 1.0292110638896013
+      },
+      "stable": {
+        "rows": 5236,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 8.881784197001252e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 33,
+        "maxPenaltyError": 4.787836793695988e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 1,
+        "maxPenaltyError": 4.423544863740858e-17,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 1,
+        "maxPenaltyError": 3.217912047936977e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.0007049591833747336,
+        "maxStableIndexError": 1.027244625404549
+      },
+      "transitionExamples": [
+        {
+          "tick": 3856,
+          "gameTime": 387.15625,
+          "weapon": "m4a4",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.00531403766945,
+            "index": 1.429903626441956
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.005314037669450045,
+            "index": 1.4299036264419556,
+            "last": 386.64410400390625
+          },
+          "cumulativePenaltyError": 4.423544863740858e-17,
+          "cumulativeIndexError": -4.440892098500626e-16,
+          "cumulativeBeforePenaltyError": 0.00004096816132740256,
+          "cumulativeBeforeIndexError": -0.9684862639085514,
+          "candidate": {
+            "penalty": 0.005314037669450045,
+            "index": 1.4299036264419556,
+            "last": 386.64410400390625
+          },
+          "penaltyError": 4.423544863740858e-17,
+          "indexError": -4.440892098500626e-16,
+          "beforePenaltyError": -1.9146205280928807e-10,
+          "beforeIndexError": -0.999999965502149
+        }
+      ]
+    },
+    {
+      "demo": "native_phase3_m4a4_001.dem",
+      "sha256": "afe08c691cc55078e0cd863340e0e5eed08748c917f1d0e14cd7c8bc2256d79f",
+      "exclusion": "No usable consecutive player rows.",
+      "summary": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "resets": 0
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": []
+    },
+    {
+      "demo": "native_phase3_m4a4_002.dem",
+      "sha256": "f53be58ed36519b8b75a0fe233cad7abf3fc2593947f86a4cdc6659f38d4d774",
+      "exclusion": null,
+      "summary": {
+        "rows": 5036,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 8.881784197001252e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 8.881784197001252e-16,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0014880927216330588,
+        "maxIndexError": 0.9835128843887659
+      },
+      "stable": {
+        "rows": 5030,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 8.881784197001252e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 36,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 3,
+        "maxPenaltyError": 4.657732532997727e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 3,
+        "maxPenaltyError": 3.217912047936977e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.000704958995790721,
+        "maxStableIndexError": 0.5112205717472058
+      },
+      "transitionExamples": [
+        {
+          "tick": 3644,
+          "gameTime": 272.375,
+          "weapon": "m4a4",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.005255780182779,
+            "index": 1.4000563621521
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.005255780182778835,
+            "index": 1.4000563621520996,
+            "last": 271.84063720703125
+          },
+          "cumulativePenaltyError": -1.6479873021779667e-16,
+          "cumulativeIndexError": -4.440892098500626e-16,
+          "cumulativeBeforePenaltyError": 0.000035203825493409016,
+          "cumulativeBeforeIndexError": -0.9835128843887659,
+          "candidate": {
+            "penalty": 0.005255780182778835,
+            "index": 1.4000563621520996,
+            "last": 271.84063720703125
+          },
+          "penaltyError": -1.6479873021779667e-16,
+          "indexError": -4.440892098500626e-16,
+          "beforePenaltyError": -7.423307021164893e-11,
+          "beforeIndexError": -1.0000000393577224
+        },
+        {
+          "tick": 4103,
+          "gameTime": 279.546875,
+          "weapon": "m4a4",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.005016728304327,
+            "index": 1.695060729980469
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.005016728304326534,
+            "index": 1.6950607299804688,
+            "last": 278.6483154296875
+          },
+          "cumulativePenaltyError": -4.657732532997727e-16,
+          "cumulativeIndexError": -2.220446049250313e-16,
+          "cumulativeBeforePenaltyError": 0.00001000477272221096,
+          "cumulativeBeforeIndexError": -0.9165194844587485,
+          "candidate": {
+            "penalty": 0.005016728304326534,
+            "index": 1.6950607299804688,
+            "last": 278.6483154296875
+          },
+          "penaltyError": -4.657732532997727e-16,
+          "indexError": -2.220446049250313e-16,
+          "beforePenaltyError": 6.296335588323876e-11,
+          "beforeIndexError": -0.9305720001581645
+        },
+        {
+          "tick": 4427,
+          "gameTime": 284.609375,
+          "weapon": "m4a4",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.00531403766945,
+            "index": 1.429903626441956
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.005314037669450045,
+            "index": 1.4299036264419556,
+            "last": 284.09649658203125
+          },
+          "cumulativePenaltyError": 4.423544863740858e-17,
+          "cumulativeIndexError": -4.440892098500626e-16,
+          "cumulativeBeforePenaltyError": 0.00004096816132740256,
+          "cumulativeBeforeIndexError": -0.9700399694243815,
+          "candidate": {
+            "penalty": 0.005314037669450045,
+            "index": 1.4299036264419556,
+            "last": 284.09649658203125
+          },
+          "penaltyError": 4.423544863740858e-17,
+          "indexError": -4.440892098500626e-16,
+          "beforePenaltyError": -1.9146205280928807e-10,
+          "beforeIndexError": -0.999999965502149
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_airduck_001.dem",
+      "sha256": "d926c66975abdc8d5175fc45fc0942b8a44b6f3ca2a61117bb24259e1404276c",
+      "exclusion": "Capture interrupted by Alt+Space window-menu/minimization; retained for diagnosis only.",
+      "summary": {
+        "rows": 17395,
+        "maxPenaltyError": 0.000001966953277948713,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 1,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 0.000001966953277948713,
+        "maxIndexError": 0,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0014208881300957262,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 17393,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 2,
+        "maxPenaltyError": 0.000001966953277948713,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 1,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 6.6366855067112596e-9,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": [
+        {
+          "tick": 10,
+          "gameTime": 130.6875,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.161488905549049,
+            "index": 0
+          },
+          "fallVelocity": 124.984375,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.16148889064788818,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -1.4901160805269598e-8,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -1.6912703154625675e-8,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.16148889064788818,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -1.4901160805269598e-8,
+          "indexError": 0,
+          "beforePenaltyError": -1.632249954641729e-8,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 373,
+          "gameTime": 136.359375,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.198431700468063,
+            "index": 0
+          },
+          "fallVelocity": 293.328125,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.19843366742134094,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 0.000001966953277948713,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.000001968754836684239,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.19843366742134094,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 0.000001966953277948713,
+          "indexError": 0,
+          "beforePenaltyError": 0.000001971288576985142,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_airduck_003.dem",
+      "sha256": "b2e4254179264568f323339cb87b22d1217b9447c88b4a419fb75b9d88e0ceb8",
+      "exclusion": null,
+      "summary": {
+        "rows": 1187,
+        "maxPenaltyError": 0.0000030994415278762233,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 3,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 0.0000030994415278762233,
+        "maxIndexError": 0,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0014181458507747267,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 1182,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 5,
+        "maxPenaltyError": 0.0000030994415278762233,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 3,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 9.989335247873043e-9,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": [
+        {
+          "tick": 28,
+          "gameTime": 415.859375,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.210867539048195,
+            "index": 0
+          },
+          "fallVelocity": 349.984375,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.2108674794435501,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -5.960464488641293e-8,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -6.680184222451757e-8,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.2108674794435501,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -5.960464488641293e-8,
+          "indexError": 0,
+          "beforePenaltyError": -6.541164893070217e-8,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 329,
+          "gameTime": 420.5625,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.195945620536804,
+            "index": 0
+          },
+          "fallVelocity": 281.984375,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.1959441751241684,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -0.0000014454126356089336,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.0000014549445749856282,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.1959441751241684,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -0.0000014454126356089336,
+          "indexError": 0,
+          "beforePenaltyError": -0.0000014524108346847253,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 523,
+          "gameTime": 423.59375,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "crouch",
+          "flags": 65667,
+          "native": {
+            "penalty": 0.192585170269012,
+            "index": 0
+          },
+          "fallVelocity": 284.734375,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.19258710741996765,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 0.0000019371509556442845,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.000001943231763723574,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.19258710741996765,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 0.0000019371509556442845,
+          "indexError": 0,
+          "beforePenaltyError": 0.000001945715096707268,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 719,
+          "gameTime": 426.65625,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "crouch",
+          "flags": 65667,
+          "native": {
+            "penalty": 0.198256596922874,
+            "index": 0
+          },
+          "fallVelocity": 311.078125,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.19825349748134613,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -0.0000030994415278762233,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -0.0000030919654478156477,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.19825349748134613,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -0.0000030994415278762233,
+          "indexError": 0,
+          "beforePenaltyError": -0.0000030894821148041984,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 921,
+          "gameTime": 429.8125,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.19778873026371,
+            "index": 0
+          },
+          "fallVelocity": 290.390625,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.1977890133857727,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": 2.8312206271086104e-7,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 2.7410717029496823e-7,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.1977890133857727,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": 2.8312206271086104e-7,
+          "indexError": 0,
+          "beforePenaltyError": 2.7664091056811557e-7,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_footsteps_001.dem",
+      "sha256": "9e36750139e14d749de13978d8a7cec3fd1223ec654dba41dbde0296ccb47049",
+      "exclusion": null,
+      "summary": {
+        "rows": 1537,
+        "maxPenaltyError": 5.960464488641293e-8,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 5.960464499743523e-8,
+        "maxIndexError": 0,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0014221095596517264,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 1536,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 1,
+        "maxPenaltyError": 5.960464488641293e-8,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 6.362728510733717e-9,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": [
+        {
+          "tick": 28,
+          "gameTime": 524.6875,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.210867539048195,
+            "index": 0
+          },
+          "fallVelocity": 349.984375,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.2108674794435501,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -5.960464488641293e-8,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -6.680184222451757e-8,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.2108674794435501,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -5.960464488641293e-8,
+          "indexError": 0,
+          "beforePenaltyError": -6.541164893070217e-8,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_footsteps_awp_001.dem",
+      "sha256": "4532802a7e840d72de94f61983077f0d680a87f7de579d3a6157da11285acb0d",
+      "exclusion": null,
+      "summary": {
+        "rows": 1535,
+        "maxPenaltyError": 1.1920928921771434e-7,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 1.1920928955078125e-7,
+        "maxIndexError": 0,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.017458926096464572,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 1534,
+        "maxPenaltyError": 5.134781488891349e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 1,
+        "maxPenaltyError": 1.1920928921771434e-7,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 2.1107433023637157e-8,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": [
+        {
+          "tick": 28,
+          "gameTime": 691.09375,
+          "weapon": "awp",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.298207342624664,
+            "index": 0
+          },
+          "fallVelocity": 349.984375,
+          "landingTolerance": 0.000004826875145984813,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.29820722341537476,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -1.1920928921771434e-7,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -1.211859989025399e-7,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.29820722341537476,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -1.1920928921771434e-7,
+          "indexError": 0,
+          "beforePenaltyError": -1.211859991245845e-7,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_movement_001.dem",
+      "sha256": "3507368d95765a12075236380cd4c35605300995d0cef3de107c93f22856c44a",
+      "exclusion": null,
+      "summary": {
+        "rows": 1825,
+        "maxPenaltyError": 5.960464488641293e-8,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 5.960464499743523e-8,
+        "maxIndexError": 0,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0014093620819117265,
+        "maxIndexError": 0
+      },
+      "stable": {
+        "rows": 1824,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 1,
+        "maxPenaltyError": 5.960464488641293e-8,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 6.362728510733717e-9,
+        "maxStableIndexError": 0
+      },
+      "transitionExamples": [
+        {
+          "tick": 28,
+          "gameTime": 462.078125,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.210867539048195,
+            "index": 0
+          },
+          "fallVelocity": 349.984375,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.2108674794435501,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -5.960464488641293e-8,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -6.680184222451757e-8,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.2108674794435501,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -5.960464488641293e-8,
+          "indexError": 0,
+          "beforePenaltyError": -6.541164893070217e-8,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_recovery_001.dem",
+      "sha256": "9f2616be8f3232651f2b2be130b48dbf3881709f35d302d9b656aded4a659f50",
+      "exclusion": null,
+      "summary": {
+        "rows": 1136,
+        "maxPenaltyError": 1.4901160805269598e-8,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 1.490116116609208e-8,
+        "maxIndexError": 5.551115123125783e-16,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0013072614851227828,
+        "maxIndexError": 1
+      },
+      "stable": {
+        "rows": 1133,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 8,
+        "maxPenaltyError": 4.926614671774132e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 1,
+        "maxPenaltyError": 3.148523108897905e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 1,
+        "maxPenaltyError": 2.2898349882893854e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 1,
+        "maxPenaltyError": 1.4901160805269598e-8,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.0007264838786397217,
+        "maxStableIndexError": 0.060028233562537836
+      },
+      "transitionExamples": [
+        {
+          "tick": 10,
+          "gameTime": 86.171875,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.161488905549049,
+            "index": 0
+          },
+          "fallVelocity": 124.984375,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.16148889064788818,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -1.4901160805269598e-8,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -1.6912703154625675e-8,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.16148889064788818,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -1.4901160805269598e-8,
+          "indexError": 0,
+          "beforePenaltyError": -1.632249954641729e-8,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 623,
+          "gameTime": 95.75,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.006410077679902,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.006410077679902315,
+            "index": 1,
+            "last": 93.714599609375
+          },
+          "cumulativePenaltyError": 3.148523108897905e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 5.46266546320312e-9,
+          "cumulativeBeforeIndexError": -1,
+          "candidate": {
+            "penalty": 0.006410077679902315,
+            "index": 1,
+            "last": 93.714599609375
+          },
+          "penaltyError": 3.148523108897905e-16,
+          "indexError": 0,
+          "beforePenaltyError": -6.405729592595666e-11,
+          "beforeIndexError": -1
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "sha256": "37b6f44d6c8ca327d580f9eeb289928eb917d0ec9b7e05e8dfc241eced4b9442",
+      "exclusion": null,
+      "summary": {
+        "rows": 1264,
+        "maxPenaltyError": 5.960464488641293e-8,
+        "maxIndexError": 8.881784197001252e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 5.960464499743523e-8,
+        "maxIndexError": 8.881784197001252e-16,
+        "resets": 3
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0014092454124551047,
+        "maxIndexError": 1.0004354037403205
+      },
+      "stable": {
+        "rows": 1259,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 8.881784197001252e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 22,
+        "maxPenaltyError": 4.614364446098307e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 2,
+        "maxPenaltyError": 4.36282954208167e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 2,
+        "maxPenaltyError": 2.2898349882893854e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 1,
+        "maxPenaltyError": 5.960464488641293e-8,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.0007264849962871495,
+        "maxStableIndexError": 0.12340050889878618
+      },
+      "transitionExamples": [
+        {
+          "tick": 28,
+          "gameTime": 576.359375,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": true,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.210867539048195,
+            "index": 0
+          },
+          "fallVelocity": 349.984375,
+          "landingTolerance": 0.0000038112499158462744,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.2108674794435501,
+            "index": 0,
+            "last": 0
+          },
+          "cumulativePenaltyError": -5.960464488641293e-8,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -6.680184222451757e-8,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.2108674794435501,
+            "index": 0,
+            "last": 0
+          },
+          "penaltyError": -5.960464488641293e-8,
+          "indexError": 0,
+          "beforePenaltyError": -6.541164893070217e-8,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 398,
+          "gameTime": 582.140625,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.006856103893369,
+            "index": 1.377367734909058
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.006856103893369436,
+            "index": 1.3773677349090576,
+            "last": 581.640380859375
+          },
+          "cumulativePenaltyError": 4.36282954208167e-16,
+          "cumulativeIndexError": -4.440892098500626e-16,
+          "cumulativeBeforePenaltyError": 0.00004581646740465205,
+          "cumulativeBeforeIndexError": -1.0004354037403205,
+          "candidate": {
+            "penalty": 0.006856103893369436,
+            "index": 1.3773677349090576,
+            "last": 581.640380859375
+          },
+          "penaltyError": 4.36282954208167e-16,
+          "indexError": -4.440892098500626e-16,
+          "beforePenaltyError": -1.0046121226570115e-10,
+          "beforeIndexError": -0.9999999772871332
+        },
+        {
+          "tick": 638,
+          "gameTime": 585.890625,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.007236122619361,
+            "index": 1.923825263977051
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.007236122619360685,
+            "index": 1.9238252639770508,
+            "last": 585.3073120117188
+          },
+          "cumulativePenaltyError": -3.148523108897905e-16,
+          "cumulativeIndexError": -2.220446049250313e-16,
+          "cumulativeBeforePenaltyError": 0.00006087716423872937,
+          "cumulativeBeforeIndexError": -0.9955561841123834,
+          "candidate": {
+            "penalty": 0.007236122619360685,
+            "index": 1.9238252639770508,
+            "last": 585.3073120117188
+          },
+          "penaltyError": -3.148523108897905e-16,
+          "indexError": -2.220446049250313e-16,
+          "beforePenaltyError": 3.0380504535687525e-11,
+          "beforeIndexError": -0.9999999914827444
+        },
+        {
+          "tick": 955,
+          "gameTime": 590.84375,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": true,
+          "exactShot": 590.84375,
+          "deadlineValid": true,
+          "fractional": false,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.014209999702871,
+            "index": 1
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.014209999702870846,
+            "index": 1,
+            "last": 590.84375
+          },
+          "cumulativePenaltyError": -1.5439038936193583e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": -1.5439038936193583e-16,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.014209999702870846,
+            "index": 1,
+            "last": 590.84375
+          },
+          "penaltyError": -1.5439038936193583e-16,
+          "indexError": 0,
+          "beforePenaltyError": -1.5439038936193583e-16,
+          "beforeIndexError": 0
+        },
+        {
+          "tick": 987,
+          "gameTime": 591.34375,
+          "weapon": "ak47",
+          "mode": 0,
+          "shot": true,
+          "exactShot": 591.34375,
+          "deadlineValid": true,
+          "fractional": false,
+          "reloadStart": false,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.024928845465183,
+            "index": 6
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.024928845465183258,
+            "index": 6,
+            "last": 591.34375
+          },
+          "cumulativePenaltyError": 2.5673907444456745e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.0007399416776493958,
+          "cumulativeBeforeIndexError": 0,
+          "candidate": {
+            "penalty": 0.024928845465183258,
+            "index": 6,
+            "last": 591.34375
+          },
+          "penaltyError": 2.5673907444456745e-16,
+          "indexError": 0,
+          "beforePenaltyError": 2.798910547774369e-10,
+          "beforeIndexError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_reload_deagle_empty_001.dem",
+      "sha256": "1ef9d9f889765c74f0eb0b28e26908d1b1efa9795d82eb24939b3105b5f03c4a",
+      "exclusion": null,
+      "summary": {
+        "rows": 1994,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0007225533427327614,
+        "maxIndexError": 0.994976230170626
+      },
+      "stable": {
+        "rows": 1992,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 8,
+        "maxPenaltyError": 4.423544863740858e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 1,
+        "maxPenaltyError": 2.42861286636753e-17,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 1,
+        "maxPenaltyError": 3.217912047936977e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.0007049589559473112,
+        "maxStableIndexError": 0.07632610466458356
+      },
+      "transitionExamples": [
+        {
+          "tick": 1168,
+          "gameTime": 384.375,
+          "weapon": "m4a4",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.005074608605355,
+            "index": 1.151134967803955
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.005074608605355024,
+            "index": 1.151134967803955,
+            "last": 383.84033203125
+          },
+          "cumulativePenaltyError": 2.42861286636753e-17,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.000019553791856989113,
+          "cumulativeBeforeIndexError": -0.994976230170626,
+          "candidate": {
+            "penalty": 0.005074608605355024,
+            "index": 1.151134967803955,
+            "last": 383.84033203125
+          },
+          "penaltyError": 2.42861286636753e-17,
+          "indexError": 0,
+          "beforePenaltyError": -1.7614082241379503e-10,
+          "beforeIndexError": -1.0000000499241788
+        }
+      ]
+    },
+    {
+      "demo": "native_reload_deagle_empty_002.dem",
+      "sha256": "aa0c7cceda6d3d1afef7113b76c8795d02c5dbf8ecac1ed9c2cd3fffce2313dd",
+      "exclusion": null,
+      "summary": {
+        "rows": 1090,
+        "maxPenaltyError": 5.134781488891349e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 5.134781488891349e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.003975235453164486,
+        "maxIndexError": 1.0224116842739845
+      },
+      "stable": {
+        "rows": 1086,
+        "maxPenaltyError": 5.134781488891349e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 9,
+        "maxPenaltyError": 4.85722573273506e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 2,
+        "maxPenaltyError": 1.491862189340054e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 2,
+        "maxPenaltyError": 2.419939248987646e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.003133508842438834,
+        "maxStableIndexError": 0.07599690563889272
+      },
+      "transitionExamples": [
+        {
+          "tick": 274,
+          "gameTime": 571.375,
+          "weapon": "deagle",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.022593906149268,
+            "index": 1.289467215538025
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.02259390614926815,
+            "index": 1.289467215538025,
+            "last": 570.8359375
+          },
+          "cumulativePenaltyError": 1.491862189340054e-16,
+          "cumulativeIndexError": 0,
+          "cumulativeBeforePenaltyError": 0.0008341460001273053,
+          "cumulativeBeforeIndexError": -0.9812206113005866,
+          "candidate": {
+            "penalty": 0.02259390614926815,
+            "index": 1.289467215538025,
+            "last": 570.8359375
+          },
+          "penaltyError": 1.491862189340054e-16,
+          "indexError": 0,
+          "beforePenaltyError": 7.29370591701084e-11,
+          "beforeIndexError": -0.9999999715059247
+        },
+        {
+          "tick": 684,
+          "gameTime": 577.78125,
+          "weapon": "deagle",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": false,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.04926772788167,
+            "index": 2.339890003204346
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.04926772788167,
+            "index": 2.3398900032043457,
+            "last": 577.54443359375
+          },
+          "cumulativePenaltyError": 0,
+          "cumulativeIndexError": -4.440892098500626e-16,
+          "cumulativeBeforePenaltyError": 0.0020437970449334875,
+          "cumulativeBeforeIndexError": -1.0224116842739845,
+          "candidate": {
+            "penalty": 0.04926772788167,
+            "index": 2.3398900032043457,
+            "last": 577.54443359375
+          },
+          "penaltyError": 0,
+          "indexError": -4.440892098500626e-16,
+          "beforePenaltyError": -6.308743111249626e-10,
+          "beforeIndexError": -1.0000000000000002
+        }
+      ]
+    },
+    {
+      "demo": "native_reload_gate_001.dem",
+      "sha256": "18aa47897cdf52ce325fb6eb97e587452ebc84cf8da23ff52fce34643c11cd3e",
+      "exclusion": null,
+      "summary": {
+        "rows": 4348,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "cumulative": {
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "resets": 1
+      },
+      "cumulativeBefore": {
+        "maxPenaltyError": 0.0011399839078365358,
+        "maxIndexError": 0.9972460402991394
+      },
+      "stable": {
+        "rows": 4342,
+        "maxPenaltyError": 4.996003610813204e-16,
+        "maxIndexError": 5.551115123125783e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "shots": {
+        "rows": 9,
+        "maxPenaltyError": 3.7296554733501353e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadStarts": {
+        "rows": 3,
+        "maxPenaltyError": 3.963843142607004e-16,
+        "maxIndexError": 4.440892098500626e-16,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "reloadEnds": {
+        "rows": 3,
+        "maxPenaltyError": 3.217912047936977e-16,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "modeChanges": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "landings": {
+        "rows": 0,
+        "maxPenaltyError": 0,
+        "maxIndexError": 0,
+        "penaltyOver1e6": 0,
+        "indexOver1e6": 0
+      },
+      "before": {
+        "maxStablePenaltyError": 0.0007049591833747336,
+        "maxStableIndexError": 0.204542336388029
+      },
+      "transitionExamples": [
+        {
+          "tick": 3053,
+          "gameTime": 228.78125,
+          "weapon": "m4a4",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.005365865770727,
+            "index": 1.496444940567017
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.005365865770727396,
+            "index": 1.4964449405670166,
+            "last": 228.28619384765625
+          },
+          "cumulativePenaltyError": 3.963843142607004e-16,
+          "cumulativeIndexError": -4.440892098500626e-16,
+          "cumulativeBeforePenaltyError": 0.00004308702869845575,
+          "cumulativeBeforeIndexError": -0.9972460402991394,
+          "candidate": {
+            "penalty": 0.005365865770727396,
+            "index": 1.4964449405670166,
+            "last": 228.28619384765625
+          },
+          "penaltyError": 3.963843142607004e-16,
+          "indexError": -4.440892098500626e-16,
+          "beforePenaltyError": 1.9212507799959422e-10,
+          "beforeIndexError": -0.9999999398858554
+        },
+        {
+          "tick": 3378,
+          "gameTime": 233.859375,
+          "weapon": "m4a4",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.00531403766945,
+            "index": 1.429903626441956
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.005314037669450045,
+            "index": 1.4299036264419556,
+            "last": 233.34722900390625
+          },
+          "cumulativePenaltyError": 4.423544863740858e-17,
+          "cumulativeIndexError": -4.440892098500626e-16,
+          "cumulativeBeforePenaltyError": 0.00004096816132740256,
+          "cumulativeBeforeIndexError": -0.9684862639085514,
+          "candidate": {
+            "penalty": 0.005314037669450045,
+            "index": 1.4299036264419556,
+            "last": 233.34722900390625
+          },
+          "penaltyError": 4.423544863740858e-17,
+          "indexError": -4.440892098500626e-16,
+          "beforePenaltyError": -1.9146205280928807e-10,
+          "beforeIndexError": -0.999999965502149
+        },
+        {
+          "tick": 3782,
+          "gameTime": 240.171875,
+          "weapon": "m4a4",
+          "mode": 0,
+          "shot": false,
+          "exactShot": null,
+          "deadlineValid": false,
+          "fractional": null,
+          "reloadStart": true,
+          "reloadManual": true,
+          "reloadEnd": false,
+          "land": false,
+          "modeChange": false,
+          "stance": "stand",
+          "flags": 65665,
+          "native": {
+            "penalty": 0.005318948999047,
+            "index": 1.46197783946991
+          },
+          "fallVelocity": null,
+          "landingTolerance": 0,
+          "cumulativeReset": false,
+          "cumulative": {
+            "penalty": 0.005318948999047279,
+            "index": 1.4619778394699097,
+            "last": 239.66143798828125
+          },
+          "cumulativePenaltyError": 2.7929047963226594e-16,
+          "cumulativeIndexError": -2.220446049250313e-16,
+          "cumulativeBeforePenaltyError": 0.00003874797949327685,
+          "cumulativeBeforeIndexError": -0.9969147191330175,
+          "candidate": {
+            "penalty": 0.005318948999047279,
+            "index": 1.4619778394699097,
+            "last": 239.66143798828125
+          },
+          "penaltyError": 2.7929047963226594e-16,
+          "indexError": -2.220446049250313e-16,
+          "beforePenaltyError": 1.769079448904476e-10,
+          "beforeIndexError": -1.0000000024508227
+        }
+      ]
+    }
+  ]
+}

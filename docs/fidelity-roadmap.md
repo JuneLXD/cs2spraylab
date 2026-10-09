@@ -71,4 +71,30 @@ continuity and rendered camera/follow recoil. Response probes report handler,
 simulation and render-submission time rather than physical display latency.
 See `cs2-feel-audit.md` for the before/after/commit table and exact remaining
 capture needs. The prepared four-sequence native recording plan is in
-`../native-audit/feel-capture/feel-capture-plan.json`; launching CS2 awaits approval.
+`../native-audit/feel-capture/feel-capture-plan.json`. The user approved native launches for the independent re-audit below.
+
+## Independent re-audit from c488943 (ongoing)
+
+Pass 16 retains fresh native runtime settings and distinguishes unavailable legacy
+command names from verified values. New movement, combat and animation benches
+compare primary native evidence before consulting earlier claims. Offline native
+recordings are now authorized and underway; no unverified feel adjustment is
+justified by a hypothesis alone. Full requested inventory remains the scope.
+
+Current priorities: airborne duck/hull trajectories; tick order of fire-inaccuracy
+and recoil recovery; native versus imported clip poses and timing; footstep audio
+onsets against demo movement; presentation and event-to-render probes. Remaining
+model, animation, damage, collision and input items require their own evidence.
+
+### Independently measured corrections, passes 17–19
+
+- Shared movement: recorded standing/crouched launch distinction, immediate ±9u airborne hull changes, and separate 90u/s duck camera offsets. Native fixture replays every sample; rendered-client interpolation and full terrain parity remain open. See [movement inventory](reaudit-movement.md).
+- Held recoil: impulses now belong to exact schedules, with processing-time presentation sampled afterward. Fresh eight-shot AK error falls .338199°→.00000239°. Accuracy penalty/index tick ordering remains a separate measured discrepancy. See [combat inventory](reaudit-combat.md).
+- R8 asset: compose charge deltas over the native graph’s firing-start pose and preserve constant object channels. Both variants rebuilt; arm/finger error752.262mm→.02743mm. The earlier mount-only reference was insufficient and is superseded. Native graph reconstruction, materials, effects and broad runtime presentation remain bounded in the [animation inventory](reaudit-animation.md).
+- Offline native capture permission is granted. Demos and game-output audio are retained; initial video has large presentation-timestamp gaps, so a nominal 60fps header must not be used for frame-accurate claims.
+
+The consolidated [independent inventory](cs2-reaudit.md) covers all requested
+mechanics with implementation commits and exact limits. The next high-priority
+correction is [accuracy/index update order](reaudit-accuracy.md): 39,648 native
+invocations and 40,408 accepted demo ticks support the common captured paths,
+while production integration and special-state ordering remain open.

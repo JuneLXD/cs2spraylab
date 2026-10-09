@@ -1,0 +1,50 @@
+{
+  "window": "synthetic640x360",
+  "secondsRequested": 8,
+  "cases": [
+    {
+      "case": "video",
+      "source": "recorder-selfcheck-video.mkv",
+      "nominalHz": 60.0,
+      "decodedFrames": 480,
+      "firstPTS": 0.0,
+      "lastPTS": 7.9830000000000005,
+      "maxInterval": 0.017000000000000348,
+      "limitation": "Decoded timestamps establish sample availability, not unique rendered game frames or mouse-to-photon latency.",
+      "gapCount": 0
+    },
+    {
+      "case": "sized",
+      "source": "recorder-selfcheck-sized.mkv",
+      "nominalHz": 60.0,
+      "decodedFrames": 9,
+      "firstPTS": 0.0,
+      "lastPTS": 4.133,
+      "maxInterval": 4.017,
+      "limitation": "Decoded timestamps establish sample availability, not unique rendered game frames or mouse-to-photon latency.",
+      "gapCount": 1
+    },
+    {
+      "case": "pulse-tuned",
+      "source": "recorder-selfcheck-pulse-tuned.mkv",
+      "nominalHz": 60.0,
+      "decodedFrames": 124,
+      "firstPTS": 0.0,
+      "lastPTS": 7.833,
+      "maxInterval": 2.05,
+      "limitation": "Decoded timestamps establish sample availability, not unique rendered game frames or mouse-to-photon latency.",
+      "gapCount": 3
+    },
+    {
+      "case": "separate",
+      "source": "recorder-selfcheck-separate.mkv",
+      "nominalHz": 60.0,
+      "decodedFrames": 480,
+      "firstPTS": 0.0,
+      "lastPTS": 7.9830000000000005,
+      "maxInterval": 0.017000000000000348,
+      "limitation": "Decoded timestamps establish sample availability, not unique rendered game frames or mouse-to-photon latency.",
+      "gapCount": 0
+    }
+  ]
+}

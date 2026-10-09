@@ -464,7 +464,9 @@ so presses and releases take effect at their own time. Nothing to change.
 Fire timing. A weapon keeps its next-attack time in seconds; the server compares it, converted to a
 tick and a ratio, with the command time. The recorded demos show what that means in play: a held AK
 fires on ticks 6 and 7 apart (mean 6.4, exactly 100 ms) while the recorded last shot time advances
-by exactly 0.1 s, and the M4A1-S by exactly 0.09 s. So the click fires at its own subtick time, each
+by exactly 0.1 s, and the M4A4 by exactly 0.09 s. (The original text mislabeled the demo as M4A1-S;
+the independent re-audit resolves its active entity and fire events as M4A4. Current
+M4A1-S vdata has a 0.1 s cycle.) So the click fires at its own subtick time, each
 following shot is processed on the first tick at or after its exact schedule, the schedule
 accumulates by the cycle, and the last shot time is the scheduled one (which is why the recoil-index
 decay of the seventh pass tolerates one tick). The trainer now does the same in both engines
@@ -690,7 +692,127 @@ the tenth pass's static-data limitation. Other current-build defaults, including
 recoil suppression/smoothing and jump-spam thresholds, still need an explicit
 runtime/config source. None was changed from an unverified assumption.
 
-## Current audit validation and response measurements
+## Runtime settings and independent benches (sixteenth pass, 2026-10-09, ongoing)
+
+This re-audit starts at `c488943`; passes 1–15 are claims to test. New native
+runtime evidence is retained in [the settings ledger](evidence/reaudit-runtime-settings.json),
+including current binary hashes, original query-log hash and the exact unavailable
+command names. The user approved an offline CS2 session, then explicitly rebooted
+the host during setup. The queries survived; that initial session produced no demo.
+Both REA bridges were restored and analysis restarted sequentially from the installed
+server/client artifacts. Saved decompiles and fresh asset exports survived.
+
+Live queries independently establish current values: ground acceleration 5.5,
+weapon-speed acceleration enabled, friction 5.2, stopspeed 80, air acceleration 12,
+air wish cap 30, gravity 800, jump impulse 301.99338, modern jump, bhop window
+1/128 s, spam penalty 1/64 s, duck cooldown .4 s, ladder factor .78, walkable and
+standable normal .7, subtick movement view angles enabled, air spread scale 1,
+and patterned shotgun spread enabled. These are current session values; calling
+them all factory defaults would overstate this measurement.
+
+`weapon_recoil_scale`, the legacy decay/suppression names, `view_recoil_tracking`,
+`weapon_land_dip_amt`, `cl_eye_smooth_*` and `sv_stepsize` return unknown command.
+Earlier notes that infer their presence or runtime defaults from binary strings
+are not independently reproduced by the current console. This does not establish
+that their underlying code or constants are absent. Sensitivity 1, yaw/pitch .022,
+zoom sensitivity 1, viewmodel FOV 65 and offsets −.5/1/−2 were retained for footage.
+
+New reproducible benches: `tools/reaudit-movement.mjs`, `tools/reaudit-combat.mjs`,
+`tools/reaudit-combat-native.py`, `tools/reaudit-animation.mjs`. Their reports keep
+native evidence distinct from trainer behavior; no numerical match is claimed
+merely because an existing unit test passes. Before/after findings and status for
+the full requested inventory are recorded in the [movement](reaudit-movement.md),
+[combat](reaudit-combat.md), [response](reaudit-response.md), and
+[model/animation](reaudit-animation.md) inventories. Unverified rows are open work,
+not claims of native equivalence.
+
+## Recorded jump and crouch state (seventeenth pass, 2026-10-09)
+
+Fresh approved `native_reaudit_airduck_003.dem` establishes three corrections.
+Standing launch is 298.86838 u/s, while fully crouched launch retains 301.99338;
+midair crouch/unduck finishes immediately and shifts the origin by ±9 units;
+camera-service view/root offsets approach their targets at 90 u/s. The shared
+motor now reproduces these rules. Before/after standing apex is 56.9974→55.8255
+units; midair-crouch apex is 74.9974→64.8255. Recorded values are 55.81235 and
+64.82797 respectively, bounded by demo sampling and position quantization.
+
+The eleven fresh fixture cases change from one pass/ten failures to eleven
+passes. Camera checks retain each 64 Hz sample and agree within 0.0001 unit.
+Ground friction and acceleration were independently rechecked and left unchanged.
+The new lateral capture crosses a slight slope and later obstructed travel, so
+it is not evidence for retuning flat-ground stopping constants.
+[The movement inventory](reaudit-movement.md) names every source, equation,
+before/after result and remaining runtime boundary. Server camera-service state
+is not proof of the final client-rendered camera trajectory.
+
+## Scheduled recoil replay (eighteenth pass, 2026-10-09)
+
+Two fresh AK recordings distinguish the scheduled impulse from its processing
+tick. Native held-fire anchors advance by 0.1000000015 s while shots are emitted
+on 64 Hz ticks. The trainer previously anchored punch at processing time even
+though its firing schedule was exact. The recovery model now samples carried
+angle and velocity at the scheduled time, applies the impulse there, and samples
+forward to the current processing time. Both engines and next-shot guides share
+that clock. Cadence is unchanged.
+
+For six held shots in `native_reaudit_recovery_001`, maximum processing-time
+punch error changes 0.235337°→0.00000215°. The independent eight-shot
+`native_reaudit_shooting_001` changes 0.338199°→0.00000239°.
+[The combat inventory](reaudit-combat.md) and
+[portable result](evidence/reaudit-combat-summary.json) retain the evidence.
+Fresh data comparisons independently match 2,730 weapon parameters and 108
+speed/tagging values. This does not resolve the measured fire-penalty/index
+update-order discrepancy, all-weapon runtime schedules, or physical early-tap
+semantics. The recorded input timestamps do not support treating the intended
+25 ms early tap as a precisely delivered 25 ms edge.
+
+## R8 mount and animation imports (nineteenth pass, 2026-10-09)
+
+The first R8 mount check was insufficient: a paired runtime strip showed hanging
+arms even though a bind-composed reference matched. The native revolver graph
+actually applies `prepare_shoot_revolver` as an additive layer over frame zero
+of `shoot1_revolver`. The importer now composes those deltas onto that authored
+base and preserves constant weapon-armature channels. Both HD/legacy assets were
+rebuilt. An independent DMX-derived reference checks 30 frames and 450 landmarks
+per asset: arm/finger position error changes 752.262→0.02743 mm, rotation error
+131.139→0.01357°, and sampled weapon-part error 0.97245→0.0001763 mm.
+
+Strengthened runtime tests include arms, hands, fingers and weapon after idle
+and fire/cancel. The prior 124.647 mm mount-only conclusion is superseded: it
+used the wrong graph base and could not certify the assembled pose. Charge
+playback rate remains unverified; the existing mechanical windup and retiming
+are retained rather than inferred from these pose measurements.
+
+The wider bench freshly compares 90 world clips and four flinches (419,310
+channel samples), 37 absolute view clips (2,206 frames), with additive R8 charge checked separately, and 19 posed hitbox capsules
+across six world clips. World durations match exactly; sampled capsule endpoint
+conversion error is at most 0.230 mm. The SAS body is simplified from 19,077 to
+9,779 vertices. Native clip fidelity does not establish native graph fidelity:
+planted transitions, turn-in-place and jump/landing additive layers remain absent;
+procedural aim, blending and ragdolls are approximations. The 90 flinch resource
+entries contain 45 paired representations, not 90 distinct bullet-hit gestures.
+[The full model/animation inventory](reaudit-animation.md) records those limits.
+
+## Re-audit delivery validation
+
+Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph
+composition `9b94483`. The [consolidated inventory](cs2-reaudit.md) retains one
+row per audited mechanic with rule/evidence, before/after, status and commit,
+plus corrected claims and exact unresolved measurements.
+
+Final TypeScript passes; 2,227 unit cases pass with only the known missing fallback
+model failure. All five Chromium cases across input-timing, trigger-continuity
+and view-punch pass. Four serial paired strips total 77 frames with no browser
+errors. All resource caps and source freezes were respected.
+
+A separate [accuracy/index replay](reaudit-accuracy.md) matches 39,648 bounded
+current-server invocations and 40,408 accepted demo ticks (152 shots), including
+ordinary reload, mode and landing transitions within stated precision. This is
+a candidate model, not a shipped runtime correction. Integration and native
+special-state caller ordering remain the next work. Additional mislabeled demo
+filenames are explicitly corrected there; filenames are not weapon evidence.
+
+## Validation retained from passes 11–15
 
 All three targeted Chromium specs pass: `input-timing`, `trigger-continuity`
 and `view-punch` (five cases total). They enter through the real menu and
@@ -708,7 +830,8 @@ samples; fresh data checks: 2,730 weapon and 108 tagging values. The full unit
 suite passes except the documented missing `public/models/ak47.json` fallback.
 TypeScript passes. Every Node check used MemoryMax=8G/MemorySwapMax=0; browser
 checks additionally used CPUQuota=400%, one worker and no concurrent repo edits.
-No new CS2 process was launched; additional capture approval is pending.
+Those earlier passes launched no new CS2 process. Approval subsequently arrived;
+the independent re-audit above includes approved fresh recordings.
 
 ## Remaining limits
 
