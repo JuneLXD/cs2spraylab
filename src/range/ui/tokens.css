@@ -1,0 +1,52 @@
+:root {
+  /* surfaces */
+  --sl-bg: #07090c;                       /* page / letterbox */
+  --sl-bg-top: #11161b;                   /* top of full-screen menu gradients */
+  --sl-panel: rgba(10, 13, 17, 0.82);     /* cards and side panels over the scene */
+  --sl-panel-strong: rgba(10, 13, 17, 0.9);
+  --sl-nav: linear-gradient(180deg, rgba(0,0,0,0.82), rgba(0,0,0,0.45));
+  --sl-field: #1a2129;                    /* select / number / output fill */
+  --sl-hairline: rgba(255, 255, 255, 0.08);
+  --sl-hairline-strong: rgba(255, 255, 255, 0.14);
+  --sl-row-alt: rgba(255, 255, 255, 0.025);
+  --sl-row-hover: rgba(255, 255, 255, 0.05);
+  --sl-row-active: rgba(255, 255, 255, 0.08);
+
+  /* text */
+  --sl-text: #eef2f5;                     /* primary */
+  --sl-text-body: #c3cbd2;                /* paragraphs */
+  --sl-text-2: #aab4be;                   /* secondary, inactive nav */
+  --sl-text-3: #8b96a1;                   /* captions, table headers, help */
+
+  /* accents */
+  --sl-go: #3c9a3e;                       /* primary action, switch on */
+  --sl-go-text: #6fcf73;                  /* "READY", "WON", success text on dark */
+  --sl-ct: #78a6dc;                       /* info tags, focus ring */
+  --sl-ct-name: #9cc2ee;                  /* "You" in the kill feed */
+  --sl-t: #e2b35b;                        /* highlight tags, bot pips */
+  --sl-t-name: #ecc472;                   /* bot names in the kill feed */
+  --sl-danger: #e5534b;                   /* live dot, low values, enemy dots */
+  --sl-own-kill: #d9443c;                 /* border of your own kills in the feed */
+  --sl-redline: #d8373a;                  /* aim_redline thumbnail motif only */
+
+  /* HUD */
+  --sl-hud-text: #ffffff;
+  --sl-hud-dim: #dfe5ea;
+  --sl-hud-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  --sl-hud-scrim: rgba(0, 0, 0, 0.55);
+  --sl-score-blue: linear-gradient(180deg, rgba(92,138,198,0.9), rgba(44,74,118,0.9));
+  --sl-score-gold: linear-gradient(180deg, rgba(210,160,70,0.92), rgba(136,98,34,0.92));
+  --sl-score-center: rgba(0, 0, 0, 0.72);
+  --sl-fps: #b6f0a0;
+
+  /* hit colours: the same ones the app's history replay SVG already uses */
+  --sl-hit-head: #e6cf6b;
+  --sl-hit-body: #6ddbb1;
+  --sl-hit-miss: #ed9186;
+
+  /* shape and type */
+  --sl-radius: 2px;
+  --sl-nav-height: 64px;
+  --sl-font-display: 'Rajdhani', 'Barlow', sans-serif;
+  --sl-font-body: 'Barlow', system-ui, sans-serif;
+}

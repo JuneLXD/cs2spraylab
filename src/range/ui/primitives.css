@@ -1,0 +1,122 @@
+:root {
+  font-family: var(--sl-font-body);
+  color: var(--sl-text);
+  background: var(--sl-bg);
+}
+
+button, input, select, textarea { font-family: inherit; }
+button, input, select { border-radius: var(--sl-radius); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--sl-ct);
+  outline-offset: 2px;
+}
+
+.sl-button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--sl-hairline-strong);
+  background: var(--sl-row-alt);
+  color: var(--sl-text);
+  font-size: 14px;
+}
+.sl-button:hover { background: var(--sl-row-hover); }
+.sl-button-primary {
+  background: var(--sl-go);
+  color: white;
+  font: 700 26px var(--sl-font-display);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  box-shadow: inset 0 1px 0 #ffffff47, 0 8px 20px #0005;
+}
+.sl-button-primary:hover { background: var(--sl-go); filter: brightness(1.12); }
+.sl-icon-button { width: 44px; height: 44px; padding: 0; flex: none; }
+.sl-tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--sl-hairline); }
+.sl-tabs button {
+  min-height: 56px;
+  padding: 12px 16px;
+  border-radius: 0;
+  color: var(--sl-text-3);
+  font: 700 17px var(--sl-font-display);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+.sl-tabs button:hover { color: var(--sl-text); }
+.sl-tabs button[aria-selected=true] { color: white; box-shadow: inset 0 -3px 0 var(--sl-text); background: var(--sl-row-hover); }
+.sl-panel { min-width: 0; background: var(--sl-panel); border: 1px solid var(--sl-hairline); }
+.sl-panel > header { min-height: 48px; padding: 12px 16px; border-bottom: 1px solid var(--sl-hairline); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sl-panel > header h2 { margin: 0; font: 700 15px var(--sl-font-display); letter-spacing: .16em; color: var(--sl-text); }
+.sl-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 8px 12px;
+  gap: 16px;
+  font-size: 15px;
+}
+.sl-setting-row:nth-child(odd) { background: var(--sl-row-alt); }
+.sl-setting-row:hover { background: var(--sl-row-hover); }
+.sl-setting-row:focus-within { background: var(--sl-row-active); }
+.sl-setting-row > label { flex: 1; cursor: pointer; }
+.sl-slider-control { display: flex; align-items: center; gap: 12px; width: 55%; min-width: 120px; }
+.sl-slider-control input {
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 0;
+  background: linear-gradient(90deg, var(--sl-text) var(--sl-fill), #ffffff2e var(--sl-fill));
+}
+.sl-slider-control input::-webkit-slider-thumb { appearance: none; width: 10px; height: 18px; background: var(--sl-text); border: 0; border-radius: 1px; box-shadow: 0 0 0 3px #0a0d11aa; }
+.sl-slider-control input::-moz-range-thumb { width: 10px; height: 18px; background: var(--sl-text); border: 0; border-radius: 1px; box-shadow: 0 0 0 3px #0a0d11aa; }
+.sl-slider-control output, .sl-number {
+  min-width: 54px;
+  padding: 4px 8px;
+  border: 1px solid var(--sl-hairline-strong);
+  background: var(--sl-field);
+  color: var(--sl-text);
+  text-align: center;
+  font: 700 16px var(--sl-font-display);
+  font-variant-numeric: tabular-nums;
+}
+.sl-slider-control output { white-space: nowrap; }
+.sl-switch {
+  appearance: none;
+  width: 44px;
+  height: 22px;
+  margin: 0;
+  position: relative;
+  background: #ffffff24;
+  cursor: pointer;
+  flex: none;
+}
+.sl-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 1px; background: var(--sl-text-2); }
+.sl-switch:checked { background: var(--sl-go); }
+.sl-switch:checked::after { transform: translateX(22px); background: white; }
+.sl-switch:disabled { opacity: .45; cursor: default; }
+.sl-tile { border: 1px solid var(--sl-hairline-strong); background: var(--sl-panel); padding: 12px; }
+.sl-tile:hover { background: var(--sl-row-hover); }
+.sl-tile[aria-pressed=true] { border-color: var(--sl-text); background: var(--sl-row-active); }
+.sl-chip { display: inline-block; padding: 4px 10px; font-size: 13px; color: var(--sl-text-2); border: 1px solid var(--sl-hairline); background: var(--sl-row-hover); }
+.sl-tag { padding: 2px 6px; font: 700 11px var(--sl-font-display); letter-spacing: .12em; text-transform: uppercase; }
+.sl-tag-gold { color: var(--sl-t); background: #e2b35b1f; }
+.sl-tag-blue { color: var(--sl-ct); background: #78a6dc1f; }
+.sl-error-page { min-height: 100dvh; padding: 32px 20px; display: grid; place-items: center; background: var(--sl-bg); }
+.sl-error-card { max-width: 660px; padding: 32px; border: 1px solid #e5534b66; background: var(--sl-panel); }
+.sl-error-card h1 { font: 700 32px var(--sl-font-display); margin: 16px 0; }
+.sl-error-card p { color: var(--sl-text-body); line-height: 1.5; }
+.sl-error-card pre { overflow: auto; max-height: 200px; padding: 16px; background: var(--sl-bg); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+/* Existing drawers use the shared theme while their full-screen replacements land. */
+.drawer { background: var(--sl-panel-strong); border-color: var(--sl-hairline-strong); }
+.drawer-header, .drawer-footer, .drawer .tabs { border-color: var(--sl-hairline); }
+.drawer-header h1 { font-family: var(--sl-font-display); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.drawer-header small, .drawer h2 { color: var(--sl-text-3); }
+.drawer .tabs button { font: 700 15px var(--sl-font-display); text-transform: uppercase; letter-spacing: .08em; }
+.drawer .tabs button[aria-selected=true] { color: var(--sl-text); border-color: var(--sl-text); }
+.drawer .primary { background: var(--sl-go); border-color: var(--sl-go); color: white; font: 700 20px var(--sl-font-display); letter-spacing: .12em; text-transform: uppercase; }
+.drawer .secondary { border-color: var(--sl-hairline-strong); background: var(--sl-row-alt); font-size: 13px; }
+.drawer .two-fields input, .drawer .select-row select { background: var(--sl-field); border-color: var(--sl-hairline-strong); color: var(--sl-text); }
+.drawer-content { scrollbar-color: #3c4651 transparent; }

@@ -188,6 +188,10 @@ export const latestChanges = {
     {id: 'native-floor-decals', title: 'Floor decal repair', items: [
       'Fixed opaque, floating floor-marking rectangles in aim_redline. Native transparency is restored and the markings sit on the floor with matching baked lighting.',
     ]},
+    {id: 'ui-foundation', title: 'New interface foundation', items: [
+      'Self-hosted Barlow and Rajdhani fonts, charcoal panels, squared controls and consistent keyboard focus styling from the new UI designs.',
+      'Shared settings controls preserve saved values, labels and number-field validation. The recovery screen now has its own working styles.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

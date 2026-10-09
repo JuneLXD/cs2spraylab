@@ -22,6 +22,7 @@ import {HearingPractice} from './HearingPractice';
 import {KeyboardSettings} from './keybinds/KeyboardSettings';
 import {keyHint, shortcutHint, slotKey} from './keybinds/profile';
 import {applyConsoleCommand} from './console-settings';
+import {SliderRow as Slider, SwitchRow as Toggle, NumberField} from './ui/primitives';
 import {frameLimitOptions, useDisplayRate} from './display-rate';
 
 function LoadoutFinishes({equipment, profile, controller, onArmory, focusRequest}: {equipment: Weapon; profile: ProgressionProfile; controller: ProgressionController; onArmory: (equipment: string) => void; focusRequest: number}) {
@@ -51,19 +52,6 @@ function CrosshairView({ value }: { value: Crosshair }) {
   return <div className={`crosshair ${value.t ? 't-style' : ''} ${value.size === 0 ? 'dot-only' : ''}`} style={style} aria-hidden="true">
     <i className="arm top" /><i className="arm right" /><i className="arm bottom" /><i className="arm left" />{value.dot && <i className="dot" />}
   </div>;
-}
-function Slider({ label, value, min, max, step = 1, suffix = '', onChange }: { label: string; value: number; min: number; max: number; step?: number; suffix?: string; onChange: (n: number) => void }) {
-  return <label className="slider-row"><span>{label}<output>{value}{suffix}</output></span><input aria-label={label} type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(+e.target.value)} /></label>;
-}
-function Toggle({ label, checked, onChange, disabled = false }: { label: string; checked: boolean; onChange: (v: boolean) => void; disabled?: boolean }) {
-  return <label className="toggle-row"><span>{label}</span><input type="checkbox" role="switch" checked={checked} disabled={disabled} onChange={e => onChange(e.target.checked)} /><span className="switch" /></label>;
-}
-function NumberField({ label, value, min, max, step = 1, onCommit }: { label: string; value: number; min: number; max: number; step?: number; onCommit: (v: number) => void }) {
-  const [draft, setDraft] = useState(String(value));
-  useEffect(() => setDraft(String(value)), [value]);
-  return <input aria-label={label} type="number" min={min} max={max} step={step} value={draft}
-    onChange={e => setDraft(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') e.currentTarget.blur(); }}
-    onBlur={() => { const n = Number(draft), next = draft.trim() && Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : value; setDraft(String(next)); onCommit(next); }} />;
 }
 function readResults(): Result[] {
   try {
