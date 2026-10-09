@@ -38,6 +38,8 @@ export type DuelConfig = {
   mapDesign: 'random' | typeof arenaDesigns[number];
   shortcutProtection: boolean;
   overrides: BotOverride[];
+  /** Deathmatch on an imported map: seconds until a dead player or bot respawns on its own side. 0 = round-based duel. */
+  respawnSeconds: number;
 };
 
 export const duelDefaults: DuelConfig = {
@@ -48,6 +50,7 @@ export const duelDefaults: DuelConfig = {
   radarEnabled: true, radarRotate: true, radarScale: .7,
   arenaScale: 1,
   mapDesign: 'random',
+  respawnSeconds: 0,
 };
 
 const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' && !Array.isArray(value)
@@ -92,6 +95,7 @@ export function sanitizeDuelConfig(raw: unknown): DuelConfig {
     arenaScale: finite(input.arenaScale, 1, count <= 2 ? .65 : 1, 1.5),
     mapDesign: arenaDesigns.find(name => name === input.mapDesign) ?? 'random',
     shortcutProtection: input.shortcutProtection !== false, overrides,
+    respawnSeconds: Math.round(finite(input.respawnSeconds, duelDefaults.respawnSeconds, 0, 10) * 2) / 2,
   };
 }
 

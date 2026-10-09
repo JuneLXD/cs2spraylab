@@ -7,6 +7,8 @@ import {botConfig, type BotOverride, type DuelConfig, type SkillLevel} from './c
 
 type DuelSetupProps = {
   config: DuelConfig;
+  /** Deathmatch on aim_redline: no arena layout or round timing; a respawn delay instead. */
+  deathmatch?: boolean;
   arenaDesign?: string;
   weaponToAdd: Equipment;
   setWeaponToAdd: (weapon: Equipment) => void;
@@ -16,11 +18,12 @@ type DuelSetupProps = {
 };
 
 // Combat reports change at 10 Hz; setup only changes with configuration or a new map.
-export const DuelSetup = memo(function DuelSetup({config, arenaDesign, weaponToAdd, setWeaponToAdd, update, updateBot, customizeBot}: DuelSetupProps) {
+export const DuelSetup = memo(function DuelSetup({config, deathmatch = false, arenaDesign, weaponToAdd, setWeaponToAdd, update, updateBot, customizeBot}: DuelSetupProps) {
   return <div className="duel-controls-body">
-        <label className="duel-field"><span>Map layout <output>{arenaDesign}</output></span><select aria-label="Map layout" value={config.mapDesign} onChange={event=>update({mapDesign:event.target.value as DuelConfig['mapDesign']})}>
-          <option value="random">Varied each round</option>{arenaDesigns.map(design=><option key={design} value={design}>{design}</option>)}</select></label>
-        <label className="duel-field"><span>Arena size <output>{(24 * config.arenaScale).toFixed(0)} x {(32 * config.arenaScale).toFixed(0)} m</output></span><input type="range" aria-label="Arena size" min={config.botCount <= 2 ? '.65' : '1'} max="1.5" step=".05" value={config.arenaScale} onChange={event => update({arenaScale: +event.target.value})}/></label>
+        {deathmatch && <label className="duel-field"><span>Respawn delay <output>{config.respawnSeconds.toFixed(1)}s</output></span><input aria-label="Respawn delay" type="range" min="1" max="10" step=".5" value={config.respawnSeconds} onChange={event => update({respawnSeconds: +event.target.value})}/></label>}
+        {!deathmatch && <label className="duel-field"><span>Map layout <output>{arenaDesign}</output></span><select aria-label="Map layout" value={config.mapDesign} onChange={event=>update({mapDesign:event.target.value as DuelConfig['mapDesign']})}>
+          <option value="random">Varied each round</option>{arenaDesigns.map(design=><option key={design} value={design}>{design}</option>)}</select></label>}
+        {!deathmatch && <label className="duel-field"><span>Arena size <output>{(24 * config.arenaScale).toFixed(0)} x {(32 * config.arenaScale).toFixed(0)} m</output></span><input type="range" aria-label="Arena size" min={config.botCount <= 2 ? '.65' : '1'} max="1.5" step=".05" value={config.arenaScale} onChange={event => update({arenaScale: +event.target.value})}/></label>}
         <label className="duel-field"><span>Bots <output>{config.botCount}</output></span><input aria-label="Number of bots" type="range" min="1" max="5" step="1" value={config.botCount} onChange={event => update({botCount: +event.target.value})}/></label>
         <label className="duel-field"><span>FACEIT level <output>{config.skill}</output></span><select aria-label="Bot skill level" value={config.skill} onChange={event => update({skill: event.target.value === '10+' ? '10+' : +event.target.value as SkillLevel})}>
           {[1,2,3,4,5,6,7,8,9,10,'10+'].map(level => <option key={level} value={level}>{level}</option>)}
@@ -36,7 +39,7 @@ export const DuelSetup = memo(function DuelSetup({config, arenaDesign, weaponToA
         </div>
         <label className="duel-field"><span>Health <output>{config.health}</output></span><input aria-label="Bot health" type="number" min="1" max="500" value={config.health} onChange={event => update({health: +event.target.value})}/></label>
         <label className="duel-field"><span>Player health <output>{config.playerHealth}</output></span><input aria-label="Player health" type="number" min="1" max="500" value={config.playerHealth} onChange={event => update({playerHealth: +event.target.value})}/></label>
-        <label className="duel-field"><span>Between rounds <output>{config.feedbackSeconds.toFixed(1)}s</output></span><input aria-label="Round restart delay" type="range" min="1" max="3" step=".1" value={config.feedbackSeconds} onChange={event => update({feedbackSeconds: +event.target.value})}/></label>
+        {!deathmatch && <label className="duel-field"><span>Between rounds <output>{config.feedbackSeconds.toFixed(1)}s</output></span><input aria-label="Round restart delay" type="range" min="1" max="3" step=".1" value={config.feedbackSeconds} onChange={event => update({feedbackSeconds: +event.target.value})}/></label>}
         <label className="duel-check"><span>Bot Kevlar</span><input aria-label="Bot armor" type="checkbox" checked={config.armor} onChange={event => update({armor: event.target.checked})}/></label>
         <label className="duel-check"><span>Bot helmet</span><input aria-label="Bot helmet" type="checkbox" checked={config.helmet} disabled={!config.armor} onChange={event => update({helmet: event.target.checked})}/></label>
         <label className="duel-field"><span>Bot armor condition</span><input aria-label="Bot armor points" type="number" min="0" max="100" value={config.armorPoints} disabled={!config.armor} onChange={event => update({armorPoints: +event.target.value})}/></label>

@@ -207,6 +207,8 @@ export function traversalAt(arena: Arena, feet: Vec, height: number): TraversalV
 }
 
 export function availableTraversalLinks(arena: Arena, state?: EnvironmentState, partnerAvailable = false): TraversalLink[] {
+  // Imported maps have no authored links but thousands of solids: skip the piece table.
+  if (!arena.traversalLinks?.length) return [];
   const authored = new Map(arena.solids.map((solid, index) => [environmentPieceId(solid, index), solid]));
   const active = (id: string) => {
     const solid = authored.get(id), piece = state?.pieces[id];

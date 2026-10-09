@@ -8,13 +8,40 @@ type RouteTree = {parent: Int32Array; rank: Int32Array};
 const masks = new WeakMap<Arena, {state?: EnvironmentState; solids: readonly Solid[]; nx: number; nz: number;
   blocked: Uint8Array; trees: Map<string, RouteTree>}>();
 
-function groundObstacles(arena: Arena, state?: EnvironmentState) {
-  return environmentSolids(arena, state).filter(solid => blocksMovement(solid) &&
+// Imported maps have thousands of collision boxes: keep the ground obstacles and a
+// coarse bucket index per arena/environment revision instead of refiltering per probe.
+const BUCKET = 2, MARGIN = .6;
+type Obstacles = {list: readonly Solid[]; nx: number; nz: number; buckets: Solid[][]};
+const obstacleCache = new WeakMap<Arena, {state?: EnvironmentState; solids: readonly Solid[]; obstacles: Obstacles}>();
+function groundObstacles(arena: Arena, state?: EnvironmentState): Obstacles {
+  const cached = obstacleCache.get(arena);
+  if (cached && cached.state === state && cached.solids === arena.solids) return cached.obstacles;
+  const list = environmentSolids(arena, state).filter(solid => blocksMovement(solid) &&
     solid.center.y + solid.size.y / 2 > 1e-8 && solid.center.y - solid.size.y / 2 < 72 * UNIT);
+  const nx = Math.max(1, Math.ceil((arena.maxX - arena.minX) / BUCKET)), nz = Math.max(1, Math.ceil((arena.maxZ - arena.minZ) / BUCKET));
+  const buckets: Solid[][] = Array.from({length: nx * nz}, () => []);
+  const column = (x: number) => Math.max(0, Math.min(nx - 1, Math.floor((x - arena.minX) / BUCKET)));
+  const row = (z: number) => Math.max(0, Math.min(nz - 1, Math.floor((z - arena.minZ) / BUCKET)));
+  for (const solid of list) {
+    const x0 = column(solid.center.x - solid.size.x / 2 - MARGIN), x1 = column(solid.center.x + solid.size.x / 2 + MARGIN);
+    const z0 = row(solid.center.z - solid.size.z / 2 - MARGIN), z1 = row(solid.center.z + solid.size.z / 2 + MARGIN);
+    for (let z = z0; z <= z1; z++) for (let x = x0; x <= x1; x++) buckets[z * nx + x].push(solid);
+  }
+  const obstacles = {list, nx, nz, buckets};
+  obstacleCache.set(arena, {state, solids: arena.solids, obstacles});
+  return obstacles;
 }
-function blocked(x: number, z: number, arena: Arena, obstacles: readonly Solid[], radius = RADIUS) {
+function blocked(x: number, z: number, arena: Arena, obstacles: Obstacles, radius = RADIUS) {
   if (x < arena.minX + radius || x > arena.maxX - radius || z < arena.minZ + radius || z > arena.maxZ - radius) return true;
-  return obstacles.some(({center, size}) => Math.abs(x - center.x) < size.x / 2 + radius && Math.abs(z - center.z) < size.z / 2 + radius);
+  const column = Math.max(0, Math.min(obstacles.nx - 1, Math.floor((x - arena.minX) / BUCKET)));
+  const row = Math.max(0, Math.min(obstacles.nz - 1, Math.floor((z - arena.minZ) / BUCKET)));
+  const nearby = radius <= MARGIN ? obstacles.buckets[row * obstacles.nx + column] : obstacles.list;
+  return nearby.some(({center, size}) => Math.abs(x - center.x) < size.x / 2 + radius && Math.abs(z - center.z) < size.z / 2 + radius);
+}
+
+/** Whether an actor-sized hull can stand at this point without touching the navigation margin. */
+export function navigable(point: Vec, arena: Arena, state?: EnvironmentState) {
+  return !blocked(point.x, point.z, arena, groundObstacles(arena, state));
 }
 
 export function clearSegment(a: Vec, b: Vec, arena: Arena, state?: EnvironmentState) {
@@ -34,7 +61,14 @@ export function clearSegment(a: Vec, b: Vec, arena: Arena, state?: EnvironmentSt
 
 // A bounded, cached occupancy grid route. Only the next bend is used; movement
 // still runs through the shared acceleration and collision kernel.
-export function routeTo(start: Vec, goal: Vec, arena: Arena, state?: EnvironmentState): Vec[] {
+export type RouteOptions = {
+  /** Imported maps: let a route start or end inside the navigation margin (spawns tucked against crates) by using
+   * the nearest free cells; collision slides the actor along the wall for that leg. Authored arenas keep strict
+   * endpoints, which their layout validation relies on. */
+  lenient?: boolean;
+};
+
+export function routeTo(start: Vec, goal: Vec, arena: Arena, state?: EnvironmentState, options: RouteOptions = {}): Vec[] {
   if (clearSegment(start, goal, arena, state)) return [goal];
   const nx = Math.ceil((arena.maxX - arena.minX) / CELL);
   const nz = Math.ceil((arena.maxZ - arena.minZ) / CELL);
@@ -62,7 +96,23 @@ export function routeTo(start: Vec, goal: Vec, arena: Arena, state?: Environment
     }
     return result;
   };
-  const roots = connected(start, true), ends = connected(goal, false);
+  // A spawn point or a goal tucked against a crate can sit inside the margin with no swept link to any cell.
+  // Take the nearest free cells within two cells instead; collision slides the actor out along the wall.
+  const nearest = (point: Vec) => {
+    const at = cell(point), found: {id: number; gap: number}[] = [];
+    for (let dz = -2; dz <= 2; dz++) for (let dx = -2; dx <= 2; dx++) {
+      const x = at.x + dx, z = at.z + dz;
+      if (x < 0 || x >= nx || z < 0 || z >= nz || mask!.blocked[index(x, z)]) continue;
+      const center = coords(index(x, z));
+      found.push({id: index(x, z), gap: Math.hypot(center.x - point.x, center.z - point.z)});
+    }
+    // Several candidates: the closest free cell may be a pocket between crates that connects to nothing.
+    return found.sort((a, b) => a.gap - b.gap).slice(0, 4).map(item => item.id);
+  };
+  let forcedStart = false, forcedEnd = false;
+  let roots = connected(start, true), ends = connected(goal, false);
+  if (!roots.length && options.lenient) {roots = nearest(start); forcedStart = true;}
+  if (!ends.length && options.lenient) {ends = nearest(goal); forcedEnd = true;}
   if (!roots.length || !ends.length) return [];
   const key = roots.join(',');
   let tree = mask.trees.get(key);
@@ -101,7 +151,8 @@ export function routeTo(start: Vec, goal: Vec, arena: Arena, state?: Environment
   while (cursor < path.length) {
     let next = path.length - 1;
     while (next > cursor && !clearSegment(from, path[next], arena, state)) next--;
-    if (!clearSegment(from, path[next], arena, state)) return [];
+    // A forced first leg leaves the margin along the wall; a forced last leg ends against it.
+    if (!clearSegment(from, path[next], arena, state) && !(forcedStart && smooth.length === 0) && !(forcedEnd && next === path.length - 1)) return [];
     smooth.push(path[next]); from = path[next]; cursor = next + 1;
   }
   return smooth;

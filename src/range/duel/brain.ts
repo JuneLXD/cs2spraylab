@@ -10,6 +10,13 @@ import {aimStep, type AimMotor} from './motor';
 const difference = (target: number, current: number) => Math.atan2(Math.sin(target - current), Math.cos(target - current));
 const normal = (random: () => number) => Math.sqrt(-2 * Math.log(Math.max(1e-9, random()))) * Math.cos(2 * Math.PI * random());
 
+/** Pathing on maps without authored cover lanes (deathmatch on an imported map): a route around the collision
+ * boxes, and somewhere to roam when nothing has been seen or heard. */
+export type BotNavigator = {
+  route: (from: Vec, to: Vec) => Vec[];
+  roam: (from: Vec, random: () => number) => Vec | undefined;
+};
+
 export class BotBrain {
   private firstSeen = -1;
   private readyAt = Infinity;
@@ -20,9 +27,42 @@ export class BotBrain {
   private willStop = true;
   private observation: BotObservation | null = null;
   private readonly motor: AimMotor = {yawRate: 0, pitchRate: 0};
+  private heard?: {point: Vec; time: number};
+  private roamGoal?: {point: Vec; since: number};
+  private path: {goal: Vec; waypoints: Vec[]; at: number} | null = null;
 
   constructor(private readonly traits: BotTraits, private readonly behavior: BotBehavior,
-    private readonly accuracy: number, private readonly random: () => number) {}
+    private readonly accuracy: number, private readonly random: () => number,
+    private readonly navigator?: BotNavigator) {}
+
+  /** A gunshot or footstep of the player within earshot: head there until something is seen. */
+  hear(point: Vec, time: number) {
+    this.heard = {point: {...point}, time};
+  }
+
+  /** Where to walk: the known target, else the last sound, else a roaming goal; then the next bend of a route to it. */
+  private approach(self: BotObservation['self'], target: Vec | null, time: number): Vec {
+    if (!this.navigator) return target ?? {x: 0, y: self.position.y, z: 5};
+    let goal = target;
+    if (!goal && this.heard && time - this.heard.time < 8) goal = this.heard.point;
+    if (!goal) {
+      const reached = this.roamGoal && Math.hypot(this.roamGoal.point.x - self.position.x, this.roamGoal.point.z - self.position.z) < 1.2;
+      if (!this.roamGoal || reached || time - this.roamGoal.since > 14) {
+        const point = this.navigator.roam(self.position, this.random);
+        this.roamGoal = point ? {point, since: time} : undefined;
+      }
+      goal = this.roamGoal?.point ?? null;
+    }
+    if (!goal) return {...self.position};
+    const moved = !this.path || Math.hypot(this.path.goal.x - goal.x, this.path.goal.z - goal.z) > 1.5;
+    if (moved || time - this.path!.at > .75) {
+      const waypoints = this.navigator.route({...self.position, y: self.feet}, {...goal, y: self.feet});
+      this.path = {goal: {...goal}, waypoints, at: time};
+    }
+    while (this.path!.waypoints.length > 1 &&
+      Math.hypot(this.path!.waypoints[0].x - self.position.x, this.path!.waypoints[0].z - self.position.z) < .6) this.path!.waypoints.shift();
+    return this.path!.waypoints[0] ?? goal;
+  }
 
   perceive(observation: BotObservation) {
     if (observation.time < (this.observation?.time ?? -Infinity)) return;
@@ -49,9 +89,11 @@ export class BotBrain {
     const remembered = memoryAim ? this.memory.seen : null;
     const identified = visible !== null && time >= this.readyAt;
     const target = visible ?? remembered;
-    const approachPoint: Vec = target?.position ?? {x: 0, y: self.position.y, z: 5};
+    if (visible) this.heard = undefined;
+    const approachPoint: Vec = this.approach(self, target?.position ?? null, time);
     const dx = approachPoint.x - self.position.x, dz = approachPoint.z - self.position.z;
-    const distance = Math.hypot(dx, dz);
+    // Engagement distance is measured to the target itself, not to the next bend of the route.
+    const distance = target ? Math.hypot(target.position.x - self.position.x, target.position.z - self.position.z) : Math.hypot(dx, dz);
     const targetYaw = Math.atan2(-dx, -dz);
     const aimPoint = (melee?visible?.bodyPoint:visible?.aimPoint)??visible?.aimPoint ?? memoryAim;
     const yawGoal = aimPoint ? Math.atan2(-(aimPoint.x - self.position.x), -(aimPoint.z - self.position.z)) + (visible ? this.aimYawError : 0) : targetYaw;
@@ -68,7 +110,8 @@ export class BotBrain {
     const engageDistance = melee?range*.8:self.equipment === 'zeus' ? stats.range * UNIT * .85 : closeWeapon ? 8
       : this.behavior === 'aggressive' ? 5 : this.behavior === 'holder' ? 18 : 9;
     const closing = closeWeapon && identified && distance > engageDistance;
-    const advancing = distance > engageDistance && (this.behavior !== 'holder' || !visible || closing);
+    // Without a target the bot is travelling to a sound or a roaming goal: engagement range does not apply.
+    const advancing = target ? distance > engageDistance && (this.behavior !== 'holder' || !visible || closing) : distance > .6;
     const headingError = difference(targetYaw, self.yaw);
     const stop = identified && !closing && this.willStop && time >= this.readyAt + this.traits.brakeErrorMs / 1000;
     const moving = advancing && !stop;

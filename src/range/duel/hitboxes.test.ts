@@ -52,7 +52,9 @@ describe('posed capsule rays', () => {
       equipment: 'awp', actors: [actor(1, -5), actor(2, -8)], shooterId: 0, shooterSide: 'player', arena: {solids: [
         {center: {x: 0, y: 1, z: -2}, size: {x: 2, y: 2, z: .01}, material: 'glass'}]}});
     expect(result.hits.map(h => h.actorId)).toEqual([1, 2]);
-    expect(result.hits.every(h => h.group === 'chest' && h.armorDamage > 0)).toBe(true);
+    // Whole points per hit: the collateral behind glass and a body keeps so little damage that its armor loss truncates to 0.
+    expect(result.hits.every(h => h.group === 'chest' && h.healthDamage > 0)).toBe(true);
+    expect(result.hits[0].armorDamage).toBeGreaterThan(0);
     expect(result.hits[0].distance).toBeCloseTo(4.8, 12);
     expect(result.hits[0].exitDistance).toBeCloseTo(5.2, 12);
     expect(result.hits[1].residualDamage).toBeLessThan(result.hits[0].residualDamage);

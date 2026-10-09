@@ -59,6 +59,8 @@ export class DuelRadar {
     ctx.fillStyle = '#a3b7ae';ctx.globalAlpha = .45;
     for(const solid of arena.solids) {
       if(solid.active===false||solid.passable)continue;
+      // An imported map's floor slab and low clips would paint the whole radar: draw only what stands at least 0.9 m tall.
+      if(arena.workshop&&(solid.center.y+solid.size.y/2<.9||solid.shotBlocking===false))continue;
       const corners = [[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,z]) => project({x: solid.center.x+x*solid.size.x/2,y:0,z:solid.center.z+z*solid.size.z/2}));
       ctx.beginPath();corners.forEach((point,index)=>index?ctx.lineTo(point.x,point.y):ctx.moveTo(point.x,point.y));ctx.closePath();ctx.fill();
     }

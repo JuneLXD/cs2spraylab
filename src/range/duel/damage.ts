@@ -8,7 +8,7 @@ export type DamageContext = {attack?: 'primary' | 'secondary'; firstSlash?: bool
 // Health and armor are integers in the game: each hit truncates its health
 // damage and its armor loss separately (an AK chest hit on Kevlar does 27 and
 // removes 4), so a sum of displayed numbers equals the health lost.
-const truncate = (value: number) => Math.max(0, Math.floor(value + 1e-6));
+export const truncate = (value: number) => Math.max(0, Math.floor(value + 1e-6));
 
 export function armorDamage(raw: number, armor: number, ratio: number): DamageResult {
   const healthDamage = raw * Math.max(0, Math.min(1, ratio / 2));

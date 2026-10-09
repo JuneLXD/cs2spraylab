@@ -4,6 +4,7 @@ import {pointOnRay, traceActor} from './geometry';
 import type {Hitgroup} from './types';
 import nativeSurfaces from './native-surface-fixture.json';
 import {traceHitboxes, type HitCapsule} from './hitboxes';
+import {armorDamage, truncate} from './damage';
 
 export type PenetrationMaterial = 'concrete' | 'metal' | 'wood' | 'plastic' | 'glass' | 'grate' | 'water' | 'flesh';
 export type PenetrationSolid = {
@@ -124,12 +125,12 @@ function actorInterval(origin: Vec, direction: Vec, actor: PenetrationActor, ran
   return {entry: hit.distance, exit: Math.max(hit.distance, end - back.distance), group: hit.group};
 }
 
+// Same hitgroup and armor arithmetic as resolveDamage, truncated to whole points per hit like the game.
 function actorDamage(raw: number, stats: PenetrationStats, group: Hitgroup, actor: PenetrationActor) {
   const multiplier = group === 'head' ? stats.headshotMultiplier : group === 'stomach' ? 1.25 : group === 'leg' ? .75 : 1;
   const damage = raw * multiplier, armor = Math.max(0, actor.armor ?? 0);
-  if (!armor || group === 'leg' || (group === 'head' && !actor.helmet)) return {healthDamage: damage, armorDamage: 0};
-  const health = damage * Math.max(0, Math.min(1, stats.armorRatio / 2)), cost = (damage - health) / 2;
-  return cost <= armor ? {healthDamage: health, armorDamage: cost} : {healthDamage: damage - armor * 2, armorDamage: armor};
+  if (!armor || group === 'leg' || (group === 'head' && !actor.helmet)) return {healthDamage: truncate(damage), armorDamage: 0};
+  return armorDamage(damage, armor, stats.armorRatio);
 }
 
 export function penetrationLoss(damage: number, thickness: number, power: number, modifier: number, damageLoss: number) {

@@ -201,6 +201,11 @@ export const latestChanges = {
     {id: 'dynamic-crosshair', title: 'Dynamic crosshair from the accuracy cone', items: [
       'With the dynamic crosshair on, the gap now follows the live accuracy cone (accumulated penalty, movement, air time, landing and spread) projected to the screen at the current field of view, as the game HUD does, instead of a speed-based guess.',
     ]},
+    {id: 'deathmatch', title: 'Deathmatch on aim_redline', items: [
+      'A new drill, Deathmatch: aim_redline, plays AI Duel opponents on the imported map without rounds. You spawn on the T side and the bots on the CT side; whoever dies respawns on their own side after the respawn delay, at a spawn the other side cannot see, and kills and deaths keep counting.',
+      'The bot count, FACEIT level, behavior, weapons, health and armor come from its own setup panel (saved separately from AI Duel), with a 1-10 s respawn delay.',
+      'Bots on the imported map route around the collision boxes toward what they see or hear, and roam the warehouse otherwise; the navigation grid now caches obstacles per map so routes cost a fraction of a millisecond.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

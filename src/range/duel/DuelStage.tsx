@@ -20,9 +20,15 @@ const initialStatus: DuelStatus = {phase: 'ready', paused: false, health: 100, a
   ammo: 30, reloading: false, enemies: 1, seconds: 0, kills: 0, damage: 0, input: 'Ready', caption: '',
   shortcutProtected: false, nextRoundIn: 0};
 
-function loadConfig(): DuelConfig {
-  try {return sanitizeDuelConfig(JSON.parse(localStorage.getItem('spraylab.duel.v1') || '{}'));}
-  catch {return sanitizeDuelConfig({});}
+const duelKeys = {duel: 'spraylab.duel.v1', deathmatch: 'spraylab.deathmatch.v1'} as const;
+/** Deathmatch keeps its own bot count, level and respawn delay; the delay is what makes the engine respawn instead of ending rounds. */
+const deathmatchDefaults = {botCount: 3, respawnSeconds: 3, radarEnabled: false};
+function loadConfig(variant: keyof typeof duelKeys): DuelConfig {
+  const fallback = variant === 'deathmatch' ? deathmatchDefaults : {};
+  let config: DuelConfig;
+  try {config = sanitizeDuelConfig({...fallback, ...JSON.parse(localStorage.getItem(duelKeys[variant]) || '{}')});}
+  catch {config = sanitizeDuelConfig(fallback);}
+  return variant === 'deathmatch' ? {...config, respawnSeconds: Math.max(1, config.respawnSeconds)} : {...config, respawnSeconds: 0};
 }
 
 const botzKeys = {botz: 'spraylab.botz.v1', reflex: 'spraylab.reflex.v1', redline: 'spraylab.redline.v1'} as const;
@@ -39,14 +45,15 @@ function loadHint() {
 
 /** AI Duel, Aim Botz (variant 'botz': passive respawning bots), Fast Aim / Reflex (variant 'reflex': bots rush your
  * island) or Aim Botz on the imported aim_redline map (variant 'redline'), all on the same engine. */
-export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel', onConsole}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'botz' | 'reflex' | 'redline';
+export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel', onConsole}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'deathmatch' | 'botz' | 'reflex' | 'redline';
   /** Console commands from binds that change app settings, such as crosshair convars. */
   onConsole?: (args: string[]) => void}) {
-  const botzMode = variant !== 'duel', reflexMode = variant === 'reflex', redlineMode = variant === 'redline';
+  const botzMode = variant === 'botz' || variant === 'reflex' || variant === 'redline', reflexMode = variant === 'reflex', redlineMode = variant === 'redline';
+  const deathmatchMode = variant === 'deathmatch', duelKind = deathmatchMode ? 'deathmatch' : 'duel';
   const kind = reflexMode ? 'reflex' : redlineMode ? 'redline' : 'botz';
   const drill = reflexMode ? 'reflex training' : redlineMode ? 'aim_redline' : 'Aim Botz';
   const title = reflexMode ? 'Fast Aim / Reflex' : redlineMode ? 'aim_redline' : 'Aim Botz';
-  const [config, setConfig] = useState(loadConfig);
+  const [config, setConfig] = useState(() => loadConfig(duelKind));
   const [botz, setBotz] = useState(() => loadBotz(kind));
   // aim_redline's collision and spawns load as a separate chunk before the engine can start.
   const [workshop, setWorkshop] = useState<Arena>();
@@ -61,14 +68,14 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   const engine = useRef<DuelEngine>();
 
   useEffect(() => {
-    if (!redlineMode) return;
+    if (!redlineMode && !deathmatchMode) return;
     let live = true;
     loadWorkshopArena('aim_redline').then(arena => {if (live) setWorkshop(arena);},
       () => {if (live) setError('The aim_redline map data could not be loaded. Reload to try again.');});
     return () => {live = false;};
   }, []);
   useEffect(() => {
-    if (!canvasHost.current || redlineMode && !workshop) return;
+    if (!canvasHost.current || (redlineMode || deathmatchMode) && !workshop) return;
     try {
       engine.current = new DuelEngine(canvasHost.current, crosshair.current!, setStatus, setError, settings, config, progression, botzMode ? botz : undefined, workshop);
       engine.current.onConsole = args => {
@@ -86,7 +93,7 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   useEffect(() => {
     if (botzMode) return;
     engine.current?.setConfig(config);
-    try {localStorage.setItem('spraylab.duel.v1', JSON.stringify(config));} catch { /* Session-only configuration. */ }
+    try {localStorage.setItem(duelKeys[duelKind], JSON.stringify(config));} catch { /* Session-only configuration. */ }
   }, [config]);
   useEffect(() => {
     if (!botzMode) return;
@@ -94,7 +101,10 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
     try {localStorage.setItem(botzKeys[kind], JSON.stringify(botz));} catch { /* Session-only configuration. */ }
   }, [botz]);
 
-  const update = useCallback((patch: Partial<DuelConfig>) => setConfig(previous => sanitizeDuelConfig({...previous, ...patch})), []);
+  const update = useCallback((patch: Partial<DuelConfig>) => setConfig(previous => {
+    const next = sanitizeDuelConfig({...previous, ...patch});
+    return deathmatchMode ? {...next, respawnSeconds: Math.max(1, next.respawnSeconds)} : next;
+  }), [deathmatchMode]);
   const updateBotz = useCallback((patch: Partial<BotzConfig>) => setBotz(previous => sanitizeBotzConfig({...previous, ...patch})), []);
   const updateBot = useCallback((index: number, patch: BotOverride) => setConfig(previous => {
     const overrides = [...previous.overrides];
@@ -123,7 +133,7 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   return <div className="duel-layout">
     <div className="duel-view">
       <div className="duel-canvas" ref={canvasHost} />
-      <div className="duel-topline"><span className="range-badge"><i />{botzMode ? title.toUpperCase() : 'AI DUEL'}</span><span>{botzMode ? `${status.enemies} ${status.enemies === 1 ? 'BOT' : 'BOTS'} UP` : `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} LEFT`}</span></div>
+      <div className="duel-topline"><span className="range-badge"><i />{botzMode ? title.toUpperCase() : deathmatchMode ? 'DEATHMATCH' : 'AI DUEL'}</span><span>{botzMode ? `${status.enemies} ${status.enemies === 1 ? 'BOT' : 'BOTS'} UP` : `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} LEFT`}</span></div>
       <div className="duel-tools"><div className="equipment-slots" role="group" aria-label="Duel equipment">
         {([1,2,3,4] as Slot[]).filter(slot=>(slot!==1||(status.loadout ? !!status.loadout.primary : settings.primaryEnabled))&&(slot!==2||!status.loadout||!!status.loadout.sidearm)).map(slot => {const id = slot === 1 ? status.loadout?.primary ?? settings.weapon : slot === 2 ? status.loadout?.sidearm ?? settings.sidearm : slot===4?'zeus':'knife';
           return <button key={slot} aria-pressed={equipped === id} title={`${label(id)} (${slotKey(settings.keyboard, slot)})`} aria-label={`Equip ${equipmentNames[id]}`} onClick={() => engine.current?.equip(slot)}><span>{slotKey(settings.keyboard, slot)}</span><img src={profile ? cosmeticPreview(profile,id) : `/models/${id}.png`} alt=""/></button>;})}
@@ -139,6 +149,8 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
       {status.phase !== 'ready' && status.caption && <div className="duel-caption" role="status">{status.caption}</div>}
       {alive && status.pickup && <button className="pickup-prompt" title={`Pick up weapon (${useKey})`} onClick={()=>engine.current?.pickup()}><Hand size={15}/>{useKey} <span>Pick up {equipmentNames[status.pickup]}</span></button>}
       {alive && status.interaction && !status.pickup && <button className="pickup-prompt" title={`${status.interaction} (${useKey})`} onClick={()=>engine.current?.sim.command(0,{usePressed:true})}><Hand size={15}/>{useKey} <span>{status.interaction}</span></button>}
+      {deathmatchMode && status.phase === 'fighting' && !status.paused && status.respawnIn !== undefined && status.respawnIn > 0 && <div className="duel-result lost" role="status"><strong>You died</strong>
+        <span>Respawning in {status.respawnIn.toFixed(1)}s</span></div>}
       {status.phase === 'result' && !botzMode && <div className={`duel-result ${status.outcome}`} role="status"><strong>{status.outcome === 'won' ? 'Round won' : status.outcome === 'lost' ? 'Round lost' : 'Draw'}</strong>
         <span>{status.paused ? 'Paused' : `Next round in ${status.nextRoundIn.toFixed(1)}s`}</span>
         {status.review && <><b>{status.review.message}</b><p>{status.review.tip}</p></>}</div>}
@@ -152,9 +164,10 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
         </button>}
       </div>}
       {!botzMode && (status.phase === 'ready' || status.paused) && !error && <div className="duel-entry">
+        {deathmatchMode && (!workshop || status.mapLoading) ? <p className="duel-loading" role="status">Loading aim_redline…</p> :
         <button className="enter-range" onClick={() => {dismissHint(); onEnter(); void engine.current?.enter();}}><Play size={17} fill="currentColor"/>
-          {status.paused ? 'Resume duel' : 'Enter duel'}
-        </button>
+          {status.paused ? (deathmatchMode ? 'Resume deathmatch' : 'Resume duel') : deathmatchMode ? 'Enter deathmatch' : 'Enter duel'}
+        </button>}
       </div>}
       {error && <div className="range-error" role="alert"><Shield size={24}/><p>{error}</p><button onClick={() => location.reload()}><RotateCcw size={16}/>Reload</button></div>}
       <div className="duel-hud">
@@ -163,7 +176,8 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
           <div className="duel-round"><span>{status.botz.kills} KILLS</span><strong>{status.botz.sessionSeconds ? <>{Math.max(0, Math.ceil(status.botz.sessionSeconds - status.botz.seconds))}<small> s</small></> : clock(status.botz.seconds)}</strong><span>{reflexMode ? `${status.botz.leaks} REACHED YOU` : `${status.botz.headshotRate.toFixed(0)}% HEADSHOTS`}</span></div>
         </> : <>
           <div className="duel-health"><small>HEALTH</small><strong>{Math.ceil(status.health)}</strong><span><Shield size={13}/>{Math.ceil(status.armor)} armor</span></div>
-          <div className="duel-round"><span>{status.kills} KILLS</span><strong>{Math.max(0, Math.ceil(config.roundSeconds - status.seconds))}<small> s</small></strong><span>{Math.round(status.damage)} DAMAGE</span></div>
+          {deathmatchMode ? <div className="duel-round"><span>{status.kills} KILLS</span><strong>{status.deaths ?? 0}<small> deaths</small></strong><span>{clock(status.seconds)}</span></div>
+          : <div className="duel-round"><span>{status.kills} KILLS</span><strong>{Math.max(0, Math.ceil(config.roundSeconds - status.seconds))}<small> s</small></strong><span>{Math.round(status.damage)} DAMAGE</span></div>}
         </>}
         <div className="duel-ammo"><small>{label(equipped)}</small><strong>{equipped === 'knife' ? '--' : status.ammo}{equipped !== 'knife' && equipped!=='zeus' && <em> / {status.reserve ?? equipmentStats(equipped).reserve}</em>}</strong><span>{status.reloading ? status.reloadSilent?'Silent reload':'Reloading' : equipped==='zeus'&&status.recharge?`Recharge ${Math.ceil(status.recharge)}s`:status.input}</span>{equipped !== 'knife' && equipped!=='zeus' && <button className="reload-pistol" title={`Reload (${keyHint(settings.keyboard, '+reload')})`} disabled={!alive || status.reloading || !status.reserve || status.ammo === equipmentStats(equipped).magazine} onClick={() => engine.current?.sim.command(0, {reloadPressed: true})}><RotateCcw size={13}/>Reload</button>}</div>
       </div>
@@ -174,11 +188,11 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
       {panel === 'review' ? <div className="duel-controls-body"><BotzScorecard island={reflexMode} name={reflexMode ? 'Reflex' : title} summary={status.botz} history={status.botzHistory ?? []}/></div> : <BotzSetup config={botz} update={updateBotz}/>}
       <div className="duel-controls-foot"><button onClick={openSettings}><Settings2 size={15}/>Mouse & crosshair</button><span><Target size={13}/>Changes start a new session</span></div>
     </aside> : <aside className="duel-controls" aria-label="Duel settings">
-      <div className="duel-controls-head"><div><small>DRILL SETUP</small><h2>AI Duel</h2></div><button className="icon-button" title="New round" aria-label="New duel round" onClick={() => engine.current?.restart()}><RotateCcw size={17}/></button></div>
+      <div className="duel-controls-head"><div><small>{deathmatchMode ? 'AI DUEL / MAP BY BOT REED' : 'DRILL SETUP'}</small><h2>{deathmatchMode ? 'Deathmatch' : 'AI Duel'}</h2></div><button className="icon-button" title={deathmatchMode ? 'New session' : 'New round'} aria-label={deathmatchMode ? 'New deathmatch session' : 'New duel round'} onClick={() => engine.current?.restart()}><RotateCcw size={17}/></button></div>
       <div className="tabs" role="tablist" aria-label="Duel panel"><button role="tab" aria-selected={panel === 'setup'} onClick={() => setPanel('setup')}>Setup</button><button role="tab" aria-selected={panel === 'review'} onClick={() => setPanel('review')}>Scorecard</button></div>
       {hint && <div className="duel-hint" role="status"><ArrowRight size={18}/><span>Set up your opponent here</span><button aria-label="Dismiss duel hint" title="Dismiss hint" onClick={dismissHint}><X size={14}/></button></div>}
-      {panel === 'review' ? <div className="duel-controls-body"><DuelScorecard review={status.review} history={status.history ?? []}/></div> : <DuelSetup config={config} arenaDesign={status.arenaDesign} weaponToAdd={weaponToAdd} setWeaponToAdd={setWeaponToAdd} update={update} updateBot={updateBot} customizeBot={customizeBot}/>}
-      <div className="duel-controls-foot"><button onClick={openSettings}><Settings2 size={15}/>Mouse & crosshair</button><span><Target size={13}/>Changes start a new round</span></div>
+      {panel === 'review' ? <div className="duel-controls-body"><DuelScorecard review={status.review} history={status.history ?? []}/></div> : <DuelSetup config={config} deathmatch={deathmatchMode} arenaDesign={status.arenaDesign} weaponToAdd={weaponToAdd} setWeaponToAdd={setWeaponToAdd} update={update} updateBot={updateBot} customizeBot={customizeBot}/>}
+      <div className="duel-controls-foot"><button onClick={openSettings}><Settings2 size={15}/>Mouse & crosshair</button><span><Target size={13}/>{deathmatchMode ? 'Changes start a new session' : 'Changes start a new round'}</span></div>
     </aside>}
   </div>;
 }

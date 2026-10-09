@@ -1,8 +1,10 @@
 import {advanceActor, DEG, STEP, UNIT, type ActorKinematics, type Vec} from '../actor-physics';
 import {gameData, pistolIds, type Weapon, type Pistol} from '../config';
 import {botConfig, rosterBehaviors, sanitizeDuelConfig, type DuelConfig} from './config';
-import {BotBrain} from './brain';
+import {BotBrain, type BotNavigator} from './brain';
 import {TacticalBrain} from './tactics';
+import {TeamSpawner} from './team-spawns';
+import {navigable, routeTo} from './navigation';
 import {isKnifeBackstab,resolveDamage} from './damage';
 import {acousticSolids, canFitInArena, moveInArena, pointOnRay, testArena, traceActor, traceSolid, type Arena} from './geometry';
 import {observeBot} from './perception';
@@ -72,6 +74,11 @@ const makeActor = (id: number, side: CombatActor['side'], x: number, z: number, 
   inventory: new Map(), equipReadyAt: 0,
 });
 
+/** Stand an actor on a map spawn point, facing the way it faces. */
+const placeAt = (actor: CombatActor, spawn: {x: number; y: number; z: number; yaw: number}) => {
+  Object.assign(actor, {position: {x: spawn.x, y: spawn.y + 64 * UNIT, z: spawn.z}, feet: spawn.y, yaw: spawn.yaw, grounded: true});
+};
+
 export class DuelSimulation {
   readonly config: DuelConfig;
   readonly arena: Arena;
@@ -124,6 +131,13 @@ export class DuelSimulation {
   private botzLives = new Map<number, {crouch: boolean; strafe?: BotzStrafe; run?: ReflexRun; spam?: ReflexCrouch; ledge?: number;
     close?: {strafe: ReflexStrafe; origin: {x: number; z: number}; across: {x: number; z: number}}}>();
   private respawnAt = new Map<number, number>();
+  /** Deathmatch on an imported map: no rounds; the player (T) and the bots (CT) respawn on their own side after
+   * `config.respawnSeconds`, kills and deaths keep counting. */
+  readonly deathmatch: boolean = false;
+  readonly deathmatchStats = {kills: 0, deaths: 0};
+  private teamSpawner?: TeamSpawner;
+  private initialLoadout = {hasPrimary: true, hasSidearm: true};
+  private floorSpots: readonly (readonly [number, number, number])[] = [];
 
   constructor(config: DuelConfig = sanitizeDuelConfig({}), private seed = 1, arena: Arena = testArena(), private playerWeapon: Weapon = 'ak47', private sidearm: Pistol = 'usp', private hasPrimary = true, botz?: BotzConfig) {
     this.config = sanitizeDuelConfig(config);
@@ -136,6 +150,17 @@ export class DuelSimulation {
     this.actors = [makeActor(0, 'player', 0, 8, hasPrimary ? playerWeapon : sidearm, this.config.playerHealth, this.config.playerArmor, seed)];
     this.actors[0].armor = this.config.playerArmor ? this.config.playerArmorPoints : 0;
     this.actors[0].helmet = this.config.playerArmor && this.config.playerHelmet;
+    this.initialLoadout = {hasPrimary, hasSidearm: this.hasSidearm};
+    this.deathmatch = !this.botz && !!this.arena.workshop && this.config.respawnSeconds > 0;
+    if (this.deathmatch) {
+      this.teamSpawner = new TeamSpawner(this.arena, seed);
+      // Roaming goals: floor spots an actor hull can stand on without touching the navigation margin.
+      this.floorSpots = this.arena.workshop!.spots.filter(spot => spot[1] < .05 && navigable({x: spot[0], y: spot[1], z: spot[2]}, this.arena, this.environment));
+      placeAt(this.actors[0], this.teamSpawner.first('t'));
+      const behaviors = rosterBehaviors(this.config, seed);
+      for (let index = 0; index < this.config.botCount; index++) this.actors.push(this.spawnDuelBot(index + 1, 1, behaviors[index]));
+      return;
+    }
     if (this.botz?.map === 'island') {
       this.actors[0].position = {...REFLEX_PLAYER_SPAWN};
       this.reflexSpawner = new ReflexSpawner(this.botz, this.arena, seed);
@@ -306,7 +331,7 @@ export class DuelSimulation {
     this.time += dt;
     this.tick = Math.floor((this.time + 1e-10) / STEP);
     if (!playerOnly) {
-      if (this.botz) this.respawnBots();
+      if (this.botz) this.respawnBots(); else if (this.deathmatch) this.respawnDue();
       if (this.botz?.map === 'island') this.catchArrivals();
       this.applyEnvironment(advanceEnvironment(this.authoredArena,this.environment,dt,this.actors.filter(actor=>actor.alive).map(actorBody)),0);
     }
@@ -500,6 +525,10 @@ export class DuelSimulation {
         if (brain instanceof TacticalBrain) brain.teammateCallout(victim.position, this.time);
       }
       event.lethal = lethal;
+      if (this.deathmatch && lethal) {
+        if (event.shooter === 0) this.deathmatchStats.kills++;
+        if (victim.id === 0) this.deathmatchStats.deaths++;
+      }
       if(lethal && event.shooter===0) this.radar.confirmDeath(victim.id,this.time);
       if (this.botz) {
         if (lethal && victim.side === 'enemy') this.respawnAt.set(victim.id, this.time + this.botz.respawnSeconds);
@@ -508,7 +537,8 @@ export class DuelSimulation {
         continue;
       }
       if (lethal && victim.side === 'enemy' && victim.weapon.id !== 'knife') this.drops.push({
-        id: victim.id, equipment: victim.weapon.id, ammo: victim.weapon.ammo,
+        // Respawning bots die many times: each drop needs its own id.
+        id: this.deathmatch ? this.dropSequence++ : victim.id, equipment: victim.weapon.id, ammo: victim.weapon.ammo,
         reserve:victim.weapon.reserve,
         position: {...victim.position, y: victim.feet + .08}, picked: false,
       });
@@ -520,7 +550,7 @@ export class DuelSimulation {
         this.outcome = 'won'; this.phase = 'result';
         this.emit({kind: 'round', tick: this.tick, outcome: this.outcome, seconds: this.time});
       }
-    } else if (!this.actors[0].alive || this.actors.slice(1).every(actor => !actor.alive) || this.time >= this.config.roundSeconds) {
+    } else if (!this.deathmatch && (!this.actors[0].alive || this.actors.slice(1).every(actor => !actor.alive) || this.time >= this.config.roundSeconds)) {
       const playerAlive = this.actors[0].alive, botsAlive = this.actors.slice(1).some(actor => actor.alive);
       this.outcome = playerAlive && !botsAlive ? 'won' : !playerAlive && botsAlive ? 'lost' : 'draw';
       this.phase = 'result';
@@ -571,6 +601,67 @@ export class DuelSimulation {
       this.actors[id] = this.spawnBot(id, old.generation + 1, old.position);
       this.combatActions.delete(id);
     }
+  }
+
+  /** Deathmatch: every dead actor gets a timer when first seen down, then comes back on its own side. */
+  private respawnDue() {
+    for (const actor of this.actors) if (!actor.alive && !this.respawnAt.has(actor.id)) this.respawnAt.set(actor.id, this.time + this.config.respawnSeconds);
+    for (const [id, at] of this.respawnAt) {
+      if (this.time + 1e-9 < at) continue;
+      this.respawnAt.delete(id);
+      const old = this.actors[id];
+      this.actors[id] = id === 0 ? this.spawnPlayer(old.generation + 1) : this.spawnDuelBot(id, old.generation + 1);
+      for (const map of [this.combatActions, this.usedAt, this.lastShotAt, this.lastHurtAt, this.lastDownAt, this.lastContactAt, this.lastCalloutAt]) map.delete(id);
+    }
+  }
+
+  /** Seconds until a dead actor returns in deathmatch; 0 when alive or not scheduled. */
+  respawnIn(id: number) {
+    const at = this.respawnAt.get(id);
+    return at === undefined ? 0 : Math.max(0, at - this.time);
+  }
+
+  /** A deathmatch bot life: its configured loadout, skill and behavior at a CT spawn the player cannot see, with its
+   * own brain, aim streams and a route planner for the imported map. */
+  private spawnDuelBot(id: number, generation: number, behavior = rosterBehaviors(this.config, this.seed)[id - 1]) {
+    const bot = botConfig(this.config, id - 1);
+    const living = this.actors.filter(actor => actor.alive && actor.id !== id);
+    const spawn = this.teamSpawner!.next('ct', living.map(actor => actor.position),
+      living.filter(actor => actor.side === 'player').map(actor => actor.position));
+    const actor = makeActor(id, 'enemy', spawn.x, spawn.z, bot.weapon, bot.health, bot.armor, this.seed + generation * 7919);
+    actor.generation = generation;
+    actor.armor = bot.armor ? bot.armorPoints : 0; actor.helmet = bot.armor && bot.helmet;
+    placeAt(actor, spawn);
+    const traits = createBotTraits(bot.skill, this.seed, id);
+    this.brains.set(id, new BotBrain(traits, behavior, bot.accuracy, randomStream(this.seed, `brain:${id}:${generation}`), this.navigator()));
+    return actor;
+  }
+
+  /** The player's deathmatch respawn: the original loadout, full health and armor, at a T spawn the bots cannot see. */
+  private spawnPlayer(generation: number) {
+    this.hasPrimary = this.initialLoadout.hasPrimary; this.hasSidearm = this.initialLoadout.hasSidearm;
+    const actor = makeActor(0, 'player', 0, 0, this.hasPrimary ? this.playerWeapon : this.sidearm, this.config.playerHealth,
+      this.config.playerArmor, this.seed + generation * 7919);
+    actor.generation = generation;
+    actor.armor = this.config.playerArmor ? this.config.playerArmorPoints : 0;
+    actor.helmet = this.config.playerArmor && this.config.playerHelmet;
+    const living = this.actors.filter(other => other.alive && other.id !== 0).map(other => other.position);
+    placeAt(actor, this.teamSpawner!.next('t', living, living));
+    actor.equipReadyAt = this.time + equipmentStats(actor.weapon.id).deploy;
+    return actor;
+  }
+
+  private navigator(): BotNavigator {
+    return {
+      route: (from, to) => routeTo(from, to, this.arena, this.environment, {lenient: true}),
+      roam: (from, random) => {
+        const near = this.floorSpots.filter(([x,, z]) => {const d = Math.hypot(x - from.x, z - from.z); return d > 6 && d < 18;});
+        const pool = near.length ? near : this.floorSpots;
+        if (!pool.length) return undefined;
+        const [x, feet, z] = pool[Math.floor(random() * pool.length)];
+        return {x, y: feet, z};
+      },
+    };
   }
 
   /** Bots never fire. They turn to face you and, if set, strafe or crouch. */
@@ -903,7 +994,7 @@ export class DuelSimulation {
     for (const listener of this.actors.slice(1)) {
       if (!listener.alive) continue;
       const brain = this.brains.get(listener.id);
-      if (!(brain instanceof TacticalBrain)) continue;
+      if (!brain) continue;
       const dx = point.x - listener.position.x, dy = point.y - listener.position.y, dz = point.z - listener.position.z;
       const distance = Math.hypot(dx, dy, dz);
       const range = sound === 'gunshot' ? gunshotRange(actor.weapon.id) : FOOTSTEP_RANGE;
@@ -914,7 +1005,8 @@ export class DuelSimulation {
       const gain = sound === 'gunshot' ? gunshotGain(actor.weapon.id, distance) : footstepGain(distance);
       if (gain*path.gain < threshold) continue;
       this.lastContactAt.set(listener.id,this.time);
-      brain.hear(path.apparentPosition, this.time, sound, occluded);
+      if (brain instanceof TacticalBrain) brain.hear(path.apparentPosition, this.time, sound, occluded);
+      else brain.hear(path.apparentPosition, this.time);
     }
   }
 }
