@@ -39,7 +39,7 @@ import {AcousticScene} from './spatial-audio';
 export type RangeStatus = {
   weapon: Weapon;
   active: boolean; firing: boolean; hitFlash?:boolean; shots: number; hits: number; heads: number; remaining: number;
-  reload: number; speed: number; distance: number;
+  reload: number; reloadProgress?: number; speed: number; distance: number;
   reserve?:number;reloadSilent?:boolean;recharge?:number;
   input: string; audio: string; assets: string; fps: number; shortcutProtected?: boolean;
   equipped: Equipment; slot: Slot; equipReady: boolean; magazine: number;
@@ -904,7 +904,7 @@ export class RangeEngine {
         magazine:this.sim.slot===1?this.sim.burstSize:this.sim.stats.magazine, targetHealth: [...this.sim.targetHealth],
         active: this.sim.active, firing: this.sim.firing, hitFlash:this.hitTime>0, shots: drill?.shots ?? this.sim.shots, hits: drill?.hits ?? this.sim.hits, heads: drill?.heads ?? this.sim.heads,
         remaining:this.sim.slot===3?0:this.sim.loadedAmmo,reserve:this.sim.reserveAmmo,reloadSilent:this.sim.reloadSilent,
-        recharge:Math.max(0,this.sim.rechargeUntil-this.sim.time),reload: reloadRemaining,
+        recharge:Math.max(0,this.sim.rechargeUntil-this.sim.time),reload: reloadRemaining, reloadProgress: reloading ? this.sim.reloadState.progress : undefined,
         ...(drill ? {drill:{round:this.sim.drillRound,completed:this.sim.drillCompleted,passed:this.sim.drillPassed,scenario:drill.scenario.name,covered:drill.scenario.covered,exposure:drill.scenario.exposure,side:drill.scenario.side,
           peekDirection:this.sim.settings.mode==='peek'?peekDirection(this.sim.position,this.sim.yaw,drill.scenario):0,
           phase:drill.finished?(this.sim.repositionFrom?'reposition':'feedback'):drill.visible?'exposed':'prepare',accurate:drill.accurate,error:drill.error,

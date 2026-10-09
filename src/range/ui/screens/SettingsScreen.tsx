@@ -97,7 +97,7 @@ export const SettingsScreen = memo(function SettingsScreen({settings, profiles, 
               <Toggle label="Low-latency rendering" checked={settings.lowLatency} onChange={lowLatency => update({lowLatency})}/>
               <p className="setting-explanation">Chrome and Edge show each frame without waiting for the page compositor, about a frame sooner after you move the mouse. It can tear, like V-Sync off. Takes effect when you switch drills or reload.</p>
               <Toggle label="Show FPS counter" checked={settings.showFps} onChange={showFps => update({showFps})}/>
-              <Button disabled={!settings.showFps} onClick={exportFrames} title={settings.showFps ? 'Download measured frame intervals' : 'Enable the FPS counter to record frame intervals'}><Download size={16}/>Export frame timings</Button>
+              <Button disabled={!settings.showFps || settings.mode==='hearing'} onClick={exportFrames} title={settings.showFps ? 'Download measured frame intervals' : 'Enable the FPS counter to record frame intervals'}><Download size={16}/>Export frame timings</Button>
               <h2>Browser</h2><Toggle label="Protect range Ctrl+W" checked={settings.protectShortcuts} onChange={protectShortcuts => update({protectShortcuts})}/>
               </>}
             {tab === 'crosshair' && <>

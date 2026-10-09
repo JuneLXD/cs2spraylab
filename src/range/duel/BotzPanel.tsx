@@ -45,7 +45,7 @@ export const BotzSetup = memo(function BotzSetup({config, update}: BotzSetupProp
   </div>;
 });
 
-export function BotzScorecard({summary, history, island = false, name = island ? 'Reflex' : 'Aim Botz', headlineStats = true}: {headlineStats?: boolean; summary?: BotzSummary; history: BotzHistory[]; island?: boolean; name?: string}) {
+export function BotzScorecard({summary, history, island = false, name = island ? 'Reflex' : 'Aim Botz', headlineStats = true, currentDate}: {currentDate?: string; headlineStats?: boolean; summary?: BotzSummary; history: BotzHistory[]; island?: boolean; name?: string}) {
   const exportHistory = () => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(history, null, 2)], {type: 'application/json'}));
     const link = document.createElement('a'); link.href = url; link.download = `spraylab-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`; link.click(); URL.revokeObjectURL(url);
@@ -69,7 +69,7 @@ export function BotzScorecard({summary, history, island = false, name = island ?
     {summary && <dl>{values.filter(([label]) => headlineStats || !['Kills','Headshot kills','Accuracy','Kills per minute'].includes(label)).map(([label, value, help]) => <div key={label}><dt title={help}>{label}</dt><dd>{value}</dd></div>)}</dl>}
     <div className="duel-history-title"><strong>Recent sessions</strong><button className="icon-button" title={`Export ${name} history`} aria-label={`Export ${name} history`} disabled={!history.length} onClick={exportHistory}><Download size={16}/></button></div>
     {!history.length && <p className="duel-analysis-empty">Sessions are saved when time runs out or you start a new one.</p>}
-    <ol>{history.slice(0, 10).map((entry, index) => <li key={`${entry.date}-${index}`}><span>{entry.kills} kills / {island ? `${entry.leaks ?? 0} reached` : `${entry.headshotRate.toFixed(0)}% HS`}
+    <ol>{history.slice(0, 10).map((entry, index) => <li key={`${entry.date}-${index}`} className={entry.date===currentDate?'sl-session-now':undefined}><span>{entry.date===currentDate && <em className="sl-now-tag">NOW </em>}{entry.kills} kills / {island ? `${entry.leaks ?? 0} reached` : `${entry.headshotRate.toFixed(0)}% HS`}
       <small>{weaponNames[entry.weapon as keyof typeof weaponNames] ?? equipmentNames[entry.weapon]} / {clock(entry.seconds)} / {new Date(entry.date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</small></span>
       <b>{entry.killsPerMinute.toFixed(1)}<small>/min</small></b></li>)}</ol>
   </section>;

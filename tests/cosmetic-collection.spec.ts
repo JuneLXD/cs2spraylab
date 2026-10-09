@@ -1,3 +1,4 @@
+import {openLoadout, chooseWeapon} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 
@@ -12,7 +13,7 @@ const deagle = finishes.filter(item => item.equipment === 'deagle');
 
 /** The armory opens from the loadout drawer. */
 async function openArmory(page: Page) {
-  await page.locator('.weapon-select').click();
+  await openLoadout(page);
   await page.getByRole('dialog', {name: 'Loadout'}).getByRole('button', {name: /^Open the armory/}).click();
 }
 
@@ -47,14 +48,13 @@ test('every finish is available, scoped to the active gun, and equips without bu
   await expect(armory.locator('.progression-action-notice')).toContainText(`${choice.label} equipped.`);
   await armory.getByRole('button', {name: 'Close armory'}).click();
   await page.reload();
-  await page.locator('.weapon-select').click();
+  await openLoadout(page);
   const loadout = page.getByRole('dialog', {name: 'Loadout'});
-  await expect(loadout.locator('.loadout-finishes')).toHaveCount(1);
-  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(ak.length + 1);
-  await loadout.getByLabel('Sidearm', {exact: true}).selectOption('deagle');
-  await loadout.getByLabel('Skin weapon', {exact: true}).selectOption('2');
-  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(deagle.length + 1);
-  await expect(loadout.locator('.loadout-finishes button.selected')).toContainText(choice.label);
+  await expect(loadout.locator('.sl-finishes')).toHaveCount(1);
+  await expect(loadout.locator('.sl-finish-grid > button')).toHaveCount(ak.length + 1);
+  await chooseWeapon(page, 'deagle', false);
+  await expect(loadout.locator('.sl-finish-grid > button')).toHaveCount(deagle.length + 1);
+  await expect(loadout.locator('.sl-finish-grid button[aria-pressed=true]')).toContainText(choice.label);
   await page.screenshot({path: `test-results/${info.project.name}-loadout-finishes.png`});
   expect(errors).toEqual([]);
 });

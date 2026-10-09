@@ -185,7 +185,7 @@ test('mobile entry never requests desktop capture or fullscreen, including after
   await exposeEngine(page,'guided');
   await page.getByRole('button',{name:'Enter range',exact:true}).click();
   await expect(page.getByRole('button',{name:'Pause range',exact:true})).toBeVisible();
-  await expect(page.locator('.statusbar')).toContainText('Touch');
+  expect(await page.evaluate(()=>window.inputCaptureEngines.guided!.inputStatus)).toBe('Touch');
   expect(await page.evaluate(()=>({calls:(window as any).captureRequests,lock:!!document.pointerLockElement,full:!!document.fullscreenElement})))
     .toEqual({calls:0,lock:false,full:false});
   await page.locator('canvas[data-range]').tap();
@@ -236,7 +236,7 @@ for (const mode of ['duel', 'guided'] as const) {
     if (mode === 'guided') await selectDrill(page, mode);
     await exposeEngine(page, mode);
     await page.getByRole('button', {name: enterLabel(mode), exact: true}).click();
-    const message = mode === 'duel' ? page.locator('.duel-ammo') : page.locator('.statusbar');
+    const message = page.locator('.sl-ready');
     await expect(message).toContainText(`Mouse capture blocked. Click ${mode === 'duel' ? 'Resume duel' : 'Enter range'} again.`);
     await expect(message).not.toContainText('Drag aim');
     await expect(page.getByRole('button', {name: mode === 'duel' ? 'Resume duel' : 'Enter range', exact: true})).toBeVisible();
@@ -293,8 +293,7 @@ for (const mode of ['duel', 'guided'] as const) {
     await page.evaluate(() => window.inputCaptureLegacy!.release!());
     await confirmCapture(page, mode, false);
     expect(await page.evaluate(() => window.inputCaptureLegacy!.changes)).toBeGreaterThan(0);
-    const input = mode === 'duel' ? page.locator('.duel-ammo') : page.locator('.statusbar');
-    await expect(input).toContainText('Standard mouse');
+    expect(await page.evaluate(mode => mode === 'duel' ? window.inputCaptureEngines.duel!.inputName : window.inputCaptureEngines.guided!.inputStatus, mode)).toContain('Standard mouse');
     await stableCapture(page, mode, false);
     await mouseOnlyAim(page, mode);
   });

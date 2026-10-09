@@ -1,3 +1,4 @@
+import {openLoadout, chooseWeapon} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 import sharp from 'sharp';
 import {readFileSync} from 'node:fs';
@@ -25,7 +26,7 @@ async function duelEngine(page: Page) {
 
 /** The armory opens from the loadout drawer, which replaced the header level widget. */
 async function openArmory(page: Page) {
-  await page.locator('.weapon-select').click();
+  await openLoadout(page);
   await page.getByRole('dialog', {name: 'Loadout'}).getByRole('button', {name: /^Open the armory/}).click();
 }
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -205,23 +206,27 @@ test('loadout lists every finish, equips without buying, and sidearm-only hides 
   test.skip(![...desktopProjects,'mobile-chromium'].includes(info.project.name));
   const deagle=JSON.parse(readFileSync('src/range/cosmetics-data.json','utf8')).cosmetics.filter((item:any)=>item.equipment==='deagle');
   await page.goto('/');
-  await page.locator('.weapon-select').click();
+  await openLoadout(page);
   const loadout=page.getByRole('dialog',{name:'Loadout'});
   await loadout.getByRole('switch',{name:'Carry a primary weapon'}).uncheck();
-  await loadout.getByLabel('Sidearm',{exact:true}).selectOption('deagle');
-  await expect(loadout.locator('.loadout-finishes > div > button')).toHaveCount(deagle.length+1);
-  await expect(loadout.locator('.loadout-finishes img')).toHaveCount(deagle.length+1);
+  await chooseWeapon(page, 'deagle', false);
+  await expect(loadout.locator('.sl-finish-grid > button')).toHaveCount(deagle.length+1);
+  await expect(loadout.locator('.sl-finish-grid img')).toHaveCount(deagle.length+1);
   const last=deagle[deagle.length-1];
   await loadout.getByRole('button',{name:`Equip Desert Eagle skin ${last.label}`,exact:true}).click();
-  await expect(loadout.locator('.loadout-finishes button.selected')).toContainText(last.label);
+  await expect(loadout.locator('.sl-finish-grid button[aria-pressed=true]')).toContainText(last.label);
   await loadout.getByRole('button',{name:/^Open the armory/}).click();
   const armory=page.getByRole('dialog',{name:'Armory'});
   await expect(armory.getByLabel('Equipment',{exact:true})).toHaveValue('deagle');
   await expect(armory.getByRole('button',{name:new RegExp(`^${escape(last.label)}, Desert Eagle, equipped$`)})).toBeDisabled();
   await page.getByRole('button',{name:'Close armory'}).click();
+  if(await page.getByRole('dialog',{name:'Loadout',exact:true}).isVisible()) await page.getByRole('button',{name:'Close panel',exact:true}).click();
+  await page.getByRole('button',{name:'Enter duel',exact:true}).click();
   await expect(page.getByRole('button',{name:'Equip AK-47',exact:true})).toHaveCount(0);
   await expect(page.getByRole('button',{name:'Equip Desert Eagle',exact:true})).toBeVisible();
   await page.reload();
+  if(await page.getByRole('dialog',{name:'Loadout',exact:true}).isVisible()) await page.getByRole('button',{name:'Close panel',exact:true}).click();
+  await page.getByRole('button',{name:'Enter duel',exact:true}).click();
   await expect(page.getByRole('button',{name:'Equip AK-47',exact:true})).toHaveCount(0);
   await expect(page.getByRole('button',{name:'Equip Desert Eagle',exact:true}).locator('img')).toHaveAttribute('src',/cosmetics/);
   expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('spraylab.progression.v1')!).equipped.deagle)).toBe(last.id);

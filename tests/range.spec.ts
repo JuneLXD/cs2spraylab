@@ -1,4 +1,4 @@
-import {selectDrill} from './menu-helpers';
+import {selectDrill, openLoadout, chooseWeapon} from './menu-helpers';
 import { expect, test } from '@playwright/test';
 import sharp from 'sharp';
 import { readFileSync } from 'node:fs';
@@ -18,15 +18,15 @@ test('target readiness never enables shooting before the weapon has loaded', asy
   await page.goto('/');
   await targetLoaded;
   await page.waitForTimeout(800);
-  await expect(page.getByRole('button', { name: 'Loading range', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeDisabled();
   release();
   await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeEnabled({timeout: 45000});
   let releaseNext!: () => void;
   const nextGate = new Promise<void>(resolve => { releaseNext = resolve; });
   await page.route('**/models/view-m4a4.glb', async route => { await nextGate; await route.continue(); });
-  await page.locator('.weapon-select').click();
-  await page.locator('.weapon-item').filter({ has: page.locator('img[src="/models/m4a4.png"]') }).click();
-  await expect(page.getByRole('button', { name: 'Loading range', exact: true })).toBeDisabled();
+  await openLoadout(page);
+  await chooseWeapon(page, 'm4a4');
+  await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeDisabled();
   releaseNext();
   await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeEnabled({timeout: 45000});
 });
@@ -122,9 +122,11 @@ test('all weapon viewmodels render distinctly and native shot samples decode', a
   const names = weaponIds;
   const fingerprints = new Set<string>();
   for (const name of names) {
-    await page.locator('.weapon-select').click();
-    await page.locator('.weapon-item').filter({ has: page.locator(`img[src="/models/${name}.png"]`) }).click();
+    await openLoadout(page);
+    await chooseWeapon(page, name);
     await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeEnabled({timeout: 45000});
+    await page.getByRole('button',{name:'Enter range',exact:true}).click();
+    if(name==='zeus') await page.getByRole('button',{name:'Equip Zeus x27',exact:true}).click();
     await page.waitForTimeout(300);
     const png = await page.locator('canvas[data-range]').screenshot();
     // Exclude the animated wall plot: this fingerprint must come from the gun.
@@ -135,8 +137,8 @@ test('all weapon viewmodels render distinctly and native shot samples decode', a
     await page.screenshot({ path: `test-results/${info.project.name}-${name.replace(/[^a-z0-9]/gi, '')}.png` });
   }
   expect(fingerprints.size).toBe(weaponIds.length);
-  await page.locator('.weapon-select').click();
-  await page.locator('.weapon-item').filter({has: page.locator('img[src="/models/ak47.png"]')}).click();
+  await openLoadout(page);
+  await chooseWeapon(page, 'ak47');
   await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 45000});
   const decoded = await page.evaluate(async ids => {
     const Constructor = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -156,7 +158,11 @@ test('all weapon viewmodels render distinctly and native shot samples decode', a
   if (!decoded) {
     info.annotations.push({ type: 'capability', description: 'Windows WebKit has no Web Audio implementation; unavailable-audio behavior is checked here.' });
     await page.getByRole('button', { name: 'Enter range', exact: true }).click();
-    await expect(page.locator('.statusbar')).toContainText('Audio unavailable');
+    await page.locator('.sl-esc-hint button').click();
+    await page.getByRole('button',{name:'Settings',exact:true}).click();
+    await page.getByRole('tab',{name:'Audio & Data',exact:true}).click();
+    await page.getByRole('button',{name:'Test weapon',exact:true}).click();
+    await expect(page.locator('.toast')).toContainText('Weapon audio unavailable');
     return;
   }
   expect(decoded).toHaveLength(weaponIds.length);
@@ -243,7 +249,7 @@ test('mouse Pointer Lock rejection pauses the range with a visible retry message
   await page.addInitScript(() => Object.defineProperty(HTMLElement.prototype, 'requestPointerLock', { value: () => Promise.reject(new DOMException('Denied', 'SecurityError')) }));
   await page.goto('/');
   await page.getByRole('button', { name: 'Enter range', exact: true }).click();
-  await expect(page.locator('.statusbar')).toContainText('Mouse capture blocked. Click Enter range again.');
+  await expect(page.locator('.sl-ready')).toContainText('Mouse capture blocked. Click Enter range again.');
   await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeVisible();
   await expect(page.getByRole('button', {name: 'Pause range', exact: true})).toHaveCount(0);
   expect(await page.evaluate(() => document.pointerLockElement)).toBeNull();

@@ -221,6 +221,11 @@ export const latestChanges = {
       'Removed the crouch and browser-shortcut reminder from gameplay. Shortcut protection and config-import feedback remain available in setup and settings.',
       'Video settings can export recent frame timings. Hearing practice has a Back to Play button, and the menus support touch and keyboard navigation.',
     ]},
+    {id: 'ui-navigation-polish', title: 'Equipment shortcuts and drill setup', items: [
+      'Home and Play equipment shortcuts open the matching Loadout slot. Loadout includes every weapon, and navigation stays available in Loadout and Session with larger touch targets.',
+      'Restore drill defaults resets practice controls while keeping your mouse, video and loadout settings. Home, Play and Results show the actual setup, and Results marks the completed session in history.',
+      'Reload progress follows the existing weapon timing. The kill feed shows newest events first, highlights your kills and deaths, and respects reduced-motion preferences.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

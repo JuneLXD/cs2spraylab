@@ -90,7 +90,7 @@ test('switching weapon categories keeps Loadout open until Escape', async ({page
 });
 
 test('header changelog preserves history, is keyboard-accessible and does not alter the loadout', async ({page}) => {
-  const trigger = page.getByRole('button', {name: 'Changelog', exact: true});
+  const trigger = page.getByRole('button', {name: 'Changelog', exact: true, includeHidden: true});
   await expect.poll(() => page.evaluate(() => Boolean(JSON.parse(localStorage.getItem('spraylab.range.v2') || '{}').crosshair))).toBe(true);
   const before = await page.evaluate(() => localStorage.getItem('spraylab.range.v2'));
   await trigger.click();

@@ -7,6 +7,23 @@ test('loadout keeps primary and sidearm independent, equips finishes and opens t
   await page.setViewportSize({width:1600,height:900});
   await page.goto('/');
   await page.getByRole('button',{name:'Loadout',exact:true}).click();
+  const availableNames = await page.evaluate(async () => {
+    const url = new URL('/src/range/config.ts', location.href).href;
+    const {weaponNames} = await import(/* @vite-ignore */ url);
+    return Object.entries(weaponNames).filter(([id])=>id !== 'zeus').map(([,name])=>name).sort();
+  });
+  const listedNames:string[]=[];
+  for(const category of ['Rifles','Snipers','SMGs','Heavy']) {
+    await page.getByRole('tab',{name:category,exact:true}).click();
+    listedNames.push(...await page.locator('.sl-weapon-tiles button span').allTextContents());
+  }
+  await page.getByRole('button',{name:'Select sidearm slot'}).click();
+  listedNames.push(...await page.locator('.sl-weapon-tiles button span').allTextContents());
+  expect(listedNames.sort()).toEqual(availableNames);
+  await page.getByRole('button',{name:'Select primary slot'}).click();
+  await page.getByRole('tab',{name:'Rifles',exact:true}).click();
+  await page.getByRole('button',{name:'Equip AUG',exact:true}).click();
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('spraylab.range.v2')!).weapon)).toBe('aug');
   await page.getByRole('tab',{name:'Snipers',exact:true}).click();
   await page.getByRole('button',{name:'Equip AWP',exact:true}).click();
   await page.getByRole('button',{name:'Equip AWP skin Printstream',exact:true}).click();

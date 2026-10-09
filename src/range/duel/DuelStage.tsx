@@ -33,8 +33,8 @@ function loadHint() {
 
 /** AI Duel, Aim Botz (variant 'botz': passive respawning bots), Fast Aim / Reflex (variant 'reflex': bots rush your
  * island) or Aim Botz on the imported aim_redline map (variant 'redline'), all on the same engine. */
-export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel', onConsole, config, update, botz, updateBotz, engineRef, controlsTarget, onMenuStatus}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'botz' | 'reflex' | 'redline';
-  config: DuelConfig; update: (patch: Partial<DuelConfig>) => void; botz: BotzConfig; updateBotz: (patch: Partial<BotzConfig>) => void;
+export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel', onConsole, config, update, botz, updateBotz, engineRef, controlsTarget, onMenuStatus, resetSetup}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'botz' | 'reflex' | 'redline';
+  resetSetup: () => void; config: DuelConfig; update: (patch: Partial<DuelConfig>) => void; botz: BotzConfig; updateBotz: (patch: Partial<BotzConfig>) => void;
   engineRef: Ref<DuelHandle>; controlsTarget: HTMLElement | null; onMenuStatus: (value: DuelMenuStatus) => void;
   /** Console commands from binds that change app settings, such as crosshair convars. */
   onConsole?: (args: string[]) => void}) {
@@ -158,19 +158,19 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
         </>}
         <AmmoBlock className="duel-ammo" label={label(equipped)} ammo={equipped === 'knife' ? '--' : status.ammo}
           reserve={equipped !== 'knife' && equipped !== 'zeus' ? status.reserve ?? equipmentStats(equipped).reserve : undefined}
-          state={status.reloading ? status.reloadSilent ? 'Silent reload' : 'Reloading' : equipped === 'zeus' && status.recharge ? `Recharge ${Math.ceil(status.recharge)}s` : botzMode && botz.infiniteAmmo === 'magazine' && equipped !== 'knife' ? 'Never reload' : `${keyHint(settings.keyboard, '+reload')} reload`}
-          input={!alive ? status.input : undefined}
+          state={status.reloading ? `${status.reloadSilent ? 'Silent reload' : 'Reloading'} ${(status.reloadRemaining??0).toFixed(1)} s` : equipped === 'zeus' && status.recharge ? `Recharge ${Math.ceil(status.recharge)}s` : botzMode && botz.infiniteAmmo === 'magazine' && equipped !== 'knife' ? 'Never reload' : `${keyHint(settings.keyboard, '+reload')} reload`}
+          reloadProgress={status.reloadProgress} input={!alive ? status.input : undefined}
           reload={alive && equipped !== 'knife' && equipped !== 'zeus' ? () => engine.current?.sim.command(0, {reloadPressed: true}) : undefined}
           reloadDisabled={status.reloading || !status.reserve || status.ammo === equipmentStats(equipped).magazine} reloadHint={`Reload (${keyHint(settings.keyboard, '+reload')})`}/>
       </div>
     </div>
     {controlsTarget && createPortal(botzMode ? <aside className="duel-controls" aria-label={reflexMode ? 'Reflex settings' : `${title} settings`}>
-      <div className="duel-controls-head"><div><small>{redlineMode ? 'AIM BOTZ / MAP BY BOT REED' : 'DRILL SETUP'}</small><h2>{title}</h2></div><button className="icon-button" title="New session" aria-label={reflexMode ? 'New reflex session' : `New ${title} session`} onClick={() => engine.current?.restart()}><RotateCcw size={17}/></button></div>
+      <div className="duel-controls-head"><div><small>{redlineMode ? 'AIM BOTZ / MAP BY BOT REED' : 'DRILL SETUP'}</small><h2>{title}</h2></div><button className="icon-button" title="Restore drill defaults" aria-label="Restore drill defaults" onClick={resetSetup}><RotateCcw size={17}/></button></div>
       <div className="tabs" role="tablist" aria-label={reflexMode ? 'Reflex panel' : `${title} panel`}><button role="tab" aria-selected={panel === 'setup'} onClick={() => setPanel('setup')}>Setup</button><button role="tab" aria-selected={panel === 'review'} onClick={() => setPanel('review')}>Stats</button></div>
       {panel === 'review' ? <div className="duel-controls-body"><BotzScorecard island={reflexMode} name={reflexMode ? 'Reflex' : title} summary={status.botz} history={status.botzHistory ?? []}/></div> : <BotzSetup config={botz} update={updateBotz}/>}
       <div className="duel-controls-foot"><button onClick={openSettings}><Settings2 size={15}/>Mouse & crosshair</button><span><Target size={13}/>Changes start a new session</span></div>
     </aside> : <aside className="duel-controls" aria-label="Duel settings">
-      <div className="duel-controls-head"><div><small>DRILL SETUP</small><h2>AI Duel</h2></div><button className="icon-button" title="New round" aria-label="New duel round" onClick={() => engine.current?.restart()}><RotateCcw size={17}/></button></div>
+      <div className="duel-controls-head"><div><small>DRILL SETUP</small><h2>AI Duel</h2></div><button className="icon-button" title="Restore drill defaults" aria-label="Restore drill defaults" onClick={resetSetup}><RotateCcw size={17}/></button></div>
       <div className="tabs" role="tablist" aria-label="Duel panel"><button role="tab" aria-selected={panel === 'setup'} onClick={() => setPanel('setup')}>Setup</button><button role="tab" aria-selected={panel === 'review'} onClick={() => setPanel('review')}>Scorecard</button></div>
       {hint && <div className="duel-hint" role="status"><ArrowRight size={18}/><span>Set up your opponent here</span><button aria-label="Dismiss duel hint" title="Dismiss hint" onClick={dismissHint}><X size={14}/></button></div>}
       {panel === 'review' ? <div className="duel-controls-body"><DuelScorecard review={status.review} history={status.history ?? []}/></div> : <DuelSetup config={config} arenaDesign={status.arenaDesign} weaponToAdd={weaponToAdd} setWeaponToAdd={setWeaponToAdd} update={update} updateBot={updateBot} customizeBot={customizeBot}/>}

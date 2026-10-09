@@ -24,9 +24,9 @@ export function StatBlock({value, label, icon: Icon, unit, bar, children, classN
   </div>;
 }
 
-export function AmmoBlock({label, ammo, reserve, state, input, testId, className = '', reload, reloadDisabled, reloadHint, compactSeparator = false}: {
+export function AmmoBlock({label, ammo, reserve, state, input, testId, className = '', reload, reloadDisabled, reloadHint, reloadProgress, compactSeparator = false}: {
   label: string; ammo: number | '--'; reserve?: number; state: string; input?: string; testId?: string; className?: string;
-  reload?: () => void; reloadDisabled?: boolean; reloadHint?: string; compactSeparator?: boolean;
+  reload?: () => void; reloadDisabled?: boolean; reloadHint?: string; reloadProgress?: number; compactSeparator?: boolean;
 }) {
   return <div className={`sl-ammo ${className}${ammo === 0 ? ' empty' : ''}`}>
     <small>{label}</small>
@@ -34,6 +34,7 @@ export function AmmoBlock({label, ammo, reserve, state, input, testId, className
       <strong data-testid={testId}>{ammo}{reserve !== undefined && <em>{compactSeparator ? '/ ' : ' / '}{reserve}</em>}</strong>
     </div>
     <span>{state}</span>
+    {reloadProgress !== undefined && <progress className="sl-reload-progress" aria-label="Reload progress" max={1} value={reloadProgress}/>}
     {reload && <button className="reload-pistol" disabled={reloadDisabled} title={reloadHint} onClick={reload}><RotateCcw size={13}/>Reload</button>}
     {input && <span className="sl-input-status">{input}</span>}
   </div>;

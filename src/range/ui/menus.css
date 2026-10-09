@@ -145,3 +145,11 @@
 .sl-stage .hearing-header {background: #171e25; border-color: var(--sl-hairline);}
 .sl-stage .hearing-practice button {border-radius: 2px;}
 .sl-stage .hearing-practice .hearing-primary {background: var(--sl-go); border-color: var(--sl-go); color: white;}
+
+.sl-home-equipped button {position: relative;}
+.sl-home-equipped kbd {position: absolute; top: 4px; left: 6px; font: 700 12px var(--sl-font-display); color: var(--sl-text-3);}
+.sl-now-tag {font: 700 12px var(--sl-font-display); color: var(--sl-ct); margin-right: 6px;}
+.duel-analysis li.sl-session-now {border-left: 2px solid var(--sl-ct); background: #78a6dc12; padding-left: 10px;}
+
+.sl-whats-new .sl-tag {margin-right: 8px;}
+.sl-setup-panel .icon-button {width: 44px; height: 44px; min-width: 44px;}

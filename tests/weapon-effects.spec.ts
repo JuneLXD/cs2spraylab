@@ -1,3 +1,4 @@
+import {openLoadout} from './menu-helpers';
 import {expect, test} from '@playwright/test';
 import {canvasColors} from './render-frame';
 
@@ -79,7 +80,7 @@ test('knife armory filters by native model and equips any native finish with its
     localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', quality: 'auto', mode:'guided',volume:0}));
   });
   await page.goto('/');
-  await page.locator('.weapon-select').click();
+  await openLoadout(page);
   await page.getByRole('dialog',{name:'Loadout'}).getByRole('button',{name:/^Open the armory/}).click();
   const armory = page.getByRole('dialog',{name:'Armory'});
   await armory.getByRole('tab',{name:'Knives',exact:true}).click();

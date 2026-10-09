@@ -36,6 +36,8 @@ test('Home uses saved sessions and timed practice opens Results with a new-sessi
   });
   await expect(page.getByRole('region',{name:'Session complete',exact:true})).toBeVisible({timeout:20000});
   await expect(page.locator('.sl-result-tiles')).toContainText('75%');
+  await expect(page.locator('.sl-result-banner')).toContainText('30s');
+  await expect(page.locator('.sl-session-now')).toContainText('NOW');
   await expect.poll(()=>page.evaluate(()=>!!document.pointerLockElement)).toBe(false);
   await page.screenshot({path:'test-results/ui-results-1600.png'});
   await page.setViewportSize({width:390,height:844});

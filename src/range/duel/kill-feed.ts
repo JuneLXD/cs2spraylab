@@ -11,7 +11,7 @@ export class KillFeedBuffer {
   }
   visible(now:number):KillEntry[] {
     this.entries=this.entries.filter(entry=>now-entry.at<6);
-    return this.entries.map(entry=>({...entry,fading:now-entry.at>=5}));
+    return [...this.entries].reverse().map(entry=>({...entry,fading:now-entry.at>=5}));
   }
   clear(){this.entries=[];}
 }

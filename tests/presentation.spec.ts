@@ -1,4 +1,4 @@
-import {selectDrill} from './menu-helpers';
+import {selectDrill, openLoadout, chooseWeapon} from './menu-helpers';
 import { test, expect } from '@playwright/test';
 import sharp from 'sharp';
 
@@ -55,8 +55,8 @@ test('wall patterns animate, respect reduced motion and can be switched off inde
   await expect.poll(async () => (await shot()).equals(a), {timeout: 6000}).toBe(false);
   await page.emulateMedia({reducedMotion: 'reduce'}); await page.waitForTimeout(200);
   const still = await shot(); await page.waitForTimeout(350); expect((await shot()).equals(still)).toBe(true);
-  await page.locator('.weapon-select').click();
-  await page.locator('.weapon-item').filter({has: page.locator('img[src="/models/mp9.png"]')}).click();
+  await openLoadout(page);
+  await chooseWeapon(page, 'mp9');
   await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 45000});
   const mp9 = await shot(); expect(mp9.equals(still)).toBe(false);
   const rightBefore = await right();

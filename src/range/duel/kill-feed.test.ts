@@ -10,9 +10,9 @@ describe('bounded combat kill feed',()=>{
   });
   it('keeps only five recent kills, fades before expiry and clears on restart',()=>{
     const feed=new KillFeedBuffer();for(let i=1;i<=8;i++)feed.add(hit(true,i),'ak47',i,name);
-    expect(feed.visible(8).map(entry=>entry.victim)).toEqual([4,5,6,7,8]);
+    expect(feed.visible(8).map(entry=>entry.victim)).toEqual([8,7,6,5,4]);
     expect(feed.visible(9).find(entry=>entry.victim===4)?.fading).toBe(true);
-    expect(feed.visible(10).map(entry=>entry.victim)).toEqual([5,6,7,8]);
+    expect(feed.visible(10).map(entry=>entry.victim)).toEqual([8,7,6,5]);
     feed.clear();expect(feed.visible(10)).toEqual([]);
   });
 });

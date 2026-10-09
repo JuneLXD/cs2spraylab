@@ -1,3 +1,4 @@
+import {openLoadout} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 
 // Written for the first visit before aim_redline and the AWP became the defaults: AI Duel with the AK-47 at Auto quality.
@@ -7,7 +8,7 @@ test.beforeEach(async ({page}) => page.addInitScript(() => {
 
 /** The armory opens from the loadout drawer. */
 async function openArmory(page: Page) {
-  await page.locator('.weapon-select').click();
+  await openLoadout(page);
   await page.getByRole('dialog', {name: 'Loadout'}).getByRole('button', {name: /^Open the armory/}).click();
 }
 

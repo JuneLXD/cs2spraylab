@@ -8,7 +8,8 @@ export function useDuelConfig() {
   const [config, setConfig] = useState(() => sanitizeDuelConfig(read('spraylab.duel.v1')));
   useEffect(() => save('spraylab.duel.v1', config), [config]);
   const update = useCallback((patch: Partial<DuelConfig>) => setConfig(previous => sanitizeDuelConfig({...previous, ...patch})), []);
-  return {config, update};
+  const reset = useCallback(() => setConfig(sanitizeDuelConfig({})), []);
+  return {config, update, reset};
 }
 export function useBotzConfig(kind: 'botz' | 'reflex' | 'redline') {
   const map = kind === 'reflex' ? 'island' : kind === 'redline' ? 'redline' : 'yard';
@@ -16,5 +17,6 @@ export function useBotzConfig(kind: 'botz' | 'reflex' | 'redline') {
   const [config, setConfig] = useState(() => sanitizeBotzConfig({...read(key), map}));
   useEffect(() => save(key, config), [key, config]);
   const update = useCallback((patch: Partial<BotzConfig>) => setConfig(previous => sanitizeBotzConfig({...previous, ...patch, map})), [map]);
-  return {config, update};
+  const reset = useCallback(() => setConfig(sanitizeBotzConfig({map})), [map]);
+  return {config, update, reset};
 }

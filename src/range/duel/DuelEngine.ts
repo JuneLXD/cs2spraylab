@@ -54,7 +54,7 @@ import {BOTZ_PLAYER_SPAWN, botzArena, botzDuelConfig, botzSummary, loadBotzHisto
 import {REFLEX_ISLAND, REFLEX_ISLAND_HALF, REFLEX_REACH, reflexArena} from './reflex';
 
 export type DuelStatus = {
-  killFeed?: readonly KillEntry[];
+  killFeed?: readonly KillEntry[]; reloadRemaining?: number; reloadProgress?: number;
   phase: 'ready' | 'fighting' | 'result'; paused: boolean; outcome?: 'won' | 'lost' | 'draw';
   health: number; armor: number; ammo: number; reloading: boolean; enemies: number;
   seconds: number; kills: number; damage: number; input: string; caption: string;
@@ -1138,6 +1138,8 @@ export class DuelEngine {
     const [player, ...bots] = this.sim.renderSnapshot();
     this.onStatus({killFeed: this.killFeed.visible(this.animationClock), phase: this.sim.phase, paused: this.paused, outcome: this.sim.phase==='result'?this.sim.outcome:undefined,
       health: player.health, armor: player.armor, ammo: player.ammo, reloading: player.reloading,
+      reloadRemaining: Math.max(0,this.sim.actors[0].weapon.reloadUntil-this.sim.time),
+      reloadProgress: player.reloading ? this.sim.actors[0].weapon.reload.progress : undefined,
       reserve:player.reserve,reloadSilent:player.reloadSilent,recharge:Math.max(0,this.sim.actors[0].weapon.rechargeUntil-this.sim.time),
       enemies: bots.filter(bot => bot.alive).length, seconds: this.sim.time, kills: this.kills,
       damage: this.damage, input: this.inputName, caption: this.animationClock < this.captionUntil ? this.caption : '',

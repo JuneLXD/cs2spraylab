@@ -243,3 +243,11 @@
   .sl-kill-feed {top: 98px;}
   .sl-kill-feed li:nth-child(n+4) {display: none;}
 }
+
+.sl-reload-progress {appearance: none; width: 70px; height: 4px; border: 0; background: #ffffff33;}
+.sl-reload-progress::-webkit-progress-bar {background: #ffffff33;}
+.sl-reload-progress::-webkit-progress-value {background: white;}
+.sl-reload-progress::-moz-progress-bar {background: white;}
+@media (prefers-reduced-motion: reduce) {
+  .sl-kill-feed li {transition: none;}
+}
