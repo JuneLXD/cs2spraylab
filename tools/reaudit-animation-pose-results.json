@@ -1,0 +1,1847 @@
+{
+  "schema": 1,
+  "baseline": "c488943",
+  "rows": [
+    {
+      "kind": "view",
+      "id": "ak47/idle",
+      "nativeSeconds": 0,
+      "importedSeconds": 0.03333333507180214,
+      "frames": 1,
+      "bones": 19,
+      "maxBonePositionMetres": 0.000003619388121876408,
+      "maxBoneRotationDegrees": 0.00014801588840256707,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 2.182500438463946e-7,
+      "maxWeaponPartRotationDegrees": 0.00003882558537770927,
+      "weaponPartSamples": 6,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 0
+      },
+      "worstWeaponPart": {
+        "bone": "bolt",
+        "time": 0,
+        "expected": [
+          -0.12622904312250996,
+          -0.0741097254745728,
+          0.5204745102927046
+        ],
+        "actual": [
+          -0.1262290691112392,
+          -0.07410951066696828,
+          0.5204744817381843
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "ak47/draw",
+      "nativeSeconds": 1,
+      "importedSeconds": 1,
+      "frames": 31,
+      "bones": 589,
+      "maxBonePositionMetres": 0.000003853769308997667,
+      "maxBoneRotationDegrees": 0.007617765015055167,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00009718404206181415,
+      "maxWeaponPartRotationDegrees": 0.014862155290623541,
+      "weaponPartSamples": 186,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.6
+      },
+      "worstWeaponPart": {
+        "bone": "bolt",
+        "time": 0.16666666666666666,
+        "expected": [
+          0.06062851518662809,
+          -0.08133687375918616,
+          0.5506859194724654
+        ],
+        "actual": [
+          0.060591494763472045,
+          -0.08135874290811063,
+          0.5505987646296502
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "ak47/inspect",
+      "nativeSeconds": 4.566699981689453,
+      "importedSeconds": 4.566666603088379,
+      "frames": 139,
+      "bones": 2641,
+      "maxBonePositionMetres": 0.00028643909775096616,
+      "maxBoneRotationDegrees": 0.03365170953656221,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00019137178038470702,
+      "maxWeaponPartRotationDegrees": 0.020138985299540987,
+      "weaponPartSamples": 834,
+      "worst": {
+        "name": "hand_R",
+        "time": 1.6666666666666667
+      },
+      "worstWeaponPart": {
+        "bone": "clip",
+        "time": 1.5333333333333334,
+        "expected": [
+          0.10137065453181712,
+          -0.16198094901614124,
+          0.5990559504634924
+        ],
+        "actual": [
+          0.1014119193568618,
+          -0.1621187827218089,
+          0.5989297670964285
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "ak47/reload",
+      "nativeSeconds": 2.433300018310547,
+      "importedSeconds": 2.433333396911621,
+      "frames": 74,
+      "bones": 1406,
+      "maxBonePositionMetres": 0.00011430695988877328,
+      "maxBoneRotationDegrees": 0.02376040729229264,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00015818928169055932,
+      "maxWeaponPartRotationDegrees": 0.02734761441506348,
+      "weaponPartSamples": 444,
+      "worst": {
+        "name": "wpn",
+        "time": 0.8666666666666667
+      },
+      "worstWeaponPart": {
+        "bone": "bolt",
+        "time": 1.4666666666666666,
+        "expected": [
+          0.03102987167097601,
+          0.020992221730731606,
+          0.5232991518494192
+        ],
+        "actual": [
+          0.030942672128666172,
+          0.02093655070127037,
+          0.523179482199376
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "ak47/fire",
+      "nativeSeconds": 0.7666999697685242,
+      "importedSeconds": 0.7666666507720947,
+      "frames": 25,
+      "bones": 475,
+      "maxBonePositionMetres": 0.00019882244323993594,
+      "maxBoneRotationDegrees": 0.030939793084174185,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00015724426861735846,
+      "maxWeaponPartRotationDegrees": 0.019775272345922256,
+      "weaponPartSamples": 150,
+      "worst": {
+        "name": "hand_R",
+        "time": 0.6
+      },
+      "worstWeaponPart": {
+        "bone": "bolt",
+        "time": 0.6,
+        "expected": [
+          -0.12726143114174654,
+          -0.07418660371010202,
+          0.5157999719455985
+        ],
+        "actual": [
+          -0.12716809912247434,
+          -0.07409930902956338,
+          0.5157083502618045
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "aug/idle",
+      "nativeSeconds": 0,
+      "importedSeconds": 0.03333333507180214,
+      "frames": 1,
+      "bones": 19,
+      "maxBonePositionMetres": 0.000003486703735639948,
+      "maxBoneRotationDegrees": 0.0001415102453857582,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 5.297062534657446e-7,
+      "maxWeaponPartRotationDegrees": 0.00020885195146751965,
+      "weaponPartSamples": 5,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 0
+      },
+      "worstWeaponPart": {
+        "bone": "weapon",
+        "time": 0,
+        "expected": [
+          -0.09665840231026213,
+          -0.04815433091131002,
+          0.40780461892917025
+        ],
+        "actual": [
+          -0.09665788716748734,
+          -0.04815421259916133,
+          0.40780458401682257
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "aug/draw",
+      "nativeSeconds": 1.166700005531311,
+      "importedSeconds": 1.1666666269302368,
+      "frames": 37,
+      "bones": 703,
+      "maxBonePositionMetres": 0.00003732240438500117,
+      "maxBoneRotationDegrees": 0.011067052543683802,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.000029875045683402087,
+      "maxWeaponPartRotationDegrees": 0.019293179799032036,
+      "weaponPartSamples": 185,
+      "worst": {
+        "name": "arm_upper_R",
+        "time": 0.8333333333333334
+      },
+      "worstWeaponPart": {
+        "bone": "bolt",
+        "time": 0.5,
+        "expected": [
+          -0.018845286839453697,
+          0.024795058211371544,
+          0.5869574191537577
+        ],
+        "actual": [
+          -0.018838345301643473,
+          0.024807383244085057,
+          0.5869837331609786
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "aug/inspect",
+      "nativeSeconds": 4.3333001136779785,
+      "importedSeconds": 4.333333492279053,
+      "frames": 131,
+      "bones": 2489,
+      "maxBonePositionMetres": 0.0004172461020494807,
+      "maxBoneRotationDegrees": 0.043939306849395836,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.0002755013641558337,
+      "maxWeaponPartRotationDegrees": 0.02559945532484712,
+      "weaponPartSamples": 655,
+      "worst": {
+        "name": "wpn",
+        "time": 1.6333333333333333
+      },
+      "worstWeaponPart": {
+        "bone": "weapon_offset",
+        "time": 2.2333333333333334,
+        "expected": [
+          0.10643465697987553,
+          -0.059596964969788946,
+          0.5316595657255877
+        ],
+        "actual": [
+          0.10647254920500204,
+          -0.059616800229617926,
+          0.5313874044803778
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "aug/reload",
+      "nativeSeconds": 3.1999998092651367,
+      "importedSeconds": 3.200000047683716,
+      "frames": 97,
+      "bones": 1843,
+      "maxBonePositionMetres": 0.00010459130773807018,
+      "maxBoneRotationDegrees": 0.011053972886890683,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00014232309489466808,
+      "maxWeaponPartRotationDegrees": 0.023509498266028734,
+      "weaponPartSamples": 485,
+      "worst": {
+        "name": "wpn",
+        "time": 3.1
+      },
+      "worstWeaponPart": {
+        "bone": "bolt",
+        "time": 3.066666666666667,
+        "expected": [
+          -0.06954782679463,
+          -0.07460618456941677,
+          0.4830814161603051
+        ],
+        "actual": [
+          -0.06964726585919888,
+          -0.07467034051926275,
+          0.4831604841682313
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "aug/fire",
+      "nativeSeconds": 0.9332999587059021,
+      "importedSeconds": 0.9333333373069763,
+      "frames": 29,
+      "bones": 551,
+      "maxBonePositionMetres": 0.00017444524010403484,
+      "maxBoneRotationDegrees": 0.01860037075580653,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00013600988013834307,
+      "maxWeaponPartRotationDegrees": 0.0233259946259449,
+      "weaponPartSamples": 145,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.8333333333333334
+      },
+      "worstWeaponPart": {
+        "bone": "weapon_offset",
+        "time": 0.5666666666666667,
+        "expected": [
+          -0.09658419966075815,
+          -0.050857847215426154,
+          0.401477256353005
+        ],
+        "actual": [
+          -0.0965633737477567,
+          -0.05076861987500989,
+          0.4013767404310566
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "aug/fire-scoped",
+      "nativeSeconds": 0.26669999957084656,
+      "importedSeconds": 0.2666666805744171,
+      "frames": 10,
+      "bones": 190,
+      "maxBonePositionMetres": 0.00011606451026922637,
+      "maxBoneRotationDegrees": 0.014640109692757374,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00004929969330027674,
+      "maxWeaponPartRotationDegrees": 0.012198910869216487,
+      "weaponPartSamples": 50,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 0.13333333333333333
+      },
+      "worstWeaponPart": {
+        "bone": "clip",
+        "time": 0.16666666666666666,
+        "expected": [
+          0.0005631417417514932,
+          -0.1815648649299963,
+          0.2519273077829226
+        ],
+        "actual": [
+          0.0005671527289352963,
+          -0.18151792077827145,
+          0.25191279508640724
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "glock/idle",
+      "nativeSeconds": 0,
+      "importedSeconds": 0.03333333507180214,
+      "frames": 1,
+      "bones": 19,
+      "maxBonePositionMetres": 0.0000032298703507892594,
+      "maxBoneRotationDegrees": 0.00014385009181537765,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 2.293774861664651e-7,
+      "maxWeaponPartRotationDegrees": 0.000034236216758956665,
+      "weaponPartSamples": 5,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 0
+      },
+      "worstWeaponPart": {
+        "bone": "weapon_offset",
+        "time": 0,
+        "expected": [
+          -0.07123964504417613,
+          -0.057461462972394836,
+          0.43656939700084707
+        ],
+        "actual": [
+          -0.07123955149420984,
+          -0.05746125360791896,
+          0.4365694023814799
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "glock/draw",
+      "nativeSeconds": 1,
+      "importedSeconds": 1,
+      "frames": 31,
+      "bones": 589,
+      "maxBonePositionMetres": 0.000005162461795070073,
+      "maxBoneRotationDegrees": 0.00027035925807817533,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.0000522432081451927,
+      "maxWeaponPartRotationDegrees": 0.000037720952599236896,
+      "weaponPartSamples": 155,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.4
+      },
+      "worstWeaponPart": {
+        "bone": "slide",
+        "time": 0.43333333333333335,
+        "expected": [
+          -0.07090822262009969,
+          -0.12145016558741413,
+          0.30153956852885083
+        ],
+        "actual": [
+          -0.07088895263873946,
+          -0.1214226697508814,
+          0.30157959351590946
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "glock/inspect",
+      "nativeSeconds": 6.433300018310547,
+      "importedSeconds": 6.433333396911621,
+      "frames": 194,
+      "bones": 3686,
+      "maxBonePositionMetres": 0.0002832330288446042,
+      "maxBoneRotationDegrees": 0.05424521830557082,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00016062884931395858,
+      "maxWeaponPartRotationDegrees": 0.03186329190400928,
+      "weaponPartSamples": 970,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 1.6666666666666667
+      },
+      "worstWeaponPart": {
+        "bone": "magazine",
+        "time": 2.8333333333333335,
+        "expected": [
+          -0.09191519455347028,
+          -0.09747740195836195,
+          0.33153885022955815
+        ],
+        "actual": [
+          -0.09184200718111127,
+          -0.09761669186654488,
+          0.3315065460930196
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "glock/reload",
+      "nativeSeconds": 2.266700029373169,
+      "importedSeconds": 2.2666666507720947,
+      "frames": 70,
+      "bones": 1330,
+      "maxBonePositionMetres": 0.00011675134285731085,
+      "maxBoneRotationDegrees": 0.02199652941394645,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00015884119570658208,
+      "maxWeaponPartRotationDegrees": 0.024674751241588085,
+      "weaponPartSamples": 350,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 1.3666666666666667
+      },
+      "worstWeaponPart": {
+        "bone": "magazine",
+        "time": 0.6666666666666666,
+        "expected": [
+          0.21806251551112607,
+          -0.3234308651960577,
+          0.0007136561638799721
+        ],
+        "actual": [
+          0.21807007900322287,
+          -0.3234161407206211,
+          0.0005556798717855083
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "glock/reload-empty",
+      "nativeSeconds": 2.266700029373169,
+      "importedSeconds": 2.2666666507720947,
+      "frames": 70,
+      "bones": 1330,
+      "maxBonePositionMetres": 0.0001371311244803862,
+      "maxBoneRotationDegrees": 0.031273603688037346,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00024668351957434805,
+      "maxWeaponPartRotationDegrees": 0.016573011045417602,
+      "weaponPartSamples": 350,
+      "worst": {
+        "name": "arm_lower_R",
+        "time": 0.8666666666666667
+      },
+      "worstWeaponPart": {
+        "bone": "magazine",
+        "time": 0.23333333333333334,
+        "expected": [
+          -0.07144898209312645,
+          -0.15029107198478217,
+          0.3722366177502966
+        ],
+        "actual": [
+          -0.07163439141723782,
+          -0.15024803526940814,
+          0.3720796974441155
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "glock/fire",
+      "nativeSeconds": 0.3999999761581421,
+      "importedSeconds": 0.4000000059604645,
+      "frames": 13,
+      "bones": 247,
+      "maxBonePositionMetres": 0.00010103754110922077,
+      "maxBoneRotationDegrees": 0.005496529223026544,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.000024591602497915534,
+      "maxWeaponPartRotationDegrees": 0.005497561411489282,
+      "weaponPartSamples": 65,
+      "worst": {
+        "name": "wpn",
+        "time": 0.23333333333333334
+      },
+      "worstWeaponPart": {
+        "bone": "slide",
+        "time": 0.13333333333333333,
+        "expected": [
+          -0.07140743178805993,
+          -0.04158247841921735,
+          0.3206339364016842
+        ],
+        "actual": [
+          -0.07140735222105006,
+          -0.041585995921299634,
+          0.32060959779528186
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "glock/fire-last",
+      "nativeSeconds": 0.3999999761581421,
+      "importedSeconds": 0.4000000059604645,
+      "frames": 13,
+      "bones": 247,
+      "maxBonePositionMetres": 0.00010103754110922077,
+      "maxBoneRotationDegrees": 0.005496529223026544,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.000008286943981891199,
+      "maxWeaponPartRotationDegrees": 0.005497561411489282,
+      "weaponPartSamples": 65,
+      "worst": {
+        "name": "wpn",
+        "time": 0.23333333333333334
+      },
+      "worstWeaponPart": {
+        "bone": "slide",
+        "time": 0.36666666666666664,
+        "expected": [
+          -0.07125534458197487,
+          -0.05193902828119141,
+          0.32495674190404555
+        ],
+        "actual": [
+          -0.07125798685155885,
+          -0.05193319714120674,
+          0.32496200400044184
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "glock/idle-empty",
+      "nativeSeconds": 0,
+      "importedSeconds": 0.03333333507180214,
+      "frames": 1,
+      "bones": 19,
+      "maxBonePositionMetres": 0.0000032298703507892594,
+      "maxBoneRotationDegrees": 0.00014385009181537765,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 2.293774861664651e-7,
+      "maxWeaponPartRotationDegrees": 0.000034236216758956665,
+      "weaponPartSamples": 5,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 0
+      },
+      "worstWeaponPart": {
+        "bone": "weapon_offset",
+        "time": 0,
+        "expected": [
+          -0.07123964504417613,
+          -0.057461462972394836,
+          0.43656939700084707
+        ],
+        "actual": [
+          -0.07123955149420984,
+          -0.05746125360791896,
+          0.4365694023814799
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "awp/idle",
+      "nativeSeconds": 0,
+      "importedSeconds": 0.03333333507180214,
+      "frames": 1,
+      "bones": 19,
+      "maxBonePositionMetres": 0.0000035803476159808886,
+      "maxBoneRotationDegrees": 0.00015991798034950273,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 2.058602000558453e-7,
+      "maxWeaponPartRotationDegrees": 0.00003686087999978984,
+      "weaponPartSamples": 6,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 0
+      },
+      "worstWeaponPart": {
+        "bone": "clip",
+        "time": 0,
+        "expected": [
+          -0.12265242100965529,
+          -0.17193989134033996,
+          0.5081713756371907
+        ],
+        "actual": [
+          -0.12265231494029692,
+          -0.17193973070934437,
+          0.5081714486125046
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "awp/draw",
+      "nativeSeconds": 1.2666999101638794,
+      "importedSeconds": 1.2666666507720947,
+      "frames": 40,
+      "bones": 760,
+      "maxBonePositionMetres": 0.000030615452420771525,
+      "maxBoneRotationDegrees": 0.011711277313186861,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00010110109036779083,
+      "maxWeaponPartRotationDegrees": 0.01716427848038046,
+      "weaponPartSamples": 240,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.7666666666666667
+      },
+      "worstWeaponPart": {
+        "bone": "bolt_action",
+        "time": 0.8666666666666667,
+        "expected": [
+          -0.13822229124173852,
+          -0.0932110139747258,
+          0.46583029680168037
+        ],
+        "actual": [
+          -0.13822136139351554,
+          -0.09321085230144895,
+          0.46572920011668234
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "awp/inspect",
+      "nativeSeconds": 5,
+      "importedSeconds": 5,
+      "frames": 151,
+      "bones": 2869,
+      "maxBonePositionMetres": 0.00026442936257709297,
+      "maxBoneRotationDegrees": 0.04802556841427592,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.0002107359781959884,
+      "maxWeaponPartRotationDegrees": 0.03286319858547266,
+      "weaponPartSamples": 906,
+      "worst": {
+        "name": "hand_R",
+        "time": 1.6
+      },
+      "worstWeaponPart": {
+        "bone": "weapon",
+        "time": 1.4666666666666666,
+        "expected": [
+          -0.035139240509770575,
+          -0.09004024746537209,
+          0.6331202337955878
+        ],
+        "actual": [
+          -0.034977829780918755,
+          -0.09004736891252438,
+          0.6332555316673678
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "awp/reload",
+      "nativeSeconds": 3.6666998863220215,
+      "importedSeconds": 3.6666667461395264,
+      "frames": 112,
+      "bones": 2128,
+      "maxBonePositionMetres": 0.00013718103464382565,
+      "maxBoneRotationDegrees": 0.022799819992890227,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.0001464033669784502,
+      "maxWeaponPartRotationDegrees": 0.023112034709272738,
+      "weaponPartSamples": 672,
+      "worst": {
+        "name": "wpn",
+        "time": 1.2666666666666666
+      },
+      "worstWeaponPart": {
+        "bone": "clip",
+        "time": 1.4,
+        "expected": [
+          0.035467381025380995,
+          -0.2210996796912918,
+          0.4714765509152572
+        ],
+        "actual": [
+          0.035538510137326035,
+          -0.22103272723345926,
+          0.4715856011958012
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "awp/fire",
+      "nativeSeconds": 1.5999999046325684,
+      "importedSeconds": 1.600000023841858,
+      "frames": 49,
+      "bones": 931,
+      "maxBonePositionMetres": 0.00013584197451885907,
+      "maxBoneRotationDegrees": 0.0160109879959728,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00022889857222942671,
+      "maxWeaponPartRotationDegrees": 0.02478286038316019,
+      "weaponPartSamples": 294,
+      "worst": {
+        "name": "hand_L",
+        "time": 1.5
+      },
+      "worstWeaponPart": {
+        "bone": "bolt_action",
+        "time": 0.6333333333333333,
+        "expected": [
+          -0.1221056408774094,
+          -0.10167023126465533,
+          0.4433574684152534
+        ],
+        "actual": [
+          -0.12191154972415431,
+          -0.10179144498881317,
+          0.44335195355600143
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "revolver/idle",
+      "nativeSeconds": 7.5,
+      "importedSeconds": 7.5,
+      "frames": 226,
+      "bones": 4294,
+      "maxBonePositionMetres": 0.0013291843445371412,
+      "maxBoneRotationDegrees": 0.13139795895181655,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 1.0975478845250813e-7,
+      "maxWeaponPartRotationDegrees": 0.000029328087869136986,
+      "weaponPartSamples": 4068,
+      "worst": {
+        "name": "hand_R",
+        "time": 2.5
+      },
+      "worstWeaponPart": {
+        "bone": "loader_handle",
+        "time": 0,
+        "expected": [
+          -0.04596555656174128,
+          -0.22445541937941613,
+          0.20742665363034332
+        ],
+        "actual": [
+          -0.0459655612353735,
+          -0.22445536969795032,
+          0.20742675138525474
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "revolver/draw",
+      "nativeSeconds": 1.166700005531311,
+      "importedSeconds": 1.1666666269302368,
+      "frames": 37,
+      "bones": 703,
+      "maxBonePositionMetres": 0.00013920287953653087,
+      "maxBoneRotationDegrees": 0.02894278247482877,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00019293163098407483,
+      "maxWeaponPartRotationDegrees": 0.04369443043493398,
+      "weaponPartSamples": 666,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.4666666666666667
+      },
+      "worstWeaponPart": {
+        "bone": "loader_holder",
+        "time": 0.9,
+        "expected": [
+          -0.06238318223536869,
+          -0.22982511736831177,
+          0.23612947145867044
+        ],
+        "actual": [
+          -0.062193174609253436,
+          -0.22979889334689743,
+          0.236150256476185
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "revolver/inspect",
+      "nativeSeconds": 5.83329963684082,
+      "importedSeconds": 5.833333492279053,
+      "frames": 176,
+      "bones": 3344,
+      "maxBonePositionMetres": 0.0002988432158695607,
+      "maxBoneRotationDegrees": 0.05443708414414972,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00023361623503948196,
+      "maxWeaponPartRotationDegrees": 0.039000594389920755,
+      "weaponPartSamples": 3168,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 5.066666666666666
+      },
+      "worstWeaponPart": {
+        "bone": "loader_holder",
+        "time": 2.6666666666666665,
+        "expected": [
+          -0.04594523143131993,
+          -0.22445693492959623,
+          0.20743077006902866
+        ],
+        "actual": [
+          -0.04575858844954259,
+          -0.22449272548718063,
+          0.20756663757292523
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "revolver/reload",
+      "nativeSeconds": 2.266700029373169,
+      "importedSeconds": 2.2666666507720947,
+      "frames": 70,
+      "bones": 1330,
+      "maxBonePositionMetres": 0.00017534079780197093,
+      "maxBoneRotationDegrees": 0.02136833363197777,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00012856101623537564,
+      "maxWeaponPartRotationDegrees": 0.11729370192796017,
+      "weaponPartSamples": 1260,
+      "worst": {
+        "name": "wpn",
+        "time": 1.1
+      },
+      "worstWeaponPart": {
+        "bone": "cylbullet4",
+        "time": 2.2,
+        "expected": [
+          -0.10591798197075324,
+          -0.07295068525999374,
+          0.449626402497134
+        ],
+        "actual": [
+          -0.10582226950411616,
+          -0.07303649211160367,
+          0.44962846231326925
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "revolver/fire",
+      "nativeSeconds": 0.699999988079071,
+      "importedSeconds": 0.699999988079071,
+      "frames": 22,
+      "bones": 418,
+      "maxBonePositionMetres": 0.000012467840100739816,
+      "maxBoneRotationDegrees": 0.005287044300118833,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 2.422054295741744e-7,
+      "maxWeaponPartRotationDegrees": 0.006732033299797476,
+      "weaponPartSamples": 396,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.4
+      },
+      "worstWeaponPart": {
+        "bone": "loader_holder",
+        "time": 0.13333333333333333,
+        "expected": [
+          -0.03216266803292239,
+          -0.2566750988367555,
+          0.23170117064279827
+        ],
+        "actual": [
+          -0.03216268541198957,
+          -0.25667485905937937,
+          0.2317012001088472
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "revolver/fire-alt",
+      "nativeSeconds": 1,
+      "importedSeconds": 1,
+      "frames": 31,
+      "bones": 589,
+      "maxBonePositionMetres": 0.00007332313719091962,
+      "maxBoneRotationDegrees": 0.01100796793905914,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.0001146868271006411,
+      "maxWeaponPartRotationDegrees": 0.0198632308975237,
+      "weaponPartSamples": 558,
+      "worst": {
+        "name": "wpn",
+        "time": 0.8666666666666667
+      },
+      "worstWeaponPart": {
+        "bone": "loader_handle",
+        "time": 0.9,
+        "expected": [
+          -0.045800516996590636,
+          -0.22722482229577656,
+          0.21092104886753316
+        ],
+        "actual": [
+          -0.045753968528666665,
+          -0.22728140288445065,
+          0.2110092812053104
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "revolver/dryfire",
+      "nativeSeconds": 0.29999998211860657,
+      "importedSeconds": 0.30000001192092896,
+      "frames": 10,
+      "bones": 190,
+      "maxBonePositionMetres": 0.000014556086208268877,
+      "maxBoneRotationDegrees": 0.000147739849473422,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.000014642319211137124,
+      "maxWeaponPartRotationDegrees": 0.00003115981406865179,
+      "weaponPartSamples": 180,
+      "worst": {
+        "name": "wpn",
+        "time": 0.1
+      },
+      "worstWeaponPart": {
+        "bone": "cylinder",
+        "time": 0.1,
+        "expected": [
+          -0.09225328844166938,
+          -0.05947088823451989,
+          0.4592426510099775
+        ],
+        "actual": [
+          -0.09224124861480913,
+          -0.059463737745687306,
+          0.45923837192239825
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "revolver/draw-alt",
+      "nativeSeconds": 1.166700005531311,
+      "importedSeconds": 1.1666666269302368,
+      "frames": 37,
+      "bones": 703,
+      "maxBonePositionMetres": 0.00023313454033525733,
+      "maxBoneRotationDegrees": 0.20960134480463702,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.00008097291378633887,
+      "maxWeaponPartRotationDegrees": 0.029113602447571045,
+      "weaponPartSamples": 666,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 1.1
+      },
+      "worstWeaponPart": {
+        "bone": "loader_holder",
+        "time": 0.8,
+        "expected": [
+          -0.0528425654666773,
+          -0.2416733497332696,
+          0.2146460840180934
+        ],
+        "actual": [
+          -0.052882524333090146,
+          -0.241729071889115,
+          0.21460301496760478
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "nova/idle",
+      "nativeSeconds": 0,
+      "importedSeconds": 0.03333333507180214,
+      "frames": 1,
+      "bones": 19,
+      "maxBonePositionMetres": 0.0000032021912590123177,
+      "maxBoneRotationDegrees": 0.00014019576810342122,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 4.177129655081613e-7,
+      "maxWeaponPartRotationDegrees": 0.00008059912630214408,
+      "weaponPartSamples": 6,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 0
+      },
+      "worstWeaponPart": {
+        "bone": "pump",
+        "time": 0,
+        "expected": [
+          -0.10895870510330868,
+          -0.12087248850287496,
+          0.6153913038408503
+        ],
+        "actual": [
+          -0.10895838095677704,
+          -0.12087222629386418,
+          0.6153913295231835
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "nova/draw",
+      "nativeSeconds": 1,
+      "importedSeconds": 1,
+      "frames": 31,
+      "bones": 589,
+      "maxBonePositionMetres": 0.00010066702961908369,
+      "maxBoneRotationDegrees": 0.01079604523824584,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.0000795937298541614,
+      "maxWeaponPartRotationDegrees": 0.020716577852606735,
+      "weaponPartSamples": 186,
+      "worst": {
+        "name": "hand_R",
+        "time": 0.8666666666666667
+      },
+      "worstWeaponPart": {
+        "bone": "shell",
+        "time": 0.9,
+        "expected": [
+          -0.22645893438247727,
+          -0.09153870074632642,
+          0.09721702636144858
+        ],
+        "actual": [
+          -0.22653850266475478,
+          -0.0915391304313061,
+          0.09721899248919674
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "nova/inspect",
+      "nativeSeconds": 5.599999904632568,
+      "importedSeconds": 5.599999904632568,
+      "frames": 169,
+      "bones": 3211,
+      "maxBonePositionMetres": 0.0003540975182492703,
+      "maxBoneRotationDegrees": 0.04238285155331347,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.001789517776678922,
+      "maxWeaponPartRotationDegrees": 0.031005008314563168,
+      "weaponPartSamples": 1014,
+      "worst": {
+        "name": "hand_R",
+        "time": 3.533333333333333
+      },
+      "worstWeaponPart": {
+        "bone": "shell",
+        "time": 3.7333333333333334,
+        "expected": [
+          -0.13630231388756953,
+          -4.82181038343908,
+          -0.3946392175022775
+        ],
+        "actual": [
+          -0.1350988093482891,
+          -4.822129381202205,
+          -0.39335384163347403
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "nova/reload",
+      "nativeSeconds": 1.6332999467849731,
+      "importedSeconds": 1.6333333253860474,
+      "frames": 50,
+      "bones": 950,
+      "maxBonePositionMetres": 0.00007791016977459806,
+      "maxBoneRotationDegrees": 0.017703430948064588,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.000199220434493898,
+      "maxWeaponPartRotationDegrees": 0.11244599764892742,
+      "weaponPartSamples": 300,
+      "worst": {
+        "name": "arm_upper_L",
+        "time": 0.9
+      },
+      "worstWeaponPart": {
+        "bone": "shell",
+        "time": 0.6333333333333333,
+        "expected": [
+          -0.07033974889485098,
+          -0.11639234360692513,
+          0.5947494283366788
+        ],
+        "actual": [
+          -0.07037895660065134,
+          -0.1162315276895858,
+          0.5948602876080823
+        ]
+      }
+    },
+    {
+      "kind": "view",
+      "id": "nova/fire",
+      "nativeSeconds": 0.7999999523162842,
+      "importedSeconds": 0.800000011920929,
+      "frames": 25,
+      "bones": 475,
+      "maxBonePositionMetres": 0.000018638638316287058,
+      "maxBoneRotationDegrees": 0.01211579229229734,
+      "maxHitboxEndpointMetres": 0,
+      "maxWeaponPartPositionMetres": 0.0001233208985086181,
+      "maxWeaponPartRotationDegrees": 0.019426109750976212,
+      "weaponPartSamples": 150,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.7
+      },
+      "worstWeaponPart": {
+        "bone": "shell",
+        "time": 0.16666666666666666,
+        "expected": [
+          -0.06984351480494057,
+          -0.3832029365907012,
+          0.12630323592026552
+        ],
+        "actual": [
+          -0.06986631119826292,
+          -0.38308267112859073,
+          0.12628824969045876
+        ]
+      }
+    },
+    {
+      "kind": "world",
+      "id": "idle_rifle",
+      "nativeSeconds": 0,
+      "importedSeconds": 0,
+      "frames": 1,
+      "bones": 19,
+      "maxBonePositionMetres": 9.77372023349275e-8,
+      "maxBoneRotationDegrees": 0.0000034150945850063755,
+      "maxHitboxEndpointMetres": 1.0256397150252514e-7,
+      "maxWeaponPartPositionMetres": 0,
+      "maxWeaponPartRotationDegrees": 0,
+      "weaponPartSamples": 0,
+      "worst": {
+        "name": "head_0",
+        "time": 0
+      }
+    },
+    {
+      "kind": "world",
+      "id": "idle_crouch_rifle",
+      "nativeSeconds": 0,
+      "importedSeconds": 0,
+      "frames": 1,
+      "bones": 19,
+      "maxBonePositionMetres": 7.265827188345685e-8,
+      "maxBoneRotationDegrees": 0.0000034150945850063755,
+      "maxHitboxEndpointMetres": 7.759652715935465e-8,
+      "maxWeaponPartPositionMetres": 0,
+      "maxWeaponPartRotationDegrees": 0,
+      "weaponPartSamples": 0,
+      "worst": {
+        "name": "head_0",
+        "time": 0
+      }
+    },
+    {
+      "kind": "world",
+      "id": "walk_n_rifle",
+      "nativeSeconds": 1,
+      "importedSeconds": 1,
+      "frames": 31,
+      "bones": 589,
+      "maxBonePositionMetres": 0.00015167222275642243,
+      "maxBoneRotationDegrees": 0.028729752469113544,
+      "maxHitboxEndpointMetres": 0.00014748526980744552,
+      "maxWeaponPartPositionMetres": 0,
+      "maxWeaponPartRotationDegrees": 0,
+      "weaponPartSamples": 0,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.9333333333333333
+      }
+    },
+    {
+      "kind": "world",
+      "id": "run_e_rifle",
+      "nativeSeconds": 0.733299970626831,
+      "importedSeconds": 0.733299970626831,
+      "frames": 23,
+      "bones": 437,
+      "maxBonePositionMetres": 0.0002572793128060823,
+      "maxBoneRotationDegrees": 0.01772343357105865,
+      "maxHitboxEndpointMetres": 0.00022964677407925267,
+      "maxWeaponPartPositionMetres": 0,
+      "maxWeaponPartRotationDegrees": 0,
+      "weaponPartSamples": 0,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.5
+      }
+    },
+    {
+      "kind": "world",
+      "id": "crouch_e_rifle",
+      "nativeSeconds": 0.7999999523162842,
+      "importedSeconds": 0.7999999523162842,
+      "frames": 25,
+      "bones": 475,
+      "maxBonePositionMetres": 0.0001581113791719923,
+      "maxBoneRotationDegrees": 0.017164088563251023,
+      "maxHitboxEndpointMetres": 0.0000942410882734948,
+      "maxWeaponPartPositionMetres": 0,
+      "maxWeaponPartRotationDegrees": 0,
+      "weaponPartSamples": 0,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.7333333333333333
+      }
+    },
+    {
+      "kind": "world",
+      "id": "jump_stand_rifle",
+      "nativeSeconds": 0.3999817967414856,
+      "importedSeconds": 0.3999817967414856,
+      "frames": 13,
+      "bones": 247,
+      "maxBonePositionMetres": 0.00021398114178176558,
+      "maxBoneRotationDegrees": 0.024097409821584145,
+      "maxHitboxEndpointMetres": 0.0001774455661833817,
+      "maxWeaponPartPositionMetres": 0,
+      "maxWeaponPartRotationDegrees": 0,
+      "weaponPartSamples": 0,
+      "worst": {
+        "name": "hand_L",
+        "time": 0.06666666666666667
+      }
+    }
+  ],
+  "meshRows": [
+    {
+      "name": "idle_rifle",
+      "fraction": 0,
+      "native": {
+        "min": [
+          -0.3535253719322716,
+          -0.002613947302805929,
+          -0.4081686427867849
+        ],
+        "max": [
+          0.395899717807065,
+          1.819291766266001,
+          0.6007724915280902
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.35352532590003627,
+          -0.0026139636800257505,
+          -0.40816856619015546
+        ],
+        "max": [
+          0.39589958982402884,
+          1.819292277537855,
+          0.6007726709847998
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "idle_rifle",
+      "fraction": 0.5,
+      "native": {
+        "min": [
+          -0.3535253719322716,
+          -0.002613947302805929,
+          -0.4081686427867849
+        ],
+        "max": [
+          0.395899717807065,
+          1.819291766266001,
+          0.6007724915280902
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.35352532590003627,
+          -0.0026139636800257505,
+          -0.40816856619015546
+        ],
+        "max": [
+          0.39589958982402884,
+          1.819292277537855,
+          0.6007726709847998
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "idle_rifle",
+      "fraction": 1,
+      "native": {
+        "min": [
+          -0.3535253719322716,
+          -0.002613947302805929,
+          -0.4081686427867849
+        ],
+        "max": [
+          0.395899717807065,
+          1.819291766266001,
+          0.6007724915280902
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.35352532590003627,
+          -0.0026139636800257505,
+          -0.40816856619015546
+        ],
+        "max": [
+          0.39589958982402884,
+          1.819292277537855,
+          0.6007726709847998
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "idle_crouch_rifle",
+      "fraction": 0,
+      "native": {
+        "min": [
+          -0.35516344588122867,
+          -0.0028281828931907968,
+          -0.4283352350591323
+        ],
+        "max": [
+          0.43871057689411175,
+          1.4120473897824735,
+          0.5015789451890444
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.3551634354203951,
+          -0.002828198925219263,
+          -0.42833522490655596
+        ],
+        "max": [
+          0.4387104187045547,
+          1.4120477953605581,
+          0.5015791091463722
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "idle_crouch_rifle",
+      "fraction": 0.5,
+      "native": {
+        "min": [
+          -0.35516344588122867,
+          -0.0028281828931907968,
+          -0.4283352350591323
+        ],
+        "max": [
+          0.43871057689411175,
+          1.4120473897824735,
+          0.5015789451890444
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.3551634354203951,
+          -0.002828198925219263,
+          -0.42833522490655596
+        ],
+        "max": [
+          0.4387104187045547,
+          1.4120477953605581,
+          0.5015791091463722
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "idle_crouch_rifle",
+      "fraction": 1,
+      "native": {
+        "min": [
+          -0.35516344588122867,
+          -0.0028281828931907968,
+          -0.4283352350591323
+        ],
+        "max": [
+          0.43871057689411175,
+          1.4120473897824735,
+          0.5015789451890444
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.3551634354203951,
+          -0.002828198925219263,
+          -0.42833522490655596
+        ],
+        "max": [
+          0.4387104187045547,
+          1.4120477953605581,
+          0.5015791091463722
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "walk_n_rifle",
+      "fraction": 0,
+      "native": {
+        "min": [
+          -0.3625289454871991,
+          -0.005678982736420867,
+          -0.3764530387461632
+        ],
+        "max": [
+          0.3627123964003335,
+          1.8359129693812624,
+          0.6833515414614489
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.3625288944480595,
+          -0.005678971031554094,
+          -0.37645340883141937
+        ],
+        "max": [
+          0.36271229325665816,
+          1.8359135161797333,
+          0.6833517175254296
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "walk_n_rifle",
+      "fraction": 0.5,
+      "native": {
+        "min": [
+          -0.30521718297308764,
+          -0.005048930382523251,
+          -0.3782589103265155
+        ],
+        "max": [
+          0.4103652386700784,
+          1.8361045754389818,
+          0.6874955360404189
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.3052171532103927,
+          -0.005049173175530441,
+          -0.37825890255929084
+        ],
+        "max": [
+          0.4103651268149698,
+          1.8360865788363627,
+          0.6874957929258033
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "walk_n_rifle",
+      "fraction": 1,
+      "native": {
+        "min": [
+          -0.362478306653011,
+          -0.005682942968492432,
+          -0.3764072138775237
+        ],
+        "max": [
+          0.36273452841255155,
+          1.8359236701409754,
+          0.6833164284191937
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.36247825559830477,
+          -0.0056829312619283995,
+          -0.376407583966907
+        ],
+        "max": [
+          0.36273442531538547,
+          1.835924217040515,
+          0.6833166044885571
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "run_e_rifle",
+      "fraction": 0,
+      "native": {
+        "min": [
+          -0.3620078080862288,
+          -0.00867762160109884,
+          -0.3633722816946966
+        ],
+        "max": [
+          0.4733455700435707,
+          1.773417584287975,
+          0.620973988044078
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.3620077543931768,
+          -0.008677610068945789,
+          -0.3633722134685245
+        ],
+        "max": [
+          0.47334592779509677,
+          1.7734181166113983,
+          0.6209741667872314
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "run_e_rifle",
+      "fraction": 0.5,
+      "native": {
+        "min": [
+          -0.3667461513481059,
+          0.0015580965277699054,
+          -0.35806013359312655
+        ],
+        "max": [
+          0.3815830684064033,
+          1.7644968742882374,
+          0.6551412446886402
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.36674609396855157,
+          0.0015577415656091026,
+          -0.35806005916540695
+        ],
+        "max": [
+          0.38158299813620966,
+          1.7644976875124432,
+          0.6551236027589872
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "run_e_rifle",
+      "fraction": 1,
+      "native": {
+        "min": [
+          -0.36202032817648755,
+          -0.008677622584181784,
+          -0.3633722721089618
+        ],
+        "max": [
+          0.4733455701935442,
+          1.7734175758823871,
+          0.6210466575222796
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.3620202744343918,
+          -0.008677611052028958,
+          -0.36337220388278674
+        ],
+        "max": [
+          0.47334592794508795,
+          1.7734181082057896,
+          0.6210468362678939
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "crouch_e_rifle",
+      "fraction": 0,
+      "native": {
+        "min": [
+          -0.3280313737817021,
+          -0.00942349686531133,
+          -0.4909272064469815
+        ],
+        "max": [
+          0.8376143593489,
+          1.3924555104989187,
+          0.4581026925077588
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.3280314409252089,
+          -0.009423484447248744,
+          -0.49092720736558426
+        ],
+        "max": [
+          0.8376148522135419,
+          1.3924558421984465,
+          0.4581028773891709
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "crouch_e_rifle",
+      "fraction": 0.5,
+      "native": {
+        "min": [
+          -0.32620321598295293,
+          -0.005474275958081666,
+          -0.5515949706320517
+        ],
+        "max": [
+          0.5037715289832307,
+          1.3612068861799627,
+          0.49329076699703833
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.32624384975202436,
+          -0.005474591335974435,
+          -0.5515950192624202
+        ],
+        "max": [
+          0.5037715445883861,
+          1.3612446521295452,
+          0.49334264264867067
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "crouch_e_rifle",
+      "fraction": 1,
+      "native": {
+        "min": [
+          -0.3280208538728077,
+          -0.009423595381282523,
+          -0.49092723176871456
+        ],
+        "max": [
+          0.8375958935759988,
+          1.3924555672898258,
+          0.458125893893923
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.328020921011917,
+          -0.009423582963232357,
+          -0.49092723268734767
+        ],
+        "max": [
+          0.8375963864362257,
+          1.3924558989893845,
+          0.4581260787863968
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "jump_stand_rifle",
+      "fraction": 0,
+      "native": {
+        "min": [
+          -0.3519414784377324,
+          -0.23722877437343265,
+          -0.31116055607278903
+        ],
+        "max": [
+          0.3874132707421815,
+          1.8094165991068605,
+          0.6718119910760049
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.35194143388861615,
+          -0.23722884253062715,
+          -0.3111605042970035
+        ],
+        "max": [
+          0.3874135671934338,
+          1.809417141842189,
+          0.6718121688013113
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "jump_stand_rifle",
+      "fraction": 0.5,
+      "native": {
+        "min": [
+          -0.31839935827738275,
+          0.06972871549606527,
+          -0.5207833286472139
+        ],
+        "max": [
+          0.4331088332857468,
+          1.812488054891195,
+          0.625264855514246
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.31839928887153046,
+          0.06972860607907772,
+          -0.5207833755194207
+        ],
+        "max": [
+          0.43310905313783493,
+          1.8124888007248425,
+          0.6252650759181042
+        ],
+        "vertices": 9779
+      }
+    },
+    {
+      "name": "jump_stand_rifle",
+      "fraction": 1,
+      "native": {
+        "min": [
+          -0.31840476194500156,
+          0.2768599259828232,
+          -0.42295761183591735
+        ],
+        "max": [
+          0.45243293996107736,
+          1.8189823759588912,
+          0.6375178066100097
+        ],
+        "vertices": 19077
+      },
+      "trainer": {
+        "min": [
+          -0.31840472324486535,
+          0.276859483614736,
+          -0.42295755880054375
+        ],
+        "max": [
+          0.45243322480928766,
+          1.8189829138560747,
+          0.6375179865287572
+        ],
+        "vertices": 9779
+      }
+    }
+  ],
+  "notes": [
+    "Frame sampling uses absolute native seconds at 30 Hz plus exact endpoint.",
+    "Revolver charge is independently graph-composed in reaudit-animation-charge.mjs and excluded here.",
+    "Clip poses only: graph blends, event timing, runtime IK and rendering are excluded.",
+    "World capsule endpoint comparison uses existing capsule definitions on fresh-native vs shipped posed skeleton; it does not independently validate those definitions.",
+    "Mesh envelopes include all third-person body vertices, with joint weights and inverse bind matrices; no material, texture or lighting equality is implied."
+  ]
+}

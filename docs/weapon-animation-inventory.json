@@ -2971,10 +2971,17 @@
       "assetKey": "revolver",
       "variant": "hd",
       "assemblyVersion": 5,
-      "build": "2000922",
+      "build": "2000930",
       "sourceModel": "agents/models/ctm_sas/ctm_sas.vmdl_c",
-      "sourceSha256": "81336d9e43a27b50315c13e26951dae77b7197d5f56322f1ef471c4f6a389835",
+      "sourceSha256": "371002d42c6119ac952ee4c00d0eb8e3aa68bbfc89e87ccccba8c76769cd15f9",
       "bindSha256": "f068f7da5175edb2be9dcde53a2e2d9c1207d1cb757aca1cbf6198a6a315c38c",
+      "nativeSourceSha256": "5f5798aa7187a58433ae9b156f332cc2d2e031a7ed18f5134d3f2a19767a3b7b",
+      "chargeComposition": {
+        "source": "animation/anims/viewmodel/pistol/pistol_revolver/prepare_shoot_revolver",
+        "base": "animation/anims/viewmodel/pistol/pistol_revolver/shoot1_revolver",
+        "baseTime": 0,
+        "graph": "animation/graphs/viewmodel/viewmodel_gun_revolver.vnmgraph"
+      },
       "skeleton": "animation/skeletons/weapons/revolver.vnmskel",
       "pickup": "reuse-native-draw",
       "clips": {
@@ -2987,43 +2994,43 @@
           "maxPartMatrixError": 1.4901161193847656e-8,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "draw": {
           "path": "animation/anims/viewmodel/pistol/pistol_revolver/draw_revolver.vnmclip_c",
           "crc": "00869e3e86",
           "bytes": 15369,
-          "seconds": 1.1666999816894532,
-          "samples": 37,
-          "maxPartMatrixError": 4.76837158203125e-7,
-          "maxMountMatrixError": 1.7881393432617188e-7,
+          "seconds": 1.1666666666666667,
+          "samples": 36,
+          "maxPartMatrixError": 4.172325134277344e-7,
+          "maxMountMatrixError": 2.384185791015625e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "inspect": {
           "path": "animation/anims/viewmodel/pistol/pistol_revolver/lookat01_revolver.vnmclip_c",
           "crc": "002afff5d3",
           "bytes": 46381,
-          "seconds": 5.833299763997396,
+          "seconds": 5.833333333333333,
           "samples": 176,
-          "maxPartMatrixError": 3.5762786865234375e-7,
-          "maxMountMatrixError": 2.980232238769531e-7,
+          "maxPartMatrixError": 1.7881393432617188e-7,
+          "maxMountMatrixError": 3.5762786865234375e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "reload": {
           "path": "animation/anims/viewmodel/pistol/pistol_revolver/reload_revolver.vnmclip_c",
           "crc": "005407ff64",
           "bytes": 29193,
-          "seconds": 2.2666999816894533,
-          "samples": 70,
-          "maxPartMatrixError": 5.960464477539062e-7,
-          "maxMountMatrixError": 1.7881393432617188e-7,
+          "seconds": 2.2666666666666666,
+          "samples": 69,
+          "maxPartMatrixError": 5.364418029785156e-7,
+          "maxMountMatrixError": 2.384185791015625e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "fire": {
@@ -3035,19 +3042,19 @@
           "maxPartMatrixError": 4.470348358154297e-8,
           "maxMountMatrixError": 1.1920928955078125e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "charge": {
           "path": "animation/anims/viewmodel/pistol/pistol_revolver/prepare_shoot_revolver.vnmclip_c",
           "crc": "008ae755be",
           "bytes": 6298,
-          "seconds": 0.9666999816894531,
-          "samples": 31,
+          "seconds": 0.9666666666666667,
+          "samples": 30,
           "maxPartMatrixError": 2.384185791015625e-7,
-          "maxMountMatrixError": 6.801641916354129e-8,
+          "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "fire-alt": {
@@ -3057,9 +3064,9 @@
           "seconds": 1,
           "samples": 31,
           "maxPartMatrixError": 1.4901161193847656e-7,
-          "maxMountMatrixError": 1.7881393432617188e-7,
+          "maxMountMatrixError": 1.1920928955078125e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "dryfire": {
@@ -3071,19 +3078,19 @@
           "maxPartMatrixError": 1.4901161193847656e-8,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "draw-alt": {
           "path": "animation/anims/viewmodel/pistol/pistol_revolver/draw_2_revolver.vnmclip_c",
           "crc": "00e647c9c0",
           "bytes": 15603,
-          "seconds": 1.1666999816894532,
-          "samples": 37,
-          "maxPartMatrixError": 2.384185791015625e-7,
-          "maxMountMatrixError": 3.5762786865234375e-7,
+          "seconds": 1.1666666666666667,
+          "samples": 36,
+          "maxPartMatrixError": 4.76837158203125e-7,
+          "maxMountMatrixError": 2.905726432800293e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         }
       },
@@ -3142,16 +3149,16 @@
         }
       },
       "meshes": [
-        "agents\\models\\ctm_sas\\ctm_sas.vmdl_c.firstperson_sleeves",
-        "agents\\models\\ctm_sas\\ctm_sas.vmdl_c.firstperson_default_gloves_arms",
+        "agents/models/ctm_sas/ctm_sas.vmdl_c.firstperson_default_gloves_arms",
+        "agents/models/ctm_sas/ctm_sas.vmdl_c.firstperson_sleeves",
         "weapons\\models\\revolver\\weapon_pist_revolver.vmdl_c.body_hd"
       ],
       "limitations": [
         "Native twist/IK runtime solvers are not reproduced; authored arm tracks retained.",
         "Call prepareNativeViewAssembly after GLTF load to prevent stale skinned frustum bounds."
       ],
-      "bytes": 3125968,
-      "sha256": "6d5b633c935fcb32a9b9ae2181dcfc0d00644eba4d1a4be7f76c2b4f4779a615"
+      "bytes": 3118488,
+      "sha256": "91427b9e9fccf99e006482a466bd54f23b4b8bf2c18e92123ff5bc301ec44f22"
     },
     "awp": {
       "assetKey": "awp",
@@ -5232,10 +5239,17 @@
       "assetKey": "revolver-legacy",
       "variant": "legacy",
       "assemblyVersion": 5,
-      "build": "2000922",
+      "build": "2000930",
       "sourceModel": "agents/models/ctm_sas/ctm_sas.vmdl_c",
-      "sourceSha256": "81336d9e43a27b50315c13e26951dae77b7197d5f56322f1ef471c4f6a389835",
+      "sourceSha256": "371002d42c6119ac952ee4c00d0eb8e3aa68bbfc89e87ccccba8c76769cd15f9",
       "bindSha256": "f068f7da5175edb2be9dcde53a2e2d9c1207d1cb757aca1cbf6198a6a315c38c",
+      "nativeSourceSha256": "5f5798aa7187a58433ae9b156f332cc2d2e031a7ed18f5134d3f2a19767a3b7b",
+      "chargeComposition": {
+        "source": "animation/anims/viewmodel/pistol/pistol_revolver/prepare_shoot_revolver",
+        "base": "animation/anims/viewmodel/pistol/pistol_revolver/shoot1_revolver",
+        "baseTime": 0,
+        "graph": "animation/graphs/viewmodel/viewmodel_gun_revolver.vnmgraph"
+      },
       "skeleton": "animation/skeletons/weapons/revolver.vnmskel",
       "pickup": "reuse-native-draw",
       "clips": {
@@ -5248,7 +5262,7 @@
           "maxPartMatrixError": 1.4901161193847656e-8,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "draw": {
@@ -5258,9 +5272,9 @@
           "seconds": 1.1666666666666667,
           "samples": 36,
           "maxPartMatrixError": 4.172325134277344e-7,
-          "maxMountMatrixError": 1.1920928955078125e-7,
+          "maxMountMatrixError": 2.384185791015625e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "inspect": {
@@ -5270,9 +5284,9 @@
           "seconds": 5.833333333333333,
           "samples": 176,
           "maxPartMatrixError": 1.7881393432617188e-7,
-          "maxMountMatrixError": 2.980232238769531e-7,
+          "maxMountMatrixError": 3.5762786865234375e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "reload": {
@@ -5282,9 +5296,9 @@
           "seconds": 2.2666666666666666,
           "samples": 69,
           "maxPartMatrixError": 5.364418029785156e-7,
-          "maxMountMatrixError": 1.7881393432617188e-7,
+          "maxMountMatrixError": 2.384185791015625e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "fire": {
@@ -5296,7 +5310,7 @@
           "maxPartMatrixError": 4.470348358154297e-8,
           "maxMountMatrixError": 1.1920928955078125e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "charge": {
@@ -5305,10 +5319,10 @@
           "bytes": 6298,
           "seconds": 0.9666666666666667,
           "samples": 30,
-          "maxPartMatrixError": 1.7881393432617188e-7,
-          "maxMountMatrixError": 6.801641916354129e-8,
+          "maxPartMatrixError": 2.384185791015625e-7,
+          "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "fire-alt": {
@@ -5318,9 +5332,9 @@
           "seconds": 1,
           "samples": 31,
           "maxPartMatrixError": 1.4901161193847656e-7,
-          "maxMountMatrixError": 1.7881393432617188e-7,
+          "maxMountMatrixError": 1.1920928955078125e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "dryfire": {
@@ -5332,7 +5346,7 @@
           "maxPartMatrixError": 1.4901161193847656e-8,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         },
         "draw-alt": {
@@ -5342,9 +5356,9 @@
           "seconds": 1.1666666666666667,
           "samples": 36,
           "maxPartMatrixError": 4.76837158203125e-7,
-          "maxMountMatrixError": 3.2782554626464844e-7,
+          "maxMountMatrixError": 2.905726432800293e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/revolver.vnmskel"
         }
       },
@@ -5403,16 +5417,16 @@
         }
       },
       "meshes": [
-        "agents\\models\\ctm_sas\\ctm_sas.vmdl_c.firstperson_default_gloves_arms",
-        "agents\\models\\ctm_sas\\ctm_sas.vmdl_c.firstperson_sleeves",
+        "agents/models/ctm_sas/ctm_sas.vmdl_c.firstperson_default_gloves_arms",
+        "agents/models/ctm_sas/ctm_sas.vmdl_c.firstperson_sleeves",
         "weapons\\models\\revolver\\weapon_pist_revolver.vmdl_c.body_legacy"
       ],
       "limitations": [
         "Native twist/IK runtime solvers are not reproduced; authored arm tracks retained.",
         "Call prepareNativeViewAssembly after GLTF load to prevent stale skinned frustum bounds."
       ],
-      "bytes": 3066164,
-      "sha256": "6d07348cfcbfa4e92d18c7e3b9f19822e078e21f0a4d540c03e44ef27a814805"
+      "bytes": 3064244,
+      "sha256": "14289ca4cbe7cde40f23b610d694b5bca13f592fb38f83b15289409e0da29dd3"
     },
     "g3sg1-legacy": {
       "assetKey": "g3sg1-legacy",

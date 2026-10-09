@@ -51,6 +51,6 @@ export function nativeActionMetadata(id: string) {
     scopedFire: id === 'aug' || id === 'sg553' ? 'fire-scoped' as const : null,
     silencedFire: ['usp', 'm4a1s', 'mp5sd'].includes(id) ? 'fire' as const : null,
     bolt: null, pull: null, scope: null,
-    chargePlayback: id === 'revolver' ? 'absolute-idle-composed; clamp at end until fire/cancel' : null,
+    chargePlayback: id === 'revolver' ? 'absolute-fire-start-composed; clamp at end until fire/cancel' : null,
   };
 }

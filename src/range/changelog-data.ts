@@ -318,6 +318,9 @@ export const latestChanges = {
       'Held-fire recoil now starts at each shot’s exact schedule and decays through its processing tick. Fresh AK recordings reduced the measured recoil error from 0.338 degrees to less than 0.000003 degrees.',
       'Bullets and next-shot guides sample the same scheduled recoil; firing cadence is unchanged.',
     ]},
+    {id: 'native-r8-charge-mount', title: 'R8 charge animation alignment', items: [
+      'The R8 now keeps its hands on the grip while charging. Both model variants combine the native charge motion with its firing-start pose and preserve the weapon attachment through charge, fire and cancellation.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

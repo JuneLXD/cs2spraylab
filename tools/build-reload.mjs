@@ -4,6 +4,9 @@ import crypto from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {selectViewClips, supportedViewIds} from './native-view-clips.mjs';
 import {auditViewActions} from './native-view-clips.mjs';
+import {NodeIO} from '@gltf-transform/core';
+import {ALL_EXTENSIONS} from '@gltf-transform/extensions';
+import {composeRevolverCharge} from './native-view-charge.mjs';
 
 const game = process.env.CS2_PATH || 'C:/Program Files (x86)/Steam/steamapps/common/Counter-Strike Global Offensive';
 const cli = process.env.SOURCE2VIEWER || path.resolve(process.platform === 'win32'
@@ -52,7 +55,14 @@ for (const id of ids) {
       '--gltf_export_materials', '--gltf_textures_adapt', '--gltf_export_animations', '--gltf_compose_additive',
       '--gltf_animation_list', Object.values(clips).map(file => path.posix.basename(file, '.vnmclip_c')).join(',')]);
   }
-  Object.assign(spec, {signature, sourceSha256: hash(source), bindSha256: hash(bind)});
+  if (id === 'revolver') {
+    const io = new NodeIO().registerExtensions(ALL_EXTENSIONS), document = await io.read(source);
+    spec.chargeComposition = composeRevolverCharge(document);
+    spec.nativeSource = source; spec.nativeSourceSha256 = hash(source);
+    spec.source = source.replace(/\.glb$/, '-charge-composed.glb');
+    await io.write(spec.source, document);
+  }
+  Object.assign(spec, {signature, sourceSha256: hash(spec.source), bindSha256: hash(bind)});
   fs.writeFileSync(specPath, JSON.stringify(spec, null, 2) + '\n');
   if (process.argv.includes('--extract-only')) continue;
   execFileSync(blender, ['--background', '--factory-startup', '--threads', '2', '--python-exit-code', '1', '--python', 'art/build_reload.py', '--', specPath],

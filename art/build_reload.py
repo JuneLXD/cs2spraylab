@@ -197,11 +197,16 @@ for obj in meshes:
         obj['native_reload'] = Path(spec['clips']['reload']).name.removesuffix('.vnmclip_c')
 bpy.ops.export_scene.gltf(filepath=str(ROOT / spec['output']), export_format='GLB',
     use_selection=True, export_animations=True, export_animation_mode='NLA_TRACKS',
-    export_anim_single_armature=False, export_frame_range=False, export_extras=True)
+    export_anim_single_armature=False, export_frame_range=False, export_extras=True,
+    # A constant per-action mount can differ from the scene's idle mount.
+    # Dropping its object channels leaves the gun behind while the arms move.
+    export_optimize_animation_keep_anim_object=True)
 (ROOT / 'research/weapon-actions' / (asset_key + '-export.json')).write_text(json.dumps({
     'assetKey': asset_key, 'variant': variant, 'assemblyVersion': 5,
     'build': spec['build'], 'sourceModel': 'agents/models/ctm_sas/ctm_sas.vmdl_c',
     'sourceSha256': spec['sourceSha256'], 'bindSha256': spec['bindSha256'],
+    **({'nativeSourceSha256': spec['nativeSourceSha256'], 'chargeComposition': spec['chargeComposition']}
+       if 'chargeComposition' in spec else {}),
     'skeleton': spec['skeleton'], 'pickup': spec['pickup'], 'clips': inventory,
     'actionAudit': spec.get('actionAudit'),
     'meshes': [o.name for o in hands + meshes],
