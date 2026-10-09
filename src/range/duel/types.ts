@@ -34,6 +34,11 @@ export type DuelActorSnapshot = {
   pitch: number;
   aimPunch?: PunchAngle;
   deathDirection?: Vec;
+  deathGroup?: Hitgroup;
+  /** Deathmatch spawn protection is active: shots do no damage and draw no blood. */
+  immune?: boolean;
+  /** Speed (m/s) the lethal shot gives the hit body part of the corpse. */
+  deathImpulse?: number;
   crouched: boolean;
   duckAmount: number;
   health: number;
@@ -56,6 +61,6 @@ type DuelEventData =
   | {kind: 'pickup'; tick: number; actorId: ActorId; dropId: number; equipment: Equipment}
   | {kind: 'sound'; tick: number; actorId: ActorId; sound: 'footstep' | 'landing'; point: Vec}
   | {kind: 'fire'; tick: number; actorId: ActorId; shotId: number; equipment: Equipment; origin: Vec; direction: Vec; pelletDirections?:Vec[]; alternate?:boolean; ordinal?:number}
-  | {kind: 'hit'; tick: number; shooter: ActorId; victim: ActorId; shotId: number; group: Hitgroup; point: Vec; healthDamage: number; armorDamage: number; lethal: boolean}
+  | {kind: 'hit'; tick: number; shooter: ActorId; victim: ActorId; shotId: number; group: Hitgroup; point: Vec; healthDamage: number; armorDamage: number; lethal: boolean; immune?: boolean}
   | {kind: 'surface'; tick: number; shooter: ActorId; shotId: number; point: Vec; surfaceId: number; normal?:Vec; phase?: 'entry' | 'exit'; material?: string; residualDamage?: number}
   | {kind: 'round'; tick: number; outcome: 'won' | 'lost' | 'draw'; seconds: number};

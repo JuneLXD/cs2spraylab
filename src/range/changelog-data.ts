@@ -281,6 +281,15 @@ export const latestChanges = {
       'Held-trigger shots now land on the game\'s 64 Hz ticks while their schedule stays exact, as the recorded CS2 demos show: an AK spray alternates 6 and 7 ticks between shots at exactly ten shots a second on average. The click itself still fires at its own moment, and a trigger held through a reload, a deploy, a pump or the R8 windup fires on the first tick after it.',
       'Walking while scoped at the second zoom level accelerates with the weapon\'s scale instead of the walking factor, as the server does. Subtick movement and bullet penetration were read from the server and already matched.',
     ]},
+    {id: 'bots-hit-reactions', title: 'Bots flinch, bleed and fall like the game\'s', items: [
+      'Bots play CS2\'s own flinch animations when hit: the clip matches the body part and the side the shot came from, in the rifle, pistol or knife family, and repeated hits restart it.',
+      'Deaths are a real fall: the body is solved as a jointed rig from the pose it died in, pushed by the shot, with knee, elbow, hip and neck limits, and it topples, lands and lies still in about a second. Before, the model scrunched into a seated heap.',
+      'A burst of blood marks every hit on a bot as feedback, oriented by the bullet and gone in half a second. Nothing sticks to walls or floors.',
+    ]},
+    {id: 'deathmatch-protection-fullscreen', title: 'Spawn protection and fullscreen on entry', items: [
+      'Deathmatch gives everyone the game\'s spawn protection (4 s by default, adjustable in the setup): hits do nothing until it ends or you attack. The HUD counts yours down and protected bots show translucent.',
+      'Settings > Browser has Fullscreen when you enter, on by default: entering or resuming a drill takes the browser fullscreen, and pausing keeps it.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

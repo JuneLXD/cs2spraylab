@@ -156,6 +156,7 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
           {deathmatchMode ? <ScoreBar className="duel-round" bots={{alive: status.enemies, total: config.botCount, label: `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} UP`}}>
             <ScoreCell value={status.kills} label="KILLS" tone="blue"/>
             <ScoreCell value={status.deaths ?? 0} label="DEATHS" tone="gold"/>
+            {(status.immuneFor ?? 0) > 0 && <ScoreCell value={`${status.immuneFor!.toFixed(1)}s`} label="IMMUNE" tone="gold"/>}
             <ScoreCell value={clock(status.seconds)} label="TIME"/>
           </ScoreBar> : <ScoreBar className="duel-round" bots={{alive: status.enemies, total: config.botCount, label: `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} LEFT`}}>
             <ScoreCell value={status.kills} label="KILLS" tone="blue"/>

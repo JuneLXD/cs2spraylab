@@ -1,6 +1,12 @@
 type KeyboardLock = {lock(keys: string[]): Promise<void>; unlock(): void};
 const keyboard = () => (navigator as Navigator & {keyboard?: KeyboardLock}).keyboard;
 
+/** The Fullscreen when you enter setting: requested in the same click as pointer lock, never owned by the guard. */
+export function requestStageFullscreen(stage: HTMLElement | null) {
+  if (!stage || document.fullscreenElement || typeof stage.requestFullscreen !== 'function') return Promise.resolve();
+  return stage.requestFullscreen().catch(() => {});
+}
+
 export class ShortcutGuard {
   protected = false;
   private generation = 0;
@@ -9,12 +15,13 @@ export class ShortcutGuard {
   constructor(private readonly stage: HTMLElement | null) {}
   /** KeyboardEvent codes to lock in fullscreen (the bound keys), so shortcuts such as Ctrl+W reach the trainer. */
   codes: readonly string[] = ['KeyW'];
-  async enter(enabled: boolean) {
+  async enter(enabled: boolean, fullscreen?: Promise<unknown>) {
     if (!enabled) {this.release(); return;}
     this.enabled = enabled;
     const generation = ++this.generation;
     if (!this.stage || !keyboard()?.lock) return;
     try {
+      if (fullscreen) await fullscreen;
       if (!document.fullscreenElement) {
         await this.stage.requestFullscreen(); this.ownsFullscreen = true;
       }

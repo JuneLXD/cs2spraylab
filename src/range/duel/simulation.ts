@@ -47,6 +47,9 @@ type CombatActor = ActorKinematics & TaggingState & {
   punch: DamagePunch;
   viewPunch: ViewPunch;
   deathDirection?: Vec;
+  deathGroup?: Hitgroup; deathImpulse?: number;
+  /** Deathmatch spawn protection ends at this time, or when the actor attacks. */
+  immuneUntil?: number;
   health: number;
   armor: number;
   helmet: boolean;
@@ -177,6 +180,7 @@ export class DuelSimulation {
       placeAt(this.actors[0], freeSpawnPose(this.teamSpawner.first('t'), this.arena));
       const behaviors = rosterBehaviors(this.config, seed);
       for (let index = 0; index < this.config.botCount; index++) this.actors.push(this.spawnDuelBot(index + 1, 1, behaviors[index]));
+      if (this.deathmatch) for (const actor of this.actors) actor.immuneUntil = this.time + this.config.spawnImmunitySeconds;
       return;
     }
     if (this.botz?.map === 'island') {
@@ -501,6 +505,7 @@ export class DuelSimulation {
       const shotId = this.shotId++;
       shots.push({actor, fired, shotId});
       this.lastShotAt.set(actor.id,this.time);
+      if (actor.immuneUntil) actor.immuneUntil = 0; // attacking ends spawn protection
       this.combatActions.set(actor.id,{action:'fire',at:this.time});
       this.emit({kind: 'fire', tick: this.tick, actorId: actor.id, shotId,
         equipment: fired.weapon, origin: fired.origin, direction: fired.direction,
@@ -522,6 +527,8 @@ export class DuelSimulation {
       if (!victim.alive) continue;
       // mp_damage_headshot_only: body hits still register, without damage.
       if (this.botz?.headshotOnly && victim.side === 'enemy' && event.group !== 'head') event.healthDamage = event.armorDamage = 0;
+      // Spawn protection: the hit still registers, but costs nothing.
+      if ((victim.immuneUntil ?? 0) > this.time) {event.healthDamage = event.armorDamage = 0; event.immune = true;}
       const rawDamage = event.healthDamage + event.armorDamage * 2, armorBeforeHit = victim.armor;
       event.healthDamage = Math.min(victim.health, event.healthDamage);
       event.armorDamage = Math.min(victim.armor, event.armorDamage);
@@ -529,7 +536,11 @@ export class DuelSimulation {
       victim.health = Math.max(0, victim.health - event.healthDamage);
       victim.armor = Math.max(0, victim.armor - event.armorDamage);
       if (victim.health === 0) victim.alive = false;
-      if (lethal) victim.deathDirection = {...direction};
+      if (lethal) {
+        victim.deathDirection = {...direction}; victim.deathGroup = event.group;
+        // The corpse takes the shot's push: Source scales the damage into a ragdoll impulse, capped for sanity.
+        victim.deathImpulse = Math.min(4.5, Math.max(1, rawDamage * .06));
+      }
       this.lastHurtAt.set(victim.id,this.time);if(lethal)this.lastDownAt.set(victim.id,this.time);
       if (victim.alive && event.healthDamage > 0) applyTagging(victim, weapon, victim.weapon.id);
       if (victim.alive && event.healthDamage > 0) victim.punch.hit({group: event.group, rawDamage, armor: armorBeforeHit, helmet: victim.helmet});
@@ -630,6 +641,7 @@ export class DuelSimulation {
       this.respawnAt.delete(id);
       const old = this.actors[id];
       this.actors[id] = id === 0 ? this.spawnPlayer(old.generation + 1) : this.spawnDuelBot(id, old.generation + 1);
+      this.actors[id].immuneUntil = this.time + this.config.spawnImmunitySeconds;
       for (const map of [this.combatActions, this.usedAt, this.lastShotAt, this.lastHurtAt, this.lastDownAt, this.lastContactAt, this.lastCalloutAt]) map.delete(id);
     }
   }
@@ -901,6 +913,7 @@ export class DuelSimulation {
       feet: actor.feet, grounded: actor.grounded ?? actor.feet === 0, verticalVelocity:actor.verticalVelocity, yaw: actor.yaw, pitch: actor.pitch, crouched: (actor.duckAmount ?? 0) >= .5,
       aimPunch: actor.punch.shotFor(actor.weapon.recovery.angle),
       deathDirection: actor.deathDirection ? {...actor.deathDirection} : undefined,
+      deathGroup: actor.deathGroup, deathImpulse: actor.deathImpulse, immune: (actor.immuneUntil ?? 0) > this.time,
       duckAmount: actor.duckAmount ?? 0, health: actor.health, armor: actor.armor,
       helmet: actor.helmet, alive: actor.alive, equipment: actor.weapon.id, ammo: actor.weapon.ammo,
       reloading: actor.weapon.reloadUntil > 0,

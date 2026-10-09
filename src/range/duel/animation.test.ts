@@ -145,3 +145,59 @@ describe('native weapon layers and dynamic death hooks', () => {
     expect(f.hip.position.y).toBe(1);
   });
 });
+
+/** The native skeleton's chains with bone offsets near the real ones, standing with the hands ahead. */
+function limbFixture() {
+  const model = new THREE.Group();
+  const bone = (name: string, parent: THREE.Object3D, x: number, y: number, z: number) => {
+    const b = new THREE.Bone(); b.name = name; b.position.set(x, y, z); parent.add(b); return b;
+  };
+  const pelvis = bone('pelvis', model, 0, 1, 0);
+  const spine0 = bone('spine_0', pelvis, 0, .03, 0), spine1 = bone('spine_1', spine0, 0, .1, 0), spine2 = bone('spine_2', spine1, 0, .12, 0);
+  const spine3 = bone('spine_3', spine2, 0, .16, 0), neck = bone('neck_0', spine3, 0, .16, 0); bone('head_0', neck, 0, .15, 0);
+  for (const [side, sign] of [['L', -1], ['R', 1]] as const) {
+    const clavicle = bone(`clavicle_${side}`, spine3, sign * .05, .05, 0), upper = bone(`arm_upper_${side}`, clavicle, sign * .15, 0, 0);
+    const lower = bone(`arm_lower_${side}`, upper, sign * .05, -.25, .1); bone(`hand_${side}`, lower, 0, -.1, .25);
+    const thigh = bone(`leg_upper_${side}`, pelvis, sign * .1, -.05, 0), shin = bone(`leg_lower_${side}`, thigh, 0, -.45, .03); bone(`ankle_${side}`, shin, 0, -.44, -.03);
+  }
+  const names: string[] = []; model.traverse(node => {if (node instanceof THREE.Bone) names.push(node.name);});
+  const clips = [new THREE.AnimationClip('animation/anims/world/idle_rifle', 0,
+    names.map(name => new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, [0], [0, 0, 0, 1])))];
+  return {model, names, animator: new DuelAnimator(model, clips, 0, 'ak47')};
+}
+describe('corpse rig on the native skeleton', () => {
+  it('rotates bones only, so no bone stretches while the body falls and lies down', () => {
+    const f = limbFixture(), a = actor(); f.animator.update(a, 0);
+    const lengths = new Map(f.names.map(name => [name, f.model.getObjectByName(name)!.position.length()]));
+    const headBefore = f.model.getObjectByName('head_0')!.getWorldPosition(new THREE.Vector3()).y;
+    a.alive = false; a.deathDirection = {x: 0, y: 0, z: 1}; a.deathGroup = 'chest'; a.deathImpulse = 2.5;
+    f.animator.setDeathWorld({floor: 0, boxes: []});
+    for (let n = 0; n < 150; n++) f.animator.update(a, 1 / 50);
+    for (const name of f.names) {
+      const bone = f.model.getObjectByName(name)!;
+      if (name !== 'pelvis') expect(bone.position.length()).toBeCloseTo(lengths.get(name)!, 9);
+      expect(Number.isFinite(bone.quaternion.x + bone.quaternion.y + bone.quaternion.z + bone.quaternion.w)).toBe(true);
+      expect(bone.getWorldPosition(new THREE.Vector3()).y).toBeGreaterThan(-.05);
+    }
+    expect(f.model.getObjectByName('head_0')!.getWorldPosition(new THREE.Vector3()).y).toBeLessThan(headBefore - .8);
+    expect(f.model.getObjectByName('pelvis')!.getWorldPosition(new THREE.Vector3()).y).toBeLessThan(.4);
+    f.animator.dispose();
+  });
+  it('plays the native flinch clip for a hit as an additive layer and cross-fades a second hit over it', () => {
+    const f = limbFixture(), a = actor();
+    const clip = (name: string) => new THREE.AnimationClip(`animation/anims/world/shared/${name}`, .5, [
+      new THREE.QuaternionKeyframeTrack('spine_2.quaternion', [0, .1, .5], [0, 0, 0, 1, .3, 0, 0, Math.sqrt(.91), 0, 0, 0, 1]),
+      new THREE.VectorKeyframeTrack('pelvis.position', [0, .5], [0, 5, 0, 0, 5, 0])]);
+    f.animator.addFlinchClips([clip('flinch_chest'), clip('flinch_head_left_pistol')]);
+    expect(f.animator.flinch('chest', 'front', 'left', 'knife')).toBe(true);
+    f.animator.update(a, .1);
+    const spine = f.model.getObjectByName('spine_2')!, pelvis = f.model.getObjectByName('pelvis')!;
+    expect(spine.quaternion.x).toBeGreaterThan(.2); expect(pelvis.position.y).toBe(1);
+    expect(f.animator.flinching).toBe(true);
+    expect(f.animator.flinch('head', 'left', 'left', 'pistol')).toBe(true);
+    expect(f.animator.flinch('leg', 'front', 'right')).toBe(false);
+    for (let n = 0; n < 40; n++) f.animator.update(a, .02);
+    expect(f.animator.flinching).toBe(false); expect(spine.quaternion.x).toBeCloseTo(0, 6);
+    f.animator.dispose();
+  });
+});

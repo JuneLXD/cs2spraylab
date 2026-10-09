@@ -5,7 +5,9 @@ import {pistolIds} from '../config';
 import type {Equipment} from '../equipment';
 import {DualPistolGrip} from './weapon-grip';
 import {BOT_COLLAPSE_SECONDS, DEATH_POSE_BLEND_SECONDS, deathVariant} from './round-flow';
-import {DeathPhysics, skeletalDeathLinks, type DeathWorld, type DeathContact} from './death-physics';
+import {DeathPhysics, buildCorpseRig, type DeathWorld, type DeathContact} from './death-physics';
+import {flinchCandidates, type FlinchFamily, type FlinchSide} from './flinch';
+import type {Hitgroup} from './types';
 import {nativeReloadWindow} from '../native-view-actions';
 import type {ReloadPhase} from '../weapon-actions';
 import {syncAnimationActions} from '../animation-actions';
@@ -14,6 +16,7 @@ import {StrafeBlend} from './strafe-blend';
 export type DuelPresentationFrame = {reloadRemaining?: number; reloadDuration?: number; deathWorld?: DeathWorld;
   reloadPhase?: ReloadPhase; reloadProgress?: number; deathVelocity?: Vec};
 export type WeaponGestureOptions = {duration?: number; crouched?: boolean; side?: 'left' | 'right'; lastShot?: boolean};
+const FLINCH_FADE = .06;
 const upperBone = (name: string) => /^(?:(?:spine_|neck_|head_|clavicle_|arm_|hand_|finger_|thumb_)|wpn(?:Pivot)?$)/.test(name);
 export function nativeGestureClips(asset: {animations: THREE.AnimationClip[]; parser: {json: {animations?: {extras?: {additive?: boolean; additive_composed?: boolean}}[]}}}) {
   asset.animations.forEach((clip, index) => {
@@ -81,8 +84,13 @@ export class DuelAnimator {
   private deathWorld?: DeathWorld;
   private dynamicDeath?: DeathPhysics;
   private readonly deathPoseRoot = new THREE.Matrix4();
-  private deathBindings: {bone: THREE.Object3D; child?: THREE.Object3D; direction: THREE.Vector3;
-    quaternion: THREE.Quaternion}[] = [];
+  /** Parents first: a bone's world rotation is solved against its already updated parent. */
+  private deathBindings: {bone: THREE.Object3D; quaternion: THREE.Quaternion; position?: boolean;
+    segment?: {from?: string; child: string; direction: THREE.Vector3};
+    frame?: {primary: string; left: string; right: string; basis: THREE.Quaternion}}[] = [];
+  private flinches: {key: string; elapsed: number; fade?: number}[] = [];
+  private flinchTurn = 0;
+  private readonly scratch = {a: new THREE.Vector3(), b: new THREE.Vector3(), c: new THREE.Vector3(), basis: new THREE.Quaternion(), matrix: new THREE.Matrix4()};
   private vector = new THREE.Vector3();
   private quaternion = new THREE.Quaternion();
   private inverse = new THREE.Quaternion();
@@ -113,7 +121,7 @@ export class DuelAnimator {
     for (const clip of clips) {
       if (!clip.name.includes('/world/')) continue;
       const key = clip.name.split('/').pop()!.replace(/\.\d+$/, '');
-      if (key.startsWith('gesture_')) continue;
+      if (key.startsWith('gesture_') || key.startsWith('flinch_')) continue;
       if (equipment && (key.endsWith(family === 'pistol' ? '_rifle' : '_pistol') ||
         /^idle_(?:crouch_)?(usp|glock|hkp|p250|deagle|elite|fiveseven|tec9|cz75a|revolver)$/.test(key) &&
         key !== `idle_${weaponIdle}` && key !== `idle_crouch_${weaponIdle}`)) continue;
@@ -165,6 +173,48 @@ export class DuelAnimator {
     const duration = options.duration ?? clip?.duration ?? 0;
     if (!clip || !Number.isFinite(duration) || duration <= 0 || this.dying) return false;
     this.gesture = {name: name!, duration, elapsed: 0}; return true;
+  }
+  /** The native flinch pack: bind-pose rotation deltas, registered twice so a new hit can cross-fade over a running one. */
+  addFlinchClips(clips: THREE.AnimationClip[]) {
+    if (this.disposed) return;
+    for (const clip of clips) {
+      const name = clip.name.split('/').pop()!;
+      if (!name.startsWith('flinch_') || this.actions.has(`${name}#0`)) continue;
+      for (const slot of [0, 1]) {
+        const bound = clip.clone(); bound.name = `${clip.name}#${slot}`;
+        bound.tracks = bound.tracks.filter(track => {
+          const target = track.name.slice(0, track.name.lastIndexOf('.'));
+          return track.name.endsWith('.quaternion') && !/^(?:root_motion|pelvis|wpn|wpnPivot)$|AIM|jiggle/.test(target) && !!this.model.getObjectByName(target);
+        });
+        if (!bound.tracks.length) break;
+        bound.blendMode = THREE.AdditiveAnimationBlendMode;
+        const action = this.mixer.clipAction(bound); action.paused = true; action.enabled = false;
+        this.actions.set(`${name}#${slot}`, action);
+      }
+    }
+  }
+  /** Plays the game's hit reaction for a body part and attack side; a new hit fades the running one out. */
+  flinch(group: Hitgroup, side: FlinchSide, limb: 'left' | 'right', family: FlinchFamily = 'rifle') {
+    if (this.disposed || this.dying) return false;
+    const name = flinchCandidates(group, side, limb, family).find(candidate => this.actions.has(`${candidate}#0`));
+    if (!name) return false;
+    const key = `${name}#${this.flinchTurn++ % 2}`;
+    for (const entry of this.flinches) if (entry.fade === undefined) entry.fade = 0;
+    this.flinches = this.flinches.filter(entry => entry.key !== key);
+    this.flinches.push({key, elapsed: 0});
+    return true;
+  }
+  get flinching() {return this.flinches.length > 0;}
+  private flinchElapsed(key: string) {return this.flinches.find(entry => entry.key === key)?.elapsed ?? 0;}
+  private advanceFlinches(dt: number, resolved: Map<string, number>) {
+    for (const entry of this.flinches) {entry.elapsed += dt; if (entry.fade !== undefined) entry.fade += dt;}
+    this.flinches = this.flinches.filter(entry => entry.elapsed < (this.actions.get(entry.key)?.getClip().duration ?? 0)
+      && (entry.fade === undefined || entry.fade < FLINCH_FADE));
+    for (const entry of this.flinches) {
+      const duration = this.actions.get(entry.key)!.getClip().duration;
+      const weight = Math.min(1, entry.elapsed / .03, (duration - entry.elapsed) / .08) * (entry.fade === undefined ? 1 : 1 - entry.fade / FLINCH_FADE);
+      if (weight > .001) resolved.set(entry.key, weight);
+    }
   }
   setDeathWorld(world?: DeathWorld) {this.deathWorld = world;}
 
@@ -222,6 +272,7 @@ export class DuelAnimator {
       const key = this.actions.has(name) ? name : fallback;
       resolved.set(key, (resolved.get(key) ?? 0) + weight);
     }
+    this.advanceFlinches(dt, resolved);
     const weaponIdle = `gesture_idle_${actor.equipment}`;
     if (!airborne && this.actions.has(weaponIdle)) resolved.set(weaponIdle, 1);
     for (const [name, action] of this.actions) {
@@ -233,6 +284,7 @@ export class DuelAnimator {
       // Native idle clips can be a single pose at t=0, with no duration.
       action.time = length <= 0 ? 0 : name.startsWith('jump') ? Math.min(this.airTime, Math.max(0, length - .0001))
         : name.startsWith('idle') || name.startsWith('gesture_idle_') ? (this.idleTime * .167) % length
+        : name.startsWith('flinch_') ? Math.min(this.flinchElapsed(name), Math.max(0, length - .0001))
         : name.startsWith('inair') ? this.idleTime % length : this.gaitPhase * length;
     }
     if (actor.reloading && !this.gesture?.name.includes('reload')) this.playAction(actor.equipment, 'reload',
@@ -290,50 +342,94 @@ export class DuelAnimator {
     if (actor.equipment === 'elite' && !this.gesture) this.dualGrip.update();
   }
 
+  /** Solves the corpse as a joint rig and poses the skeleton by rotating bones only, so the skin never stretches. */
   private updateDynamicDeath(actor: DuelActorSnapshot, dt: number, velocity?: Vec) {
     this.model.updateWorldMatrix(true, false);
     if (this.dynamicDeath?.sleeping && this.model.matrixWorld.equals(this.deathPoseRoot)) return;
     if (!this.dynamicDeath) {
-      this.dying = true; this.gesture = undefined;
+      this.dying = true; this.gesture = undefined; this.flinches = [];
       const pose: {bone: THREE.Object3D; position: THREE.Vector3; quaternion: THREE.Quaternion}[] = [];
       this.model.traverse(bone => {if (bone instanceof THREE.Bone) pose.push({bone, position: bone.position.clone(), quaternion: bone.quaternion.clone()});});
       this.mixer.stopAllAction();
       for (const value of pose) {value.bone.position.copy(value.position); value.bone.quaternion.copy(value.quaternion);}
       this.model.updateWorldMatrix(true, true);
-      const names: [string, number][] = [['pelvis', .12], ['spine_2', .14], ['head_0', .12],
-        ['arm_upper_L', .07], ['arm_lower_L', .06], ['hand_L', .045], ['arm_upper_R', .07], ['arm_lower_R', .06], ['hand_R', .045],
-        ['leg_lower_L', .07], ['ankle_L', .06], ['leg_lower_R', .07], ['ankle_R', .06]];
-      const bodies = names.flatMap(([name, radius]) => {
-        const bone = this.model.getObjectByName(name); if (!bone) return [];
-        const position = bone.getWorldPosition(new THREE.Vector3()); return [{name, radius, position, mass: name === 'pelvis' ? 4 : 1}];
-      });
-      const links = skeletalDeathLinks.filter(link => bodies.some(b => b.name === link.a) && bodies.some(b => b.name === link.b));
-      this.dynamicDeath = new DeathPhysics(bodies, links, velocity ?? {x: actor.velocity.x, y: 0, z: actor.velocity.z});
-      const impulse = actor.deathDirection ?? {x: 0, y: 0, z: 1};
-      this.dynamicDeath.impulse('spine_2', {x: impulse.x * 2, y: -.3, z: impulse.z * 2});
-      for (const body of bodies) {
-        const bone = this.model.getObjectByName(body.name)!;
-        // Only direct skeletal children define orientation; renderer translations follow solved points.
-        const child = bone.children.find(node => node instanceof THREE.Bone);
-        const direction = child ? child.getWorldPosition(new THREE.Vector3()).sub(bone.getWorldPosition(new THREE.Vector3())).normalize() : new THREE.Vector3(0, 1, 0);
-        this.deathBindings.push({bone, child, direction, quaternion: bone.getWorldQuaternion(new THREE.Quaternion())});
+      const worldPosition = (name: string) => {
+        const bone = this.model.getObjectByName(name); return bone ? bone.getWorldPosition(new THREE.Vector3()) : undefined;
+      };
+      const rig = buildCorpseRig(worldPosition);
+      if (!rig) {this.deathWorld = undefined; this.dying = false; this.updateDeath(actor, dt); return;}
+      this.dynamicDeath = new DeathPhysics(rig.bodies, rig.links, velocity ?? {x: actor.velocity.x, y: 0, z: actor.velocity.z},
+        {struts: rig.struts, hinges: rig.hinges, selfCollision: true, damping: .98, friction: .45, iterations: 10});
+      // The lethal shot pushes the part it hit, plus a share of the trunk; a limb takes the side the bullet entered.
+      const direction = actor.deathDirection ?? {x: -Math.sin(actor.yaw), y: 0, z: -Math.cos(actor.yaw)};
+      const speed = actor.deathImpulse ?? 2;
+      const limb = direction.x * Math.cos(actor.yaw) - direction.z * Math.sin(actor.yaw) > 0 ? 'L' : 'R';
+      const targets: Record<Hitgroup, [string, number][]> = {
+        head: [['head_0', 1], ['spine_2', .35]],
+        chest: [['spine_2', 1], ['arm_upper_L', .6], ['arm_upper_R', .6], ['head_0', .4]],
+        stomach: [['pelvis', 1], ['spine_2', .6]],
+        arm: [[`arm_lower_${limb}`, 1], [`arm_upper_${limb}`, .5], ['spine_2', .3]],
+        leg: [[`leg_lower_${limb}`, 1], [`leg_upper_${limb}`, .5], ['pelvis', .3]],
+      };
+      for (const [name, share] of targets[actor.deathGroup ?? 'chest'])
+        this.dynamicDeath.impulse(name, {x: direction.x * speed * share, y: (direction.y * speed - .3) * share, z: direction.z * speed * share});
+      const has = (name: string) => rig.bodies.some(body => body.name === name);
+      const bind = (name: string) => {
+        const bone = this.model.getObjectByName(name)!;
+        return {bone, quaternion: bone.getWorldQuaternion(new THREE.Quaternion())};
+      };
+      const segment = (name: string, child: string, from = name) =>
+        this.deathBindings.push({...bind(name), position: name === 'pelvis', segment: {from: from === name ? undefined : from, child,
+          direction: worldPosition(child)!.sub(worldPosition(from)!).normalize()}});
+      // The trunk takes its full rotation from the hips and the shoulder girdle; a skeleton without them turns by its spine only.
+      for (const [name, primary, left, right] of [['pelvis', 'spine_2', 'leg_upper_L', 'leg_upper_R'], ['spine_2', 'arm_upper_L', 'arm_upper_L', 'arm_upper_R']] as const) {
+        if (![name, primary, left, right].every(has)) {if (has(name) && has(name === 'pelvis' ? 'spine_2' : 'head_0')) segment(name, name === 'pelvis' ? 'spine_2' : 'head_0'); continue;}
+        // The shoulder girdle's primary axis runs from the chest to the midpoint between the shoulders.
+        const to = name === 'pelvis' ? worldPosition(primary)! : worldPosition(left)!.add(worldPosition(right)!).multiplyScalar(.5);
+        const basis = this.basisQuaternion(to.sub(worldPosition(name)!), worldPosition(right)!.sub(worldPosition(left)!), new THREE.Quaternion());
+        this.deathBindings.push({...bind(name), position: name === 'pelvis', frame: {primary, left, right, basis}});
       }
+      // The neck follows the head joint, which hangs free of the shoulder girdle.
+      if (has('spine_2') && has('head_0') && this.model.getObjectByName('neck_0')) segment('neck_0', 'head_0', 'spine_2');
+      for (const [name, child] of [['arm_upper_L', 'arm_lower_L'], ['arm_lower_L', 'hand_L'], ['arm_upper_R', 'arm_lower_R'], ['arm_lower_R', 'hand_R'],
+        ['leg_upper_L', 'leg_lower_L'], ['leg_lower_L', 'ankle_L'], ['leg_upper_R', 'leg_lower_R'], ['leg_lower_R', 'ankle_R']] as const)
+        if (has(name) && has(child)) segment(name, child);
     }
     for (const contact of this.dynamicDeath.step(dt, this.deathWorld)) this.onDeathContact?.(contact);
+    const {a, b, basis} = this.scratch;
     for (const binding of this.deathBindings) {
       const point = this.dynamicDeath.point(binding.bone.name)!;
-      this.vector.set(point.x, point.y, point.z);
-      binding.bone.parent?.worldToLocal(this.vector); binding.bone.position.copy(this.vector);
-      const child = binding.child && this.dynamicDeath.point(binding.child.name);
-      if (child) {
-        this.vector.set(child.x - point.x, child.y - point.y, child.z - point.z).normalize();
-        this.quaternion.setFromUnitVectors(binding.direction, this.vector).multiply(binding.quaternion);
-        binding.bone.parent?.getWorldQuaternion(this.inverse); this.inverse.invert();
-        binding.bone.quaternion.copy(this.inverse.multiply(this.quaternion));
+      if (binding.position) {
+        this.vector.set(point.x, point.y, point.z);
+        binding.bone.parent?.worldToLocal(this.vector); binding.bone.position.copy(this.vector);
       }
+      if (binding.segment) {
+        const child = this.dynamicDeath.point(binding.segment.child)!, from = binding.segment.from ? this.dynamicDeath.point(binding.segment.from)! : point;
+        this.vector.set(child.x - from.x, child.y - from.y, child.z - from.z).normalize();
+        this.quaternion.setFromUnitVectors(binding.segment.direction, this.vector).multiply(binding.quaternion);
+      } else if (binding.frame) {
+        const primary = this.dynamicDeath.point(binding.frame.primary)!, left = this.dynamicDeath.point(binding.frame.left)!, right = this.dynamicDeath.point(binding.frame.right)!;
+        if (binding.frame.primary === binding.frame.left) a.set((left.x + right.x) / 2 - point.x, (left.y + right.y) / 2 - point.y, (left.z + right.z) / 2 - point.z);
+        else a.set(primary.x - point.x, primary.y - point.y, primary.z - point.z);
+        b.set(right.x - left.x, right.y - left.y, right.z - left.z);
+        this.basisQuaternion(a, b, this.quaternion).multiply(basis.copy(binding.frame.basis).invert()).multiply(binding.quaternion);
+      } else continue;
+      binding.bone.parent?.getWorldQuaternion(this.inverse); this.inverse.invert();
+      binding.bone.quaternion.copy(this.inverse.multiply(this.quaternion));
       binding.bone.updateWorldMatrix(false, true);
     }
     this.deathPoseRoot.copy(this.model.matrixWorld);
+  }
+  /** Rotation of the frame whose x axis is `primary` and whose z axis is normal to `primary` and `secondary`. */
+  private basisQuaternion(primary: THREE.Vector3, secondary: THREE.Vector3, target: THREE.Quaternion) {
+    const {c, matrix} = this.scratch;
+    const x = primary.normalize();
+    const z = c.crossVectors(x, secondary);
+    if (z.lengthSq() < 1e-10) z.set(0, 1, 0).cross(x);
+    if (z.lengthSq() < 1e-10) z.set(1, 0, 0).cross(x);
+    z.normalize();
+    const y = secondary.crossVectors(z, x);
+    return target.setFromRotationMatrix(matrix.makeBasis(x, y, z));
   }
 
   private updateDeath(actor: DuelActorSnapshot, dt: number, age?: number) {
@@ -422,6 +518,6 @@ export class DuelAnimator {
     if (this.disposed) return;
     this.disposed = true; this.gesture = undefined;
     this.mixer.stopAllAction(); this.mixer.uncacheRoot(this.model);
-    this.actions.clear(); this.activeActions.clear(); this.absoluteGestures.clear(); this.deathBindings = []; this.dynamicDeath = undefined;
+    this.actions.clear(); this.activeActions.clear(); this.absoluteGestures.clear(); this.deathBindings = []; this.dynamicDeath = undefined; this.flinches = [];
   }
 }

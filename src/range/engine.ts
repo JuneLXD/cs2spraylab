@@ -27,7 +27,7 @@ import type {DrillMode, ProgressionController} from './progression';
 import {batchStaticMeshes, disposeResources} from './duel/render-resources';
 import {ImpactCloud} from './impact-cloud';
 import {FrameMetrics, FramePacer, PerformanceMeter, qualityPolicy, renderPixelRatio} from './performance';
-import {ShortcutGuard} from './shortcut-guard';
+import {ShortcutGuard, requestStageFullscreen} from './shortcut-guard';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from './keybinds/runtime';
 import {attachBindInput} from './keybinds/dom-input';
 import {protectedCodes} from './keybinds/profile';
@@ -93,6 +93,7 @@ export class RangeEngine {
   private metrics = new FrameMetrics();
   private meter: PerformanceMeter;
   private shortcuts: ShortcutGuard;
+  private readonly stage: HTMLElement | null;
   private entering = false;
   private enterRevision = 0;
   private shotEffects: ShotEffects;
@@ -147,7 +148,7 @@ export class RangeEngine {
     this.crosshair = crosshair; this.hitmarker = hitmarker;
     this.scope = new ScopeOverlay(host);
     this.meter = new PerformanceMeter(host); this.meter.configure(settings.showFps);
-    this.shortcuts = new ShortcutGuard(host.closest('.range-stage'));
+    this.stage = host.closest('.range-stage'); this.shortcuts = new ShortcutGuard(this.stage);
     this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
     this.cues.forEach((cue, i) => { cue.className = `aim-cue ${i ? 'next' : 'now'}`; cue.style.color = i ? GUIDE_COLORS.next : GUIDE_COLORS.now; cue.innerHTML = `<i></i><span>${i ? 'NEXT' : 'NOW'}</span>`; host.append(cue); });
     this.cueLabels = this.cues.map(cue => cue.querySelector('span')!);
@@ -760,7 +761,9 @@ export class RangeEngine {
     const coarse = matchMedia('(pointer: coarse)').matches;
     const supported = typeof this.renderer.domElement.requestPointerLock === 'function';
     const capture = coarse || !supported ? Promise.resolve<'drag'>('drag') : requestRawLock(this.renderer.domElement);
-    const guard = this.shortcuts.enter(this.sim.settings.protectShortcuts && supported && !coarse);
+    const fullscreen = this.sim.settings.autoFullscreen && !coarse ? requestStageFullscreen(this.stage) : undefined;
+    const protect = this.sim.settings.protectShortcuts && supported && !coarse;
+    const guard = protect && fullscreen ? this.shortcuts.enter(protect, fullscreen) : this.shortcuts.enter(protect);
     try {
       const mode = await capture;
       await guard;

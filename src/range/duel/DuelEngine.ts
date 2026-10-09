@@ -21,6 +21,10 @@ import {acousticSolids, duelArena, traceSolid, type Arena, type Solid} from './g
 import {DuelSimulation} from './simulation';
 import type {DuelActorSnapshot, DuelEvent} from './types';
 import {DuelAnimator, nativeGestureClips} from './animation';
+import {requestStageFullscreen} from '../shortcut-guard';
+import {BloodEffects} from '../blood-effects';
+import {applyImmunityAlpha} from './immunity-alpha';
+import {attackSide, flinchFamily, limbSide} from './flinch';
 import {NativeHitboxPose} from './native-hitboxes';
 import {batchStaticMeshes, disposeResources, disposeSkeletons} from './render-resources';
 import {fullyOccluded} from './visibility';
@@ -65,6 +69,8 @@ export type DuelStatus = {
   nextRoundIn: number;
   /** Deathmatch on an imported map: deaths so far and, while dead, seconds until the respawn. */
   deathmatch?: boolean; deaths?: number; respawnIn?: number;
+  /** Deathmatch: seconds of spawn protection left for you. */
+  immuneFor?: number;
   equipped?: Equipment; review?: DuelReview; history?: DuelHistory[];
   loadout?: {primary: Weapon | null; sidearm: Settings['sidearm'] | null}; pickup?: Equipment;
   interaction?:string;
@@ -130,6 +136,9 @@ export class DuelEngine {
   private heldWeapons = new Map<number, THREE.Object3D>();
   private animators = new Map<number, DuelAnimator>();
   private gestureClips=new Map<Equipment,THREE.AnimationClip[]>();
+  private flinchClips: THREE.AnimationClip[] = [];
+  private readonly stage: HTMLElement | null;
+  private readonly blood: BloodEffects;
   private gestureLoading=new Set<Equipment>();
   private targetScene?: THREE.Object3D;
   private targetClips: THREE.AnimationClip[] = [];
@@ -207,7 +216,7 @@ export class DuelEngine {
     this.scope = new ScopeOverlay(host);
     this.damageFeedback = new DamageFeedback(host);
     this.meter = new PerformanceMeter(host); this.meter.configure(settings.showFps);
-    this.shortcuts = new ShortcutGuard(host.closest('.range-stage'));
+    this.stage = host.closest('.range-stage'); this.shortcuts = new ShortcutGuard(this.stage);
     this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
     this.binds = new BindRuntime(settings.keyboard, event => this.onBind(event));
     this.applyViewmodel(settings.viewmodel);
@@ -236,6 +245,7 @@ export class DuelEngine {
     this.scene.add(this.actors, this.covers, this.dynamicCovers, this.effects,this.actorShadows.group);
     this.audio.setAcoustics(this.acoustics);
     this.shotEffects = new ShotEffects(this.effects); this.viewFlashes = new MuzzleFlashes(this.viewScene, 2);
+    this.blood = new BloodEffects(this.effects);
     this.rebuildCovers();
     this.bindInput();
     this.observer = new ResizeObserver(() => this.resize()); this.observer.observe(host);
@@ -457,6 +467,13 @@ export class DuelEngine {
         this.motionReady = true;
         this.rebuildActors();
       } catch { /* Keep the baseline idle/run set if local native clips are absent. */ }
+      try {
+        const flinch = await new GLTFLoader().loadAsync('/models/duel-flinch.glb?v=1');
+        const animations = nativeGestureClips(flinch); disposeResources([flinch.scene]);
+        if (this.disposed || revision !== this.agentRevision) return;
+        this.flinchClips = animations;
+        for (const animator of this.animators.values()) animator.addFlinchClips(animations);
+      } catch { /* Bots show no hit reaction without the local flinch pack. */ }
       this.sceneLoaded = true;
       void this.preloadViewModels();
     } catch { if (!this.disposed) this.onError('The player model is unavailable. Run npm run assets:build, then reload.'); }
@@ -485,6 +502,7 @@ export class DuelEngine {
     root.add(model); this.actors.add(root); this.models.set(actor.id, root);
     const animator=new DuelAnimator(model, this.targetClips, (actor.id * .317) % 1, actor.equipment);
     animator.addGestureClips(this.gestureClips.get(actor.equipment)??[]);
+    animator.addFlinchClips(this.flinchClips);
     animator.setDeathWorld({floor:0,boxes:this.deathBoxes(actor.position)});
     this.animators.set(actor.id,animator);
     this.generations.set(actor.id, actor.generation);
@@ -757,7 +775,9 @@ export class DuelEngine {
     const supported = typeof this.renderer.domElement.requestPointerLock === 'function';
     this.inputName = coarse ? 'Touch' : 'Mouse';
     const pointerLock = !coarse ? requestRawLock(this.renderer.domElement) : Promise.resolve<'drag'>('drag');
-    const guard = this.shortcuts.enter(!coarse && supported && this.config.shortcutProtection);
+    const fullscreen = this.settings.autoFullscreen && !coarse ? requestStageFullscreen(this.stage) : undefined;
+    const protect = !coarse && supported && this.config.shortcutProtection;
+    const guard = protect && fullscreen ? this.shortcuts.enter(protect, fullscreen) : this.shortcuts.enter(protect);
     void this.audio.unlock(this.settings.weapon);
     void this.audio.unlock(this.settings.sidearm); void this.audio.unlock('knife');
     for (const actor of this.sim.actors.slice(1)) if (actor.weapon.id !== this.settings.weapon) void this.audio.unlock(actor.weapon.id);
@@ -988,6 +1008,17 @@ export class DuelEngine {
         });
         endpoint(event.shotId,event.point);
         this.shotEffects.impact(v3(event.point),this.settings.impactSize,event.shooter===0?this.ownTraceColor:this.enemyTraceColor,this.animationClock);
+        if (!event.lethal && !event.immune && event.victim !== 0) {
+          const victim = this.sim.actors[event.victim], shooter = this.sim.actors[event.shooter];
+          if (victim && shooter) this.animators.get(event.victim)?.flinch(event.group, attackSide(victim.yaw, victim.position, shooter.position),
+            limbSide(victim.yaw, victim.position, event.point), flinchFamily(victim.weapon.id));
+        }
+        // Blood as hit feedback on a bot's body, along the bullet; a protected spawn bleeds nothing.
+        if (!event.immune && event.victim !== 0) {
+          const shooter = this.sim.actors[event.shooter], fire = shots.get(event.shotId);
+          const direction = fire?.direction ?? (shooter ? {x: event.point.x - shooter.position.x, y: event.point.y - shooter.position.y, z: event.point.z - shooter.position.z} : {x: 0, y: 0, z: 1});
+          this.blood.burst(event.point, direction, this.animationClock, event.group === 'head' ? 1.3 : 1);
+        }
         // An Aim Botz bot may already have respawned when a frame runs several ticks.
         const down = event.lethal && !this.sim.actors[event.victim]?.alive;
         if(down)this.animationTimes.delete(event.victim);
@@ -1077,7 +1108,7 @@ export class DuelEngine {
   }
 
   private clearEffects() {
-    this.shotEffects.clear(); this.viewFlashes.clear(); this.shotCounts.clear();
+    this.shotEffects.clear(); this.viewFlashes.clear(); this.shotCounts.clear(); this.blood.clear();
   }
 
   private syncDrops() {
@@ -1110,6 +1141,7 @@ export class DuelEngine {
       model.position.set(actor.position.x, actor.alive ? actor.feet : deathFeet(actor, deathAge, this.sim.arena.solids,
         this.sim.actors[actor.id].verticalVelocity), actor.position.z);
       model.rotation.y = actor.yaw - Math.PI;
+      applyImmunityAlpha(model, !!actor.immune && actor.alive);
       if (model.visible || !actor.alive) {
         const elapsed = this.animationTimes.has(actor.id) ? this.animationClock - this.animationTimes.get(actor.id)! : dt;
         if (dt > 0 && this.animationTimes.has(actor.id) && elapsed < 1 / this.metrics.animationRate(this.settings.quality)) continue;
@@ -1150,6 +1182,7 @@ export class DuelEngine {
       damage: this.damage, input: this.inputName, caption: this.animationClock < this.captionUntil ? this.caption : '',
       mapLoading: !!this.workshop && !this.workshopModel,
       shortcutProtected: this.shortcuts.protected, nextRoundIn: this.roundFlow.remaining(this.config.feedbackSeconds),
+      immuneFor: this.sim.deathmatch ? Math.max(0, (this.sim.actors[0].immuneUntil ?? 0) - this.sim.time) : undefined,
       ...(this.sim.deathmatch ? {deathmatch: true, deaths: this.sim.deathmatchStats.deaths, respawnIn: this.sim.respawnIn(0)} : {}),
       equipped: player.equipment, review: this.sim.coach.review(), history: this.history,
       loadout: this.sim.loadout, pickup: this.sim.nearestPickup()?.equipment, interaction:this.sim.nearestDoor()?.open?'Close door':this.sim.nearestDoor()?'Open door':undefined, arenaDesign: this.sim.arena.design,
@@ -1262,6 +1295,7 @@ export class DuelEngine {
         `${dynamicCrosshairGap({inaccuracy: cone, spread: stats.spread}, this.height, VERTICAL_FOV)}px`);
     } else this.crosshair.style.setProperty('--motion-gap', '0px');
     this.shotEffects.update(this.animationClock); this.viewFlashes.update(this.animationClock);
+    this.blood.update(this.animationClock, this.camera, this.renderer);
     this.renderer.setViewport(0, 0, this.width, this.height);
     this.renderer.autoClear = true; this.renderer.render(this.scene, this.camera);
     this.renderer.autoClear = false; this.renderer.clearDepth();
@@ -1294,7 +1328,7 @@ export class DuelEngine {
     this.meter.dispose();
     this.radar.dispose();
     this.actorShadows.dispose();
-    this.shotEffects.dispose(); this.viewFlashes.dispose();
+    this.shotEffects.dispose(); this.viewFlashes.dispose(); this.blood.dispose();
     disposeResources([this.scene, this.viewScene, ...this.worldWeapons.values(), ...(this.targetScene && !this.agentInstance ? [this.targetScene] : [])]);
     this.agentRevision++;this.agentInstance?.dispose();this.actorLoader.dispose();
     this.renderer.dispose(); this.renderer.domElement.remove();

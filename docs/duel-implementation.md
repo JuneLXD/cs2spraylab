@@ -57,9 +57,24 @@ older range drills.
 - The renderer uses a CS2-derived third-person rig and weapon assets already
   produced by this project's local asset pipeline. When present,
   `duel-motion.glb` adds 40 clips: eight-way run/walk/crouch, directional jump,
-  crouch-jump/in-air, idle, and three native deaths. A small floor-contact
-  correction settles corpses without a ragdoll solver. Player death lowers and
+  crouch-jump/in-air, idle, and three native deaths. Player death lowers and
   rolls the first-person camera. Otherwise the baseline target clips are used.
+- Deaths (2026-10-09): a corpse is a 15-joint verlet rig built from the posed
+  skeleton at the moment of death (`buildCorpseRig` in `death-physics.ts`):
+  bone links, rigid hip and shoulder frames, distance limits for knees, elbows,
+  hip fold and neck, self-collision and floor/prop contacts, with the lethal
+  shot's push on the part it hit (`deathImpulse`, from the damage, capped) and
+  the actor's velocity. The skeleton follows by rotating bones only (the pelvis
+  also translates), so the skin never stretches; the body topples, lands and
+  sleeps in about a second. Before this the rig moved bone positions, which
+  scrunched the mesh into a seated heap.
+- Flinch (2026-10-09): `duel-flinch.glb` (`tools/build-duel-flinch.mjs`) holds
+  the game's 42 `flinch_*` clips (rifle, pistol and knife families) as additive
+  bind-pose deltas. A non-lethal hit plays the clip for the hit group and the
+  attack side (`flinch.ts`), restarting with a short cross-fade on repeated hits.
+- Blood (2026-10-09): `blood-effects.ts` draws a burst of droplets and two mist
+  puffs at a bot's hit point along the bullet, gone in half a second; nothing
+  sticks to surfaces, by request.
 - Fixed-tick positions are interpolated for display, with immediate local mouse
   orientation. Native locomotion clips blend by direction, actual speed and
   continuous crouch fraction on a shared stride phase. Bot aim has bounded
@@ -153,3 +168,13 @@ recoil and recovery fields across 17 weapons match installed build 2000918;
 that is not a full engine-behavior validation. USP-S and knife are available
 in the original range but are not yet duel loadouts. Do not claim exact CS2
 parity until independent current-build fixtures and low-end GPU tests exist.
+
+### Spawn protection (2026-10-09)
+
+`spawnImmunitySeconds` (default 4, the game's `mp_respawn_immunitytime`; 0-10 in
+the Deathmatch setup as "Spawn protection") makes every actor immune to damage
+after each spawn: hits still register (the hit event carries `immune: true`)
+but cost nothing, draw no blood and no flinch. Immunity ends when the actor
+attacks, as in the game, or when the timer runs out. The HUD shows you an
+IMMUNE countdown and immune bots render translucent (`immunity-alpha.ts`, the
+game's `sv_disable_immunity_alpha` behaviour).

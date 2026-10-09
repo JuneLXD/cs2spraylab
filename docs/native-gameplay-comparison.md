@@ -443,9 +443,11 @@ weapon) carry only draw, fire, reload, inspect, idle and settle clips with varia
 parameters, nothing driven by movement or look input. The AK's graph references a single fire clip,
 so there is no fire variation to add. The trainer's clip set matches; its 2 mm walking bob is
 below visibility and stays. The weapon's share of the recoil kick remains unverified: the viewmodel
-entity has no symbol or convar to find it by. Bot world models are a known gap: `target.glb` holds
-idle and east/west run clips only, while the game blends eight directions, walk and crouch cycles;
-adding those needs the Windows model export.
+entity has no symbol or convar to find it by. The Duel bots blend the game's locomotion set (`duel-motion.glb`: eight-way run, walk and
+crouch cycles, jumps, pistol idles); only the practice range's drill dummy (`target.glb`) is limited
+to idle and two run clips. Since 2026-10-09 the bots also play the game's flinch clips on hits and die
+as a joint rig that topples and lies down (see `docs/duel-implementation.md`); turn-in-place,
+planted-foot transitions and landing clips remain the gaps.
 
 ## Server rules: subtick movement, fire timing, footsteps, penetration, movement audit (tenth pass)
 

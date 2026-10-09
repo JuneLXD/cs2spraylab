@@ -49,6 +49,8 @@ export type Settings = {
   frameLimit: number; showFps: boolean; animatedGuides: boolean; protectShortcuts: boolean;
   /** Desynchronized (low-latency) canvas; see render-context.ts. */
   lowLatency: boolean;
+  /** Entering or resuming a session takes the browser fullscreen. */
+  autoFullscreen: boolean;
   showImpactPattern: boolean; showMousePath: boolean;
   peekScenario: 'mixed' | 'common' | 'deep' | 'off-angle' | 'elevated';
   peekDuration: number;
@@ -89,7 +91,7 @@ export const defaults: Settings = {
   weapon: 'awp', sidearm: 'usp', primaryEnabled: true, mode: 'redline', sensitivity: 1, dpi: 800, invertY: false,
   moving: false, targetSpeed: 'rifle', follow: false, volume: 0.2,
   spread: true, burst: 0, quality: 'high', impactSize: 1.5,
-  frameLimit: 0, showFps: true, animatedGuides: true, protectShortcuts: false, lowLatency: true,
+  frameLimit: 0, showFps: true, animatedGuides: true, protectShortcuts: false, lowLatency: true, autoFullscreen: true,
   transferAfter: 15, transferRule: 'bullet',
   showImpactPattern: true, showMousePath: true,
   peekScenario: 'mixed', peekDuration: 1, drillPace: 'practice',
@@ -134,7 +136,7 @@ export function sanitizeSettings(raw: unknown): Settings {
       ? s.frameLimit! : s.quality === 'performance' ? 60 : 0,
     // A profile saved before these settings existed keeps what it had then: no FPS overlay, Ctrl+W protected.
     showFps: s.showFps === true, animatedGuides: s.animatedGuides !== false, protectShortcuts: s.protectShortcuts !== false,
-    lowLatency: s.lowLatency !== false,
+    lowLatency: s.lowLatency !== false, autoFullscreen: s.autoFullscreen !== false,
     // The former Display aspect setting picks the matching resolution; native moves to the new 1920x1440 default.
     resolution: resolutions.find(value => value === s.resolution) ?? legacyAspects[(s as { aspect?: string }).aspect ?? ''] ?? defaults.resolution,
     crosshair: {

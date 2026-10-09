@@ -43,6 +43,8 @@ export type DuelConfig = {
   respawnSeconds: number;
   /** Deathmatch only: sv_infinite_ammo for you. 'reserve' = 2 (reload, never run dry), 'magazine' = 1 (never reload); bots keep normal magazines. */
   infiniteAmmo: BotzAmmo;
+  /** Deathmatch: seconds of damage immunity after every spawn (mp_respawn_immunitytime, 4 in the game); attacking ends it early. */
+  spawnImmunitySeconds: number;
 };
 
 export const duelDefaults: DuelConfig = {
@@ -55,6 +57,7 @@ export const duelDefaults: DuelConfig = {
   mapDesign: 'random',
   respawnSeconds: 0,
   infiniteAmmo: 'off',
+  spawnImmunitySeconds: 4,
 };
 
 const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' && !Array.isArray(value)
@@ -102,6 +105,7 @@ export function sanitizeDuelConfig(raw: unknown): DuelConfig {
     shortcutProtection: input.shortcutProtection !== false, overrides,
     respawnSeconds: Math.round(finite(input.respawnSeconds, duelDefaults.respawnSeconds, 0, 10) * 2) / 2,
     infiniteAmmo: ammoModes.find(mode => mode === input.infiniteAmmo) ?? duelDefaults.infiniteAmmo,
+    spawnImmunitySeconds: Math.round(finite(input.spawnImmunitySeconds, duelDefaults.spawnImmunitySeconds, 0, 10) * 2) / 2,
   };
 }
 

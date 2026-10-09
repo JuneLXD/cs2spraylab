@@ -17,7 +17,8 @@ const arena: Arena = workshopArena('aim_redline', redline as unknown as Workshop
 const spawns = arena.workshop!.spawns;
 const tSide = (point: Vec) => point.x < 8, ctSide = (point: Vec) => point.x > 15;
 const deathmatch = (patch: Partial<DuelConfig> = {}, seed = 5) => {
-  const sim = new DuelSimulation(sanitizeDuelConfig({botCount: 3, respawnSeconds: 2, skill: 3, ...patch}), seed, arena, 'ak47', 'usp', true);
+  // Spawn protection is off here unless a test asks for it: the kill tests shoot straight after spawning.
+  const sim = new DuelSimulation(sanitizeDuelConfig({botCount: 3, respawnSeconds: 2, skill: 3, spawnImmunitySeconds: 0, ...patch}), seed, arena, 'ak47', 'usp', true);
   sim.actors[0].weapon = new DuelWeaponState('ak47', () => 0);
   return sim;
 };
@@ -196,5 +197,42 @@ describe('deathmatch on aim_redline', () => {
     const never = hold('magazine');
     expect(never.shots).toBeGreaterThan(normal.shots);
     expect(never).toMatchObject({ammo: magazine, reserve, reloading: false});
+  });
+});
+
+describe('deathmatch spawn protection', () => {
+  it('defaults to the game\'s 4 s, saves in half seconds and can be turned off', () => {
+    expect(sanitizeDuelConfig({}).spawnImmunitySeconds).toBe(4);
+    expect(sanitizeDuelConfig({spawnImmunitySeconds: 2.3}).spawnImmunitySeconds).toBe(2.5);
+    expect(sanitizeDuelConfig({spawnImmunitySeconds: 99}).spawnImmunitySeconds).toBe(10);
+    expect(sanitizeDuelConfig({spawnImmunitySeconds: 0}).spawnImmunitySeconds).toBe(0);
+  });
+  it('protects everyone at spawn: a hit registers without damage until the timer runs out or the victim attacks', () => {
+    const sim = deathmatch({botCount: 1, spawnImmunitySeconds: 3}), bot = sim.actors[1];
+    sim.start();
+    expect(sim.snapshot().map(actor => actor.immune)).toEqual([true, true]);
+    expose(sim, 1); aimAt(sim, 1); sim.command(1, {forward: 0, side: 0, fireHeld: false, firePressed: false});
+    fire(sim);
+    const hit = sim.drainEvents().find(event => event.kind === 'hit');
+    expect(hit && hit.kind === 'hit' ? [hit.victim, hit.healthDamage, hit.armorDamage, hit.immune] : 'no hit').toEqual([1, 0, 0, true]);
+    expect(bot.health).toBe(100);
+    // Your own shot ended your protection; the bot keeps its own until it shoots or 3 s pass.
+    expect(sim.snapshot()[0].immune).toBe(false);
+    runFor(sim, 3.25);
+    expect(sim.snapshot()[1].immune).toBe(false);
+    expose(sim, 1); aimAt(sim, 1); sim.command(1, {forward: 0, side: 0, fireHeld: false, firePressed: false}); fire(sim);
+    expect(sim.actors[1].health < 100 || !sim.actors[1].alive).toBe(true);
+  });
+  it('comes back with every respawn and shows you a countdown', () => {
+    const sim = deathmatch({botCount: 1, spawnImmunitySeconds: 2, respawnSeconds: 1});
+    sim.start();
+    runFor(sim, 2.25);
+    expect(sim.snapshot()[0].immune).toBe(false);
+    sim.actors[0].alive = false; sim.actors[0].health = 0;
+    runFor(sim, 1.5);
+    expect(sim.actors[0].alive).toBe(true);
+    expect(sim.snapshot()[0].immune).toBe(true);
+    expect(sim.actors[0].immuneUntil! - sim.time).toBeGreaterThan(1.5);
+    expect(sim.actors[0].immuneUntil! - sim.time).toBeLessThanOrEqual(2);
   });
 });

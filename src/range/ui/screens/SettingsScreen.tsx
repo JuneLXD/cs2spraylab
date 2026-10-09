@@ -98,7 +98,9 @@ export const SettingsScreen = memo(function SettingsScreen({settings, profiles, 
               <p className="setting-explanation">Chrome and Edge show each frame without waiting for the page compositor, about a frame sooner after you move the mouse. It can tear, like V-Sync off. Takes effect when you switch drills or reload.</p>
               <Toggle label="Show FPS counter" checked={settings.showFps} onChange={showFps => update({showFps})}/>
               <Button disabled={!settings.showFps || settings.mode==='hearing'} onClick={exportFrames} title={settings.showFps ? 'Download measured frame intervals' : 'Enable the FPS counter to record frame intervals'}><Download size={16}/>Export frame timings</Button>
-              <h2>Browser</h2><Toggle label="Protect range Ctrl+W" checked={settings.protectShortcuts} onChange={protectShortcuts => update({protectShortcuts})}/>
+              <h2>Browser</h2><Toggle label="Fullscreen when you enter" checked={settings.autoFullscreen} onChange={autoFullscreen => update({autoFullscreen})}/>
+              <p className="setting-explanation">Entering or resuming a drill takes the browser fullscreen, like the game. Pausing keeps it; the Fullscreen button in the header leaves it.</p>
+              <Toggle label="Protect range Ctrl+W" checked={settings.protectShortcuts} onChange={protectShortcuts => update({protectShortcuts})}/>
               </>}
             {tab === 'crosshair' && <>
               <div className="sl-crosshair-layout"><div className="sl-crosshair-left"><div className="crosshair-preview" aria-label="Crosshair preview"><span className="sl-preview-label">4× zoom</span><div className="preview-target"/><div className="sl-crosshair-zoom"><CrosshairView value={settings.crosshair}/></div><div className="sl-crosshair-actual"><span className="sl-preview-label">Actual size</span><div className="preview-target"/><CrosshairView value={settings.crosshair}/></div></div><h2>Presets</h2>
