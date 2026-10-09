@@ -87,8 +87,9 @@ describe('tagged movement', () => {
     const first = advanceActor(actor, input, 225 * UNIT, STEP);
     expect(first.velocity.x).toBeCloseTo(225 * UNIT * .3);
     const second = advanceActor(first, input, 225 * UNIT, STEP);
-    expect(second.velocity).toEqual(groundVelocity(first.velocity.x, 0, 1, 0, 225 * UNIT * .3, STEP,
-      {weaponSpeed: 225 * UNIT, ducking: false, walking: false}));
+    expect(second.velocity.x).toBeCloseTo(groundVelocity(first.velocity.x, 0, 1, 0, 225 * UNIT * .3, STEP,
+      {weaponSpeed: 225 * UNIT, ducking: false, walking: false}).x, 12);
+    expect(second.velocity.z).toBe(0);
     expect(second.velocity.x).toBeGreaterThan(first.velocity.x * .95);
     const resting = {...actor, velocity: {x: 0, z: 0}};
     expect(advanceActor(resting, input, 225 * UNIT, STEP).velocity.x)

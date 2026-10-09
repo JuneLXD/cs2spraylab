@@ -98,12 +98,22 @@ export function clampJumpSpeed(velocity: {x: number; z: number}, weaponSpeed: nu
   return {x: velocity.x * limit / length, z: velocity.z * limit / length};
 }
 
-export function airVelocity(vx: number, vz: number, x: number, z: number, speed: number, dt: number) {
+// Native AirAccelerate applies at most half of the uncapped acceleration
+// budget before the collision move; AirMove adds the remainder afterward.
+// Close to the wish cap the entire remaining gain can fit in the first half.
+export function airAcceleration(vx: number, vz: number, x: number, z: number, speed: number, dt: number) {
   const length = Math.hypot(x, z);
-  if (!length) return { x: vx, z: vz };
+  if (!length) return {movement: {x: vx, z: vz}, deferred: {x: 0, z: 0}};
   x /= length; z /= length;
-  const add = Math.min(Math.max(0, Math.min(speed, 30 * UNIT) - vx * x - vz * z), 12 * speed * dt);
-  return { x: vx + x * add, z: vz + z * add };
+  const budget = 12 * speed * dt;
+  const add = Math.min(Math.max(0, Math.min(speed, 30 * UNIT) - vx * x - vz * z), budget);
+  const before = Math.min(add, budget / 2), after = add - before;
+  return {movement: {x: vx + x * before, z: vz + z * before}, deferred: {x: x * after, z: z * after}};
+}
+
+export function airVelocity(vx: number, vz: number, x: number, z: number, speed: number, dt: number) {
+  const {movement, deferred} = airAcceleration(vx, vz, x, z, speed, dt);
+  return {x: movement.x + deferred.x, z: movement.z + deferred.z};
 }
 
 export function advanceActor(
@@ -187,12 +197,18 @@ export function advanceActor(
   const tag = clamp(actor.velocityModifier ?? 1, 0, 1);
   const ducking = crouch || duckAmount > 0;
   const speed = runningSpeed * (ducking ? 1 - .66 * duckAmount : walk ? .52 : 1) * tag;
-  let velocity = airborne
-    ? airVelocity(actor.velocity.x, actor.velocity.z, wishX, wishZ, runningSpeed, dt)
-    : groundVelocity(actor.velocity.x, actor.velocity.z, wishX, wishZ, speed, dt,
+  // Modern jump restores pre-landing momentum only above the weapon cap (or
+  // under explicit auto-bhop rules), and does so before air acceleration.
+  const restoreBhop = wantsJump && supported && (bhop || rules?.autoBhop) && actor.landingVelocityXY &&
+    (rules?.autoBhop || Math.hypot(actor.landingVelocityXY.x, actor.landingVelocityXY.z) > runningSpeed);
+  let initialVelocity = restoreBhop ? actor.landingVelocityXY! : actor.velocity;
+  if (wantsJump && supported) initialVelocity = clampJumpSpeed(initialVelocity, runningSpeed, rules);
+  const air = airborne ? airAcceleration(initialVelocity.x, initialVelocity.z, wishX, wishZ, runningSpeed, dt) : undefined;
+  let deferredVelocity = air?.deferred;
+  let velocity = air
+    ? air.movement
+    : groundVelocity(initialVelocity.x, initialVelocity.z, wishX, wishZ, speed, dt,
       {weaponSpeed: runningSpeed, ducking, walking: walk && !ducking, scopedSlow: input.scopedSlow});
-  if (bhop && actor.landingVelocityXY) velocity = {...actor.landingVelocityXY};
-  if (wantsJump && supported) velocity = clampJumpSpeed(velocity, runningSpeed, rules);
   let moveMode: NonNullable<ActorKinematics['moveMode']> = airborne ? 'air' : 'ground';
   const hullHeight = (72 - 18 * duckCurve) * UNIT;
   if (world && environment?.selfId !== undefined && duckAmount !== currentDuck) {
@@ -237,13 +253,17 @@ export function advanceActor(
     specialVelocity = add(swimming, waterSettings?.current ?? {x: 0, y: 0, z: 0});
     velocity = {x: specialVelocity.x, z: specialVelocity.z}; verticalVelocity = specialVelocity.y;
   }
-  // Ground tagging caps momentum as well as wish speed/acceleration. Do not
-  // multiply velocity every tick, or apply the ground cap to an airborne actor.
-  if (!airborne && tag < 1) {
+  // WalkMove caps the final ground momentum, then defers half the entire
+  // friction/acceleration/cap correction until after the collision move.
+  if (!airborne && !specialVelocity) {
+    const cap = speed * (actor.landedAt !== undefined && actor.landingVelocity !== undefined
+      ? groundLandingFactor(actor.landingVelocity, time + dt - actor.landedAt) : 1);
     const actualSpeed = Math.hypot(velocity.x, velocity.z);
-    if (actualSpeed > speed) {
-      velocity.x *= speed / actualSpeed; velocity.z *= speed / actualSpeed;
+    if (actualSpeed > cap) {
+      velocity.x *= cap / actualSpeed; velocity.z *= cap / actualSpeed;
     }
+    deferredVelocity = {x: (velocity.x - initialVelocity.x) / 2, z: (velocity.z - initialVelocity.z) / 2};
+    velocity = {x: velocity.x - deferredVelocity.x, z: velocity.z - deferredVelocity.z};
   }
   const beforeVertical = feet, initialVerticalVelocity = verticalVelocity;
   if (specialVelocity) feet += specialVelocity.y * dt;
@@ -267,6 +287,9 @@ export function advanceActor(
       clipped = clipContactVelocity(clipped, hit.normal);
     }
     velocity = {x: clipped.x, z: clipped.z}; verticalVelocity = clipped.y;
+  }
+  if (deferredVelocity && !specialVelocity) {
+    velocity = {x: velocity.x + deferredVelocity.x, z: velocity.z + deferredVelocity.z};
   }
   feet = contact.feet;
   if (contact.support?.traversal?.kind === 'actor' &&

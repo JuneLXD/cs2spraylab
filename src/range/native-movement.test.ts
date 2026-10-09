@@ -1,6 +1,7 @@
 import {describe, expect, it} from 'vitest';
-import {accelerateGround, advanceActor, DUCK_SECONDS, UNDUCK_SECONDS, idleInput, STEP, UNIT, type ActorKinematics} from './actor-physics';
+import {accelerateGround, advanceActor, airAcceleration, DUCK_SECONDS, UNDUCK_SECONDS, idleInput, STEP, UNIT, type ActorKinematics} from './actor-physics';
 import fixture from './native-movement-fixture.json';
+import airFixture from './native-air-movement-fixture.json';
 
 const standing = (): ActorKinematics => ({position: {x: 0, y: 64 * UNIT, z: 0},
   velocity: {x: 0, z: 0}, yaw: 0, feet: 0, verticalVelocity: 0,
@@ -14,6 +15,56 @@ describe('installed-build movement arithmetic', () => {
       expect(result.x / UNIT, JSON.stringify(sample)).toBeCloseTo(sample.result, 4);
       expect(result.z).toBe(0);
     }
+  });
+
+  it('matches all 54 native air gain phases and integrates with the velocity before deferred gain', () => {
+    for (const sample of airFixture.samples) {
+      const phase = airAcceleration(sample.current * UNIT, 0, 1, 0, sample.wishSpeed * UNIT, sample.dt);
+      expect(phase.movement.x / UNIT, JSON.stringify(sample)).toBeCloseTo(sample.movementVelocity, 5);
+      expect(phase.deferred.x / UNIT, JSON.stringify(sample)).toBeCloseTo(sample.deferredGain, 5);
+      const actor = {...standing(), position: {x: 0, y: 10 + 64 * UNIT, z: 0}, feet: 10,
+        velocity: {x: sample.current * UNIT, z: 0}};
+      const next = advanceActor(actor, {...idleInput(), side: 1}, sample.wishSpeed * UNIT, sample.dt);
+      expect(next.velocity.x / UNIT, JSON.stringify(sample)).toBeCloseTo(sample.finalVelocity, 5);
+      expect(next.position.x / UNIT, JSON.stringify(sample)).toBeCloseTo(sample.movementVelocity * sample.dt, 6);
+    }
+  });
+
+  it.each([
+    ['walking', {walk: true}, 215], ['crouching', {crouch: true}, 215], ['slower weapon', {}, 150],
+  ] as const)('includes the %s speed cap in midpoint ground displacement', (_label, command, weaponSpeed) => {
+    const actor = {...standing(), velocity: {x: 215 * UNIT, z: 0}};
+    const next = advanceActor(actor, {...idleInput(), side: 1, ...command}, weaponSpeed * UNIT, STEP);
+    expect(next.velocity.x).toBeLessThan(actor.velocity.x);
+    expect(next.position.x).toBeCloseTo((actor.velocity.x + next.velocity.x) * STEP / 2, 10);
+  });
+
+  it('matches native pre/post ground integration through acceleration, friction and stopping', () => {
+    for (const sample of airFixture.groundPhases) {
+      expect((sample.initialVelocity + sample.finalVelocity) / 2).toBeCloseTo(sample.movementVelocity, 4);
+      expect(sample.restoredVelocity).toBeCloseTo(sample.finalVelocity, 4);
+    }
+    for (const [initial, side] of [[0, 1], [215, 0], [215, -1], [3, 0]]) {
+      const actor = {...standing(), velocity: {x: initial * UNIT, z: 0}};
+      const next = advanceActor(actor, {...idleInput(), side}, 215 * UNIT, STEP);
+      expect(next.position.x).toBeCloseTo((actor.velocity.x + next.velocity.x) * STEP / 2, 10);
+    }
+  });
+
+  it.each([100, 215, 250])('restores a %s u/s landing only when it exceeds the current weapon cap', speed => {
+    const actor = {...standing(), movementTime: .001, landedAt: 0, landingVelocity: -300 * UNIT,
+      velocity: {x: 50 * UNIT, z: 0}, landingVelocityXY: {x: speed * UNIT, z: 0}};
+    const next = advanceActor(actor, {...idleInput(), jump: true}, 215 * UNIT, STEP);
+    expect(next.velocity.x / UNIT).toBeCloseTo(speed > 215 ? 215 * 1.1 : 50, 5);
+  });
+
+  it('applies air strafing after restoring and capping bunnyhop momentum', () => {
+    const actor = {...standing(), movementTime: .001, landedAt: 0, landingVelocity: -300 * UNIT,
+      velocity: {x: 150 * UNIT, z: 0}, landingVelocityXY: {x: 250 * UNIT, z: 0}};
+    const next = advanceActor(actor, {...idleInput(), jump: true, forward: 1}, 215 * UNIT, STEP);
+    expect(next.velocity.x / UNIT).toBeCloseTo(215 * 1.1, 5);
+    expect(next.velocity.z / UNIT).toBeCloseTo(-20.15625, 5);
+    expect(next.position.z / UNIT).toBeCloseTo(-10.078125 * STEP, 6);
   });
 
   it('clamps ground speed to the stance cap on the next tick, before any landing has happened', () => {

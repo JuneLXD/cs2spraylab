@@ -37,3 +37,11 @@ time while firing on aim_redline. Browser diagnostics are implemented; physical
 mouse-to-screen latency and complete Source 2 rendering equivalence are not
 claimed. All eight areas now have an implemented, testable improvement or a
 retained native comparison showing that further numerical tuning was unwarranted.
+
+## October 9 feel audit follow-up
+
+Pass 11 of `native-gameplay-comparison.md` fixes ground/air displacement order
+and the bunnyhop momentum restore gate using the current server's native
+arithmetic. Counter-strafe and release accuracy times remain unchanged; a new
+direct velocity/input recording is required to tighten their existing demo
+comparison. The camera's crouch interpolation remains a separate open item.

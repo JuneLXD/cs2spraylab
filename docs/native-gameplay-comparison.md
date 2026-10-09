@@ -508,6 +508,59 @@ binary's static data (registration passes an empty descriptor and the objects li
 zero-initialised memory), so the values the trainer uses remain those of the public defaults and the
 earlier fixtures, not a reading from this build.
 
+## Movement integration order (eleventh pass, 2026-10-09)
+
+The current server SHA-256 is
+`c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a`.
+`tools/verify-native-air-movement.py` executes bounded native arithmetic without
+launching CS2: 54 air samples and 12 ground pre/post-move samples are retained in
+`src/range/native-air-movement-fixture.json`. The saved `AirMove` and `WalkMove`
+callers establish where those helpers run relative to the collision move.
+
+- Air acceleration applies `min(total gain, uncapped acceleration budget / 2)`
+  before movement and the remainder afterward. Near the 30 u/s wish cap, all
+  remaining gain can fit before movement, so averaging old and final velocity
+  is incorrect for air movement.
+- Ground movement clamps final velocity to the stance/weapon/landing cap,
+  then uses the midpoint between initial and final velocity for displacement.
+  The other half of the friction/acceleration correction is applied afterward.
+- Modern jump restores pre-landing horizontal velocity only when it exceeded
+  the weapon cap (or auto-bhop is explicitly enabled), before applying new air
+  gain. The trainer restored even slower landing velocity and overwrote new gain.
+
+`tools/probe-movement-feel.mjs` writes reproducible trajectories, retained in
+`../native-audit/reports/movement-feel-before.json` and `movement-feel-after.json`.
+First-step distances below use an AK and 1/128 s:
+
+| Case | Trainer before, units | Trainer after, units | End speed, u/s |
+| --- | ---: | ---: | ---: |
+| Accelerate from rest | 0.072174 | 0.036087 | 9.238281, unchanged |
+| Release from 215 u/s | 1.611450 | 1.645569 | 206.265625, unchanged |
+| Counter-strafe from 215 u/s | 1.539276 | 1.609482 | 197.027344, unchanged |
+| Switch from running to walk | 1.611450 | 1.276563 | 111.8, unchanged |
+| Air strafe from rest | 0.157471 | 0.078735 | 20.15625, unchanged |
+
+A 50 u/s bunnyhop with a prior landing speed of 100 or 215 used to become 100
+or 215 u/s; it now stays 50. A prior 250 u/s landing still restores to the AK's
+236.5 u/s jump cap. The 34% accuracy threshold stays at 78.125 ms under opposite
+input and 203.125 ms after release; release stops at 382.8125 ms and acceleration
+reaches 215 u/s at 570.3125 ms. No friction or acceleration constants were tuned.
+
+Status: matched for bounded dry-ground/air integration arithmetic and the
+statically traced restore rule. Collision response, moving supports and full
+native tick-by-tick trajectories are not established by these helper fixtures.
+`../native-audit/audit-movement-demo.py` measures that the demos' `velocity_X/Y`
+aliases describe the preceding position interval (mean component error 0.00128
+u/s, versus 3.32 u/s for the same interval). Correctly aligned interval speeds
+cross 34% at 203.125 ms in both releases and 78.125 ms in the reversal, exactly
+the trainer's probe values. The first pass's apparent 15.625 ms discrepancy
+came from that parser lag. Native release stops in a 375 ms interval versus
+382.8125 ms in the trainer; this is within half a native tick. Available fields
+do not supply direct horizontal velocity: these remain interval averages and
+sampled button edges, not proof of instantaneous/subtick parity. No stop-time
+correction is warranted. Crouch amount/rates remain verified;
+the camera eye-height smoothstep remains unverified.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current

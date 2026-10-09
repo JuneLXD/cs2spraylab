@@ -290,6 +290,10 @@ export const latestChanges = {
       'Deathmatch gives you the game\'s spawn protection (4 s by default, adjustable in the setup): bot hits do nothing until it ends or you attack, and the HUD counts it down. Bots get none, so a fresh spawn is a fair target.',
       'Settings > Browser has Fullscreen when you enter, on by default: entering or resuming a drill takes the browser fullscreen, and pausing keeps it.',
     ]},
+    {id: 'native-movement-integration', title: 'Movement between input and position', items: [
+      'Ground and air movement now split acceleration around the move in the order verified in the CS2 server, improving starts, stops and stance changes without changing the speed constants.',
+      'Bunnyhops restore pre-landing momentum only above the weapon speed cap and preserve new air-strafe gain.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

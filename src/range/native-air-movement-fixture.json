@@ -1,0 +1,536 @@
+{
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "method": "Bounded Unicorn evaluation of native AirAccelerate, with dry-air eligibility supplied. Native AirMove uses movementVelocity for its collision move and adds deferredGain afterward. Ground phases execute the native pre/post-move helpers with a supplied net acceleration, including a speed-cap correction. Fixtures exclude collision response, moving base velocity, water, duck transitions and friction/acceleration generation.",
+  "samples": [
+    {
+      "wishSpeed": 150,
+      "dt": 0.00390625,
+      "current": -40,
+      "movementVelocity": -36.484375,
+      "deferredGain": 3.515625,
+      "finalVelocity": -32.96875
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.00390625,
+      "current": 0,
+      "movementVelocity": 3.515625,
+      "deferredGain": 3.515625,
+      "finalVelocity": 7.03125
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.00390625,
+      "current": 20,
+      "movementVelocity": 23.515625,
+      "deferredGain": 3.515625,
+      "finalVelocity": 27.03125
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.00390625,
+      "current": 29,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.00390625,
+      "current": 30,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.00390625,
+      "current": 45,
+      "movementVelocity": 45.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 45.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.0078125,
+      "current": -40,
+      "movementVelocity": -32.96875,
+      "deferredGain": 7.03125,
+      "finalVelocity": -25.9375
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.0078125,
+      "current": 0,
+      "movementVelocity": 7.03125,
+      "deferredGain": 7.03125,
+      "finalVelocity": 14.0625
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.0078125,
+      "current": 20,
+      "movementVelocity": 27.03125,
+      "deferredGain": 2.96875,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.0078125,
+      "current": 29,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.0078125,
+      "current": 30,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.0078125,
+      "current": 45,
+      "movementVelocity": 45.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 45.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.015625,
+      "current": -40,
+      "movementVelocity": -25.9375,
+      "deferredGain": 14.0625,
+      "finalVelocity": -11.875
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.015625,
+      "current": 0,
+      "movementVelocity": 14.0625,
+      "deferredGain": 14.0625,
+      "finalVelocity": 28.125
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.015625,
+      "current": 20,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.015625,
+      "current": 29,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.015625,
+      "current": 30,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 150,
+      "dt": 0.015625,
+      "current": 45,
+      "movementVelocity": 45.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 45.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.00390625,
+      "current": -40,
+      "movementVelocity": -34.9609375,
+      "deferredGain": 5.0390625,
+      "finalVelocity": -29.921875
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.00390625,
+      "current": 0,
+      "movementVelocity": 5.0390625,
+      "deferredGain": 5.0390625,
+      "finalVelocity": 10.078125
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.00390625,
+      "current": 20,
+      "movementVelocity": 25.0390625,
+      "deferredGain": 4.9609375,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.00390625,
+      "current": 29,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.00390625,
+      "current": 30,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.00390625,
+      "current": 45,
+      "movementVelocity": 45.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 45.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.0078125,
+      "current": -40,
+      "movementVelocity": -29.921875,
+      "deferredGain": 10.078125,
+      "finalVelocity": -19.84375
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.0078125,
+      "current": 0,
+      "movementVelocity": 10.078125,
+      "deferredGain": 10.078125,
+      "finalVelocity": 20.15625
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.0078125,
+      "current": 20,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.0078125,
+      "current": 29,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.0078125,
+      "current": 30,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.0078125,
+      "current": 45,
+      "movementVelocity": 45.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 45.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.015625,
+      "current": -40,
+      "movementVelocity": -19.84375,
+      "deferredGain": 20.15625,
+      "finalVelocity": 0.3125
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.015625,
+      "current": 0,
+      "movementVelocity": 20.15625,
+      "deferredGain": 9.84375,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.015625,
+      "current": 20,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.015625,
+      "current": 29,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.015625,
+      "current": 30,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 215,
+      "dt": 0.015625,
+      "current": 45,
+      "movementVelocity": 45.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 45.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.00390625,
+      "current": -40,
+      "movementVelocity": -34.140625,
+      "deferredGain": 5.859375,
+      "finalVelocity": -28.28125
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.00390625,
+      "current": 0,
+      "movementVelocity": 5.859375,
+      "deferredGain": 5.859375,
+      "finalVelocity": 11.71875
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.00390625,
+      "current": 20,
+      "movementVelocity": 25.859375,
+      "deferredGain": 4.140625,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.00390625,
+      "current": 29,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.00390625,
+      "current": 30,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.00390625,
+      "current": 45,
+      "movementVelocity": 45.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 45.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.0078125,
+      "current": -40,
+      "movementVelocity": -28.28125,
+      "deferredGain": 11.71875,
+      "finalVelocity": -16.5625
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.0078125,
+      "current": 0,
+      "movementVelocity": 11.71875,
+      "deferredGain": 11.71875,
+      "finalVelocity": 23.4375
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.0078125,
+      "current": 20,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.0078125,
+      "current": 29,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.0078125,
+      "current": 30,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.0078125,
+      "current": 45,
+      "movementVelocity": 45.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 45.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.015625,
+      "current": -40,
+      "movementVelocity": -16.5625,
+      "deferredGain": 23.4375,
+      "finalVelocity": 6.875
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.015625,
+      "current": 0,
+      "movementVelocity": 23.4375,
+      "deferredGain": 6.5625,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.015625,
+      "current": 20,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.015625,
+      "current": 29,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.015625,
+      "current": 30,
+      "movementVelocity": 30.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 30.0
+    },
+    {
+      "wishSpeed": 250,
+      "dt": 0.015625,
+      "current": 45,
+      "movementVelocity": 45.0,
+      "deferredGain": 0.0,
+      "finalVelocity": 45.0
+    }
+  ],
+  "groundPhases": [
+    {
+      "initialVelocity": 0,
+      "finalVelocity": 9.23828125,
+      "dt": 0.0078125,
+      "movementVelocity": 4.619140625,
+      "deferredGain": 4.619140625,
+      "restoredVelocity": 9.23828125
+    },
+    {
+      "initialVelocity": 215,
+      "finalVelocity": 206.265625,
+      "dt": 0.0078125,
+      "movementVelocity": 210.6328125,
+      "deferredGain": -4.3671875,
+      "restoredVelocity": 206.265625
+    },
+    {
+      "initialVelocity": 215,
+      "finalVelocity": 111.8,
+      "dt": 0.0078125,
+      "movementVelocity": 163.39999389648438,
+      "deferredGain": -51.599998474121094,
+      "restoredVelocity": 111.79999542236328
+    },
+    {
+      "initialVelocity": 215,
+      "finalVelocity": 150,
+      "dt": 0.0078125,
+      "movementVelocity": 182.5,
+      "deferredGain": -32.5,
+      "restoredVelocity": 150.0
+    },
+    {
+      "initialVelocity": -4,
+      "finalVelocity": 7,
+      "dt": 0.0078125,
+      "movementVelocity": 1.5,
+      "deferredGain": 5.5,
+      "restoredVelocity": 7.0
+    },
+    {
+      "initialVelocity": 3,
+      "finalVelocity": 0,
+      "dt": 0.0078125,
+      "movementVelocity": 1.5,
+      "deferredGain": -1.5,
+      "restoredVelocity": 0.0
+    },
+    {
+      "initialVelocity": 0,
+      "finalVelocity": 9.23828125,
+      "dt": 0.015625,
+      "movementVelocity": 4.619140625,
+      "deferredGain": 4.619140625,
+      "restoredVelocity": 9.23828125
+    },
+    {
+      "initialVelocity": 215,
+      "finalVelocity": 206.265625,
+      "dt": 0.015625,
+      "movementVelocity": 210.6328125,
+      "deferredGain": -4.3671875,
+      "restoredVelocity": 206.265625
+    },
+    {
+      "initialVelocity": 215,
+      "finalVelocity": 111.8,
+      "dt": 0.015625,
+      "movementVelocity": 163.39999389648438,
+      "deferredGain": -51.599998474121094,
+      "restoredVelocity": 111.79999542236328
+    },
+    {
+      "initialVelocity": 215,
+      "finalVelocity": 150,
+      "dt": 0.015625,
+      "movementVelocity": 182.5,
+      "deferredGain": -32.5,
+      "restoredVelocity": 150.0
+    },
+    {
+      "initialVelocity": -4,
+      "finalVelocity": 7,
+      "dt": 0.015625,
+      "movementVelocity": 1.5,
+      "deferredGain": 5.5,
+      "restoredVelocity": 7.0
+    },
+    {
+      "initialVelocity": 3,
+      "finalVelocity": 0,
+      "dt": 0.015625,
+      "movementVelocity": 1.5,
+      "deferredGain": -1.5,
+      "restoredVelocity": 0.0
+    }
+  ]
+}
