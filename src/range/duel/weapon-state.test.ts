@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {STEP, UNIT, idleInput} from '../actor-physics';
+import {STEP, UNIT, idleInput, SERVER_TICK, tickAligned} from '../actor-physics';
 import {defaults, gameData, weaponIds} from '../config';
 import {Simulation} from '../simulation';
 import {DuelWeaponState} from './weapon-state';
@@ -43,7 +43,8 @@ describe('duel and range ballistic parity', () => {
     duelShots.forEach((shot, i) => {
       const windup = weapon === 'revolver' ? REVOLVER_WINDUP : 0;
       expect(shot.time - windup - i * gameData.weapons[weapon].cycle).toBeGreaterThanOrEqual(-1e-8);
-      expect(shot.time - windup - i * gameData.weapons[weapon].cycle).toBeLessThan(STEP + 1e-8);
+      // Shots after the first land on the server tick at or after their exact schedule.
+      expect(shot.time - windup - i * gameData.weapons[weapon].cycle).toBeLessThan(SERVER_TICK + 1e-8);
       expect(shot.time).toBeCloseTo(rangeShots[i].time, 8);
       for (const axis of ['x', 'y', 'z'] as const) expect(shot.direction[axis]).toBeCloseTo(rangeShots[i].direction[axis], 7);
     });
@@ -86,7 +87,8 @@ describe('duel and range ballistic parity', () => {
     expect(duel.ammo).toBe(stats.magazine - 1);
     const pressedAt = (heldTicks + 1) * STEP;
     expect(duel.advance(pressedAt, STEP, {...command, firePressed: true}, actor())).toBeDefined();
-    const intervalTicks = Math.ceil(stats.cycle / STEP);
+    // The early press stays queued and fires on the first server tick at or after the cycle.
+    const intervalTicks = Math.round((tickAligned(pressedAt + stats.cycle) - pressedAt) / STEP);
     for (let tick = 1; tick < intervalTicks; tick++)
       expect(duel.advance(pressedAt + tick * STEP, STEP, {...command, firePressed: tick === 1}, actor())).toBeUndefined();
     expect(duel.advance(pressedAt + intervalTicks * STEP, STEP, command, actor())).toBeDefined();
@@ -133,6 +135,7 @@ describe('duel and range ballistic parity', () => {
     }
     expect(shots).toHaveLength(13);
     expect(shots[shots.length - 1].origin.y).toBeCloseTo(46 * UNIT, 6);
-    shots.forEach((shot, i) => expect(shot.at - i * .1).toBeLessThan(STEP + 1e-8));
+    // Shots after the first land on the server tick at or after their exact 0.1 s schedule.
+    shots.forEach((shot, i) => expect(shot.at - i * .1).toBeLessThan(SERVER_TICK + 1e-8));
   });
 });

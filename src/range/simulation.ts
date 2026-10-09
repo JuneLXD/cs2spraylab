@@ -3,7 +3,7 @@ import {ViewPunch} from './view-punch';
 import {equipmentForSlot, equipmentStats, isPumpShotgun, knifeModel, ZEUS_RECHARGE_SECONDS, type Equipment, type Slot} from './equipment';
 import {createScenario, DrillCoach, isDrillMode, RANGE_WALLS, REPOSITION_SHOTS, type CoachSample, type DrillMetrics} from './drills';
 import {WeaponRecovery} from './ballistics';
-import {advanceActor, DEG, GRAVITY, JUMP_SPEED, STEP, UNIT, airVelocity, groundVelocity, idleInput, type ActorEnvironment, type ActorKinematics, type MoveInput, type Vec} from './actor-physics';
+import {advanceActor, DEG, GRAVITY, JUMP_SPEED, SERVER_TICK, STEP, UNIT, airVelocity, groundVelocity, idleInput, tickAligned, type ActorEnvironment, type ActorKinematics, type MoveInput, type Vec} from './actor-physics';
 import {direction, shotDirections} from './shot-model';
 import {TERRAIN_RULES} from './terrain';
 import {resolveDamage} from './duel/damage';
@@ -117,7 +117,9 @@ export class Simulation {
   predictedRecoil(next=false){
     if (this.equipped === 'knife' || this.equipped === 'zeus') return {yaw: 0, pitch: 0};
     const due=this.firing?this.nextShot:Math.max(this.time,this.shotReady.get(this.equipped) ?? 0,this.burstEnd);
-    const scheduledDelay=(at:number)=>Math.max(0,Math.ceil((at-this.time)/STEP-1e-8))*STEP;
+    // A held or queued shot is processed on the server tick at or after its schedule; a press at a ready weapon fires now.
+    const processedAt=(at:number)=>this.firing||at>this.time+1e-9?tickAligned(at):at;
+    const scheduledDelay=(at:number)=>Math.max(0,Math.ceil((processedAt(at)-this.time)/STEP-1e-8))*STEP;
     const delay=scheduledDelay(due);
     if(!next)return this.recovery.predict(delay);
     const state=Object.assign(Object.create(WeaponRecovery.prototype),this.recovery) as WeaponRecovery;
@@ -332,7 +334,7 @@ export class Simulation {
   private untilTick() { return (Math.floor((this.time + 1e-10) / STEP) + 1) * STEP - this.time; }
   private untilEvent() {
     let duration = this.untilTick();
-    const at = Math.min(this.actions.nextEventAt, this.reloadState.active ? this.reloadState.nextEventAt : this.firing ? this.nextShot : Infinity);
+    const at = Math.min(this.actions.nextEventAt, this.reloadState.active ? this.reloadState.nextEventAt : this.firing ? tickAligned(this.nextShot) : Infinity);
     if (at > this.time + 1e-10) duration = Math.min(duration, at - this.time);
     return duration;
   }
@@ -344,7 +346,12 @@ export class Simulation {
     this.time += dt;
     this.actions.advance(this.time);
     const weapon = this.stats;
+    // A reload sets the next attack time to its end (the game's reload sequence does the same): a shot queued through
+    // a shell reload is processed on the first server tick after the reload and keeps that schedule.
+    const reloading = this.reloadState.active;
+    const reloadEnd = this.reloadState.phase === 'finish' || this.reloadState.phase === 'magazine' ? this.reloadState.until : this.time;
     for (const [id, state] of this.ammoStates) state.advance(this.time, id === this.equipped ? this.reloadHeld : undefined);
+    if (this.firing && reloading && !this.reloadState.active) this.nextShot = Math.max(this.nextShot, reloadEnd);
     // Pop's infinite modes top the reserve (and the magazine) back up every tick, as sv_infinite_ammo does.
     if (this.pop) this.refillPopAmmo();
     if (this.firing && this.reloadState.active) this.reloadState.interrupt();
@@ -352,7 +359,7 @@ export class Simulation {
       this.ammoFor(id).ammo = 1; this.rechargeTimes.delete(id);
       this.actionEvents.push({kind: 'zeus-ready', at: this.time, equipment: id});
     }
-    const next = advanceActor(this, this.input, weapon.speed * UNIT, dt, undefined, undefined, undefined,
+    const next = advanceActor(this, {...this.input, scopedSlow: this.actions.zoom >= 2 && weapon.speed * .52 < 110}, weapon.speed * UNIT, dt, undefined, undefined, undefined,
       {...this.environment, time: this.time - dt});
     this.input.jumpPressed = false; this.input.jumpPressOffset = 0;
     const traveled = Math.hypot(next.position.x - this.position.x, next.position.z - this.position.z);
@@ -410,7 +417,9 @@ export class Simulation {
       else if (!this.drill.finished && this.drill.seenAt !== null && this.time-this.drill.seenAt > (this.settings.drillPace==='challenge' ? 1.5 : 8)) this.completeDrill(true);
     }
     if (this.firing && this.actions.isRevolver && !this.actions.alternateFire) this.nextShot = Math.max(this.nextShot, this.actions.chargeTrigger(this.time, true));
-    if (this.firing && !this.reloadState.active && this.time + 1e-9 >= this.nextShot) this.fire();
+    // A shot the weapon becomes ready for while the trigger is held is processed on the next server tick; its
+    // schedule (nextShot) keeps accumulating exactly, as the game's demos show (AK sprays alternate 6 and 7 ticks).
+    if (this.firing && !this.reloadState.active && this.time + 1e-9 >= tickAligned(this.nextShot)) this.fire();
     // CS2 reloads an empty magazine by itself once the last shot's cycle ends. shotReady alone can
     // lag behind a shot queued through a long shell reload, so time the cycle from the shot itself.
     if (!this.firing && this.loadedAmmo === 0 && this.equipped !== 'knife' && !this.reloadState.active && this.time + 1e-9 >=
@@ -435,6 +444,9 @@ export class Simulation {
     if (!this.measured || this.slot !== 1) this.recovery.setParameters(weapon);
     const endless = !!this.pop && this.settings.popAmmo === 'magazine' && this.equipped !== 'zeus';
     if (!endless && this.shots >= this.burstSize || this.loadedAmmo <= 0) {this.burstLeft = 0; this.finish(); return;}
+    // A shot held past its schedule by more than a tick (a shell reload, a holster, the deploy delay) is scheduled from
+    // now, like the game's stale next-attack time; one processed on the next tick keeps its exact schedule.
+    if (this.time - this.nextShot > SERVER_TICK + 1e-9) this.nextShot = this.time;
     if (this.actions.burst && !this.burstLeft) {this.burstLeft = 3; this.burstEnd = this.nextShot + this.actions.burstCycle;}
     this.recoil = this.equipped === 'zeus' ? {yaw: 0, pitch: 0} : this.recovery.recoil;
     if (this.equipped === 'zeus') this.recovery.penalty = !this.grounded ? weapon.stand + weapon.jump : this.duckAmount >= .95 ? weapon.crouch : weapon.stand;
@@ -454,7 +466,8 @@ export class Simulation {
       this.rechargeTimes.set('zeus', this.time + ZEUS_RECHARGE_SECONDS);
       this.actionEvents.push({kind: 'zeus-discharge', at: this.time, equipment: 'zeus'});
     }
-    this.lastShotAt = this.time;
+    // The game records the scheduled time as the last shot time; a tick-aligned shot keeps its schedule.
+    this.lastShotAt = this.nextShot;
     this.actions.afterShot(this.time);
     this.onShot({index, ordinal, at:this.time, origin:{...this.position}, direction:directions[0], recoil:this.recoil, equipment:this.equipped,
       kind:this.equipped==='zeus'?'zeus':directions.length>1?'pellets':'bullet', attack:this.actions.alternateFire?'secondary':'primary',

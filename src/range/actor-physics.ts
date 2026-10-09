@@ -7,6 +7,10 @@ import {acceptedJumpPress, isBhopPress, jumpLandingFactor, groundLandingFactor, 
 export const UNIT = .0254;
 export const DEG = Math.PI / 180;
 export const STEP = 1 / 128;
+/** CS2's server tick. A held trigger's shots are processed on tick boundaries while their schedule stays exact. */
+export const SERVER_TICK = 1 / 64;
+/** The first server tick boundary at or after `time`. */
+export const tickAligned = (time: number) => Math.ceil(time / SERVER_TICK - 1e-7) * SERVER_TICK;
 export const GRAVITY = 800 * UNIT;
 export const JUMP_SPEED = 301.993 * UNIT;
 export const DUCK_SECONDS = 1 / 6.4;
@@ -14,6 +18,8 @@ export const UNDUCK_SECONDS = 1 / 8;
 
 export type Vec = { x: number; y: number; z: number };
 export type MoveInput = { forward: number; side: number; walk: boolean; crouch: boolean; jump: boolean;
+  /** Scoped at the second zoom level with a walking speed under 110 u/s: the server keeps the weapon's scale on the walking acceleration speed. */
+  scopedSlow?: boolean;
   jumpPressed?: boolean; jumpPressOffset?: number };
 export type ActorKinematics = {
   position: Vec;
@@ -52,13 +58,13 @@ export const idleInput = (): MoveInput => ({ forward: 0, side: 0, walk: false, c
 export const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 export const stanceCurve = (amount: number) => amount * amount * (3 - 2 * amount);
 
-type GroundStance = {weaponSpeed: number; ducking: boolean; walking: boolean};
+type GroundStance = {weaponSpeed: number; ducking: boolean; walking: boolean; scopedSlow?: boolean};
 
 // Build 2000919, server Accelerate (RVA ab1ff0): wish-speed and acceleration
 // speed are different, especially while ducking, walking or damage-tagged.
 export function accelerateGround(
   vx: number, vz: number, x: number, z: number, wishSpeed: number, dt: number,
-  {weaponSpeed, ducking, walking}: GroundStance = {weaponSpeed: wishSpeed, ducking: false, walking: false},
+  {weaponSpeed, ducking, walking, scopedSlow = false}: GroundStance = {weaponSpeed: wishSpeed, ducking: false, walking: false},
 ) {
   const length = Math.hypot(x, z);
   if (!length) return {x: vx, z: vz};
@@ -66,7 +72,8 @@ export function accelerateGround(
   const current = vx * x + vz * z;
   const base = Math.max(250 * UNIT, wishSpeed);
   const weaponScale = Math.min(1, weaponSpeed / (250 * UNIT));
-  const accelerationSpeed = base * (ducking ? .34 : walking ? .52 : weaponScale);
+  // Server Accelerate (build 2000930): walking at zoom level 2 with a walking speed below 110 u/s skips the 0.52.
+  const accelerationSpeed = base * (ducking ? .34 : walking ? (scopedSlow ? weaponScale : .52) : weaponScale);
   const walkCap = base * weaponScale * .52;
   const taper = walking && !ducking ? clamp((walkCap - Math.max(0, current)) / (5 * UNIT), 0, 1) : 1;
   const add = Math.min(Math.max(0, wishSpeed - current), 5.5 * accelerationSpeed * taper * dt);
@@ -183,7 +190,7 @@ export function advanceActor(
   let velocity = airborne
     ? airVelocity(actor.velocity.x, actor.velocity.z, wishX, wishZ, runningSpeed, dt)
     : groundVelocity(actor.velocity.x, actor.velocity.z, wishX, wishZ, speed, dt,
-      {weaponSpeed: runningSpeed, ducking, walking: walk && !ducking});
+      {weaponSpeed: runningSpeed, ducking, walking: walk && !ducking, scopedSlow: input.scopedSlow});
   if (bhop && actor.landingVelocityXY) velocity = {...actor.landingVelocityXY};
   if (wantsJump && supported) velocity = clampJumpSpeed(velocity, runningSpeed, rules);
   let moveMode: NonNullable<ActorKinematics['moveMode']> = airborne ? 'air' : 'ground';

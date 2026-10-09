@@ -1,5 +1,5 @@
 import {equipmentStats, isPumpShotgun, knifeModel, ZEUS_RECHARGE_SECONDS, type Equipment} from '../equipment';
-import {DEG, UNIT, type Vec} from '../actor-physics';
+import {DEG, UNIT, type Vec, SERVER_TICK, tickAligned} from '../actor-physics';
 import type {DamagePunch} from '../aim-punch';
 import {WeaponRecovery} from '../ballistics';
 import type {RecoilAngle} from '../recoil';
@@ -33,8 +33,6 @@ export class DuelWeaponState {
   pumpUntil = 0;
   pendingPress = false;
   ordinal = 0;
-  private wasHeld = false;
-  private wasAlternateHeld = false;
   readonly actions: WeaponActions;
   private burstLeft = 0;
   private burstEnd = 0;
@@ -49,7 +47,7 @@ export class DuelWeaponState {
   }
 
   holster() {
-    this.reload.cancel(); this.pendingPress = false; this.wasHeld = false; this.wasAlternateHeld = false;
+    this.reload.cancel(); this.pendingPress = false;
     this.burstLeft = 0; this.actions.holster();
   }
 
@@ -67,7 +65,9 @@ export class DuelWeaponState {
       !(command.fireHeld && (this.actions.stats.fullAuto || this.id === 'knife')) && !alternate &&
       !(this.id === 'knife' && command.secondaryHeld)) return Infinity;
     if (this.ammo <= 0 && this.id !== 'knife') return Infinity;
-    return Math.max(this.nextShotAt, this.actions.readyAt, this.actions.chargeReadyAt);
+    // A press that finds the weapon ready fires at its own time; anything else waits for the next server tick.
+    const due = Math.max(this.nextShotAt, this.actions.readyAt, this.actions.chargeReadyAt);
+    return command.firePressed ? due : tickAligned(due);
   }
 
   advancePassive(time: number, dt: number, crouch = false, airborne = false) {
@@ -97,14 +97,16 @@ export class DuelWeaponState {
     punch?: DamagePunch;
   }): FiredRound | undefined {
     this.actions.advance(time);
+    // A reload sets the next attack time to its end (the game's reload sequence does the same): a shot held or
+    // queued through it is processed on the first server tick after the reload and keeps that schedule.
+    const reloading = this.reload.active;
+    const reloadEnd = this.reload.phase === 'finish' || this.reload.phase === 'magazine' ? this.reload.until : time;
     this.reload.advance(time, command.reloadHeld);
+    if (reloading && !this.reload.active) this.nextShotAt = Math.max(this.nextShotAt, reloadEnd);
     if (command.secondaryPressed && !this.reloadUntil) this.actions.secondary(time);
     this.actions.alternateFire = this.id === 'revolver' && !!(command.secondaryHeld || command.secondaryPressed);
     const stats = this.actions.stats;
     this.recovery.setParameters(stats);
-    const continuous = (this.wasHeld && command.fireHeld || this.wasAlternateHeld && this.actions.alternateFire) && stats.fullAuto;
-    this.wasHeld = command.fireHeld;
-    this.wasAlternateHeld = this.actions.alternateFire;
     const airborne = !(actor.grounded ?? actor.feet === 0);
     this.advancePassive(time, dt, (actor.duckAmount ?? Number(command.crouch)) >= .95, airborne);
     const punch = actor.punch?.shotFor(this.recovery.angle);
@@ -143,14 +145,18 @@ export class DuelWeaponState {
     }
     const chargedAt = this.actions.chargeTrigger(time, command.fireHeld);
     if (!Number.isFinite(chargedAt)) {this.pendingPress = false; return;}
-    if (time + 1e-9 < Math.max(this.nextShotAt, this.actions.readyAt, chargedAt)) {
+    // The weapon is due at the latest of its schedule, its deploy and (R8) its windup. A press that finds it ready
+    // fires at its own subtick time; a held or queued trigger is processed on the next server tick, and that shot
+    // keeps its exact schedule unless it is more than a tick late, like the game's stale next-attack time.
+    const due = Math.max(this.nextShotAt, this.actions.readyAt, this.actions.isRevolver && !this.actions.alternateFire ? chargedAt : -Infinity);
+    if (time + 1e-9 < (command.firePressed ? due : tickAligned(due))) {
       if (!triggerHeld) this.pendingPress = false;
       return;
     }
-    const burstShotAt = this.burstLeft && time - this.nextShotAt <= dt + 1e-9 ? this.nextShotAt : time;
+    const scheduled = command.firePressed || time - due > SERVER_TICK + 1e-9 ? time : due;
     if (this.actions.burst && !this.burstLeft) {
       this.burstLeft = 3;
-      this.burstEnd = time + this.actions.burstCycle;
+      this.burstEnd = scheduled + this.actions.burstCycle;
     }
     const speedRatio = Math.hypot(actor.velocity.x, actor.velocity.z) / (stats.speed * UNIT);
     const directions = shotDirections({
@@ -164,18 +170,17 @@ export class DuelWeaponState {
     if (this.id !== 'zeus') this.recovery.fire();
     this.actions.afterShot(time);
     this.ammo--;
-    if (isPumpShotgun(this.id)) this.pumpUntil = time + stats.cycle;
+    if (isPumpShotgun(this.id)) this.pumpUntil = scheduled + stats.cycle;
     if (this.id === 'zeus') {
       this.rechargeUntil = time + ZEUS_RECHARGE_SECONDS;
       this.actionEvents.push({kind: 'zeus-discharge', at: time});
     }
-    // Carry the fractional cycle across ticks, as the range does. Rounding each
-    // interval up to a tick slowed full-auto and sampled recoil at the wrong time.
-    this.nextShotAt = (continuous && this.ordinal > 0 && time - this.nextShotAt <= dt + 1e-9
-      ? this.nextShotAt : time) + stats.cycle;
+    // The schedule accumulates exactly while the trigger is held; the shot itself lands on the server tick
+    // after it (build 2000930 demos: AK sprays alternate 6 and 7 ticks with the last shot time advancing by 0.1 s).
+    this.nextShotAt = scheduled + stats.cycle;
     if (this.burstLeft > 0) {
       this.burstLeft--;
-      this.nextShotAt = this.burstLeft ? burstShotAt + this.actions.burstInterval : this.burstEnd;
+      this.nextShotAt = this.burstLeft ? scheduled + this.actions.burstInterval : this.burstEnd;
     }
     this.pendingPress = false;
     return {origin: {...actor.position}, direction, weapon: this.id, ordinal: this.ordinal++,

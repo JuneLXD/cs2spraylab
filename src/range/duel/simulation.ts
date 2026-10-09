@@ -440,7 +440,7 @@ export class DuelSimulation {
       if (actor.id !== 0 && actor.weapon.id !== 'knife' && gameData.weapons[actor.weapon.id].zoomLevels && !actor.weapon.actions.zoom && !actor.weapon.actions.pendingZoom && command.fireHeld) {
         actor.weapon.actions.secondary(this.time);
       }
-      const next = advanceActor(actor, command, actor.weapon.actions.stats.speed * UNIT, dt,
+      const next = advanceActor(actor, {...command, scopedSlow: actor.weapon.actions.zoom >= 2 && actor.weapon.actions.stats.speed * .52 < 110}, actor.weapon.actions.stats.speed * UNIT, dt,
         (from, desired, feet, height) => {
           const staticPosition = moveInArena(from, desired, feet, height, this.arena);
           const clear = (position: Vec) => this.actors.every(other => other === actor || !other.alive ||

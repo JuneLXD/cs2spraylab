@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {STEP, UNIT} from '../actor-physics';
+import {STEP, UNIT, tickAligned} from '../actor-physics';
 import {equipmentStats, SHELL_RELOAD_FINISH, SHELL_RELOAD_START, ZEUS_RECHARGE_SECONDS} from '../equipment';
 import {idleCommand} from './types';
 import {DuelWeaponState} from './weapon-state';
@@ -33,8 +33,10 @@ describe('shotgun discharge contract', () => {
     weapon.advance(.01, .01, {...idleCommand(), reloadPressed: true, reloadHeld: true}, actor);
     weapon.holster();
     expect(weapon.advance(.1, .09, press(), actor)).toBeUndefined();
-    // Held through the pump: the shot lands when the cycle ends, never earlier.
-    expect(weapon.advance(.88, .78, {...idleCommand(), fireHeld: true}, actor)).toBeDefined();
+    // Held through the pump: the shot lands on the server tick after the cycle ends, never earlier, and keeps the
+    // cycle's end as its schedule.
+    expect(weapon.advance(.88, .78, {...idleCommand(), fireHeld: true}, actor)).toBeUndefined();
+    expect(weapon.advance(tickAligned(.88), tickAligned(.88) - .88, {...idleCommand(), fireHeld: true}, actor)).toBeDefined();
     expect(weapon.pumpUntil).toBeCloseTo(1.76); expect(weapon.reserve).toBe(32);
   });
   it('a held trigger stops a shell reload after the first shell and fires once the finish transition completes', () => {
@@ -45,7 +47,10 @@ describe('shotgun discharge contract', () => {
     const held = {...idleCommand(), fireHeld: true};
     expect(weapon.advance(shellAt, shellAt - .1, held, actor)).toBeUndefined();
     expect(weapon.reloadPhase).toBe('finish');
-    expect(weapon.advance(shellAt + SHELL_RELOAD_FINISH, SHELL_RELOAD_FINISH, held, actor)).toBeDefined();
+    // The reload's end is the next attack time: the queued shot is processed on the server tick at or after it.
+    const end = shellAt + SHELL_RELOAD_FINISH, endTick = tickAligned(end);
+    if (endTick > end + 1e-9) expect(weapon.advance(end, SHELL_RELOAD_FINISH, held, actor)).toBeUndefined();
+    expect(weapon.advance(endTick, endTick - end, held, actor)).toBeDefined();
     expect(weapon.ammo).toBe(0); expect(weapon.reserve).toBe(31);
     expect(weapon.drainActionEvents().map(e => e.kind)).toEqual(['reload-start', 'reload-shell', 'reload-end']);
   });

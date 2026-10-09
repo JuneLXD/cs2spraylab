@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {advanceActor, DUCK_SECONDS, STEP, UNIT, idleInput, type ActorKinematics} from './actor-physics';
+import {advanceActor, DUCK_SECONDS, STEP, UNIT, idleInput, type ActorKinematics, accelerateGround} from './actor-physics';
 import {traceActor} from './duel/geometry';
 
 const standing = (): ActorKinematics => ({
@@ -49,3 +49,16 @@ describe('shared actor crouch stance', () => {
     expect(shot(1.62, 1)).toBeUndefined();
   });
 });
+
+describe('server Accelerate corner case (build 2000930)', () => {
+  it('walking at a slow second zoom level keeps the weapon scale on the acceleration speed instead of 0.52', () => {
+    const dt = STEP, scoped = 100 * UNIT, wish = scoped * .52;
+    const stance = {weaponSpeed: scoped, ducking: false, walking: true};
+    const normal = accelerateGround(0, 0, 0, -1, wish, dt, stance);
+    const slow = accelerateGround(0, 0, 0, -1, wish, dt, {...stance, scopedSlow: true});
+    // Base 250 u/s: 5.5 * 250 * 0.52 per second normally, 5.5 * 250 * (100 / 250) when scoped and slow.
+    expect(Math.hypot(normal.x, normal.z)).toBeCloseTo(5.5 * 250 * UNIT * .52 * dt, 9);
+    expect(Math.hypot(slow.x, slow.z)).toBeCloseTo(5.5 * 250 * UNIT * .4 * dt, 9);
+  });
+});
+

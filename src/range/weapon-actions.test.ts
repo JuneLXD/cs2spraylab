@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {STEP} from './actor-physics';
+import {STEP, SERVER_TICK, tickAligned} from './actor-physics';
 import {defaults, gameData} from './config';
 import {Simulation} from './simulation';
 import {REVOLVER_WINDUP, WeaponActions, scopeVerticalFov} from './weapon-actions';
@@ -17,7 +17,10 @@ describe('native weapon modes', () => {
     expect(weapon.advance(.3, .2, idleCommand(), actor)).toBeUndefined();
     expect(weapon.ammo).toBe(8);
     expect(weapon.advance(1, .1, {...idleCommand(), firePressed: true, fireHeld: true}, actor)).toBeUndefined();
-    expect(weapon.advance(1 + REVOLVER_WINDUP, REVOLVER_WINDUP, {...idleCommand(), fireHeld: true}, actor)).toBeDefined();
+    // The windup ends at 1 + REVOLVER_WINDUP; the shot is processed on the server tick at or after it, as in the range.
+    const windupEnd = 1 + REVOLVER_WINDUP, windupTick = tickAligned(windupEnd);
+    if (windupTick > windupEnd + 1e-9) expect(weapon.advance(windupEnd, windupEnd - 1, {...idleCommand(), fireHeld: true}, actor)).toBeUndefined();
+    expect(weapon.advance(windupTick, windupTick - windupEnd, {...idleCommand(), fireHeld: true}, actor)).toBeDefined();
     weapon.holster();
     expect(weapon.advance(2, .1, {...idleCommand(), secondaryPressed: true}, actor)).toBeDefined();
     expect(weapon.actions.stats.stand).toBe(gameData.weapons.revolver.alternate.stand);
@@ -82,7 +85,8 @@ describe('native weapon modes', () => {
       if (shot) duelTimes.push(at);
     }
     expect(times).toHaveLength(3); expect(duelTimes).toEqual(times);
-    times.slice(1).forEach((at, i) => expect(at - times[0] - (i + 1) * gameData.weapons[id].burstInterval).toBeLessThan(STEP + 1e-8));
+    // Burst rounds after the first land on the server tick at or after their exact schedule.
+    times.slice(1).forEach((at, i) => expect(at - times[0] - (i + 1) * gameData.weapons[id].burstInterval).toBeLessThan(SERVER_TICK + 1e-8));
   });
   it('does not resume an interrupted burst or queued trigger when equipping a holstered weapon', () => {
     const weapon = new DuelWeaponState('glock', () => 0);
@@ -116,8 +120,8 @@ describe('native weapon modes', () => {
     expect(times.length).toBe(duelTimes.length);
     times.forEach((time,i)=>expect(time).toBeCloseTo(duelTimes[i],6));
     const interval=alternate ? gameData.weapons.revolver.alternate.cycle : gameData.weapons.revolver.cycle;
-    times.slice(1).forEach((time,i)=>expect(Math.abs(time-times[i]-interval)).toBeLessThan(STEP+1e-8));
-    expect(Math.abs(times[times.length-1]-times[0]-(times.length-1)*interval)).toBeLessThan(STEP+1e-8);
+    times.slice(1).forEach((time,i)=>expect(Math.abs(time-times[i]-interval)).toBeLessThan(SERVER_TICK+1e-8));
+    expect(Math.abs(times[times.length-1]-times[0]-(times.length-1)*interval)).toBeLessThan(SERVER_TICK+1e-8);
   });
   it('R8 slows only while cocking its primary trigger and restores idle speed on release', () => {
     const action=new WeaponActions('revolver');

@@ -447,6 +447,65 @@ entity has no symbol or convar to find it by. Bot world models are a known gap: 
 idle and east/west run clips only, while the game blends eight directions, walk and crouch cycles;
 adding those needs the Windows model export.
 
+## Server rules: subtick movement, fire timing, footsteps, penetration, movement audit (tenth pass)
+
+Read from `libserver.so` (the install's 2026-10-08 build, same layout as 2000927 for the movement
+routines) on 2026-10-09 with the convar tracer on a second bridge, plus the demos recorded earlier
+in `native-audit/reports`.
+
+Subtick movement. `DoMovement` walks the command's subtick steps: every button edge carries a
+fraction of the 1/64 s tick, and the movement passes run once per sub-interval with that interval's
+buttons (`sv_subtick_movement_view_angles` 1 takes the view angles at the fraction too). Both
+trainer engines already advance the simulation to each input's timestamp before applying the edge,
+so presses and releases take effect at their own time. Nothing to change.
+
+Fire timing. A weapon keeps its next-attack time in seconds; the server compares it, converted to a
+tick and a ratio, with the command time. The recorded demos show what that means in play: a held AK
+fires on ticks 6 and 7 apart (mean 6.4, exactly 100 ms) while the recorded last shot time advances
+by exactly 0.1 s, and the M4A1-S by exactly 0.09 s. So the click fires at its own subtick time, each
+following shot is processed on the first tick at or after its exact schedule, the schedule
+accumulates by the cycle, and the last shot time is the scheduled one (which is why the recoil-index
+decay of the seventh pass tolerates one tick). The trainer now does the same in both engines
+(`tickAligned`, 1/64 s): shots after a press land on tick boundaries with the schedule exact, and a
+shot more than a tick late for its schedule is scheduled from its own time, as the game's stale
+next-attack time is. A reload or a deploy sets the next-attack time to its end, as the game's reload
+and deploy sequences do, and the R8 windup end is checked the same way: a trigger held or pressed
+early is processed on the first tick at or after that end and scheduled there (a Nova held through
+its 0.88 s pump fires on the tick after it and is due again at 1.76 s, not a tick later). The recoil
+guides predict the next two shots at those ticks. Before this pass every shot fired at its exact
+schedule.
+
+Penetration. The per-surface routine is the trainer's `penetrationLoss` to the term:
+(3 / power) * 1.25 * 3 / modifier + damageLoss * damage + thickness^2 / (24 * modifier), with the
+same-material branches (glass or grate under 6 units: modifier 3, loss 0.05; wood 3; plastic 2), a
+3000-unit limit, four penetrations, at least one damage point left to continue, and modifiers under
+0.1 stopping the bullet. A teammate's flesh uses the friendly-fire penetration convar, which the
+trainer never needs. Not reproduced: one surface-flag special case (modifier 1/32, loss 1e-5) whose
+trigger could not be identified, and the debug-impact record's 1.18 / 2.8 / 0.15 terms, which never
+touch damage.
+
+Footsteps. With `mp_footsteps_serverside` 1 (default) the server plays footsteps from the animation
+graph's footstep node; the `player_footstep` event reaches players within 75 units and other player
+sound events within 500; jump and landing sounds (`Default.WalkJump`) are capped by
+`sv_max_distance_transmit_footsteps`. `footstep_audible_threshold` and `footstep_force_volume` exist
+but no server code reads them. The cadence comes from the run and walk cycles (the run clip is
+0.708 s, the walk clip longer, the world-model graph blends them by `move_speed_horizontal`), and
+neither the shipped text data (the clips carry only sync markers) nor the demos (no footstep events
+were recorded) give the stride, so the trainer's rule of a step every 1.35 m above 54% of the
+weapon's speed stays unverified. Walking and crouching are silent in both.
+
+Movement audit. Accelerate matches the fixture-derived function: base max(250, wish speed), the
+weapon's speed scale when `sv_accelerate_use_weapon_speed` is on (default 1), 0.34 while ducking,
+0.52 while walking, and the 5 u/s taper under the walking cap. One corner case was added: at zoom
+level 2 with a walking speed under 110 u/s (AWP, auto-snipers) walking keeps the weapon scale instead
+of 0.52. `sv_backspeed` and `sv_condense_late_buttons` have no readers; `sv_bhop_time_window`,
+`sv_jump_spam_penalty_time`, `sv_timebetweenducks`, `sv_ladder_scale_speed`, the walkable and
+standable normals and `sv_jump_impulse` are read where the trainer's rules expect them; the weapon
+encumbrance convars do not exist (weapon speed is vdata). The numeric defaults are not in the
+binary's static data (registration passes an empty descriptor and the objects live in
+zero-initialised memory), so the values the trainer uses remain those of the public defaults and the
+earlier fixtures, not a reading from this build.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current

@@ -277,6 +277,10 @@ export const latestChanges = {
       'Scoped sensitivity uses the larger of the current and the target field of view: zooming in still follows the transition, zooming out returns to full sensitivity the moment it starts, as in the game.',
       'Checked and left alone: the game\'s viewmodel graphs hold no movement bob or sway, only draw, fire, reload, inspect, idle and settle clips, so the weapon stays still while you move, as it already did here.',
     ]},
+    {id: 'server-tick-fire', title: 'Shots on the server\'s ticks, from the CS2 server and its demos', items: [
+      'Held-trigger shots now land on the game\'s 64 Hz ticks while their schedule stays exact, as the recorded CS2 demos show: an AK spray alternates 6 and 7 ticks between shots at exactly ten shots a second on average. The click itself still fires at its own moment, and a trigger held through a reload, a deploy, a pump or the R8 windup fires on the first tick after it.',
+      'Walking while scoped at the second zoom level accelerates with the weapon\'s scale instead of the walking factor, as the server does. Subtick movement and bullet penetration were read from the server and already matched.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

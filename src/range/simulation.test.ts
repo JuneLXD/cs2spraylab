@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import {SERVER_TICK, tickAligned} from './actor-physics';
 import { defaults, gameData, loadSettings, migrateLegacySettings, migrateMode, parseProfile, recoilPattern, resolutionPixelRatio, sanitizeSettings, viewAspect, weaponIds } from './config';
 import { DEG, direction, groundVelocity, mouseAngle, Simulation, STEP, targetSpeed, UNIT, VERTICAL_FOV, TARGET_Z, SPAWN_Z, JUMP_SPEED, GRAVITY } from './simulation';
 import {REVOLVER_WINDUP} from './weapon-actions';
@@ -66,7 +67,12 @@ describe('Shot scheduling and independent drills', () => {
     s.onShot = shot => times.push(shot.at); s.start(true); run(s, gameData.weapons[id].cycle * gameData.weapons[id].magazine + 1);
     expect(times.length).toBe(gameData.weapons[id].magazine);
     const windup = id === 'revolver' ? REVOLVER_WINDUP : 0;
-    times.forEach((t, i) => expect(Math.abs(t - windup - i * gameData.weapons[id].cycle)).toBeLessThanOrEqual(STEP + 1e-9));
+    // Shots after the first land on the server tick at or after their exact schedule (build 2000930 demos).
+    times.forEach((t, i) => {
+      const scheduled = windup + i * gameData.weapons[id].cycle;
+      expect(t + 1e-9).toBeGreaterThanOrEqual(scheduled); expect(t - scheduled).toBeLessThan(SERVER_TICK + 1e-9);
+      if (i > 0) expect(Math.abs(t * 64 - Math.round(t * 64))).toBeLessThan(1e-6);
+    });
     expect(s.latest?.shots).toBe(times.length);
   });
   it.each(weaponIds.filter(id => id !== 'zeus' && !gameData.weapons[id].fullAuto))('%s fires once per press and queues an early second press until the native cycle', id => {
@@ -84,10 +90,11 @@ describe('Shot scheduling and independent drills', () => {
     expect(s.start()).toBe(true);
     while (s.time + STEP < second + cycle) s.step(STEP);
     expect(times).toHaveLength(2);
-    s.step(STEP);
+    // The queued press fires on the first server tick at or after the cycle.
+    while (s.time + 1e-9 < tickAligned(second + cycle)) s.step(STEP);
     expect(times).toHaveLength(3);
     expect(times[2] - second).toBeGreaterThanOrEqual(cycle - 1e-9);
-    expect(times[2] - second).toBeLessThan(cycle + STEP + 1e-9);
+    expect(times[2] - second).toBeLessThan(cycle + SERVER_TICK + 1e-9);
     run(s, cycle * 3);
     expect(times).toHaveLength(3);
   });

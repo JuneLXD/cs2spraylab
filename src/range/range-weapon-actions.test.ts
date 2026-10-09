@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest';
+import {tickAligned} from './actor-physics';
 import {defaults} from './config';
 import {equipmentStats, SHELL_RELOAD_START, SHELL_RELOAD_FINISH, ZEUS_RECHARGE_SECONDS} from './equipment';
 import {Simulation, STEP, UNIT, type Shot} from './simulation';
@@ -75,10 +76,16 @@ describe('native range discharge and ammo controller', () => {
   it.each(['nova', 'xm1014', 'sawedoff'] as const)('%s queues an empty reload interruption until one shell and finish are complete', id => {
     const sim = make(id, false), shots: Shot[] = []; sim.onShot = shot => shots.push(shot);
     sim.reloadState.ammo = 0; sim.reload(); expect(sim.start()).toBe(true);
-    sim.step(SHELL_RELOAD_START); expect(shots).toHaveLength(0);
-    sim.step(sim.stats.reload); expect(sim.loadedAmmo).toBe(1); expect(sim.reloadPhase).toBe('finish');
-    sim.step(SHELL_RELOAD_FINISH); expect(shots).toHaveLength(1); expect(sim.loadedAmmo).toBe(0); expect(sim.reserveAmmo).toBe(31);
+    runTo(sim, SHELL_RELOAD_START); expect(shots).toHaveLength(0);
+    runTo(sim, SHELL_RELOAD_START + sim.stats.reload + STEP); expect(sim.loadedAmmo).toBe(1); expect(sim.reloadPhase).toBe('finish');
+    // The queued shot is processed on the first server tick after the reload ends and is scheduled at that end;
+    // the empty-magazine auto reload then waits a whole cycle from that schedule.
+    const until = sim.reloadState.until;
+    runTo(sim, tickAligned(until) + STEP); expect(shots).toHaveLength(1); expect(sim.loadedAmmo).toBe(0); expect(sim.reserveAmmo).toBe(31);
+    expect(shots[0].at).toBeCloseTo(tickAligned(until), 9); expect(sim.nextShot).toBeCloseTo(until + sim.stats.cycle, 9);
     expect(sim.drainActionEvents().map(event => event.kind)).toEqual(['reload-start', 'reload-shell', 'reload-end']);
+    runTo(sim, until + sim.stats.cycle - STEP); expect(sim.reloadPhase).toBe('idle');
+    runTo(sim, until + sim.stats.cycle + STEP); expect(sim.reloadPhase).toBe('start');
   });
   it('reloads an empty magazine by itself once the last shot\'s cycle ends, unless the reserve is empty', () => {
     const sim = make('ak47', false); sim.reloadState.ammo = 1;
@@ -91,10 +98,13 @@ describe('native range discharge and ammo controller', () => {
   });
   it('preserves the pump deadline when reload is interrupted by holstering', () => {
     const sim = make('nova', false), shots: Shot[] = []; sim.onShot = shot => shots.push(shot); sim.start();
-    sim.reloadHeld = true; sim.reload(); sim.step(.1); sim.equip(2); sim.equip(1); sim.equipReadyAt = sim.time;
+    sim.reloadHeld = true; sim.reload(); runTo(sim, .1); sim.equip(2); sim.equip(1); sim.equipReadyAt = sim.time;
     expect(sim.start()).toBe(true); runTo(sim, .88); expect(shots).toHaveLength(1);
-    sim.step(STEP); expect(shots).toHaveLength(2); expect(sim.reserveAmmo).toBe(32);
-    expect(shots[1].at - shots[0].at).toBeGreaterThanOrEqual(.88);
+    // The queued shot is processed on the server tick that follows the pump deadline and keeps the deadline as its
+    // schedule: the next shot is due a cycle after 0.88 s, not after the tick.
+    runTo(sim, tickAligned(.88) - STEP); expect(shots).toHaveLength(1);
+    runTo(sim, tickAligned(.88) + STEP); expect(shots).toHaveLength(2); expect(sim.reserveAmmo).toBe(32);
+    expect(shots[1].at).toBeCloseTo(tickAligned(.88), 9); expect(sim.nextShot).toBeCloseTo(.88 + .88, 9);
   });
   it('recharges holstered Zeus and never advances its zero-duration generic recovery', () => {
     const sim = make('zeus'), shots: Shot[] = []; sim.onShot = shot => shots.push(shot); sim.start();

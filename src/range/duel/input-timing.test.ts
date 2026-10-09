@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest';
+import {tickAligned} from '../actor-physics';
 import {STEP, UNIT} from '../actor-physics';
 import {defaults, gameData} from '../config';
 import {InputClock} from '../input-clock';
@@ -127,13 +128,13 @@ describe('event-time input and local presentation', () => {
     expect(sim.actors[1].health).toBe(500);
   });
 
-  it('samples full-auto shots at weapon-cycle deadlines rather than rounding to ticks', () => {
+  it('fires the click at its own time, then lands each held-trigger shot on the server tick after its exact schedule', () => {
     const sim = combat(); sim.actors[0].yaw = Math.PI;
     sim.advance(.0013); input(sim, {firePressed: true, fireHeld: true});
     sim.advance(.249); sim.advance(.249);
     const shots = sim.drainEvents().filter(event => event.kind === 'fire' && event.actorId === 0);
     expect(shots.length).toBeGreaterThan(4);
-    shots.forEach((shot, index) => expect(shot.at).toBeCloseTo(.0013 + index * gameData.weapons.ak47.cycle, 10));
+    shots.forEach((shot, index) => expect(shot.at).toBeCloseTo(index ? tickAligned(.0013 + index * gameData.weapons.ak47.cycle) : .0013, 10));
     expect(sim.actors[0].weapon.ammo).toBe(30 - shots.length);
   });
 
