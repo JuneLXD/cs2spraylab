@@ -4,7 +4,9 @@ import {equipmentStats} from '../equipment';
 import {sanitizeDuelConfig, type DuelConfig} from './config';
 import {traceSolid, type Arena} from './geometry';
 import {routeTo} from './navigation';
-import {DuelSimulation} from './simulation';
+import {DuelSimulation, freeSpawnPose} from './simulation';
+import {fitsTerrain} from '../actor-collision';
+import {arenaTerrainNear} from './traversal';
 import {TeamSpawner} from './team-spawns';
 import {DuelWeaponState} from './weapon-state';
 import {workshopArena, type WorkshopData} from './workshop';
@@ -112,6 +114,28 @@ describe('deathmatch on aim_redline', () => {
     expect(reborn.equipReadyAt).toBeGreaterThan(sim.time - .25);
     expect(sim.loadout).toEqual({primary: 'ak47', sidearm: 'usp'});
     expect(sim.drainEvents().some(event => event.kind === 'round')).toBe(false);
+  });
+
+  it('a spawn never leaves the hull inside the voxelised map: the stair clip overlapping a T spawn is nudged free', () => {
+    const height = 72 * UNIT;
+    const fits = (point: {x: number; y: number; z: number}) => fitsTerrain({x: point.x, y: point.y + EYE, z: point.z}, point.y, height,
+      {solids: arenaTerrainNear(arena, {x: point.x, y: point.y + EYE, z: point.z}), floor: 0, bounds: arena});
+    const stuck = spawns.filter(spawn => !fits(spawn));
+    expect(stuck.map(spawn => [spawn.team, +spawn.x.toFixed(2), +spawn.z.toFixed(2)])).toEqual([['t', -2.23, -3.98]]);
+    for (const spawn of spawns) {
+      const pose = freeSpawnPose(spawn, arena);
+      expect(fits(pose)).toBe(true);
+      expect(Math.hypot(pose.x - spawn.x, pose.y - spawn.y, pose.z - spawn.z)).toBeLessThanOrEqual(.2);
+    }
+    // From the nudged stair-base spawn you can walk off in every direction (sideways is up the stairs).
+    const base = freeSpawnPose(stuck[0], arena);
+    for (const command of [{forward: 1}, {forward: -1}, {side: 1}, {side: -1}]) {
+      const sim = deathmatch({botCount: 1, weapons: ['knife']});
+      Object.assign(sim.actors[0], {position: {x: base.x, y: base.y + EYE, z: base.z}, feet: base.y, yaw: base.yaw, grounded: true, velocity: {x: 0, z: 0}});
+      sim.start(); sim.command(0, {forward: 0, side: 0, ...command});
+      runFor(sim, 1);
+      expect(Math.hypot(sim.actors[0].position.x - base.x, sim.actors[0].position.z - base.z), JSON.stringify(command)).toBeGreaterThan(.3);
+    }
   });
 
   it('bots route around the warehouse collision instead of walking into walls', () => {

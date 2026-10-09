@@ -113,6 +113,12 @@ sv_infinite_ammo 2, 'magazine' = sv_infinite_ammo 1). The Deathmatch setup offer
 bots keep normal magazines so their reload windows stay. `useDuelConfig` pins it to 'off' for
 round-based duels, which never show the control.
 
+Spawn placement runs through `freeSpawnPose` (same day): a spawn whose standing hull would start
+inside a solid is moved to the nearest free pose within half a metre, sideways first, else up to
+the step height, like CS2's CheckStuck. The voxelised 10 cm clip at the foot of the stairs overlapped
+the T spawn at (-2.2, -4.0) by 12 cm, which left a respawned player unable to move; it now spawns
+15 cm back. `deathmatch.test.ts` checks every spawn of both teams and walks off that one.
+
 Bots use `BotBrain` on the imported map (the tactical brain needs authored cover lanes) with a
 `BotNavigator`: routes from `routeTo` with lenient endpoints, since spawns tucked against crates
 sit inside the navigation margin, and roaming goals drawn from the map's navigable floor spots

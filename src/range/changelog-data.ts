@@ -250,6 +250,9 @@ export const latestChanges = {
     {id: 'deathmatch-ammo', title: 'Ammo mode in Deathmatch', items: [
       'The Deathmatch setup has the Ammo selection from Aim Botz: Normal reserves, Infinite reserve (you still reload but never run dry, sv_infinite_ammo 2) or Never reload (sv_infinite_ammo 1). It applies to you only; the bots keep normal magazines and their reload windows.',
     ]},
+    {id: 'spawn-unstick', title: 'Deathmatch spawns never start stuck', items: [
+      'A spawn whose hull would start inside the imported map\'s collision is nudged to the nearest free spot, as CS2\'s unstick does. The 10 cm stair clip at the foot of aim_redline\'s stairs overlapped the T spawn there, so you could not move after respawning on it.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

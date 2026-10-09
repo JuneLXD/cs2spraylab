@@ -14,7 +14,7 @@ import {createBotTraits} from './skill';
 import {idleCommand, type ActorCommand, type DuelActorSnapshot, type DuelEvent, type Hitgroup} from './types';
 import {traceHitboxes} from './hitboxes';
 import {DuelWeaponState, type FiredRound} from './weapon-state';
-import {verticalContact} from '../actor-collision';
+import {fitsTerrain, verticalContact} from '../actor-collision';
 import {TERRAIN_RULES} from '../terrain';
 import {FOOTSTEP_RANGE, footstepGain, gunshotGain, gunshotRange} from '../sound-model';
 import {proficiency} from './awareness';
@@ -73,6 +73,24 @@ const makeActor = (id: number, side: CombatActor['side'], x: number, z: number, 
   stepDistance: 0,
   inventory: new Map(), equipReadyAt: 0,
 });
+
+/** Source's CheckStuck at spawn time: a hull that starts inside a solid can never move (the voxelised clip at the
+ * foot of aim_redline's stairs overlaps one T spawn by 10 cm), so the nearest free pose within half a metre is used;
+ * sideways nudges are preferred over standing on the lip. */
+export function freeSpawnPose<T extends {x: number; y: number; z: number}>(spawn: T, arena: Arena): T {
+  const height = 72 * UNIT, eye = 64 * UNIT;
+  const world = {solids: arenaTerrainNear(arena, {x: spawn.x, y: spawn.y + eye, z: spawn.z}), floor: 0, bounds: arena};
+  const fits = (x: number, feet: number, z: number) => fitsTerrain({x, y: feet + eye, z}, feet, height, world);
+  if (fits(spawn.x, spawn.y, spawn.z)) return spawn;
+  const nudges: {dx: number; dy: number; dz: number}[] = [];
+  for (let up = .05; up <= TERRAIN_RULES.stepHeight + 1e-9; up += .05) nudges.push({dx: 0, dy: up, dz: 0});
+  for (let ring = .05; ring <= .5 + 1e-9; ring += .05) for (let k = 0; k < 8; k++)
+    nudges.push({dx: Math.cos(k * Math.PI / 4) * ring, dy: 0, dz: Math.sin(k * Math.PI / 4) * ring});
+  nudges.sort((a, b) => Math.hypot(a.dx, 2 * a.dy, a.dz) - Math.hypot(b.dx, 2 * b.dy, b.dz));
+  for (const {dx, dy, dz} of nudges) if (fits(spawn.x + dx, spawn.y + dy, spawn.z + dz))
+    return {...spawn, x: spawn.x + dx, y: spawn.y + dy, z: spawn.z + dz};
+  return spawn;
+}
 
 /** Stand an actor on a map spawn point, facing the way it faces. */
 const placeAt = (actor: CombatActor, spawn: {x: number; y: number; z: number; yaw: number}) => {
@@ -156,7 +174,7 @@ export class DuelSimulation {
       this.teamSpawner = new TeamSpawner(this.arena, seed);
       // Roaming goals: floor spots an actor hull can stand on without touching the navigation margin.
       this.floorSpots = this.arena.workshop!.spots.filter(spot => spot[1] < .05 && navigable({x: spot[0], y: spot[1], z: spot[2]}, this.arena, this.environment));
-      placeAt(this.actors[0], this.teamSpawner.first('t'));
+      placeAt(this.actors[0], freeSpawnPose(this.teamSpawner.first('t'), this.arena));
       const behaviors = rosterBehaviors(this.config, seed);
       for (let index = 0; index < this.config.botCount; index++) this.actors.push(this.spawnDuelBot(index + 1, 1, behaviors[index]));
       return;
@@ -632,7 +650,7 @@ export class DuelSimulation {
     const actor = makeActor(id, 'enemy', spawn.x, spawn.z, bot.weapon, bot.health, bot.armor, this.seed + generation * 7919);
     actor.generation = generation;
     actor.armor = bot.armor ? bot.armorPoints : 0; actor.helmet = bot.armor && bot.helmet;
-    placeAt(actor, spawn);
+    placeAt(actor, freeSpawnPose(spawn, this.arena));
     const traits = createBotTraits(bot.skill, this.seed, id);
     this.brains.set(id, new BotBrain(traits, behavior, bot.accuracy, randomStream(this.seed, `brain:${id}:${generation}`), this.navigator()));
     return actor;
@@ -647,7 +665,7 @@ export class DuelSimulation {
     actor.armor = this.config.playerArmor ? this.config.playerArmorPoints : 0;
     actor.helmet = this.config.playerArmor && this.config.playerHelmet;
     const living = this.actors.filter(other => other.alive && other.id !== 0).map(other => other.position);
-    placeAt(actor, this.teamSpawner!.next('t', living, living));
+    placeAt(actor, freeSpawnPose(this.teamSpawner!.next('t', living, living), this.arena));
     actor.equipReadyAt = this.time + equipmentStats(actor.weapon.id).deploy;
     return actor;
   }
