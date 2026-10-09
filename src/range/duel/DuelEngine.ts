@@ -1,3 +1,4 @@
+import {KillFeedBuffer, type KillEntry} from './kill-feed';
 import {applyMapPresentation} from './map-presentation';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -53,6 +54,7 @@ import {BOTZ_PLAYER_SPAWN, botzArena, botzDuelConfig, botzSummary, loadBotzHisto
 import {REFLEX_ISLAND, REFLEX_ISLAND_HALF, REFLEX_REACH, reflexArena} from './reflex';
 
 export type DuelStatus = {
+  killFeed?: readonly KillEntry[];
   phase: 'ready' | 'fighting' | 'result'; paused: boolean; outcome?: 'won' | 'lost' | 'draw';
   health: number; armor: number; ammo: number; reloading: boolean; enemies: number;
   seconds: number; kills: number; damage: number; input: string; caption: string;
@@ -118,6 +120,7 @@ export class DuelEngine {
   private entering = false;
   private enterRevision = 0;
   private kills = 0;
+  private readonly killFeed = new KillFeedBuffer();
   private damage = 0;
   private models = new Map<number, THREE.Group>();
   private hitboxPoses = new Map<number, NativeHitboxPose>();
@@ -726,7 +729,7 @@ export class DuelEngine {
     this.shell.scale.set(this.config.arenaScale, 1, this.config.arenaScale);
     this.damageFeedback.clear(); this.wasReloading = false;
     this.roundFlow.reset(); this.deaths.clear();
-    this.caption = ''; this.captionUntil = 0; this.kick = 0;
+    this.caption = ''; this.captionUntil = 0; this.kick = 0; this.killFeed.clear();
     this.audio.stopVoices();this.clearEffects(); this.rebuildCovers(); this.rebuildActors(); this.report();
     this.loadWorldWeapons();
     if (continuous) {this.sim.start(); this.beginProgression(); this.updateMovement(); this.report();}
@@ -973,6 +976,11 @@ export class DuelEngine {
           this.settings.volume*.35,this.soundLocation(event.point));
       }
       else if (event.kind === 'hit') {
+        if (event.lethal) this.killFeed.add(event, shots.get(event.shotId)?.equipment ?? this.sim.actors[event.shooter]?.weapon.id ?? 'ak47', this.animationClock, id => {
+          if (id === 0) return 'You';
+          const behavior = !this.botz ? botConfig(this.config, id - 1).behavior : undefined;
+          return `Bot ${id}${behavior && behavior !== 'mixed' ? ` · ${behavior[0].toUpperCase()}${behavior.slice(1)}` : ''}`;
+        });
         endpoint(event.shotId,event.point);
         this.shotEffects.impact(v3(event.point),this.settings.impactSize,event.shooter===0?this.ownTraceColor:this.enemyTraceColor,this.animationClock);
         // An Aim Botz bot may already have respawned when a frame runs several ticks.
@@ -1128,7 +1136,7 @@ export class DuelEngine {
 
   private report() {
     const [player, ...bots] = this.sim.renderSnapshot();
-    this.onStatus({phase: this.sim.phase, paused: this.paused, outcome: this.sim.phase==='result'?this.sim.outcome:undefined,
+    this.onStatus({killFeed: this.killFeed.visible(this.animationClock), phase: this.sim.phase, paused: this.paused, outcome: this.sim.phase==='result'?this.sim.outcome:undefined,
       health: player.health, armor: player.armor, ammo: player.ammo, reloading: player.reloading,
       reserve:player.reserve,reloadSilent:player.reloadSilent,recharge:Math.max(0,this.sim.actors[0].weapon.rechargeUntil-this.sim.time),
       enemies: bots.filter(bot => bot.alive).length, seconds: this.sim.time, kills: this.kills,

@@ -196,7 +196,7 @@ test('walking controls distance, jump changes view and stationary backstop stays
   await selectDrill(page, 'guided');
   await page.getByRole('button', { name: 'Enter range', exact: true }).click();
   await page.keyboard.down('KeyW');
-  await expect.poll(async () => parseFloat(await page.locator('.distance-input output').innerText())).toBeLessThan(8);
+  await expect.poll(async () => parseFloat(await page.locator('.hud-performance .hud-stat').last().locator('strong').innerText())).toBeLessThan(8);
   await page.keyboard.up('KeyW');
   const canvas = page.locator('canvas[data-range]');
   await page.waitForTimeout(400);
@@ -273,7 +273,7 @@ test('long-range compensation cues remain fixed-size and player distance persist
   const nearSize = await page.locator('.aim-cue.now').boundingBox();
   await page.getByRole('button', { name: 'Enter range', exact: true }).click();
   await page.keyboard.down('KeyS');
-  await expect.poll(async () => parseFloat(await page.locator('.distance-input output').innerText()), { timeout: 25000 }).toBeGreaterThan(90);
+  await expect.poll(async () => parseFloat(await page.locator('.hud-performance .hud-stat').last().locator('strong').innerText()), { timeout: 25000 }).toBeGreaterThan(90);
   await page.keyboard.up('KeyS');
   await page.getByRole('button', { name: 'Pause range', exact: true }).click();
   await expect(page.locator('.aim-cue.now')).toBeVisible();
@@ -282,7 +282,7 @@ test('long-range compensation cues remain fixed-size and player distance persist
   expect(farSize!.width).toBe(nearSize!.width); expect(farSize!.height).toBe(nearSize!.height);
   await selectDrill(page, 'spray');
   await expect(page.locator('.aim-cue.now')).toBeHidden();
-  expect(parseFloat(await page.locator('.distance-input output').innerText())).toBeGreaterThan(90);
+  expect(parseFloat(await page.locator('.hud-performance .hud-stat').last().locator('strong').innerText())).toBeGreaterThan(90);
   await selectDrill(page, 'guided');
   await page.screenshot({ path: `test-results/${info.project.name}-long-range.png` });
 });

@@ -1,8 +1,8 @@
 import {memo} from 'react';
 import {GraduationCap} from 'lucide-react';
 import {gameData, loadoutWeapon, modeNames, type Settings} from '../../config';
-import {cosmeticLabel,cosmeticPreview} from '../../cosmetics';
-import {equippedCosmetic,type ProgressionProfile} from '../../progression';
+import {cosmeticLabel, cosmeticPreview} from '../../cosmetics';
+import {equippedCosmetic, type ProgressionProfile} from '../../progression';
 import {cosmeticCatalog} from '../../cosmetics';
 import {latestChanges} from '../../changelog-data';
 import type {Equipment} from '../../equipment';

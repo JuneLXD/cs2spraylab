@@ -1,7 +1,7 @@
 import {TrainingSettings} from './TrainingSettings';
 import {memo, useEffect, useRef, useState, type FocusEvent, type MouseEvent} from 'react';
 import {Check, Download, RotateCcw, Upload, Volume2, X} from 'lucide-react';
-import {classicViewmodel, gameData, isDuelEngineMode, loadoutWeapon, presets, resolutions, resolutionSize, weaponNames, type Crosshair, type MeasuredProfile, type Resolution, type Settings, type Weapon} from '../../config';
+import {classicViewmodel, gameData, loadoutWeapon, presets, resolutions, resolutionSize, weaponNames, type Crosshair, type MeasuredProfile, type Resolution, type Settings, type Weapon} from '../../config';
 import {KeyboardSettings} from '../../keybinds/KeyboardSettings';
 import {frameLimitOptions, useDisplayRate} from '../../display-rate';
 import recoilProvenance from '../../recoil-provenance.json';
@@ -14,7 +14,7 @@ type Tab = 'game' | 'video' | 'crosshair' | 'keyboard' | 'data';
 const tabs: {id: Tab; label: string}[] = [{id: 'game', label: 'Game'}, {id: 'video', label: 'Video'}, {id: 'crosshair', label: 'Crosshair'}, {id: 'keyboard', label: 'Keyboard / Mouse'}, {id: 'data', label: 'Audio & Data'}];
 type Props = {settings: Settings; profiles: Partial<Record<Weapon, MeasuredProfile>>; update: (patch: Partial<Settings>) => void;
   cross: (patch: Partial<Crosshair>) => void; close: () => void; restore: () => void; notify: (message: string) => void;
-  importProfile: (file?: File) => Promise<void>; removeCapture: () => void; exportSession: () => void};
+  importProfile: (file?: File) => Promise<void>; removeCapture: () => void; exportSession: () => void; exportFrames: () => void};
 const help: Record<string, string> = {
   'Low-latency rendering': 'Chrome and Edge can present the frame without waiting for the page compositor. It can tear, like V-Sync off. Takes effect when you switch drills or reload. Software renderers always get a normal canvas.',
   'Render quality': 'Choose scene detail and rendering density. Adaptive adjusts density as the frame rate changes. Performance also sets a 60 FPS limit.',
@@ -41,11 +41,10 @@ function resolutionLabel(resolution: Resolution) {
   return `${size.width} x ${size.height} (${aspect}${aspect === '4:3' || aspect === '5:4' ? ' stretched' : ''})`;
 }
 
-export const SettingsScreen = memo(function SettingsScreen({settings, profiles, update, cross, close, restore, notify, importProfile, removeCapture, exportSession}: Props) {
+export const SettingsScreen = memo(function SettingsScreen({settings, profiles, update, cross, close, restore, notify, importProfile, removeCapture, exportSession, exportFrames}: Props) {
   const [tab, setTab] = useState<Tab>('game');
   const [about, setAbout] = useState({title: 'Sensitivity', text: help.Sensitivity});
   const displayHz = useDisplayRate(true);
-  const weapon = gameData.weapons[loadoutWeapon(settings)];
   const audio = useRef<RangeAudio>();
   useEffect(() => () => {audio.current?.dispose(); audio.current = undefined;}, []);
   const testSound = async () => {
@@ -98,6 +97,7 @@ export const SettingsScreen = memo(function SettingsScreen({settings, profiles, 
               <Toggle label="Low-latency rendering" checked={settings.lowLatency} onChange={lowLatency => update({lowLatency})}/>
               <p className="setting-explanation">Chrome and Edge show each frame without waiting for the page compositor, about a frame sooner after you move the mouse. It can tear, like V-Sync off. Takes effect when you switch drills or reload.</p>
               <Toggle label="Show FPS counter" checked={settings.showFps} onChange={showFps => update({showFps})}/>
+              <Button disabled={!settings.showFps} onClick={exportFrames} title={settings.showFps ? 'Download measured frame intervals' : 'Enable the FPS counter to record frame intervals'}><Download size={16}/>Export frame timings</Button>
               <h2>Browser</h2><Toggle label="Protect range Ctrl+W" checked={settings.protectShortcuts} onChange={protectShortcuts => update({protectShortcuts})}/>
               </>}
             {tab === 'crosshair' && <>

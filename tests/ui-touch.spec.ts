@@ -1,0 +1,20 @@
+import {expect,test} from '@playwright/test';
+test.use({hasTouch:true,isMobile:true,viewport:{width:390,height:844}});
+test('touch users can enter, pause, inspect, select drills and open Hearing practice',async({page})=>{
+  test.setTimeout(120000);
+  await page.addInitScript(()=>localStorage.setItem('spraylab.range.v2',JSON.stringify({mode:'guided',weapon:'ak47',quality:'performance',volume:0,protectShortcuts:false})));
+  await page.goto('/');
+  await page.getByRole('button',{name:'Enter range',exact:true}).tap();
+  await expect(page.getByRole('button',{name:'Pause range'})).toBeVisible();
+  expect(await page.evaluate(()=>!!document.pointerLockElement)).toBe(false);
+  await page.getByRole('button',{name:'Inspect weapon',exact:true}).tap();
+  await page.getByRole('button',{name:'Pause range'}).tap();
+  await expect(page.getByLabel('Play setup')).toBeVisible();
+  await page.getByLabel('Training mode').selectOption('hearing');
+  await page.getByRole('button',{name:'Start hearing practice',exact:true}).tap();
+  await expect(page.locator('.hearing-practice')).toBeVisible();
+  await page.getByRole('button',{name:'Back to Play',exact:true}).tap();
+  await expect(page.getByLabel('Training mode')).toHaveValue('hearing');
+  const go=(await page.getByRole('button',{name:'Start hearing practice'}).boundingBox())!;
+  expect(go.x+go.width).toBeLessThanOrEqual(390);
+});

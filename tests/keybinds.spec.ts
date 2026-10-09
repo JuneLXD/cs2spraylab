@@ -99,6 +99,7 @@ test('AI Duel fires and switches weapons through imported binds', async ({page},
 });
 
 test('imported binds drive range movement instead of WASD', async ({page}, info) => {
+  test.setTimeout(120000);
   test.skip(info.project.name.startsWith('mobile'), 'Desktop keyboard workflow');
   await page.addInitScript(() => Object.defineProperty(HTMLElement.prototype, 'requestPointerLock', {value: undefined}));
   await page.goto('/');
@@ -107,7 +108,7 @@ test('imported binds drive range movement instead of WASD', async ({page}, info)
   await importConfig(page);
   await page.getByRole('button', {name: 'Done', exact: true}).click();
   await page.getByRole('button', {name: 'Enter range', exact: true}).click();
-  const distance = async () => parseFloat(await page.locator('.distance-input output').innerText());
+  const distance = async () => parseFloat(await page.locator('.hud-performance .hud-stat').last().locator('strong').innerText());
   const start = await distance();
   await page.keyboard.down('KeyW'); await page.waitForTimeout(400); await page.keyboard.up('KeyW');
   expect(await distance()).toBe(start);

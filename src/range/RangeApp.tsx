@@ -12,32 +12,27 @@ import type {DuelHandle, DuelMenuStatus} from './duel/DuelStage';
 import {SettingsScreen} from './ui/screens/SettingsScreen';
 import {CrosshairView} from './ui/CrosshairView';
 import {AmmoBlock, EscHint, ScoreBar, ScoreCell, StatBlock, WeaponSlotList} from './hud/Hud';
-import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Activity, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronDown, Code2 as Github, Crosshair as AimIcon, Download, Eye, Gauge, History, ListPlus, Maximize, Paintbrush, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, Target, Upload, Volume2, VolumeX, X } from 'lucide-react';
-import { classicViewmodel, Crosshair, defaults, gameData, historyModeNames, isDuelEngineMode, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, resolutions, resolutionSize, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol, type Resolution } from './config';
-import { RangeEngine, RangeStatus } from './engine';
-import { Result } from './simulation';
-import { loadAttempts } from '../lib/storage';
-import { markSetupHintSeen, needsSetupHint } from './onboarding';
-import {equipmentIds,equipmentNames,equipmentStats,type Slot} from './equipment';
-import {isDrillMode,readDrillMetrics} from './drills';
-import {DrillPanel,DrillReview} from './DrillPanel';
-import {makeRepFeedback,type RepFeedback} from './rep-feedback';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {Activity, ArrowLeft, ArrowRight, ArrowUp, Check, Eye, Pause, Play, RotateCcw, ScanLine, Shield, Target, X} from 'lucide-react';
+import {Crosshair, defaults, gameData, isDuelEngineMode, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, saveSettings, Settings, Weapon, weaponNames} from './config';
+import {RangeEngine, RangeStatus} from './engine';
+import {Result} from './simulation';
+import {loadAttempts} from '../lib/storage';
+import {markSetupHintSeen, needsSetupHint} from './onboarding';
+import {equipmentIds, equipmentNames} from './equipment';
+import {isDrillMode, readDrillMetrics} from './drills';
+import {DrillPanel} from './DrillPanel';
+import {makeRepFeedback, type RepFeedback} from './rep-feedback';
 import {DuelStage} from './duel/DuelStage';
-import {GraduationCap} from 'lucide-react';
 import {MovementTutorial} from './MovementTutorial';
 import {modeInfo} from './mode-info';
-import recoilProvenance from './recoil-provenance.json';
-import {createProgressionController, cosmeticsForEquipment, equippedCosmetic, type ProgressionController, type ProgressionProfile} from './progression';
+import {createProgressionController} from './progression';
 import {AchievementNotification, ProgressionPanel, useProgression} from './ProgressionPanel';
-import {cosmeticCatalog, cosmeticLabel, cosmeticPreview} from './cosmetics';
+import {cosmeticCatalog, cosmeticLabel} from './cosmetics';
 import {Changelog} from './Changelog';
 import {HearingPractice} from './HearingPractice';
-import {KeyboardSettings} from './keybinds/KeyboardSettings';
-import {keyHint, shortcutHint, slotKey} from './keybinds/profile';
+import {keyHint} from './keybinds/profile';
 import {applyConsoleCommand} from './console-settings';
-import {SliderRow as Slider, SwitchRow as Toggle, NumberField} from './ui/primitives';
-import {frameLimitOptions, useDisplayRate} from './display-rate';
 
 function readResults(): Result[] {
   try {
@@ -59,7 +54,6 @@ export default function RangeApp() {
   const [settings, setSettings] = useState(loadSettings);
   const [setupHint, setSetupHint] = useState(needsSetupHint);
   const [tutorial, setTutorial] = useState(false);
-  const settingsButton = useRef<HTMLButtonElement>(null);
   const settingsRef = useRef(settings); settingsRef.current = settings;
   const [status, setStatus] = useState(emptyStatus);
   const [panel, setPanel] = useState<Panel>(null);
@@ -96,7 +90,6 @@ export default function RangeApp() {
   const drawer = useRef<HTMLElement>(null);
   const selectedWeapon = loadoutWeapon(settings);
   const assetReady = status.assets === 'Models ready' && status.weapon === selectedWeapon;
-  const weapon = gameData.weapons[selectedWeapon];
   const score = settings.mode==='precision' ? status.drill?.last?.movementScore ?? 0 : status.shots ? status.hits / status.shots * 100 : 0;
   const showRepFeedback=repFeedback?.mode===settings.mode && status.active && !status.firing && !status.hitFlash;
   const update = useCallback((patch: Partial<Settings>) => setSettings(s => ({ ...s, ...patch })), []);
@@ -213,11 +206,12 @@ export default function RangeApp() {
     const next = {...profiles}; delete next[settings.weapon]; setProfiles(next);
     try {localStorage.setItem('spraylab.profiles.v1', JSON.stringify(next));} catch {setNotice('Storage unavailable.');}
   }, [profiles, settings.weapon]);
+  const exportFrames = useCallback(() => stage.current?.querySelector<HTMLButtonElement>('.performance-meter')?.click(), []);
   const exportSession = useCallback(() => download('spraylab-session.json', {settings, results, legacy, profiles}), [settings, results, legacy, profiles]);
   return <main className="range-app">
     <section ref={stage} data-screen={screen} className={`range-stage sl-stage${screen !== 'game' || panel ? ' sl-menu-open' : ''}${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode) ? ' with-drill' : ''}`} aria-label="Practice range">
       <AchievementNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
-      {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={entered} engineRef={duel} onMenuStatus={onDuelMenu} controlsTarget={controlsTarget} config={duelConfig.config} update={duelConfig.update} botz={selectedBotz.config} updateBotz={selectedBotz.update} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : <>
+      {settings.mode === 'hearing' ? <HearingPractice backToPlay={play} volume={settings.volume} openSettings={() => open('settings')} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={entered} engineRef={duel} onMenuStatus={onDuelMenu} controlsTarget={controlsTarget} config={duelConfig.config} update={duelConfig.update} botz={selectedBotz.config} updateBotz={selectedBotz.update} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view sl-game-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
       <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
@@ -237,7 +231,6 @@ export default function RangeApp() {
       {showRepFeedback&&repFeedback&&<div className={`rep-feedback${repFeedback.passed?' passed':''}`} role="status" aria-label="Rep feedback"><Check className="sl-rep-icon" size={24}/><div><b>{repFeedback.message}</b>{repFeedback.tip&&<p>{repFeedback.tip}</p>}</div></div>}
       {error && <div className="range-error" role="alert"><Shield size={24} /><p>{error}</p><button onClick={() => { setError(''); setGeneration(g => g + 1); }}><RotateCcw size={16} />Restart range</button></div>}
       {status.active && <EscHint className="exit-hint" label="Pause range" pause={() => engine.current?.pause()}/>}
-      {status.active && status.input !== 'Touch' && !status.shortcutProtected && shortcutHint(settings.keyboard) && <div className="range-shortcut-warning" role="status">{shortcutHint(settings.keyboard)}</div>}
       <div className="range-hud sl-hud">
         <div className="hud-performance sl-bottom-stats">
           <StatBlock className="hud-stat" icon={Activity} value={Math.round(status.speed)} unit="u/s" label="SPEED"/>
@@ -259,7 +252,7 @@ export default function RangeApp() {
       {isDrillMode(settings.mode)&&<DrillPanel status={status} mode={settings.mode} challenge={settings.drillPace==='challenge'} peekDuration={settings.peekDuration}/>}
       </>}
       {screen !== 'game' && <div className="sl-menu-layer">
-        <TopNav screen={screen} navigate={navigate} loadout={openLoadout} armory={openArmory} session={openHistory} settings={openSettings} changelog={openChangelog} count={recent.length} fps={settings.showFps} volume={settings.volume} toggleFps={toggleFps} mute={mute} fullscreen={fullscreen}/>
+        <TopNav screen={screen} navigate={navigate} loadout={openLoadout} armory={openArmory} session={openHistory} settings={openSettings} changelog={openChangelog} changelogOpen={panel === 'changelog'} count={recent.length} fps={settings.showFps} volume={settings.volume} toggleFps={toggleFps} mute={mute} fullscreen={fullscreen}/>
         {screen === 'play' && <PlayScreen settings={settings} profile={progressionState.profile} update={update} selectMode={selectMode} controlsRef={setControlsTarget}
           ready={settings.mode === 'hearing' || (isDuelEngineMode(settings.mode) ? duelMenu.ready : assetReady)} resume={isDuelEngineMode(settings.mode) ? duelMenu.paused && !duelMenu.result : hasSession}
           input={isDuelEngineMode(settings.mode) ? duelMenu.input : status.input}
@@ -270,14 +263,13 @@ export default function RangeApp() {
         {setupHint && !panel && <div className="settings-hint" role="status"><button className="hint-action" aria-label="Customize your CS2 settings" onClick={openSettings}><b>Match your CS2 setup</b><span id="settings-hint-text">Sensitivity, crosshair & audio</span></button><ArrowUp className="hint-arrow" size={22}/><button className="icon-button" aria-label="Dismiss settings hint" onClick={() => {setSetupHint(false); stage.current?.querySelector<HTMLButtonElement>('.settings-button')?.focus();}}><X size={16}/></button></div>}
       </div>}
       {screen !== 'game' && (error || duelMenu.error) && <div className="sl-engine-error" role="alert"><Shield size={24}/><p>{error || duelMenu.error}</p><button onClick={() => {if (isDuelEngineMode(settings.mode)) location.reload(); else {setError(''); setGeneration(value=>value+1);}}}>Reload range</button></div>}
-      {settings.mode === 'hearing' && screen === 'game' && <button className="sl-hearing-back" onClick={() => navigate('play')}>Back to Play</button>}
     {notice && <div className="toast" role="status">{notice}<button className="icon-button" aria-label="Dismiss message" onClick={() => setNotice('')}><X size={15} /></button></div>}
     {panel && <div className="drawer-backdrop" onPointerDown={e => { if (e.target === e.currentTarget) setPanel(null); }}>
       <aside className={`drawer ${panel === 'settings' ? 'sl-settings-page' : panel === 'weapons' ? 'sl-loadout-page' : panel === 'history' ? 'sl-session-page' : ''} ${panel === 'history' || panel === 'changelog' || panel === 'settings' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="panel-title" tabIndex={-1} ref={drawer}>
         {panel === 'changelog' && <div className="drawer-header"><div><small>SPRAYLAB</small><h1 id="panel-title">Changelog</h1></div><button className="icon-button" aria-label="Close panel" onClick={() => setPanel(null)}><X size={21} /></button></div>}
         {panel === 'changelog' && <Changelog/>}
         {panel === 'settings' && <SettingsScreen settings={settings} profiles={profiles} update={update} cross={cross} close={closePanel} notify={setNotice} importProfile={importProfile}
-          restore={restoreSettings} removeCapture={removeCapture} exportSession={exportSession}/>}
+          restore={restoreSettings} removeCapture={removeCapture} exportSession={exportSession} exportFrames={exportFrames}/>}
         {panel === 'weapons' && <LoadoutScreen settings={settings} update={update} profile={progressionState.profile} controller={progression} armory={setArmoryRequest} close={closePanel}/>}
         {panel === 'history' && <SessionScreen results={results} legacy={legacy} histories={histories} mode={settings.mode} snapshot={duel.current?.snapshot()} close={closePanel}/>}
 

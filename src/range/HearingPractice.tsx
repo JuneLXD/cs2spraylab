@@ -11,10 +11,10 @@ import {
 import './hearing-practice.css';
 
 type Phase = 'idle' | 'loading' | 'playing' | 'waiting' | 'review' | 'paused' | 'error';
-export type HearingPracticeProps = {volume: number; suspended?: boolean; openSettings?: () => void};
+export type HearingPracticeProps = {volume: number; suspended?: boolean; openSettings?: () => void; backToPlay?: () => void};
 const metric = (value: number | null, unit = '') => value === null ? '--' : `${value.toFixed(1)}${unit}`;
 
-export function HearingPractice({volume, suspended = false, openSettings}: HearingPracticeProps) {
+export function HearingPractice({volume, suspended = false, openSettings, backToPlay}: HearingPracticeProps) {
   const [config, setConfig] = useState(() => normalizeHearingConfig(readHearingStorage(HEARING_CONFIG_KEY)));
   const [history, setHistory] = useState(() => parseHearingHistory(readHearingStorage(HEARING_HISTORY_KEY)));
   const [session, setSession] = useState<HearingResult[]>([]);
@@ -151,6 +151,7 @@ export function HearingPractice({volume, suspended = false, openSettings}: Heari
     </select></label>;
 
   return <section className="hearing-practice" aria-label="Hearing practice" data-hearing-phase={phase} onKeyDown={e => e.stopPropagation()}>
+    {backToPlay && <div className="sl-hearing-nav"><button onClick={backToPlay}>Back to Play</button></div>}
     <header className="hearing-header"><div><Ear size={21}/><h1>Hearing practice</h1></div>
       <span><Headphones size={16}/>{config.device === 'headphones' ? 'Headphones' : config.device === 'mono' ? 'Mono' : 'Stereo speakers'}</span>
       {openSettings && <button className="hearing-icon" title="Range audio settings" aria-label="Range audio settings" onClick={() => {gate.cancel(); heard.current = false; setPhase(p => p === 'review' ? p : 'paused'); openSettings();}}><Settings2 size={18}/></button>}

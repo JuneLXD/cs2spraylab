@@ -92,7 +92,7 @@ test('imports the CS2 crosshair, and keys bound to crosshair convars change it i
   await expect.poll(ammo).toBeLessThan(30);
   const left = await ammo();
   await page.keyboard.press('KeyV');
-  await expect(page.getByLabel('Radar zoom')).toHaveValue('0.3');
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.duel.v1')!).radarScale)).toBe(.3);
   expect(await ammo()).toBe(left);
 
   await page.reload();

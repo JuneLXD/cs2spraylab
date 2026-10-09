@@ -216,6 +216,11 @@ export const latestChanges = {
       'Session history brings range replays, Aim Botz, Reflex, aim_redline and AI Duel together with their existing exports and feedback.',
       'Timed practice opens a full Results screen with the completed scores, coaching, setup and New Session. Pointer capture waits no longer let an intermediate ready report cancel the start.',
     ]},
+    {id: 'ui-kill-feed', title: 'Kill feed and final UI details', items: [
+      'A compact kill feed shows the attacker, victim, weapon and headshots from combat events. It keeps five recent kills, fades them out and clears on a new session.',
+      'Removed the crouch and browser-shortcut reminder from gameplay. Shortcut protection and config-import feedback remain available in setup and settings.',
+      'Video settings can export recent frame timings. Hearing practice has a Back to Play button, and the menus support touch and keyboard navigation.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

@@ -111,6 +111,7 @@ html, body, #root {
   gap: 5px;
 }
 .sl-top-nav .changelog-button {
+  min-width: 32px;
   min-height: 40px;
   border: 0;
   background: transparent;
@@ -420,12 +421,6 @@ html, body, #root {
 .sl-stage .toast {
   z-index: 60;
 }
-.sl-hearing-back {
-  position: absolute;
-  top: 8px;
-  right: 16px;
-  z-index: 15;
-}
 @media (max-width: 1100px) {
   .range-app .sl-top-nav {gap: 10px; padding: 0 16px;}
   .sl-top-nav .main-nav > button {padding: 0 10px;}
@@ -539,3 +534,11 @@ html, body, #root {
   text-align: center;
 }
 .sl-engine-error button {padding: 12px; background: var(--sl-go); color: white;}
+/* Feedback is readable without intercepting aim or movement input. */
+.sl-stage > .drill-panel {pointer-events: none;}
+@media (max-width: 740px) {
+  .sl-stage > .drill-panel {width: min(190px, 35vw); left: 8px; opacity: .92;}
+}
+@media (max-width: 360px) {
+  .sl-top-nav .main-nav > button {padding: 0 8px; font-size: 14px; letter-spacing: 1px;}
+}

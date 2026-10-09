@@ -1,7 +1,7 @@
-import {memo, useEffect, useState} from 'react';
+import {memo, useState} from 'react';
 import {Check, Diamond, X} from 'lucide-react';
 import {gameData, pistolIds, weaponNames, type Pistol, type Settings, type Weapon} from '../../config';
-import {equipmentNames, type Equipment} from '../../equipment';
+import {type Equipment} from '../../equipment';
 import {cosmeticLabel, cosmeticPreview} from '../../cosmetics';
 import {cosmeticsForEquipment, equippedCosmetic, type ProgressionController, type ProgressionProfile} from '../../progression';
 import {Button, IconButton, SwitchRow, Tabs, Tile} from '../primitives';

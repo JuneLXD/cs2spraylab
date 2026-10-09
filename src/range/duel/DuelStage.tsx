@@ -1,18 +1,19 @@
+import {KillFeed} from '../hud/KillFeed';
 import {AmmoBlock, EscHint, ScoreBar, ScoreCell, StatBlock, WeaponSlotList} from '../hud/Hud';
 import {useCallback, useEffect, useImperativeHandle, useRef, useState, type CSSProperties, type Ref} from 'react';
 import {createPortal} from 'react-dom';
-import {ArrowRight, Plus, Eye, Hand, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, Target, X} from 'lucide-react';
+import {ArrowRight, Plus, Eye, Hand, Pause, RotateCcw, ScanLine, Settings2, Shield, Target, X} from 'lucide-react';
 import {gameData, loadoutWeapon, type Settings} from '../config';
-import {botConfig, sanitizeDuelConfig, type BotOverride, type DuelConfig} from './config';
+import {botConfig, type BotOverride, type DuelConfig} from './config';
 import {DuelEngine, type DuelStatus} from './DuelEngine';
 import './duel.css';
-import {equipmentNames, equipmentStats, type Slot, type Equipment} from '../equipment';
+import {equipmentNames, equipmentStats, type Equipment} from '../equipment';
 import {DuelScorecard} from './DuelScorecard';
 import type {ProgressionController} from '../progression';
-import {cosmeticPreview, cosmeticLabel} from '../cosmetics';
+import {cosmeticLabel} from '../cosmetics';
 import {DuelSetup} from './DuelSetup';
-import {keyHint, shortcutHint, slotKey} from '../keybinds/profile';
-import {sanitizeBotzConfig, type BotzConfig} from './botz';
+import {keyHint} from '../keybinds/profile';
+import {type BotzConfig} from './botz';
 import type {Arena} from './geometry';
 import {loadWorkshopArena} from './workshop';
 import {BotzScorecard, BotzSetup, clock} from './BotzPanel';
@@ -38,7 +39,6 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   /** Console commands from binds that change app settings, such as crosshair convars. */
   onConsole?: (args: string[]) => void}) {
   const botzMode = variant !== 'duel', reflexMode = variant === 'reflex', redlineMode = variant === 'redline';
-  const kind = reflexMode ? 'reflex' : redlineMode ? 'redline' : 'botz';
   const drill = reflexMode ? 'reflex training' : redlineMode ? 'aim_redline' : 'Aim Botz';
   const title = reflexMode ? 'Fast Aim / Reflex' : redlineMode ? 'aim_redline' : 'Aim Botz';
   // aim_redline's collision and spawns load as a separate chunk before the engine can start.
@@ -112,12 +112,12 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
     <div className={`duel-view sl-game-view ${botzMode ? 'sl-botz-view' : 'sl-duel-view'}`}>
       <div className="duel-canvas" ref={canvasHost} />
       <div className="duel-topline"><span className="range-badge"><i />{botzMode ? title.toUpperCase() : 'AI DUEL'}</span><span>{botzMode ? `${status.enemies} ${status.enemies === 1 ? 'BOT' : 'BOTS'} UP` : `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} LEFT`}</span></div>
+      <KillFeed entries={status.killFeed ?? []}/>
       <div className="duel-tools">
       <WeaponSlotList settings={settings} equipped={equipped} profile={profile} loadout={status.loadout} label="Duel equipment" equip={slot => engine.current?.equip(slot)}/>
       <div className="weapon-action-tools"><button className="icon-button" aria-label="Inspect weapon" title={`Inspect weapon (${keyHint(settings.keyboard, '+lookatweapon')})`} onClick={()=>engine.current?.inspect()}><Eye size={16}/></button>
         {equipped !== 'knife' && (gameData.weapons[equipped].zoomLevels > 0 || gameData.weapons[equipped].hasBurst || gameData.weapons[equipped].isRevolver) && <button className="icon-button" aria-label="Secondary weapon mode" title={`${equipped === 'revolver' ? 'Quick alternate shot' : 'Scope / burst mode'} (${keyHint(settings.keyboard, '+attack2')})`} onClick={()=>engine.current?.secondary()}><ScanLine size={16}/></button>}</div>
       {playing && <EscHint className="duel-exit" label={botzMode ? `Pause ${drill}` : 'Pause duel'} pause={() => engine.current?.pause()}/>}
-      {alive && !status.shortcutProtected && shortcutHint(settings.keyboard) && <div className="duel-shortcut-warning" role="status">{shortcutHint(settings.keyboard)}</div>}
       </div>
       <div className="follow-origin" ref={crosshair} aria-hidden="true"><div className={`crosshair ${settings.crosshair.t ? 't-style' : ''} ${settings.crosshair.size === 0 ? 'dot-only' : ''}`} style={crosshairStyle}>
         <i className="arm top"/><i className="arm right"/><i className="arm bottom"/><i className="arm left"/>{settings.crosshair.dot&&<i className="dot"/>}

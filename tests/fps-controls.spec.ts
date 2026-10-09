@@ -17,6 +17,9 @@ test('FPS controls work before mouse capture across browser engines', async ({pa
   await page.getByRole('button', {name: 'Settings', exact: true}).click();
   await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await expect(page.getByLabel('Show FPS counter')).toBeChecked();
+  const download = page.waitForEvent('download');
+  await page.getByRole('button', {name: 'Export frame timings', exact: true}).click();
+  expect((await download).suggestedFilename()).toBe('spraylab-frame-times.json');
   await page.getByRole('button', {name: 'Done', exact: true}).click();
   await selectDrill(page, 'guided');
   await expect(page.getByLabel('Performance monitor')).toBeVisible();

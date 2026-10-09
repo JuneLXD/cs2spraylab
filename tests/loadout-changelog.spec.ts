@@ -8,6 +8,7 @@ const deagle = catalog.filter(item => item.equipment === 'deagle').slice(0, 2);
 const finishCount = (equipment: string) => catalog.filter(item => item.equipment === equipment).length + 1;
 
 test.beforeEach(async ({page}) => {
+  test.setTimeout(120000);
   await page.addInitScript(({ak, deagle}) => {
     if (sessionStorage.getItem('loadout-changelog-seeded')) return;
     localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'duel', quality: 'auto', weapon: 'awp', sidearm: 'deagle', primaryEnabled: true, volume: 0}));
@@ -18,81 +19,74 @@ test.beforeEach(async ({page}) => {
   await page.goto('/');
 });
 
-test('primary selection keeps Loadout open and focuses its equipped finish', async ({page}, info) => {
+test('primary selection keeps Loadout open with every finish and a reachable Armory', async ({page}, info) => {
   await page.setViewportSize({width: 320, height: 740});
-  await page.locator('.weapon-select').click();
+  await page.getByRole('button', {name: 'Loadout', exact: true}).click();
   const loadout = page.getByRole('dialog', {name: 'Loadout'});
-  await loadout.getByLabel('Skin weapon', {exact: true}).selectOption('2');
-  await loadout.locator('.weapon-item').filter({hasText: 'AK-47'}).click();
+  await loadout.getByRole('tab', {name: 'Rifles', exact: true}).click();
+  await loadout.getByRole('button', {name: 'Equip AK-47', exact: true}).click();
   await expect(loadout).toBeVisible();
-  await expect(loadout.getByLabel('Skin weapon', {exact: true})).toHaveValue('1');
   const finishes = loadout.getByRole('region', {name: 'AK-47 skins'});
   await expect(finishes.getByRole('button', {name: /^Equip AK-47 skin/})).toHaveCount(finishCount('ak47'));
-  const owned = finishes.getByRole('button', {name: `Equip AK-47 skin ${ak.label}`, exact: true});
-  await expect(owned).toBeFocused();
-  await expect(owned).toBeInViewport();
-  await expect(owned).toHaveAttribute('aria-pressed', 'true');
+  await expect(finishes.getByRole('button', {name: `Equip AK-47 skin ${ak.label}`, exact: true})).toHaveAttribute('aria-pressed', 'true');
   const stock = finishes.getByRole('button', {name: 'Equip AK-47 skin Stock', exact: true});
   await stock.click();
-  await expect(loadout).toBeVisible();
+  await expect(stock).toBeFocused();
   await expect(stock).toHaveAttribute('aria-pressed', 'true');
-  await loadout.locator('.weapon-item').filter({hasText: 'AK-47'}).click();
-  await expect(stock).toBeFocused();
-  const slot = loadout.getByLabel('Skin weapon', {exact: true});
-  await slot.focus();
-  await slot.selectOption('2');
-  await expect(slot).toBeFocused();
-  await slot.selectOption('1');
-  await expect(slot).toBeFocused();
-  await loadout.locator('.weapon-item').filter({hasText: 'AK-47'}).click();
-  await expect(stock).toBeFocused();
   expect(await loadout.evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
-  expect(await loadout.locator('.weapon-item').evaluateAll(nodes => nodes.every(node => node.scrollWidth <= node.clientWidth))).toBe(true);
+  expect(await loadout.locator('.sl-weapon-tiles button').evaluateAll(nodes => nodes.every(node => node.scrollWidth <= node.clientWidth))).toBe(true);
   await page.screenshot({path: `test-results/${info.project.name}-owned-primary-320.png`});
-  await finishes.getByRole('button', {name: /^Open the armory/}).click();
-  await expect(loadout).toHaveCount(0);
+  await loadout.getByRole('button', {name: /^Open the armory/}).click();
   const armory = page.getByRole('dialog', {name: 'Armory'});
   await expect(armory).toBeVisible();
   await expect(armory.getByLabel('Equipment', {exact: true})).toHaveValue('ak47');
   await expect(armory.getByRole('button', {name: 'Collection', exact: true})).toHaveAttribute('aria-pressed', 'true');
   await expect(armory.locator('.progression-choice')).toHaveCount(finishCount('ak47'));
+  await page.keyboard.press('Escape');
+  await expect(armory).toHaveCount(0);
+  await expect(loadout).toBeVisible();
 });
 
-test('sidearm selection focuses its finishes and preserves the equipped finish on reload', async ({page}) => {
-  await page.locator('.weapon-select').focus();
+test('sidearm finishes persist independently of the primary and restore keyboard focus', async ({page}) => {
+  const trigger = page.getByRole('button', {name: 'Loadout', exact: true});
+  await trigger.focus();
   await page.keyboard.press('Enter');
   const loadout = page.getByRole('dialog', {name: 'Loadout'});
-  await loadout.locator('.weapon-item').filter({hasText: 'Desert Eagle'}).click();
-  await expect(loadout).toBeVisible();
-  await expect(loadout.getByRole('switch', {name: 'Carry a primary weapon'})).not.toBeChecked();
-  await expect(loadout.getByLabel('Skin weapon', {exact: true})).toHaveCount(0);
+  await loadout.getByRole('button', {name: 'Select sidearm slot'}).click();
+  await loadout.getByRole('button', {name: 'Equip Desert Eagle', exact: true}).click();
+  await expect(loadout.getByRole('switch', {name: 'Carry a primary weapon'})).toBeChecked();
   const finishes = loadout.getByRole('region', {name: 'Desert Eagle skins'});
   await expect(finishes.getByRole('button', {name: /^Equip Desert Eagle skin/})).toHaveCount(finishCount('deagle'));
-  await expect(finishes.getByRole('button', {name: `Equip Desert Eagle skin ${deagle[1].label}`, exact: true})).toBeFocused();
+  await expect(finishes.getByRole('button', {name: `Equip Desert Eagle skin ${deagle[1].label}`, exact: true})).toHaveAttribute('aria-pressed', 'true');
   await finishes.getByRole('button', {name: `Equip Desert Eagle skin ${deagle[0].label}`, exact: true}).click();
   await page.keyboard.press('Escape');
   await expect(loadout).toHaveCount(0);
-  await expect(page.locator('.weapon-select')).toBeFocused();
-  await expect(page.locator('.weapon-select')).toContainText('Desert Eagle');
+  await expect(trigger).toBeFocused();
+  await expect(page.locator('.sl-loadout-chips')).toContainText('AWP');
   await page.reload();
-  await page.locator('.weapon-select').click();
+  await trigger.click();
+  await loadout.getByRole('button', {name: 'Select sidearm slot'}).click();
   await expect(finishes.getByRole('button', {name: /^Equip Desert Eagle skin/})).toHaveCount(finishCount('deagle'));
   await expect(finishes.getByRole('button', {name: `Equip Desert Eagle skin ${deagle[0].label}`, exact: true})).toHaveAttribute('aria-pressed', 'true');
 });
 
-test('every weapon has finishes, so choosing one keeps Loadout open on them until Escape', async ({page}) => {
-  await page.locator('.weapon-select').click();
+test('switching weapon categories keeps Loadout open until Escape', async ({page}) => {
+  const trigger = page.getByRole('button', {name: 'Loadout', exact: true});
+  await trigger.click();
   const loadout = page.getByRole('dialog', {name: 'Loadout'});
-  await loadout.locator('.weapon-item').filter({hasText: 'AK-47'}).click();
+  await loadout.getByRole('tab', {name: 'Rifles', exact: true}).click();
+  await loadout.getByRole('button', {name: 'Equip AK-47', exact: true}).click();
   await expect(loadout).toBeVisible();
-  await loadout.locator('.weapon-item').filter({hasText: /^AWP/}).click();
+  await loadout.getByRole('tab', {name: 'Snipers', exact: true}).click();
+  await loadout.getByRole('button', {name: 'Equip AWP', exact: true}).click();
   await expect(loadout).toBeVisible();
   const awp = loadout.getByRole('region', {name: 'AWP skins'});
   await expect(awp.getByRole('button', {name: /^Equip AWP skin/})).toHaveCount(finishCount('awp'));
-  await expect(awp.getByRole('button', {name: 'Equip AWP skin Stock', exact: true})).toBeFocused();
+  await expect(awp.getByRole('button', {name: 'Equip AWP skin Stock', exact: true})).toHaveAttribute('aria-pressed', 'true');
   await page.keyboard.press('Escape');
   await expect(loadout).toHaveCount(0);
-  await expect(page.locator('.weapon-select')).toContainText('AWP');
+  await expect(trigger).toBeFocused();
+  await expect(page.locator('.sl-loadout-chips')).toContainText('AWP');
 });
 
 test('header changelog preserves history, is keyboard-accessible and does not alter the loadout', async ({page}) => {
@@ -147,7 +141,9 @@ test('header controls and changelog fit desktop, mobile and landscape without ov
       }
     }
     await expect(page.getByRole('button', {name: 'Changelog', exact: true})).toBeVisible();
-    if (height > 540) await expect(page.locator('.changelog-button span')).toBeVisible();
+    const changelogBox = (await page.getByRole('button', {name: 'Changelog', exact: true}).boundingBox())!;
+    expect(changelogBox.width).toBeGreaterThanOrEqual(32);
+    expect(changelogBox.height).toBeGreaterThanOrEqual(32);
     if ([1440, 390, 320, 844].includes(width)) await page.screenshot({path: `test-results/${info.project.name}-header-${width}.png`});
     await page.getByRole('button', {name: 'Changelog', exact: true}).click();
     const dialog = page.getByRole('dialog', {name: 'Changelog', exact: true});

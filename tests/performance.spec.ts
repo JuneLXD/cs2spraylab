@@ -24,7 +24,7 @@ test('guided Deagle survives repeated taps, reloads and weapon switching', async
   await page.getByRole('button',{name:'Enter range',exact:true}).click();
   const canvas = page.locator('canvas[data-range]');
   await expect(page.getByRole('button',{name:'Pause range',exact:true})).toBeVisible();
-  if (!mobile) await expect(page.locator('.range-shortcut-warning')).toContainText('C to crouch');
+  await expect(page.locator('.range-shortcut-warning')).toHaveCount(0);
   for (let i = 0; i < 5; i++) {
     // Native readiness uses simulation time, not wall time on a loaded CI GPU.
     await page.waitForFunction(() => {const s = (window as any).performanceEngine.sim;

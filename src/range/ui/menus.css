@@ -140,3 +140,8 @@
   .sl-session-screen > .sl-tabs {padding: 0 14px;}
   .sl-session-content {padding: 16px;}
 }
+.sl-stage .hearing-practice {background: #11171d; font-family: var(--sl-font-body);}
+.sl-hearing-nav {padding: 8px 18px; background: #090d11; border-bottom: 1px solid var(--sl-hairline);}
+.sl-stage .hearing-header {background: #171e25; border-color: var(--sl-hairline);}
+.sl-stage .hearing-practice button {border-radius: 2px;}
+.sl-stage .hearing-practice .hearing-primary {background: var(--sl-go); border-color: var(--sl-go); color: white;}

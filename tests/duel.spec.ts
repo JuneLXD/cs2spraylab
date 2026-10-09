@@ -98,12 +98,12 @@ test('AI Duel is playable from the first visit with adjacent bot controls', asyn
   await expect(page.getByRole('button', {name: 'Resume duel'})).toBeVisible();
 });
 
-test('Duel warns about browser shortcuts when fullscreen protection is disabled', async ({page}, info) => {
+test('Duel keeps browser shortcut warnings out of the HUD when protection is disabled', async ({page}, info) => {
   test.skip(!desktopSmoke.has(info.project.name), 'Desktop shortcut fallback');
   await page.goto('/');
   await page.getByLabel('Protect Ctrl+W').uncheck();
   await page.getByRole('button', {name: 'Enter duel'}).click();
-  await expect(page.locator('.duel-shortcut-warning')).toContainText('C to crouch');
+  await expect(page.locator('.duel-shortcut-warning')).toHaveCount(0);
   expect(await page.evaluate(() => !!document.fullscreenElement)).toBe(false);
   await page.keyboard.down('c');
   await page.keyboard.up('c');

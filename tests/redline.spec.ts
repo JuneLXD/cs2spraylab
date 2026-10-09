@@ -17,7 +17,7 @@ test('a first visit opens aim_redline with the AWP and its defaults', async ({pa
   test.setTimeout(120000);
   await page.goto('/');
   await expect(page.getByLabel('Training mode')).toHaveValue('redline');
-  await expect(page.locator('.weapon-select')).toContainText('AWP');
+  await expect(page.locator('.sl-loadout-chips')).toContainText('AWP');
   await expect(page.getByRole('complementary', {name: 'aim_redline settings'})).toBeVisible();
   for (const [label, value] of [['Number of bots', '3'], ['Bot distance', 'far'], ['Bot movement', 'close'], ['Bot crouch', 'never'],
     ['Respawn delay', '0'], ['Session length', '0'], ['Infinite ammo', 'magazine'], ['Bot weapon', 'ak47'], ['Bot health', '100']])
