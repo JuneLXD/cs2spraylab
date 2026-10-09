@@ -20,7 +20,7 @@ const runFor = (sim: DuelSimulation, seconds: number) => {for (let elapsed = 0; 
 
 describe('aim_redline', () => {
   it('loads as invisible collision for the warehouse, with both teams\' spawns standing on the floor or catwalk', () => {
-    expect(arena.workshop).toMatchObject({name: 'aim_redline', credits: 'BOT Reed', model: '/maps/aim_redline.glb?v=lighting-2'});
+    expect(arena.workshop).toMatchObject({name: 'aim_redline', credits: 'BOT Reed', model: '/maps/aim_redline.glb?v=lighting-3'});
     expect(arena.solids.length).toBeGreaterThan(1000);
     expect(arena.maxX - arena.minX).toBeGreaterThan(30); expect(arena.maxX - arena.minX).toBeLessThan(45);
     expect(arena.maxZ - arena.minZ).toBeGreaterThan(30); expect(arena.maxZ - arena.minZ).toBeLessThan(45);

@@ -185,6 +185,9 @@ export const latestChanges = {
       'Native baked lighting and skylight shadows bring back the warm floor and walls, contact shading and coloured light around the hall.',
       'Restored container logos, glowing lamps and transparent fences; corrected the texture coordinates on shipping crates and the tint on roof beams.',
     ]},
+    {id: 'native-floor-decals', title: 'Floor decal repair', items: [
+      'Fixed opaque, floating floor-marking rectangles in aim_redline. Native transparency is restored and the markings sit on the floor with matching baked lighting.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

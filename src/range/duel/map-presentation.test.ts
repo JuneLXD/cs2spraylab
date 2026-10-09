@@ -18,11 +18,13 @@ function bakedScene() {
 describe('imported map lighting resources', () => {
   it('keeps one shared bake and disposes both atlases once when leaving the map', async () => {
     const {scene, material} = bakedScene(), light = new THREE.Texture(), shadow = new THREE.Texture();
+    material.userData.nativeOverlay = 1;
     const lightDispose = vi.spyOn(light, 'dispose'), shadowDispose = vi.spyOn(shadow, 'dispose');
     vi.spyOn(THREE.TextureLoader.prototype, 'loadAsync').mockResolvedValueOnce(light).mockResolvedValueOnce(shadow);
     await applyMapPresentation(scene, 'aim_redline');
     expect(material.lightMap).toBe(light); expect(light.channel).toBe(1);
     expect(light.flipY).toBe(false); expect(light.colorSpace).toBe(THREE.NoColorSpace);
+    expect(material.transparent).toBe(true); expect(material.depthWrite).toBe(false); expect(material.polygonOffset).toBe(true);
     disposeResources([scene]);
     expect(lightDispose).toHaveBeenCalledOnce(); expect(shadowDispose).toHaveBeenCalledOnce();
   });

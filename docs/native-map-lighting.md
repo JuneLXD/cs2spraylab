@@ -56,7 +56,7 @@ The importer emits `public/revamp/maps/aim_redline.glb`, `aim_redline-lightmap.w
 These are local game assets, ignored by Git like the other imported resources.
 The model URL is versioned to avoid retaining the old model in a browser cache.
 
-## Validation
+## Initial lighting pass validation
 
 - Full import from the original VPK and installed stock dependencies completed.
 - Three importer regressions and seventeen focused lighting-resource, workshop
@@ -78,6 +78,38 @@ The model URL is versioned to avoid retaining the old model in a browser cache.
   `map-final.json`, `map-preview-playing.png` and
   `map-production-preview-check.json`. A native/browser toggle is served at
   `http://192.168.0.18:5191/map-lighting.html`; the built preview remains on 5190.
+
+## Floor decal repair
+
+A subsequent user screenshot exposed a solid, apparently raised patch beside the
+stairs. The side-lane reproduction uses camera `(26, 1.6256, -22)`, yaw π.
+Raycasting confirms `hr_dust_decal_road_striping` is exported at Y=0.3937 m while
+the concrete floor is at Y=0. Its adapted color image is RGB, although the
+original texture is RGBA with alpha 0–186. The material declares `F_OVERLAY` and
+`F_TRANSLUCENT`, which the previous alpha recovery did not recognize.
+
+The importer now recognizes flag-based overlays alongside the static-overlay
+shader and restores translucent materials' original alpha. It projects all
+eight horizontal floor decals (2,267 vertices) onto nearby opaque floor geometry,
+with a 1 mm separation and non-depth-writing overlay materials. Projection runs
+only during import; walls and decals without a complete nearby receiver retain
+their geometry. Tiny compiler clipping overruns at floor edges use a 1 mm search.
+Native decal lighting UVs remain intact: borrowing receiver UVs crosses unrelated
+lightmap charts at 97 vertices and creates edge artifacts. Collision is unchanged.
+
+This repair restores alpha on 58 material instances, up from 26. Comparison
+captures are `../native-audit/reports/map-floor-before.png` and
+`map-floor-after.png`; the model cache version advances to `lighting-3`.
+
+Validation: six importer regressions and seventeen runtime/workshop/changelog
+checks pass, along with the full import, TypeScript/build, the side-lane browser
+comparison and the built-preview start/fire smoke check. Chromium reports no
+JavaScript, shader or HTTP errors. The comparison view remains at 111 draw calls
+and 744,348 triangles before and after this repair. Its sampled decal height is
+0.001001 m, above a receiver at 0.000001 m. Collision/spawn data retains the hash
+recorded above. Final model SHA-256 is
+`fb28932aed84685d70ca380b3ad884dd841561290c396a339db733b6689ae128`.
+The before/after toggle is at `http://192.168.0.18:5191/floor-repair.html`.
 
 ## Limits
 

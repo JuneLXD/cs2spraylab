@@ -4,6 +4,7 @@ import {ALL_EXTENSIONS} from '@gltf-transform/extensions';
 import {dedup, flatten, join, weld, prune, textureCompress, meshopt} from '@gltf-transform/functions';
 import {MeshoptEncoder} from 'meshoptimizer';
 import sharp from 'sharp';
+import {projectFloorDecals} from './project-map-decals.mjs';
 
 // Preserve native baked-UV geometry and visible overlays before GLB optimization.
 export function prepareMapPresentation(doc, {lightmap = true} = {}) {
@@ -17,7 +18,7 @@ export function prepareMapPresentation(doc, {lightmap = true} = {}) {
       material.setBaseColorFactor([...factor.slice(0, 3).map(value => value <= .0031308
         ? value * 12.92 : 1.055 * value ** (1 / 2.4) - .055), factor[3]]);
     }
-    if (native?.ShaderName === 'csgo_static_overlay.vfx') {
+    if (native?.ShaderName === 'csgo_static_overlay.vfx' || native?.IntParams?.F_OVERLAY) {
       const mode = native.IntParams?.F_BLEND_MODE ?? 1;
       material.setAlphaMode('BLEND');
       material.setBaseColorFactor([...material.getBaseColorFactor().slice(0, 3), native.FloatParams?.g_flOpacityScale ?? 1]);
@@ -52,7 +53,7 @@ export function prepareMapPresentation(doc, {lightmap = true} = {}) {
       primitive.setMaterial(baked.get(material)); mapped++;
     }
   }
-  return {mapped, overlays};
+  return {mapped, overlays, ...projectFloorDecals(doc)};
 }
 
 /** The adapted glTF color images lose the alpha channel on some Source 2 materials. */
@@ -62,7 +63,7 @@ export async function restoreMapTextureAlpha(doc, extract) {
   for (const material of doc.getRoot().listMaterials()) {
     const native = material.getExtras().vmat;
     const source = native?.TextureParams?.g_tColor;
-    if (!source || !(native.IntParams?.F_ALPHA_TEST || material.getExtras().nativeOverlay)) continue;
+    if (!source || !(native.IntParams?.F_ALPHA_TEST || native.IntParams?.F_TRANSLUCENT || material.getExtras().nativeOverlay)) continue;
     if (!textures.has(source)) {
       const file = extract(source);
       if (!file) throw new Error(`Missing original alpha texture: ${source}`);

@@ -9,7 +9,7 @@ export type WorkshopData = {name: string; voxel: number; origin: [number, number
 
 export const workshopMaps = {
   // The T spawns look at a wall of crates. From the north end you see down the whole hall: floor, crates and catwalk.
-  aim_redline: {credits: 'BOT Reed', model: '/maps/aim_redline.glb?v=lighting-2', aimBotz: {x: 11, z: -28, yaw: Math.PI},
+  aim_redline: {credits: 'BOT Reed', model: '/maps/aim_redline.glb?v=lighting-3', aimBotz: {x: 11, z: -28, yaw: Math.PI},
     load: () => import('./maps/aim_redline.json')},
 } as const;
 export type WorkshopMapId = keyof typeof workshopMaps;
