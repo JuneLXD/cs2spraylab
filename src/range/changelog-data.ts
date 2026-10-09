@@ -198,6 +198,9 @@ export const latestChanges = {
       'Every hit now deals whole health and armor points, truncated per hit like the game HUD: an AK-47 chest hit on Kevlar does 27 and strips 4 armor instead of 27.9 shown as 28.',
       'Bullet spread sampling (draw order, uniform radii, R8 and Negev transforms, shotgun pattern indexing and the per-pellet rules) was read from the server build and already matched.',
     ]},
+    {id: 'dynamic-crosshair', title: 'Dynamic crosshair from the accuracy cone', items: [
+      'With the dynamic crosshair on, the gap now follows the live accuracy cone (accumulated penalty, movement, air time, landing and spread) projected to the screen at the current field of view, as the game HUD does, instead of a speed-based guess.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

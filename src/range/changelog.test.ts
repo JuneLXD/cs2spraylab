@@ -30,7 +30,7 @@ describe('append-only changelog', () => {
       'combat', 'weapons', 'movement', 'arenas', 'bot-behavior', 'connection', 'presentation', 'performance', 'tracers', 'fullscreen', 'display', 'crosshair', 'aim-botz', 'controls',
       'armory', 'frame-limit', 'auto-reload', 'weapon-switch', 'input-latency', 'reflex', 'aim-redline', 'botz-movement', 'low-latency', 'defaults', 'input-timing', 'native-reload', 'native-scope', 'native-recovery', 'native-hitboxes', 'native-camera-kick', 'native-landing-camera', 'native-damage-camera',
       'native-shot-effects','viewmodel-handling','native-map-materials','surface-feedback','strafe-transitions','frame-time-diagnostics','native-held-reload','native-map-lighting','native-floor-decals',
-      'native-movement-rules', 'native-landing-accuracy',
+      'native-movement-rules', 'native-landing-accuracy', 'dynamic-crosshair',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'reflex')!.items.join(' ')).toContain('come at you through its gaps');
     expect(latestChanges.sections.find(section => section.id === 'aim-redline')!.items.join(' ')).toContain('BOT Reed');

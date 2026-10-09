@@ -10,6 +10,7 @@ import {requestRawLock} from '../input';
 import {InputClock, inputTimestamp} from '../input-clock';
 import {createGameRenderer} from '../render-context';
 import {mouseAngle, VERTICAL_FOV} from '../simulation';
+import {dynamicCrosshairGap} from '../crosshair-spread';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
 import {attachBindInput} from '../keybinds/dom-input';
 import {protectedCodes} from '../keybinds/profile';
@@ -1231,7 +1232,15 @@ export class DuelEngine {
     if (!this.settings.follow) followPoint.set(0, 0, 0);
     this.crosshair.style.visibility = player.alive && !scoped && (player.equipment==='knife'||gameData.weapons[player.equipment].showCrosshair) ? '' : 'hidden';
     this.crosshair.style.transform = `translate(${followPoint.x * this.width / 2}px, ${-followPoint.y * this.height / 2}px)`;
-    this.crosshair.style.setProperty('--motion-gap', this.settings.crosshair.dynamic ? `${speed * 1.2 + this.kick * 4}px` : '0px');
+    // The dynamic gap is the live accuracy cone (penalty, movement, air, spread)
+    // projected to the screen, as the game's HUD does, not a speed heuristic.
+    if (this.settings.crosshair.dynamic) {
+      const stats = viewWeapon.actions.stats, command = this.sim.actors[0].command;
+      const cone = viewWeapon.recovery.inaccuracy(speed / (stats.speed * UNIT), !!command.walk,
+        !(player.grounded ?? true), (player.verticalVelocity ?? 0) / UNIT);
+      this.crosshair.style.setProperty('--motion-gap',
+        `${dynamicCrosshairGap({inaccuracy: cone, spread: stats.spread}, this.height, VERTICAL_FOV)}px`);
+    } else this.crosshair.style.setProperty('--motion-gap', '0px');
     this.shotEffects.update(this.animationClock); this.viewFlashes.update(this.animationClock);
     this.renderer.setViewport(0, 0, this.width, this.height);
     this.renderer.autoClear = true; this.renderer.render(this.scene, this.camera);
