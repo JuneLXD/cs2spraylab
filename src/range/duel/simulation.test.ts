@@ -53,19 +53,41 @@ describe('duel contracts and shared kernels', () => {
     expect(shotDirection({...base, speedRatio: 1, spread: false})).toEqual({x: -0, y: 0, z: -1});
   });
 
-  it('retains recoil, shot cadence and ammunition through rapid trigger release', () => {
+  it('drops a tap released before the weapon is ready, like the range and Source', () => {
     const weapon = new DuelWeaponState('ak47', () => 0);
     const actor = {position: {x: 0, y: 64 * UNIT, z: 0}, yaw: 0, pitch: 0,
       velocity: {x: 0, z: 0}, feet: 0, verticalVelocity: 0};
     const command = { ...idleInput(), yawDelta: 0, pitchDelta: 0, fireHeld: false, firePressed: true,
       reloadPressed: false };
-    const first = weapon.advance(STEP, STEP, command, actor);
-    expect(first).toBeDefined();
+    expect(weapon.advance(STEP, STEP, command, actor)).toBeDefined();
     command.firePressed = false;
     weapon.advance(STEP * 2, STEP, command, actor);
+    // A press whose release arrives before the cycle ends is not buffered.
     command.firePressed = true;
     expect(weapon.advance(STEP * 3, STEP, command, actor)).toBeUndefined();
+    expect(weapon.pendingPress).toBe(false);
+    command.firePressed = false;
+    let second;
+    for (let tick = 4; tick < 16; tick++) second = weapon.advance(tick * STEP, STEP, command, actor) ?? second;
+    expect(second).toBeUndefined();
+    expect(weapon.ammo).toBe(29);
+    expect(weapon.nextAttackTime(command)).toBe(Infinity);
+  });
+
+  it('fires at readiness when the trigger is held through the cycle, keeping recoil and cadence', () => {
+    const weapon = new DuelWeaponState('ak47', () => 0);
+    const actor = {position: {x: 0, y: 64 * UNIT, z: 0}, yaw: 0, pitch: 0,
+      velocity: {x: 0, z: 0}, feet: 0, verticalVelocity: 0};
+    const command = { ...idleInput(), yawDelta: 0, pitchDelta: 0, fireHeld: false, firePressed: true,
+      reloadPressed: false };
+    expect(weapon.advance(STEP, STEP, command, actor)).toBeDefined();
+    command.firePressed = false;
+    weapon.advance(STEP * 2, STEP, command, actor);
+    // Pressed early and held: the shot lands at the cycle deadline, not at release.
+    command.firePressed = true; command.fireHeld = true;
+    expect(weapon.advance(STEP * 3, STEP, command, actor)).toBeUndefined();
     expect(weapon.pendingPress).toBe(true);
+    expect(weapon.nextAttackTime(command)).toBeCloseTo(STEP + gameData.weapons.ak47.cycle, 9);
     command.firePressed = false;
     let second;
     for (let tick = 4; tick < 16; tick++) second = weapon.advance(tick * STEP, STEP, command, actor) ?? second;
@@ -73,6 +95,10 @@ describe('duel contracts and shared kernels', () => {
     expect(weapon.ammo).toBe(28);
     expect(weapon.recovery.index).toBeGreaterThan(1);
     expect(weapon.recovery.penalty).toBeGreaterThan(gameData.weapons.ak47.stand);
+    // Holding a full-auto trigger keeps firing; releasing stops it without a queued shot.
+    command.fireHeld = false;
+    for (let tick = 16; tick < 40; tick++) expect(weapon.advance(tick * STEP, STEP, command, actor)).toBeUndefined();
+    expect(weapon.ammo).toBe(28);
   });
 });
 

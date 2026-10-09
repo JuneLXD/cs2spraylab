@@ -188,6 +188,11 @@ export const latestChanges = {
     {id: 'native-floor-decals', title: 'Floor decal repair', items: [
       'Fixed opaque, floating floor-marking rectangles in aim_redline. Native transparency is restored and the markings sit on the floor with matching baked lighting.',
     ]},
+    {id: 'native-movement-rules', title: 'Movement and trigger rules from the server code', items: [
+      'Ground speed is clamped to the current max speed every tick, as in the native WalkMove: walking, crouching or being tagged at full sprint cuts speed at once instead of bleeding it off through friction.',
+      'A jump cannot start faster than 1.1x the weapon speed, and a bunnyhop only restores pre-landing speed when it exceeded that max.',
+      'Duel no longer fires a buffered click: like the range and the game, a shot fires at readiness only while the trigger is still held, and a released tap during a shell reload neither interrupts it nor queues a shot. Friction, air acceleration, crouch rates, accuracy decay and recoil-index reset were read from the installed server build and already matched.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

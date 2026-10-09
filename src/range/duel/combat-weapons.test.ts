@@ -33,19 +33,31 @@ describe('shotgun discharge contract', () => {
     weapon.advance(.01, .01, {...idleCommand(), reloadPressed: true, reloadHeld: true}, actor);
     weapon.holster();
     expect(weapon.advance(.1, .09, press(), actor)).toBeUndefined();
-    expect(weapon.advance(.88, .78, idleCommand(), actor)).toBeDefined();
+    // Held through the pump: the shot lands when the cycle ends, never earlier.
+    expect(weapon.advance(.88, .78, {...idleCommand(), fireHeld: true}, actor)).toBeDefined();
     expect(weapon.pumpUntil).toBeCloseTo(1.76); expect(weapon.reserve).toBe(32);
   });
-  it('queues shell-reload interruption until the first shell and finish transition are complete', () => {
+  it('a held trigger stops a shell reload after the first shell and fires once the finish transition completes', () => {
     const weapon = new DuelWeaponState('nova', () => 0); weapon.ammo = 0;
     weapon.advance(0, 0, {...idleCommand(), reloadPressed: true}, actor);
     expect(weapon.advance(.1, .1, press(), actor)).toBeUndefined();
     const shellAt = SHELL_RELOAD_START + equipmentStats('nova').reload;
-    expect(weapon.advance(shellAt, shellAt - .1, idleCommand(), actor)).toBeUndefined();
+    const held = {...idleCommand(), fireHeld: true};
+    expect(weapon.advance(shellAt, shellAt - .1, held, actor)).toBeUndefined();
     expect(weapon.reloadPhase).toBe('finish');
-    expect(weapon.advance(shellAt + SHELL_RELOAD_FINISH, SHELL_RELOAD_FINISH, idleCommand(), actor)).toBeDefined();
+    expect(weapon.advance(shellAt + SHELL_RELOAD_FINISH, SHELL_RELOAD_FINISH, held, actor)).toBeDefined();
     expect(weapon.ammo).toBe(0); expect(weapon.reserve).toBe(31);
     expect(weapon.drainActionEvents().map(e => e.kind)).toEqual(['reload-start', 'reload-shell', 'reload-end']);
+  });
+  it('a tap released during a shell reload neither interrupts it nor queues a shot', () => {
+    const weapon = new DuelWeaponState('nova', () => 0); weapon.ammo = 0;
+    weapon.advance(0, 0, {...idleCommand(), reloadPressed: true}, actor);
+    expect(weapon.advance(.1, .1, {...idleCommand(), firePressed: true}, actor)).toBeUndefined();
+    const shellAt = SHELL_RELOAD_START + equipmentStats('nova').reload;
+    expect(weapon.advance(shellAt, shellAt - .1, idleCommand(), actor)).toBeUndefined();
+    expect(weapon.reloadPhase).toBe('shell');
+    expect(weapon.advance(shellAt + SHELL_RELOAD_FINISH, SHELL_RELOAD_FINISH, idleCommand(), actor)).toBeUndefined();
+    expect(weapon.ammo).toBe(1); expect(weapon.reserve).toBe(31);
   });
 });
 
