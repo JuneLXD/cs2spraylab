@@ -253,6 +253,10 @@ export const latestChanges = {
     {id: 'spawn-unstick', title: 'Deathmatch spawns never start stuck', items: [
       'A spawn whose hull would start inside the imported map\'s collision is nudged to the nearest free spot, as CS2\'s unstick does. The 10 cm stair clip at the foot of aim_redline\'s stairs overlapped the T spawn there, so you could not move after respawning on it.',
     ]},
+    {id: 'native-audio-mix', title: 'Sound levels from the CS2 mixer', items: [
+      'Every imported sound now carries its CS2 mix group and level (Weapons 0.6, Footsteps 0.8, hit feedback 1.0, bullet impacts 0.3, foley 1.0), and your own shots, steps and hit sounds use the game\'s distance curve at their native offsets. Hit confirmations and the helmet dink are about 5 dB louder relative to your gunshot, as in the game; your gunshot is about 2.5 dB quieter.',
+      'Enemy gunshots add CS2\'s distant layer (its own samples, level and curve) beyond about 20 m, and sounds the game varies in pitch now vary the same way.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

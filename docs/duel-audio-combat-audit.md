@@ -96,3 +96,27 @@ Raw calibration/profile JSON and screenshots are in ignored `test-results/`.
 Native upper-body weapon/aim animation layers, exact hand grips per weapon,
 bone-attached hit volumes and independently measured human equivalence remain
 outside what these changes establish.
+
+## Mix levels from the CS2 mixer (2026-10-09)
+
+The import now keeps, for every event, the game's `mixgroup`, `pitch_random_min/max` and the
+`Default_Mix` level of that group multiplied up its parent chain (`scripts/soundmixers.txt`:
+Weapons 0.6, WeaponsDistant 0.6, Footsteps 0.8, PlayerAttackerFeedback and PlayerVictim 1.0,
+BulletImpacts 0.3, Foley 1.0, All 1.0). `RangeAudio.playEvent` multiplies the event level by that
+group level, and the trainer's hand-tuned multipliers (0.65 on shots, 0.55 on hit feedback and
+foley, 0.45 on own footsteps, 0.4 on deaths, 0.5 on draws) are gone. Own sounds use the game's
+distance curve at their native offset: gunshots and hit feedback sit 60 units above the origin
+(4 units from the ear), footsteps 64 units below it. Relative to your own AK shot, hit feedback
+is now about +5.5 dB (was -2.3 dB) and the helmet dink about 0 dB (was -8 dB); own footsteps are
+unchanged within 0.1 dB, which is where the old 0.45 came from.
+
+Every weapon's firing event lists a child event (`soundevent_01`, e.g. `Weapon_AK47.SingleDistant`,
+WeaponsDistant 0.6, level 0.5, curve 0 below 800 units rising to 0.54 at 2,336): the import
+decodes it as `<weapon>-distant` and `play()` layers it on other shooters' shots, so gunfire
+beyond about 20 m carries the game's distant sample. Events with a pitch range vary the playback
+rate within it. Not reproduced: the game's final-mix glue compressor (RMS 300 ms, -6 dB, 40:1,
+4 ms / 458 ms) and per-group ducking; the Web Audio limiter (-3 dB, 12:1, 3 ms / 80 ms) stays.
+`node tools/import-audio.mjs --actions-only` refreshes these parameters from an installed game
+without re-decoding cached samples (Linux: `CS2_PATH` and `SOURCE2VIEWER` point at the install and
+`.local-tools/vrf-linux/Source2Viewer-CLI`; the converter writes into a folder per sample).
+

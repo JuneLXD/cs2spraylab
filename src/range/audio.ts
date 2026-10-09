@@ -3,7 +3,11 @@ import type {Vec} from './actor-physics';
 import {AcousticScene, AcousticReverb, positionListener, spatialChain, type SpatialSound, type SpatialAudioProfile} from './spatial-audio';
 import {ActionSoundTimeline, curveGain, inverseDistanceGain, sampleIndex, type ActorSoundState, type SoundAction, type SoundTimelines} from './sound-model';
 
-type NativeEvent = {samples: string[]; volume: number; pitch: number; distanceCurve?: number[][]};
+type NativeEvent = {samples: string[]; volume: number; pitch: number; distanceCurve?: number[][]; mixgroup?: string; pitchRandom?: [number, number]};
+/** CS2 emits gunshots and hit feedback 60 units above the player origin, 4 units from the ear at eye height. */
+const EAR_TO_GUN_UNITS = 4;
+/** Footsteps play at the feet, 64 units below the ear. */
+const EAR_TO_FEET_UNITS = 64;
 export type RangeAudioProfile = SpatialAudioProfile & {nativeDistanceCurves?: boolean; reverb?: boolean; propagationDelay?: boolean};
 export class RangeAudio {
   context?: AudioContext;
@@ -16,6 +20,8 @@ export class RangeAudio {
   private decoding = new Map<string, Promise<void>>();
   private mono = new WeakMap<AudioBuffer, AudioBuffer>();
   private events: Record<string, NativeEvent> = {};
+  /** Default_Mix levels per CS2 mix group, multiplied up the parent chain (scripts/soundmixers.txt). */
+  private mixgroups: Record<string, number> = {};
   private manifest?: Promise<void>;
   private common?: Promise<void>;
   private previous = new Map<string, number>();
@@ -79,8 +85,8 @@ export class RangeAudio {
       if (!this.disposed) this.status = 'ready';
     } catch {this.status = 'unavailable'; this.pending.delete(weapon);}
   }
-  private readManifest(data: {events: Record<string, NativeEvent>; timelines?: SoundTimelines}) {
-    this.events = data.events; this.timelines = data.timelines ?? {};
+  private readManifest(data: {events: Record<string, NativeEvent>; timelines?: SoundTimelines; mixgroups?: Record<string, number>}) {
+    this.events = data.events; this.timelines = data.timelines ?? {}; this.mixgroups = data.mixgroups ?? {};
     this.actionSounds.setTimelines(this.timelines);
   }
   private async decode(url: string) {
@@ -100,7 +106,7 @@ export class RangeAudio {
     for (let i = 0; i < urls.length; i += 4) await Promise.all(urls.slice(i, i + 4).map(url => this.decode(url).catch(() => {})));
   }
   private async load(weapon: Equipment) {
-    await this.preload([weapon, `${weapon}-reload`, `${weapon}-draw`, `${weapon}-scope-in`, `${weapon}-scope-out`,
+    await this.preload([weapon, `${weapon}-distant`, `${weapon}-reload`, `${weapon}-draw`, `${weapon}-scope-in`, `${weapon}-scope-out`,
       ...Object.values(this.timelines[weapon] ?? {}).flatMap(timeline => timeline?.cues.map(cue => cue.key) ?? []),
       ...(weapon === 'knife' ? ['knife-stab', 'knife-hit', 'knife-wall', 'knife-draw'] : [])]);
     let buffer = this.samples.get(this.events[weapon]?.samples[0]);
@@ -148,7 +154,8 @@ export class RangeAudio {
     voice.start(this.context.currentTime + (this.profile.propagationDelay === false ? 0 : spatial?.path?.delay ?? 0));
     return true;
   }
-  playEvent(key: string, volume: number, spatial?: SpatialSound, pan = 0) {
+  /** `localUnits`: how far a non-positional (own) sound sits from the ear, for CS2's distance curve. */
+  playEvent(key: string, volume: number, spatial?: SpatialSound, pan = 0, localUnits = 0) {
     const event = this.events[key];
     if (key.endsWith('-scope-out') || !event || !event.samples.length || !Number.isFinite(volume) || volume <= 0) return false;
     const index = sampleIndex(event.samples.length, this.previous.get(key), Math.random());
@@ -161,21 +168,27 @@ export class RangeAudio {
       spatial.position.y - this.listenerPosition.y, spatial.position.z - this.listenerPosition.z) : 0);
     const mapped = spatial && event.distanceCurve && this.profile.nativeDistanceCurves !== false;
     const pathMapped = !!spatial?.path && !mapped;
-    const attenuation = mapped ? curveGain(distance / .0254, event.distanceCurve!) : pathMapped ? inverseDistanceGain(distance) : 1;
-    return this.emit(buffer, volume * event.volume * attenuation, event.pitch,
+    const attenuation = mapped ? curveGain(distance / .0254, event.distanceCurve!) : pathMapped ? inverseDistanceGain(distance)
+      : event.distanceCurve?.length ? curveGain(localUnits, event.distanceCurve) : 1;
+    const [low, high] = event.pitchRandom ?? [0, 0];
+    const pitch = event.pitch + (high > low ? low + Math.random() * (high - low) : 0);
+    return this.emit(buffer, volume * event.volume * (event.mixgroup ? this.mixgroups[event.mixgroup] ?? 1 : 1) * attenuation, pitch,
       (mapped || pathMapped) && spatial ? {...spatial, distanceMapped: true} : spatial, pan);
   }
+  /** A shot: the event at CS2's level, plus its distant layer for other shooters (silent inside its curve's 800 units). */
   play(weapon: Equipment, volume: number, spatial?: SpatialSound) {
-    if (this.events[weapon]) this.playEvent(weapon, volume * .65, spatial);
-    else {
-      const buffer = this.buffers.get(weapon); if (buffer) this.emit(buffer, volume * .65, 1, spatial);
+    if (this.events[weapon]) {
+      this.playEvent(weapon, volume, spatial, 0, EAR_TO_GUN_UNITS);
+      if (spatial && this.events[`${weapon}-distant`]) this.playEvent(`${weapon}-distant`, volume, spatial);
+    } else {
+      const buffer = this.buffers.get(weapon); if (buffer) this.emit(buffer, volume, 1, spatial);
     }
   }
   playStep(volume: number, pan = 0, heavy = false, spatial?: SpatialSound, surface = 'concrete') {
-    this.playEvent(`${heavy ? 'land' : 'step'}-${surface}`, volume, spatial, pan);
+    this.playEvent(`${heavy ? 'land' : 'step'}-${surface}`, volume, spatial, pan, EAR_TO_FEET_UNITS);
   }
   playHit(head: boolean, armor: boolean, victim: boolean, volume: number, spatial?: SpatialSound) {
-    this.playEvent(`${victim ? 'hurt' : 'hit'}-${head ? armor ? 'helmet' : 'head' : armor ? 'armor' : 'body'}`, volume * .55, spatial);
+    this.playEvent(`${victim ? 'hurt' : 'hit'}-${head ? armor ? 'helmet' : 'head' : armor ? 'armor' : 'body'}`, volume, spatial, 0, EAR_TO_GUN_UNITS);
   }
   setAcoustics(scene?: AcousticScene) {this.acoustics = scene;}
   /** Call for every actor each simulation frame; local and remote use the same timeline. */
@@ -225,7 +238,7 @@ export class RangeAudio {
     return this.playEvent(`${equipment}-scope-${entering ? 'in' : 'out'}`, volume, spatial);
   }
   playKnife(kind: 'slash' | 'stab' | 'hit' | 'wall' | 'draw', volume: number, spatial?: SpatialSound) {
-    return this.playEvent(kind === 'slash' ? 'knife' : `knife-${kind}`, volume, spatial);
+    return this.playEvent(kind === 'slash' ? 'knife' : `knife-${kind}`, volume, spatial, 0, EAR_TO_GUN_UNITS);
   }
   playImpact(surface: 'concrete' | 'metal' | 'wood' | 'glass', volume: number, spatial?: SpatialSound) {
     return this.playEvent(`impact-${surface}`, volume, spatial);

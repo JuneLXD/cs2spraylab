@@ -56,26 +56,41 @@ for (const name of ['footsteps', 'player', 'weapons']) {
 }
 const old = actionsOnly ? JSON.parse(fs.readFileSync('public/revamp/audio/events.json', 'utf8')) : {};
 const events = old.events ?? {};
+const canonicalName = name => Object.keys(sources).find(key => key.toLowerCase() === name.toLowerCase());
+/** Playback parameters CS2 keeps on the event: level, mix group, pitch with its random range, distance curve. */
+const eventMetadata = (canonical, source) => ({source: canonical, volume: source.volume ?? 1, pitch: source.pitch ?? 1,
+  mixgroup: source.mixgroup ?? 'All',
+  ...(source.pitch_random_min || source.pitch_random_max ? {pitchRandom: [source.pitch_random_min ?? 0, source.pitch_random_max ?? 0]} : {}),
+  distanceCurve: source.distance_volume_mapping_curve?.map(row => row.slice(0, 2))});
+/** The converter writes <dir>/<vpk path>.wav next to the vsnd's own KV3, so decode into a folder and pick the audio. */
+const decodeSample = (file, output) => {
+  const staging = `research/audio-events/samples/${path.basename(output, '.wav')}`;
+  fs.rmSync(staging, {recursive: true, force: true}); fs.mkdirSync(staging, {recursive: true});
+  run('-f', `${file}_c`, '-d', '-o', staging);
+  const decoded = fs.readdirSync(staging, {recursive: true}).map(String).find(name => /\.(wav|mp3)$/i.test(name));
+  if (!decoded) throw new Error(`Nothing decoded for ${file}`);
+  const bytes = fs.readFileSync(`${staging}/${decoded}`);
+  if (bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WAVE') fs.copyFileSync(`${staging}/${decoded}`, output);
+  else execFileSync(process.env.FFMPEG || 'ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', `${staging}/${decoded}`,
+    '-c:a', 'pcm_s16le', output], {stdio: 'pipe', windowsHide: true});
+};
 const add = (key, name, limit = 4) => {
-  if (actionsOnly && events[key]?.samples.every(sample => fs.existsSync(`public/revamp${sample}`))) return;
-  const canonical = Object.keys(sources).find(key => key.toLowerCase() === name.toLowerCase());
+  const canonical = canonicalName(name);
   const source = sources[canonical];
   if (!source) throw new Error(`Missing sound event ${name}`);
+  const cached = events[key];
+  // Cached samples keep their files; the playback parameters are always refreshed from the game's definitions.
+  if (actionsOnly && cached?.samples.length && cached.samples.every(sample => fs.existsSync(`public/revamp${sample}`))) {
+    events[key] = {...eventMetadata(canonical, source), samples: cached.samples}; return;
+  }
   const tracks = source.vsnd_files_track_01;
   const files = (Array.isArray(tracks) ? tracks : [tracks]).filter(Boolean).slice(0, limit);
   if (!files.length) throw new Error(`No samples for ${name}`);
-  events[key] = {source: canonical, volume: source.volume ?? 1, pitch: source.pitch ?? 1,
-    distanceCurve: source.distance_volume_mapping_curve?.map(row => row.slice(0, 2)),
-    samples: files.map((file, i) => {
-      const output = `native/${key}-${i}.wav`;
-      const staging = `research/audio-events/samples/${key}-${i}.audio`;
-      run('-f', `${file}_c`, '-d', '-o', staging);
-      const bytes = fs.readFileSync(staging);
-      if (bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WAVE') fs.copyFileSync(staging, `public/revamp/audio/${output}`);
-      else execFileSync(process.env.FFMPEG || 'ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', staging,
-        '-c:a', 'pcm_s16le', `public/revamp/audio/${output}`], {stdio: 'pipe', windowsHide: true});
-      return `/audio/${output}`;
-    })};
+  events[key] = {...eventMetadata(canonical, source), samples: files.map((file, i) => {
+    const output = `native/${key}-${i}.wav`;
+    decodeSample(file, `public/revamp/audio/${output}`);
+    return `/audio/${output}`;
+  })};
 };
 for (const [key, name] of Object.entries({concrete: 'Concrete', wood: 'Wood', metal: 'SolidMetal'})) {
   add(`step-${key}`, `CT_${name}.StepLeft`);
@@ -94,7 +109,11 @@ const weapons = {ak47: 'AK47', m4a4: 'M4A4', m4a1s: 'M4A1', galil: 'GalilAR', fa
   tec9: 'tec9', revolver: 'Revolver', awp: 'AWP', ssg08: 'SSG08', g3sg1: 'G3SG1', scar20: 'SCAR20',
   nova: 'Nova', xm1014: 'XM1014', mag7: 'Mag7', sawedoff: 'Sawedoff', zeus: 'Taser'};
 for (const [id, name] of Object.entries(weapons)) {
-  add(id, `Weapon_${name}.${id === 'm4a1s' ? 'Silenced' : id === 'usp' ? 'SilencedShot' : 'Single'}`);
+  const fireEvent = `Weapon_${name}.${id === 'm4a1s' ? 'Silenced' : id === 'usp' ? 'SilencedShot' : 'Single'}`;
+  add(id, fireEvent);
+  // CS2 layers a separate distant event on every shot (its soundevent_01 children): own samples, level and curve.
+  const distant = [].concat(sources[canonicalName(fireEvent)].soundevent_01 ?? []).find(child => /distant$/i.test(child));
+  if (distant) add(`${id}-distant`, distant, 2);
   // Clip event names differ from the firing-event names for these native models.
   const actionName = id === 'm4a4' ? 'M4A1' : id === 'cz75a' ? 'CZ' : name;
   for (const [kind, suffix] of [['reload', ['m249', 'negev'].includes(id) ? 'Coverup' : 'Clipout'], ['draw', 'Draw']]) {
@@ -154,10 +173,25 @@ for (const [id, weapon] of Object.entries(inventory.weapons)) {
   }
   timelines[id] = actions;
 }
+// Mix-group levels from the game's mixer (scripts/soundmixers.txt, Default_Mix), multiplied up each parent chain.
+const mixerFile = 'research/audio-events/soundmixers.txt';
+if (!fs.existsSync(mixerFile)) {
+  const dir = 'research/audio-events/soundmixers'; fs.mkdirSync(dir, {recursive: true});
+  run('-f', 'scripts/soundmixers.txt', '-o', dir);
+  fs.copyFileSync(`${dir}/scripts/soundmixers.txt`, mixerFile);
+}
+const mixer = parseKv3(fs.readFileSync(mixerFile, 'utf8'));
+const parents = Object.fromEntries((mixer.MixGroups ?? []).map(group => [group.name, group.parent]));
+const levels = Object.fromEntries((mixer.SoundMixers?.Default_Mix ?? []).map(entry => [entry.mixgroup, entry.vol ?? 1]));
+const mixgroups = Object.fromEntries(Object.keys(levels).map(name => {
+  let gain = 1; for (let group = name; group; group = parents[group]) gain *= levels[group] ?? 1;
+  return [name, +gain.toFixed(4)];
+}));
+for (const event of Object.values(events)) if (!(event.mixgroup in mixgroups)) missing.push({mixgroup: event.mixgroup, source: event.source});
 const build = fs.readFileSync(`${game}/game/csgo/steam.inf`, 'utf8').match(/ClientVersion=(\d+)/)[1];
 const definitionBuild = actionsOnly ? inventory.weapons.ak47?.build ?? old.build ?? build : build;
 fs.writeFileSync('src/range/native-reload-presentation.json', JSON.stringify({definitionBuild, installedBuild: build, weapons: reloadWindows}, null, 2));
-fs.writeFileSync('public/revamp/audio/events.json', JSON.stringify({build: definitionBuild, installedBuild: build, events, timelines,
+fs.writeFileSync('public/revamp/audio/events.json', JSON.stringify({build: definitionBuild, installedBuild: build, mixgroups, events, timelines,
   audit: {missing, cachedDefinitions: actionsOnly, timing: 'Native frame markers / 30 Hz; duration from audited DMX; runtime retimes to presentation duration.',
     provenance: 'Cached event/clip definitions may predate installedBuild; newly decoded samples come from installed static VPK. No parity claim.'}}, null, 2));
 if (!actionsOnly) writeSoundMetadata({build: definitionBuild,events});

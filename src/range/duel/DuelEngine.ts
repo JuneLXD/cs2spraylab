@@ -919,7 +919,7 @@ export class DuelEngine {
     this.renderer.domElement.focus({preventScroll:true});
   }
   inspect() {const actor = this.sim.actors[0]; if (actor.alive && !actor.weapon.reloadUntil && !actor.command.fireHeld && this.sim.time >= actor.equipReadyAt) {
-    if(this.viewAnimation?.playInspect())this.audio.playAction(0,this.sim.actors[0].weapon.id,'inspect',this.sim.time,{local:true,volume:this.settings.volume*.5});
+    if(this.viewAnimation?.playInspect())this.audio.playAction(0,this.sim.actors[0].weapon.id,'inspect',this.sim.time,{local:true,volume:this.settings.volume});
   }}
   secondary() {this.sim.command(0, {secondaryPressed: true});}
 
@@ -937,7 +937,7 @@ export class DuelEngine {
         const action=event.action==='reload-start'?(actor.weapon.reloadEmpty?'reload-empty':'reload'):
           event.action==='reload-cancel'?'cancel':event.action;
         if(!action.startsWith('reload'))this.audio.playAction(event.actorId,event.equipment,action,this.sim.time,
-          {local,silent:event.silent,volume:this.settings.volume*.55,spatial:local?undefined:this.soundLocation(actor.position)});
+          {local,silent:event.silent,volume:this.settings.volume,spatial:local?undefined:this.soundLocation(actor.position)});
         this.animators.get(event.actorId)?.playAction(event.equipment,action,{crouched:(actor.duckAmount??0)>.5,
           duration:action.startsWith('reload')?equipmentStats(event.equipment).reload:undefined});
       }else if(event.kind==='environment') {
@@ -960,7 +960,7 @@ export class DuelEngine {
         if(event.equipment==='knife')this.audio.playKnife(event.alternate?'stab':'slash',this.settings.volume,location);
         else this.audio.play(event.equipment,this.settings.volume,location);
         this.audio.playAction(event.actorId,event.equipment,event.alternate?'fire-alt':'fire',this.sim.time,
-          {local:event.actorId===0,volume:this.settings.volume*.45,spatial:location});
+          {local:event.actorId===0,volume:this.settings.volume,spatial:location});
       } else if (event.kind === 'sound') {
         const dx = event.point.x - player.position.x, dz = event.point.z - player.position.z;
         const distance = Math.hypot(dx, dz);
@@ -970,7 +970,7 @@ export class DuelEngine {
           const support = this.sim.arena.solids.find(solid => Math.abs(solid.center.y + solid.size.y / 2 - point.y + .06) < .05 &&
             Math.abs(point.x - solid.center.x) < solid.size.x / 2 + .2 && Math.abs(point.z - solid.center.z) < solid.size.z / 2 + .2);
           const material = support?.kind === 'crate' ? 'wood' : support?.kind === 'cargo' ? 'metal' : 'concrete';
-          this.audio.playStep(this.settings.volume * (own ? .45 : 1), 0, event.sound === 'landing',
+          this.audio.playStep(this.settings.volume, 0, event.sound === 'landing',
             own ? undefined : this.soundLocation(point, FOOTSTEP_RANGE), material);
         }
       } else if (event.kind === 'surface') {
@@ -978,7 +978,7 @@ export class DuelEngine {
         if(event.normal)this.shotEffects.surfaces.fire(event.point,event.normal,event.material,this.settings.impactSize,this.animationClock);
         else this.shotEffects.impact(v3(event.point),this.settings.impactSize,event.shooter===0?this.ownTraceColor:this.enemyTraceColor,this.animationClock);
         if(event.phase!=='exit')this.audio.playImpact(['wood','metal','glass'].includes(event.material??'')?event.material as 'wood'|'metal'|'glass':'concrete',
-          this.settings.volume*.35,this.soundLocation(event.point));
+          this.settings.volume,this.soundLocation(event.point));
       }
       else if (event.kind === 'hit') {
         if (event.lethal) this.killFeed.add(event, shots.get(event.shotId)?.equipment ?? this.sim.actors[event.shooter]?.weapon.id ?? 'ak47', this.animationClock, id => {
@@ -1010,7 +1010,7 @@ export class DuelEngine {
           this.caption = `HIT -${Math.round(event.healthDamage)}`;
           this.captionUntil = this.animationClock + .65;
         }
-        if (event.lethal) this.audio.playEvent('death', this.settings.volume * .4,
+        if (event.lethal) this.audio.playEvent('death', this.settings.volume,
           event.victim === 0 ? undefined : this.soundLocation(event.point));
       } else if (event.kind === 'round' && this.botz) {
         // A timed session is over: free the mouse so New session can be clicked.
@@ -1189,8 +1189,8 @@ export class DuelEngine {
       void this.loadViewModel(player.equipment);
       void this.audio.unlock(player.equipment).then(() => {
         if (!this.disposed && this.sim.actors[0].weapon.id === player.equipment && !this.paused)
-          if(!this.audio.playAction(0,player.equipment,'draw',this.sim.time,{local:true,volume:this.settings.volume*.5,duration:equipmentStats(player.equipment).deploy}))
-            this.audio.playEvent(`${player.equipment}-draw`, this.settings.volume * .5);
+          if(!this.audio.playAction(0,player.equipment,'draw',this.sim.time,{local:true,volume:this.settings.volume,duration:equipmentStats(player.equipment).deploy}))
+            this.audio.playEvent(`${player.equipment}-draw`, this.settings.volume);
       });
     }
     this.wasReloading = player.reloading;
@@ -1236,7 +1236,7 @@ export class DuelEngine {
         reloading:actor.reloading,local:actor.id===0,silent:actor.reloadSilent,reloadEmpty:state.reloadEmpty,
         reloadRemaining:Math.max(0,state.reloadUntil-this.sim.time),reloadDuration:state.reload.phaseDuration||equipmentStats(actor.equipment).reload,
         reloadPhase:state.reloadPhase,reloadProgress:state.reload.progress},
-        this.sim.time,this.settings.volume*.55,actor.id===0?undefined:this.soundLocation(actor.position));
+        this.sim.time,this.settings.volume,actor.id===0?undefined:this.soundLocation(actor.position));
     }
     this.processEvents(events);
     if (this.sim.botzStats.leaks > this.arrivalsShown) {

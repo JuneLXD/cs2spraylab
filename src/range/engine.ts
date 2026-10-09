@@ -158,7 +158,7 @@ export class RangeEngine {
     this.shotEffects = new ShotEffects(this.scene); this.viewFlashes = new MuzzleFlashes(this.viewScene, 2);
     this.updateDemonstration();
     this.sim.onShot = s => this.shot(s);
-    this.sim.onSound = landing => this.audio.playStep(this.sim.settings.volume * .45, 0, landing);
+    this.sim.onSound = landing => this.audio.playStep(this.sim.settings.volume, 0, landing);
     this.observer = new ResizeObserver(() => this.resize()); this.observer.observe(host);
     this.bindInput(); this.resize();
     void this.loadTarget(); void this.setWeapon(loadoutWeapon(settings));
@@ -325,11 +325,11 @@ export class RangeEngine {
     void this.audio.unlock(this.sim.equipped);
     await this.setWeapon(this.sim.equipped);
     this.viewAnimations.get(this.sim.equipped)?.playDraw(Math.max(.01, this.sim.equipReadyAt - this.sim.time));
-    this.audio.playAction('range-player',this.sim.equipped,'draw',this.sim.time,{local:true,volume:this.sim.settings.volume*.5,duration:this.sim.stats.deploy});
+    this.audio.playAction('range-player',this.sim.equipped,'draw',this.sim.time,{local:true,volume:this.sim.settings.volume,duration:this.sim.stats.deploy});
   }
   inspect() {if (!this.sim.firing && !this.sim.reloadState.active && this.sim.time >= this.sim.equipReadyAt) {
     this.viewAnimations.get(this.sim.equipped)?.playInspect();
-    this.audio.playAction('range-player',this.sim.equipped,'inspect',this.sim.time,{local:true,volume:this.sim.settings.volume*.5});
+    this.audio.playAction('range-player',this.sim.equipped,'inspect',this.sim.time,{local:true,volume:this.sim.settings.volume});
   }}
   secondary(held = false) {
     if (this.sim.firing || this.sim.reloadState.active) return;
@@ -337,7 +337,7 @@ export class RangeEngine {
     else {
       const zoom=this.sim.actions.zoom;
       this.sim.actions.secondary(this.sim.time);
-      if(zoom!==this.sim.actions.zoom)this.audio.playScope(this.sim.equipped,!!this.sim.actions.zoom,this.sim.settings.volume*.4);
+      if(zoom!==this.sim.actions.zoom)this.audio.playScope(this.sim.equipped,!!this.sim.actions.zoom,this.sim.settings.volume);
     }
   }
   async setWeapon(id: Equipment) {
@@ -632,7 +632,7 @@ export class RangeEngine {
     this.kick = 1;
     this.audio.play(this.sim.equipped, this.sim.settings.volume);
     this.audio.playAction('range-player',this.sim.equipped,shot.attack==='secondary'?'fire-alt':'fire',this.sim.time,
-      {local:true,volume:this.sim.settings.volume*.45});
+      {local:true,volume:this.sim.settings.volume});
   }
   private addImpact(parent:THREE.Object3D,point:THREE.Vector3,distance:number,color:THREE.Color) {
     this.impactClouds??=new Map();let cloud=this.impactClouds.get(parent);
@@ -847,7 +847,7 @@ export class RangeEngine {
     this.audio.syncActor({id:'range-player',generation:this.sim.drillRevision,equipment:this.sim.equipped,alive:true,local:true,
       reloading,silent:this.sim.reloadSilent,reloadEmpty:this.sim.reloadEmpty,reloadRemaining,reloadDuration:this.sim.reloadState.phaseDuration||this.sim.stats.reload,
       reloadPhase:this.sim.reloadPhase,reloadProgress:this.sim.reloadState.progress},
-      this.sim.time,this.sim.settings.volume*.55);
+      this.sim.time,this.sim.settings.volume);
     for(const action of this.sim.drainActionEvents())if(action.kind==='reload-cancel')this.audio.cancelAction('range-player');
     this.audio.updateActions(this.sim.time);
     const offset = this.viewOffset ?? VIEWMODEL_OFFSET;
