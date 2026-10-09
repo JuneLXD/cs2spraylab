@@ -8,6 +8,8 @@ test('fullscreen keeps menus available and the game view fills the stage', async
   await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
   await expect(page.getByLabel('Play setup')).toBeVisible();
   await expect(page.locator('.duel-controls')).toBeVisible();
+  // Play offers a way back out of fullscreen: the nav button flips and the footer gets an explicit exit.
+  await expect(page.getByRole('button',{name:'Exit fullscreen',exact:true})).toHaveCount(2);
   for (const mode of ['duel','peek']) {
     await selectDrill(page, mode);
     const [view,stage] = [await page.locator('.sl-game-view').boundingBox(),await page.locator('.range-stage').boundingBox()];
@@ -17,6 +19,9 @@ test('fullscreen keeps menus available and the game view fills the stage', async
   await page.getByRole('button',{name:'Settings',exact:true}).click();
   await expect(page.getByRole('dialog',{name:'Settings',exact:true})).toBeVisible();
   await page.getByRole('button',{name:'Done',exact:true}).click();
-  await page.evaluate(() => document.exitFullscreen());
+  await page.locator('.sl-play-footer').getByRole('button',{name:'Exit fullscreen',exact:true}).click();
+  await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(false);
+  await expect(page.getByRole('button',{name:'Exit fullscreen',exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Fullscreen',exact:true})).toBeVisible();
   await expect(page.getByLabel('Play setup')).toBeVisible();
 });

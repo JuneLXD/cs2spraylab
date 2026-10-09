@@ -118,6 +118,12 @@ export default function RangeApp() {
   const toggleFps = useCallback(() => update({showFps: !settingsRef.current.showFps}), [update]);
   const mute = useCallback(() => update({volume: settingsRef.current.volume ? 0 : .2}), [update]);
   const fullscreen = useCallback(() => {if (document.fullscreenElement) void document.exitFullscreen(); else void stage.current?.requestFullscreen?.().catch(() => setNotice('Fullscreen unavailable in this browser.'));}, []);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  useEffect(() => {
+    const sync = () => setIsFullscreen(!!document.fullscreenElement);
+    sync(); document.addEventListener('fullscreenchange', sync);
+    return () => document.removeEventListener('fullscreenchange', sync);
+  }, []);
   const learn = useCallback(() => {engine.current?.pause(); duel.current?.pause(); setTutorial(true);}, []);
   const reset = useCallback(() => {engine.current?.reset(); update(rangeDrillDefaults(settingsRef.current.mode)); setHasSession(false);}, [update]);
   const selectMode = useCallback((mode: Mode) => {if (settingsRef.current.mode === mode) return; engine.current?.pause(); duel.current?.pause(); setHasSession(false); setCompleted(undefined); setDuelMenu({ready: false, playing: false, paused: false, result: false, input: 'Ready', error: ''}); update({mode, spread: modeInfo[mode].spread});}, [update]);
@@ -221,7 +227,7 @@ export default function RangeApp() {
   }, [profiles, settings.weapon]);
   const exportFrames = useCallback(() => stage.current?.querySelector<HTMLButtonElement>('.performance-meter')?.click(), []);
   const exportSession = useCallback(() => download('spraylab-session.json', {settings, results, legacy, profiles}), [settings, results, legacy, profiles]);
-  const navigation = <TopNav screen={panel === 'weapons' ? 'loadout' : panel === 'history' ? 'session' : screen} navigate={navigate} loadout={openLoadout} armory={openArmory} session={openHistory} settings={openSettings} changelog={openChangelog} changelogOpen={panel === 'changelog'} count={recent.length} fps={settings.showFps} volume={settings.volume} toggleFps={toggleFps} mute={mute} fullscreen={fullscreen}/>;
+  const navigation = <TopNav screen={panel === 'weapons' ? 'loadout' : panel === 'history' ? 'session' : screen} navigate={navigate} loadout={openLoadout} armory={openArmory} session={openHistory} settings={openSettings} changelog={openChangelog} changelogOpen={panel === 'changelog'} count={recent.length} fps={settings.showFps} volume={settings.volume} toggleFps={toggleFps} mute={mute} fullscreen={fullscreen} fullscreenActive={isFullscreen}/>;
   return <main className="range-app">
     <section ref={stage} data-screen={screen} className={`range-stage sl-stage${screen !== 'game' || panel ? ' sl-menu-open' : ''}${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode) ? ' with-drill' : ''}`} aria-label="Practice range">
       <AchievementNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
@@ -267,7 +273,7 @@ export default function RangeApp() {
       </>}
       {screen !== 'game' && <div className="sl-menu-layer" style={{visibility: panel ? 'hidden' : undefined}} aria-hidden={!!panel}>
         {navigation}
-        {screen === 'play' && <PlayScreen settings={settings} profile={progressionState.profile} update={update} selectMode={selectMode} controlsRef={setControlsTarget}
+        {screen === 'play' && <PlayScreen fullscreenActive={isFullscreen} exitFullscreen={fullscreen} settings={settings} profile={progressionState.profile} update={update} selectMode={selectMode} controlsRef={setControlsTarget}
           ready={settings.mode === 'hearing' || (isDuelEngineMode(settings.mode) ? duelMenu.ready : assetReady)} resume={isDuelEngineMode(settings.mode) ? duelMenu.paused && !duelMenu.result : hasSession}
           input={isDuelEngineMode(settings.mode) ? duelMenu.input : status.input}
           startLabel={settings.mode === 'hearing' ? 'Start hearing practice' : isDuelEngineMode(settings.mode) ? `${hasSession ? 'Resume' : settings.mode === 'duel' || settings.mode === 'deathmatch' ? 'Enter' : 'Start'} ${settings.mode === 'duel' ? 'duel' : settings.mode === 'deathmatch' ? 'deathmatch' : settings.mode === 'reflex' ? 'reflex training' : settings.mode === 'redline' ? 'aim_redline' : 'Aim Botz'}` : 'Enter range'}

@@ -244,6 +244,9 @@ export const latestChanges = {
       'The bot count, FACEIT level, behavior, weapons, health and armor come from its own setup panel (saved separately from AI Duel), with a 1-10 s respawn delay.',
       'Bots on the imported map route around the collision boxes toward what they see or hear, and roam the warehouse otherwise; the navigation grid now caches obstacles per map so routes cost a fraction of a millisecond.',
     ]},
+    {id: 'play-fullscreen-exit', title: 'Exit fullscreen from Play', items: [
+      'The Play footer shows an Exit fullscreen button while fullscreen is on, and the top-bar fullscreen control now reads Exit fullscreen with a matching icon instead of a one-way Fullscreen button.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

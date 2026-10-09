@@ -368,6 +368,7 @@ html, body, #root {
   background: rgba(0,0,0,.68);
   border-top: 1px solid var(--sl-hairline);
 }
+.sl-exit-fullscreen {display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;}
 .sl-loadout-chips {
   display: flex;
   gap: 10px;

@@ -1,7 +1,7 @@
 import {RecentSessions} from '../RecentSessions';
 import type {RecentSession} from '../session-data';
 import {memo, useEffect, useState} from 'react';
-import {Check, Crosshair, GraduationCap, Headphones, MoveHorizontal, RotateCcw, Target, Zap} from 'lucide-react';
+import {Check, Crosshair, GraduationCap, Headphones, Minimize, MoveHorizontal, RotateCcw, Target, Zap} from 'lucide-react';
 import {modeNames, type Mode, type Settings} from '../../config';
 import {modeInfo} from '../../mode-info';
 import {cosmeticLabel, cosmeticPreview} from '../../cosmetics';
@@ -11,11 +11,13 @@ import {Button, Tabs, Tile} from '../primitives';
 import {TrainingSettings} from './TrainingSettings';
 import type {LoadoutSlot} from './LoadoutScreen';
 
-export const PlayScreen = memo(function PlayScreen({settings, profile, update, selectMode, controlsRef, ready, resume, input, startLabel, start, newSession, loadout, openSettings, tutorial, reset, recent, history, setupSummary}: {
+export const PlayScreen = memo(function PlayScreen({settings, profile, update, selectMode, controlsRef, ready, resume, input, startLabel, start, newSession, loadout, openSettings, tutorial, reset, recent, history, setupSummary, fullscreenActive = false, exitFullscreen}: {
   recent: RecentSession[]; history: () => void;
   settings: Settings; profile: ProgressionProfile; update: (patch: Partial<Settings>) => void; selectMode: (mode: Mode) => void;
   controlsRef: (element: HTMLDivElement | null) => void; ready: boolean; resume: boolean; input: string; startLabel: string;
   start: () => void; newSession: () => void; loadout: (slot:LoadoutSlot) => void; setupSummary: string; openSettings: () => void; tutorial: () => void; reset: () => void;
+  /** Fullscreen is active: show a way out next to the setup controls, since Escape only pauses the drill. */
+  fullscreenActive?: boolean; exitFullscreen?: () => void;
 }) {
   const [category, setCategory] = useState(categoryFor(settings.mode));
   useEffect(() => setCategory(categoryFor(settings.mode)), [settings.mode]);
@@ -33,6 +35,6 @@ export const PlayScreen = memo(function PlayScreen({settings, profile, update, s
     <RecentSessions rows={recent.filter(row=>row.mode===settings.mode)} open={history} limit={3} title="Last sessions"/>
     <button className="sl-learn" onClick={tutorial}><GraduationCap size={23}/><span><strong>Learn the fundamentals</strong><small>Movement, counter-strafing and shot timing</small></span></button>
     </div><aside className="sl-setup-panel" aria-label="Drill setup"><div ref={controlsRef}/>{!['duel','deathmatch','botz','reflex','redline'].includes(settings.mode) && <><header><div><small>DRILL SETUP</small><h2>{modeNames[settings.mode]}</h2></div>{settings.mode !== 'hearing' && <Button aria-label="Restore drill defaults" onClick={reset}><RotateCcw size={16}/></Button>}</header><div className="sl-range-setup">{settings.mode === 'hearing' ? <p>Start practice to choose sounds and locate their direction and distance.</p> : <TrainingSettings settings={settings} update={update}/>}</div></>}</aside></div>
-    <footer className="sl-play-footer"><div className="sl-loadout-chips">{[...(settings.primaryEnabled ? [settings.weapon] : []), settings.sidearm].map((id, index) => <button key={`${id}-${index}`} onClick={()=>loadout(index===0&&settings.primaryEnabled?'primary':'sidearm')}><img src={cosmeticPreview(profile, id)} alt=""/><span><small>{index === 0 && settings.primaryEnabled ? 'PRIMARY' : 'SIDEARM'}</small>{cosmeticLabel(profile, id)}</span></button>)}</div><Button className="sl-mouse-settings" onClick={openSettings}>Mouse & crosshair</Button><div className="sl-ready"><strong>{ready ? resume ? 'PAUSED' : 'READY' : 'LOADING'}</strong><small>{input.includes('blocked') ? input : setupSummary}</small></div>{resume && <Button onClick={newSession}>New session</Button>}<Button primary className="sl-go" aria-label={startLabel} disabled={!ready} onClick={start}>{resume ? 'Resume' : 'Go'}</Button></footer>
+    <footer className="sl-play-footer"><div className="sl-loadout-chips">{[...(settings.primaryEnabled ? [settings.weapon] : []), settings.sidearm].map((id, index) => <button key={`${id}-${index}`} onClick={()=>loadout(index===0&&settings.primaryEnabled?'primary':'sidearm')}><img src={cosmeticPreview(profile, id)} alt=""/><span><small>{index === 0 && settings.primaryEnabled ? 'PRIMARY' : 'SIDEARM'}</small>{cosmeticLabel(profile, id)}</span></button>)}</div><Button className="sl-mouse-settings" onClick={openSettings}>Mouse & crosshair</Button>{fullscreenActive && <Button className="sl-exit-fullscreen" aria-label="Exit fullscreen" onClick={exitFullscreen}><Minimize size={16}/>Exit fullscreen</Button>}<div className="sl-ready"><strong>{ready ? resume ? 'PAUSED' : 'READY' : 'LOADING'}</strong><small>{input.includes('blocked') ? input : setupSummary}</small></div>{resume && <Button onClick={newSession}>New session</Button>}<Button primary className="sl-go" aria-label={startLabel} disabled={!ready} onClick={start}>{resume ? 'Resume' : 'Go'}</Button></footer>
   </section>;
 });
