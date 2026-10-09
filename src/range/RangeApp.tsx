@@ -1,3 +1,4 @@
+import {AmmoBlock, EscHint, ScoreBar, ScoreCell, StatBlock, WeaponSlotList} from './hud/Hud';
 import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { Activity, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronDown, Code2 as Github, Crosshair as AimIcon, Download, Eye, Gauge, History, ListPlus, Maximize, Paintbrush, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, Target, Upload, Volume2, VolumeX, X } from 'lucide-react';
 import { classicViewmodel, Crosshair, defaults, gameData, historyModeNames, isDuelEngineMode, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, resolutions, resolutionSize, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol, type Resolution } from './config';
@@ -220,16 +221,14 @@ export default function RangeApp() {
     <section ref={stage} className={`range-stage${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode)?' with-drill':''}`} aria-label="Practice range">
       <AchievementNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
       {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={!!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={() => setSetupHint(false)} suspended={!!panel || tutorial || armoryOpen}/> : <>
-      <div className={`range-view${showRepFeedback?' has-rep-feedback':''}`}>
+      <div className={`range-view sl-game-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
       <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
       {!isDrillMode(settings.mode)&&<div className="target-label">{modeNames[settings.mode]} <span>{status.distance.toFixed(1)} m</span></div>}
       {settings.mode === 'transfer' && settings.transferRule === 'kill' && <div className="transfer-health" aria-label="Transfer target health">
         {(status.targetHealth ?? [100,100]).map((health, i) => <span key={i} className={health === 0 ? 'down' : ''}>{i ? 'B' : 'A'} <b>{health === 0 ? 'DOWN' : `${Math.ceil(health)} HP`}</b></span>)}
       </div>}
-      <div className="equipment-slots" role="group" aria-label="Equipped weapon">
-        {([1,2,3,4] as Slot[]).filter(slot=>slot!==1||settings.primaryEnabled).map(slot=>{const id=slot===1?settings.weapon:slot===2?settings.sidearm:slot===4?'zeus':'knife';return <button key={slot} aria-pressed={status.slot===slot} aria-label={`Equip ${equipmentNames[id]}`} title={`${cosmeticLabel(progressionState.profile, id)} (${slotKey(settings.keyboard, slot)})`} onClick={()=>{void engine.current?.equip(slot);}}><span>{slotKey(settings.keyboard, slot)}</span><img src={cosmeticPreview(progressionState.profile, id)} alt=""/></button>;})}
-      </div>
+      <WeaponSlotList settings={settings} equipped={status.equipped} slot={status.slot} profile={progressionState.profile} label="Equipped weapon" equip={slot => {void engine.current?.equip(slot);}}/>
       <div className="weapon-action-tools"><button className="icon-button" aria-label="Inspect weapon" title={`Inspect weapon (${keyHint(settings.keyboard, '+lookatweapon')})`} onClick={()=>engine.current?.inspect()}><Eye size={16}/></button>
         {status.equipped !== 'knife' && (gameData.weapons[status.equipped].zoomLevels > 0 || gameData.weapons[status.equipped].hasBurst || gameData.weapons[status.equipped].isRevolver) && <button className="icon-button" aria-label="Secondary weapon mode" title={`${status.equipped === 'revolver' ? 'Quick alternate shot' : 'Scope / burst mode'} (${keyHint(settings.keyboard, '+attack2')})`} onClick={()=>engine.current?.secondary()}><ScanLine size={16}/></button>}</div>
       <div className="follow-origin" ref={follow}><CrosshairView value={settings.crosshair} /></div>
@@ -238,15 +237,27 @@ export default function RangeApp() {
       </div>}
       {!settings.spread&&<button className="spread-warning" onClick={()=>{update({spread:true});}} title="Enable movement and firing inaccuracy">Spread off<Shield size={12}/></button>}
       <div className="hit-marker" ref={hitmarker}><X size={42} strokeWidth={3} /></div>
-      {showRepFeedback&&repFeedback&&<div className={`rep-feedback${repFeedback.passed?' passed':''}`} role="status" aria-label="Rep feedback"><b>{repFeedback.message}</b>{repFeedback.tip&&<p>{repFeedback.tip}</p>}</div>}
+      {showRepFeedback&&repFeedback&&<div className={`rep-feedback${repFeedback.passed?' passed':''}`} role="status" aria-label="Rep feedback"><Check className="sl-rep-icon" size={24}/><div><b>{repFeedback.message}</b>{repFeedback.tip&&<p>{repFeedback.tip}</p>}</div></div>}
       {!status.active && !error && <button className="enter-range" disabled={!assetReady} onClick={start}><Play size={18} fill="currentColor" />{assetReady ? 'Enter range' : 'Loading range'}</button>}
       {error && <div className="range-error" role="alert"><Shield size={24} /><p>{error}</p><button onClick={() => { setError(''); setGeneration(g => g + 1); }}><RotateCcw size={16} />Restart range</button></div>}
-      {status.active && <div className="exit-hint"><span>Press ESC to exit</span><button className="icon-button" aria-label="Pause range" title="Pause range (Esc)" onClick={() => engine.current?.pause()}><Pause size={16} /></button></div>}
+      {status.active && <EscHint className="exit-hint" label="Pause range" pause={() => engine.current?.pause()}/>}
       {status.active && status.input !== 'Touch' && !status.shortcutProtected && shortcutHint(settings.keyboard) && <div className="range-shortcut-warning" role="status">{shortcutHint(settings.keyboard)}</div>}
-      <div className="range-hud">
-        <div className="hud-performance"><span className="hud-stat"><Activity size={17} /><b>{Math.round(status.speed)}</b><small>u/s</small></span><span className="hud-stat"><Target size={17} /><b>{status.distance.toFixed(1)}</b><small>m</small></span></div>
-        <div className="hud-result"><small>{settings.mode==='precision'?'MOVEMENT SCORE':'HIT RATE'}</small><strong data-testid="accuracy">{Math.round(score)}<em>{settings.mode==='precision'?'/100':'%'}</em></strong><div className="hit-counts"><span className="head-count"><b>{status.heads}</b> HEAD</span><span className="body-count"><b>{status.hits - status.heads}</b> BODY</span><span className="miss-count"><b>{status.shots - status.hits}</b> MISS</span></div></div>
-        <div className="hud-ammo"><small>{cosmeticLabel(progressionState.profile, status.equipped)}</small><strong data-testid="ammo">{status.slot===3?'--':status.remaining}{status.slot!==3&&status.equipped!=='zeus'&&<em>{`/ ${status.reserve ?? status.magazine}`}</em>}</strong><span>{status.reload?`${status.reloadSilent?'Silent reload':'Reloading'} ${status.reload.toFixed(1)} s`:status.recharge?`Recharge ${Math.ceil(status.recharge)}s`:!status.equipReady?'Drawing':status.firing ? 'Firing' : 'Ready'}</span>{status.slot!==3&&status.equipped!=='zeus'&&<button className="reload-pistol" disabled={status.remaining===status.magazine||!!status.reload||!status.reserve} onClick={()=>engine.current?.sim.reload()} title={`Reload ${equipmentNames[status.equipped]} (${keyHint(settings.keyboard, '+reload')})`}><RotateCcw size={13}/>Reload</button>}</div>
+      <div className="range-hud sl-hud">
+        <div className="hud-performance sl-bottom-stats">
+          <StatBlock className="hud-stat" icon={Activity} value={Math.round(status.speed)} unit="u/s" label="SPEED"/>
+          <StatBlock className="hud-stat" icon={Target} value={status.distance.toFixed(1)} unit="m" label="DISTANCE"/>
+        </div>
+        <ScoreBar className="hud-result">
+          <ScoreCell value={status.heads} label="HEAD" tone="gold"/>
+          <ScoreCell value={status.hits - status.heads} label="BODY" tone="blue"/>
+          <ScoreCell value={<>{Math.round(score)}<em>{settings.mode === 'precision' ? '/100' : '%'}</em></>} label={settings.mode === 'precision' ? 'MOVEMENT SCORE' : 'HIT RATE'} testId="accuracy"/>
+          <ScoreCell value={status.shots - status.hits} label="MISS" tone="miss"/>
+        </ScoreBar>
+        <AmmoBlock className="hud-ammo" label={cosmeticLabel(progressionState.profile, status.equipped)} testId="ammo" compactSeparator
+          ammo={status.slot === 3 ? '--' : status.remaining} reserve={status.slot !== 3 && status.equipped !== 'zeus' ? status.reserve ?? status.magazine : undefined}
+          state={status.reload ? `${status.reloadSilent ? 'Silent reload' : 'Reloading'} ${status.reload.toFixed(1)} s` : status.recharge ? `Recharge ${Math.ceil(status.recharge)}s` : !status.equipReady ? 'Drawing' : status.firing ? 'Firing' : 'Ready'}
+          reload={status.active && status.slot !== 3 && status.equipped !== 'zeus' ? () => engine.current?.sim.reload() : undefined}
+          reloadDisabled={status.remaining === status.magazine || !!status.reload || !status.reserve} reloadHint={`Reload ${equipmentNames[status.equipped]} (${keyHint(settings.keyboard, '+reload')})`}/>
       </div>
       </div>
       {isDrillMode(settings.mode)&&<DrillPanel status={status} mode={settings.mode} challenge={settings.drillPace==='challenge'} peekDuration={settings.peekDuration}/>}

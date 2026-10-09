@@ -192,6 +192,11 @@ export const latestChanges = {
       'Self-hosted Barlow and Rajdhani fonts, charcoal panels, squared controls and consistent keyboard focus styling from the new UI designs.',
       'Shared settings controls preserve saved values, labels and number-field validation. The recovery screen now has its own working styles.',
     ]},
+    {id: 'ui-hud', title: 'CS2-style corner HUD', items: [
+      'Scores and timers now sit at the top, with health or accuracy at bottom left, ammo at bottom right, and weapon silhouettes along the edge.',
+      'HUD values stay visible above the scope. FPS lives at top left; bot counts, rep feedback and touch controls adapt to smaller views.',
+      'Inspect and scope controls are reachable in the range. Reload no longer starts the paused range through its HUD button.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

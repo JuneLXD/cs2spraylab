@@ -1,5 +1,6 @@
+import {AmmoBlock, EscHint, ScoreBar, ScoreCell, StatBlock, WeaponSlotList} from '../hud/Hud';
 import {useCallback, useEffect, useRef, useState, type CSSProperties} from 'react';
-import {ArrowRight, Eye, Hand, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, Target, X} from 'lucide-react';
+import {ArrowRight, Plus, Eye, Hand, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, Target, X} from 'lucide-react';
 import {gameData, loadoutWeapon, type Settings} from '../config';
 import {botConfig, sanitizeDuelConfig, type BotOverride, type DuelConfig} from './config';
 import {DuelEngine, type DuelStatus} from './DuelEngine';
@@ -121,16 +122,14 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
     '--cross-outline': `${settings.crosshair.outline}px`, opacity: settings.crosshair.alpha} as CSSProperties;
 
   return <div className="duel-layout">
-    <div className="duel-view">
+    <div className={`duel-view sl-game-view ${botzMode ? 'sl-botz-view' : 'sl-duel-view'}`}>
       <div className="duel-canvas" ref={canvasHost} />
       <div className="duel-topline"><span className="range-badge"><i />{botzMode ? title.toUpperCase() : 'AI DUEL'}</span><span>{botzMode ? `${status.enemies} ${status.enemies === 1 ? 'BOT' : 'BOTS'} UP` : `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} LEFT`}</span></div>
-      <div className="duel-tools"><div className="equipment-slots" role="group" aria-label="Duel equipment">
-        {([1,2,3,4] as Slot[]).filter(slot=>(slot!==1||(status.loadout ? !!status.loadout.primary : settings.primaryEnabled))&&(slot!==2||!status.loadout||!!status.loadout.sidearm)).map(slot => {const id = slot === 1 ? status.loadout?.primary ?? settings.weapon : slot === 2 ? status.loadout?.sidearm ?? settings.sidearm : slot===4?'zeus':'knife';
-          return <button key={slot} aria-pressed={equipped === id} title={`${label(id)} (${slotKey(settings.keyboard, slot)})`} aria-label={`Equip ${equipmentNames[id]}`} onClick={() => engine.current?.equip(slot)}><span>{slotKey(settings.keyboard, slot)}</span><img src={profile ? cosmeticPreview(profile,id) : `/models/${id}.png`} alt=""/></button>;})}
-      </div>
+      <div className="duel-tools">
+      <WeaponSlotList settings={settings} equipped={equipped} profile={profile} loadout={status.loadout} label="Duel equipment" equip={slot => engine.current?.equip(slot)}/>
       <div className="weapon-action-tools"><button className="icon-button" aria-label="Inspect weapon" title={`Inspect weapon (${keyHint(settings.keyboard, '+lookatweapon')})`} onClick={()=>engine.current?.inspect()}><Eye size={16}/></button>
         {equipped !== 'knife' && (gameData.weapons[equipped].zoomLevels > 0 || gameData.weapons[equipped].hasBurst || gameData.weapons[equipped].isRevolver) && <button className="icon-button" aria-label="Secondary weapon mode" title={`${equipped === 'revolver' ? 'Quick alternate shot' : 'Scope / burst mode'} (${keyHint(settings.keyboard, '+attack2')})`} onClick={()=>engine.current?.secondary()}><ScanLine size={16}/></button>}</div>
-      {playing && <div className="duel-exit"><span>Press ESC to exit</span><button className="icon-button" aria-label={botzMode ? `Pause ${drill}` : 'Pause duel'} title={botzMode ? `Pause ${drill}` : 'Pause duel'} onClick={() => engine.current?.pause()}><Pause size={16}/></button></div>}
+      {playing && <EscHint className="duel-exit" label={botzMode ? `Pause ${drill}` : 'Pause duel'} pause={() => engine.current?.pause()}/>}
       {alive && !status.shortcutProtected && shortcutHint(settings.keyboard) && <div className="duel-shortcut-warning" role="status">{shortcutHint(settings.keyboard)}</div>}
       </div>
       <div className="follow-origin" ref={crosshair} aria-hidden="true"><div className={`crosshair ${settings.crosshair.t ? 't-style' : ''} ${settings.crosshair.size === 0 ? 'dot-only' : ''}`} style={crosshairStyle}>
@@ -157,15 +156,36 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
         </button>
       </div>}
       {error && <div className="range-error" role="alert"><Shield size={24}/><p>{error}</p><button onClick={() => location.reload()}><RotateCcw size={16}/>Reload</button></div>}
-      <div className="duel-hud">
-        {botzMode && status.botz ? <>
-          <div className="duel-health"><small>ACCURACY</small><strong>{status.botz.accuracy.toFixed(0)}<small>%</small></strong><span><Target size={13}/>{status.botz.hits} / {status.botz.shots} hits</span></div>
-          <div className="duel-round"><span>{status.botz.kills} KILLS</span><strong>{status.botz.sessionSeconds ? <>{Math.max(0, Math.ceil(status.botz.sessionSeconds - status.botz.seconds))}<small> s</small></> : clock(status.botz.seconds)}</strong><span>{reflexMode ? `${status.botz.leaks} REACHED YOU` : `${status.botz.headshotRate.toFixed(0)}% HEADSHOTS`}</span></div>
+      <div className="duel-hud sl-hud">
+        {botzMode ? status.botz && <>
+          <div className="duel-health sl-bottom-stats">
+            <StatBlock value={status.botz.accuracy.toFixed(0)} unit="%" icon={Target} bar={status.botz.accuracy} label="ACCURACY"/>
+            <StatBlock value={status.botz.hits} unit={` / ${status.botz.shots}`} icon={ScanLine} label="HITS / SHOTS" bar={status.botz.accuracy}>
+              <span className="sr-only">{status.botz.hits} / {status.botz.shots} hits</span>
+            </StatBlock>
+          </div>
+          <ScoreBar className="duel-round" bots={{alive: status.enemies, total: botz.botCount, label: `${status.enemies} ${status.enemies === 1 ? 'BOT' : 'BOTS'} UP`}}>
+            <ScoreCell value={status.botz.kills} label="KILLS" tone="blue"/>
+            <ScoreCell value={clock(status.botz.sessionSeconds ? Math.max(0, Math.ceil(status.botz.sessionSeconds - status.botz.seconds)) : status.botz.seconds)} label={status.botz.sessionSeconds ? 'REMAINING' : 'ENDLESS'}/>
+            <ScoreCell value={reflexMode ? status.botz.leaks : `${status.botz.headshotRate.toFixed(0)}%`} label={reflexMode ? 'REACHED YOU' : 'HEADSHOTS'} tone="gold"/>
+          </ScoreBar>
         </> : <>
-          <div className="duel-health"><small>HEALTH</small><strong>{Math.ceil(status.health)}</strong><span><Shield size={13}/>{Math.ceil(status.armor)} armor</span></div>
-          <div className="duel-round"><span>{status.kills} KILLS</span><strong>{Math.max(0, Math.ceil(config.roundSeconds - status.seconds))}<small> s</small></strong><span>{Math.round(status.damage)} DAMAGE</span></div>
+          <div className="duel-health sl-bottom-stats">
+            <StatBlock value={Math.ceil(status.health)} icon={Plus} bar={status.health / config.playerHealth * 100} label="HEALTH"/>
+            <StatBlock value={Math.ceil(status.armor)} icon={Shield} bar={status.armor} label={config.playerHelmet ? 'ARMOR · HELMET' : 'ARMOR'}/>
+          </div>
+          <ScoreBar className="duel-round" bots={{alive: status.enemies, total: config.botCount, label: `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} LEFT`}}>
+            <ScoreCell value={status.kills} label="KILLS" tone="blue"/>
+            <ScoreCell value={clock(Math.max(0, Math.ceil(config.roundSeconds - status.seconds)))} label="ROUND"/>
+            <ScoreCell value={Math.round(status.damage)} label="DAMAGE" tone="gold"/>
+          </ScoreBar>
         </>}
-        <div className="duel-ammo"><small>{label(equipped)}</small><strong>{equipped === 'knife' ? '--' : status.ammo}{equipped !== 'knife' && equipped!=='zeus' && <em> / {status.reserve ?? equipmentStats(equipped).reserve}</em>}</strong><span>{status.reloading ? status.reloadSilent?'Silent reload':'Reloading' : equipped==='zeus'&&status.recharge?`Recharge ${Math.ceil(status.recharge)}s`:status.input}</span>{equipped !== 'knife' && equipped!=='zeus' && <button className="reload-pistol" title={`Reload (${keyHint(settings.keyboard, '+reload')})`} disabled={!alive || status.reloading || !status.reserve || status.ammo === equipmentStats(equipped).magazine} onClick={() => engine.current?.sim.command(0, {reloadPressed: true})}><RotateCcw size={13}/>Reload</button>}</div>
+        <AmmoBlock className="duel-ammo" label={label(equipped)} ammo={equipped === 'knife' ? '--' : status.ammo}
+          reserve={equipped !== 'knife' && equipped !== 'zeus' ? status.reserve ?? equipmentStats(equipped).reserve : undefined}
+          state={status.reloading ? status.reloadSilent ? 'Silent reload' : 'Reloading' : equipped === 'zeus' && status.recharge ? `Recharge ${Math.ceil(status.recharge)}s` : botzMode && botz.infiniteAmmo === 'magazine' && equipped !== 'knife' ? 'Never reload' : `${keyHint(settings.keyboard, '+reload')} reload`}
+          input={!alive ? status.input : undefined}
+          reload={alive && equipped !== 'knife' && equipped !== 'zeus' ? () => engine.current?.sim.command(0, {reloadPressed: true}) : undefined}
+          reloadDisabled={status.reloading || !status.reserve || status.ammo === equipmentStats(equipped).magazine} reloadHint={`Reload (${keyHint(settings.keyboard, '+reload')})`}/>
       </div>
     </div>
     {botzMode ? <aside className="duel-controls" aria-label={reflexMode ? 'Reflex settings' : `${title} settings`}>
