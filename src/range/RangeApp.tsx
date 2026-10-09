@@ -116,7 +116,10 @@ export default function RangeApp() {
   const openAgent = useCallback(() => setArmoryRequest('agent'), []);
   const openArmory = useCallback(() => setArmoryRequest('knife'), []);
   const toggleFps = useCallback(() => update({showFps: !settingsRef.current.showFps}), [update]);
-  const mute = useCallback(() => update({volume: settingsRef.current.volume ? 0 : .2}), [update]);
+  // Mute remembers the level it silenced, so unmuting restores it.
+  const lastVolume = useRef(settings.volume || .2); if (settings.volume > 0) lastVolume.current = settings.volume;
+  const mute = useCallback(() => update({volume: settingsRef.current.volume ? 0 : lastVolume.current || .2}), [update]);
+  const setVolume = useCallback((volume: number) => update({volume: Math.max(0, Math.min(1, volume))}), [update]);
   const fullscreen = useCallback(() => {if (document.fullscreenElement) void document.exitFullscreen(); else void stage.current?.requestFullscreen?.().catch(() => setNotice('Fullscreen unavailable in this browser.'));}, []);
   const [isFullscreen, setIsFullscreen] = useState(false);
   useEffect(() => {
@@ -228,9 +231,9 @@ export default function RangeApp() {
   }, [profiles, settings.weapon]);
   const exportFrames = useCallback(() => stage.current?.querySelector<HTMLButtonElement>('.performance-meter')?.click(), []);
   const exportSession = useCallback(() => download('spraylab-session.json', {settings, results, legacy, profiles}), [settings, results, legacy, profiles]);
-  const navigation = <TopNav screen={panel === 'weapons' ? 'loadout' : panel === 'history' ? 'session' : screen} navigate={navigate} loadout={openLoadout} armory={openArmory} session={openHistory} settings={openSettings} changelog={openChangelog} changelogOpen={panel === 'changelog'} count={recent.length} fps={settings.showFps} volume={settings.volume} toggleFps={toggleFps} mute={mute} fullscreen={fullscreen} fullscreenActive={isFullscreen}/>;
+  const navigation = <TopNav screen={panel === 'weapons' ? 'loadout' : panel === 'history' ? 'session' : screen} navigate={navigate} loadout={openLoadout} armory={openArmory} session={openHistory} settings={openSettings} changelog={openChangelog} changelogOpen={panel === 'changelog'} count={recent.length} fps={settings.showFps} volume={settings.volume} toggleFps={toggleFps} mute={mute} setVolume={setVolume} fullscreen={fullscreen} fullscreenActive={isFullscreen}/>;
   return <main className="range-app">
-    <section ref={stage} data-screen={screen} className={`range-stage sl-stage${screen !== 'game' || panel ? ' sl-menu-open' : ''}${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode) ? ' with-drill' : ''}`} aria-label="Practice range">
+    <section ref={stage} data-screen={screen} className={`range-stage sl-stage${screen !== 'game' || panel ? ' sl-menu-open' : ''}${settings.mode === 'pop' && settings.popHideHud ? ' sl-hud-hidden' : ''}${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode) ? ' with-drill' : ''}`} aria-label="Practice range">
       <AchievementNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
       {settings.mode === 'hearing' ? <HearingPractice backToPlay={play} volume={settings.volume} openSettings={() => open('settings')} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' || settings.mode === 'deathmatch' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={entered} engineRef={duel} onMenuStatus={onDuelMenu} controlsTarget={controlsTarget} config={selectedDuel.config} update={selectedDuel.update} resetSetup={settings.mode==='duel'||settings.mode==='deathmatch'?selectedDuel.reset:selectedBotz.reset} botz={selectedBotz.config} updateBotz={selectedBotz.update} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view sl-game-view${showRepFeedback?' has-rep-feedback':''}`}>

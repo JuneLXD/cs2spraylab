@@ -486,6 +486,7 @@ export class RangeEngine {
       'popSize', 'popCount', 'popSpacing', 'popDistance'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = settings.invertY !== this.sim.settings.invertY;
+      if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
       this.sim.settings = settings;
       this.resizeImpacts();
       if (changedInversion) this.updateDemonstration();
@@ -662,7 +663,7 @@ export class RangeEngine {
       const hit = pop.hit(shot.origin, dir, shot.maxDistance);
       const end = hit ? vector(hit.point) : this.popBackdropPoint(shot.origin, dir, shot.maxDistance);
       if (hit) popped++;
-      else if (end) this.addImpact(this.impacts, end.clone().addScaledVector(vector(dir), -.012), end.distanceTo(vector(shot.origin)), this.missMaterial.color);
+      else if (end && !this.sim.settings.popHideImpacts) this.addImpact(this.impacts, end.clone().addScaledVector(vector(dir), -.012), end.distanceTo(vector(shot.origin)), this.missMaterial.color);
       if (muzzle && !shot.melee && end) {
         this.viewScene.updateMatrixWorld(true);
         const start = viewMuzzleToWorld(muzzle.getWorldPosition(new THREE.Vector3()), this.viewCamera, this.camera, this.width, this.height);
@@ -675,7 +676,7 @@ export class RangeEngine {
     this.hitCaption.textContent = popped > 1 ? `${popped} POPS` : popped ? 'POP' : 'MISS';
     if (popped) this.audio.playPopSound(this.sim.settings.popSound, this.sim.settings.volume, popped);
     if (shot.melee) this.audio.playKnife(shot.attack === 'secondary' ? 'stab' : 'slash', this.sim.settings.volume);
-    else {
+    else if (!this.sim.settings.popMuteGun) {
       this.audio.play(this.sim.equipped, this.sim.settings.volume);
       this.audio.playAction('range-player', this.sim.equipped, shot.attack === 'secondary' ? 'fire-alt' : 'fire', this.sim.time, {local: true, volume: this.sim.settings.volume});
     }

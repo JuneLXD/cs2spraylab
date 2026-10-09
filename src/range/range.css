@@ -81,3 +81,7 @@
 /* Real fullscreen: only the game view. Setup and coach panels return when fullscreen ends. */
 .range-stage:fullscreen .duel-controls,.range-stage:fullscreen .drill-panel{display:none}
 .range-stage:-webkit-full-screen .duel-controls,.range-stage:-webkit-full-screen .drill-panel{display:none}
+
+/* Pop's Hide HUD: only the crosshair and the hit flash stay over the view. */
+.sl-hud-hidden .range-topline,.sl-hud-hidden .target-label,.sl-hud-hidden .sl-weapon-slots,.sl-hud-hidden .weapon-action-tools,.sl-hud-hidden .range-hud,.sl-hud-hidden .spread-warning,.sl-hud-hidden .rep-feedback,.sl-hud-hidden .exit-hint,.sl-hud-hidden .performance-meter{display:none}
+

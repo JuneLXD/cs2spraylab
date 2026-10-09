@@ -573,3 +573,9 @@ html, body, #root {
 .sl-swatches button{width:22px;height:22px;border-radius:50%;border:2px solid rgba(0,0,0,.35);cursor:pointer;padding:0}
 .sl-swatches button[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.3)}
 
+/* Master volume in the top bar: the mute button, a short slider and the level. */
+.sl-volume{display:flex;align-items:center;gap:6px}
+.sl-volume input[type=range]{width:84px;accent-color:#ff6a4d;cursor:pointer}
+.sl-volume output{font-size:12px;min-width:34px;opacity:.8;font-variant-numeric:tabular-nums}
+@media (max-width:900px){.sl-volume input[type=range],.sl-volume output{display:none}}
+

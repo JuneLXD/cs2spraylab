@@ -85,10 +85,12 @@ describe('native audio consumer', () => {
   it('synthesizes the Pop hit sounds and stays silent at zero volume', async () => {
     const {audio, sources} = fixture(); await audio.unlock('ak47');
     expect(audio.playPopSound('hitmarker', 0)).toBe(false); expect(sources.length).toBe(0);
-    expect(audio.playPopSound('hitmarker', .5)).toBe(true);
-    // Three partials and the click.
-    expect(sources.length).toBe(4); expect(sources.every(source => source.start.mock.calls.length === 1)).toBe(true);
-    expect(audio.playPopSound('pop', .5)).toBe(true); expect(sources.length).toBe(6);
+    // The user's file, decoded at unlock, plays as one voice.
+    expect(audio.playPopSound('hitmarker', .5)).toBe(true); expect(sources.length).toBe(1);
+    // The synthesized tick: three partials and the click.
+    expect(audio.playPopSound('synth', .5)).toBe(true);
+    expect(sources.length).toBe(5); expect(sources.every(source => source.start.mock.calls.length === 1)).toBe(true);
+    expect(audio.playPopSound('pop', .5)).toBe(true); expect(sources.length).toBe(7);
     audio.dispose();
   });
   it('maps estimated cue attenuation to full acoustic path length, not apparent corner distance', async () => {

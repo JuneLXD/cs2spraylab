@@ -56,7 +56,10 @@ describe('pop field', () => {
     expect(sanitizeSettings({popCount: 4.4}).popCount).toBe(4);
     expect(sanitizeSettings({}).popSize).toBe(30);
     expect([sanitizeSettings({}).popAmmo, sanitizeSettings({}).popSound]).toEqual(['magazine', 'hitmarker']);
+    expect([sanitizeSettings({}).popMuteGun, sanitizeSettings({}).popHideImpacts, sanitizeSettings({}).popHideHud]).toEqual([false, false, false]);
+    expect(sanitizeSettings({popMuteGun: true, popHideImpacts: 'yes', popHideHud: 1})).toMatchObject({popMuteGun: true, popHideImpacts: false, popHideHud: false});
     expect([sanitizeSettings({popAmmo: 'reserve', popSound: 'pop'}).popAmmo, sanitizeSettings({popAmmo: 'always', popSound: 'x'}).popAmmo]).toEqual(['reserve', 'magazine']);
+    expect([sanitizeSettings({popSound: 'synth'}).popSound, sanitizeSettings({popSound: 'pop'}).popSound, sanitizeSettings({popSound: 'x'}).popSound]).toEqual(['synth', 'pop', 'hitmarker']);
   });
 
   it('never reloads by default: a held trigger keeps firing; infinite reserve reloads from a full reserve; normal runs down', () => {

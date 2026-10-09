@@ -30,4 +30,13 @@ ones every other range drill uses.
   setting in Pop. `popSound` picks `RangeAudio.playHitmarker` (default; a synthesized Battlefield-style
   tick: 3.2 kHz, 4.85 kHz and 1.6 kHz sine partials decaying within 70 ms plus a 12 ms band-passed click)
   or `playPop`.
+- Pop-only switches (same day): `popMuteGun` skips the shot's audio and fire foley in `popShot` (knife and the
+  hit sound stay), `popHideImpacts` skips the miss marks (and clears existing ones when turned on),
+  `popHideHud` adds `sl-hud-hidden` to the stage so the topline, target label, weapon slots, action
+  tools, score and ammo bar, spread warning, rep feedback, ESC hint and FPS meter are hidden; the
+  crosshair and hit flash remain.
+- Hit sound file: `popSound` 'hitmarker' (default) plays `public/revamp/sounds/pop-hitmarker.mp3`, the file the
+  user supplied (decoded at audio unlock; the synthesized tick stands in until then), 'synth' the synthesized
+  tick, 'pop' the bloop. The master volume (top bar and Settings > Audio) is `settings.volume`, applied to
+  every sound.
 

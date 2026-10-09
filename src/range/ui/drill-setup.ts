@@ -6,10 +6,10 @@ import type {DuelConfig} from '../duel/config';
 export function rangeDrillDefaults(mode: Mode): Partial<Settings> {
   const {burst, peekScenario, peekDuration, drillPace, follow, transferRule, transferAfter,
     impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides,
-    popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound} = defaults;
+    popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud} = defaults;
   return {burst, peekScenario, peekDuration, drillPace, follow, transferRule, transferAfter,
     impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides, spread: mode !== 'guided',
-    popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound};
+    popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud};
 }
 export function drillSetupSummary(settings: Settings, botz: BotzConfig, duel: DuelConfig): string {
   if (['botz', 'reflex', 'redline'].includes(settings.mode)) {

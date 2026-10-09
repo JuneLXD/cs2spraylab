@@ -267,6 +267,11 @@ export const latestChanges = {
       'Pop never reloads by default: its setup has an Ammo mode (Never reload, Infinite reserve, Normal reserves), and with Never reload a held trigger keeps firing.',
       'Its Hit sound is now a Battlefield-style hitmarker, synthesized in the trainer (a 3.2 kHz tick with a click, not the game\'s file); the pop stays as the alternative.',
     ]},
+    {id: 'pop-quiet', title: 'Pop: your hitmarker, quiet options and a master volume', items: [
+      'Pop\'s hit sound is now the hitmarker file you provided; the synthesized hitmarker and the pop stay in the Hit sound list.',
+      'Three Pop-only switches in its setup: Mute gun sound (the hit sound stays), Hide bullet impacts (no miss marks on the wall) and Hide HUD (only the crosshair and the hit flash stay over the view).',
+      'A master volume slider sits in the top bar next to mute on every screen; it is the same level as the Audio setting, every sound goes through it, and unmuting restores the level you had.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

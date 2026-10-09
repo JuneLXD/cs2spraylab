@@ -9,6 +9,8 @@ const EAR_TO_GUN_UNITS = 4;
 /** Footsteps play at the feet, 64 units below the ear. */
 const EAR_TO_FEET_UNITS = 64;
 export type RangeAudioProfile = SpatialAudioProfile & {nativeDistanceCurves?: boolean; reverb?: boolean; propagationDelay?: boolean};
+/** Pop's default hit sound: the hitmarker file the user supplied (public/revamp/sounds). */
+export const POP_HITMARKER_URL = '/sounds/pop-hitmarker.mp3';
 export class RangeAudio {
   context?: AudioContext;
   buffers = new Map<Equipment, AudioBuffer>();
@@ -80,6 +82,7 @@ export class RangeAudio {
       }).catch(() => {});
       await this.manifest;
       this.common ??= this.preload(Object.keys(this.events).filter(key => /^(step-|land-|hit-|hurt-|impact-|death$)/.test(key)));
+      void this.decode(POP_HITMARKER_URL).catch(() => {});
       if (!this.pending.has(weapon)) this.pending.set(weapon, this.load(weapon));
       await Promise.all([this.pending.get(weapon), this.common]);
       if (!this.disposed) this.status = 'ready';
@@ -198,8 +201,15 @@ export class RangeAudio {
     }
     return this.noise;
   }
-  playPopSound(kind: 'hitmarker' | 'pop', volume: number, count = 1) {
-    return kind === 'pop' ? this.playPop(volume, count) : this.playHitmarker(volume, count);
+  /** Pop's hit sound: the user's hitmarker file (the synthesized tick stands in until it is decoded), the synthesized tick, or the pop. */
+  playPopSound(kind: 'hitmarker' | 'synth' | 'pop', volume: number, count = 1) {
+    if (kind === 'pop') return this.playPop(volume, count);
+    if (kind === 'hitmarker') {
+      const buffer = this.samples.get(POP_HITMARKER_URL);
+      if (buffer) return this.emit(buffer, volume, count > 1 ? 1.06 : 1);
+      void this.decode(POP_HITMARKER_URL).catch(() => {});
+    }
+    return this.playHitmarker(volume, count);
   }
   /** Pop's default hit sound, a Battlefield-style hitmarker synthesized here (no game file): a 3.2 kHz tick with a
    * quieter inharmonic partial, a low thump and a few milliseconds of band-passed noise, all gone within 80 ms. */

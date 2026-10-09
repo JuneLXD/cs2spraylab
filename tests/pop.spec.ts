@@ -58,5 +58,25 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
   await expect(page.locator('.hit-caption')).toHaveText('POP');
   await page.keyboard.press('Escape');
   await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeVisible();
+  // Pop-only options: no gunshot, no miss marks, no HUD.
+  for (const label of ['Mute gun sound', 'Hide bullet impacts', 'Hide HUD']) await page.getByLabel(label, {exact: true}).check();
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await expect(page.locator('.range-hud')).toBeHidden();
+  await expect(page.locator('.sl-hud-hidden')).toHaveCount(1);
+  const quiet = await page.evaluate(() => {
+    const engine = (window as any).popEngine, sim = engine.sim;
+    let played = 0; engine.audio.play = () => {played++;};
+    sim.yaw = Math.PI / 2; sim.pitch = -.3;   // off the wall: a miss
+    sim.start(); sim.release('mouse');
+    return {played, shots: sim.pop.shots, pops: sim.pop.pops, clouds: engine.impactClouds?.size ?? 0, caption: engine.hitCaption.textContent};
+  });
+  expect(quiet).toEqual({played: 0, shots: 2, pops: 1, clouds: 0, caption: 'MISS'});
+  // The master volume in the top bar is the same level as the Audio setting.
+  await page.keyboard.press('Escape');
+  const slider = page.getByLabel('Master volume');
+  await expect(slider).toHaveValue('20');
+  await slider.focus(); await page.keyboard.press('ArrowLeft');
+  await expect(slider).toHaveValue('19');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.range.v2')!).volume)).toBeCloseTo(.19, 6);
   expect(errors).toEqual([]);
 });

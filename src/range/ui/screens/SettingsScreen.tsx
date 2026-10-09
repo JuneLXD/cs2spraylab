@@ -116,7 +116,7 @@ export const SettingsScreen = memo(function SettingsScreen({settings, profiles, 
               <Toggle label="Dynamic gap" checked={settings.crosshair.dynamic} onChange={v => cross({ dynamic: v })} /></div></div>
             </>}
             {tab === 'data' && <>
-              <h2>Audio</h2><Slider label="Weapon volume" value={Math.round(settings.volume * 100)} min={0} max={100} suffix="%" onChange={v => update({ volume: v / 100 })} />
+              <h2>Audio</h2><Slider label="Master volume" value={Math.round(settings.volume * 100)} min={0} max={100} suffix="%" onChange={v => update({ volume: v / 100 })} />
               <button className="secondary" onClick={testSound}><Volume2 size={16} />Test {weaponNames[settings.weapon]}</button>
               <h2>Data provenance</h2><dl className="data-list"><dt>Weapon data build</dt><dd>{gameData.build}</dd><dt>Recoil math inspected</dt><dd>{recoilProvenance.build}</dd><dt>Cadence, speed, magazine</dt><dd>Game weapon data</dd><dt>Models & shot samples</dt><dd>Local Valve assets</dd><dt>Spray trajectory</dt><dd>{profiles[settings.weapon] ? 'Capture-fitted impulses' : 'Native seeds + recovered recoil math'}</dd><dt>Recoil recovery</dt><dd>Persistent punch + recoil index</dd></dl>
               <p className="settings-note">Weapon parameters match the latest local export. Recoil math was inspected on an earlier build; full trajectories, camera motion and subtick timing are not an exact CS2 reproduction.</p>

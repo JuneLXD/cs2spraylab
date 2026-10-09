@@ -67,7 +67,9 @@ export type Settings = {
   /** Pop: ball diameter in cm, balls at once, minimum space between them (m), distance from you (m), ball colour. */
   popSize: number; popCount: number; popSpacing: number; popDistance: number; popColor: string;
   /** Pop: ammo as sv_infinite_ammo ('magazine' = 1 never reloads, 'reserve' = 2 reloads from a full reserve) and the hit sound. */
-  popAmmo: 'off' | 'reserve' | 'magazine'; popSound: 'hitmarker' | 'pop';
+  popAmmo: 'off' | 'reserve' | 'magazine'; popSound: 'hitmarker' | 'synth' | 'pop';
+  /** Pop only: no gunshot audio, no miss marks on the wall, no HUD over the view. */
+  popMuteGun: boolean; popHideImpacts: boolean; popHideHud: boolean;
   /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
   cs2Crosshair?: Cs2Crosshair;
 };
@@ -97,6 +99,7 @@ export const defaults: Settings = {
   viewmodel: classicViewmodel,
   tracers: 'native',
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
+  popMuteGun: false, popHideImpacts: false, popHideHud: false,
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -147,7 +150,8 @@ export function sanitizeSettings(raw: unknown): Settings {
     popSize: Math.round(numeric(s.popSize, defaults.popSize, 8, 80)), popCount: Math.round(numeric(s.popCount, defaults.popCount, 1, 12)),
     popSpacing: numeric(s.popSpacing, defaults.popSpacing, .2, 5), popDistance: numeric(s.popDistance, defaults.popDistance, 3, 40),
     popColor: typeof s.popColor === 'string' && /^#[\da-f]{6}$/i.test(s.popColor) ? s.popColor.toLowerCase() : defaults.popColor,
-    popAmmo: s.popAmmo === 'off' || s.popAmmo === 'reserve' ? s.popAmmo : 'magazine', popSound: s.popSound === 'pop' ? 'pop' : 'hitmarker',
+    popAmmo: s.popAmmo === 'off' || s.popAmmo === 'reserve' ? s.popAmmo : 'magazine', popSound: s.popSound === 'pop' || s.popSound === 'synth' ? s.popSound : 'hitmarker',
+    popMuteGun: s.popMuteGun === true, popHideImpacts: s.popHideImpacts === true, popHideHud: s.popHideHud === true,
     ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }
