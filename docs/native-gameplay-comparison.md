@@ -357,12 +357,28 @@ This was not read from the binary; it follows the game's displayed values
 (AK-47 chest on Kevlar: 27 damage, 4 armor; M4A4 23; AWP 112; AK-47 at 500
 units 35), which only the per-hit truncation reproduces.
 
-Not re-verified in this pass: the per-shot spread sampling and seed, beyond
-the earlier static inspection of the client sampler (uniform radius then angle
-for inaccuracy, then again for spread). CS2 also registers
-`sv_turning_inaccuracy_*` and `sv_strafing_inaccuracy_*` terms, both off by
-default, a `weapon_accuracy_stack_boost_limit` penalty for boosted players and
-a `weapon_land_dip_amt` view effect; none applies to the trainer's defaults.
+Bullet spread sampling, read from the server's shared bullet routine (the one
+that consults `weapon_accuracy_shotgun_spread_patterns`), matches the trainer's
+`sampleShotSpread`/`shotDirections` exactly in structure: per shot it draws the
+inaccuracy radius, the inaccuracy angle, the spread radius and the spread angle
+in that order, radii uniform without a square root; the R8 alternate fire maps
+both radii through `1 - r^2`; the Negev squares the radius three, two or one
+times for recoil index 0, 1 or 2 before `1 - r`; the offset is
+`cos/sin(angle) * radius * inaccuracy + cos/sin(angle) * radius * spread`.
+Shotguns with patterns enabled (the native default) take the spread pair from
+the pattern table at `floor(recoilIndex) * pellets + pellet` and redraw the
+inaccuracy pair per pellet; with patterns disabled the inaccuracy pair is
+drawn once per shot and only the spread pair per pellet. The two debug
+convars that force the angle upward or ignore inaccuracy are off. Only the
+random stream's seed (derived from the user command) and float-exact
+`sinf/cosf` remain unreproduced, which affects individual shots, not the
+distribution.
+
+CS2 also registers `sv_turning_inaccuracy_*` and `sv_strafing_inaccuracy_*`
+terms (both registered with default 0, so the inaccuracy getter adds nothing),
+a `weapon_accuracy_stack_boost_limit` penalty for players standing on
+teammates and a `weapon_land_dip_amt` view effect; none applies to the
+trainer's defaults.
 
 ## Remaining limits
 

@@ -196,6 +196,7 @@ export const latestChanges = {
     {id: 'native-landing-accuracy', title: 'Landing inaccuracy and whole-number damage', items: [
       'Landing adds the weapon\'s inaccuracy_land times the landing speed to the accuracy penalty, as the server\'s weapon landing hook does; a normal jump lands with about half a jump\'s inaccuracy that recovers over the usual time.',
       'Every hit now deals whole health and armor points, truncated per hit like the game HUD: an AK-47 chest hit on Kevlar does 27 and strips 4 armor instead of 27.9 shown as 28.',
+      'Bullet spread sampling (draw order, uniform radii, R8 and Negev transforms, shotgun pattern indexing and the per-pellet rules) was read from the server build and already matched.',
     ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
