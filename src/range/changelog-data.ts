@@ -238,6 +238,7 @@ export const latestChanges = {
     ]},
     {id: 'dynamic-crosshair', title: 'Dynamic crosshair from the accuracy cone', items: [
       'With the dynamic crosshair on, the gap now follows the live accuracy cone (accumulated penalty, movement, air time, landing and spread) projected to the screen at the current field of view, as the game HUD does, instead of a speed-based guess.',
+      'Checked against the CS2 client (build 2000930): the game projects the cone the same way in screen pixels, then eases the offset into a soft limit (cl_crosshair_dynamic_spread_limit + 64 px, 319 by default) and truncates it to whole pixels. The trainer now does the same.',
     ]},
     {id: 'deathmatch', title: 'Deathmatch on aim_redline', items: [
       'A new drill, Deathmatch: aim_redline, plays AI Duel opponents on the imported map without rounds. You spawn on the T side and the bots on the CT side; whoever dies respawns on their own side after the respawn delay, at a spawn the other side cannot see, and kills and deaths keep counting.',

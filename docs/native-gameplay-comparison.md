@@ -380,6 +380,36 @@ a `weapon_accuracy_stack_boost_limit` penalty for players standing on
 teammates and a `weapon_land_dip_amt` view effect; none applies to the
 trainer's defaults.
 
+## Dynamic crosshair (eighth pass, client)
+
+Read from `libclient.so` (build 2000930) with REA/Ghidra on 2026-10-09: the crosshair convars are
+registered in one client routine (this build's set includes `cl_crosshair_gap`, `cl_crosshair_length`
+and `cl_crosshair_thickness` in `cl_crosshair_screen_height` = 1080 reference pixels, `cl_crosshairstyle`
+7 by default, and a new `cl_crosshair_dynamic_spread_limit`, default 255, described as "the additional
+distance the dynamic elements are allowed to spread out to from the baseline of 128 pixels"). The
+crosshair update routine, found through the convar values' readers, does the following every frame for
+the dynamic styles:
+
+- Cone = the weapon's current inaccuracy plus its spread (both tangent units), the same sum the
+  trainer uses. In the settings preview the cone is animated as |sin(t)| * 0.1 instead.
+- Offset = the screen distance, in real pixels, between the projection of the view direction and the
+  projection of a direction deviated by that cone, 2000 units ahead at the current field of view. For a
+  perspective projection that is cone * (half screen height) / tan(vertical fov / 2), which is what
+  `dynamicCrosshairGap` already computed (the CS:GO HUD's 320 px per radian at 640x480 scaled by height).
+- The offset is then eased into a soft limit: with limit = spread_limit + 64 (319 px by default) and
+  knee = 0.75 * limit, an offset past the knee becomes limit - (limit - knee) * e^(-(offset - knee) /
+  (limit - knee)), never exceeds the limit, never drops below the bar thickness when the centre dot is
+  on, and is truncated to whole pixels. The trainer now applies the same easing and truncation
+  (`crosshair-spread.ts`, default limit 319, a custom limit as a parameter); the dot floor (at most a
+  couple of pixels) is not reproduced.
+- The crosshair alpha fades toward 20% as inaccuracy plus a weapon term approaches 0.25; the trainer
+  does not reproduce this.
+
+Standing with an AK at 1080p the offset is 4 px, running 128 px, so the limit only matters in the air
+or deep in a spray. `tools` keep nothing new for this pass; the decompiled routines are in
+`native-audit/rea/out/client-*.c`. The client analysis itself took 90 minutes at one core under a 4-hour
+cap (the 90-minute cap of the first attempt discarded it, see the memory note).
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current
