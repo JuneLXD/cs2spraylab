@@ -4,7 +4,7 @@ import {AcousticScene} from './spatial-audio';
 
 function fixture() {
   const sources: any[] = [], panners: any[] = [], gains: any[] = [], requests: string[] = [];
-  const param = () => ({value: 1, setValueAtTime() {}});
+  const param = () => ({value: 1, setValueAtTime() {}, linearRampToValueAtTime() {}, exponentialRampToValueAtTime() {}});
   const node = () => ({connect: vi.fn(), disconnect: vi.fn(), gain: param()});
   class Context {
     state = 'running'; currentTime = 0; destination = node(); listener = {setPosition() {}, setOrientation() {}};
@@ -15,6 +15,9 @@ function fixture() {
     createBiquadFilter = () => ({...node(), frequency: param(), Q: param()});
     createDelay = () => ({...node(), delayTime: param()});
     createPanner = () => {const panner = {...node(), positionX: param(), positionY: param(), positionZ: param()}; panners.push(panner); return panner;};
+    sampleRate = 48000;
+    createBuffer = (channels: number, length: number, rate: number) => ({numberOfChannels: channels, length, sampleRate: rate, getChannelData: () => new Float32Array(length)});
+    createOscillator = () => {const osc = {...node(), type: 'sine', frequency: param(), start: vi.fn(), stop: vi.fn(), onended: undefined}; sources.push(osc); return osc;};
     createBufferSource = () => {
       const source = {...node(), playbackRate: param(), start: vi.fn(), stop: vi.fn(), onended: undefined}; sources.push(source); return source;
     };
@@ -77,6 +80,15 @@ describe('native audio consumer', () => {
     expect(sources.length).toBe(3);
     const pitch = sources[2].playbackRate.value;
     expect(pitch).toBeGreaterThanOrEqual(.98); expect(pitch).toBeLessThanOrEqual(1.02);
+    audio.dispose();
+  });
+  it('synthesizes the Pop hit sounds and stays silent at zero volume', async () => {
+    const {audio, sources} = fixture(); await audio.unlock('ak47');
+    expect(audio.playPopSound('hitmarker', 0)).toBe(false); expect(sources.length).toBe(0);
+    expect(audio.playPopSound('hitmarker', .5)).toBe(true);
+    // Three partials and the click.
+    expect(sources.length).toBe(4); expect(sources.every(source => source.start.mock.calls.length === 1)).toBe(true);
+    expect(audio.playPopSound('pop', .5)).toBe(true); expect(sources.length).toBe(6);
     audio.dispose();
   });
   it('maps estimated cue attenuation to full acoustic path length, not apparent corner distance', async () => {

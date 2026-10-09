@@ -26,6 +26,8 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
   await expect(page.getByLabel('Ball size')).toHaveValue('40');
   await expect(page.getByLabel('Balls at once')).toHaveValue('4');
   await expect(page.getByLabel('Distance to the balls')).toHaveValue('10');
+  await expect(page.getByLabel('Ammo mode')).toHaveValue('magazine');
+  await expect(page.getByLabel('Hit sound')).toHaveValue('hitmarker');
   await page.getByRole('button', {name: 'Cyan balls'}).click();
   await expect(page.getByLabel('Ball color', {exact: true})).toHaveValue('#4df3ff');
   await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 60000});
@@ -49,9 +51,9 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
   await expect(page.getByTestId('accuracy')).toHaveText('100%', {timeout: 10000});
   const after = await page.evaluate(() => {
     const sim = (window as any).popEngine.sim;
-    return {pops: sim.pop.pops, shots: sim.pop.shots, count: sim.pop.balls.length, ids: sim.pop.balls.map((ball: {id: number}) => ball.id)};
+    return {pops: sim.pop.pops, shots: sim.pop.shots, count: sim.pop.balls.length, ids: sim.pop.balls.map((ball: {id: number}) => ball.id), ammo: sim.loadedAmmo};
   });
-  expect(after).toMatchObject({pops: 1, shots: 1, count: 4});
+  expect(after).toMatchObject({pops: 1, shots: 1, count: 4, ammo: 30});
   expect(after.ids).not.toContain(before.ids[0]);
   await expect(page.locator('.hit-caption')).toHaveText('POP');
   await page.keyboard.press('Escape');

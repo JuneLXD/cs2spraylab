@@ -191,6 +191,38 @@ export class RangeAudio {
     this.playEvent(`${victim ? 'hurt' : 'hit'}-${head ? armor ? 'helmet' : 'head' : armor ? 'armor' : 'body'}`, volume, spatial, 0, EAR_TO_GUN_UNITS);
   }
   private noise?: AudioBuffer;
+  private noiseBuffer(ctx: AudioContext) {
+    if (!this.noise) {
+      this.noise = ctx.createBuffer(1, Math.max(1, Math.round(ctx.sampleRate * .08)), ctx.sampleRate);
+      const data = this.noise.getChannelData(0); for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    }
+    return this.noise;
+  }
+  playPopSound(kind: 'hitmarker' | 'pop', volume: number, count = 1) {
+    return kind === 'pop' ? this.playPop(volume, count) : this.playHitmarker(volume, count);
+  }
+  /** Pop's default hit sound, a Battlefield-style hitmarker synthesized here (no game file): a 3.2 kHz tick with a
+   * quieter inharmonic partial, a low thump and a few milliseconds of band-passed noise, all gone within 80 ms. */
+  playHitmarker(volume: number, count = 1) {
+    const ctx = this.context;
+    if (!ctx || ctx.state !== 'running' || !this.master || !Number.isFinite(volume) || volume <= 0 || this.disposed) return false;
+    const now = ctx.currentTime, level = Math.min(1, volume) * .85, lift = count > 1 ? 1.06 : 1;
+    for (const [frequency, gain, decay] of [[3200, 1, .07], [4850, .35, .05], [1600, .18, .04]] as const) {
+      const tone = ctx.createOscillator(), env = ctx.createGain();
+      tone.type = 'sine'; tone.frequency.value = frequency * lift;
+      env.gain.setValueAtTime(0, now); env.gain.linearRampToValueAtTime(level * gain, now + .001); env.gain.exponentialRampToValueAtTime(.001, now + decay);
+      tone.connect(env); env.connect(this.master);
+      tone.onended = () => {tone.disconnect(); env.disconnect();};
+      tone.start(now); tone.stop(now + decay + .01);
+    }
+    const click = ctx.createBufferSource(), band = ctx.createBiquadFilter(), clickGain = ctx.createGain();
+    click.buffer = this.noiseBuffer(ctx); band.type = 'bandpass'; band.frequency.value = 4000; band.Q.value = 1.2;
+    clickGain.gain.setValueAtTime(level * .5, now); clickGain.gain.exponentialRampToValueAtTime(.001, now + .012);
+    click.connect(band); band.connect(clickGain); clickGain.connect(this.master);
+    click.onended = () => {click.disconnect(); band.disconnect(); clickGain.disconnect();};
+    click.start(now); click.stop(now + .02);
+    return true;
+  }
   /** Pop mode: a synthesized pop, a sine bloop sweeping down over 180 ms with a short band-passed click, pitched a little
    * at random; several pops at once ring a touch higher. */
   playPop(volume: number, count = 1) {
@@ -203,12 +235,8 @@ export class RangeAudio {
     tone.frequency.setValueAtTime(base * 1.6, now); tone.frequency.exponentialRampToValueAtTime(base * .55, now + .12);
     toneGain.gain.setValueAtTime(0, now); toneGain.gain.linearRampToValueAtTime(level, now + .004); toneGain.gain.exponentialRampToValueAtTime(.001, now + .18);
     tone.connect(toneGain); toneGain.connect(this.master);
-    if (!this.noise) {
-      this.noise = ctx.createBuffer(1, Math.max(1, Math.round(ctx.sampleRate * .08)), ctx.sampleRate);
-      const data = this.noise.getChannelData(0); for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-    }
     const click = ctx.createBufferSource(), band = ctx.createBiquadFilter(), clickGain = ctx.createGain();
-    click.buffer = this.noise; band.type = 'bandpass'; band.frequency.value = 2600; band.Q.value = .9;
+    click.buffer = this.noiseBuffer(ctx); band.type = 'bandpass'; band.frequency.value = 2600; band.Q.value = .9;
     clickGain.gain.setValueAtTime(level * .7, now); clickGain.gain.exponentialRampToValueAtTime(.001, now + .05);
     click.connect(band); band.connect(clickGain); clickGain.connect(this.master);
     tone.onended = () => {tone.disconnect(); toneGain.disconnect();};

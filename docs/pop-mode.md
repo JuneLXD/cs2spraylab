@@ -24,3 +24,10 @@ ones every other range drill uses.
   to `distance + 8` m and dims the lights, and restores the range look on leaving.
 - HUD: POPS, HIT RATE, MISS and POPS / MIN replace the head/body cells. Tests: `pop.test.ts`,
   `tests/pop.spec.ts`.
+- Ammo and hit sound (same day): `popAmmo` ('magazine' by default: the magazine is refilled after every
+  shot and a held trigger keeps firing, as sv_infinite_ammo 1; 'reserve' refills the reserve and still
+  reloads; 'off' is normal) is applied in `Simulation.fire()` and `burstSize` ignores the Burst length
+  setting in Pop. `popSound` picks `RangeAudio.playHitmarker` (default; a synthesized Battlefield-style
+  tick: 3.2 kHz, 4.85 kHz and 1.6 kHz sine partials decaying within 70 ms plus a 12 ms band-passed click)
+  or `playPop`.
+

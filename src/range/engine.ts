@@ -673,7 +673,7 @@ export class RangeEngine {
     this.kick = 1; this.hitTime = .45;
     this.hitmarker.style.color = this.hitCaption.style.color = popped ? '#ffdc59' : '#ff7469';
     this.hitCaption.textContent = popped > 1 ? `${popped} POPS` : popped ? 'POP' : 'MISS';
-    if (popped) this.audio.playPop(this.sim.settings.volume, popped);
+    if (popped) this.audio.playPopSound(this.sim.settings.popSound, this.sim.settings.volume, popped);
     if (shot.melee) this.audio.playKnife(shot.attack === 'secondary' ? 'stab' : 'slash', this.sim.settings.volume);
     else {
       this.audio.play(this.sim.equipped, this.sim.settings.volume);

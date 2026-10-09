@@ -263,6 +263,10 @@ export const latestChanges = {
       'Its setup sets the ball size (8-80 cm), how many float at once (1-12), the minimum space between them, the distance from you (3-40 m) and the ball colour, from presets or any colour.',
       'Popping a ball plays a synthesized pop, a short downward bloop with a click, on top of the shot.',
     ]},
+    {id: 'pop-ammo-sound', title: 'Pop: ammo mode and hit sound', items: [
+      'Pop never reloads by default: its setup has an Ammo mode (Never reload, Infinite reserve, Normal reserves), and with Never reload a held trigger keeps firing.',
+      'Its Hit sound is now a Battlefield-style hitmarker, synthesized in the trainer (a 3.2 kHz tick with a click, not the game\'s file); the pop stays as the alternative.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

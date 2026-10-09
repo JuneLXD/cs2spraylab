@@ -66,6 +66,8 @@ export type Settings = {
   tracers: 'every' | 'native' | 'off';
   /** Pop: ball diameter in cm, balls at once, minimum space between them (m), distance from you (m), ball colour. */
   popSize: number; popCount: number; popSpacing: number; popDistance: number; popColor: string;
+  /** Pop: ammo as sv_infinite_ammo ('magazine' = 1 never reloads, 'reserve' = 2 reloads from a full reserve) and the hit sound. */
+  popAmmo: 'off' | 'reserve' | 'magazine'; popSound: 'hitmarker' | 'pop';
   /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
   cs2Crosshair?: Cs2Crosshair;
 };
@@ -94,7 +96,7 @@ export const defaults: Settings = {
   keyboard: defaultKeyboard,
   viewmodel: classicViewmodel,
   tracers: 'native',
-  popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d',
+  popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -145,6 +147,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     popSize: Math.round(numeric(s.popSize, defaults.popSize, 8, 80)), popCount: Math.round(numeric(s.popCount, defaults.popCount, 1, 12)),
     popSpacing: numeric(s.popSpacing, defaults.popSpacing, .2, 5), popDistance: numeric(s.popDistance, defaults.popDistance, 3, 40),
     popColor: typeof s.popColor === 'string' && /^#[\da-f]{6}$/i.test(s.popColor) ? s.popColor.toLowerCase() : defaults.popColor,
+    popAmmo: s.popAmmo === 'off' || s.popAmmo === 'reserve' ? s.popAmmo : 'magazine', popSound: s.popSound === 'pop' ? 'pop' : 'hitmarker',
     ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }

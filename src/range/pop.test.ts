@@ -1,6 +1,7 @@
 import {describe, expect, it} from 'vitest';
 import {POP_SPAWN, PopField, popConfig, popRegion} from './pop';
-import {sanitizeSettings} from './config';
+import {defaults, sanitizeSettings} from './config';
+import {Simulation} from './simulation';
 
 /** Deterministic stand-in for Math.random. */
 const lcg = (seed: number) => () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296;
@@ -54,5 +55,22 @@ describe('pop field', () => {
     expect(sanitizeSettings({popColor: '#4DF3FF', popCount: 4.4}).popColor).toBe('#4df3ff');
     expect(sanitizeSettings({popCount: 4.4}).popCount).toBe(4);
     expect(sanitizeSettings({}).popSize).toBe(30);
+    expect([sanitizeSettings({}).popAmmo, sanitizeSettings({}).popSound]).toEqual(['magazine', 'hitmarker']);
+    expect([sanitizeSettings({popAmmo: 'reserve', popSound: 'pop'}).popAmmo, sanitizeSettings({popAmmo: 'always', popSound: 'x'}).popAmmo]).toEqual(['reserve', 'magazine']);
+  });
+
+  it('never reloads by default: a held trigger keeps firing; infinite reserve reloads from a full reserve; normal runs down', () => {
+    const run = (popAmmo: 'off' | 'reserve' | 'magazine') => {
+      const sim = new Simulation({...defaults, mode: 'pop', weapon: 'ak47', primaryEnabled: true, spread: false, popAmmo});
+      sim.start(true);
+      for (let t = 0; t < 7; t += .25) sim.advance(.25);
+      return sim;
+    };
+    const endless = run('magazine');
+    expect(endless.pop!.shots).toBeGreaterThan(60); expect(endless.loadedAmmo).toBe(30); expect(endless.reserveAmmo).toBe(90); expect(endless.firing).toBe(true);
+    const reserve = run('reserve');
+    expect(reserve.pop!.shots).toBe(30); expect(reserve.reserveAmmo).toBe(90); expect(reserve.loadedAmmo).toBe(30);
+    const normal = run('off');
+    expect(normal.pop!.shots).toBe(30); expect(normal.reserveAmmo).toBe(60); expect(normal.loadedAmmo).toBe(30);
   });
 });

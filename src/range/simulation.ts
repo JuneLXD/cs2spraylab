@@ -128,6 +128,7 @@ export class Simulation {
   }
   get burstSize() {
     if (this.slot === 3 || this.settings.mode === 'precision') return 1;
+    if (this.pop) return this.stats.magazine;
     if (this.settings.mode === 'burst') return REPOSITION_SHOTS;
     if (this.settings.mode === 'peek') return this.stats.magazine;
     return Math.min(this.settings.burst || this.stats.magazine, this.stats.magazine);
@@ -179,6 +180,13 @@ export class Simulation {
         this.duckRecoveryOrigin = undefined; this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
       }
     } else {this.pop = undefined; this.popPlaced = false;}
+  }
+  /** Pop's ammo mode as sv_infinite_ammo: 'reserve' (2) keeps the reserve full, 'magazine' (1) never empties the magazine. */
+  private refillPopAmmo() {
+    const mode = this.settings.popAmmo;
+    if (mode === 'off' || this.equipped === 'knife' || this.equipped === 'zeus') return;
+    this.reloadState.reserve = this.stats.reserve;
+    if (mode === 'magazine') this.reloadState.ammo = this.stats.magazine;
   }
   /** Pop keeps one running tally per session; a pause records it once per new shots. */
   publishPopResult() {
@@ -337,6 +345,8 @@ export class Simulation {
     this.actions.advance(this.time);
     const weapon = this.stats;
     for (const [id, state] of this.ammoStates) state.advance(this.time, id === this.equipped ? this.reloadHeld : undefined);
+    // Pop's infinite modes top the reserve (and the magazine) back up every tick, as sv_infinite_ammo does.
+    if (this.pop) this.refillPopAmmo();
     if (this.firing && this.reloadState.active) this.reloadState.interrupt();
     for (const [id, until] of this.rechargeTimes) if (this.time + 1e-9 >= until) {
       this.ammoFor(id).ammo = 1; this.rechargeTimes.delete(id);
@@ -423,7 +433,8 @@ export class Simulation {
       this.finish(); return;
     }
     if (!this.measured || this.slot !== 1) this.recovery.setParameters(weapon);
-    if (this.shots >= this.burstSize || this.loadedAmmo <= 0) {this.burstLeft = 0; this.finish(); return;}
+    const endless = !!this.pop && this.settings.popAmmo === 'magazine' && this.equipped !== 'zeus';
+    if (!endless && this.shots >= this.burstSize || this.loadedAmmo <= 0) {this.burstLeft = 0; this.finish(); return;}
     if (this.actions.burst && !this.burstLeft) {this.burstLeft = 3; this.burstEnd = this.nextShot + this.actions.burstCycle;}
     this.recoil = this.equipped === 'zeus' ? {yaw: 0, pitch: 0} : this.recovery.recoil;
     if (this.equipped === 'zeus') this.recovery.penalty = !this.grounded ? weapon.stand + weapon.jump : this.duckAmount >= .95 ? weapon.crouch : weapon.stand;
@@ -434,7 +445,8 @@ export class Simulation {
       weaponId:this.equipped,alternateFire:this.actions.alternateFire,recoilIndex:this.recovery.index,seed:ordinal+1}, weapon.pellets, this.random);
     const index = this.shots++;
     if (this.pop) {if (!this.pop.shots) this.popStartedAt = this.time; this.pop.shots++;}
-    this.reloadState.ammo--; this.shotOrdinals.set(this.equipped, ordinal + 1);
+    this.reloadState.ammo--;
+    if (this.pop) this.refillPopAmmo(); this.shotOrdinals.set(this.equipped, ordinal + 1);
     if (this.equipped !== 'zeus') {
       this.recovery.fire(); this.viewPunch.add(this.recovery.lastViewPunch, this.time);
     }
@@ -455,6 +467,6 @@ export class Simulation {
     if (this.burstLeft) {this.burstLeft--; this.nextShot = this.burstLeft ? this.nextShot + this.actions.burstInterval : this.burstEnd;}
     else this.nextShot += weapon.cycle;
     this.shotReady.set(this.equipped, this.nextShot);
-    if (this.shots >= this.burstSize || !this.loadedAmmo || !this.burstLeft && (!weapon.fullAuto || this.releasedBurst)) this.finish();
+    if (!endless && this.shots >= this.burstSize || !this.loadedAmmo || !this.burstLeft && (!weapon.fullAuto || this.releasedBurst)) this.finish();
   }
 }
