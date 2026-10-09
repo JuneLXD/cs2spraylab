@@ -15,6 +15,7 @@ export function drillSetupSummary(settings: Settings, botz: BotzConfig, duel: Du
     return `${botz.botCount} ${botz.botCount === 1 ? 'bot' : 'bots'} · ${movement} · ${botz.sessionSeconds ? `${botz.sessionSeconds}s` : 'endless'} · ${botz.infiniteAmmo === 'magazine' ? 'never reload' : botz.infiniteAmmo === 'reserve' ? 'infinite reserve' : 'normal ammo'}`;
   }
   if (settings.mode === 'duel') return `${duel.botCount} ${duel.botCount === 1 ? 'opponent' : 'opponents'} · skill ${duel.skill} · ${duel.roundSeconds}s rounds`;
+  if (settings.mode === 'deathmatch') return `${duel.botCount} ${duel.botCount === 1 ? 'opponent' : 'opponents'} · skill ${duel.skill} · ${duel.respawnSeconds}s respawns · aim_redline`;
   if (settings.mode === 'hearing') return 'Locate footsteps and shots by direction and distance';
   return `${settings.burst ? `${settings.burst}-shot bursts` : 'full magazine'} · ${settings.spread ? 'spread on' : 'spread off'} · ${settings.moving ? 'moving target' : 'stationary target'}`;
 }

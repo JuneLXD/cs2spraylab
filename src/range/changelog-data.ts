@@ -226,6 +226,24 @@ export const latestChanges = {
       'Restore drill defaults resets practice controls while keeping your mouse, video and loadout settings. Home, Play and Results show the actual setup, and Results marks the completed session in history.',
       'Reload progress follows the existing weapon timing. The kill feed shows newest events first, highlights your kills and deaths, and respects reduced-motion preferences.',
     ]},
+    {id: 'native-movement-rules', title: 'Movement and trigger rules from the server code', items: [
+      'Ground speed is clamped to the current max speed every tick, as in the native WalkMove: walking, crouching or being tagged at full sprint cuts speed at once instead of bleeding it off through friction.',
+      'A jump cannot start faster than 1.1x the weapon speed, and a bunnyhop only restores pre-landing speed when it exceeded that max.',
+      'Duel no longer fires a buffered click: like the range and the game, a shot fires at readiness only while the trigger is still held, and a released tap during a shell reload neither interrupts it nor queues a shot. Friction, air acceleration, crouch rates, accuracy decay and recoil-index reset were read from the installed server build and already matched.',
+    ]},
+    {id: 'native-landing-accuracy', title: 'Landing inaccuracy and whole-number damage', items: [
+      'Landing adds the weapon\'s inaccuracy_land times the landing speed to the accuracy penalty, as the server\'s weapon landing hook does; a normal jump lands with about half a jump\'s inaccuracy that recovers over the usual time.',
+      'Every hit now deals whole health and armor points, truncated per hit like the game HUD: an AK-47 chest hit on Kevlar does 27 and strips 4 armor instead of 27.9 shown as 28.',
+      'Bullet spread sampling (draw order, uniform radii, R8 and Negev transforms, shotgun pattern indexing and the per-pellet rules) was read from the server build and already matched.',
+    ]},
+    {id: 'dynamic-crosshair', title: 'Dynamic crosshair from the accuracy cone', items: [
+      'With the dynamic crosshair on, the gap now follows the live accuracy cone (accumulated penalty, movement, air time, landing and spread) projected to the screen at the current field of view, as the game HUD does, instead of a speed-based guess.',
+    ]},
+    {id: 'deathmatch', title: 'Deathmatch on aim_redline', items: [
+      'A new drill, Deathmatch: aim_redline, plays AI Duel opponents on the imported map without rounds. You spawn on the T side and the bots on the CT side; whoever dies respawns on their own side after the respawn delay, at a spawn the other side cannot see, and kills and deaths keep counting.',
+      'The bot count, FACEIT level, behavior, weapons, health and armor come from its own setup panel (saved separately from AI Duel), with a 1-10 s respawn delay.',
+      'Bots on the imported map route around the collision boxes toward what they see or hear, and roam the warehouse otherwise; the navigation grid now caches obstacles per map so routes cost a fraction of a millisecond.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

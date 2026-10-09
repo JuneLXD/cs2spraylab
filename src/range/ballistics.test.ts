@@ -29,6 +29,19 @@ describe('Recovered accuracy formulas',()=>{
     expect(state.index).toBeCloseTo(Math.pow(10,-.4),10);
     state.advance(1);expect(state.index).toBe(0);
   });
+  it('adds the mode inaccuracy_land times the landing speed, then recovers it',()=>{
+    const r=new WeaponRecovery(ak);
+    r.land(301.993);
+    expect(r.penalty).toBeCloseTo(ak.stand+ak.land*301.993,9);
+    expect(ak.land*301.993).toBeGreaterThan(ak.jump*.4); // about half a jump's inaccuracy
+    r.land(-5); // never negative
+    expect(r.penalty).toBeCloseTo(ak.stand+ak.land*301.993,9);
+    r.advance(ak.recovery);
+    expect(r.penalty-ak.stand).toBeCloseTo(ak.land*301.993*.1,6);
+    const scoped=new WeaponRecovery({...ak,land:ak.land*2});
+    scoped.land(301.993);
+    expect(scoped.penalty).toBeCloseTo(ak.stand+ak.land*2*301.993,9);
+  });
   it('penalizes airborne shots even at the jump apex',()=>{
     expect(airborneInaccuracy(ak,0)).toBe(0);
     const state=new WeaponRecovery(ak);state.advance(STEP,false,true);

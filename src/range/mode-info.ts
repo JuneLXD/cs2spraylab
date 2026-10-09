@@ -2,6 +2,7 @@ import type {Mode} from './config';
 export const modeInfo: Record<Mode, {benefit: string; task: string; spread: boolean}> = {
   hearing: {benefit: 'Locate opponents before you see them', task: 'Listen to the hidden footsteps or gunfire, then mark their direction and distance. Compare your estimate with the revealed source.', spread: true},
   duel: {benefit: 'Turn practice into better duels', task: 'Read the opponent, isolate an angle, stop and shoot. Review your shot timing and aim after each fight.', spread: true},
+  deathmatch: {benefit: 'Fight AI opponents on aim_redline without rounds', task: 'You spawn on the T side and the bots on the CT side of the warehouse. Everyone respawns on their own side a few seconds after dying, so the fight never stops; pick the bot count and FACEIT level in the panel.', spread: true},
   botz: {benefit: 'Warm up like aim_botz', task: 'Bots stand at different distances and respawn after each kill. Flick to the head, stop, and tap. Track kills per minute and headshot rate.', spread: true},
   redline: {benefit: 'Aim Botz on a real CS2 map', task: 'Bots spawn around the aim_redline warehouse: on the floor, and on crates and up on the catwalk if you turn that on. Flick to the head, stop, and tap; each one respawns after a kill.', spread: true},
   reflex: {benefit: 'Sharpen reactions like Fast Aim / Reflex', task: 'Bots burst through the gaps in the walls, then strafe A-D and spam crouch as they edge toward your island. Kill each one before it reaches the line around you.', spread: true},

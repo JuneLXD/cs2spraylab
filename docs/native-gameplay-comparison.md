@@ -303,6 +303,83 @@ angle and independently checks all three camera axes against the retained
 physical shot angles. This verifies camera composition, not a new native
 measurement of the complete damage-recovery trajectory.
 
+## Movement and accuracy rules read from the server (seventh pass)
+
+Recorded on October 9, 2026 from the installed Linux `libserver.so` (client
+2000927, SHA-256 `0109636a2dfc2a2ec3dee2ead2fd45322b179a111013dbfb14d5cd91855a19d0`),
+decompiled with REA 6.1.0 and Ghidra 12.1.4. Convar names lead only to the
+static initializers that register them; the code that uses a convar is found
+through references to the registered object. Decompiled functions and the
+query helpers are retained in `../native-audit/rea/`.
+
+Rules the trainer already matched, now with code evidence instead of demo
+agreement: ground friction (`max(speed, sv_stopspeed) * sv_friction * surface
+friction * dt`, ground only), air acceleration (wish speed capped by
+`sv_air_max_wishspeed`, uncapped wish speed in the gain), the continuous
+`1 - 0.66 * duckAmount` crouch factor, duck-speed thresholds 1.5 and 0.75 with
+the 0.8x, 3/s and 6/s rates and the `sv_timebetweenducks` cooldown, the accuracy
+baseline (stand, crouch under FL_DUCKING, stand + jump x `weapon_air_spread_scale`
+in the air), snap-up and `ln(10)/recovery` exponential decay of the accuracy
+penalty, the recoil index decaying as `10^(-2t)` only after
+`last shot + cycle + 1/64 s` with a snap to zero at or below 0.1, the movement
+term remapped over 34%..95% of the mode's max speed with the 0.25 power unless
+walking, and the airborne term interpolated on `sqrt(|vz|)/sqrt(sv_jump_impulse)`
+and clamped to `[0, 2 * initial]`. The stamina convars are still registered but
+only the `sv_legacy_jump` path uses them; the default modern jump applies the
+landing-velocity factors already in the trainer.
+
+Two rules differed and are now implemented:
+
+- `WalkMove` clamps horizontal speed to the current max speed on every ground
+  tick after acceleration. The trainer only did so after a first landing, so
+  walking, crouching or being tagged at full speed bled speed off through
+  friction instead of cutting it at once. The landing factor now only lowers
+  that cap.
+- The modern jump clamps the start speed to 1.1x the weapon's max speed unless
+  `sv_enablebunnyhopping` is set, and restores the pre-landing velocity on a
+  bunnyhop only when it exceeded the max speed. The trainer had no 1.1x limit.
+
+Also aligned: Duel no longer buffers a fire press released before the weapon is
+ready; like the range and the native item post-frame, a shot fires at readiness
+only while the trigger is still held, and a released tap during a shell reload
+neither interrupts it nor queues a shot.
+
+Landing inaccuracy: the server weapon class's landing hook (reached through
+the class vtable, since Ghidra left it undefined) adds the current mode's
+`inaccuracy_land` times the landing speed in units/s to the accuracy penalty,
+which then recovers normally. The trainer imported the field but never applied
+it; both simulations now call `WeaponRecovery.land()` from the same landing
+detection that drives the camera dip. For an AK-47 a normal jump lands with
+about 0.073 of penalty, roughly half the airborne term.
+
+Damage now truncates each hit's health damage and armor loss to whole points.
+This was not read from the binary; it follows the game's displayed values
+(AK-47 chest on Kevlar: 27 damage, 4 armor; M4A4 23; AWP 112; AK-47 at 500
+units 35), which only the per-hit truncation reproduces.
+
+Bullet spread sampling, read from the server's shared bullet routine (the one
+that consults `weapon_accuracy_shotgun_spread_patterns`), matches the trainer's
+`sampleShotSpread`/`shotDirections` exactly in structure: per shot it draws the
+inaccuracy radius, the inaccuracy angle, the spread radius and the spread angle
+in that order, radii uniform without a square root; the R8 alternate fire maps
+both radii through `1 - r^2`; the Negev squares the radius three, two or one
+times for recoil index 0, 1 or 2 before `1 - r`; the offset is
+`cos/sin(angle) * radius * inaccuracy + cos/sin(angle) * radius * spread`.
+Shotguns with patterns enabled (the native default) take the spread pair from
+the pattern table at `floor(recoilIndex) * pellets + pellet` and redraw the
+inaccuracy pair per pellet; with patterns disabled the inaccuracy pair is
+drawn once per shot and only the spread pair per pellet. The two debug
+convars that force the angle upward or ignore inaccuracy are off. Only the
+random stream's seed (derived from the user command) and float-exact
+`sinf/cosf` remain unreproduced, which affects individual shots, not the
+distribution.
+
+CS2 also registers `sv_turning_inaccuracy_*` and `sv_strafing_inaccuracy_*`
+terms (both registered with default 0, so the inaccuracy getter adds nothing),
+a `weapon_accuracy_stack_boost_limit` penalty for players standing on
+teammates and a `weapon_land_dip_amt` view effect; none applies to the
+trainer's defaults.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current

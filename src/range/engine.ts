@@ -5,6 +5,8 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { clone as cloneSkeleton } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { Settings, MeasuredProfile, Weapon, gameData, type Viewmodel } from './config';
 import { DEG, direction, Simulation, Shot, Vec, VERTICAL_FOV, TARGET_Z, type Result } from './simulation';
+import { UNIT } from './actor-physics';
+import { dynamicCrosshairGap } from './crosshair-spread';
 import { RangeAudio } from './audio';
 import { requestRawLock } from './input';
 import {InputClock, inputTimestamp} from './input-clock';
@@ -861,7 +863,15 @@ export class RangeEngine {
     point.set(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch)).multiplyScalar(10).add(this.camera.position).project(this.camera);
     if (!this.sim.settings.follow) point.set(0, 0, 0);
     this.crosshair.style.transform = `translate(${point.x * this.width / 2}px, ${-point.y * this.height / 2}px)`;
-    this.crosshair.style.setProperty('--motion-gap', this.sim.settings.crosshair.dynamic ? `${moving * 1.2 + this.kick * 4}px` : '0px');
+    // The dynamic gap is the live accuracy cone (penalty, movement, air, spread)
+    // projected to the screen, as the game's HUD does, not a speed heuristic.
+    if (this.sim.settings.crosshair.dynamic) {
+      const stats = this.sim.stats;
+      const cone = this.sim.recovery.inaccuracy(moving / (stats.speed * UNIT), this.sim.input.walk,
+        !this.sim.grounded, this.sim.verticalVelocity / UNIT);
+      this.crosshair.style.setProperty('--motion-gap',
+        `${dynamicCrosshairGap({inaccuracy: cone, spread: stats.spread}, this.height, VERTICAL_FOV)}px`);
+    } else this.crosshair.style.setProperty('--motion-gap', '0px');
     const targetPosition = this.targets[activeLane].position;
     const dx = targetPosition.x - this.sim.position.x, dz = targetPosition.z - this.sim.position.z;
     const distance = Math.hypot(dx, dz);

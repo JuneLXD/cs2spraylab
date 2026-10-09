@@ -91,6 +91,34 @@ building/deploying from a fresh checkout. It now includes native motion export;
 Blender's Python and Blender Source Tools' DMX parser are local prerequisites;
 see `gameplay-session-audit.md`. Review rights before publishing derived art.
 
+## Deathmatch on aim_redline
+
+Added 2026-10-09 at the user's request: the `deathmatch` mode plays AI Duel opponents on the
+imported aim_redline map without rounds. `DuelConfig.respawnSeconds` (0 for round-based duels,
+1-10 s here, saved under `spraylab.deathmatch.v1` with its own bot count, level, behavior,
+weapons, health and armor) switches `DuelSimulation` into deathmatch when the arena is an imported
+map: the player starts at the middle T floor spawn and the bots at CT spawns the player cannot
+see (`TeamSpawner`, which treats player clips and fences as sight blockers like the Aim Botz
+spawner). Every actor found dead is given a respawn timer; when it elapses the actor is rebuilt
+with its configured loadout at an own-team spawn that no living enemy can see (else the farthest
+one), generation + 1, a fresh brain and new aim/damage random streams, and the player returns
+with the original loadout and the weapon's deploy time. No `round` event is ever emitted, so the
+engine's round flow, scorecard history and progression attempts stay idle; `deathmatchStats`
+counts the player's kills and deaths and the HUD shows kills, deaths, the session clock and a
+"Respawning in" overlay while dead.
+
+Bots use `BotBrain` on the imported map (the tactical brain needs authored cover lanes) with a
+`BotNavigator`: routes from `routeTo` with lenient endpoints, since spawns tucked against crates
+sit inside the navigation margin, and roaming goals drawn from the map's navigable floor spots
+6-18 m away when nothing has been seen or heard. The navigation grid now caches its ground
+obstacles and a 2 m bucket index per arena and environment revision, which keeps cross-map
+routes on 7,000 boxes under a millisecond; authored arenas keep strict endpoints because their
+layout validation depends on them. Player gunshots and footsteps reach `BotBrain` through the
+same hearing gate as the tactical brain. The radar draws only solids at least 0.9 m tall on
+imported maps so the floor slab and clips do not paint it grey. Not done: the catwalk spawns are
+never used (the grid has no height), bots do not use the catwalk or climb crates, and there is no
+team-mate coordination between deathmatch bots.
+
 ## Verification and remaining fidelity gaps
 
 Run `npm run check`, `npm run audit:duel`, `npm run bench:duel`, `npm run profile:duel`, and

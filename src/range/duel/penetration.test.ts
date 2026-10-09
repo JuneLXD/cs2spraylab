@@ -30,8 +30,9 @@ describe('stateless penetration and collateral ray', () => {
   it('keeps first actor damage consistent with the existing hitgroup/armor formula', () => {
     const result = resolveBulletRay(request({actors: [{...actor(2, -5), armor: 100}]}));
     const hit = result.hits[0], raw = stats.damage * Math.pow(.98, hit.distance / (500 * UNIT));
-    expect(hit.group).toBe('chest'); expect(hit.healthDamage).toBeCloseTo(raw * .75, 10);
-    expect(hit.armorDamage).toBeCloseTo(raw * .25 / 2, 10);
+    // Whole points per hit, like the game HUD (an armored chest hit keeps 75% of the falloff damage).
+    expect(hit.group).toBe('chest'); expect(hit.healthDamage).toBe(Math.floor(raw * .75 + 1e-6));
+    expect(hit.armorDamage).toBe(Math.floor(raw * .25 / 2 + 1e-6));
   });
   it('returns ordered entries, exits, and collateral hits with decreasing residual damage', () => {
     const input = request({arena: {solids: [wall(-2)]}, actors: [actor(3, -10), actor(2, -5)]});

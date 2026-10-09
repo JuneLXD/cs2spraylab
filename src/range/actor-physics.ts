@@ -82,6 +82,15 @@ export function groundVelocity(vx: number, vz: number, x: number, z: number, spe
   return accelerateGround(vx, vz, x, z, speed, dt, stance);
 }
 
+// Native modern jump (build 2000927): unless sv_enablebunnyhopping is set, a jump
+// cannot start faster than 1.1x the weapon's max speed (PreventBunnyJumping).
+export function clampJumpSpeed(velocity: {x: number; z: number}, weaponSpeed: number, rules?: {enableBunnyhopping?: boolean}) {
+  if (rules?.enableBunnyhopping) return velocity;
+  const limit = weaponSpeed * 1.1, length = Math.hypot(velocity.x, velocity.z);
+  if (limit <= 0 || length <= limit) return velocity;
+  return {x: velocity.x * limit / length, z: velocity.z * limit / length};
+}
+
 export function airVelocity(vx: number, vz: number, x: number, z: number, speed: number, dt: number) {
   const length = Math.hypot(x, z);
   if (!length) return { x: vx, z: vz };
@@ -176,6 +185,7 @@ export function advanceActor(
     : groundVelocity(actor.velocity.x, actor.velocity.z, wishX, wishZ, speed, dt,
       {weaponSpeed: runningSpeed, ducking, walking: walk && !ducking});
   if (bhop && actor.landingVelocityXY) velocity = {...actor.landingVelocityXY};
+  if (wantsJump && supported) velocity = clampJumpSpeed(velocity, runningSpeed, rules);
   let moveMode: NonNullable<ActorKinematics['moveMode']> = airborne ? 'air' : 'ground';
   const hullHeight = (72 - 18 * duckCurve) * UNIT;
   if (world && environment?.selfId !== undefined && duckAmount !== currentDuck) {
@@ -265,6 +275,7 @@ export function advanceActor(
     landingVelocityXY = {...velocity};
     if (isBhopPress(pendingJumpPressTime, landedAt, rules) || rules?.autoBhop && jump) {
       const remainder = dt - landingOffset;
+      velocity = clampJumpSpeed(velocity, runningSpeed, rules);
       verticalVelocity = JUMP_SPEED * jumpLandingFactor(landingVelocity, 0);
       pendingJumpPressTime = undefined;
       const bounceFeet = feet + verticalVelocity * remainder - GRAVITY * remainder * remainder / 2;
@@ -273,10 +284,14 @@ export function advanceActor(
       verticalVelocity -= GRAVITY * remainder;
     }
   }
-  if (contact.grounded && landedAt !== undefined && landingVelocity !== undefined && !rules?.enableBunnyhopping) {
-    const cap = speed * groundLandingFactor(landingVelocity, time + dt - landedAt);
+  // Native WalkMove (build 2000927) clamps horizontal speed to the current max
+  // speed on every ground tick after acceleration, so walking, crouching or
+  // damage tagging cut speed at once; the landing factor only lowers that cap.
+  if (contact.grounded) {
+    const cap = speed * (landedAt !== undefined && landingVelocity !== undefined
+      ? groundLandingFactor(landingVelocity, time + dt - landedAt) : 1);
     const length = Math.hypot(velocity.x, velocity.z);
-    if (length > cap) velocity = {x: velocity.x * cap / length, z: velocity.z * cap / length};
+    if (length > cap) velocity = length > 0 ? {x: velocity.x * cap / length, z: velocity.z * cap / length} : velocity;
   }
   if (contact.grounded || contact.ceiling) verticalVelocity = 0;
   if (dt > 0 && resolved.x === actor.position.x) velocity.x = 0;

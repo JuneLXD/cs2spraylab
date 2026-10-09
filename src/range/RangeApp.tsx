@@ -65,9 +65,10 @@ export default function RangeApp() {
   const duel = useRef<DuelHandle>(null);
   const [duelMenu, setDuelMenu] = useState<DuelMenuStatus>({ready: false, playing: false, paused: false, result: false, input: 'Ready', error: ''});
   const [controlsTarget, setControlsTarget] = useState<HTMLDivElement | null>(null);
-  const duelConfig = useDuelConfig(), botzConfig = useBotzConfig('botz'), reflexConfig = useBotzConfig('reflex'), redlineConfig = useBotzConfig('redline');
+  const duelConfig = useDuelConfig('duel'), deathmatchConfig = useDuelConfig('deathmatch'), botzConfig = useBotzConfig('botz'), reflexConfig = useBotzConfig('reflex'), redlineConfig = useBotzConfig('redline');
   const selectedBotz = settings.mode === 'reflex' ? reflexConfig : settings.mode === 'redline' ? redlineConfig : botzConfig;
-  const setupSummary = drillSetupSummary(settings, selectedBotz.config, duelConfig.config);
+  const selectedDuel = settings.mode === 'deathmatch' ? deathmatchConfig : duelConfig;
+  const setupSummary = drillSetupSummary(settings, selectedBotz.config, selectedDuel.config);
   const setupRef = useRef(setupSummary); setupRef.current = setupSummary;
   const [hasSession, setHasSession] = useState(false);
   const starting = useRef(false);
@@ -224,7 +225,7 @@ export default function RangeApp() {
   return <main className="range-app">
     <section ref={stage} data-screen={screen} className={`range-stage sl-stage${screen !== 'game' || panel ? ' sl-menu-open' : ''}${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode) ? ' with-drill' : ''}`} aria-label="Practice range">
       <AchievementNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
-      {settings.mode === 'hearing' ? <HearingPractice backToPlay={play} volume={settings.volume} openSettings={() => open('settings')} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={entered} engineRef={duel} onMenuStatus={onDuelMenu} controlsTarget={controlsTarget} config={duelConfig.config} update={duelConfig.update} resetSetup={settings.mode==='duel'?duelConfig.reset:selectedBotz.reset} botz={selectedBotz.config} updateBotz={selectedBotz.update} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : <>
+      {settings.mode === 'hearing' ? <HearingPractice backToPlay={play} volume={settings.volume} openSettings={() => open('settings')} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' || settings.mode === 'deathmatch' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={entered} engineRef={duel} onMenuStatus={onDuelMenu} controlsTarget={controlsTarget} config={selectedDuel.config} update={selectedDuel.update} resetSetup={settings.mode==='duel'||settings.mode==='deathmatch'?selectedDuel.reset:selectedBotz.reset} botz={selectedBotz.config} updateBotz={selectedBotz.update} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view sl-game-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
       <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
@@ -269,7 +270,7 @@ export default function RangeApp() {
         {screen === 'play' && <PlayScreen settings={settings} profile={progressionState.profile} update={update} selectMode={selectMode} controlsRef={setControlsTarget}
           ready={settings.mode === 'hearing' || (isDuelEngineMode(settings.mode) ? duelMenu.ready : assetReady)} resume={isDuelEngineMode(settings.mode) ? duelMenu.paused && !duelMenu.result : hasSession}
           input={isDuelEngineMode(settings.mode) ? duelMenu.input : status.input}
-          startLabel={settings.mode === 'hearing' ? 'Start hearing practice' : isDuelEngineMode(settings.mode) ? `${hasSession ? 'Resume' : settings.mode === 'duel' ? 'Enter' : 'Start'} ${settings.mode === 'duel' ? 'duel' : settings.mode === 'reflex' ? 'reflex training' : settings.mode === 'redline' ? 'aim_redline' : 'Aim Botz'}` : 'Enter range'}
+          startLabel={settings.mode === 'hearing' ? 'Start hearing practice' : isDuelEngineMode(settings.mode) ? `${hasSession ? 'Resume' : settings.mode === 'duel' || settings.mode === 'deathmatch' ? 'Enter' : 'Start'} ${settings.mode === 'duel' ? 'duel' : settings.mode === 'deathmatch' ? 'deathmatch' : settings.mode === 'reflex' ? 'reflex training' : settings.mode === 'redline' ? 'aim_redline' : 'Aim Botz'}` : 'Enter range'}
           start={start} newSession={newSession} loadout={openLoadoutSlot} setupSummary={setupSummary} openSettings={openSettings} tutorial={learn} reset={reset} recent={recent} history={openHistory}/>}
         {screen === 'home' && <HomeScreen settings={settings} profile={progressionState.profile} rows={recent} ready={settings.mode === 'hearing' || (isDuelEngineMode(settings.mode) ? duelMenu.ready : assetReady)} start={start} setup={play} setupSummary={setupSummary} loadout={openLoadoutSlot} armory={openAgent} history={openHistory} changelog={openChangelog} tutorial={learn}/>}
         {screen === 'results' && completed && <ResultsScreen setupSummary={completed.setup} status={completed.status} mode={completed.mode} settings={settings} profile={progressionState.profile} home={home} setup={play} newSession={newSession}/>}

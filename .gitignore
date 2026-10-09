@@ -54,3 +54,10 @@ coverage/
 *.vpk
 public/*
 !public/revamp/
+
+# Worktree convenience symlinks to the main checkout (never commit them)
+/node_modules
+/research
+/public/revamp/audio
+/public/revamp/textures
+/public/revamp/maps

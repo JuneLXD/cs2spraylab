@@ -16,6 +16,40 @@ describe('installed-build movement arithmetic', () => {
     }
   });
 
+  it('clamps ground speed to the stance cap on the next tick, before any landing has happened', () => {
+    let actor = standing();
+    for (let i = 0; i < 256; i++) actor = advanceActor(actor, {...idleInput(), forward: 1}, 215 * UNIT, STEP);
+    expect(Math.hypot(actor.velocity.x, actor.velocity.z) / UNIT).toBeCloseTo(215, 3);
+    expect(actor.landedAt).toBeUndefined();
+    // Native WalkMove clamps to m_flMaxSpeed every ground tick: walking cuts
+    // speed to 52% at once instead of bleeding it off through friction.
+    const walking = advanceActor(actor, {...idleInput(), forward: 1, walk: true}, 215 * UNIT, STEP);
+    expect(Math.hypot(walking.velocity.x, walking.velocity.z) / UNIT).toBeCloseTo(215 * .52, 5);
+    // Crouching clamps to the current duck factor as the duck amount ramps.
+    let ducking = actor;
+    for (let i = 0; i < 4; i++) {
+      ducking = advanceActor(ducking, {...idleInput(), forward: 1, crouch: true}, 215 * UNIT, STEP);
+      expect(Math.hypot(ducking.velocity.x, ducking.velocity.z) / UNIT)
+        .toBeCloseTo(215 * (1 - .66 * (ducking.duckAmount ?? 0)), 4);
+    }
+    // Damage tagging lowers the cap the same way.
+    const tagged = advanceActor({...actor, velocityModifier: .5}, {...idleInput(), forward: 1}, 215 * UNIT, STEP);
+    expect(Math.hypot(tagged.velocity.x, tagged.velocity.z) / UNIT).toBeCloseTo(215 * .5, 5);
+  });
+
+  it('limits a jump to 1.1x the weapon speed unless bunnyhopping is enabled', () => {
+    const fast = {...standing(), velocity: {x: 300 * UNIT, z: 0}};
+    const jumped = advanceActor(fast, {...idleInput(), forward: 0, jump: true}, 215 * UNIT, STEP);
+    expect(jumped.verticalVelocity).toBeGreaterThan(0);
+    expect(jumped.velocity.x / UNIT).toBeCloseTo(215 * 1.1, 4);
+    const grounded = advanceActor(fast, idleInput(), 215 * UNIT, STEP);
+    expect(grounded.velocity.x / UNIT).toBeCloseTo(215, 4); // ground clamp, no 1.1x allowance
+    const free = advanceActor(fast, {...idleInput(), jump: true}, 215 * UNIT, STEP, undefined, undefined, undefined,
+      {solids: [], floor: 0, jumpRules: {enableBunnyhopping: true}});
+    expect(free.verticalVelocity).toBeGreaterThan(0);
+    expect(free.velocity.x / UNIT).toBeCloseTo(300, 4);
+  });
+
   it.each([150, 215, 225, 240, 250])('can reach the full %s u/s weapon crouch cap from rest', speed => {
     let actor = standing();
     for (let i = 0; i < 256; i++) actor = advanceActor(actor, {...idleInput(), crouch: true, side: 1}, speed * UNIT, STEP);

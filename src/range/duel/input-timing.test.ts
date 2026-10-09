@@ -93,7 +93,7 @@ describe('event-time input and local presentation', () => {
     input(sim, {firePressed: true});
     expect(sim.drainEvents()).toEqual(expect.arrayContaining([expect.objectContaining({kind: 'hit', victim: 1, group: 'head'})]));
     expect(sim.actors[1].health).toBeGreaterThan(356);
-    expect(sim.actors[1].health).toBeLessThan(360);
+    expect(sim.actors[1].health).toBeLessThanOrEqual(360); // whole-point damage: exactly 40 at this range
     expect(sim.actors[1].armor).toBe(0);
   });
 

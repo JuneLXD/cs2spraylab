@@ -32,18 +32,21 @@ describe('independent installed-archive weapon stats',()=>{
 describe('weapon damage and armor arithmetic',()=>{
   it.each(weaponIds.filter(id => id !== 'zeus'))('%s applies native damage, falloff, head multiplier and armor ratio in world units',id=>{
     const data=fixture.weapons[id].primary;
+    // Each hit's health damage and armor loss are truncated to whole points, as displayed in the game.
+    const whole=(value:number)=>Math.floor(value+1e-6);
     for(const distance of [0,500*UNIT,25,50,100]) {
       const base=data.damage*Math.pow(data.rangeModifier,distance/(500*UNIT));
-      expect(resolveDamage(id,'chest',distance,0,false).healthDamage).toBeCloseTo(base,8);
-      expect(resolveDamage(id,'head',distance,0,false).healthDamage).toBeCloseTo(base*data.headshotMultiplier,8);
-      expect(resolveDamage(id,'stomach',distance,0,false).healthDamage).toBeCloseTo(base*1.25,8);
+      expect(resolveDamage(id,'chest',distance,0,false).healthDamage).toBe(whole(base));
+      expect(resolveDamage(id,'head',distance,0,false).healthDamage).toBe(whole(base*data.headshotMultiplier));
+      expect(resolveDamage(id,'stomach',distance,0,false).healthDamage).toBe(whole(base*1.25));
       const leg=resolveDamage(id,'leg',distance,100,true);
-      expect(leg.healthDamage).toBeCloseTo(base*.75,8);expect(leg.armorDamage).toBe(0);
-      const head=resolveDamage(id,'head',distance,100,true);
+      expect(leg.healthDamage).toBe(whole(base*.75));expect(leg.armorDamage).toBe(0);
       const chest=resolveDamage(id,'chest',distance,100,false);
-      expect(chest.healthDamage).toBeCloseTo(base*Math.min(1,data.armorRatio/2),8);
-      expect(head.healthDamage+head.armorDamage*2).toBeCloseTo(base*data.headshotMultiplier,8);
-      expect(resolveDamage(id,'head',distance,100,false).healthDamage).toBeCloseTo(base*data.headshotMultiplier,8);
+      expect(chest.healthDamage).toBe(whole(base*Math.min(1,data.armorRatio/2)));
+      const rawHead=base*data.headshotMultiplier, keptHead=rawHead*Math.min(1,data.armorRatio/2), absorbed=(rawHead-keptHead)/2;
+      expect(resolveDamage(id,'head',distance,100,true)).toEqual(absorbed<=100
+        ? {healthDamage:whole(keptHead),armorDamage:whole(absorbed)} : {healthDamage:whole(rawHead-200),armorDamage:100});
+      expect(resolveDamage(id,'head',distance,100,false).healthDamage).toBe(whole(rawHead));
     }
   });
   it('AWP kills with a close armored chest hit, but not a leg hit; SSG needs a head hit',()=>{

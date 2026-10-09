@@ -125,7 +125,14 @@ export class DuelWeaponState {
       this.actions.holster(); this.burstLeft = 0;
       return;
     }
+    // Source fires a requested shot only while the trigger is still held when the
+    // weapon becomes ready; a tap released during the cycle is dropped, as in the range.
+    const triggerHeld = command.fireHeld || this.actions.alternateFire && !!command.secondaryHeld;
     if (command.firePressed || this.actions.alternateFire && command.secondaryPressed) this.pendingPress = true;
+    else if (!triggerHeld) {
+      this.pendingPress = false;
+      this.actions.chargeTrigger(time, false); // an R8 windup released early is cancelled
+    }
     if (!this.pendingPress && !this.burstLeft && !(command.fireHeld && stats.fullAuto) && !this.actions.alternateFire) return;
     if (this.reload.active) {this.reload.interrupt(); return;}
     if (this.ammo === 0) {
@@ -136,7 +143,10 @@ export class DuelWeaponState {
     }
     const chargedAt = this.actions.chargeTrigger(time, command.fireHeld);
     if (!Number.isFinite(chargedAt)) {this.pendingPress = false; return;}
-    if (time + 1e-9 < Math.max(this.nextShotAt, this.actions.readyAt, chargedAt)) return;
+    if (time + 1e-9 < Math.max(this.nextShotAt, this.actions.readyAt, chargedAt)) {
+      if (!triggerHeld) this.pendingPress = false;
+      return;
+    }
     const burstShotAt = this.burstLeft && time - this.nextShotAt <= dt + 1e-9 ? this.nextShotAt : time;
     if (this.actions.burst && !this.burstLeft) {
       this.burstLeft = 3;

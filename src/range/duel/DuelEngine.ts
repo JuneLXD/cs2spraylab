@@ -11,6 +11,7 @@ import {requestRawLock} from '../input';
 import {InputClock, inputTimestamp} from '../input-clock';
 import {createGameRenderer} from '../render-context';
 import {mouseAngle, VERTICAL_FOV} from '../simulation';
+import {dynamicCrosshairGap} from '../crosshair-spread';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
 import {attachBindInput} from '../keybinds/dom-input';
 import {protectedCodes} from '../keybinds/profile';
@@ -62,6 +63,8 @@ export type DuelStatus = {
   mapLoading?: boolean;
   shortcutProtected: boolean;
   nextRoundIn: number;
+  /** Deathmatch on an imported map: deaths so far and, while dead, seconds until the respawn. */
+  deathmatch?: boolean; deaths?: number; respawnIn?: number;
   equipped?: Equipment; review?: DuelReview; history?: DuelHistory[];
   loadout?: {primary: Weapon | null; sidearm: Settings['sidearm'] | null}; pickup?: Equipment;
   interaction?:string;
@@ -188,6 +191,7 @@ export class DuelEngine {
   /** Reflex arrivals already shown as a caption. */
   private arrivalsShown = 0;
   private generations = new Map<number, number>();
+  private playerGeneration = 1;
   private workshopModel?: THREE.Group;
 
   constructor(private readonly host: HTMLElement, private readonly crosshair: HTMLElement,
@@ -212,8 +216,8 @@ export class DuelEngine {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.08;
     this.renderer.domElement.dataset.duel = 'true';
-    this.renderer.domElement.setAttribute('aria-label', !this.botz ? 'AI Duel arena' : this.botz.map === 'island' ? 'Reflex island'
-      : this.workshop?.workshop ? this.workshop.workshop.name : 'Aim Botz yard');
+    this.renderer.domElement.setAttribute('aria-label', this.workshop?.workshop && (this.botz || this.config.respawnSeconds > 0) ? this.workshop.workshop.name
+      : !this.botz ? 'AI Duel arena' : this.botz.map === 'island' ? 'Reflex island' : 'Aim Botz yard');
     this.renderer.domElement.tabIndex = 0;
     host.prepend(this.renderer.domElement);
     // An imported map is seen through its windows: a pale sky, and no haze inside a 40 m hall.
@@ -310,8 +314,9 @@ export class DuelEngine {
 
   private createSimulation() {
     const seed = seedForDesign(this.seed++, this.config.mapDesign);
-    const arena = !this.botz ? duelArena(seed, this.config.arenaScale) : this.botz.map === 'island' ? reflexArena(this.botz)
-      : this.workshop ?? botzArena();
+    // Deathmatch plays AI Duel bots on the imported map; round-based duels keep their authored arenas.
+    const arena = !this.botz ? (this.workshop && this.config.respawnSeconds > 0 ? this.workshop : duelArena(seed, this.config.arenaScale))
+      : this.botz.map === 'island' ? reflexArena(this.botz) : this.workshop ?? botzArena();
     const simulation = new DuelSimulation(this.config, seed, arena, this.settings.weapon, this.settings.sidearm, this.settings.primaryEnabled, this.botz);
     this.botzRecorded = false; this.arrivalsShown = 0;
     simulation.playerAspect = this.camera.aspect;
@@ -654,8 +659,8 @@ export class DuelEngine {
   }
 
   private beginProgression() {
-    // Passive Aim Botz rounds do not count toward duel achievements.
-    if (this.botz) return;
+    // Passive Aim Botz rounds and endless deathmatch sessions do not count toward duel achievements.
+    if (this.botz || this.sim.deathmatch) return;
     this.attemptDamage.clear();
     this.attemptId = this.progression?.beginDuel(this.attemptSetup(), String(this.attemptRevision)) ?? null;
   }
@@ -728,7 +733,7 @@ export class DuelEngine {
     this.sim = this.createSimulation(); this.inputClock.reset(performance.now()); this.kills = this.damage = 0;
     this.shell.scale.set(this.config.arenaScale, 1, this.config.arenaScale);
     this.damageFeedback.clear(); this.wasReloading = false;
-    this.roundFlow.reset(); this.deaths.clear();
+    this.roundFlow.reset(); this.deaths.clear(); this.playerGeneration = 1;
     this.caption = ''; this.captionUntil = 0; this.kick = 0; this.killFeed.clear();
     this.audio.stopVoices();this.clearEffects(); this.rebuildCovers(); this.rebuildActors(); this.report();
     this.loadWorldWeapons();
@@ -1145,6 +1150,7 @@ export class DuelEngine {
       damage: this.damage, input: this.inputName, caption: this.animationClock < this.captionUntil ? this.caption : '',
       mapLoading: !!this.workshop && !this.workshopModel,
       shortcutProtected: this.shortcuts.protected, nextRoundIn: this.roundFlow.remaining(this.config.feedbackSeconds),
+      ...(this.sim.deathmatch ? {deathmatch: true, deaths: this.sim.deathmatchStats.deaths, respawnIn: this.sim.respawnIn(0)} : {}),
       equipped: player.equipment, review: this.sim.coach.review(), history: this.history,
       loadout: this.sim.loadout, pickup: this.sim.nearestPickup()?.equipment, interaction:this.sim.nearestDoor()?.open?'Close door':this.sim.nearestDoor()?'Open door':undefined, arenaDesign: this.sim.arena.design,
       ...(this.botz ? {botz: botzSummary(this.sim.botzStats, this.sim.time, this.botz.sessionSeconds), botzHistory: this.botzHistory} : {})});
@@ -1172,6 +1178,11 @@ export class DuelEngine {
     const events=this.sim.drainEvents();
     const player = snapshots[0];
     const viewWeapon=this.sim.actors[0].weapon;
+    if (player.generation !== this.playerGeneration) {
+      // A deathmatch respawn: leave the death camera, forget the hit arcs and re-apply any keys still held.
+      this.playerGeneration = player.generation;
+      this.deaths.delete(0); this.damageFeedback.clear(); this.updateMovement();
+    }
     if(timestamp-this.shadowAt>=50){this.shadowAt=timestamp;this.actorShadows.update(actorShadows(snapshots,this.sim.arena));}
     if(timestamp-this.radarAt>=100) {this.radarAt=timestamp;this.radar.update(player,this.sim.radar.snapshot(this.sim.time),this.sim.time,this.sim.arena,this.config);}
     if (player.equipment !== this.renderedEquipment) {
@@ -1241,7 +1252,15 @@ export class DuelEngine {
     if (!this.settings.follow) followPoint.set(0, 0, 0);
     this.crosshair.style.visibility = player.alive && !scoped && (player.equipment==='knife'||gameData.weapons[player.equipment].showCrosshair) ? '' : 'hidden';
     this.crosshair.style.transform = `translate(${followPoint.x * this.width / 2}px, ${-followPoint.y * this.height / 2}px)`;
-    this.crosshair.style.setProperty('--motion-gap', this.settings.crosshair.dynamic ? `${speed * 1.2 + this.kick * 4}px` : '0px');
+    // The dynamic gap is the live accuracy cone (penalty, movement, air, spread)
+    // projected to the screen, as the game's HUD does, not a speed heuristic.
+    if (this.settings.crosshair.dynamic) {
+      const stats = viewWeapon.actions.stats, command = this.sim.actors[0].command;
+      const cone = viewWeapon.recovery.inaccuracy(speed / (stats.speed * UNIT), !!command.walk,
+        !(player.grounded ?? true), (player.verticalVelocity ?? 0) / UNIT);
+      this.crosshair.style.setProperty('--motion-gap',
+        `${dynamicCrosshairGap({inaccuracy: cone, spread: stats.spread}, this.height, VERTICAL_FOV)}px`);
+    } else this.crosshair.style.setProperty('--motion-gap', '0px');
     this.shotEffects.update(this.animationClock); this.viewFlashes.update(this.animationClock);
     this.renderer.setViewport(0, 0, this.width, this.height);
     this.renderer.autoClear = true; this.renderer.render(this.scene, this.camera);

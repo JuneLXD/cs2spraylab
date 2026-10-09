@@ -196,6 +196,20 @@ describe('walking distance, jumping and moving lanes', () => {
     expect(s.feet).toBe(0); expect(s.position.y).toBe(64 * UNIT);
     s.input.jump = false; s.advance(STEP); s.input.jump = true; s.advance(STEP); expect(s.feet).toBeGreaterThan(0);
   });
+  it('raises the accuracy penalty by inaccuracy_land times the landing speed when the player lands', () => {
+    const s = make(); s.active = true; s.input.jump = true;
+    const ak = gameData.weapons.ak47;
+    expect(s.recovery.penalty).toBeCloseTo(ak.stand, 9);
+    s.advance(STEP); s.input.jump = false;
+    for (let i = 0; i < 256 && s.feet > 0; i++) s.advance(STEP);
+    expect(s.feet).toBe(0);
+    // In the air the penalty sat at stand + jump; the landing tick adds
+    // land * |landing speed| and then decays one step toward stand.
+    const decay = Math.pow(10, -STEP / ak.recovery);
+    const landing = (s.recovery.penalty - ak.stand) / decay - ak.jump;
+    expect(landing / ak.land).toBeGreaterThan(290);
+    expect(landing / ak.land).toBeLessThan(302);
+  });
   it('ships the requested first-run defaults', () => {
     expect(defaults.sensitivity * defaults.dpi).toBe(800); expect(defaults.volume).toBe(.2);
     expect(defaults.crosshair.color).toBe('#ffeb55');
