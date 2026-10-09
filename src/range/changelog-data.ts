@@ -193,6 +193,10 @@ export const latestChanges = {
       'A jump cannot start faster than 1.1x the weapon speed, and a bunnyhop only restores pre-landing speed when it exceeded that max.',
       'Duel no longer fires a buffered click: like the range and the game, a shot fires at readiness only while the trigger is still held, and a released tap during a shell reload neither interrupts it nor queues a shot. Friction, air acceleration, crouch rates, accuracy decay and recoil-index reset were read from the installed server build and already matched.',
     ]},
+    {id: 'native-landing-accuracy', title: 'Landing inaccuracy and whole-number damage', items: [
+      'Landing adds the weapon\'s inaccuracy_land times the landing speed to the accuracy penalty, as the server\'s weapon landing hook does; a normal jump lands with about half a jump\'s inaccuracy that recovers over the usual time.',
+      'Every hit now deals whole health and armor points, truncated per hit like the game HUD: an AK-47 chest hit on Kevlar does 27 and strips 4 armor instead of 27.9 shown as 28.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

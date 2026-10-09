@@ -5,11 +5,16 @@ import type {Hitgroup} from './types';
 export type DamageResult = {healthDamage: number; armorDamage: number};
 export type DamageContext = {attack?: 'primary' | 'secondary'; firstSlash?: boolean; backstab?: boolean};
 
+// Health and armor are integers in the game: each hit truncates its health
+// damage and its armor loss separately (an AK chest hit on Kevlar does 27 and
+// removes 4), so a sum of displayed numbers equals the health lost.
+const truncate = (value: number) => Math.max(0, Math.floor(value + 1e-6));
+
 export function armorDamage(raw: number, armor: number, ratio: number): DamageResult {
   const healthDamage = raw * Math.max(0, Math.min(1, ratio / 2));
   const absorbed = (raw - healthDamage) / 2;
-  if (absorbed <= armor) return {healthDamage, armorDamage: absorbed};
-  return {healthDamage: raw - armor * 2, armorDamage: armor};
+  if (absorbed <= armor) return {healthDamage: truncate(healthDamage), armorDamage: truncate(absorbed)};
+  return {healthDamage: truncate(raw - armor * 2), armorDamage: truncate(armor)};
 }
 
 // Horizontal cone is a Source-family estimate, not a measured CS2 hit fixture.
@@ -29,16 +34,16 @@ export function resolveDamage(weapon: Equipment, group: Hitgroup, distanceMeters
     if (distanceMeters > (secondary ? knifeModel.secondaryRangeUnits : knifeModel.primaryRangeUnits) * UNIT) return zero;
     const raw = secondary ? (context.backstab ? knifeModel.backStabDamage : knifeModel.stabDamage)
       : context.backstab ? knifeModel.backSlashDamage : context.firstSlash === false ? knifeModel.slashDamage : knifeModel.firstSlashDamage;
-    return armor > 0 ? armorDamage(raw, armor, stats.armorRatio) : {healthDamage: raw, armorDamage: 0};
+    return armor > 0 ? armorDamage(raw, armor, stats.armorRatio) : {healthDamage: truncate(raw), armorDamage: 0};
   }
   // Zeus has no hitgroup bonus or armor consumption. Its engine-specific
   // distance curve is not exposed by vdata; retain documented generic falloff.
   if (weapon === 'zeus') return distanceMeters > stats.range * UNIT ? zero
-    : {healthDamage: stats.damage * Math.pow(stats.rangeModifier, distanceMeters / (500 * UNIT)), armorDamage: 0};
+    : {healthDamage: truncate(stats.damage * Math.pow(stats.rangeModifier, distanceMeters / (500 * UNIT))), armorDamage: 0};
   const multiplier = group === 'head' ? stats.headshotMultiplier : group === 'stomach' ? 1.25 : group === 'leg' ? .75 : 1;
   const raw = stats.damage * multiplier * Math.pow(stats.rangeModifier, distanceMeters / (500 * UNIT));
   const protectedGroup = group !== 'leg' && (group !== 'head' || helmet);
-  if (!protectedGroup || armor <= 0) return {healthDamage: raw, armorDamage: 0};
+  if (!protectedGroup || armor <= 0) return {healthDamage: truncate(raw), armorDamage: 0};
   return armorDamage(raw, armor, stats.armorRatio);
 }
 

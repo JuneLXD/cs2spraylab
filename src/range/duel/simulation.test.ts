@@ -134,7 +134,7 @@ describe('headless combat fixtures', () => {
     const bare = resolveDamage('ak47', 'head', 0, 0, false);
     const helmet = resolveDamage('ak47', 'head', 0, 100, true);
     expect(bare.healthDamage).toBe(144);
-    expect(helmet.healthDamage).toBeCloseTo(111.6);
+    expect(helmet.healthDamage).toBe(111); // 144 * 0.775 = 111.6, truncated like the game
     expect(helmet.armorDamage).toBeGreaterThan(0);
     expect(resolveDamage('ak47', 'leg', 0, 100, true).armorDamage).toBe(0);
     expect(resolveDamage('ak47', 'chest', 30, 0, false).healthDamage).toBeLessThan(36);

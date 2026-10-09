@@ -6,7 +6,7 @@ export type AccuracyParameters=RecoilParameters&{
   stand:number;crouch:number;move:number;fire:number;spread:number;recovery:number;
   recoveryFinal?:number;recoveryCrouch?:number;recoveryCrouchFinal?:number;
   recoveryStart?:number;recoveryEnd?:number;jump?:number;jumpInitial?:number;jumpApex?:number;
-  spreadSeed?:number;pellets?:number;
+  land?:number;spreadSeed?:number;pellets?:number;
 };
 const clamp=(x:number,lo=0,hi=1)=>Math.max(lo,Math.min(hi,x));
 const ZERO=()=>({yaw:0,pitch:0});
@@ -98,6 +98,12 @@ export class WeaponRecovery {
     const elapsed=this.time-this.anchorAt,angle=this.punch.sample(elapsed),velocity=this.punch.velocity(elapsed);
     this.angle={yaw:angle.yaw,pitch:angle.pitch};this.roll=angle.roll;
     this.velocity={yaw:velocity.yaw,pitch:velocity.pitch};
+  }
+  /** Native landing hook (server build 2000927): the mode's inaccuracy_land
+   * times the landing speed in units/s is added to the accuracy penalty, then
+   * recovers like any other penalty. A normal jump adds about half a jump's worth. */
+  land(landingSpeedUnits:number){
+    this.penalty+=(this.weapon.land ?? 0)*Math.max(0,landingSpeedUnits);
   }
   fire(){
     const recoil=this.recoil;

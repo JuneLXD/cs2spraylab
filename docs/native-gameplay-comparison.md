@@ -344,12 +344,25 @@ ready; like the range and the native item post-frame, a shot fires at readiness
 only while the trigger is still held, and a released tap during a shell reload
 neither interrupts it nor queues a shot.
 
-Not re-verified in this pass: the per-shot spread sampling and seed, the damage
-and armor arithmetic, and where `inaccuracy_land` is applied (a new
-`weapon_land_dip_amt` convar exists). CS2 also registers
+Landing inaccuracy: the server weapon class's landing hook (reached through
+the class vtable, since Ghidra left it undefined) adds the current mode's
+`inaccuracy_land` times the landing speed in units/s to the accuracy penalty,
+which then recovers normally. The trainer imported the field but never applied
+it; both simulations now call `WeaponRecovery.land()` from the same landing
+detection that drives the camera dip. For an AK-47 a normal jump lands with
+about 0.073 of penalty, roughly half the airborne term.
+
+Damage now truncates each hit's health damage and armor loss to whole points.
+This was not read from the binary; it follows the game's displayed values
+(AK-47 chest on Kevlar: 27 damage, 4 armor; M4A4 23; AWP 112; AK-47 at 500
+units 35), which only the per-hit truncation reproduces.
+
+Not re-verified in this pass: the per-shot spread sampling and seed, beyond
+the earlier static inspection of the client sampler (uniform radius then angle
+for inaccuracy, then again for spread). CS2 also registers
 `sv_turning_inaccuracy_*` and `sv_strafing_inaccuracy_*` terms, both off by
-default, and a `weapon_accuracy_stack_boost_limit` penalty for boosted players;
-none applies to the trainer's defaults.
+default, a `weapon_accuracy_stack_boost_limit` penalty for boosted players and
+a `weapon_land_dip_amt` view effect; none applies to the trainer's defaults.
 
 ## Remaining limits
 

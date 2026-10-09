@@ -324,7 +324,10 @@ export class Simulation {
     this.input.jumpPressed = false; this.input.jumpPressOffset = 0;
     const traveled = Math.hypot(next.position.x - this.position.x, next.position.z - this.position.z);
     if (next.landedAt !== undefined && next.landedAt !== this.landedAt && next.landingVelocity !== undefined &&
-      !next.waterLevel && next.supportId === undefined) this.viewPunch.land(-next.landingVelocity / UNIT, next.landedAt);
+      !next.waterLevel && next.supportId === undefined) {
+      this.viewPunch.land(-next.landingVelocity / UNIT, next.landedAt);
+      this.recovery.land(-next.landingVelocity / UNIT);
+    }
     if (next.grounded && !this.grounded) this.onSound(true);
     const audible = Math.hypot(next.velocity.x, next.velocity.z) > weapon.speed * UNIT * .54;
     if (next.grounded && audible && traveled > 0) {
