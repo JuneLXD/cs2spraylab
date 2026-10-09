@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect, test} from '@playwright/test';
 import sharp from 'sharp';
 
@@ -132,9 +133,9 @@ test('side-angle traversal remains renderable during an active duel', async ({pa
 test('switching from Duel to Guided spray restores the original range', async ({page}, info) => {
   test.skip(!desktopSmoke.has(info.project.name), 'Desktop mode-switch smoke test');
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await expect(page.locator('canvas[data-range]')).toBeVisible();
-  await page.getByLabel('Training mode').selectOption('duel');
+  await selectDrill(page, 'duel');
   await expect(page.locator('canvas[data-duel]')).toBeVisible();
 });
 

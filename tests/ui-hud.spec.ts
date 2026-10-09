@@ -32,9 +32,6 @@ for (const mode of ['guided', 'duel', 'botz'] as const) {
     await page.mouse.click(stage.x + stage.width * .5, stage.y + stage.height * .5, {button: 'right'});
     await expect(page.locator('.weapon-scope')).toBeVisible();
     await page.screenshot({path: `test-results/ui-${mode}-scope.png`});
-    await page.keyboard.press('Escape');
-    await expect(pause).toBeHidden();
-    await expect(page.getByRole('button', {name: 'Reload', exact: true})).toBeHidden();
     for (const size of [{width: 1280, height: 720}, {width: 390, height: 844}, {width: 844, height: 390}]) {
       await page.setViewportSize(size);
       const actions = page.locator('.weapon-action-tools');
@@ -47,6 +44,9 @@ for (const mode of ['guided', 'duel', 'botz'] as const) {
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({path: `test-results/ui-${mode}-${size.width}.png`});
     }
+    await page.keyboard.press('Escape');
+    await expect(pause).toBeHidden();
+    await expect(page.getByRole('button', {name: 'Reload', exact: true})).toBeHidden();
     expect(errors).toEqual([]);
   });
 }

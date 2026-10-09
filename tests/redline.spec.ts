@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 
 /** Exposes the running DuelEngine as window.redlineEngine. */
@@ -47,7 +48,7 @@ test('aim_redline: the warehouse loads, bots stand around it, and a headshot cou
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('redline');
+  await selectDrill(page, 'redline');
   const setup = page.getByRole('complementary', {name: 'aim_redline settings'});
   await expect(setup).toBeVisible();
   await expect(setup).toContainText('MAP BY BOT REED');

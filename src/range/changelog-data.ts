@@ -202,6 +202,11 @@ export const latestChanges = {
       'Saved controls, config imports and exports remain available. Restore defaults keeps the current drill and loadout; menus fit narrow screens.',
       'Dynamic crosshair movement now inherits the engine offset correctly. Weapon audio can be tested from any drill.',
     ]},
+    {id: 'ui-play', title: 'Play setup and fullscreen menus', items: [
+      'Play opens on your last drill, with category cards for all eleven drills, setup controls, loadout shortcuts and GO.',
+      'Escape returns to Play with Resume and New Session. Menus remain visible in fullscreen and keep the current scene mounted.',
+      'Bot and duel configurations retain their existing saves. Settings, sound, FPS, fullscreen, the tutorial and history remain reachable from the menu.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

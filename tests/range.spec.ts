@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import { expect, test } from '@playwright/test';
 import sharp from 'sharp';
 import { readFileSync } from 'node:fs';
@@ -63,7 +64,7 @@ test('tap emits exactly a timed five-shot burst, without audio or Pointer Lock',
   });
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeEnabled({timeout: 45000});
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByLabel('Burst length').selectOption('5');
   await page.getByRole('button', { name: 'Done', exact: true }).click();
@@ -85,7 +86,7 @@ test('moving targets animate in shooting modes without starting a burst', async 
   await page.emulateMedia({reducedMotion: 'reduce'});
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeEnabled({timeout: 45000});
-  await page.getByLabel('Training mode').selectOption('spray');
+  await selectDrill(page, 'spray');
   await page.getByRole('button', {name: 'Settings', exact: true}).click();
   await page.getByLabel('Moving target', {exact: true}).check();
   await page.getByRole('button', {name: 'Done', exact: true}).click();
@@ -165,7 +166,7 @@ test('all weapon viewmodels render distinctly and native shot samples decode', a
 test('guided cues, immediate repeat ammo, visible feedback and project links', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeEnabled({timeout: 45000});
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await expect(page.locator('.aim-cue.now')).toBeVisible();
   await expect(page.locator('.aim-cue.next')).toBeVisible();
   expect(await page.locator('.aim-cue.now').evaluate(e => getComputedStyle(e).color)).not.toBe(await page.locator('.aim-cue.next').evaluate(e => getComputedStyle(e).color));
@@ -192,7 +193,7 @@ test('walking controls distance, jump changes view and stationary backstop stays
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.addInitScript(() => Object.defineProperty(HTMLElement.prototype, 'requestPointerLock', { value: undefined }));
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await page.getByRole('button', { name: 'Enter range', exact: true }).click();
   await page.keyboard.down('KeyW');
   await expect.poll(async () => parseFloat(await page.locator('.distance-input output').innerText())).toBeLessThan(8);
@@ -251,7 +252,7 @@ test('mouse Pointer Lock rejection pauses the range with a visible retry message
 test('transfer hands the guide from A to B and restores A for the next attempt', async ({ page }, info) => {
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeEnabled({timeout: 45000});
-  await page.getByLabel('Training mode').selectOption('transfer');
+  await selectDrill(page, 'transfer');
   await expect(page.locator('.aim-cue.now')).toContainText('NOW 1 / A');
   const canvas = page.locator('canvas[data-range]');
   await canvas.dispatchEvent('pointerdown', { button: 0, pointerId: 1, isPrimary: true, pointerType: 'touch' });
@@ -267,7 +268,7 @@ test('long-range compensation cues remain fixed-size and player distance persist
   await page.addInitScript(() => Object.defineProperty(HTMLElement.prototype, 'requestPointerLock', { value: undefined }));
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Enter range', exact: true })).toBeEnabled({timeout: 45000});
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await expect(page.locator('.aim-cue.now')).toBeVisible();
   const nearSize = await page.locator('.aim-cue.now').boundingBox();
   await page.getByRole('button', { name: 'Enter range', exact: true }).click();
@@ -279,10 +280,10 @@ test('long-range compensation cues remain fixed-size and player distance persist
   await expect(page.locator('.aim-cue.next')).toBeVisible();
   const farSize = await page.locator('.aim-cue.now').boundingBox();
   expect(farSize!.width).toBe(nearSize!.width); expect(farSize!.height).toBe(nearSize!.height);
-  await page.getByLabel('Training mode').selectOption('spray');
+  await selectDrill(page, 'spray');
   await expect(page.locator('.aim-cue.now')).toBeHidden();
   expect(parseFloat(await page.locator('.distance-input output').innerText())).toBeGreaterThan(90);
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await page.screenshot({ path: `test-results/${info.project.name}-long-range.png` });
 });
 
@@ -294,7 +295,7 @@ test('mobile landscape keeps shooting, settings and project links within the vie
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth && document.documentElement.scrollHeight <= innerHeight)).toBe(true);
   await expect(page.getByRole('link', { name: /Donate/ })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Settings', exact: true })).toBeVisible();
-  await page.getByLabel('Training mode').selectOption('spray');
+  await selectDrill(page, 'spray');
   const canvas = page.locator('canvas[data-range]'), b = (await canvas.boundingBox())!;
   expect(b.height).toBeGreaterThan(240);
   const stats = await sharp(await canvas.screenshot()).stats();

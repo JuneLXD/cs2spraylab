@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {test,expect} from '@playwright/test';
 import sharp from 'sharp';
 import {canvasColors} from './render-frame';
@@ -18,7 +19,7 @@ async function rendered(page: import('@playwright/test').Page) {
 
 test('the resized drill canvas remains visible without DOM overlays',async({page,browserName})=>{
   await ready(page);
-  await page.getByLabel('Training mode').selectOption('peek');
+  await selectDrill(page, 'peek');
   await rendered(page);
   const png=await page.locator('canvas[data-range]').screenshot({style:'.range-view > :not(.canvas-host), .canvas-host > :not(canvas) { visibility:hidden !important; }'});
   const stats=await sharp(png).stats();
@@ -65,7 +66,7 @@ test('sidearm and default knife render, switch back to primary, and USP is semi-
 test('peeking begins in cover and records stopping and aiming feedback after the entry',async({page},info)=>{
   test.skip(info.project.name.startsWith('mobile'),'Peeking requires keyboard movement');
   await page.addInitScript(()=>{Math.random=()=>.2;Object.defineProperty(HTMLElement.prototype,'requestPointerLock',{value:undefined});});
-  await ready(page);await page.getByLabel('Training mode').selectOption('peek');
+  await ready(page);await selectDrill(page, 'peek');
   const coach=page.getByRole('complementary',{name:'Drill coach'});
   await expect(coach).toContainText('Peek right');
   await page.screenshot({path:`test-results/${info.project.name}-peek-covered.png`});
@@ -87,7 +88,7 @@ test('peeking begins in cover and records stopping and aiming feedback after the
 test('new drills and coach fit desktop, portrait and landscape with no overlap of the aiming area',async({page},info)=>{
   await ready(page);
   for(const mode of ['precision','burst','peek']){
-    await page.getByLabel('Training mode').selectOption(mode);
+    await selectDrill(page, mode);
     const coach=page.locator('.drill-panel'),canvas=page.locator('canvas[data-range]');
     await expect(coach).toBeVisible();
     await rendered(page);
@@ -126,7 +127,7 @@ test('hit captions sit just below the crosshair without covering the score in ev
   for(const size of [null,{width:390,height:844},{width:844,height:390}]){
     if(size)await page.setViewportSize(size);
     for(const mode of ['guided','spray','transfer','peek','precision','burst']){
-      await page.getByLabel('Training mode').selectOption(mode);
+      await selectDrill(page, mode);
       if(['peek','precision','burst'].includes(mode))await expect(page.locator('.drill-panel')).toBeVisible();
       else await expect(page.locator('.drill-panel')).toHaveCount(0);
       // The canvas follows its host on the next resize callback after the drill panel opens or closes.
@@ -149,7 +150,7 @@ test('hit captions sit just below the crosshair without covering the score in ev
 
 test('six-shot bursts and configurable timed peeking retain live shot feedback',async({page})=>{
   await ready(page);
-  await page.getByLabel('Training mode').selectOption('burst');
+  await selectDrill(page, 'burst');
   const canvas=page.locator('canvas[data-range]');
   const tap=async()=>{
     await canvas.dispatchEvent('pointerdown',{button:0,pointerId:1,isPrimary:true,pointerType:'touch'});
@@ -157,7 +158,7 @@ test('six-shot bursts and configurable timed peeking retain live shot feedback',
   };
   await tap();
   await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('spraylab.results.v2')||'[]')[0]?.shots)).toBe(6);
-  await page.getByLabel('Training mode').selectOption('peek');
+  await selectDrill(page, 'peek');
   await page.getByRole('button',{name:'Settings',exact:true}).click();
   await page.getByLabel('Peeking target duration',{exact:true}).fill('4');
   await page.getByRole('button',{name:'Done',exact:true}).click();
@@ -177,7 +178,7 @@ test('six-shot bursts and configurable timed peeking retain live shot feedback',
 test('repeated mistakes produce a central tip and the header fits narrow screens',async({page},info)=>{
   await page.addInitScript(()=>{Math.random=()=>.9;});
   await ready(page);
-  await page.getByLabel('Training mode').selectOption('peek');
+  await selectDrill(page, 'peek');
   await page.getByRole('button',{name:'Settings',exact:true}).click();
   await page.getByLabel('Peeking target duration',{exact:true}).fill('0.5');
   await page.getByRole('button',{name:'Done',exact:true}).click();

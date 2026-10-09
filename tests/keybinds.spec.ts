@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
 
@@ -101,7 +102,7 @@ test('imported binds drive range movement instead of WASD', async ({page}, info)
   test.skip(info.project.name.startsWith('mobile'), 'Desktop keyboard workflow');
   await page.addInitScript(() => Object.defineProperty(HTMLElement.prototype, 'requestPointerLock', {value: undefined}));
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await openKeyboardTab(page);
   await importConfig(page);
   await page.getByRole('button', {name: 'Done', exact: true}).click();

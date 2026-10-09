@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 
 async function setup(page: Page) {
@@ -196,7 +197,7 @@ test('integrated drill releases 3D resources and stops playback across settings 
   await page.addInitScript(() => localStorage.setItem('spraylab.range.v2', JSON.stringify({weapon: 'ak47', mode:'duel', volume:.7, quality:'performance'})));
   await page.goto('/');
   await expect(page.locator('canvas[data-duel]')).toBeVisible();
-  await page.getByLabel('Training mode').selectOption('hearing');
+  await selectDrill(page, 'hearing');
   await expect(page.locator('canvas[data-duel],canvas[data-range]')).toHaveCount(0);
   await expect(page.getByLabel('Distance falloff')).toHaveValue('native');
   await expect(page.getByRole('button', {name:'Reset range', exact:true})).toHaveCount(0);
@@ -207,11 +208,11 @@ test('integrated drill releases 3D resources and stops playback across settings 
   await page.getByRole('button', {name:'Done', exact:true}).click();
   await page.getByRole('button', {name:'Replay sound', exact:true}).click();
   await expect(page.getByRole('button', {name:'Confirm estimate'})).toBeEnabled();
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   const stopped = await audit(page); expect(stopped.live).toBe(0);
   await expect(page.locator('canvas[data-range]')).toBeVisible();
   await page.waitForTimeout(1500); expect((await audit(page)).starts).toBe(stopped.starts);
-  await page.getByLabel('Training mode').selectOption('hearing');
+  await selectDrill(page, 'hearing');
   await page.setViewportSize({width:320,height:740});
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   await page.screenshot({path:info.outputPath('integrated-hearing-320.png')});

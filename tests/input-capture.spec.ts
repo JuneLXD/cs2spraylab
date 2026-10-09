@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 
 type Mode = 'duel' | 'guided';
@@ -180,7 +181,7 @@ test('mobile entry never requests desktop capture or fullscreen, including after
   await expect(page.getByRole('button',{name:'Pause duel',exact:true})).toBeVisible();
   await expect(page.locator('.duel-ammo')).toContainText('Touch');
   await page.getByRole('button',{name:'Pause duel',exact:true}).click();
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await exposeEngine(page,'guided');
   await page.getByRole('button',{name:'Enter range',exact:true}).click();
   await expect(page.getByRole('button',{name:'Pause range',exact:true})).toBeVisible();
@@ -215,7 +216,7 @@ test('duel -> Escape -> guided retains native capture and mouse-only aim', async
   await expect(page.getByRole('button', {name: 'Resume duel', exact: true})).toBeVisible();
   await expect.poll(() => page.evaluate(() => document.pointerLockElement === null && document.fullscreenElement === null)).toBe(true);
   expect(await page.evaluate(() => window.inputCaptureEngines.duel!.paused)).toBe(true);
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await exposeEngine(page, 'guided');
   expect(await page.evaluate(() => window.inputCaptureEngines.duel!.disposed)).toBe(true);
   await page.getByRole('button', {name: 'Enter range', exact: true}).click();
@@ -232,7 +233,7 @@ for (const mode of ['duel', 'guided'] as const) {
       value: () => Promise.reject(new DOMException('Capture denied by regression fixture', 'NotAllowedError')),
     }));
     await page.goto('/');
-    if (mode === 'guided') await page.getByLabel('Training mode').selectOption(mode);
+    if (mode === 'guided') await selectDrill(page, mode);
     await exposeEngine(page, mode);
     await page.getByRole('button', {name: enterLabel(mode), exact: true}).click();
     const message = mode === 'duel' ? page.locator('.duel-ammo') : page.locator('.statusbar');
@@ -258,7 +259,7 @@ for (const mode of ['duel', 'guided'] as const) {
     // Isolate legacy event completion from the separate fullscreen activation path.
     if (mode === 'duel') await page.getByLabel('Protect Ctrl+W', {exact: true}).uncheck();
     else {
-      await page.getByLabel('Training mode').selectOption(mode);
+      await selectDrill(page, mode);
       await page.getByRole('button', {name: 'Settings', exact: true}).click();
       await page.getByRole('tab', {name: 'Video', exact: true}).click();
       await page.getByLabel('Protect range Ctrl+W', {exact: true}).uncheck();

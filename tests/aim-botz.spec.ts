@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 import sharp from 'sharp';
 
@@ -29,7 +30,7 @@ test('Aim Botz: shoot a bot, it respawns, and the stats count it', async ({page}
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('botz');
+  await selectDrill(page, 'botz');
   await expect(page.getByRole('complementary', {name: 'Aim Botz settings'})).toBeVisible();
   await expect(page.locator('.duel-topline')).toContainText('10 BOTS UP');
   const canvas = page.locator('canvas[data-duel]');
@@ -66,7 +67,7 @@ test('Aim Botz: shoot a bot, it respawns, and the stats count it', async ({page}
 test('Aim Botz: a timed session ends, is saved, and New session starts the next', async ({page}, info) => {
   test.skip(info.project.name !== 'chromium', 'Desktop Aim Botz session test');
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('botz');
+  await selectDrill(page, 'botz');
   await page.getByLabel('Session length').selectOption('30');
   await page.getByLabel('Headshot only').check();
   await page.getByLabel('Number of bots').press('Home');
@@ -102,7 +103,7 @@ test('Aim Botz: a timed session ends, is saved, and New session starts the next'
 test('Aim Botz settings persist, and AI Duel is unchanged', async ({page}, info) => {
   test.skip(info.project.name !== 'chromium', 'Desktop Aim Botz persistence test');
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('botz');
+  await selectDrill(page, 'botz');
   await page.getByLabel('Number of bots').press('End');
   await page.getByLabel('Bot movement').selectOption('strafe');
   await expect(page.locator('.duel-topline')).toContainText('16 BOTS UP');
@@ -110,7 +111,7 @@ test('Aim Botz settings persist, and AI Duel is unchanged', async ({page}, info)
   await expect(page.getByLabel('Training mode')).toHaveValue('botz');
   await expect(page.getByLabel('Number of bots')).toHaveValue('16');
   await expect(page.getByLabel('Bot movement')).toHaveValue('strafe');
-  await page.getByLabel('Training mode').selectOption('duel');
+  await selectDrill(page, 'duel');
   await expect(page.getByRole('complementary', {name: 'Duel settings'})).toBeVisible();
   await expect(page.getByLabel('Number of bots')).toHaveAttribute('max', '5');
   await expect(page.locator('canvas[data-duel]')).toHaveAttribute('aria-label', 'AI Duel arena');

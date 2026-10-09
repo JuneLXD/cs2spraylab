@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 import sharp from 'sharp';
 
@@ -53,13 +54,13 @@ test('fundamentals offer interactive practice, honest demonstrations and mobile 
 
 test('transfer and spread choices persist, with mode-specific recommendations', async ({page}) => {
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await page.getByRole('button', {name: 'Settings', exact: true}).click();
   await expect(page.getByLabel('Practice spread', {exact: true})).not.toBeChecked();
   await expect(page.locator('.setting-explanation').filter({hasText: 'Turning it off does not remove recoil'})).toBeVisible();
   await page.getByLabel('Transfer after bullet', {exact: true}).fill('9');
   await page.getByRole('button', {name: 'Done', exact: true}).click();
-  await page.getByLabel('Training mode').selectOption('transfer');
+  await selectDrill(page, 'transfer');
   await page.getByRole('button', {name: 'Settings', exact: true}).click();
   await expect(page.getByLabel('Practice spread', {exact: true})).toBeChecked();
   await expect(page.getByLabel('Transfer after bullet', {exact: true})).toHaveValue('9');

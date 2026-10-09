@@ -1,3 +1,7 @@
+import {TopNav, type MenuScreen} from './ui/TopNav';
+import {PlayScreen} from './ui/screens/PlayScreen';
+import {useBotzConfig, useDuelConfig} from './ui/useDrillConfig';
+import type {DuelHandle, DuelMenuStatus} from './duel/DuelStage';
 import {SettingsScreen} from './ui/screens/SettingsScreen';
 import {CrosshairView} from './ui/CrosshairView';
 import {AmmoBlock, EscHint, ScoreBar, ScoreCell, StatBlock, WeaponSlotList} from './hud/Hud';
@@ -79,6 +83,18 @@ export default function RangeApp() {
   const settingsRef = useRef(settings); settingsRef.current = settings;
   const [status, setStatus] = useState(emptyStatus);
   const [panel, setPanel] = useState<Panel>(null);
+  const [screen, setScreen] = useState<MenuScreen | 'game'>('play');
+  const screenRef = useRef(screen); screenRef.current = screen;
+  const duel = useRef<DuelHandle>(null);
+  const [duelMenu, setDuelMenu] = useState<DuelMenuStatus>({ready: false, playing: false, paused: false, result: false, input: 'Ready', error: ''});
+  const [controlsTarget, setControlsTarget] = useState<HTMLDivElement | null>(null);
+  const duelConfig = useDuelConfig(), botzConfig = useBotzConfig('botz'), reflexConfig = useBotzConfig('reflex'), redlineConfig = useBotzConfig('redline');
+  const selectedBotz = settings.mode === 'reflex' ? reflexConfig : settings.mode === 'redline' ? redlineConfig : botzConfig;
+  const [hasSession, setHasSession] = useState(false);
+  const onDuelMenu = useCallback((value: DuelMenuStatus) => {
+    setDuelMenu(previous => Object.keys(value).every(key => previous[key as keyof DuelMenuStatus] === value[key as keyof DuelMenuStatus]) ? previous : value);
+    if (screenRef.current === 'game' && (value.paused || !value.playing || value.result)) setScreen(value.result ? 'results' : 'play');
+  }, []);
   const [finishSlot, setFinishSlot] = useState<1 | 2>(1);
   const [finishFocusRequest, setFinishFocusRequest] = useState(0);
   const [results, setResults] = useState(readResults);
@@ -105,7 +121,22 @@ export default function RangeApp() {
   // A manual edit replaces the CS2 convars; the next bound crosshair command starts from this crosshair.
   const cross = useCallback((patch: Partial<Crosshair>) => setSettings(s => { const next = { ...s, crosshair: { ...s.crosshair, ...patch } }; delete next.cs2Crosshair; return next; }), []);
   const [consoleCommand] = useState(() => (args: string[]) => setSettings(s => applyConsoleCommand(s, args) ?? s));
-  const open = (next: Panel) => { engine.current?.pause(); setSetupHint(false); setPanel(next); };
+  const open = useCallback((next: Panel) => { engine.current?.pause(); duel.current?.pause(); setSetupHint(false); setPanel(next); }, []);
+  const navigate = useCallback((next: MenuScreen) => {engine.current?.pause(); duel.current?.pause(); setPanel(null); setScreen(next);}, []);
+  const openLoadout = useCallback(() => open('weapons'), [open]);
+  const openSettings = useCallback(() => open('settings'), [open]);
+  const openHistory = useCallback(() => open('history'), [open]);
+  const openChangelog = useCallback(() => open('changelog'), [open]);
+  const openArmory = useCallback(() => setArmoryRequest('knife'), []);
+  const toggleFps = useCallback(() => update({showFps: !settingsRef.current.showFps}), [update]);
+  const mute = useCallback(() => update({volume: settingsRef.current.volume ? 0 : .2}), [update]);
+  const fullscreen = useCallback(() => {if (document.fullscreenElement) void document.exitFullscreen(); else void stage.current?.requestFullscreen?.().catch(() => setNotice('Fullscreen unavailable in this browser.'));}, []);
+  const learn = useCallback(() => {engine.current?.pause(); duel.current?.pause(); setTutorial(true);}, []);
+  const reset = useCallback(() => engine.current?.reset(), []);
+  const selectMode = useCallback((mode: Mode) => {engine.current?.pause(); duel.current?.pause(); setHasSession(false); setDuelMenu({ready: false, playing: false, paused: false, result: false, input: 'Ready', error: ''}); update({mode, spread: modeInfo[mode].spread});}, [update]);
+  const entered = useCallback(() => setSetupHint(false), []);
+  useEffect(() => {if (!status.active && screenRef.current === 'game' && !isDuelEngineMode(settingsRef.current.mode) && settingsRef.current.mode !== 'hearing') setScreen('play');}, [status.active]);
+  useEffect(() => {if (screen !== 'game' || panel || tutorial || armoryOpen) engine.current?.pause();}, [screen, panel, tutorial, armoryOpen]);
   useEffect(() => { if (setupHint) markSetupHintSeen(); }, [setupHint]);
   useEffect(() => { if (status.active) setSetupHint(false); }, [status.active]);
   useEffect(()=>{if(!repFeedback)return;const timer=setTimeout(()=>setRepFeedback(null),4000);return()=>clearTimeout(timer);},[repFeedback]);
@@ -162,11 +193,16 @@ export default function RangeApp() {
     document.addEventListener('keydown', key);
     return () => { document.removeEventListener('keydown', key); previous?.focus(); };
   }, [panel]);
-  const start = () => {
-    const coarse = matchMedia('(pointer: coarse)').matches;
-    if (coarse) { engine.current!.sim.active = true; engine.current!.inputStatus = 'Touch'; void engine.current?.audio.unlock(engine.current.sim.equipped); }
-    else void engine.current?.enter();
-  };
+  const start = useCallback(() => {
+    setSetupHint(false); setHasSession(true);
+    // Pointer lock must be requested in this click, before any effect or await.
+    const entering = isDuelEngineMode(settingsRef.current.mode) ? duel.current?.enter() : settingsRef.current.mode !== 'hearing' ? engine.current?.enter() : undefined;
+    setScreen('game');
+    void entering?.then(() => {
+      if (!isDuelEngineMode(settingsRef.current.mode) && settingsRef.current.mode !== 'hearing' && !engine.current?.sim.active) setScreen('play');
+    });
+  }, []);
+  const newSession = useCallback(() => {if (isDuelEngineMode(settingsRef.current.mode)) duel.current?.restart(); else engine.current?.reset(); start();}, [start]);
   const importProfile = useCallback(async (file?: File) => {
     if (!file) return;
     try {
@@ -185,34 +221,9 @@ export default function RangeApp() {
   }, [profiles, settings.weapon]);
   const exportSession = useCallback(() => download('spraylab-session.json', {settings, results, legacy, profiles}), [settings, results, legacy, profiles]);
   return <main className="range-app">
-    <header className="appbar">
-      <a className="brand" href="/" aria-label="SprayLab home"><AimIcon size={25} strokeWidth={1.7} /><span>SPRAYLAB<span className="brand-sub">COUNTER-STRIKE TRAINING</span></span></a>
-      <nav className="main-nav" aria-label="Workspace"><button className={!panel ? 'selected' : ''} onClick={() => setPanel(null)}><Target size={16} />Range</button><button className={panel === 'history' ? 'selected' : ''} onClick={() => open('history')}><History size={16} />Session<span className="count">{results.length}</span></button></nav>
-      <div className="app-actions">
-        <button type="button" className="changelog-button" aria-label="Changelog" title="Changelog" aria-haspopup="dialog" aria-expanded={panel === 'changelog'} onClick={event => {event.currentTarget.focus(); open('changelog');}}><ListPlus size={17} aria-hidden="true"/><span>Changelog</span></button>
-        <button ref={settingsButton} className={`settings-button${setupHint ? ' settings-nudge' : ''}`} aria-describedby={setupHint ? 'settings-hint-text' : undefined} onClick={() => open('settings')}><Settings2 size={17} />Settings</button>
-      </div>
-      {setupHint && !panel && <div className="settings-hint" role="status">
-        <button className="hint-action" aria-label="Customize your CS2 settings" onClick={() => open('settings')}><b>Match your CS2 setup</b><span id="settings-hint-text">Sensitivity, crosshair & audio</span></button>
-        <ArrowUp className="hint-arrow" size={22} aria-hidden="true" />
-        <button className="icon-button" aria-label="Dismiss settings hint" title="Dismiss hint" onClick={() => { setSetupHint(false); settingsButton.current?.focus(); }}><X size={16} /></button>
-      </div>}
-    </header>
-    <section className="range-toolbar" aria-label="Range configuration">
-      {settings.mode !== 'hearing' && <button className="weapon-select" onClick={() => open('weapons')}><img src={cosmeticPreview(progressionState.profile, selectedWeapon)} alt="" /><span><small>{settings.primaryEnabled ? 'LOADOUT' : 'SIDEARM ONLY'}</small>{weaponNames[selectedWeapon]}</span><ChevronDown size={15} /></button>}
-      <label className="mode-select"><small>DRILL</small><select aria-label="Training mode" value={settings.mode} onChange={e => {const mode = e.target.value as Mode; update({mode, spread: modeInfo[mode].spread});}}>{Object.entries(modeNames).map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></label>
-      {!isDuelEngineMode(settings.mode) && settings.mode !== 'hearing' && <div className="distance-input"><small>DISTANCE</small><output>{status.distance.toFixed(1)} m</output></div>}
-      <div className="toolbar-actions">
-        {!isDuelEngineMode(settings.mode) && settings.mode !== 'hearing' && <button className="icon-button" title="Reset range" aria-label="Reset range" onClick={() => engine.current?.reset()}><RotateCcw size={18} /></button>}
-        {settings.mode !== 'hearing' && <button type="button" className="icon-button fps-toggle" title={settings.showFps ? 'Hide FPS counter' : 'Show FPS counter'} aria-label="Toggle FPS counter" aria-pressed={settings.showFps} onClick={() => update({showFps: !settings.showFps})}><Gauge size={18} aria-hidden="true"/></button>}
-        <button className="icon-button" title={settings.volume ? 'Mute' : 'Unmute'} aria-label={settings.volume ? 'Mute' : 'Unmute'} onClick={() => update({ volume: settings.volume ? 0 : .2 })}>{settings.volume ? <Volume2 size={18} /> : <VolumeX size={18} />}</button>
-        {settings.mode !== 'hearing' && <button className="icon-button fullscreen" title="Fullscreen" aria-label="Fullscreen" onClick={() => { if (document.fullscreenElement) void document.exitFullscreen(); else void stage.current?.requestFullscreen?.().catch(() => setNotice('Fullscreen unavailable in this browser.')); }}><Maximize size={18} /></button>}
-      </div>
-    </section>
-    <section className="mode-brief" aria-label="Drill purpose"><div><strong>{modeInfo[settings.mode].benefit}</strong><p>{modeInfo[settings.mode].task}</p></div><button onClick={() => {engine.current?.pause(); setTutorial(true);}}><GraduationCap size={19}/>Learn the fundamentals</button></section>
-    <section ref={stage} className={`range-stage${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode)?' with-drill':''}`} aria-label="Practice range">
+    <section ref={stage} data-screen={screen} className={`range-stage sl-stage${screen !== 'game' || panel ? ' sl-menu-open' : ''}${isDuelEngineMode(settings.mode) ? ' duel-stage' : isDrillMode(settings.mode) ? ' with-drill' : ''}`} aria-label="Practice range">
       <AchievementNotification controller={progression} onOpenAchievements={()=>{setPanel(null);setAchievementRequest(true);}}/>
-      {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={!!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={() => setSetupHint(false)} suspended={!!panel || tutorial || armoryOpen}/> : <>
+      {settings.mode === 'hearing' ? <HearingPractice volume={settings.volume} openSettings={() => open('settings')} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={entered} engineRef={duel} onMenuStatus={onDuelMenu} controlsTarget={controlsTarget} config={duelConfig.config} update={duelConfig.update} botz={selectedBotz.config} updateBotz={selectedBotz.update} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view sl-game-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
       <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
@@ -230,7 +241,6 @@ export default function RangeApp() {
       {!settings.spread&&<button className="spread-warning" onClick={()=>{update({spread:true});}} title="Enable movement and firing inaccuracy">Spread off<Shield size={12}/></button>}
       <div className="hit-marker" ref={hitmarker}><X size={42} strokeWidth={3} /></div>
       {showRepFeedback&&repFeedback&&<div className={`rep-feedback${repFeedback.passed?' passed':''}`} role="status" aria-label="Rep feedback"><Check className="sl-rep-icon" size={24}/><div><b>{repFeedback.message}</b>{repFeedback.tip&&<p>{repFeedback.tip}</p>}</div></div>}
-      {!status.active && !error && <button className="enter-range" disabled={!assetReady} onClick={start}><Play size={18} fill="currentColor" />{assetReady ? 'Enter range' : 'Loading range'}</button>}
       {error && <div className="range-error" role="alert"><Shield size={24} /><p>{error}</p><button onClick={() => { setError(''); setGeneration(g => g + 1); }}><RotateCcw size={16} />Restart range</button></div>}
       {status.active && <EscHint className="exit-hint" label="Pause range" pause={() => engine.current?.pause()}/>}
       {status.active && status.input !== 'Touch' && !status.shortcutProtected && shortcutHint(settings.keyboard) && <div className="range-shortcut-warning" role="status">{shortcutHint(settings.keyboard)}</div>}
@@ -254,8 +264,16 @@ export default function RangeApp() {
       </div>
       {isDrillMode(settings.mode)&&<DrillPanel status={status} mode={settings.mode} challenge={settings.drillPace==='challenge'} peekDuration={settings.peekDuration}/>}
       </>}
-    </section>
-    <footer className="statusbar"><span><i className={settings.mode !== 'hearing' && status.active ? 'online' : ''} />{settings.mode === 'hearing' ? 'Hearing practice' : isDuelEngineMode(settings.mode) ? modeNames[settings.mode] : status.input}</span><span className="status-center">{settings.mode === 'hearing' ? 'Native samples / browser spatial audio' : isDuelEngineMode(settings.mode) ? 'Simulation' : status.audio === 'unavailable' ? 'Audio unavailable' : status.slot===3?'250 u/s':`${Math.round(60 / equipmentStats(status.equipped).cycle)} RPM`}<span className="desktop-status">Build {gameData.build}</span></span><div className="project-links"><a href="https://github.com/HamzahAlrawi/cs2spraylab" target="_blank" rel="noreferrer"><Github size={14} />Source</a></div></footer>
+      {screen !== 'game' && <div className="sl-menu-layer">
+        <TopNav screen={screen} navigate={navigate} loadout={openLoadout} armory={openArmory} session={openHistory} settings={openSettings} changelog={openChangelog} count={results.length} fps={settings.showFps} volume={settings.volume} toggleFps={toggleFps} mute={mute} fullscreen={fullscreen}/>
+        <PlayScreen settings={settings} profile={progressionState.profile} update={update} selectMode={selectMode} controlsRef={setControlsTarget}
+          ready={settings.mode === 'hearing' || (isDuelEngineMode(settings.mode) ? duelMenu.ready : assetReady)} resume={hasSession && !duelMenu.result}
+          input={isDuelEngineMode(settings.mode) ? duelMenu.input : status.input}
+          startLabel={settings.mode === 'hearing' ? 'Start hearing practice' : isDuelEngineMode(settings.mode) ? `${hasSession ? 'Resume' : settings.mode === 'duel' ? 'Enter' : 'Start'} ${settings.mode === 'duel' ? 'duel' : settings.mode === 'reflex' ? 'reflex training' : settings.mode === 'redline' ? 'aim_redline' : 'Aim Botz'}` : 'Enter range'}
+          start={start} newSession={newSession} loadout={openLoadout} openSettings={openSettings} tutorial={learn} reset={reset}/>
+        {setupHint && !panel && <div className="settings-hint" role="status"><button className="hint-action" aria-label="Customize your CS2 settings" onClick={openSettings}><b>Match your CS2 setup</b><span id="settings-hint-text">Sensitivity, crosshair & audio</span></button><ArrowUp className="hint-arrow" size={22}/><button className="icon-button" aria-label="Dismiss settings hint" onClick={() => {setSetupHint(false); stage.current?.querySelector<HTMLButtonElement>('.settings-button')?.focus();}}><X size={16}/></button></div>}
+      </div>}
+      {settings.mode === 'hearing' && screen === 'game' && <button className="sl-hearing-back" onClick={() => navigate('play')}>Back to Play</button>}
     {notice && <div className="toast" role="status">{notice}<button className="icon-button" aria-label="Dismiss message" onClick={() => setNotice('')}><X size={15} /></button></div>}
     {panel && <div className="drawer-backdrop" onPointerDown={e => { if (e.target === e.currentTarget) setPanel(null); }}>
       <aside className={`drawer ${panel === 'settings' ? 'sl-settings-page' : ''} ${panel === 'history' || panel === 'changelog' || panel === 'settings' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="panel-title" tabIndex={-1} ref={drawer}>
@@ -285,5 +303,6 @@ export default function RangeApp() {
     </div>}
     {tutorial && <MovementTutorial keyboard={settings.keyboard} close={() => setTutorial(false)} practice={() => {setTutorial(false); update({mode: 'precision', spread: true, drillPace: 'practice'});}}/>}
     <ProgressionPanel controller={progression} activeEquipment={selectedWeapon} equipmentLabels={equipmentNames} requestedEquipment={armoryRequest} requestedAchievements={achievementRequest} onRequestHandled={()=>{setArmoryRequest(null);setAchievementRequest(false);}} onOpenChange={value=>{setArmoryOpen(value); if(value)engine.current?.pause();}}/>
+    </section>
   </main>;
 }

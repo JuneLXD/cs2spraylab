@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect, test} from '@playwright/test';
 
 // Written for the first visit before aim_redline and the AWP became the defaults: AI Duel with the AK-47 at Auto quality.
@@ -17,7 +18,7 @@ test('FPS controls work before mouse capture across browser engines', async ({pa
   await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await expect(page.getByLabel('Show FPS counter')).toBeChecked();
   await page.getByRole('button', {name: 'Done', exact: true}).click();
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await expect(page.getByLabel('Performance monitor')).toBeVisible();
   await toggle.click();
   await expect(page.getByLabel('Performance monitor')).toBeHidden();

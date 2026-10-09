@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect, test, type Page} from '@playwright/test';
 import sharp from 'sharp';
 
@@ -22,7 +23,7 @@ test('Fast Aim / Reflex: stand on the island, shoot an incoming bot, and see one
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('reflex');
+  await selectDrill(page, 'reflex');
   const setup = page.getByRole('complementary', {name: 'Reflex settings'});
   await expect(setup).toBeVisible();
   await expect(setup.getByRole('heading', {name: 'Fast Aim / Reflex'})).toBeVisible();
@@ -90,7 +91,7 @@ test('Fast Aim / Reflex: stand on the island, shoot an incoming bot, and see one
 test('Fast Aim / Reflex keeps its own settings and history apart from Aim Botz', async ({page}, info) => {
   test.skip(info.project.name !== 'chromium', 'Desktop reflex persistence test');
   await page.goto('/');
-  await page.getByLabel('Training mode').selectOption('reflex');
+  await selectDrill(page, 'reflex');
   await page.getByLabel('Bot approach').selectOption('front');
   await page.getByLabel('Number of bots').press('End');
   await page.getByLabel('Session length').selectOption('30');
@@ -119,7 +120,7 @@ test('Fast Aim / Reflex keeps its own settings and history apart from Aim Botz',
   await expect(page.getByLabel('Training mode')).toHaveValue('reflex');
   await expect(page.getByLabel('Bot approach')).toHaveValue('front');
   await expect(page.getByLabel('Number of bots')).toHaveValue('16');
-  await page.getByLabel('Training mode').selectOption('botz');
+  await selectDrill(page, 'botz');
   await expect(page.getByRole('complementary', {name: 'Aim Botz settings'})).toBeVisible();
   await expect(page.getByLabel('Number of bots')).toHaveValue('10');
   await expect(page.getByLabel('Bot approach')).toHaveCount(0);

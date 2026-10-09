@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {expect,test,type Page} from '@playwright/test';
 import sharp from 'sharp';
 import {canvasColors} from './render-frame';
@@ -69,7 +70,7 @@ test('performance preset and opt-in FPS work in both engines and persist', async
   await expect.poll(async () => parseInt(await page.getByLabel('Performance monitor').innerText())).toBeLessThanOrEqual(65);
   if (info.project.name.startsWith('mobile')) await page.getByRole('button',{name:'Pause duel',exact:true}).click(); else await page.keyboard.press('Escape');
   await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(false);
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await rangeEngine(page);
   await expect(page.getByLabel('Performance monitor')).toBeVisible();
   const buffer = await page.locator('canvas[data-range]').evaluate(node => ({width:(node as HTMLCanvasElement).width,height:(node as HTMLCanvasElement).height}));
@@ -120,7 +121,7 @@ test('toolbar FPS toggle stays synchronized with settings and mode changes', asy
   await expect(toggle).toHaveAttribute('aria-pressed','false');
   await expect(page.getByLabel('Performance monitor')).toBeHidden();
   await toggle.click();
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   await expect(page.getByLabel('Performance monitor')).toBeVisible();
   await expect(toggle).toHaveAttribute('aria-pressed','true');
   await page.reload();
@@ -131,7 +132,7 @@ test('toolbar FPS toggle stays synchronized with settings and mode changes', asy
   expect(meter.x).toBeGreaterThanOrEqual(0);
   expect(meter.x+meter.width).toBeLessThanOrEqual(viewport.width);
   expect(meter.height).toBeGreaterThanOrEqual(20);
-  await page.getByLabel('Training mode').selectOption('duel');
+  await selectDrill(page, 'duel');
   await expect(toggle).toHaveAttribute('aria-pressed','true');
   await expect(page.getByLabel('Performance monitor')).toBeVisible();
   await toggle.click();

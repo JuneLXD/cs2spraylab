@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import { test, expect } from '@playwright/test';
 import sharp from 'sharp';
 
@@ -11,7 +12,7 @@ test.beforeEach(async ({page}, info) => {
 test('pausing clears live hit feedback before the entry button returns', async ({page}) => {
   await page.goto('/');
   await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 45000});
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   const result = await page.evaluate(async () => {
     const canvas = document.querySelector<HTMLCanvasElement>('canvas[data-range]')!;
     const caption = document.querySelector<HTMLElement>('.hit-caption')!;
@@ -42,7 +43,7 @@ test('wall patterns animate, respect reduced motion and can be switched off inde
   await page.setViewportSize({width: 1440, height: 1000});
   await page.goto('/');
   await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 45000});
-  await page.getByLabel('Training mode').selectOption('guided');
+  await selectDrill(page, 'guided');
   const box = (await page.locator('canvas[data-range]').boundingBox())!;
   const focal = box.height * 2 / 3;
   const clip = {x: box.x + box.width / 2 - 7 / 13.47 * focal + 3, y: box.y + box.height / 2 - (4 - 1.6256) / 13.47 * focal + 3,
@@ -119,7 +120,7 @@ test('viewmodels stay framed across portrait, landscape, ultrawide and stretched
       await page.getByLabel('Resolution', {exact: true}).selectOption(aspect);
       await page.getByRole('button', {name: 'Done', exact: true}).click();
       await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 45000});
-      await page.getByLabel('Training mode').selectOption('spray');
+      await selectDrill(page, 'spray');
       const canvas = page.locator('canvas[data-range]');
       const gun = await canvas.screenshot({scale: 'css'});
       await reference.setViewportSize(viewport);
@@ -138,7 +139,7 @@ test('viewmodels stay framed across portrait, landscape, ultrawide and stretched
       for (let i = 0; i < a.length; i += 3) if (Math.abs(a[i]-b[i]) + Math.abs(a[i+1]-b[i+1]) + Math.abs(a[i+2]-b[i+2]) > 35) changed++;
       expect(changed / (area.width * area.height)).toBeGreaterThan(.045);
       await page.bringToFront();
-      await page.getByLabel('Training mode').selectOption('spray');
+      await selectDrill(page, 'spray');
       await page.screenshot({path: `test-results/framing-${viewport.width}x${viewport.height}-${aspect}.png`});
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     }

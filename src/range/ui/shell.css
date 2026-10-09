@@ -1,0 +1,526 @@
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+.range-app {
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+.range-app .range-stage.sl-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  display: block;
+  overflow: hidden;
+  background: var(--sl-bg);
+}
+.sl-stage > .range-view, .sl-stage > .duel-layout {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+.sl-stage .sl-game-view {
+  height: 100%;
+  width: 100%;
+  min-height: 0;
+}
+.sl-stage > .drill-panel {
+  position: absolute;
+  z-index: 9;
+  left: 16px;
+  top: 130px;
+  max-height: calc(100% - 280px);
+  width: 245px;
+  overflow: auto;
+  background: var(--sl-panel);
+  border: 1px solid var(--sl-hairline);
+}
+.sl-stage.sl-menu-open .sl-game-view > :not(.canvas-host):not(.duel-canvas):not(.range-error) {
+  visibility: hidden;
+}
+.sl-stage.sl-menu-open > .drill-panel {
+  visibility: hidden;
+}
+.sl-menu-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  background: linear-gradient(135deg, rgba(16,22,29,.94), rgba(4,7,10,.88));
+  color: var(--sl-text);
+}
+.range-app .sl-top-nav {
+  height: var(--sl-nav-height);
+  min-height: 64px;
+  padding: 0 28px;
+  gap: 32px;
+  background: var(--sl-nav);
+  border-bottom: 1px solid var(--sl-hairline);
+  display: flex;
+  align-items: center;
+}
+.sl-top-nav .brand {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--sl-text);
+  font: 700 25px var(--sl-font-display);
+  letter-spacing: 2px;
+}
+.sl-top-nav .main-nav {
+  align-self: stretch;
+  margin: 0;
+  gap: 0;
+}
+.sl-top-nav .main-nav > button {
+  height: 100%;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  padding: 0 18px;
+  font: 700 17px var(--sl-font-display);
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+  color: var(--sl-text-2);
+  background: transparent;
+}
+.sl-top-nav .main-nav > button[aria-current] {
+  color: white;
+  background: var(--sl-row-hover);
+  border-bottom-color: white;
+}
+.sl-top-nav .app-actions {
+  margin-left: auto;
+  gap: 5px;
+}
+.sl-top-nav .changelog-button {
+  min-height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--sl-text-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sl-top-nav .sl-icon-button {
+  min-width: 36px;
+  width: 36px;
+  height: 40px;
+  padding: 8px;
+  background: transparent;
+  border: 0;
+}
+.sl-menu-page {
+  min-width: 0;
+  min-height: 0;
+}
+.sl-play {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.sl-play-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 28px;
+  background: rgba(0,0,0,.22);
+  border-bottom: 1px solid var(--sl-hairline);
+}
+.sl-play-heading > select {
+  width: 195px;
+}
+.sl-play-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 24px;
+  min-height: 0;
+  padding: 24px 28px;
+  overflow: auto;
+}
+.sl-play-main {
+  min-width: 0;
+  overflow: auto;
+}
+.sl-drill-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.sl-drill-tile {
+  position: relative;
+  display: block;
+  padding: 0;
+  text-align: left;
+  background: var(--sl-panel);
+  overflow: hidden;
+}
+.sl-drill-tile > div:last-of-type {
+  padding: 17px 16px;
+}
+.sl-drill-tile h2 {
+  font: 700 23px var(--sl-font-display);
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+.sl-drill-tile p {
+  font-size: 13px;
+  color: var(--sl-text-2);
+  margin: 0;
+}
+.sl-drill-art {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #8393a0, #303e48);
+}
+.sl-drill-art > svg {
+  color: rgba(255,255,255,.65);
+  z-index: 1;
+}
+.sl-drill-art > img {
+  position: absolute;
+  height: 240px;
+  bottom: -75px;
+  right: 22%;
+  filter: brightness(.8);
+}
+.sl-drill-art > span {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  font: 700 18px var(--sl-font-display);
+  letter-spacing: 2px;
+  text-shadow: 0 1px 5px black;
+}
+.sl-map-lines {
+  position: absolute;
+  inset: 30% -10% -60%;
+  transform: perspective(300px) rotateX(50deg);
+  background: repeating-linear-gradient(90deg, transparent 0 39px, #ffffff1a 40px 41px), repeating-linear-gradient(0deg, transparent 0 39px, #ffffff1a 40px 41px);
+}
+.sl-drill-redline .sl-drill-art {
+  background: linear-gradient(0deg, #77643f 0 32%, #353531 32% 36%, #79786a 36% 69%, #b43532 69% 75%, #464845 75%);
+}
+.sl-drill-reflex .sl-drill-art {
+  background: radial-gradient(ellipse at 50% 90%, #8a8062 0 29%, #424c49 30% 43%, #596b6a 44% 64%, #697e86 65%);
+}
+.sl-selected-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #111;
+  background: white;
+  border-radius: 50%;
+  padding: 3px;
+  width: 25px;
+  height: 25px;
+}
+.sl-play .sl-drill-brief {
+  display: block;
+  padding: 24px 0;
+  background: none;
+  border: 0;
+}
+.sl-drill-brief > small {
+  font: 700 13px var(--sl-font-display);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--sl-t);
+}
+.sl-drill-brief h1 {
+  font: 700 42px var(--sl-font-display);
+  margin: 8px 0;
+  text-transform: uppercase;
+}
+.sl-play .sl-drill-brief p {
+  max-width: 780px;
+  color: var(--sl-text-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.sl-fact-chips {
+  display: flex;
+  gap: 9px;
+  margin-top: 18px;
+}
+.sl-fact-chips span {
+  padding: 6px 9px;
+  background: #ffffff08;
+  color: var(--sl-text-2);
+  border: 1px solid var(--sl-hairline);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+.sl-learn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 18px;
+  text-align: left;
+  background: var(--sl-panel);
+  border: 1px solid var(--sl-hairline);
+  color: var(--sl-text);
+}
+.sl-learn small {
+  display: block;
+  color: var(--sl-text-2);
+  margin-top: 4px;
+}
+.sl-setup-panel {
+  min-width: 0;
+  min-height: 0;
+  background: var(--sl-panel);
+  border: 1px solid var(--sl-hairline);
+  overflow: auto;
+}
+.sl-stage .sl-setup-panel .duel-controls {
+  display: flex;
+  width: 100%;
+  background: none;
+  border: 0;
+  color: var(--sl-text);
+  max-height: none;
+}
+.sl-setup-panel > header, .sl-setup-panel .duel-controls-head {
+  height: auto;
+  padding: 18px;
+  border-bottom: 1px solid var(--sl-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sl-setup-panel h2 {
+  font: 700 23px var(--sl-font-display);
+  margin: 4px 0 0;
+}
+.sl-setup-panel small {
+  color: var(--sl-text-3);
+  letter-spacing: 1.5px;
+  font-size: 10px;
+}
+.sl-setup-panel .duel-controls-body {
+  overflow: visible;
+  padding: 0;
+  gap: 0;
+}
+.sl-setup-panel .duel-field, .sl-setup-panel .duel-check {
+  padding: 13px 18px;
+  gap: 10px;
+  font-size: 13px;
+}
+.sl-setup-panel .duel-field:nth-child(odd), .sl-setup-panel .duel-check:nth-child(odd) {
+  background: var(--sl-row-alt);
+}
+.sl-setup-panel .duel-field > span, .sl-setup-panel .duel-check > span {
+  color: var(--sl-text-body);
+}
+.sl-setup-panel input, .sl-setup-panel select {
+  accent-color: var(--sl-go);
+}
+.sl-setup-panel .duel-field select, .sl-setup-panel .duel-field input[type=number] {
+  background: var(--sl-field);
+  color: var(--sl-text);
+  border-color: var(--sl-hairline-strong);
+}
+.sl-range-setup {
+  padding: 16px;
+}
+.sl-range-setup h2 {
+  margin: 16px 0;
+  font-size: 17px;
+}
+.sl-range-setup .setting-explanation, .sl-setup-panel .botz-note {
+  font-size: 12px;
+  color: var(--sl-text-3);
+  line-height: 1.5;
+}
+.sl-setup-panel .botz-note {
+  padding: 10px 18px;
+}
+.sl-play-footer {
+  min-height: 98px;
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(0,0,0,.68);
+  border-top: 1px solid var(--sl-hairline);
+}
+.sl-loadout-chips {
+  display: flex;
+  gap: 10px;
+}
+.sl-loadout-chips button {
+  background: var(--sl-row-alt);
+  border: 1px solid var(--sl-hairline);
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  text-align: left;
+  color: var(--sl-text);
+  gap: 10px;
+  max-width: 225px;
+}
+.sl-loadout-chips img {
+  width: 70px;
+  height: 38px;
+  object-fit: contain;
+}
+.sl-loadout-chips small, .sl-ready small {
+  display: block;
+  color: var(--sl-text-3);
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+.sl-ready {
+  margin-left: auto;
+  text-align: right;
+  max-width: 240px;
+}
+.sl-ready strong {
+  color: var(--sl-go-text);
+  font: 700 17px var(--sl-font-display);
+  letter-spacing: 2px;
+}
+.sl-go {
+  min-width: 170px;
+  height: 54px;
+  font: 700 24px var(--sl-font-display);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.sl-stage .drawer-backdrop {
+  position: absolute;
+  z-index: 30;
+}
+.sl-stage .range-error {
+  z-index: 40;
+}
+.sl-stage .toast {
+  z-index: 60;
+}
+.sl-hearing-back {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  z-index: 15;
+}
+@media (max-width: 1100px) {
+  .range-app .sl-top-nav {gap: 10px; padding: 0 16px;}
+  .sl-top-nav .main-nav > button {padding: 0 10px;}
+  .sl-top-nav .brand span, .sl-top-nav .changelog-button span {display: none;}
+  .sl-play-body {grid-template-columns: minmax(0,1fr) 300px; gap: 16px; padding: 18px;}
+  .sl-drill-art {height: 135px;}
+  .sl-drill-tiles {gap: 8px;}
+  .sl-drill-tile h2 {font-size: 18px;}
+  .sl-drill-tile > div:last-of-type {padding: 12px;}
+  .sl-drill-tile p {font-size: 12px;}
+  .sl-mouse-settings {display: none;}
+  .sl-loadout-chips img {width: 48px;}
+}
+@media (max-width: 740px) {
+  .range-app .sl-top-nav {height: auto; min-height: 90px; flex-wrap: wrap; gap: 0; padding: 8px 12px 0;}
+  .sl-top-nav .main-nav {order: 3; width: 100%; height: 40px; justify-content: center;}
+  .sl-top-nav .main-nav > button {padding: 0 12px; font-size: 15px;}
+  .sl-top-nav .brand span {display: block; font-size: 21px;}
+  .sl-top-nav .sl-icon-button {width: 30px; min-width: 30px; height: 32px;}
+  .sl-play-heading {padding: 0 12px; display: block;}
+  .sl-play-heading .sl-tabs {overflow-x: auto;}
+  .sl-play-heading .sl-tabs button {padding: 14px 12px; white-space: nowrap; font-size: 12px;}
+  .sl-play-heading > select {width: 100%; margin: 8px 0;}
+  .sl-play-body {display: block; padding: 14px;}
+  .sl-play-main {overflow: visible;}
+  .sl-drill-tiles {grid-template-columns: repeat(3,minmax(0,1fr));}
+  .sl-drill-art {height: 100px;}
+  .sl-drill-art > img {height: 155px; bottom: -55px; right: 0;}
+  .sl-drill-art > span, .sl-drill-tile p {display: none;}
+  .sl-drill-tile h2 {font-size: 14px;}
+  .sl-drill-tile > div:last-of-type {padding: 9px 7px;}
+  .sl-drill-brief h1 {font-size: 32px;}
+  .sl-play .sl-drill-brief p {font-size: 13px;}
+  .sl-setup-panel {margin-top: 18px;}
+  .sl-play-footer {min-height: 76px; padding: 12px; gap: 8px; flex-wrap: wrap;}
+  .sl-loadout-chips {display: none;}
+  .sl-ready {margin: 0 auto 0 0; max-width: 145px; text-align: left;}
+  .sl-go {min-width: 110px; height: 46px; font-size: 20px;}
+  .sl-play-footer > .sl-button:not(.sl-go) {padding: 8px; min-height: 40px; font-size: 12px;}
+  .sl-stage > .drill-panel {width: 190px; top: 110px; font-size: 10px;}
+}
+@media (max-height: 500px) and (min-width: 741px) {
+  .sl-play-heading .sl-tabs button {padding: 10px;}
+  .sl-play-footer {min-height: 64px; padding: 8px 18px;}
+  .sl-go {height: 44px;}
+}
+.sl-top-nav .main-nav {
+  display: flex;
+  align-items: stretch;
+}
+.sl-top-nav .app-actions {
+  display: flex;
+  align-items: center;
+}
+.sl-play-heading .sl-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+.sl-play-heading .sl-tabs button {
+  white-space: nowrap;
+}
+.sl-play-heading > select, .sl-range-setup .select-row select {
+  background: var(--sl-field);
+  border: 1px solid var(--sl-hairline-strong);
+  color: var(--sl-text);
+  min-height: 34px;
+  padding: 5px 10px;
+}
+.sl-menu-layer .settings-hint {
+  position: absolute;
+  z-index: 5;
+  top: 70px;
+  right: 20px;
+  width: min(360px, calc(100% - 40px));
+  padding: 12px;
+  background: var(--sl-panel-strong);
+  border-color: var(--sl-ct);
+}
+.sl-top-nav button[aria-pressed=true] {
+  color: var(--sl-go-text);
+}
+.sl-drill-tile h2, .sl-setup-panel h2 {
+  color: var(--sl-text);
+}
+@media (max-width: 740px) {
+  .sl-menu-layer .settings-hint {top: 96px;}
+  .sl-top-nav .brand {gap: 8px;}
+  .sl-top-nav .app-actions {gap: 0;}
+  .sl-top-nav .changelog-button {padding: 5px;}
+  .sl-top-nav .main-nav {height: 40px;}
+}
+.sl-menu-layer, .sl-play {
+  grid-template-columns: minmax(0, 1fr);
+}
+.sl-play-heading {min-width: 0;}
+.sl-setup-panel .duel-controls .tabs {border-color: var(--sl-hairline);}
+.sl-setup-panel .duel-controls .tabs button[aria-selected=true] {border-color: var(--sl-text); color: white;}
+.sl-setup-panel .duel-controls input[type=range] {accent-color: var(--sl-text);}

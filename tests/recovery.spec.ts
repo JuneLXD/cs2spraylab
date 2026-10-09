@@ -1,3 +1,4 @@
+import {selectDrill} from './menu-helpers';
 import {test,expect} from '@playwright/test';
 
 test.beforeEach(async ({page}) => {
@@ -26,7 +27,7 @@ test('spread defaults on, explicit off is visible, and impact size persists',asy
 test('stationary counterstrafing attempts score zero and show a central movement tip',async({page},info)=>{
   await page.goto('/');
   await expect(page.getByRole('button',{name:'Enter range',exact:true})).toBeEnabled({timeout:45000});
-  await page.getByLabel('Training mode').selectOption({label:'Counterstrafing practice'});
+  await selectDrill(page, {label:'Counterstrafing practice'});
   const canvas=page.locator('canvas[data-range]');
   await canvas.dispatchEvent('pointerdown',{button:0,pointerId:1,isPrimary:true,pointerType:'touch'});
   await canvas.dispatchEvent('pointerup',{button:0,pointerId:1,isPrimary:true,pointerType:'touch'});
@@ -46,7 +47,7 @@ test('peek arrow alternates with the target lane and clears once the shot is uno
   await page.addInitScript(()=>{Math.random=()=>.9;Object.defineProperty(HTMLElement.prototype,'requestPointerLock',{value:undefined});});
   await page.goto('/');
   await expect(page.getByRole('button',{name:'Enter range',exact:true})).toBeEnabled({timeout:45000});
-  await page.getByLabel('Training mode').selectOption('peek');
+  await selectDrill(page, 'peek');
   await page.getByRole('button',{name:'Enter range',exact:true}).click();
   await expect(page.getByRole('status',{name:'Peek right',exact:true})).toBeVisible();
   await page.screenshot({path:`test-results/${info.project.name}-peek-arrow.png`});

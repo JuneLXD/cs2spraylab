@@ -1,5 +1,6 @@
 import {AmmoBlock, EscHint, ScoreBar, ScoreCell, StatBlock, WeaponSlotList} from '../hud/Hud';
-import {useCallback, useEffect, useRef, useState, type CSSProperties} from 'react';
+import {useCallback, useEffect, useImperativeHandle, useRef, useState, type CSSProperties, type Ref} from 'react';
+import {createPortal} from 'react-dom';
 import {ArrowRight, Plus, Eye, Hand, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, Target, X} from 'lucide-react';
 import {gameData, loadoutWeapon, type Settings} from '../config';
 import {botConfig, sanitizeDuelConfig, type BotOverride, type DuelConfig} from './config';
@@ -21,17 +22,8 @@ const initialStatus: DuelStatus = {phase: 'ready', paused: false, health: 100, a
   ammo: 30, reloading: false, enemies: 1, seconds: 0, kills: 0, damage: 0, input: 'Ready', caption: '',
   shortcutProtected: false, nextRoundIn: 0};
 
-function loadConfig(): DuelConfig {
-  try {return sanitizeDuelConfig(JSON.parse(localStorage.getItem('spraylab.duel.v1') || '{}'));}
-  catch {return sanitizeDuelConfig({});}
-}
-
-const botzKeys = {botz: 'spraylab.botz.v1', reflex: 'spraylab.reflex.v1', redline: 'spraylab.redline.v1'} as const;
-function loadBotz(variant: keyof typeof botzKeys): BotzConfig {
-  const map = variant === 'reflex' ? 'island' : variant === 'redline' ? 'redline' : 'yard';
-  try {return sanitizeBotzConfig({...JSON.parse(localStorage.getItem(botzKeys[variant]) || '{}'), map});}
-  catch {return sanitizeBotzConfig({map});}
-}
+export type DuelHandle = {enter: () => Promise<void>; newSession: () => Promise<void>; restart: () => void; pause: () => void; snapshot: () => DuelStatus};
+export type DuelMenuStatus = {ready: boolean; playing: boolean; paused: boolean; result: boolean; input: string; error: string};
 
 function loadHint() {
   try {return localStorage.getItem('spraylab.duel.hint.v1') !== 'seen';}
@@ -40,15 +32,15 @@ function loadHint() {
 
 /** AI Duel, Aim Botz (variant 'botz': passive respawning bots), Fast Aim / Reflex (variant 'reflex': bots rush your
  * island) or Aim Botz on the imported aim_redline map (variant 'redline'), all on the same engine. */
-export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel', onConsole}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'botz' | 'reflex' | 'redline';
+export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel', onConsole, config, update, botz, updateBotz, engineRef, controlsTarget, onMenuStatus}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'botz' | 'reflex' | 'redline';
+  config: DuelConfig; update: (patch: Partial<DuelConfig>) => void; botz: BotzConfig; updateBotz: (patch: Partial<BotzConfig>) => void;
+  engineRef: Ref<DuelHandle>; controlsTarget: HTMLElement | null; onMenuStatus: (value: DuelMenuStatus) => void;
   /** Console commands from binds that change app settings, such as crosshair convars. */
   onConsole?: (args: string[]) => void}) {
   const botzMode = variant !== 'duel', reflexMode = variant === 'reflex', redlineMode = variant === 'redline';
   const kind = reflexMode ? 'reflex' : redlineMode ? 'redline' : 'botz';
   const drill = reflexMode ? 'reflex training' : redlineMode ? 'aim_redline' : 'Aim Botz';
   const title = reflexMode ? 'Fast Aim / Reflex' : redlineMode ? 'aim_redline' : 'Aim Botz';
-  const [config, setConfig] = useState(loadConfig);
-  const [botz, setBotz] = useState(() => loadBotz(kind));
   // aim_redline's collision and spawns load as a separate chunk before the engine can start.
   const [workshop, setWorkshop] = useState<Arena>();
   const [status, setStatus] = useState<DuelStatus>(initialStatus);
@@ -84,29 +76,22 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   useEffect(() => {engine.current?.setSettings(settings);}, [settings]);
   useEffect(() => {void engine.current?.refreshCosmetics();}, [cosmeticRevision]);
   useEffect(() => {if (suspended) engine.current?.pause();}, [suspended]);
-  useEffect(() => {
-    if (botzMode) return;
-    engine.current?.setConfig(config);
-    try {localStorage.setItem('spraylab.duel.v1', JSON.stringify(config));} catch { /* Session-only configuration. */ }
-  }, [config]);
-  useEffect(() => {
-    if (!botzMode) return;
-    engine.current?.setBotz(botz);
-    try {localStorage.setItem(botzKeys[kind], JSON.stringify(botz));} catch { /* Session-only configuration. */ }
-  }, [botz]);
-
-  const update = useCallback((patch: Partial<DuelConfig>) => setConfig(previous => sanitizeDuelConfig({...previous, ...patch})), []);
-  const updateBotz = useCallback((patch: Partial<BotzConfig>) => setBotz(previous => sanitizeBotzConfig({...previous, ...patch})), []);
-  const updateBot = useCallback((index: number, patch: BotOverride) => setConfig(previous => {
-    const overrides = [...previous.overrides];
-    overrides[index] = {...overrides[index], ...patch};
-    return sanitizeDuelConfig({...previous, overrides});
-  }), []);
-  const customizeBot = useCallback((index: number, enabled: boolean) => setConfig(previous => {
-    const overrides = [...previous.overrides];
-    overrides[index] = enabled ? {...botConfig(previous, index)} : {};
-    return sanitizeDuelConfig({...previous, overrides});
-  }), []);
+  useEffect(() => {if (!botzMode) engine.current?.setConfig(config);}, [config]);
+  useEffect(() => {if (botzMode) engine.current?.setBotz(botz);}, [botz]);
+  const updateBot = useCallback((index: number, patch: BotOverride) => {
+    const overrides = [...config.overrides]; overrides[index] = {...overrides[index], ...patch}; update({overrides});
+  }, [config, update]);
+  const customizeBot = useCallback((index: number, enabled: boolean) => {
+    const overrides = [...config.overrides]; overrides[index] = enabled ? {...botConfig(config, index)} : {}; update({overrides});
+  }, [config, update]);
+  useImperativeHandle(engineRef, () => ({
+    enter: async () => {dismissHint(); onEnter(); await engine.current?.enter();},
+    newSession: async () => {engine.current?.restart(); await engine.current?.enter();},
+    restart: () => engine.current?.restart(), pause: () => engine.current?.pause(), snapshot: () => status,
+  }), [status, onEnter]);
+  const ready = !!engine.current && !error && (!redlineMode || !!workshop && !status.mapLoading);
+  useEffect(() => onMenuStatus({ready, playing: status.phase !== 'ready' && !status.paused, paused: status.paused,
+    result: botzMode && status.phase === 'result', input: status.input, error}), [ready, status.phase, status.paused, status.input, error, onMenuStatus]);
   const dismissHint = () => {
     setHint(false);
     try {localStorage.setItem('spraylab.duel.hint.v1', 'seen');} catch { /* Hint may repeat without storage. */ }
@@ -144,17 +129,6 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
       {status.phase === 'result' && botzMode && status.botz && <div className="duel-result won" role="status"><strong>Session complete</strong>
         <span>{status.botz.kills} kills / {reflexMode ? `${status.botz.leaks} reached you` : `${status.botz.headshotRate.toFixed(0)}% headshots`} / {status.botz.accuracy.toFixed(0)}% accuracy</span>
         <b>{status.botz.killsPerMinute.toFixed(1)} kills per minute</b></div>}
-      {botzMode && !error && (status.phase === 'ready' || status.paused || status.phase === 'result') && <div className="duel-entry">
-        {redlineMode && (!workshop || status.mapLoading) ? <p className="duel-loading" role="status">Loading aim_redline…</p> :
-        <button className="enter-range" onClick={() => {onEnter(); if (status.phase === 'result') engine.current?.newSession(); else void engine.current?.enter();}}><Play size={17} fill="currentColor"/>
-          {status.phase === 'result' ? 'New session' : status.paused ? `Resume ${drill}` : `Start ${drill}`}
-        </button>}
-      </div>}
-      {!botzMode && (status.phase === 'ready' || status.paused) && !error && <div className="duel-entry">
-        <button className="enter-range" onClick={() => {dismissHint(); onEnter(); void engine.current?.enter();}}><Play size={17} fill="currentColor"/>
-          {status.paused ? 'Resume duel' : 'Enter duel'}
-        </button>
-      </div>}
       {error && <div className="range-error" role="alert"><Shield size={24}/><p>{error}</p><button onClick={() => location.reload()}><RotateCcw size={16}/>Reload</button></div>}
       <div className="duel-hud sl-hud">
         {botzMode ? status.botz && <>
@@ -188,7 +162,7 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
           reloadDisabled={status.reloading || !status.reserve || status.ammo === equipmentStats(equipped).magazine} reloadHint={`Reload (${keyHint(settings.keyboard, '+reload')})`}/>
       </div>
     </div>
-    {botzMode ? <aside className="duel-controls" aria-label={reflexMode ? 'Reflex settings' : `${title} settings`}>
+    {controlsTarget && createPortal(botzMode ? <aside className="duel-controls" aria-label={reflexMode ? 'Reflex settings' : `${title} settings`}>
       <div className="duel-controls-head"><div><small>{redlineMode ? 'AIM BOTZ / MAP BY BOT REED' : 'DRILL SETUP'}</small><h2>{title}</h2></div><button className="icon-button" title="New session" aria-label={reflexMode ? 'New reflex session' : `New ${title} session`} onClick={() => engine.current?.restart()}><RotateCcw size={17}/></button></div>
       <div className="tabs" role="tablist" aria-label={reflexMode ? 'Reflex panel' : `${title} panel`}><button role="tab" aria-selected={panel === 'setup'} onClick={() => setPanel('setup')}>Setup</button><button role="tab" aria-selected={panel === 'review'} onClick={() => setPanel('review')}>Stats</button></div>
       {panel === 'review' ? <div className="duel-controls-body"><BotzScorecard island={reflexMode} name={reflexMode ? 'Reflex' : title} summary={status.botz} history={status.botzHistory ?? []}/></div> : <BotzSetup config={botz} update={updateBotz}/>}
@@ -199,6 +173,6 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
       {hint && <div className="duel-hint" role="status"><ArrowRight size={18}/><span>Set up your opponent here</span><button aria-label="Dismiss duel hint" title="Dismiss hint" onClick={dismissHint}><X size={14}/></button></div>}
       {panel === 'review' ? <div className="duel-controls-body"><DuelScorecard review={status.review} history={status.history ?? []}/></div> : <DuelSetup config={config} arenaDesign={status.arenaDesign} weaponToAdd={weaponToAdd} setWeaponToAdd={setWeaponToAdd} update={update} updateBot={updateBot} customizeBot={customizeBot}/>}
       <div className="duel-controls-foot"><button onClick={openSettings}><Settings2 size={15}/>Mouse & crosshair</button><span><Target size={13}/>Changes start a new round</span></div>
-    </aside>}
+    </aside>, controlsTarget)}
   </div>;
 }
