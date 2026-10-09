@@ -347,7 +347,9 @@ export class RangeEngine {
   }}
   secondary(held = false) {
     if (this.sim.firing || this.sim.reloadState.active) return;
-    if (this.sim.equipped==='knife'||this.sim.actions.isRevolver) {this.sim.start(false, true); if(!held) this.sim.release('mouse');}
+    if (this.sim.equipped==='knife'||this.sim.actions.isRevolver) {
+      if (held) this.sim.pressTrigger(true); else {this.sim.start(false, true); this.sim.release('mouse');}
+    }
     else {
       const zoom=this.sim.actions.zoom;
       this.sim.actions.secondary(this.sim.time);
@@ -797,7 +799,7 @@ export class RangeEngine {
     if (event.kind === 'press' || event.kind === 'release') {
       const down = event.kind === 'press';
       switch (event.action) {
-        case 'attack': if (!down) this.sim.release('mouse'); else if (this.loadedTarget && this.modelCache.has(this.sim.equipped)) this.sim.start(); return;
+        case 'attack': if (!down) this.sim.release('mouse'); else if (this.loadedTarget && this.modelCache.has(this.sim.equipped)) this.sim.pressTrigger(); return;
         case 'attack2': if (down) this.secondary(true); else if (this.sim.actions.isRevolver && this.sim.actions.alternateFire) this.sim.release('mouse'); return;
         case 'reload': this.sim.reloadHeld = down; if (down) this.sim.reload(true); return;
         case 'inspect': if (down) this.inspect(); return;

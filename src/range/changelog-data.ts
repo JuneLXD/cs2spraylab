@@ -294,6 +294,10 @@ export const latestChanges = {
       'Ground and air movement now split acceleration around the move in the order verified in the CS2 server, improving starts, stops and stance changes without changing the speed constants.',
       'Bunnyhops restore pre-landing momentum only above the weapon speed cap and preserve new air-strafe gain.',
     ]},
+    {id: 'held-trigger-continuity', title: 'Hold fire through weapon changes', items: [
+      'In the range, holding fire through a reload or weapon draw now fires when the weapon becomes ready. Pressing during those actions works too; releasing before readiness cancels the shot.',
+      'Configured practice bursts still stop at their selected length, and pause or reset clears held input.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

@@ -45,3 +45,8 @@ and the bunnyhop momentum restore gate using the current server's native
 arithmetic. Counter-strafe and release accuracy times remain unchanged; a new
 direct velocity/input recording is required to tighten their existing demo
 comparison. The camera's crouch interpolation remains a separate open item.
+
+Pass 12 preserves physical held fire through range reload/deploy, backed by the
+current native item dispatcher and reproducible before/after probes. Released
+early taps do not queue a later shot. Native early-press schedule preservation
+still needs the prepared recording; the existing schedule policy is unchanged.

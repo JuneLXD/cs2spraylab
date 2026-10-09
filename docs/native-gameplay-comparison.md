@@ -561,6 +561,41 @@ sampled button edges, not proof of instantaneous/subtick parity. No stop-time
 correction is warranted. Crouch amount/rates remain verified;
 the camera eye-height smoothstep remains unverified.
 
+## Held input through reload and deploy (twelfth pass, 2026-10-09)
+
+The current server's item post-frame dispatcher checks the primary-button
+predicate, then ordinary primary readiness, then dispatches the attack. The
+button predicate accepts a held current-command button; a failed readiness
+check does not consume it. The next ready command therefore needs no new
+press. The predicate also has a command-transition fallback, so this static
+trace does not prove that every within-command press/release is discarded.
+The source chain is retained in
+`../native-audit/reports/feel-audit-20261009/trigger-dispatch-evidence.json`.
+
+The range previously ended an attempt on reload/deploy and forgot held input;
+presses during a magazine reload or deploy were also discarded. Physical
+`pressTrigger()` now keeps that input separate from training `start()` and
+reconsiders it when the weapon becomes ready. Releasing, pausing, resetting or
+reconfiguring clears it. Configured practice bursts still stop at their limit.
+
+`tools/audit-trigger-continuity.mjs` writes the before/after measurements in
+`../native-audit/reports/feel-trigger-{before,after}.json`:
+
+| AK case | Before | After |
+| --- | --- | --- |
+| Press during / hold through magazine reload | No resumed shot | Shot at 2.468750 s, readiness 2.466667 s |
+| Press during / hold through deploy | No resumed shot | Shot at readiness, 1.000000 s |
+| Hold through empty auto-reload | No resumed shot | Shot at 2.578125 s, readiness 2.5682295 s |
+| Release before readiness | No shot | No shot |
+
+The held-fire fix matches the static dispatcher rule. Timing uses the existing
+tenth-pass tick schedule; it is not a new native measurement of these exact
+reload/deploy scenarios. A fresh early press's effect on the native *subsequent*
+schedule remains unverified. The previously cited postpone-fire comparator is
+R8-specific, not the generic primary readiness check. The new readiness fixture
+keeps those comparators separate and does not claim to resolve that scheduling
+question. The prepared native capture protocol includes the missing cases.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current

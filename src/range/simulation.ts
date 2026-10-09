@@ -69,6 +69,11 @@ export class Simulation {
   private burstLeft = 0;
   private burstEnd = 0;
   private releasedBurst = false;
+  // Physical input outlives a practice attempt. Reload/deploy end that attempt,
+  // but the native weapon post-frame still sees a button held through them.
+  private triggerHeld = false;
+  private triggerAlternate = false;
+  private resumeHeldAt?: number;
   get actions() {
     let state = this.actionStates.get(this.equipped);
     if (!state) {state = new WeaponActions(this.equipped); this.actionStates.set(this.equipped, state);}
@@ -206,11 +211,13 @@ export class Simulation {
     this.previousSlot = this.slot; this.slot = slot;
     if (this.equipped !== 'knife') this.pattern = recoilPattern(this.equipped, this.slot === 1 ? this.measured : undefined);
     this.equipReadyAt = this.time + (this.active ? this.stats.deploy : 0);
+    this.resumeHeldAt = this.triggerHeld ? this.equipReadyAt : undefined;
     return true;
   }
   reload(silent = this.reloadHeld) {
     if (!this.reloadState.start(this.time, silent)) return false;
     this.finish(); this.burstLeft = 0; this.actions.holster(); this.active = true; this.reloadHeld = silent;
+    this.resumeHeldAt = this.triggerHeld ? this.time : undefined;
     return true;
   }
   private restock() {
@@ -275,7 +282,14 @@ export class Simulation {
     this.yaw -= dx * scale;
     this.pitch = clamp(this.pitch - dy * scale * (this.settings.invertY ? -1 : 1), -89 * DEG, 89 * DEG);
   }
-  start(automatic = false, alternate = false) {
+  /** Mouse/key attack edge. Training's automatic start remains a separate action. */
+  pressTrigger(alternate = false) {
+    this.triggerHeld = true; this.triggerAlternate = alternate;
+    const started = this.start(false, alternate);
+    if (!started && !this.firing && !this.drill?.finished) this.resumeHeldAt = this.time;
+    return started;
+  }
+  start(automatic = false, alternate = false, scheduledAt = this.time) {
     if (this.firing || this.time < Math.max(this.equipReadyAt, this.actions.readyAt) || this.drill?.finished) return false;
     if(this.equipped==='knife'&&this.time<(this.shotReady.get('knife')??0))return false;
     if (this.reloadState.active) {
@@ -286,9 +300,11 @@ export class Simulation {
     this.meleeSecondary = this.equipped === 'knife' && alternate;
     this.actions.alternateFire = this.actions.isRevolver && alternate;
     this.active = true; this.firing = true; this.automatic = automatic;
+    this.resumeHeldAt = undefined;
     this.shots = this.hits = this.heads = 0;
-    this.startedAt = this.time; this.nextShot = Math.max(this.time, this.shotReady.get(this.equipped) ?? 0,
-      this.burstEnd, this.reloadState.until, this.actions.chargeTrigger(this.time, true));
+    this.startedAt = this.time; this.nextShot = Math.max(scheduledAt, this.shotReady.get(this.equipped) ?? 0,
+      this.equipReadyAt, this.actions.readyAt, this.burstEnd, this.reloadState.until,
+      this.actions.isRevolver ? this.actions.chargeTrigger(this.time, true) : 0);
     this.releasedBurst = false;
     this.targetHealth = [100, 100];
     this.latest = undefined;
@@ -297,10 +313,12 @@ export class Simulation {
     return true;
   }
   release(pointerType: string) {
+    if (pointerType !== 'touch') {this.triggerHeld = false; this.resumeHeldAt = undefined;}
     if (this.automatic || pointerType === 'touch') return;
     if (this.burstLeft) this.releasedBurst = true; else this.finish();
   }
   cancel() {
+    this.triggerHeld = false; this.resumeHeldAt = undefined;
     this.burstLeft = 0;
     if (this.firing) this.finish();
     this.active = false; this.input = idleInput(); this.velocity = { x: 0, z: 0 };
@@ -352,6 +370,8 @@ export class Simulation {
     const reloadEnd = this.reloadState.phase === 'finish' || this.reloadState.phase === 'magazine' ? this.reloadState.until : this.time;
     for (const [id, state] of this.ammoStates) state.advance(this.time, id === this.equipped ? this.reloadHeld : undefined);
     if (this.firing && reloading && !this.reloadState.active) this.nextShot = Math.max(this.nextShot, reloadEnd);
+    if (this.resumeHeldAt !== undefined && reloading && !this.reloadState.active)
+      this.resumeHeldAt = Math.max(this.resumeHeldAt, reloadEnd);
     // Pop's infinite modes top the reserve (and the magazine) back up every tick, as sv_infinite_ammo does.
     if (this.pop) this.refillPopAmmo();
     if (this.firing && this.reloadState.active) this.reloadState.interrupt();
@@ -415,6 +435,11 @@ export class Simulation {
         }
       }
       else if (!this.drill.finished && this.drill.seenAt !== null && this.time-this.drill.seenAt > (this.settings.drillPace==='challenge' ? 1.5 : 8)) this.completeDrill(true);
+    }
+    if (this.triggerHeld && this.resumeHeldAt !== undefined && !this.firing && !this.reloadState.active &&
+      (this.equipped === 'knife' || this.loadedAmmo > 0)) {
+      const due = Math.max(this.resumeHeldAt, this.equipReadyAt, this.actions.readyAt, this.shotReady.get(this.equipped) ?? 0);
+      if (this.time + 1e-9 >= tickAligned(due)) this.start(false, this.triggerAlternate, due);
     }
     if (this.firing && this.actions.isRevolver && !this.actions.alternateFire) this.nextShot = Math.max(this.nextShot, this.actions.chargeTrigger(this.time, true));
     // A shot the weapon becomes ready for while the trigger is held is processed on the next server tick; its
