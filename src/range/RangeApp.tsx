@@ -1,5 +1,7 @@
+import {SettingsScreen} from './ui/screens/SettingsScreen';
+import {CrosshairView} from './ui/CrosshairView';
 import {AmmoBlock, EscHint, ScoreBar, ScoreCell, StatBlock, WeaponSlotList} from './hud/Hud';
-import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import { Activity, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronDown, Code2 as Github, Crosshair as AimIcon, Download, Eye, Gauge, History, ListPlus, Maximize, Paintbrush, Pause, Play, RotateCcw, ScanLine, Settings2, Shield, Target, Upload, Volume2, VolumeX, X } from 'lucide-react';
 import { classicViewmodel, Crosshair, defaults, gameData, historyModeNames, isDuelEngineMode, loadSettings, loadoutWeapon, MeasuredProfile, migrateMode, Mode, modeNames, parseProfile, presets, resolutions, resolutionSize, saveSettings, Settings, Weapon, weaponIds, weaponNames, pistolIds, type Pistol, type Resolution } from './config';
 import { RangeEngine, RangeStatus } from './engine';
@@ -48,12 +50,6 @@ function LoadoutFinishes({equipment, profile, controller, onArmory, focusRequest
     })}</div></section>;
 }
 
-function CrosshairView({ value }: { value: Crosshair }) {
-  const style = { '--cross-color': value.color, '--cross-size': `${value.size}px`, '--cross-gap': `${value.gap}px`, '--cross-thickness': `${value.thickness}px`, '--cross-outline': `${value.outline}px`, opacity: value.alpha } as CSSProperties;
-  return <div className={`crosshair ${value.t ? 't-style' : ''} ${value.size === 0 ? 'dot-only' : ''}`} style={style} aria-hidden="true">
-    <i className="arm top" /><i className="arm right" /><i className="arm bottom" /><i className="arm left" />{value.dot && <i className="dot" />}
-  </div>;
-}
 function readResults(): Result[] {
   try {
     const a = JSON.parse(localStorage.getItem('spraylab.results.v2') || '[]');
@@ -68,16 +64,7 @@ function download(name: string, value: unknown) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 const emptyStatus: RangeStatus = { weapon: 'ak47', equipped:'ak47',slot:1,equipReady:true,magazine:30, active: false, firing: false, shots: 0, hits: 0, heads: 0, remaining: 30, reload: 0, speed: 0, distance: 12, input: 'Ready', audio: 'locked', assets: 'Loading models', fps: 0 };
-const aspectName = (width: number, height: number) => ({'1.33': '4:3', '1.25': '5:4', '1.6': '16:10', '1.78': '16:9'} as Record<string, string>)[String(Math.round(width / height * 100) / 100)] ?? `${width}:${height}`;
-function resolutionLabel(resolution: Resolution) {
-  const size = resolutionSize(resolution);
-  if (!size) return 'Native (fill the window)';
-  const aspect = aspectName(size.width, size.height);
-  return `${size.width} x ${size.height} (${aspect}${aspect === '4:3' || aspect === '5:4' ? ' stretched' : ''})`;
-}
 type Panel = 'settings' | 'weapons' | 'history' | 'changelog' | null;
-type Tab = 'game' | 'keyboard' | 'crosshair' | 'data';
-const tabNames: Record<Tab, string> = {game: 'Game', keyboard: 'Keyboard / Mouse', crosshair: 'Crosshair', data: 'Data & audio'};
 
 export default function RangeApp() {
   const [progression] = useState(() => createProgressionController({catalog: cosmeticCatalog}));
@@ -91,9 +78,7 @@ export default function RangeApp() {
   const settingsButton = useRef<HTMLButtonElement>(null);
   const settingsRef = useRef(settings); settingsRef.current = settings;
   const [status, setStatus] = useState(emptyStatus);
-  const [panel, setPanel] = useState<Panel>(null), [tab, setTab] = useState<Tab>('game');
-  // Measured while Settings is open: the range is paused, so frame timing reflects the display.
-  const displayHz = useDisplayRate(panel === 'settings');
+  const [panel, setPanel] = useState<Panel>(null);
   const [finishSlot, setFinishSlot] = useState<1 | 2>(1);
   const [finishFocusRequest, setFinishFocusRequest] = useState(0);
   const [results, setResults] = useState(readResults);
@@ -116,9 +101,9 @@ export default function RangeApp() {
   const weapon = gameData.weapons[selectedWeapon];
   const score = settings.mode==='precision' ? status.drill?.last?.movementScore ?? 0 : status.shots ? status.hits / status.shots * 100 : 0;
   const showRepFeedback=repFeedback?.mode===settings.mode && status.active && !status.firing && !status.hitFlash;
-  const update = (patch: Partial<Settings>) => setSettings(s => ({ ...s, ...patch }));
+  const update = useCallback((patch: Partial<Settings>) => setSettings(s => ({ ...s, ...patch })), []);
   // A manual edit replaces the CS2 convars; the next bound crosshair command starts from this crosshair.
-  const cross = (patch: Partial<Crosshair>) => setSettings(s => { const next = { ...s, crosshair: { ...s.crosshair, ...patch } }; delete next.cs2Crosshair; return next; });
+  const cross = useCallback((patch: Partial<Crosshair>) => setSettings(s => { const next = { ...s, crosshair: { ...s.crosshair, ...patch } }; delete next.cs2Crosshair; return next; }), []);
   const [consoleCommand] = useState(() => (args: string[]) => setSettings(s => applyConsoleCommand(s, args) ?? s));
   const open = (next: Panel) => { engine.current?.pause(); setSetupHint(false); setPanel(next); };
   useEffect(() => { if (setupHint) markSetupHintSeen(); }, [setupHint]);
@@ -167,7 +152,7 @@ export default function RangeApp() {
     const key = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { e.preventDefault(); setPanel(null); }
       if (e.key === 'Tab') {
-        const elements = drawer.current?.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input,select,[tabindex="0"]');
+        const elements = drawer.current?.querySelectorAll<HTMLElement>('button:not(:disabled):not([tabindex="-1"]),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]');
         if (!elements?.length) return;
         const first = elements[0], last = elements[elements.length - 1];
         if (e.shiftKey && (document.activeElement === first || document.activeElement === drawer.current)) { e.preventDefault(); last.focus(); }
@@ -182,7 +167,7 @@ export default function RangeApp() {
     if (coarse) { engine.current!.sim.active = true; engine.current!.inputStatus = 'Touch'; void engine.current?.audio.unlock(engine.current.sim.equipped); }
     else void engine.current?.enter();
   };
-  const importProfile = async (file?: File) => {
+  const importProfile = useCallback(async (file?: File) => {
     if (!file) return;
     try {
       if (file.size > 100000) throw new Error('Profile exceeds 100 KB.');
@@ -191,7 +176,14 @@ export default function RangeApp() {
       try { localStorage.setItem('spraylab.profiles.v1', JSON.stringify(next)); } catch { setNotice('Capture loaded for this session only.'); }
       update({ weapon: p.weapon }); setNotice(`${weaponNames[p.weapon]} capture loaded.`);
     } catch (e) { setNotice((e as Error).message); }
-  };
+  }, [profiles]);
+  const closePanel = useCallback(() => setPanel(null), []);
+  const restoreSettings = useCallback(() => setSettings(current => ({...defaults, mode: current.mode, weapon: current.weapon, sidearm: current.sidearm, primaryEnabled: current.primaryEnabled, crosshair: {...defaults.crosshair}, keyboard: current.keyboard})), []);
+  const removeCapture = useCallback(() => {
+    const next = {...profiles}; delete next[settings.weapon]; setProfiles(next);
+    try {localStorage.setItem('spraylab.profiles.v1', JSON.stringify(next));} catch {setNotice('Storage unavailable.');}
+  }, [profiles, settings.weapon]);
+  const exportSession = useCallback(() => download('spraylab-session.json', {settings, results, legacy, profiles}), [settings, results, legacy, profiles]);
   return <main className="range-app">
     <header className="appbar">
       <a className="brand" href="/" aria-label="SprayLab home"><AimIcon size={25} strokeWidth={1.7} /><span>SPRAYLAB<span className="brand-sub">COUNTER-STRIKE TRAINING</span></span></a>
@@ -266,81 +258,11 @@ export default function RangeApp() {
     <footer className="statusbar"><span><i className={settings.mode !== 'hearing' && status.active ? 'online' : ''} />{settings.mode === 'hearing' ? 'Hearing practice' : isDuelEngineMode(settings.mode) ? modeNames[settings.mode] : status.input}</span><span className="status-center">{settings.mode === 'hearing' ? 'Native samples / browser spatial audio' : isDuelEngineMode(settings.mode) ? 'Simulation' : status.audio === 'unavailable' ? 'Audio unavailable' : status.slot===3?'250 u/s':`${Math.round(60 / equipmentStats(status.equipped).cycle)} RPM`}<span className="desktop-status">Build {gameData.build}</span></span><div className="project-links"><a href="https://github.com/HamzahAlrawi/cs2spraylab" target="_blank" rel="noreferrer"><Github size={14} />Source</a></div></footer>
     {notice && <div className="toast" role="status">{notice}<button className="icon-button" aria-label="Dismiss message" onClick={() => setNotice('')}><X size={15} /></button></div>}
     {panel && <div className="drawer-backdrop" onPointerDown={e => { if (e.target === e.currentTarget) setPanel(null); }}>
-      <aside className={`drawer ${panel === 'history' || panel === 'changelog' || panel === 'settings' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="panel-title" tabIndex={-1} ref={drawer}>
-        <div className="drawer-header"><div><small>SPRAYLAB</small><h1 id="panel-title">{panel === 'settings' ? 'Settings' : panel === 'weapons' ? 'Loadout' : panel === 'changelog' ? 'Changelog' : 'Session history'}</h1></div><button className="icon-button" aria-label="Close panel" onClick={() => setPanel(null)}><X size={21} /></button></div>
+      <aside className={`drawer ${panel === 'settings' ? 'sl-settings-page' : ''} ${panel === 'history' || panel === 'changelog' || panel === 'settings' ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-labelledby="panel-title" tabIndex={-1} ref={drawer}>
+        {panel !== 'settings' && <div className="drawer-header"><div><small>SPRAYLAB</small><h1 id="panel-title">{panel === 'weapons' ? 'Loadout' : panel === 'changelog' ? 'Changelog' : 'Session history'}</h1></div><button className="icon-button" aria-label="Close panel" onClick={() => setPanel(null)}><X size={21} /></button></div>}
         {panel === 'changelog' && <Changelog/>}
-        {panel === 'settings' && <>
-          <div className="tabs" role="tablist" aria-label="Settings sections">{(Object.keys(tabNames) as Tab[]).map(t => <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>{tabNames[t]}</button>)}</div>
-          <div className="drawer-content" role="tabpanel">
-            {tab === 'keyboard' && <KeyboardSettings settings={settings} update={update} notify={setNotice}/>}
-            {tab === 'game' && <>
-              <h2>Mouse</h2><div className="two-fields"><label>Sensitivity<NumberField label="Sensitivity" min={.05} max={10} step={.05} value={settings.sensitivity} onCommit={sensitivity => update({ sensitivity })} /></label><label>Mouse DPI<NumberField label="Mouse DPI" min={100} max={32000} step={100} value={settings.dpi} onCommit={dpi => update({ dpi })} /></label></div>
-              <div className="readout"><span>cm / 360</span><b>{(360 / (.022 * settings.sensitivity * settings.dpi) * 2.54).toFixed(2)}</b></div>
-              <div className="readout"><span>eDPI</span><b>{Math.round(settings.sensitivity * settings.dpi)}</b></div>
-              <Toggle label="Invert mouse Y" checked={settings.invertY} onChange={v => update({ invertY: v })} />
-              <h2>Training</h2><label className="select-row">Burst length<select aria-label="Burst length" value={settings.burst} onChange={e => update({ burst: +e.target.value })}><option value="0">Full magazine</option><option value="5">5 rounds</option><option value="10">10 rounds</option><option value="15">15 rounds</option></select></label>
-              <label className="select-row">Peeking angles<select aria-label="Peeking angles" value={settings.peekScenario} onChange={e=>update({peekScenario:e.target.value as Settings['peekScenario']})}><option value="mixed">Mixed situations</option><option value="common">Common angles</option><option value="deep">Deep holds</option><option value="off-angle">Off-angles</option><option value="elevated">Elevated holds</option></select></label>
-              <Slider label="Peeking target duration" value={settings.peekDuration} min={.5} max={10} step={.25} suffix=" s" onChange={peekDuration=>update({peekDuration})}/>
-              <label className="select-row">Counterstrafe / burst pace<select aria-label="Drill pace" value={settings.drillPace} onChange={e=>update({drillPace:e.target.value as Settings['drillPace']})}><option value="practice">Practice / 8 s exposure</option><option value="challenge">Challenge / 1.5 s exposure</option></select></label>
-              <Toggle label="Follow recoil" checked={settings.follow} onChange={v => update({ follow: v })} />
-              <Toggle label="Practice spread" checked={isDuelEngineMode(settings.mode) || settings.spread} disabled={isDuelEngineMode(settings.mode)} onChange={v => update({ spread: v })} />
-              <p className="setting-explanation">Spread adds the weapon's random shot dispersion and the extra inaccuracy from movement, jumping and repeated fire. Turning it off does not remove recoil. Switching drills applies the recommended setting: off for Guided spray, on for other drills. AI Duel, Aim Botz, Fast Aim / Reflex and aim_redline always apply it, as CS2 does.</p>
-              <label className="select-row">Transfer to B<select aria-label="Transfer trigger" value={settings.transferRule} onChange={e => update({transferRule: e.target.value as Settings['transferRule']})}><option value="bullet">After a bullet count</option><option value="kill">After A loses 100 health</option></select></label>
-              {settings.transferRule === 'bullet' && <Slider label="Transfer after bullet" value={settings.transferAfter} min={1} max={weapon.magazine - 1} onChange={transferAfter => update({transferAfter})}/>}
-              <p className="setting-explanation">Transfer targets have 100 health and no armor. Recoil continues across A and B. A short selected burst caps the transfer count before its last round.</p>
-              <Slider label="Bullet impact size" value={settings.impactSize} min={.5} max={4} step={.25} suffix="x" onChange={impactSize=>update({impactSize})}/>
-              <label className="select-row">Bullet tracers<select aria-label="Bullet tracers" value={settings.tracers} onChange={e => update({tracers: e.target.value as Settings['tracers']})}><option value="every">Every shot (practice)</option><option value="native">CS2 effects & cadence</option><option value="off">Off</option></select></label>
-              <p className="setting-explanation">Every shot draws a tracer from the muzzle to where each round lands, suppressed guns included. CS2 cadence matches the game: every third round for most rifles and none for suppressed weapons. AI Duel bots always use CS2 cadence.</p>
-              <Toggle label="Moving target" checked={settings.moving} onChange={v => update({ moving: v })} />
-              <label className="select-row">Target movement<select aria-label="Target movement" value={settings.targetSpeed} onChange={e => update({ targetSpeed: e.target.value as Settings['targetSpeed'] })}><option value="rifle">{weaponNames[settings.weapon]} / {weapon.speed} u/s</option><option value="smg">MP9 / 240 u/s</option><option value="knife">Knife / 250 u/s</option></select></label>
-              <h2>Wall guides</h2>
-              <Toggle label="Impact pattern (left)" checked={settings.showImpactPattern} onChange={v => update({ showImpactPattern: v })} />
-              <Toggle label="Mouse movement (right)" checked={settings.showMousePath} onChange={v => update({ showMousePath: v })} />
-              <Toggle label="Animated wall guides" checked={settings.animatedGuides} onChange={animatedGuides => update({animatedGuides})}/>
-              <h2>Viewmodel</h2>
-              <Slider label="Viewmodel FOV" value={settings.viewmodel.fov} min={54} max={68} onChange={fov => update({viewmodel: {...settings.viewmodel, fov}})}/>
-              <Slider label="Viewmodel offset X" value={settings.viewmodel.x} min={-2.5} max={2.5} step={.1} onChange={x => update({viewmodel: {...settings.viewmodel, x}})}/>
-              <Slider label="Viewmodel offset Y" value={settings.viewmodel.y} min={-2} max={2} step={.1} onChange={y => update({viewmodel: {...settings.viewmodel, y}})}/>
-              <Slider label="Viewmodel offset Z" value={settings.viewmodel.z} min={-2} max={2} step={.1} onChange={z => update({viewmodel: {...settings.viewmodel, z}})}/>
-              <button className="secondary" onClick={() => update({viewmodel: classicViewmodel})}><RotateCcw size={15}/>Classic position</button>
-              <p className="setting-explanation">Same values as CS2&apos;s viewmodel_fov and viewmodel_offset_x/y/z (right, forward, up). Import CS2 config under Keyboard / Mouse reads them from autoexec.cfg or CS2&apos;s saved settings.</p>
-              <h2>Graphics</h2><label className="select-row">Render quality<select aria-label="Render quality" value={settings.quality} onChange={e => update({ quality: e.target.value as Settings['quality'], ...(e.target.value === 'performance' ? {frameLimit:60} : {}) })}><option value="auto">Adaptive</option><option value="performance">Performance (older PCs)</option><option value="low">Low</option><option value="high">High</option></select></label>
-              <label className="select-row">Frame limit<select aria-label="Frame limit" value={settings.frameLimit} onChange={e => update({frameLimit: +e.target.value})}>{frameLimitOptions(displayHz, settings.frameLimit).map(n => <option key={n} value={n}>{n ? `${n} FPS` : displayHz ? `Display refresh rate (${displayHz} FPS)` : 'Display refresh rate'}</option>)}</select></label>
-              <p className="setting-explanation">Browsers draw at most once per display refresh, so Display refresh rate is the highest frame rate this PC allows: up to 500 FPS on a 500 Hz monitor, when the PC keeps up.{displayHz ? ` This display measures ${displayHz} Hz.` : ''}</p>
-              <Toggle label="Low-latency rendering" checked={settings.lowLatency} onChange={lowLatency => update({lowLatency})}/>
-              <p className="setting-explanation">Chrome and Edge show each frame without waiting for the page compositor, about a frame sooner after you move the mouse. It can tear, like V-Sync off. Takes effect when you switch drills or reload.</p>
-              <Toggle label="Show FPS counter" checked={settings.showFps} onChange={showFps => update({showFps})}/>
-              <Toggle label="Protect range Ctrl+W" checked={settings.protectShortcuts} onChange={protectShortcuts => update({protectShortcuts})}/>
-              <label className="select-row">Resolution<select aria-label="Resolution" value={settings.resolution} onChange={e => update({ resolution: e.target.value as Resolution })}>{resolutions.map(r => <option key={r} value={r}>{resolutionLabel(r)}</option>)}</select></label>
-              <p className="setting-explanation">Like CS2&apos;s Stretched scaling: the world and crosshair are stretched to fill the view, and the scene renders at that many rows. Your hands and weapon keep their proportions.</p>
-            </>}
-            {tab === 'crosshair' && <>
-              <div className="crosshair-preview" aria-label="Crosshair preview"><div className="preview-target" /><CrosshairView value={settings.crosshair} /></div>
-              <div className="presets">{Object.entries(presets).map(([name, value]) => <button key={name} onClick={() => cross(value)}><div><CrosshairView value={value} /></div>{name}</button>)}</div>
-              <label className="color-row">Color<input type="color" aria-label="Crosshair color" value={settings.crosshair.color} onChange={e => cross({ color: e.target.value })} /></label>
-              <div className="swatches">{['#50ff76', '#52edff', '#ffef68', '#ffffff', '#ef79b3', '#f66556'].map(color => <button key={color} style={{ background: color }} aria-label={`Crosshair ${color}`} aria-pressed={settings.crosshair.color === color} onClick={() => cross({ color })}>{settings.crosshair.color === color && <Check size={14} color="#111" />}</button>)}</div>
-              {settings.cs2Crosshair && <p className="setting-explanation">Matches your CS2 crosshair convars at {settings.cs2Crosshair.screenHeight}p. Editing here replaces them; keys bound to crosshair convars, such as toggle aliases, still change it in game.</p>}
-              <Slider label="Length" value={settings.crosshair.size} min={0} max={40} step={.5} onChange={v => cross({ size: v })} />
-              <Slider label="Gap" value={settings.crosshair.gap} min={-10} max={30} step={.5} onChange={v => cross({ gap: v })} />
-              <Slider label="Thickness" value={settings.crosshair.thickness} min={.5} max={10} step={.5} onChange={v => cross({ thickness: v })} />
-              <Slider label="Outline" value={settings.crosshair.outline} min={0} max={3} step={.5} onChange={v => cross({ outline: v })} />
-              <Slider label="Opacity" value={settings.crosshair.alpha} min={.1} max={1} step={.05} onChange={v => cross({ alpha: v })} />
-              <Toggle label="Center dot" checked={settings.crosshair.dot} onChange={v => cross({ dot: v })} />
-              <Toggle label="T-style" checked={settings.crosshair.t} onChange={v => cross({ t: v })} />
-              <Toggle label="Dynamic gap" checked={settings.crosshair.dynamic} onChange={v => cross({ dynamic: v })} />
-            </>}
-            {tab === 'data' && <>
-              <h2>Audio</h2><Slider label="Weapon volume" value={Math.round(settings.volume * 100)} min={0} max={100} suffix="%" onChange={v => update({ volume: v / 100 })} />
-              <button className="secondary" onClick={async () => { await engine.current?.audio.unlock(settings.weapon); engine.current?.audio.play(settings.weapon, settings.volume); }}><Volume2 size={16} />Test {weaponNames[settings.weapon]}</button>
-              <h2>Data provenance</h2><dl className="data-list"><dt>Weapon data build</dt><dd>{gameData.build}</dd><dt>Recoil math inspected</dt><dd>{recoilProvenance.build}</dd><dt>Cadence, speed, magazine</dt><dd>Game weapon data</dd><dt>Models & shot samples</dt><dd>Local Valve assets</dd><dt>Spray trajectory</dt><dd>{profiles[settings.weapon] ? 'Capture-fitted impulses' : 'Native seeds + recovered recoil math'}</dd><dt>Recoil recovery</dt><dd>Persistent punch + recoil index</dd></dl>
-              <p className="settings-note">Weapon parameters match the latest local export. Recoil math was inspected on an earlier build; full trajectories, camera motion and subtick timing are not an exact CS2 reproduction.</p>
-              <p className="data-note">Recoil and firing inaccuracy persist between trigger presses. Recovery math is derived from the installed client; subtick movement, spread RNG and animation blending are not an exact CS2 reproduction.</p>
-              <label className="secondary file-button"><Upload size={16} />Import angular capture<input aria-label="Import angular capture" type="file" accept="application/json,.json" onChange={e => { void importProfile(e.target.files?.[0]); e.target.value = ''; }} /></label>
-              {profiles[settings.weapon] && <><p className="data-note">{profiles[settings.weapon]?.source} / build {profiles[settings.weapon]?.build}</p><button className="secondary" onClick={() => { const next = { ...profiles }; delete next[settings.weapon]; setProfiles(next); try { localStorage.setItem('spraylab.profiles.v1', JSON.stringify(next)); } catch { setNotice('Storage unavailable.'); } }}>Remove capture</button></>}
-              <button className="secondary" onClick={() => download('spraylab-session.json', { settings, results, legacy, profiles })}><Download size={16} />Export session</button>
-            </>}
-          </div><div className="drawer-footer"><button className="secondary" onClick={() => setSettings(s =>({ ...defaults, crosshair: { ...defaults.crosshair }, keyboard: s.keyboard }))}><RotateCcw size={15} />Restore defaults</button><button className="primary" onClick={() => setPanel(null)}><Check size={16} />Done</button></div>
-        </>}
+        {panel === 'settings' && <SettingsScreen settings={settings} profiles={profiles} update={update} cross={cross} close={closePanel} notify={setNotice} importProfile={importProfile}
+          restore={restoreSettings} removeCapture={removeCapture} exportSession={exportSession}/>}
         {panel === 'weapons' && <div className="drawer-content arsenal">
           <Toggle label="Carry a primary weapon" checked={settings.primaryEnabled} onChange={primaryEnabled=>update({primaryEnabled})}/>
           <label className="select-row">Sidearm<select aria-label="Sidearm" value={settings.sidearm} onChange={e=>update({sidearm:e.target.value as Pistol})}>{pistolIds.map(id=><option key={id} value={id}>{weaponNames[id]}</option>)}</select></label>

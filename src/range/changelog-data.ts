@@ -197,6 +197,11 @@ export const latestChanges = {
       'HUD values stay visible above the scope. FPS lives at top left; bot counts, rep feedback and touch controls adapt to smaller views.',
       'Inspect and scope controls are reachable in the range. Reload no longer starts the paused range through its HUD button.',
     ]},
+    {id: 'ui-settings', title: 'Full-screen settings', items: [
+      'Settings now has separate Game, Video, Crosshair, Keyboard / Mouse and Audio & Data tabs, with focused-setting help and a larger crosshair preview.',
+      'Saved controls, config imports and exports remain available. Restore defaults keeps the current drill and loadout; menus fit narrow screens.',
+      'Dynamic crosshair movement now inherits the engine offset correctly. Weapon audio can be tested from any drill.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

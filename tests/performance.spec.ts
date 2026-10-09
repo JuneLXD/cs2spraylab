@@ -57,8 +57,10 @@ test('performance preset and opt-in FPS work in both engines and persist', async
   await page.goto('/');
   await expect(page.getByLabel('Performance monitor')).toBeHidden();
   await page.getByRole('button',{name:'Settings',exact:true}).click();
+  await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await page.getByLabel('Render quality').selectOption('performance');
   await expect(page.getByLabel('Frame limit')).toHaveValue('60');
+  await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await page.getByLabel('Show FPS counter').check();
   await page.getByRole('button',{name:'Done',exact:true}).click();
   await expect(page.getByLabel('Performance monitor')).toBeVisible();
@@ -77,13 +79,16 @@ test('performance preset and opt-in FPS work in both engines and persist', async
   await expect.poll(async () => parseInt(await page.getByLabel('Performance monitor').innerText())).toBeGreaterThan(30);
   expect(await canvasColors(page,'canvas[data-range]')).toBeGreaterThan(8);
   const meter = (await page.getByLabel('Performance monitor').boundingBox())!, ammo = (await page.locator('.hud-ammo').boundingBox())!;
-  expect(meter.y).toBeGreaterThanOrEqual(ammo.y+ammo.height);
+  expect(meter.y + meter.height <= ammo.y || meter.x + meter.width <= ammo.x).toBe(true);
   await page.screenshot({path:`test-results/${info.project.name}-performance-monitor.png`});
   if (info.project.name.startsWith('mobile')) await page.getByRole('button',{name:'Pause range',exact:true}).click(); else await page.keyboard.press('Escape');
   await page.reload();
   await page.getByRole('button',{name:'Settings',exact:true}).click();
+  await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await expect(page.getByLabel('Render quality')).toHaveValue('performance');
+  await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await expect(page.getByLabel('Show FPS counter')).toBeChecked();
+  await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await page.getByLabel('Show FPS counter').uncheck();
   await page.getByRole('button',{name:'Done',exact:true}).click();
   await expect(page.getByLabel('Performance monitor')).toBeHidden();
@@ -107,7 +112,9 @@ test('toolbar FPS toggle stays synchronized with settings and mode changes', asy
   await expect(toggle).toHaveAttribute('aria-pressed','true');
   await expect(page.getByLabel('Performance monitor')).toBeVisible();
   await page.getByRole('button',{name:'Settings',exact:true}).click();
+  await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await expect(page.getByLabel('Show FPS counter')).toBeChecked();
+  await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await page.getByLabel('Show FPS counter').uncheck();
   await page.getByRole('button',{name:'Done',exact:true}).click();
   await expect(toggle).toHaveAttribute('aria-pressed','false');

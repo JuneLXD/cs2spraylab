@@ -260,6 +260,7 @@ for (const mode of ['duel', 'guided'] as const) {
     else {
       await page.getByLabel('Training mode').selectOption(mode);
       await page.getByRole('button', {name: 'Settings', exact: true}).click();
+      await page.getByRole('tab', {name: 'Video', exact: true}).click();
       await page.getByLabel('Protect range Ctrl+W', {exact: true}).uncheck();
       await page.getByRole('button', {name: 'Done', exact: true}).click();
     }

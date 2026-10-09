@@ -58,7 +58,7 @@ for (const frameLimit of [30, 240]) for (const shooter of [0, 1]) {
     expect(timing.deadPoseOnHitFrame).toBe(true);
     if (shooter) {
       expect(timing.health).toBe(0);
-      await expect(page.locator('.duel-health strong')).toHaveText('0');
+      await expect(page.locator('.duel-health strong').first()).toHaveText('0');
     } else {
       expect(timing.damage).toBe(1);
       expect(timing.caption).toBe('HEADSHOT');

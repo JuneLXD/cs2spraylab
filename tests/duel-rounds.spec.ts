@@ -53,7 +53,7 @@ test('rounds restart without another click or viewport changes; Escape pauses th
   expect(deathCamera.y).toBeLessThan(1.3); expect(deathCamera.roll).toBeGreaterThan(.05);
   await page.locator('canvas[data-duel]').screenshot({path: `test-results/duel-player-death-${info.project.name}.png`});
   await expect(page.locator('.duel-result')).toHaveCount(0, {timeout: 4000});
-  await expect(page.locator('.duel-health strong')).toHaveText('240');
+  await expect(page.locator('.duel-health strong').first()).toHaveText('240');
   expect(await page.locator('canvas[data-duel]').boundingBox()).toEqual(bounds);
   expect(await state()).toEqual(before);
   await forceDeath();

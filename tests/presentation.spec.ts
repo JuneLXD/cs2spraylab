@@ -115,6 +115,7 @@ test('viewmodels stay framed across portrait, landscape, ultrawide and stretched
     for (const aspect of ['native', '1920x1440']) {
       await page.bringToFront();
       await page.getByRole('button', {name: 'Settings', exact: true}).click();
+      await page.getByRole('tab', {name: 'Video', exact: true}).click();
       await page.getByLabel('Resolution', {exact: true}).selectOption(aspect);
       await page.getByRole('button', {name: 'Done', exact: true}).click();
       await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 45000});
@@ -124,6 +125,7 @@ test('viewmodels stay framed across portrait, landscape, ultrawide and stretched
       await reference.setViewportSize(viewport);
       await reference.bringToFront();
       await reference.getByRole('button', {name: 'Settings', exact: true}).click();
+      await reference.getByRole('tab', {name: 'Video', exact: true}).click();
       await reference.getByLabel('Resolution', {exact: true}).selectOption(aspect);
       await reference.getByRole('button', {name: 'Done', exact: true}).click();
       const empty = await reference.locator('canvas[data-range]').screenshot({scale: 'css'});

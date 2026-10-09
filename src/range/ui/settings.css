@@ -1,0 +1,118 @@
+.range-app .drawer.sl-settings-page {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  border: 0;
+  background: radial-gradient(ellipse at 48% 0, #202932 0, #11161b 48%, #07090c 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 64px minmax(0, 1fr) 76px;
+}
+.sl-settings-header, .sl-settings-body, .sl-settings-footer { min-width: 0; }
+.sl-settings-header {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  padding: 0 28px;
+  background: #07090ccf;
+  border-bottom: 1px solid var(--sl-hairline);
+}
+.sl-settings-header h1 { align-self: center; font: 700 25px var(--sl-font-display); letter-spacing: .16em; text-transform: uppercase; }
+.sl-settings-header .sl-tabs { border: 0; }
+.sl-settings-header .sl-icon-button { margin-left: auto; align-self: center; border: 0; }
+.sl-settings-body { min-height: 0; overflow: auto; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 28px; padding: 24px 28px; }
+.sl-settings-body.sl-settings-crosshair, .sl-settings-body.sl-settings-keyboard, .sl-settings-body.sl-settings-data { display: block; }
+.sl-settings-crosshair > .sl-settings-controls { height: 100%; }
+.sl-settings-page .sl-settings-controls { padding: 0; overflow: visible; min-width: 0; }
+.sl-settings-controls > h2 { margin: 24px 16px 6px; font: 700 13px var(--sl-font-display); letter-spacing: .18em; color: var(--sl-text-3); }
+.sl-settings-controls > h2:first-child { margin-top: 0; }
+.sl-settings-page .select-row { flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; min-height: 52px; padding: 8px 16px; margin: 0; font-size: 16px; }
+.sl-settings-page .select-row:nth-child(odd) { background: var(--sl-row-alt); }
+.sl-settings-page .select-row:hover, .sl-settings-page .select-row:focus-within { background: var(--sl-row-active); }
+.sl-settings-page .select-row select { width: 320px; max-width: 50%; height: 34px; padding: 4px 10px; font-size: 14px; }
+.sl-settings-page .sl-setting-row { min-height: 52px; padding: 8px 16px; font-size: 16px; }
+.sl-settings-page .sl-slider-control { width: 320px; max-width: 55%; }
+.sl-settings-page .two-fields { padding: 8px 16px; max-width: 700px; gap: 24px; }
+.sl-settings-page .two-fields label { font-size: 16px; }
+.sl-settings-page .two-fields input { height: 36px; text-align: left; font: 500 16px var(--sl-font-body); }
+.sl-settings-page .readout { min-height: 44px; padding: 8px 16px; margin: 0; align-items: center; border-color: var(--sl-hairline); font-size: 14px; }
+.sl-settings-page .readout b { font: 700 22px var(--sl-font-display); color: var(--sl-text); }
+.sl-settings-page .sl-settings-game > .sl-settings-controls > .setting-explanation,
+.sl-settings-page .sl-settings-video > .sl-settings-controls > .setting-explanation { display: none; }
+.sl-setting-help { align-self: start; position: sticky; top: 0; padding: 24px 22px; background: var(--sl-panel); border: 1px solid var(--sl-hairline); }
+.sl-setting-help > small { text-transform: uppercase; font: 700 12px var(--sl-font-display); letter-spacing: .18em; color: var(--sl-text-3); }
+.sl-settings-page .sl-setting-help h2 { margin: 6px 0 20px; font: 700 28px var(--sl-font-display); text-transform: none; color: var(--sl-text); }
+.sl-setting-help p { font-size: 15px; line-height: 1.55; color: var(--sl-text-body); }
+.sl-latency-diagram { margin-top: 18px; padding: 16px; background: var(--sl-row-alt); border: 1px solid var(--sl-hairline); }
+.sl-latency-diagram small { display: block; text-transform: uppercase; letter-spacing: .18em; color: var(--sl-text-3); font: 700 12px var(--sl-font-display); }
+.sl-latency-diagram > div { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; margin: 10px 0 16px; }
+.sl-latency-diagram > div:last-child { margin-bottom: 0; color: var(--sl-go-text); }
+.sl-latency-diagram span { padding: 5px 8px; border: 1px solid var(--sl-hairline-strong); background: var(--sl-field); }
+.sl-settings-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 28px; background: #0009; border-top: 1px solid var(--sl-hairline); }
+.sl-settings-footer .sl-button-primary { min-width: 180px; font-size: 22px; }
+.sl-crosshair-layout { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 28px; min-height: 100%; }
+.sl-crosshair-left { min-width: 0; }
+.sl-settings-page .crosshair-preview { height: clamp(250px, 49vh, 443px); border-radius: 0; border: 1px solid #ffffff4d; background: linear-gradient(#0001 1px, transparent 1px), linear-gradient(90deg, #0001 1px, transparent 1px), #98958c; background-size: 140px 140px; }
+.sl-settings-page .preview-target { width: 760px; height: 760px; left: calc(50% - 357px); top: calc(50% - 100px); background: url('/models/target.png') center / contain no-repeat; opacity: 1; }
+.sl-crosshair-zoom { transform: scale(4); }
+.sl-preview-label { position: absolute; top: 10px; left: 12px; padding: 2px 7px; color: white; background: #0009; font: 700 12px var(--sl-font-display); letter-spacing: .12em; text-transform: uppercase; z-index: 1; }
+.sl-crosshair-actual { position: absolute; bottom: 12px; right: 12px; width: 182px; height: 114px; display: grid; place-items: center; background: #98958c; border: 1px solid #0005; box-shadow: 0 4px 18px #0004; }
+.sl-settings-page .sl-crosshair-actual .preview-target { width: 100px; height: 100px; left: calc(50% - 47px); top: calc(50% - 14px); }
+.sl-crosshair-actual .sl-preview-label { font-size: 10px; top: 4px; left: 6px; }
+.sl-crosshair-left h2 { margin: 16px 0 10px; font: 700 13px var(--sl-font-display); letter-spacing: .18em; }
+.sl-settings-page .presets { margin: 0; gap: 10px; }
+.sl-settings-page .presets button { flex-direction: row; justify-content: start; gap: 12px; padding: 11px; min-height: 72px; border: 1px solid var(--sl-hairline-strong); background: var(--sl-panel); font: 700 18px var(--sl-font-display); letter-spacing: .04em; }
+.sl-settings-page .presets button[aria-pressed=true] { border-color: white; }
+.sl-settings-page .presets button > div { width: 48px; height: 48px; background: #706e64; flex: none; }
+.sl-settings-page .presets .crosshair { transform: scale(3); }
+.sl-crosshair-controls { border: 1px solid var(--sl-hairline); background: var(--sl-panel); }
+.sl-settings-page .color-row { padding: 16px 16px 0; text-transform: uppercase; font: 700 14px var(--sl-font-display); letter-spacing: .16em; }
+.sl-settings-page .color-row input { width: 42px; height: 34px; border: 1px solid var(--sl-hairline-strong); }
+.sl-settings-page .swatches { padding: 8px 16px 16px; margin: 0; gap: 10px; border-bottom: 1px solid var(--sl-hairline); }
+.sl-settings-page .swatches button { width: 34px; height: 34px; border-radius: 1px; }
+.sl-settings-page .setting-explanation { color: var(--sl-text-2); font-size: 13px; line-height: 1.5; }
+.sl-crosshair-controls .setting-explanation { padding: 12px 16px; }
+.sl-settings-page .data-list { max-width: 800px; font-size: 14px; gap: 16px; padding: 12px 16px; }
+.sl-settings-page .data-note, .sl-settings-page .settings-note { max-width: 800px; font-size: 14px; padding: 0 16px; color: var(--sl-text-2); }
+.sl-settings-page .keyboard-settings { max-width: 1100px; margin: 0 auto; font-size: 14px; }
+.sl-settings-page .kb-nav { background: #11161b; box-shadow: 0 -24px 0 #11161b, 0 1px 0 var(--sl-hairline); }
+.sl-settings-page .kb-nav button { font: 700 14px var(--sl-font-display); min-height: 36px; border-color: var(--sl-hairline); color: var(--sl-text-2); }
+.sl-settings-page .kb-row { min-height: 48px; border-color: var(--sl-hairline); padding: 8px 12px; }
+.sl-settings-page .kb-row:nth-child(odd) { background: var(--sl-row-alt); }
+.sl-settings-page .kb-option select, .sl-settings-page .kb-key, .sl-settings-page .kb-paste textarea, .sl-settings-page .kb-add-bind input { background: var(--sl-field); border-color: var(--sl-hairline-strong); color: var(--sl-text); }
+.sl-settings-page .kb-section h2 { font: 700 15px var(--sl-font-display); letter-spacing: .16em; }
+.sl-settings-page .kb-section .slider-row { max-width: 700px; padding: 8px 12px; }
+.sl-settings-page .kb-section .slider-row input { accent-color: var(--sl-text); }
+.sl-settings-page .kb-key button, .sl-settings-page .kb-add { min-height: 36px; }
+.sl-settings-page .kb-label { font-size: 15px; }
+.sl-settings-page .kb-report, .sl-settings-page .kb-capture, .sl-settings-page .kb-change { background: #19262f; border-color: var(--sl-ct); }
+
+@media (max-width: 1100px) {
+  .sl-settings-header { gap: 12px; padding: 0 16px; }
+  .sl-settings-header .sl-tabs button { padding-inline: 10px; font-size: 15px; }
+  .sl-settings-body { grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; padding: 20px; }
+  .sl-crosshair-layout { grid-template-columns: minmax(0, 1fr) 360px; gap: 20px; }
+  .sl-settings-page .presets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 850px) {
+  .range-app .drawer.sl-settings-page { grid-template-rows: auto minmax(0, 1fr) auto; }
+  .sl-settings-header { flex-wrap: wrap; gap: 0; padding: 0 16px; }
+  .sl-settings-header h1 { height: 56px; display: flex; align-items: center; font-size: 22px; }
+  .sl-settings-header .sl-tabs { order: 3; flex-basis: 100%; flex-wrap: nowrap; overflow-x: auto; }
+  .sl-settings-header .sl-tabs button { flex: none; min-height: 48px; padding: 10px 14px; white-space: nowrap; }
+  .sl-settings-body { display: block; padding: 20px 16px; }
+  .sl-setting-help { position: static; margin-top: 24px; }
+  .sl-crosshair-layout { display: block; }
+  .sl-settings-crosshair > .sl-settings-controls { height: auto; }
+  .sl-crosshair-controls { margin-top: 24px; }
+  .sl-settings-page .select-row { font-size: 14px; padding-inline: 8px; }
+  .sl-settings-page .select-row select { max-width: 52%; font-size: 13px; }
+  .sl-settings-page .sl-setting-row { padding-inline: 8px; font-size: 14px; }
+  .sl-settings-page .sl-slider-control { max-width: 57%; }
+  .sl-settings-footer { padding: 12px 16px; }
+  .sl-settings-footer .sl-button-primary { min-width: 120px; }
+  .sl-settings-page .presets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sl-settings-page { scroll-behavior: auto; }
+}

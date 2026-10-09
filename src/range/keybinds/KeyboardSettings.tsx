@@ -177,7 +177,7 @@ export function KeyboardSettings({settings, update, notify}: Props) {
 
     {keyboardPage.sections.map(section => <section key={section.id} id={rowId(section.id)} className="kb-section" aria-labelledby={`${rowId(section.id)}-title`}>
       <h2 id={`${rowId(section.id)}-title`}>{section.title}</h2>
-      {section.rows.map(row => {
+      {section.rows.filter(row => !(row.kind === 'slider' && row.convar === 'sensitivity') && !(row.kind === 'enum' && row.bindkey === 'mouse_y')).map(row => {
         if (row.kind === 'bind') return bindRow(row);
         if (row.kind === 'enum') {
           const [value, set] = enumValue(row) ?? ['', () => {}];

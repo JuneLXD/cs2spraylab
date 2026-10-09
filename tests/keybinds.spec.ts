@@ -44,7 +44,9 @@ test('Keyboard / Mouse mirrors CS2, imports autoexec.cfg and rebinds keys', asyn
   await expect(page.getByRole('group', {name: 'Move Forward', exact: true})).not.toContainText('W');
   await expect(page.getByRole('group', {name: 'Melee Weapons', exact: true})).toContainText('script');
   await expect(page.getByLabel('Duck Mode', {exact: true})).toHaveValue('1');
-  await expect(page.getByLabel('Mouse Sensitivity', {exact: true})).toHaveValue('1.5');
+  await page.getByRole('tab', {name: 'Game', exact: true}).click();
+  await expect(page.getByLabel('Sensitivity', {exact: true})).toHaveValue('1.5');
+  await page.getByRole('tab', {name: 'Keyboard / Mouse', exact: true}).click();
 
   await page.getByRole('button', {name: 'Add a key for Jump', exact: true}).click();
   await expect(page.locator('.kb-capture')).toContainText('Jump');

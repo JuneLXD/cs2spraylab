@@ -24,6 +24,7 @@ test('a first visit opens aim_redline with the AWP and its defaults', async ({pa
   for (const [label, checked] of [['Spawn on ledges', false], ['Headshot only', false], ['Bot armor', true], ['Bot helmet', false],
     ['Protect Ctrl+W', true]] as const) await expect(page.getByLabel(label, {exact: true})).toBeChecked({checked});
   await page.getByRole('button', {name: 'Settings', exact: true}).click();
+  await page.getByRole('tab', {name: 'Video', exact: true}).click();
   await expect(page.getByLabel('Render quality', {exact: true})).toHaveValue('high');
   await expect(page.getByLabel('Frame limit', {exact: true})).toHaveValue('0');
   for (const [label, checked] of [['Low-latency rendering', true], ['Show FPS counter', true], ['Protect range Ctrl+W', false]] as const)
