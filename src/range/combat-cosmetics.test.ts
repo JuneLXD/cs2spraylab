@@ -3,11 +3,11 @@ import {readFileSync, existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import data from './cosmetics-data.json';
 import audit from '../../docs/weapon-cosmetics-inventory.json';
-import {gameData} from './config';
 
 describe('new native weapon finish imports', () => {
   it('pins the installed build and authored item catalog', () => {
-    expect(audit.build).toBe(gameData.build); expect(data.build).toBe(gameData.build);
+    // A weapon-stat refresh does not re-export this independent item catalog.
+    expect(audit.build).toBe('2000924'); expect(data.build).toBe(audit.build);
     expect(audit.itemsSha256).toBe(data.itemsSha256);
   });
   it.each(['nova', 'xm1014', 'mag7', 'sawedoff', 'zeus'] as const)('%s has real distinct supported native pairings and matching asset files', id => {

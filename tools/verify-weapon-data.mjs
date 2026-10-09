@@ -6,8 +6,10 @@ import {execFileSync} from 'node:child_process';
 import {parseKv3} from './kv3.mjs';
 
 // Independent, read-only comparison against a fresh export of the installed archive.
-const game = process.env.CS2_PATH || 'C:/Program Files (x86)/Steam/steamapps/common/Counter-Strike Global Offensive';
-const cli = path.resolve('.local-tools/vrf/Source2Viewer-CLI.exe');
+const game = process.env.CS2_PATH || (process.platform === 'win32'
+  ? 'C:/Program Files (x86)/Steam/steamapps/common/Counter-Strike Global Offensive' : path.resolve('../cs2-game'));
+const cli = process.env.SOURCE2VIEWER || path.resolve(process.platform === 'win32'
+  ? '.local-tools/vrf/Source2Viewer-CLI.exe' : '.local-tools/vrf-linux/Source2Viewer-CLI');
 const file = path.resolve('research/weapon-stats-audit.vdata');
 fs.mkdirSync(path.dirname(file), {recursive:true});
 execFileSync(cli,['-i',`${game}/game/csgo/pak01_dir.vpk`,'-f','scripts/weapons.vdata_c','-d','-o',file],{stdio:'pipe'});
@@ -29,7 +31,7 @@ const flags={fullAuto:'m_bIsFullAuto',zoomLevels:'m_nZoomLevels',hideWhenZoomed:
   hasBurst:'m_bHasBurstMode',burstCycle:'m_flCycleTimeWhenInBurstMode',burstInterval:'m_flTimeBetweenBurstShots',
   unzoomsAfterShot:'m_bUnzoomsAfterShot',isRevolver:'m_bIsRevolver',showCrosshair:'m_bShowCrosshair'};
 const fixture={build,source:'scripts/weapons.vdata_c',sha256:crypto.createHash('sha256').update(raw).digest('hex'),
-  limitations:['Exported stats verified; damage hitgroup/armor arithmetic is separately tested, not native-engine emulated.','R8 windup is not present in weapons.vdata and remains an explicit trainer estimate.'],weapons:{}};
+  limitations:['Exported stats verified; damage hitgroup/armor arithmetic is separately tested, not native-engine emulated.','R8 windup is not present in weapons.vdata; separate native-fire-readiness-fixture.json verifies its thirteen-tick deadline.'],weapons:{}};
 for(const [id,weapon] of Object.entries(runtime.weapons)) {
   const source=native[`weapon_${aliases[id]||id}`]; assert(source,`Missing native ${id}`);
   const mode=index=>Object.fromEntries(Object.entries(fields).map(([key,field])=>{
@@ -50,5 +52,14 @@ for(const [id,weapon] of Object.entries(runtime.weapons)) {
   fixture.weapons[id]={primary,alternate,...controls,...ammo};
   console.log(`${id}: ${primary.damage} damage; ${primary.armorRatio/2*100}% armor penetration; ${primary.magazine} rounds; ${primary.cycle}s cycle. Both modes verified.`);
 }
+const tagging=JSON.parse(fs.readFileSync('src/range/tagging-data.json','utf8'));
+for(const [id,values] of Object.entries(tagging.weapons)) {
+  const source=native[`weapon_${aliases[id]||id}`];
+  assert(source,`Missing native tagging weapon ${id}`);
+  const speed=source.m_flMaxSpeed;
+  assert.deepEqual(values,{large:source.m_flFlinchVelocityModifierLarge,small:source.m_flFlinchVelocityModifierSmall,
+    speed:Array.isArray(speed)?speed[['usp','m4a1s'].includes(id)?1:0]:speed},`${id}.tagging`);
+}
 if(process.argv.includes('--write-fixture')) fs.writeFileSync('src/range/native-weapon-stats-fixture.json',JSON.stringify(fixture,null,2)+'\n');
 console.log(`Verified ${Object.keys(fixture.weapons).length} weapons against installed build ${build}; export SHA256 ${fixture.sha256}`);
+console.log(`Verified all three tagging parameters for ${Object.keys(tagging.weapons).length} weapons from the same export.`);

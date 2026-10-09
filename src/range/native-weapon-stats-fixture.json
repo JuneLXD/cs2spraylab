@@ -1,10 +1,10 @@
 {
-  "build": "2000924",
+  "build": "2000930",
   "source": "scripts/weapons.vdata_c",
-  "sha256": "3289d4dba65b1ef3f884c389448c8a6c6db8691442c18a7aaddb28434aaf250d",
+  "sha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b",
   "limitations": [
     "Exported stats verified; damage hitgroup/armor arithmetic is separately tested, not native-engine emulated.",
-    "R8 windup is not present in weapons.vdata and remains an explicit trainer estimate."
+    "R8 windup is not present in weapons.vdata; separate native-fire-readiness-fixture.json verifies its thirteen-tick deadline."
   ],
   "weapons": {
     "ak47": {
@@ -565,7 +565,7 @@
         "cycle": 0.1,
         "speed": 220,
         "deploy": 1.16667,
-        "reload": 3.766667,
+        "reload": 3.2,
         "spread": 0.0005,
         "stand": 0.0049,
         "crouch": 0.00368,
@@ -598,7 +598,7 @@
         "cycle": 0.1,
         "speed": 150,
         "deploy": 1.16667,
-        "reload": 3.766667,
+        "reload": 3.2,
         "spread": 0.0003,
         "stand": 0.00368,
         "crouch": 0.00311,

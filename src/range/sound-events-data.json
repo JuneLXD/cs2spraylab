@@ -9085,7 +9085,7 @@
         ]
       },
       "reload": {
-        "duration": 3.7666666666666666,
+        "duration": 3.2,
         "cues": [
           {
             "time": 0.5,
@@ -9093,27 +9093,22 @@
             "audience": "all"
           },
           {
-            "time": 1.4666666666666666,
+            "time": 1.3333333333333333,
             "key": "cue-ecf7788509d99bca",
             "audience": "all"
           },
           {
-            "time": 1.5666666666666667,
+            "time": 1.4,
             "key": "cue-01355d000345b6ef",
             "audience": "all"
           },
           {
-            "time": 2.033333333333333,
-            "key": "cue-53c87520706de249",
-            "audience": "all"
-          },
-          {
-            "time": 2.6,
+            "time": 2.066666666666667,
             "key": "cue-d7c4bf5e5fd3ca06",
             "audience": "all"
           },
           {
-            "time": 2.8333333333333335,
+            "time": 2.2333333333333334,
             "key": "cue-d3db2c21f5f43022",
             "audience": "all"
           }

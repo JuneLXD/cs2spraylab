@@ -98,5 +98,12 @@
     "impulseFraction": 0.055,
     "decayExponent": 18,
     "scope": "69 offline arithmetic cases and all 14 recorded AK camera anchors (maximum 0.000639 degree replay difference). Limited 157-frame spray-video comparison supports the added term; full camera trajectory and viewmodel animation parity remain unverified."
+  },
+  "currentWeaponDataAudit": {
+    "build": "2000930",
+    "inspectedAt": "2026-10-09",
+    "exportSha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b",
+    "parametersSha256": "9d53fe1149eb986be1f6e7e472e563a1240b0381d27e3f63d4d59297fc521c7a",
+    "scope": "All 2730 weapon-parameter comparisons match a fresh build 2000930 export after the AUG reload correction. Recoil parameters are unchanged; the separate table and RNG emulation remain pinned to their original build 2000924 binaries."
   }
 }

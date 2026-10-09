@@ -1,0 +1,72 @@
+{
+  "build": "2000930",
+  "scope": "Fresh installed archive export compared field by field against all 35 runtime weapons and both authored modes.",
+  "source": "scripts/weapons.vdata_c",
+  "exportSha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b",
+  "checks": 2730,
+  "beforeDifferences": [
+    {
+      "weapon": "aug",
+      "field": "primary.reload",
+      "expected": 3.2,
+      "actual": 3.766667
+    },
+    {
+      "weapon": "aug",
+      "field": "alternate.reload",
+      "expected": 3.2,
+      "actual": 3.766667
+    }
+  ],
+  "afterDifferences": [],
+  "fieldCoverage": [
+    "primary and alternate recoil seeds, angle, variance, magnitude, magnitude variance",
+    "stance, movement, firing, jump, initial jump, apex and landing inaccuracy",
+    "initial and final stand/crouch recovery and transition bullets",
+    "spread, cycle, speed, deploy and reload attack lock",
+    "damage, penetration, range, range modifier, armor ratio and headshot multiplier",
+    "zoom levels, FOV and duration; burst and revolver flags; ammo/reserve/pellet controls"
+  ],
+  "augReload": {
+    "source": "animation/anims/viewmodel/rifle/rifle_aug/reload_aug.vnmclip_c",
+    "compiledSha256": "ce685ae0afa884227b4daae03bd09d7e7affb593dadcfa52313466f4f35e647b",
+    "exportSha256": "f61a9f9d7f8636c2eaebbb60e9ba053878621b5d343e678fcccdf61bfe70e2b3",
+    "fps": 30,
+    "before": {
+      "attackLock": 3.766667,
+      "clipDuration": 3.7666666666666666,
+      "insertionFrame": 47,
+      "insertionSeconds": 1.5666666666666667
+    },
+    "after": {
+      "attackLock": 3.2,
+      "clipDuration": 3.2,
+      "insertionFrame": 42,
+      "insertionSeconds": 1.4
+    },
+    "silentWindowFrames": [
+      0,
+      89
+    ]
+  },
+  "limitations": [
+    "Parameter equality does not establish full current-engine behavior; native recoil table/RNG emulation previously targeted build 2000924.",
+    "Current cfg and gameinfo text files do not supply recoil smoothing/suppression or most movement/accuracy convar defaults. Existing native server console log directly establishes six movement defaults.",
+    "Native command seed derivation and JavaScript trigonometric float parity remain unverified.",
+    "Ladder inaccuracy and Negev firing-movement factor activation remain unverified; no speculative changes made.",
+    "Zeus falloff and knife/backstab arithmetic remain explicit approximations; the prior hitgroup/armor selector verification does not prove complete damage arithmetic."
+  ],
+  "localEvidence": [
+    "native-audit/reports/feel-audit-20261009/weapon-data-comparison.json",
+    "native-audit/reports/feel-audit-20261009/weapons.vdata",
+    "native-audit/reports/feel-audit-20261009/reload_aug.vnmclip",
+    "native-audit/reports/feel-audit-20261009/reload_aug.dmx"
+  ],
+  "reproduce": "CS2_PATH=../cs2-game systemd-run --user --scope --quiet -p MemoryMax=8G -p MemorySwapMax=0 node tools/verify-weapon-data.mjs",
+  "tagging": {
+    "weapons": 36,
+    "parametersPerWeapon": 3,
+    "differences": [],
+    "scope": "Fresh vdata large/small flinch multipliers and mode-specific movement speed. Old binary arithmetic fixture remains separately pinned."
+  }
+}

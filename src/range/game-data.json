@@ -1,7 +1,7 @@
 {
-  "build": "2000924",
+  "build": "2000930",
   "source": "scripts/weapons.vdata_c",
-  "sha256": "3289d4dba65b1ef3f884c389448c8a6c6db8691442c18a7aaddb28434aaf250d",
+  "sha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b",
   "weapons": {
     "ak47": {
       "magazine": 30,
@@ -604,7 +604,7 @@
       "range": 8192,
       "armorRatio": 1.8,
       "headshotMultiplier": 4,
-      "reload": 3.766667,
+      "reload": 3.2,
       "fullAuto": true,
       "worldModel": "weapons/models/aug/weapon_rif_aug.vmdl",
       "skeleton": "animation/skeletons/weapons/aug.vnmskel",
@@ -643,7 +643,7 @@
         "range": 8192,
         "armorRatio": 1.8,
         "headshotMultiplier": 4,
-        "reload": 3.766667
+        "reload": 3.2
       },
       "zoomLevels": 1,
       "zoomFov": [

@@ -642,10 +642,10 @@
       "assetKey": "aug",
       "variant": "hd",
       "assemblyVersion": 5,
-      "build": "2000922",
+      "build": "2000930",
       "sourceModel": "agents/models/ctm_sas/ctm_sas.vmdl_c",
-      "sourceSha256": "52bd6b57aa45723fca98f9190c804c24522d221694113377ee42399bff2148ce",
-      "bindSha256": "c4025873ba22df5d31f0ec5e0e58ce0cdd712875a5bdd67c55585863a345e993",
+      "sourceSha256": "4df5f1e10809ed9876c71e62d4b31a5150e97bc77f4e27eadabea4a702c52faf",
+      "bindSha256": "28848e1ab436b83c1874f72d642340196ad030bfbce2553a7c2a1ab4f41b48ad",
       "skeleton": "animation/skeletons/weapons/aug.vnmskel",
       "pickup": "reuse-native-draw",
       "clips": {
@@ -658,7 +658,7 @@
           "maxPartMatrixError": 1.1368683772161603e-13,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "draw": {
@@ -670,7 +670,7 @@
           "maxPartMatrixError": 7.450580596923828e-9,
           "maxMountMatrixError": 1.4901161193847656e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "inspect": {
@@ -682,19 +682,19 @@
           "maxPartMatrixError": 5.960464477539063e-8,
           "maxMountMatrixError": 2.384185791015625e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "reload": {
           "path": "animation/anims/viewmodel/rifle/rifle_aug/reload_aug.vnmclip_c",
-          "crc": "008275cfbe",
-          "bytes": 33785,
-          "seconds": 3.7666666666666666,
-          "samples": 114,
+          "crc": "00adefa85d",
+          "bytes": 29661,
+          "seconds": 3.2,
+          "samples": 97,
           "maxPartMatrixError": 2.384185791015625e-7,
-          "maxMountMatrixError": 2.086162567138672e-7,
+          "maxMountMatrixError": 1.1920928955078125e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "fire": {
@@ -706,7 +706,7 @@
           "maxPartMatrixError": 5.960464477539063e-8,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "fire-scoped": {
@@ -718,7 +718,7 @@
           "maxPartMatrixError": 5.960464477539063e-8,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         }
       },
@@ -745,16 +745,16 @@
         }
       },
       "meshes": [
-        "agents\\models\\ctm_sas\\ctm_sas.vmdl_c.firstperson_default_gloves_arms",
-        "agents\\models\\ctm_sas\\ctm_sas.vmdl_c.firstperson_sleeves",
+        "agents/models/ctm_sas/ctm_sas.vmdl_c.firstperson_sleeves",
+        "agents/models/ctm_sas/ctm_sas.vmdl_c.firstperson_default_gloves_arms",
         "weapons\\models\\aug\\weapon_rif_aug.vmdl_c.body_hd"
       ],
       "limitations": [
         "Native twist/IK runtime solvers are not reproduced; authored arm tracks retained.",
         "Call prepareNativeViewAssembly after GLTF load to prevent stale skinned frustum bounds."
       ],
-      "bytes": 3209020,
-      "sha256": "7bdb3e8223a25ca276c387ac3c4dbaf3d05a97a36eac30838aa82550f97f09f6"
+      "bytes": 3298088,
+      "sha256": "e116e778fd86b2de60b35ef83d7f6c6786d89eecead80a90dfe87e5d9c299bb0"
     },
     "mp9": {
       "assetKey": "mp9",
@@ -3882,10 +3882,10 @@
       "assetKey": "aug-legacy",
       "variant": "legacy",
       "assemblyVersion": 5,
-      "build": "2000922",
+      "build": "2000930",
       "sourceModel": "agents/models/ctm_sas/ctm_sas.vmdl_c",
-      "sourceSha256": "52bd6b57aa45723fca98f9190c804c24522d221694113377ee42399bff2148ce",
-      "bindSha256": "c4025873ba22df5d31f0ec5e0e58ce0cdd712875a5bdd67c55585863a345e993",
+      "sourceSha256": "4df5f1e10809ed9876c71e62d4b31a5150e97bc77f4e27eadabea4a702c52faf",
+      "bindSha256": "28848e1ab436b83c1874f72d642340196ad030bfbce2553a7c2a1ab4f41b48ad",
       "skeleton": "animation/skeletons/weapons/aug.vnmskel",
       "pickup": "reuse-native-draw",
       "clips": {
@@ -3898,7 +3898,7 @@
           "maxPartMatrixError": 1.1368683772161603e-13,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "draw": {
@@ -3910,7 +3910,7 @@
           "maxPartMatrixError": 7.450580596923828e-9,
           "maxMountMatrixError": 1.4901161193847656e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "inspect": {
@@ -3922,19 +3922,19 @@
           "maxPartMatrixError": 5.960464477539063e-8,
           "maxMountMatrixError": 2.384185791015625e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "reload": {
           "path": "animation/anims/viewmodel/rifle/rifle_aug/reload_aug.vnmclip_c",
-          "crc": "008275cfbe",
-          "bytes": 33785,
-          "seconds": 3.7666666666666666,
-          "samples": 114,
+          "crc": "00adefa85d",
+          "bytes": 29661,
+          "seconds": 3.2,
+          "samples": 97,
           "maxPartMatrixError": 2.384185791015625e-7,
-          "maxMountMatrixError": 2.086162567138672e-7,
+          "maxMountMatrixError": 1.1920928955078125e-7,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "fire": {
@@ -3946,7 +3946,7 @@
           "maxPartMatrixError": 5.960464477539063e-8,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         },
         "fire-scoped": {
@@ -3958,7 +3958,7 @@
           "maxPartMatrixError": 5.960464477539063e-8,
           "maxMountMatrixError": 5.960464477539063e-8,
           "quaternionContinuity": true,
-          "armSlot": "OBagents\\models\\ctm_sas\\ctm_sas.vmdl_c",
+          "armSlot": "OBagents/models/ctm_sas/ctm_sas.vmdl_c",
           "weaponSlot": "OBanimation/skeletons/weapons/aug.vnmskel"
         }
       },
@@ -3985,16 +3985,16 @@
         }
       },
       "meshes": [
-        "agents\\models\\ctm_sas\\ctm_sas.vmdl_c.firstperson_sleeves",
-        "agents\\models\\ctm_sas\\ctm_sas.vmdl_c.firstperson_default_gloves_arms",
+        "agents/models/ctm_sas/ctm_sas.vmdl_c.firstperson_sleeves",
+        "agents/models/ctm_sas/ctm_sas.vmdl_c.firstperson_default_gloves_arms",
         "weapons\\models\\aug\\weapon_rif_aug.vmdl_c.body_legacy"
       ],
       "limitations": [
         "Native twist/IK runtime solvers are not reproduced; authored arm tracks retained.",
         "Call prepareNativeViewAssembly after GLTF load to prevent stale skinned frustum bounds."
       ],
-      "bytes": 2487716,
-      "sha256": "19dc3ba90e455e21a3462b9b1506fab0d35b07ecd969ec95170a5967819e6f13"
+      "bytes": 2476096,
+      "sha256": "f19c159934a75cd238e99dfea5d15e761d54ba375c2de21feebd9a2fcade2e54"
     },
     "mp7-legacy": {
       "assetKey": "mp7-legacy",

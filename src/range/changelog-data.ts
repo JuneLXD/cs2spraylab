@@ -305,6 +305,11 @@ export const latestChanges = {
       'Follow recoil and range guides now use the same recoil sample as the camera on every rendered frame, removing up to four pixels of stale recoil in the measured AK spray.',
       'The follow crosshair uses the client\'s pixel snapping and center deadband; damage moves the camera without being added to the crosshair\'s target direction.',
     ]},
+    {id: 'native-aug-reload', title: 'Current CS2 AUG reload', items: [
+      'The AUG reload now unlocks at 3.2 seconds and inserts ammo at 1.4 seconds, matching the installed game instead of the older 3.767/1.567-second timings.',
+      'Both AUG viewmodel variants and their reload sounds were rebuilt from the same current animation, keeping the magazine motion, ammo counter and foley aligned.',
+      'A fresh comparison checked every weapon\'s imported primary/alternate stats; the AUG reload was the only parameter change found.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

@@ -101,16 +101,17 @@
     "aug": {
       "normal": {
         "source": "animation/anims/viewmodel/rifle/rifle_aug/reload_aug.vnmclip_c",
-        "sha256": "b9fb8bd5ba436e6d392a79c115ef7bb77b2065c657064bcec410c728b09cbd75",
+        "sha256": "ce685ae0afa884227b4daae03bd09d7e7affb593dadcfa52313466f4f35e647b",
         "fps": 30,
-        "duration": 3.7666666666666666,
-        "insert": 1.5666666666666667,
+        "duration": 3.2,
+        "insert": 1.4,
         "silent": [
           {
             "start": 0,
             "end": 2.966666666666667
           }
-        ]
+        ],
+        "build": "2000930"
       }
     },
     "mp9": {

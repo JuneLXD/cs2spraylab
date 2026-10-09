@@ -6,7 +6,8 @@ import {selectViewClips, supportedViewIds} from './native-view-clips.mjs';
 import {auditViewActions} from './native-view-clips.mjs';
 
 const game = process.env.CS2_PATH || 'C:/Program Files (x86)/Steam/steamapps/common/Counter-Strike Global Offensive';
-const cli = path.resolve('.local-tools/vrf/Source2Viewer-CLI.exe');
+const cli = process.env.SOURCE2VIEWER || path.resolve(process.platform === 'win32'
+  ? '.local-tools/vrf/Source2Viewer-CLI.exe' : '.local-tools/vrf-linux/Source2Viewer-CLI');
 const blender = process.env.BLENDER || 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe';
 const run = args => execFileSync(cli, ['-i', `${game}/game/csgo/pak01_dir.vpk`, ...args], {encoding: 'utf8', stdio: 'pipe', maxBuffer: 50e6});
 const listing = run(['-l', '-f', 'animation/anims/viewmodel/', '-e', 'vnmclip_c']);
@@ -54,7 +55,7 @@ for (const id of ids) {
   Object.assign(spec, {signature, sourceSha256: hash(source), bindSha256: hash(bind)});
   fs.writeFileSync(specPath, JSON.stringify(spec, null, 2) + '\n');
   if (process.argv.includes('--extract-only')) continue;
-  execFileSync(blender, ['--background', '--factory-startup', '--python-exit-code', '1', '--python', 'art/build_reload.py', '--', specPath],
+  execFileSync(blender, ['--background', '--factory-startup', '--threads', '2', '--python-exit-code', '1', '--python', 'art/build_reload.py', '--', specPath],
     {stdio: 'inherit', maxBuffer: 30e6});
   const output = `public/revamp/models/view-${assetKey}.glb`;
   if (process.argv.includes('--no-optimize')) fs.copyFileSync(spec.output, output);

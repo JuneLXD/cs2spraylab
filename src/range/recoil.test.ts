@@ -11,10 +11,12 @@ import {createHash} from 'node:crypto';
 
 describe('installed CS2 recoil math', () => {
   it('pins current weapon data and recoil tables separately from the older full-math audit', () => {
-    expect(gameData.build).toBe(provenance.weaponDataAudit.build);
-    expect(createHash('sha256').update(JSON.stringify(gameData.weapons)).digest('hex')).toBe(provenance.weaponDataAudit.parametersSha256);
+    expect(gameData.build).toBe(provenance.currentWeaponDataAudit.build);
+    expect(gameData.sha256).toBe(provenance.currentWeaponDataAudit.exportSha256);
+    expect(createHash('sha256').update(JSON.stringify(gameData.weapons)).digest('hex')).toBe(provenance.currentWeaponDataAudit.parametersSha256);
     expect(provenance.build).toBe('2000908');
-    expect(provenance.tableAudit.build).toBe(gameData.build);
+    expect(provenance.tableAudit.build).toBe('2000924');
+    expect(provenance.tableAudit.build).toBe(provenance.weaponDataAudit.build);
     expect(provenance.tableAudit.clientSha256).toBe(provenance.weaponDataAudit.clientSha256);
   });
   it('matches every float in independently emulated tier0 RNG fixtures', () => {

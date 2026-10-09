@@ -60,3 +60,15 @@ sample and verifies the client pixel conversion. The former stale sample could
 differ by 4.01 pixels in a deterministic 240 Hz AK spray. The 0.22 weapon fraction,
 landing weapon dip, crouch eye curve and exact framebuffer/DPR parity remain
 unverified; no tuning was made without evidence.
+
+Pass 15 refreshes current weapon parameters and the AUG's reload controller,
+both viewmodel variants and audio cues: lock 3.766667→3.2 s, insertion
+1.566667→1.4 s. All 2,730 weapon and 108 tagging values now match the export;
+older binary/cosmetic provenance remains explicitly separate.
+
+Three targeted browser specs now validate real captured input, held-trigger
+continuity and rendered camera/follow recoil. Response probes report handler,
+simulation and render-submission time rather than physical display latency.
+See `cs2-feel-audit.md` for the before/after/commit table and exact remaining
+capture needs. The prepared four-sequence native recording plan is in
+`../native-audit/feel-capture/feel-capture-plan.json`; launching CS2 awaits approval.

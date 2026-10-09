@@ -647,6 +647,69 @@ possible. The client eye getter consumes interpolated view offsets, but the
 crouch setter curve was not traced. Those weapon/camera effects remain
 unchanged pending a controlled recording with world and weapon landmarks.
 
+## Current weapon data and AUG reload (fifteenth pass, 2026-10-09)
+
+A fresh Source 2 Viewer export of installed build 2000930's
+`scripts/weapons.vdata_c` has SHA-256
+`46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b`.
+`tools/verify-weapon-data.mjs` compares 2,730 values across all 35 runtime
+weapons and both authored modes, plus 108 tagging values across 36 weapons.
+Only the two AUG reload-lock values differed: 3.766667 s in the trainer versus
+3.2 s in the current game. All compared recoil, accuracy/recovery, spread,
+speed, cadence, scope, ammo and damage parameters match after that correction.
+`docs/native-weapon-data-evidence.json` retains coverage, hashes and differences.
+
+The current AUG reload clip independently lasts 3.2 s and inserts ammo at
+frame 42/30 = 1.4 s, replacing the old frame 47/30 = 1.566667 s. Its silent
+window remains frames 0..89. Both HD and legacy viewmodels were rebuilt from
+the current native clip using the existing Blender retarget pipeline, with 97
+samples, 302 reload channels and unchanged mesh/skin/node/clip counts. Maximum
+part matrix error is 2.38e-7 and attachment error 1.19e-7, below the existing
+1e-4 gate. All other clip durations remain unchanged. Merely scaling the old
+animation to 3.2 s would place its insertion pose about 69 ms too early.
+
+Reload foley was refreshed from the same clip: frames 15, 40, 42, 62 and 67;
+all cues resolve and the insertion sound occurs at 1.4 s. The public audio
+manifest and checked-in timeline agree. `../native-audit/verify-aug-refresh.py`
+reproduces structural/animation/audio validation; reports and old-asset backups
+are in `../native-audit/reports/aug-refresh-*`. Deploy must mirror the two
+gitignored AUG GLBs and the public audio manifest. `tools/build-reload.mjs`
+now supports the Linux converter and limits Blender to two threads; this audit
+used a checksum-verified portable Blender under `../native-audit/tools/`.
+
+Status: matched for current exported parameters, authored normal reload timing,
+animation and cue data. This is not a new live recording of every empty/silent
+reload branch. Older recoil-table emulation, binary tagging and cosmetics
+audits retain their own original build labels; refreshing vdata does not
+retroactively establish current-engine RNG or full damage arithmetic.
+
+The retained `../native-audit/reports/native-server-probe.log` directly reports
+acceleration 5.5, weapon-speed scaling enabled, friction 5.2, stop speed 80,
+gravity 800 and jump impulse 301.993. This strengthens those defaults beyond
+the tenth pass's static-data limitation. Other current-build defaults, including
+recoil suppression/smoothing and jump-spam thresholds, still need an explicit
+runtime/config source. None was changed from an unverified assumption.
+
+## Current audit validation and response measurements
+
+All three targeted Chromium specs pass: `input-timing`, `trigger-continuity`
+and `view-punch` (five cases total). They enter through the real menu and
+pointer-lock path. The controlled response harness times DOM pointer dispatch,
+the simulated shot and the first renderer submission on the next real rAF.
+`../native-audit/reports/feel-response/{duel,guided}.json` retains the samples.
+These are CPU/browser observations on the local software-rendered host, not
+GPU completion, monitor presentation or physical mouse-to-photon latency.
+Separate browser round trips for press/release can become a held spray while
+software rendering blocks; the tap test therefore dispatches them as one click.
+No production latency constant was tuned from these measurements.
+
+Native arithmetic totals: 66 movement, 62 readiness/windup and 42 crosshair
+samples; fresh data checks: 2,730 weapon and 108 tagging values. The full unit
+suite passes except the documented missing `public/models/ak47.json` fallback.
+TypeScript passes. Every Node check used MemoryMax=8G/MemorySwapMax=0; browser
+checks additionally used CPUQuota=400%, one worker and no concurrent repo edits.
+No new CS2 process was launched; additional capture approval is pending.
+
 ## Remaining limits
 
 Native aim-punch fields in this build describe decay anchors, not the current
