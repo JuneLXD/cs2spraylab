@@ -207,23 +207,37 @@ describe('deathmatch spawn protection', () => {
     expect(sanitizeDuelConfig({spawnImmunitySeconds: 99}).spawnImmunitySeconds).toBe(10);
     expect(sanitizeDuelConfig({spawnImmunitySeconds: 0}).spawnImmunitySeconds).toBe(0);
   });
-  it('protects everyone at spawn: a hit registers without damage until the timer runs out or the victim attacks', () => {
+  it('protects you only: a fresh bot can be shot at once, and your first shot ends your own protection', () => {
     const sim = deathmatch({botCount: 1, spawnImmunitySeconds: 3}), bot = sim.actors[1];
     sim.start();
-    expect(sim.snapshot().map(actor => actor.immune)).toEqual([true, true]);
+    expect(sim.snapshot().map(actor => actor.immune)).toEqual([true, false]);
     expose(sim, 1); aimAt(sim, 1); sim.command(1, {forward: 0, side: 0, fireHeld: false, firePressed: false});
     fire(sim);
     const hit = sim.drainEvents().find(event => event.kind === 'hit');
-    expect(hit && hit.kind === 'hit' ? [hit.victim, hit.healthDamage, hit.armorDamage, hit.immune] : 'no hit').toEqual([1, 0, 0, true]);
-    expect(bot.health).toBe(100);
-    // Your own shot ended your protection; the bot keeps its own until it shoots or 3 s pass.
+    expect(hit && hit.kind === 'hit' ? [hit.victim, hit.immune ?? false, hit.healthDamage > 0 || hit.lethal] : 'no hit').toEqual([1, false, true]);
+    expect(bot.health < 100 || !bot.alive).toBe(true);
     expect(sim.snapshot()[0].immune).toBe(false);
-    runFor(sim, 3.25);
-    expect(sim.snapshot()[1].immune).toBe(false);
-    expose(sim, 1); aimAt(sim, 1); sim.command(1, {forward: 0, side: 0, fireHeld: false, firePressed: false}); fire(sim);
-    expect(sim.actors[1].health < 100 || !sim.actors[1].alive).toBe(true);
   });
-  it('comes back with every respawn and shows you a countdown', () => {
+  it('a bot\'s hits on you cost nothing while you are protected, and the timer ends it', () => {
+    const sim = deathmatch({botCount: 1, spawnImmunitySeconds: 3}), player = sim.actors[0];
+    sim.start();
+    runFor(sim, 1); // past the bot's deploy
+    const health = player.health, armor = player.armor;
+    // Stand the bot in front of you, aim it at your head and hold its trigger for a short burst.
+    expose(sim, 1); const bot = sim.actors[1];
+    const dx = player.position.x - bot.position.x, dy = player.position.y - bot.position.y, dz = player.position.z - bot.position.z;
+    bot.yaw = Math.atan2(-dx, -dz); bot.pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
+    sim.command(1, {forward: 0, side: 0, firePressed: true, fireHeld: true});
+    for (let n = 0; n < 40; n++) sim.step();
+    sim.command(1, {fireHeld: false, firePressed: false});
+    const hits = sim.drainEvents().filter(event => event.kind === 'hit' && event.victim === 0);
+    expect(hits.length).toBeGreaterThan(0);
+    for (const hit of hits) if (hit.kind === 'hit') expect([hit.immune, hit.healthDamage, hit.armorDamage]).toEqual([true, 0, 0]);
+    expect([player.health, player.armor, player.alive]).toEqual([health, armor, true]);
+    runFor(sim, 2.5);
+    expect(sim.snapshot()[0].immune).toBe(false);
+  });
+  it('comes back with every one of your respawns and shows you a countdown', () => {
     const sim = deathmatch({botCount: 1, spawnImmunitySeconds: 2, respawnSeconds: 1});
     sim.start();
     runFor(sim, 2.25);

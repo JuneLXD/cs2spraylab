@@ -180,7 +180,8 @@ export class DuelSimulation {
       placeAt(this.actors[0], freeSpawnPose(this.teamSpawner.first('t'), this.arena));
       const behaviors = rosterBehaviors(this.config, seed);
       for (let index = 0; index < this.config.botCount; index++) this.actors.push(this.spawnDuelBot(index + 1, 1, behaviors[index]));
-      if (this.deathmatch) for (const actor of this.actors) actor.immuneUntil = this.time + this.config.spawnImmunitySeconds;
+      // Spawn protection is yours only: bots can be shot the moment they appear.
+      if (this.deathmatch) this.actors[0].immuneUntil = this.time + this.config.spawnImmunitySeconds;
       return;
     }
     if (this.botz?.map === 'island') {
@@ -641,7 +642,7 @@ export class DuelSimulation {
       this.respawnAt.delete(id);
       const old = this.actors[id];
       this.actors[id] = id === 0 ? this.spawnPlayer(old.generation + 1) : this.spawnDuelBot(id, old.generation + 1);
-      this.actors[id].immuneUntil = this.time + this.config.spawnImmunitySeconds;
+      if (id === 0) this.actors[id].immuneUntil = this.time + this.config.spawnImmunitySeconds;
       for (const map of [this.combatActions, this.usedAt, this.lastShotAt, this.lastHurtAt, this.lastDownAt, this.lastContactAt, this.lastCalloutAt]) map.delete(id);
     }
   }

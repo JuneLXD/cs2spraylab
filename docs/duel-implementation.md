@@ -172,9 +172,10 @@ parity until independent current-build fixtures and low-end GPU tests exist.
 ### Spawn protection (2026-10-09)
 
 `spawnImmunitySeconds` (default 4, the game's `mp_respawn_immunitytime`; 0-10 in
-the Deathmatch setup as "Spawn protection") makes every actor immune to damage
-after each spawn: hits still register (the hit event carries `immune: true`)
-but cost nothing, draw no blood and no flinch. Immunity ends when the actor
-attacks, as in the game, or when the timer runs out. The HUD shows you an
-IMMUNE countdown and immune bots render translucent (`immunity-alpha.ts`, the
-game's `sv_disable_immunity_alpha` behaviour).
+the Deathmatch setup as "Spawn protection") makes you immune to damage after
+each of your spawns: hits still register (the hit event carries `immune: true`)
+but cost nothing, draw no blood and no flinch. Immunity ends when you attack,
+as in the game, or when the timer runs out, and the HUD shows an IMMUNE
+countdown. Bots get no protection (the user's choice: a fresh spawn stays a
+target); `immunity-alpha.ts` would render an immune bot translucent, as the
+game's `sv_disable_immunity_alpha` behaviour, but no bot is ever immune.

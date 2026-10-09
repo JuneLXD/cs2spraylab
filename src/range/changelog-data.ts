@@ -287,7 +287,7 @@ export const latestChanges = {
       'A burst of blood marks every hit on a bot as feedback, oriented by the bullet and gone in half a second. Nothing sticks to walls or floors.',
     ]},
     {id: 'deathmatch-protection-fullscreen', title: 'Spawn protection and fullscreen on entry', items: [
-      'Deathmatch gives everyone the game\'s spawn protection (4 s by default, adjustable in the setup): hits do nothing until it ends or you attack. The HUD counts yours down and protected bots show translucent.',
+      'Deathmatch gives you the game\'s spawn protection (4 s by default, adjustable in the setup): bot hits do nothing until it ends or you attack, and the HUD counts it down. Bots get none, so a fresh spawn is a fair target.',
       'Settings > Browser has Fullscreen when you enter, on by default: entering or resuming a drill takes the browser fullscreen, and pausing keeps it.',
     ]},
   ] satisfies readonly ChangelogSection[],

@@ -43,7 +43,7 @@ export type DuelConfig = {
   respawnSeconds: number;
   /** Deathmatch only: sv_infinite_ammo for you. 'reserve' = 2 (reload, never run dry), 'magazine' = 1 (never reload); bots keep normal magazines. */
   infiniteAmmo: BotzAmmo;
-  /** Deathmatch: seconds of damage immunity after every spawn (mp_respawn_immunitytime, 4 in the game); attacking ends it early. */
+  /** Deathmatch: seconds of damage immunity after each of your spawns (mp_respawn_immunitytime, 4 in the game; bots get none here); attacking ends it early. */
   spawnImmunitySeconds: number;
 };
 

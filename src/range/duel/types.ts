@@ -35,7 +35,7 @@ export type DuelActorSnapshot = {
   aimPunch?: PunchAngle;
   deathDirection?: Vec;
   deathGroup?: Hitgroup;
-  /** Deathmatch spawn protection is active: shots do no damage and draw no blood. */
+  /** Deathmatch spawn protection (yours only) is active: shots do no damage and draw no blood. */
   immune?: boolean;
   /** Speed (m/s) the lethal shot gives the hit body part of the corpse. */
   deathImpulse?: number;
