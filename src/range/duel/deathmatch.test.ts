@@ -87,8 +87,8 @@ describe('deathmatch on aim_redline', () => {
     expect(ctSide(bot.position)).toBe(true);
     expect(sim.respawnIn(1)).toBe(0);
     expect(sim.drainEvents().some(event => event.kind === 'round')).toBe(false);
-    expect(sim.drops).toHaveLength(1);
-    expect(sim.drops[0].id).toBeGreaterThanOrEqual(1000);
+    // No weapon is left behind: everyone comes back with their own loadout.
+    expect(sim.drops).toHaveLength(0);
   });
 
   it('a dead player respawns on the T side with the original loadout, full health and armor, counting the death', () => {

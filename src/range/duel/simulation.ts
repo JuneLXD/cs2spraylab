@@ -536,7 +536,8 @@ export class DuelSimulation {
         this.emit(event);
         continue;
       }
-      if (lethal && victim.side === 'enemy' && victim.weapon.id !== 'knife') this.drops.push({
+      // Deathmatch leaves no weapons on the floor: everyone respawns with their own loadout.
+      if (lethal && victim.side === 'enemy' && victim.weapon.id !== 'knife' && !this.deathmatch) this.drops.push({
         // Respawning bots die many times: each drop needs its own id.
         id: this.deathmatch ? this.dropSequence++ : victim.id, equipment: victim.weapon.id, ammo: victim.weapon.ammo,
         reserve:victim.weapon.reserve,
