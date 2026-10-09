@@ -76,7 +76,10 @@ for (const mode of ['duel', 'guided'] as const) {
       e.inputClock.reset(performance.now());
       e.renderer.domElement.focus();
     }, mode);
-    await page.mouse.down(); await page.mouse.up();
+    // Dispatch the pair together. Separate down/up round trips can hold the
+    // trigger for several cycles while software WebGL blocks the main thread.
+    const box = (await page.locator(selector).boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
     const fired = await page.evaluate(mode => {
       const e = (window as any).timingEngine;
       return {ammo: mode === 'duel' ? e.sim.actors[0].weapon.ammo : e.sim.loadedAmmo,
