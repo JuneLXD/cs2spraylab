@@ -1122,6 +1122,50 @@ retimes are not inferred from this correction. [Detailed evidence](reaudit-anima
 
 
 
+## Published input and motion histories (thirty-second pass, 2026-10-09)
+
+[Detailed evidence and limits](reaudit-presentation-history.md). This pass
+changes probes and documentation only; R8 follow-up remains excluded.
+
+- Two approved AK windows retain 4,861 guarded numeric rows, 2,574 demo ticks
+  and 2,406 decoded video frames. Maximum video gaps are 34/33 ms; numeric gaps
+  are 110.937/32.314 ms. Game and sampler exit zero; owned Steam stops cleanly.
+- All 4,088 input-entry occurrences (2,458 distinct records) match the sampled
+  published render/player pairs. Three selected first-press player pairs equal
+  their camera anchors. Eight live/demo camera pairs agree exactly after the
+  documented carrier conversion and float32 recovery.
+- Five held follow-ups preserve the captured burst phase under both cycle-pair
+  addition and a conditional native-cache replay. Resolver entry clock and
+  exact/interpolated/last/no-history status remain unobserved. The new
+  0.139646–0.153806 ms anchor/deadline gaps differ from older recordings;
+  ordinary processing still trails deadlines by 1.220696–14.892578 ms.
+- Velocity registration/group refresh/typed setter now bind count, offset and
+  cache invalidation. Every captured active ring has count one and offset1/64;
+  only one ring is enabled, correcting any two-context interpretation of
+  prior captures. Other branches and latch scheduling remain partial.
+- TransformHistory has its own 96-byte layout and several current-record
+  writers. Runtime008 rejects every transform read at an omitted subclass
+  gate. Exact inheritance and virtual bindings justify a narrow reader fix;
+  those old readouts remain invalid and the fixed reader needs a new live run.
+- Retained draw/shell investigation continues under
+  `native-audit/reports/animation-draw-shell`: deploy/reload tokens and selected
+  graph rates are bound. A candidate immediate graph evaluator forwards a
+  separate frame delta, but its concrete receiver/caller remains unbound.
+  The pass31 worker clock is one established path, not proof of the sole
+  displayed-model clock. Native action onset and shell deadlines remain open.
+
+Tools: `reaudit-frame-history-{proof,capture-fields,report}.py`,
+`reaudit-held-anchor-replay.py`, `reaudit-velocity-offset-{proof,capture-fields}.py`
+and `reaudit-transform-history-{static,capture-fields}.py`. Portable numeric
+fixtures and summaries are under `docs/evidence`; raw locations stay in tools
+and local audit artifacts. Full inventory remains 135 rows and incomplete.
+
+Validation: native, synthetic decoder and portable replay checks pass; final
+probe/fixture hashes agree. TypeScript passes; full units have 2,367 passes and
+only the known missing fallback-model fixture failure. Both Chromium camera
+cases pass in 27.1 seconds. Runs were serialized under host caps, with deploy
+paused and repository files frozen during browser execution.
+
 ## Passes 30–31 integration validation
 
 TypeScript passes. The full unit suite has 2,367 passes and only the documented

@@ -1,4 +1,4 @@
-# CS2 independent re-audit: passes 16–31
+# CS2 independent re-audit: passes 16–32
 
 Nine evidenced corrections follow baseline `c488943`: movement (`79832e6`),
 scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
@@ -25,6 +25,9 @@ tick base, narrows turn projections and binds construction/publication order.
 [Pass 29](reaudit-animation.md#pass-29-action-clocks-evidence-only) measures
 actual action clocks and records the AK reload pose/event mismatch. Pass 31
 binds the current first-person graph clock and corrects that narrow retime.
+[Pass 32](reaudit-presentation-history.md) captures published/input frame clocks,
+first-press camera anchors and velocity-offset producer fields. It also records
+the rejected transform reader and its narrowly corrected class gate.
 R8-specific follow-up is excluded at the user’s request.
 
 Current binary/config provenance is retained in
@@ -79,6 +82,15 @@ No active Ghidra request is cancelled or restarted.
 - AK reload: current Arms graph clock passes 40 native cases. Authored insertion
   pose crossing changes 1.115069→1.1 seconds; ammo/readiness remain unchanged.
   Exact native action onset and display phase remain outside this rate correction.
+- Pass 32 evidence: 4,088 input-entry occurrences match published clock pairs;
+  three fresh-press anchors and eight demo/live camera pairs match exactly.
+  Five held follow-ups match a conditional float32 cache replay. All 4,861
+  velocity rows have the bound one-tick offset; transform reads were rejected
+  and their corrected class gate still needs live validation. Production is unchanged.
+- Pass 32 validation: native/decoder/portable probes and TypeScript pass;
+  2,367 unit cases pass with only the known missing fallback fixture failure.
+  Both Chromium camera cases pass in 27.1 seconds, with serialized capped
+  execution and repository files frozen throughout the browser run.
 - Passes 30–31 validation: TypeScript and portable probes pass; 2,367 unit
   cases pass with only the known missing fallback fixture. All three targeted
   Chromium cases are verified: both camera checks and actual Duel AK reload
@@ -203,7 +215,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-response.md
 | Input→simulation→render | Native video lacks synchronized device edge/presentation instrumentation | Browser tests record DOM dispatch, shot and renderer submission; no production delay tuned | CPU/browser response measured; native and physical mouse-to-photon unverified | `c488943` |
 | Frame pacing | Native engine presentation is outside demo sampling | Synthetic60/144/240Hz clocks, limits0/60/120; uncapped renders every supplied frame; unchanged | Trainer measured, native comparison unverified | `c488943` |
 | Low-latency canvas | No native presentation equivalence established | Requests desynchronized WebGL2 when enabled, rejects software-renderer path, falls back to regular context; unchanged | Browser implementation only; actual scanout benefit unverified | `c488943` |
-| Shot camera / aim punch | Current client/server: 512 sampler cases, 72 impulses, 4 explicit anchors; 52 AK shots and 386 scene frames ([pass 22](reaudit-camera-clocks.md)) | .45 physical punch share plus camera kick; processing-clock class replay differs up to 0.499441°; no speculative change | Arithmetic matched; presented-frame selection established in pass 23; runtime phase and continuous video comparison remain partial | `e85f59a`; evidence only in pass 22 |
+| Shot camera / aim punch | Current client/server arithmetic; pass32 adds 8 exact demo/live anchor pairs, 3 selected first-press matches and 5 conditional held-anchor replays ([history](reaudit-presentation-history.md)) | .45 physical punch share plus camera kick; processing-clock class replay differs up to 0.499441°; no speculative change | Arithmetic matched; native published/input pairs now observed; browser mapping, resolver phase and continuous video comparison remain partial | `e85f59a`; evidence only in passes 22/32 |
 | Crosshair on shot | Current-client saved pixel conversion and recoil-follow evidence; earlier bounded arithmetic retained | Render-time sample and pixel snapping retained; unchanged in this pass | Bounded prior arithmetic independently traced; new video parity unverified | `c488943` |
 | Viewmodel on shot | Current native camera/HUD caller chain, 0.325 combined physical share and 108 executed orientation cases ([pass 23](reaudit-viewmodel-recoil.md)) | .22 local Euler rotation replaced by native world-angle share converted to weapon camera space; damage punch included | Isolated recoil rotation matched; full animated landmarks and timing remain open | `5132783` |
 | Muzzle flash / tracer onset | Native clip event tracks and tracer data; see animation/combat inventories | Simulated shot triggers pooled flash/tracer; native cadence option retained | Approximated particles and renderer timing | `c488943` |
@@ -374,6 +386,13 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
     projection, but almost every sample is outside an active processing marker.
     That match does not establish invocation identity or a free-running replay.
     Constructor defaults also do not establish an existing-instance reset policy.
+38. Runtime006/007 did not capture two velocity rings: each had one active ring.
+    Pass32 binds its offset producer and observes the matching group pair;
+    unused second-context values cannot establish that context's runtime law.
+39. A transform current record is not necessarily the last interpolated result.
+    Its recording and fallback getters also write it. The first runtime008
+    reader rejected the actual pawn subclass; fixing its class gate does not
+    retroactively validate those samples.
 
 ## Exact remaining evidence and implementation
 
@@ -390,11 +409,11 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   boundary presses; constrained unduck and partial-duck takeoffs; matched
   stairs, slopes, surface friction and ladders; rendered camera frames paired
   with camera-service offsets.
-- Camera clocks: selected attack-history index and player/render pairs, resolver
-  branch/cache and current-time/domain state per shot; actual presented-frame
-  clocks and prediction phase. [Client construction](reaudit-client-history.md)
-  is now traced statically. [Pass 22](reaudit-camera-clocks.md)
-  records the exact remaining metadata and rules out a fitted schedule offset.
+- Camera clocks: [pass32](reaudit-presentation-history.md) observes selected
+  player/render pairs and first-press camera anchors. Still needed: serialized
+  history after reduction, resolver branch/cache and entry/domain state per
+  shot, exact sampler phase, and the trainer's corresponding saved frame clock.
+  Both older and new recordings rule out a fitted universal schedule offset.
 - Presentation/audio: continuous timestamped native camera and gun landmarks
   through shots, recovery, crouch, landing and zoom; footstep material,
   listener-distance, water/ladder and separate jump/landing sound paths.
@@ -403,7 +422,8 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   cache. Pass27 binds the history writer and ordinary body-yaw owner/rules.
   Pass30 adds 1,427 exact selected-cache comparisons and captured controller tick
   base; the recorded seed matches all 372 stationary-turn projections. Full bob
-  still needs ring-offset/latch producers, call-associated entry/exit clocks,
+  has a bound ring-offset producer in pass32 but still needs latch ordering,
+  call-associated entry/exit clocks,
   consecutive body transitions, existing-instance resets and selected transform
   history beside its evaluation context. Sway needs input/writer/prediction ordering and
   HUD phase beyond the captured exact-endpoint arithmetic.

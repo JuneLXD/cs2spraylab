@@ -17,7 +17,16 @@ parser.add_argument('--output',required=True,help='New directory name under nati
 parser.add_argument('--velocity-history',action='store_true',help='Include bounded native velocity ring entries and metadata')
 parser.add_argument('--scene-writer',action='store_true',help='Include native body state, prepared inputs and command clocks')
 parser.add_argument('--body-clock',action='store_true',help='Include controller tick base and active movement-clock markers')
+parser.add_argument('--transform-history',action='store_true',help='Include separately bound TransformHistory records and guards')
+parser.add_argument('--velocity-offset',action='store_true',help='Include bound interpolation-group offset producer fields')
+parser.add_argument('--frame-history',action='store_true',help='Include engine presented frames, input records and camera punch anchors')
 args=parser.parse_args()
+engine_digest=None
+if args.frame_history:
+ engine_digest=hashlib.sha256()
+ with (ROOT.parent/'cs2-game/game/bin/linuxsteamrt64/libengine2.so').open('rb') as source:
+  for chunk in iter(lambda:source.read(1048576),b''):engine_digest.update(chunk)
+ assert engine_digest.hexdigest()=='f5745c46cb38b1d120c3c7c5f0f19590f46c3d1bd136ee527b276cce8bfaba14'
 assert Path(args.output).name==args.output
 out=ROOT/'reports'/args.output;out.mkdir(exist_ok=True)
 assert not (out/'samples.jsonl').exists(), 'Retain previous capture; use a fresh output path'
@@ -26,18 +35,26 @@ reader_specs=[('reaudit-sway-capture-fields.py','read_sway_fields'),('reaudit-bo
 if args.velocity_history:reader_specs.append(('reaudit-velocity-capture-fields.py','read_velocity_fields'))
 if args.scene_writer:reader_specs.append(('reaudit-scene-writer-capture-fields.py','read_scene_writer_fields'))
 if args.body_clock:reader_specs.append(('reaudit-body-clock-capture-fields.py','read_body_clock_fields'))
+if args.transform_history:reader_specs.append(('reaudit-transform-history-capture-fields.py','read_transform_history_fields'))
+if args.velocity_offset:reader_specs.append(('reaudit-velocity-offset-capture-fields.py','read_velocity_offset_fields'))
+if args.frame_history:reader_specs.append(('reaudit-frame-history-capture-fields.py','read_frame_history_fields'))
+reader_wrappers={'reaudit-body-clock-capture-fields.py':'bodyClock','reaudit-transform-history-capture-fields.py':'transformHistory','reaudit-velocity-offset-capture-fields.py':'velocityOffset'}
 for name,function in reader_specs:
  path=Path(__file__).resolve().parent/name
  assert path.exists(), str(path)
  reader=runpy.run_path(str(path))[function]
  # Keep this helper's named fields/guards separate from other readers. Its
  # guards are included in the complete second read and equality check below.
- if name=='reaudit-body-clock-capture-fields.py':
-  def body_clock_reader(read,base,player,node,reader=reader):return {'bodyClock':reader(read,base,player,node)}
-  extra_readers.append(body_clock_reader)
+ if name in reader_wrappers:
+  def wrapped_reader(read,base,player,node,reader=reader,key=reader_wrappers[name]):return {key:reader(read,base,player,node)}
+  extra_readers.append(wrapped_reader)
+ elif name=='reaudit-frame-history-capture-fields.py':
+  def frame_reader(read,base,player,node,reader=reader):return {'frameHistory':reader(read,base,engine_base,player)}
+  extra_readers.append(frame_reader)
  else:extra_readers.append(reader)
 child=subprocess.Popen(['bash',str(ROOT/'cs2-portable.sh'),'+exec','native_audit_bob_002_boot','+map','de_dust2'],start_new_session=True,stdout=(out/'game.log').open('w'),stderr=subprocess.STDOUT)
 (out/'launch.json').write_text(json.dumps({'launcherPid':child.pid,'startedAt':time.time(),'clientSha256':digest.hexdigest(),'method':__doc__,'velocityHistory':args.velocity_history,'sceneWriter':args.scene_writer,'bodyClock':args.body_clock,'samplerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'helperHashes':{name:hashlib.sha256((Path(__file__).resolve().parent/name).read_bytes()).hexdigest()for name in [x[0]for x in reader_specs]+['reaudit-sway-clock-inputs.py']}},indent=2)+'\n')
+(out/'extensions.json').write_text(json.dumps({'transformHistory':args.transform_history,'velocityOffset':args.velocity_offset,'frameHistory':args.frame_history,'engineSha256':engine_digest.hexdigest() if engine_digest else None},indent=2)+'\n')
 def descendants(pid):
  try:children=[int(v)for v in Path(f'/proc/{pid}/task/{pid}/children').read_text().split()]
  except (FileNotFoundError,PermissionError):return []
@@ -46,13 +63,17 @@ def findgame():
  for pid in [child.pid]+descendants(child.pid):
   try:
    if Path(f'/proc/{pid}/comm').read_text().strip()!='cs2':continue
+   bases={}
    for line in Path(f'/proc/{pid}/maps').read_text().splitlines():
     parts=line.split()
     if len(parts)>=6 and parts[-1].endswith('/game/csgo/bin/linuxsteamrt64/libclient.so') and int(parts[2],16)==0:
-     return pid,int(parts[0].split('-')[0],16)
+     bases['client']=int(parts[0].split('-')[0],16)
+    if len(parts)>=6 and parts[-1].endswith('/game/bin/linuxsteamrt64/libengine2.so') and int(parts[2],16)==0:
+     bases['engine']=int(parts[0].split('-')[0],16)
+   if 'client' in bases and (not args.frame_history or 'engine' in bases):return pid,bases['client'],bases.get('engine',0)
   except (FileNotFoundError,PermissionError):pass
  return None
-mem=None;pid=base=0;arms=player=0;lastscan=lastframe=-1;lastkey=None;samples=errors=0
+mem=None;pid=base=engine_base=0;arms=player=0;lastscan=lastframe=-1;lastkey=None;samples=errors=0
 read_error_counts={}
 start=time.monotonic();laststatus=start;rejectedClock=rejectedFields=0
 with (out/'samples.jsonl').open('w',buffering=1) as stream:
@@ -61,7 +82,7 @@ with (out/'samples.jsonl').open('w',buffering=1) as stream:
    if mem is None:
     found=findgame()
     if not found:time.sleep(.2);continue
-    pid,base=found;mem=os.open(f'/proc/{pid}/mem',os.O_RDONLY);print('Bound game-only sampler',pid,flush=True)
+    pid,base,engine_base=found;mem=os.open(f'/proc/{pid}/mem',os.O_RDONLY);print('Bound game-only sampler',pid,flush=True)
    def read(a,n):
     if not 0<a<2**63:raise OSError('Target address unavailable during lifecycle transition')
     assert 0<n<=65536

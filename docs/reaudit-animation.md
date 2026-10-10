@@ -315,6 +315,27 @@ result. No game, browser, exporter or native-analysis provider was launched by
 this pass.
 
 
+## Pass 32: clock-path scope and remaining draw/shell work
+
+Retained current-byte work binds the weapon controller's deploy/reload tokens
+and reload stages. The selected AK/AWP/Nova/XM resources have authored-speed
+draw nodes and no declared connection to the generic action-speed parameter.
+Actual trainer callers still restart a draw after asynchronous preparation and
+fit it into the remaining deploy time: a 250 ms delay can compress a one-second
+clip into 750 ms. This is a measured source path, not a frequency measurement.
+
+A separate candidate immediate evaluator forwards frame delta to the same
+graph context; same-time calls select zero delta. Its concrete receiver and
+incoming indirect caller remain unbound after a bounded negative direct-call/
+tail search. Therefore the pass31 worker proof establishes one clock path and
+ordinary relative rate, **not the sole displayed-Arms update path**. Native
+first-active-sample ordering, late-model onset and shell event/deadline mapping
+remain open; no additional production correction is made.
+
+Current hashes, listings, graph checks and limits are retained under
+`native-audit/reports/animation-draw-shell`, including `verify-retained.py`,
+`reference-proof.json`, token-initializer ranges and `NOTES.md`.
+
 ## Passes 30–31 integration validation
 
 TypeScript passes. The full unit suite has 2,367 passes and only the documented

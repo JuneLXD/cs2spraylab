@@ -1,0 +1,661 @@
+{
+  "method": "Bounded CSV/JSON replay of runtime008 AK command/camera anchor clocks.\n\nNo target process, native execution, demo parser, bridge or network is used.\nThis checks retained raw observations and ordinary finite float32 tick-pair\narithmetic against saved current-hash resolver instructions. Branch telemetry\nand the resolver's actual entry clock are not reconstructed by this replay.\n",
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "serverEvidence": {
+    "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+    "savedInstructionChecks": 29,
+    "retainedEvidence": [
+      {
+        "name": "reaudit-attack-history-select.json",
+        "sha256": "b3d15dd4100acbc78459683f5a7617f6ee76572dd3b308d3d65f29851fa2b82b"
+      },
+      {
+        "name": "reaudit-attack-history-resolver.json",
+        "sha256": "73fd0f37e3b56e47b990c992eb9b7d44d7b04ceed3952ced34ae771fc633aaca"
+      },
+      {
+        "name": "reaudit-attack-history-pair-compare.json",
+        "sha256": "66aaaee038ef7747d616ab4f323081810ddccd465c8f3cc85b3a17f05785404b"
+      },
+      {
+        "name": "reaudit-attack-history-pair-arithmetic.json",
+        "sha256": "59ea01d23512ac20f679ede0e44ae2f2009dfc81fa1b273d8361b8efc5839be0"
+      },
+      {
+        "name": "reaudit-attack-history-pair-subtract.json",
+        "sha256": "7a498eeac41cc6e92e08e2aa602bc7802748d9772a16c4e333a34036c6cac6cf"
+      },
+      {
+        "name": "reaudit-attack-history-pair-increment.json",
+        "sha256": "564f8505e48aea80cbd8eec997c5f4d71b993418b1bd4a389f0083519f6f3339"
+      },
+      {
+        "name": "reaudit-attack-history-pair-constructor.json",
+        "sha256": "df3bff01b7947bfa07726d77d5928ecdd9983d0a4e10a4a1cae9d671a15fd07e"
+      },
+      {
+        "name": "reaudit-attack-history-pair-from-ticks.json",
+        "sha256": "1322a5b04baae5b989d08ad0e89f6053d2828514a4a4b15be0a47d66f56b64f9"
+      },
+      {
+        "name": "reaudit-attack-history-current-time-pair.json",
+        "sha256": "95f0cc3203318dc202136ddf5302ebea6144d768bdbbaf6ef9ab6f5d0b837e58"
+      },
+      {
+        "name": "reaudit-attack-history-tick-domains.json",
+        "sha256": "223f66a0e6fcb78029cf4b04c25d6e88d69c911b655d53171b2c82b47ed0b671"
+      },
+      {
+        "name": "reaudit-attack-history-entry-parser.json",
+        "sha256": "3b046d5b060e66abfed960259ec4ff0d3330c9ff5a4d4ad167ecae186e995ef1"
+      },
+      {
+        "name": "reaudit-attack-history-usercmd-parser.json",
+        "sha256": "bb2b7d9aa04bcdae5e4d9c0610efca0b52a4e1110830a1923243cce8c6c7d17d"
+      },
+      {
+        "name": "reaudit-attack-history-protobuf.json",
+        "sha256": "ddd2f5fe75b37656d5c610f43f189bc17caab9416ef4fcebd4e02ce31005b274"
+      },
+      {
+        "name": "reaudit-attack-history-select.txt",
+        "sha256": "b4e1ec7da80e72183ab94b759c806deb08e5c4ac2e92cd223aca2412b250ba7e"
+      },
+      {
+        "name": "reaudit-attack-history-resolver.txt",
+        "sha256": "b3a43502ed18ff51dfce211e47eccb9173aa511a0ab0384f7ae3145f12622b8b"
+      },
+      {
+        "name": "reaudit-attack-history-pair-increment.txt",
+        "sha256": "3b8c2f446016f0e59909001e32b5af72c22acf497895c318ba0d5b56b6d0aeb5"
+      },
+      {
+        "name": "reaudit-attack-history-pair-arithmetic.txt",
+        "sha256": "22b825a0d1977b3abe06dc6b775484202a2d67282493cf3b4c186f39c9c190c1"
+      },
+      {
+        "name": "reaudit-attack-history-pair-subtract.txt",
+        "sha256": "41075f91c4b634db1d978de836df7a07587ba952dd7b3324e7afc21e9563bd13"
+      }
+    ],
+    "limitation": "Retained current-hash disassembly rechecked; no fresh binary hash or native execution in this analysis."
+  },
+  "inputs": [
+    {
+      "path": "native-audit/reports/native_reaudit_history_001/ticks.csv",
+      "sha256": "da70aa4c7a15cab7cbd349e992fa26a9b5a5926b512e11186532166dd9cfed50"
+    },
+    {
+      "path": "native-audit/reports/native_reaudit_history_001/weapon_fire.json",
+      "sha256": "df8dbe4a6bc20110f073f6d8b3b801a901fa7631d570a4039e363dfa7b903e3f"
+    },
+    {
+      "path": "native-audit/reports/reaudit-motion-runtime-008/native_reaudit_history_001-snapshot.jsonl",
+      "sha256": "f5f38ce5bf65ef21339e674a18d742d5c2b6ab2a0e085a7974d9c7ec702f3084"
+    },
+    {
+      "path": "native-audit/reports/reaudit-motion-runtime-008/launch.json",
+      "sha256": "42dad4c392d37de24720bc1fc2c387af9ccedeb250e3c40fa701a50c6408d12e"
+    }
+  ],
+  "probeSha256": "bb705db852fe3837176d13465f87b3a8bcf7997f503b11b828e8d4d048e18123",
+  "snapshotRows": 1934,
+  "selectedPresses": [
+    {
+      "player": {
+        "tick": 7243,
+        "fraction": 0.037031423300504684
+      },
+      "render": {
+        "tick": 7242,
+        "fraction": 0.037031423300504684
+      },
+      "frame": 6925,
+      "monotonic": 19115.914374189,
+      "inputReadDisabled": true
+    },
+    {
+      "player": {
+        "tick": 7372,
+        "fraction": 0.912937581539154
+      },
+      "render": {
+        "tick": 7371,
+        "fraction": 0.912937581539154
+      },
+      "frame": 7017,
+      "monotonic": 19117.942475146,
+      "inputReadDisabled": true
+    },
+    {
+      "player": {
+        "tick": 7750,
+        "fraction": 0.8343089818954468
+      },
+      "render": {
+        "tick": 7749,
+        "fraction": 0.8343089818954468
+      },
+      "frame": 7393,
+      "monotonic": 19123.848966137,
+      "inputReadDisabled": true
+    }
+  ],
+  "shots": [
+    {
+      "ordinal": 0,
+      "demoTick": 328,
+      "cameraAnchor": {
+        "tick": 7243,
+        "fraction": 0.037031423300504684
+      },
+      "nextAttack": {
+        "tick": 7249,
+        "fraction": 0.44687509536743164
+      },
+      "schedule": {
+        "tick": 7243,
+        "fraction": 0.046875
+      },
+      "scheduleSource": "after-shot next pair minus cycle",
+      "selectedFirstPress": true,
+      "selectedFrames": [
+        6925
+      ],
+      "live": {
+        "anchor": {
+          "tick": 7243,
+          "fraction": 0.037031423300504684
+        },
+        "storedPunch": [
+          -1.0993632078170776,
+          -0.5681607127189636,
+          0.0
+        ],
+        "monotonic": 19115.914374189,
+        "primaryAttackIndex": 0,
+        "inputCount": 1,
+        "sampledGlobalTick": 7243,
+        "predictionTick": 7244,
+        "sampledGlobalFraction": 0.03917068615555763,
+        "sampledCurrentTime": 113.1724853515625,
+        "inputReadDisabled": true
+      },
+      "cameraMinusScheduleMs": -0.1538058859296143,
+      "processingMinusScheduleMs": 14.892578125,
+      "lastShotFloat32": 113.172607421875,
+      "scheduleFloat32": 113.172607421875,
+      "aimMinusCameraMs": 7.812499825377017,
+      "networkPunchQuantizationMax": 4.607439041137695e-05,
+      "derivedCacheUnderScheduleClock": -1.0098435878753662
+    },
+    {
+      "ordinal": 1,
+      "demoTick": 457,
+      "cameraAnchor": {
+        "tick": 7372,
+        "fraction": 0.912937581539154
+      },
+      "nextAttack": {
+        "tick": 7379,
+        "fraction": 0.32187509536743164
+      },
+      "schedule": {
+        "tick": 7372,
+        "fraction": 0.921875
+      },
+      "scheduleSource": "after-shot next pair minus cycle",
+      "selectedFirstPress": true,
+      "selectedFrames": [
+        7017
+      ],
+      "live": {
+        "anchor": {
+          "tick": 7372,
+          "fraction": 0.912937581539154
+        },
+        "storedPunch": [
+          -1.0993632078170776,
+          -0.5681607127189636,
+          0.0
+        ],
+        "monotonic": 19117.942475146,
+        "primaryAttackIndex": 0,
+        "inputCount": 1,
+        "sampledGlobalTick": 7373,
+        "predictionTick": 7373,
+        "sampledGlobalFraction": 0.9119682312011719,
+        "sampledCurrentTime": 115.20175170898438,
+        "inputReadDisabled": true
+      },
+      "cameraMinusScheduleMs": -0.13964716345071793,
+      "processingMinusScheduleMs": 1.220703125,
+      "lastShotFloat32": 115.201904296875,
+      "scheduleFloat32": 115.201904296875,
+      "aimMinusCameraMs": 7.812500931322575,
+      "networkPunchQuantizationMax": 4.607439041137695e-05,
+      "derivedCacheUnderScheduleClock": -1.0089373588562012
+    },
+    {
+      "ordinal": 2,
+      "demoTick": 464,
+      "cameraAnchor": {
+        "tick": 7379,
+        "fraction": 0.31293773651123047
+      },
+      "nextAttack": {
+        "tick": 7385,
+        "fraction": 0.7218751907348633
+      },
+      "schedule": {
+        "tick": 7379,
+        "fraction": 0.32187509536743164
+      },
+      "scheduleSource": "preceding shot next pair",
+      "selectedFirstPress": false,
+      "selectedFrames": [],
+      "live": {
+        "anchor": {
+          "tick": 7379,
+          "fraction": 0.31293773651123047
+        },
+        "storedPunch": [
+          -1.3139275312423706,
+          0.2706238031387329,
+          0.0
+        ],
+        "monotonic": 19118.051544803,
+        "primaryAttackIndex": -1,
+        "inputCount": 1,
+        "sampledGlobalTick": 7380,
+        "predictionTick": 7380,
+        "sampledGlobalFraction": 0.9118854999542236,
+        "sampledCurrentTime": 115.31112670898438,
+        "inputReadDisabled": true
+      },
+      "cameraMinusScheduleMs": -0.1396462321281433,
+      "processingMinusScheduleMs": 10.59570163488388,
+      "lastShotFloat32": 115.3019027709961,
+      "scheduleFloat32": 115.3019027709961,
+      "aimMinusCameraMs": 7.8125,
+      "networkPunchQuantizationMax": 8.547306060791016e-05
+    },
+    {
+      "ordinal": 3,
+      "demoTick": 470,
+      "cameraAnchor": {
+        "tick": 7385,
+        "fraction": 0.7129378318786621
+      },
+      "nextAttack": {
+        "tick": 7392,
+        "fraction": 0.12187528610229492
+      },
+      "schedule": {
+        "tick": 7385,
+        "fraction": 0.7218751907348633
+      },
+      "scheduleSource": "preceding shot next pair",
+      "selectedFirstPress": false,
+      "selectedFrames": [],
+      "live": {
+        "anchor": {
+          "tick": 7385,
+          "fraction": 0.7129378318786621
+        },
+        "storedPunch": [
+          -1.472739577293396,
+          -0.08299502730369568,
+          0.0
+        ],
+        "monotonic": 19118.145942733,
+        "primaryAttackIndex": -1,
+        "inputCount": 1,
+        "sampledGlobalTick": 7386,
+        "predictionTick": 7386,
+        "sampledGlobalFraction": 0.9495583772659302,
+        "sampledCurrentTime": 115.40546417236328,
+        "inputReadDisabled": true
+      },
+      "cameraMinusScheduleMs": -0.1396462321281433,
+      "processingMinusScheduleMs": 4.345700144767761,
+      "lastShotFloat32": 115.40190124511719,
+      "scheduleFloat32": 115.40190124511719,
+      "aimMinusCameraMs": 7.8125,
+      "networkPunchQuantizationMax": 0.0001150369644165039
+    },
+    {
+      "ordinal": 4,
+      "demoTick": 477,
+      "cameraAnchor": {
+        "tick": 7392,
+        "fraction": 0.11293792724609375
+      },
+      "nextAttack": {
+        "tick": 7398,
+        "fraction": 0.5218753814697266
+      },
+      "schedule": {
+        "tick": 7392,
+        "fraction": 0.12187528610229492
+      },
+      "scheduleSource": "preceding shot next pair",
+      "selectedFirstPress": false,
+      "selectedFrames": [],
+      "live": {
+        "anchor": {
+          "tick": 7392,
+          "fraction": 0.11293792724609375
+        },
+        "storedPunch": [
+          -1.6256887912750244,
+          -0.0531800352036953,
+          0.0
+        ],
+        "monotonic": 19118.257679095,
+        "primaryAttackIndex": -1,
+        "inputCount": 1,
+        "sampledGlobalTick": 7393,
+        "predictionTick": 7393,
+        "sampledGlobalFraction": 0.9522089958190918,
+        "sampledCurrentTime": 115.51487731933594,
+        "inputReadDisabled": true
+      },
+      "cameraMinusScheduleMs": -0.1396462321281433,
+      "processingMinusScheduleMs": 13.720698654651642,
+      "lastShotFloat32": 115.50190734863281,
+      "scheduleFloat32": 115.50190734863281,
+      "aimMinusCameraMs": 7.8125,
+      "networkPunchQuantizationMax": 4.792213439941406e-05
+    },
+    {
+      "ordinal": 5,
+      "demoTick": 483,
+      "cameraAnchor": {
+        "tick": 7398,
+        "fraction": 0.5129380226135254
+      },
+      "nextAttack": {
+        "tick": 7404,
+        "fraction": 0.9218754768371582
+      },
+      "schedule": {
+        "tick": 7398,
+        "fraction": 0.5218753814697266
+      },
+      "scheduleSource": "preceding shot next pair",
+      "selectedFirstPress": false,
+      "selectedFrames": [],
+      "live": {
+        "anchor": {
+          "tick": 7398,
+          "fraction": 0.5129380226135254
+        },
+        "storedPunch": [
+          -1.7420196533203125,
+          0.4010009765625,
+          0.0
+        ],
+        "monotonic": 19118.352945983,
+        "primaryAttackIndex": -1,
+        "inputCount": 1,
+        "sampledGlobalTick": 7399,
+        "predictionTick": 7400,
+        "sampledGlobalFraction": 0.1498795449733734,
+        "sampledCurrentTime": 115.6117172241211,
+        "inputReadDisabled": false
+      },
+      "cameraMinusScheduleMs": -0.1396462321281433,
+      "processingMinusScheduleMs": 7.4706971645355225,
+      "lastShotFloat32": 115.6019058227539,
+      "scheduleFloat32": 115.6019058227539,
+      "aimMinusCameraMs": 7.8125,
+      "networkPunchQuantizationMax": 0.0
+    },
+    {
+      "ordinal": 6,
+      "demoTick": 489,
+      "cameraAnchor": {
+        "tick": 7404,
+        "fraction": 0.912938117980957
+      },
+      "nextAttack": {
+        "tick": 7411,
+        "fraction": 0.32187557220458984
+      },
+      "schedule": {
+        "tick": 7404,
+        "fraction": 0.9218754768371582
+      },
+      "scheduleSource": "preceding shot next pair",
+      "selectedFirstPress": false,
+      "selectedFrames": [],
+      "live": {
+        "anchor": {
+          "tick": 7404,
+          "fraction": 0.912938117980957
+        },
+        "storedPunch": [
+          -1.8624205589294434,
+          0.32299375534057617,
+          0.0
+        ],
+        "monotonic": 19118.445936205,
+        "primaryAttackIndex": -1,
+        "inputCount": 1,
+        "sampledGlobalTick": 7405,
+        "predictionTick": 7405,
+        "sampledGlobalFraction": 0.968464195728302,
+        "sampledCurrentTime": 115.70262908935547,
+        "inputReadDisabled": true
+      },
+      "cameraMinusScheduleMs": -0.1396462321281433,
+      "processingMinusScheduleMs": 1.220695674419403,
+      "lastShotFloat32": 115.701904296875,
+      "scheduleFloat32": 115.701904296875,
+      "aimMinusCameraMs": 7.8125,
+      "networkPunchQuantizationMax": 9.775161743164062e-05
+    },
+    {
+      "ordinal": 7,
+      "demoTick": 835,
+      "cameraAnchor": {
+        "tick": 7750,
+        "fraction": 0.8343089818954468
+      },
+      "nextAttack": {
+        "tick": 7757,
+        "fraction": 0.24375009536743164
+      },
+      "schedule": {
+        "tick": 7750,
+        "fraction": 0.84375
+      },
+      "scheduleSource": "after-shot next pair minus cycle",
+      "selectedFirstPress": true,
+      "selectedFrames": [
+        7393
+      ],
+      "live": {
+        "anchor": {
+          "tick": 7750,
+          "fraction": 0.8343089818954468
+        },
+        "storedPunch": [
+          -1.0993632078170776,
+          -0.5681607127189636,
+          0.0
+        ],
+        "monotonic": 19123.848966137,
+        "primaryAttackIndex": 0,
+        "inputCount": 1,
+        "sampledGlobalTick": 7751,
+        "predictionTick": 7751,
+        "sampledGlobalFraction": 0.8346021771430969,
+        "sampledCurrentTime": 121.1067886352539,
+        "inputReadDisabled": true
+      },
+      "cameraMinusScheduleMs": -0.1475159078836441,
+      "processingMinusScheduleMs": 2.44140625,
+      "lastShotFloat32": 121.10693359375,
+      "scheduleFloat32": 121.10693359375,
+      "aimMinusCameraMs": 7.8125,
+      "networkPunchQuantizationMax": 4.607439041137695e-05,
+      "derivedCacheUnderScheduleClock": -1.0094410181045532
+    }
+  ],
+  "conditionalHeldCacheReplay": [
+    {
+      "demoTick": 464,
+      "predicted": {
+        "tick": 7379,
+        "fraction": 0.31293773651123047
+      },
+      "observed": {
+        "tick": 7379,
+        "fraction": 0.31293773651123047
+      },
+      "pairExact": true,
+      "errorMs": 0.0,
+      "simpleCyclePairExact": true,
+      "simpleCycleErrorMs": 0.0,
+      "cacheBefore": -1.0089373588562012,
+      "cacheAfter": -1.0089373588562012,
+      "sampledPrimaryAttackIndex": -1,
+      "sampledInputReadDisabled": true
+    },
+    {
+      "demoTick": 470,
+      "predicted": {
+        "tick": 7385,
+        "fraction": 0.7129378318786621
+      },
+      "observed": {
+        "tick": 7385,
+        "fraction": 0.7129378318786621
+      },
+      "pairExact": true,
+      "errorMs": 0.0,
+      "simpleCyclePairExact": true,
+      "simpleCycleErrorMs": 0.0,
+      "cacheBefore": -1.0089373588562012,
+      "cacheAfter": -1.0089373588562012,
+      "sampledPrimaryAttackIndex": -1,
+      "sampledInputReadDisabled": true
+    },
+    {
+      "demoTick": 477,
+      "predicted": {
+        "tick": 7392,
+        "fraction": 0.11293792724609375
+      },
+      "observed": {
+        "tick": 7392,
+        "fraction": 0.11293792724609375
+      },
+      "pairExact": true,
+      "errorMs": 0.0,
+      "simpleCyclePairExact": true,
+      "simpleCycleErrorMs": 0.0,
+      "cacheBefore": -1.0089373588562012,
+      "cacheAfter": -1.0089373588562012,
+      "sampledPrimaryAttackIndex": -1,
+      "sampledInputReadDisabled": true
+    },
+    {
+      "demoTick": 483,
+      "predicted": {
+        "tick": 7398,
+        "fraction": 0.5129380226135254
+      },
+      "observed": {
+        "tick": 7398,
+        "fraction": 0.5129380226135254
+      },
+      "pairExact": true,
+      "errorMs": 0.0,
+      "simpleCyclePairExact": true,
+      "simpleCycleErrorMs": 0.0,
+      "cacheBefore": -1.0089373588562012,
+      "cacheAfter": -1.0089373588562012,
+      "sampledPrimaryAttackIndex": -1,
+      "sampledInputReadDisabled": false
+    },
+    {
+      "demoTick": 489,
+      "predicted": {
+        "tick": 7404,
+        "fraction": 0.912938117980957
+      },
+      "observed": {
+        "tick": 7404,
+        "fraction": 0.912938117980957
+      },
+      "pairExact": true,
+      "errorMs": 0.0,
+      "simpleCyclePairExact": true,
+      "simpleCycleErrorMs": 0.0,
+      "cacheBefore": -1.0089373588562012,
+      "cacheAfter": -1.0089373588562012,
+      "sampledPrimaryAttackIndex": -1,
+      "sampledInputReadDisabled": true
+    }
+  ],
+  "summary": {
+    "demoShots": 8,
+    "liveCameraChanges": 8,
+    "demoLiveRawPairExact": 8,
+    "firstPressAnchorMatches": 3,
+    "heldPairs": 5,
+    "conditionalCachePairExact": 5,
+    "conditionalCacheMaxErrorMs": 0.0,
+    "cycleIncrementPairExact": 5,
+    "cycleIncrementMaxErrorMs": 0.0,
+    "cameraMinusScheduleMs": [
+      -0.1538058859296143,
+      -0.1396462321281433
+    ],
+    "processingMinusScheduleMs": [
+      1.220695674419403,
+      14.892578125
+    ],
+    "lastShotFloat32MatchesSchedule": 8,
+    "maxDemoLivePunchDifference": 0.0001150369644165039
+  },
+  "staticRule": {
+    "candidate": "Normalize(nextAttack + oneTick + FromTickFloat(cachedDifference))",
+    "cacheRefresh": "FloatTicks(Normalize(resolvedAnchor - (resolverCurrentPair + oneTick)))",
+    "validHistory": "A valid selected attack index reads the selected player pair, converts tick domain, and clamps it; render pair is separate.",
+    "heldFallback": "Invalid or out-of-range selected index enters candidate/history search. Interpolated and last-history branches keep candidate for the recoil anchor while choosing pose/render history.",
+    "exceptions": "No-history/stale-history paths can replace/bound the first pair; exact-history bounds and conversion remain applicable.",
+    "conditionalNoHistoryExclusion": "In the retained no-history comparison, candidate <= current selects current + one tick. If the resolver current pair equals the measured deadline, the observed slightly earlier anchor therefore requires a candidate-preserving path instead. That current-pair assumption is not direct runtime telemetry."
+  },
+  "conclusions": [
+    "All eight live anchor tick/fraction pairs equal the demo carriers after doubled integer decoding and float32 decimal recovery.",
+    "All three observed first-press camera anchors equal their selected published player pairs; this is a polling association backed by the native field/caller chain.",
+    "The five held follow-ups preserve the captured burst history phase. The conditional cache replay uses observed weapon deadlines as resolver current pairs; it is not per-shot resolver branch telemetry.",
+    "The new per-burst phase differs from earlier multi-millisecond captures, ruling out a universal fitted correction."
+  ],
+  "trainerNeeds": [
+    "A saved per-present player clock and frame identity associated with the first press; an event timestamp alone is not the native saved frame clock.",
+    "Separate camera sampling time and stored recoil-command anchor, with an independently retained per-burst cached timing difference.",
+    "Equivalent command consumption/reduction and clamp handling for early press, delayed processing, stale/no history, reload/deploy and tick-domain conversion.",
+    "Evidence linking the trainer render/input phases to that native clock before a live behavior change."
+  ],
+  "missingRuntime": [
+    "Resolver entry current pair and tick-domain conversion state, actual serialized attack index/entry after reduction.",
+    "Cached timing difference before/after each shot and resolver exact/interpolated/last/no-history status.",
+    "The global/predicted time at the exact camera sampler call, not a later stable poll."
+  ],
+  "limits": [
+    "Only one stationary AK tap/burst/reload/tap capture, eight shots; no early/deferred attack or special weapon coverage.",
+    "CSV float32 values are recovered, not a fresh demo parse. Original demo hash is recorded separately when present.",
+    "Ordinary finite float32 pair model, not native resolver emulation or a full malformed/nonfinite tick-pair implementation.",
+    "Polling may miss intermediate writes and cross-object snapshots are not atomic."
+  ],
+  "originalDemo": {
+    "bytes": 323302,
+    "sha256": "6c2bcd4f89b2ba625bbc6141a7776dd0ba6159d95056bfbd2ec2acda2bafaaa8",
+    "reparsed": false
+  }
+}

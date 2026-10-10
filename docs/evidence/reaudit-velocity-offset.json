@@ -1,0 +1,151 @@
+{
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "scriptSha256": "e2851eaa3e18d0a350a8c3617ae92a4088bad3cbbe5ea073d68646813618c62a",
+  "method": "Current-byte static instruction, RTTI, vtable, constructor and dataflow assertions; no native execution.",
+  "status": "offset producer and invalidation resolved; captured invocation/branch and full latch scheduling remain partial",
+  "instructionAssertions": 68,
+  "classAssertions": 3,
+  "virtualTargetAssertions": 4,
+  "ripBindings": 8,
+  "literalAssertions": 6,
+  "layoutIdentityAssertions": 4,
+  "resolved": [
+    "The entity constructor creates a typed velocity adapter with its embedded network velocity as owner, and registers it in the interpolation group returned by the adapter. That group is the same signed history time class 1 established by the prior writer proof.",
+    "Registration inserts that adapter into the entity wrapped-variable collection, refreshes interpolation groups and sends each ring its cached float offset plus companion integer count.",
+    "Dirty-group refresh clears its dirty flag, obtains count from the entity virtual provider for each ring, computes and caches its offset, then broadcasts both arguments. Actual C_CSPlayerPawn binds the count provider to constant one.",
+    "The plain-history branch calls the previously bound offset-setter slot. Actual velocity follows the typed wrapper-adapter branch, which inlines the same ring stores rather than calling that plain setter.",
+    "The velocity adapter stores the selected ring offset and companion count, sets its cache timestamp to -1, and ORs the corresponding cache dirty bit. Ring one storage is updated only when the dual-ring history flag is set; its cache invalidation still occurs for a valid ring-one selector.",
+    "Both selectors are visited in order zero then one. Native ProcessInterpolatedList refreshes the groups before calling the entity interpolation consumer. Existing dirty-state and outer frame scheduling remain essential.",
+    "Construction starts with dirty interpolation groups, cached offset zero/count one, and a zero history-ring offset. Registration/refresh is a concrete path that replaces that zero with the computed amount."
+  ],
+  "branchMatrix": [
+    {
+      "ring": 0,
+      "condition": "ordinary path, or entity render-time type is not one, or local pawn lookup is absent",
+      "offset": "float32(count * 1/64)",
+      "pawnCount": 1,
+      "ordinarySeconds": 0.015625
+    },
+    {
+      "ring": 0,
+      "condition": "entity render-time type is one and local pawn lookup succeeds",
+      "offset": "float32(count * local tick-interval helper)",
+      "helper": "normally 1/64; if the separately gated mode override applies, float32((1/64) * float32(1 + float32(percent/100)))",
+      "unknown": "effective mode interface returns and local pawn flag at the setter phase"
+    },
+    {
+      "ring": 1,
+      "condition": "global client-count field greater than one, or engine interface boolean true",
+      "offset": "float32(clamp(value, minimum, maximum) * 1/64)",
+      "unknown": "three runtime control values and engine boolean; count still stored separately and remains one for this pawn"
+    },
+    {
+      "ring": 1,
+      "condition": "client-count field at most one, engine boolean false, fallback switch true",
+      "offset": "float32(count * 1/64)",
+      "pawnCount": 1,
+      "ordinarySeconds": 0.015625
+    },
+    {
+      "ring": 1,
+      "condition": "client-count field at most one, engine boolean false, fallback switch false",
+      "offset": "float32(max(count - 1, 0) * 1/64)",
+      "pawnCount": 1,
+      "ordinarySeconds": 0
+    }
+  ],
+  "captureHelper": "tools/reaudit-velocity-offset-capture-fields.py",
+  "stillNeeded": [
+    "Associate a refresh/setter invocation with its input branch values and subsequent latch/cache/HUD consumer; later stable polling cannot prove invocation ownership.",
+    "Bind effective local interval/engine interface returns when their branches matter. Runtime control names are not newly claimed from their numeric pointer bindings.",
+    "Complete the external latch caller ordering and consecutive free-running input replay before any production bob/sway correction."
+  ],
+  "scanBoundary": "One 448 KiB retained entity code region yielded 32 indirect-slot candidates. Only dataflow-typed calls and the constructor-bound velocity adapter support conclusions. No whole-ELF search or claim of exhaustive callers.",
+  "ranges": [
+    {
+      "name": "constructor-group-state",
+      "bytes": 325,
+      "sha256": "46e2d1516a933078216b8b68f671036d38682bc87cf6f3dd28975f387197ed4f"
+    },
+    {
+      "name": "constructor-velocity-pointer",
+      "bytes": 80,
+      "sha256": "da58d5346de043e52c57a8d7c921182c77e91cfc8b82adbb49f357657197d8b7"
+    },
+    {
+      "name": "constructor-history",
+      "bytes": 304,
+      "sha256": "16c05a54b168a351ff8bbc1a7b3be3910e627c02a80791a0cf21fa57f9a8ddeb"
+    },
+    {
+      "name": "constructor-adapter",
+      "bytes": 49,
+      "sha256": "ae56193e8e2a1fbbf93c5194f14762bafe426e7813e7ebda388d9c8d61d364c4"
+    },
+    {
+      "name": "adapter-register",
+      "bytes": 366,
+      "sha256": "f0f667286f8f50586e5f1cb7832bd6c721bd09cdea0824d43b1018b6d24e3b63"
+    },
+    {
+      "name": "group-refresh",
+      "bytes": 362,
+      "sha256": "27049a8c099d2c1f5b62d6819413db756204102a4a4056ec3d08375d2b2e4184"
+    },
+    {
+      "name": "group-refresh-specialized",
+      "bytes": 308,
+      "sha256": "4890709017044450aee22076ee6246773a5bb0bb9dbddcc62f24fedd8da9be47"
+    },
+    {
+      "name": "velocity-adapter-group",
+      "bytes": 21,
+      "sha256": "bd396eae0138791794adae3ed234efa9f7284743e31a0419e87e18298827fd98"
+    },
+    {
+      "name": "velocity-adapter-offset",
+      "bytes": 166,
+      "sha256": "491287cf973ff3d9927a269edb55df42d2e052df5c037db1f00d7c27273583fe"
+    },
+    {
+      "name": "plain-history-offset",
+      "bytes": 96,
+      "sha256": "ecf3d19a692edcf49085dbb0016b7b3c7139343f18be8b5071515248bd871871"
+    },
+    {
+      "name": "offset-formula",
+      "bytes": 186,
+      "sha256": "94bdda0f75f72d785463c4d2acb45463d93c1cd9bffc88c4b34c79fef91a7635"
+    },
+    {
+      "name": "network-offset-formula",
+      "bytes": 57,
+      "sha256": "19a031ed5adbd54d7085db69efacaccfb8558c88dd5d5b5458d2c8eead4961a2"
+    },
+    {
+      "name": "local-interval-formula",
+      "bytes": 168,
+      "sha256": "bd928e34d23bf40e6d7cb32cc2e9deff4d051d301cdd964fee800a00ccafb9d4"
+    },
+    {
+      "name": "pawn-count-provider",
+      "bytes": 6,
+      "sha256": "2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67"
+    },
+    {
+      "name": "consumer-refresh-first",
+      "bytes": 69,
+      "sha256": "1146367a703826a742e5ac85eaf565f779af2f9083f8b48c3f454f119cabb70f"
+    },
+    {
+      "name": "consumer-refresh-second",
+      "bytes": 69,
+      "sha256": "7d0a721d3760b6c31e6d02ed1d5f758cc88e94055a35a9b2d50d524b553f4f14"
+    },
+    {
+      "name": "interpolate-dirty-refresh",
+      "bytes": 87,
+      "sha256": "fb37571492a6c2462d2a3ceeb74267ec3b2140396fd09c6abe8ed57f9eaa1804"
+    }
+  ]
+}

@@ -214,3 +214,20 @@ through the remaining lock. The measured frame-33 crossing changes from
 1.115069 s to 1.1 s on the existing action clock. Ammo/readiness and existing
 fades are preserved. Exact action onset/display phase, other weapon paths,
 shell transitions and delayed-model draw playback remain separate work.
+
+### Published input and motion histories, pass 32
+
+[Two approved windows](reaudit-presentation-history.md) retain 4,861 guarded
+snapshots. All 4,088 input-entry occurrences match published clock pairs;
+three first-press camera anchors match selected player pairs, and eight
+demo/live anchors agree exactly. Five held follow-ups match a conditional
+float32 cache replay, without proving resolver branch or entry-clock identity.
+Establish the corresponding trainer render/input clock before changing camera
+timing; no fitted delay is supported.
+
+The velocity offset producer and cache invalidation are now bound; all captured
+active rings have count one and a 1/64-second offset. Transform history uses a
+separate layout and shared current record. Its first live reader rejected the
+actual skeleton subclass; the corrected, narrowly bound gate remains awaiting
+live validation. Full motion still needs invocation inputs, latch/consumer
+ordering and existing-instance resets. Production remains unchanged.

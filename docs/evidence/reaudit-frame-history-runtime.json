@@ -1,0 +1,486 @@
+{
+  "fixtureSha256": "11bf5c4d4c5c7ad70ff4d16b9857fd270df781af47ea9ccb47d6323adce19a2a",
+  "probeSha256": "2a6d835aa3cab142e8d7010b474e1388a8f933dd03722104662875c5ddce5eed",
+  "cases": [
+    {
+      "name": "native_reaudit_history_001",
+      "rows": 1934,
+      "uniquePresentedRecords": 1096,
+      "maxNumericGap": 0.11093700399942463,
+      "uniqueInputRecords": 1059,
+      "inputReadDisabledRows": 7,
+      "inputEntryPublishedPairMatches": 1626,
+      "inputEntryFramesAbsentFromSampledRing": 0,
+      "inputEntryPublishedPairDifferences": 0,
+      "selectedPrimaryEdges": [
+        {
+          "elapsed": 3.480197049000708,
+          "frame": 6925,
+          "player": {
+            "tick": 7243,
+            "fraction": 0.037031423300504684
+          },
+          "render": {
+            "tick": 7242,
+            "fraction": 0.037031423300504684
+          },
+          "disabled": true
+        },
+        {
+          "elapsed": 5.508298005999677,
+          "frame": 7017,
+          "player": {
+            "tick": 7372,
+            "fraction": 0.912937581539154
+          },
+          "render": {
+            "tick": 7371,
+            "fraction": 0.912937581539154
+          },
+          "disabled": true
+        },
+        {
+          "elapsed": 11.41478899700087,
+          "frame": 7393,
+          "player": {
+            "tick": 7750,
+            "fraction": 0.8343089818954468
+          },
+          "render": {
+            "tick": 7749,
+            "fraction": 0.8343089818954468
+          },
+          "disabled": true
+        }
+      ],
+      "observedCameraAnchorChanges": [
+        {
+          "elapsed": 3.480197049000708,
+          "anchor": {
+            "tick": 7243,
+            "fraction": 0.037031423300504684
+          },
+          "storedPunch": [
+            -1.0993632078170776,
+            -0.5681607127189636,
+            0.0
+          ],
+          "rawTick": 7243,
+          "predictionTick": 7244,
+          "controllerTick": 7244,
+          "matchingPriorSelectedEdges": [
+            {
+              "elapsed": 3.480197049000708,
+              "frame": 6925,
+              "player": {
+                "tick": 7243,
+                "fraction": 0.037031423300504684
+              },
+              "render": {
+                "tick": 7242,
+                "fraction": 0.037031423300504684
+              },
+              "disabled": true
+            }
+          ],
+          "recentSelectedEdges": [
+            {
+              "elapsed": 3.480197049000708,
+              "frame": 6925,
+              "player": {
+                "tick": 7243,
+                "fraction": 0.037031423300504684
+              },
+              "render": {
+                "tick": 7242,
+                "fraction": 0.037031423300504684
+              },
+              "disabled": true
+            }
+          ],
+          "retainedPreviousAnchor": {
+            "tick": 2727,
+            "fraction": 0.0
+          }
+        },
+        {
+          "elapsed": 5.508298005999677,
+          "anchor": {
+            "tick": 7372,
+            "fraction": 0.912937581539154
+          },
+          "storedPunch": [
+            -1.0993632078170776,
+            -0.5681607127189636,
+            0.0
+          ],
+          "rawTick": 7373,
+          "predictionTick": 7373,
+          "controllerTick": 7373,
+          "matchingPriorSelectedEdges": [
+            {
+              "elapsed": 5.508298005999677,
+              "frame": 7017,
+              "player": {
+                "tick": 7372,
+                "fraction": 0.912937581539154
+              },
+              "render": {
+                "tick": 7371,
+                "fraction": 0.912937581539154
+              },
+              "disabled": true
+            }
+          ],
+          "recentSelectedEdges": [
+            {
+              "elapsed": 5.508298005999677,
+              "frame": 7017,
+              "player": {
+                "tick": 7372,
+                "fraction": 0.912937581539154
+              },
+              "render": {
+                "tick": 7371,
+                "fraction": 0.912937581539154
+              },
+              "disabled": true
+            }
+          ],
+          "retainedPreviousAnchor": {
+            "tick": 7243,
+            "fraction": 0.037031423300504684
+          }
+        },
+        {
+          "elapsed": 5.617367662998731,
+          "anchor": {
+            "tick": 7379,
+            "fraction": 0.31293773651123047
+          },
+          "storedPunch": [
+            -1.3139275312423706,
+            0.2706238031387329,
+            0.0
+          ],
+          "rawTick": 7380,
+          "predictionTick": 7380,
+          "controllerTick": 7380,
+          "matchingPriorSelectedEdges": [],
+          "recentSelectedEdges": [
+            {
+              "elapsed": 5.508298005999677,
+              "frame": 7017,
+              "player": {
+                "tick": 7372,
+                "fraction": 0.912937581539154
+              },
+              "render": {
+                "tick": 7371,
+                "fraction": 0.912937581539154
+              },
+              "disabled": true
+            }
+          ],
+          "retainedPreviousAnchor": {
+            "tick": 7372,
+            "fraction": 0.912937581539154
+          }
+        },
+        {
+          "elapsed": 5.7117655930014735,
+          "anchor": {
+            "tick": 7385,
+            "fraction": 0.7129378318786621
+          },
+          "storedPunch": [
+            -1.472739577293396,
+            -0.08299502730369568,
+            0.0
+          ],
+          "rawTick": 7386,
+          "predictionTick": 7386,
+          "controllerTick": 7386,
+          "matchingPriorSelectedEdges": [],
+          "recentSelectedEdges": [
+            {
+              "elapsed": 5.508298005999677,
+              "frame": 7017,
+              "player": {
+                "tick": 7372,
+                "fraction": 0.912937581539154
+              },
+              "render": {
+                "tick": 7371,
+                "fraction": 0.912937581539154
+              },
+              "disabled": true
+            }
+          ],
+          "retainedPreviousAnchor": {
+            "tick": 7379,
+            "fraction": 0.31293773651123047
+          }
+        },
+        {
+          "elapsed": 5.82350195500112,
+          "anchor": {
+            "tick": 7392,
+            "fraction": 0.11293792724609375
+          },
+          "storedPunch": [
+            -1.6256887912750244,
+            -0.0531800352036953,
+            0.0
+          ],
+          "rawTick": 7393,
+          "predictionTick": 7393,
+          "controllerTick": 7393,
+          "matchingPriorSelectedEdges": [],
+          "recentSelectedEdges": [
+            {
+              "elapsed": 5.508298005999677,
+              "frame": 7017,
+              "player": {
+                "tick": 7372,
+                "fraction": 0.912937581539154
+              },
+              "render": {
+                "tick": 7371,
+                "fraction": 0.912937581539154
+              },
+              "disabled": true
+            }
+          ],
+          "retainedPreviousAnchor": {
+            "tick": 7385,
+            "fraction": 0.7129378318786621
+          }
+        },
+        {
+          "elapsed": 5.91876884299927,
+          "anchor": {
+            "tick": 7398,
+            "fraction": 0.5129380226135254
+          },
+          "storedPunch": [
+            -1.7420196533203125,
+            0.4010009765625,
+            0.0
+          ],
+          "rawTick": 7399,
+          "predictionTick": 7400,
+          "controllerTick": 7400,
+          "matchingPriorSelectedEdges": [],
+          "recentSelectedEdges": [
+            {
+              "elapsed": 5.508298005999677,
+              "frame": 7017,
+              "player": {
+                "tick": 7372,
+                "fraction": 0.912937581539154
+              },
+              "render": {
+                "tick": 7371,
+                "fraction": 0.912937581539154
+              },
+              "disabled": true
+            }
+          ],
+          "retainedPreviousAnchor": {
+            "tick": 7392,
+            "fraction": 0.11293792724609375
+          }
+        },
+        {
+          "elapsed": 6.0117590650006605,
+          "anchor": {
+            "tick": 7404,
+            "fraction": 0.912938117980957
+          },
+          "storedPunch": [
+            -1.8624205589294434,
+            0.32299375534057617,
+            0.0
+          ],
+          "rawTick": 7405,
+          "predictionTick": 7405,
+          "controllerTick": 7405,
+          "matchingPriorSelectedEdges": [],
+          "recentSelectedEdges": [
+            {
+              "elapsed": 5.508298005999677,
+              "frame": 7017,
+              "player": {
+                "tick": 7372,
+                "fraction": 0.912937581539154
+              },
+              "render": {
+                "tick": 7371,
+                "fraction": 0.912937581539154
+              },
+              "disabled": true
+            }
+          ],
+          "retainedPreviousAnchor": {
+            "tick": 7398,
+            "fraction": 0.5129380226135254
+          }
+        },
+        {
+          "elapsed": 11.41478899700087,
+          "anchor": {
+            "tick": 7750,
+            "fraction": 0.8343089818954468
+          },
+          "storedPunch": [
+            -1.0993632078170776,
+            -0.5681607127189636,
+            0.0
+          ],
+          "rawTick": 7751,
+          "predictionTick": 7751,
+          "controllerTick": 7751,
+          "matchingPriorSelectedEdges": [
+            {
+              "elapsed": 11.41478899700087,
+              "frame": 7393,
+              "player": {
+                "tick": 7750,
+                "fraction": 0.8343089818954468
+              },
+              "render": {
+                "tick": 7749,
+                "fraction": 0.8343089818954468
+              },
+              "disabled": true
+            }
+          ],
+          "recentSelectedEdges": [
+            {
+              "elapsed": 11.41478899700087,
+              "frame": 7393,
+              "player": {
+                "tick": 7750,
+                "fraction": 0.8343089818954468
+              },
+              "render": {
+                "tick": 7749,
+                "fraction": 0.8343089818954468
+              },
+              "disabled": true
+            }
+          ],
+          "retainedPreviousAnchor": {
+            "tick": 7404,
+            "fraction": 0.912938117980957
+          }
+        }
+      ],
+      "transformValidRows": 0,
+      "transformRejections": {
+        "scene node class unbound": 1934
+      },
+      "velocityOffsetStates": [
+        {
+          "state": {
+            "groups": [
+              {
+                "count": 1,
+                "offset": 0.015625,
+                "ring": 0
+              },
+              {
+                "count": 1,
+                "offset": 0.0,
+                "ring": 1
+              }
+            ],
+            "rings": [
+              {
+                "count": 1,
+                "offset": 0.015625,
+                "ring": 0
+              }
+            ],
+            "valid": true
+          },
+          "rows": 1934
+        }
+      ]
+    },
+    {
+      "name": "native_reaudit_bob_007",
+      "rows": 2927,
+      "uniquePresentedRecords": 1427,
+      "maxNumericGap": 0.03231412300010561,
+      "uniqueInputRecords": 1399,
+      "inputReadDisabledRows": 0,
+      "inputEntryPublishedPairMatches": 2462,
+      "inputEntryFramesAbsentFromSampledRing": 0,
+      "inputEntryPublishedPairDifferences": 0,
+      "selectedPrimaryEdges": [],
+      "observedCameraAnchorChanges": [
+        {
+          "elapsed": 19.08018762500069,
+          "anchor": {
+            "tick": 11298,
+            "fraction": 0.0
+          },
+          "storedPunch": [
+            0.75,
+            0.0,
+            0.0
+          ],
+          "rawTick": 11298,
+          "predictionTick": 11298,
+          "controllerTick": 11298,
+          "matchingPriorSelectedEdges": [],
+          "recentSelectedEdges": [],
+          "retainedPreviousAnchor": {
+            "tick": 9796,
+            "fraction": 0.0
+          }
+        }
+      ],
+      "transformValidRows": 0,
+      "transformRejections": {
+        "scene node class unbound": 2927
+      },
+      "velocityOffsetStates": [
+        {
+          "state": {
+            "groups": [
+              {
+                "count": 1,
+                "offset": 0.015625,
+                "ring": 0
+              },
+              {
+                "count": 1,
+                "offset": 0.0,
+                "ring": 1
+              }
+            ],
+            "rings": [
+              {
+                "count": 1,
+                "offset": 0.015625,
+                "ring": 0
+              }
+            ],
+            "valid": true
+          },
+          "rows": 2927
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "No native invocation trace or atomic cross-object snapshot.",
+    "No physical scanout or input latency claim.",
+    "Input array may be before or after serialization/reduction; the sampling phase is unknown.",
+    "TransformHistory data were rejected because the live node subclass was not yet in the bound allowlist.",
+    "Original input early-return flag decoded from the preserved, guarded input header."
+  ]
+}

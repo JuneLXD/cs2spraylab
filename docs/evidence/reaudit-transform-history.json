@@ -1,0 +1,215 @@
+{
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "wholeArtifactHashVerified": true,
+  "provenance": "Static current-byte range hashes, exact instructions, RTTI and virtual callback bindings; synthetic decoder checks. No live process, native execution or captured invocation.",
+  "assertions": {
+    "ranges": 23,
+    "summedRangeBytes": 16138,
+    "instructions": 72,
+    "exactTails": 2,
+    "classes": 4,
+    "virtualTargets": 10,
+    "ripBindings": 9,
+    "inheritanceRelocations": 3,
+    "matchingObservedSceneVirtuals": 30
+  },
+  "ranges": [
+    {
+      "name": "registration",
+      "bytes": 1888,
+      "sha256": "83d4e792971770e74ec47952343eb5ed36468decc319af52430b8c2f7da9bd63"
+    },
+    {
+      "name": "scene-getter",
+      "bytes": 704,
+      "sha256": "dbbea75f5fff20bf4f4f9e62c57d1793f610e3bcdf86659bd36976245965052e"
+    },
+    {
+      "name": "scene-consumer",
+      "bytes": 1738,
+      "sha256": "fefc3af5758ed05266ca4e621bb61978708ee24ae52c46f84120ce54425cb1fb"
+    },
+    {
+      "name": "bracket",
+      "bytes": 1440,
+      "sha256": "1c5bc21907899702979d33eb89d662f1c085b05431105eeb20a5df6fb0a8b4d6"
+    },
+    {
+      "name": "evaluate-and-derivative-prefix",
+      "bytes": 1920,
+      "sha256": "dc341764b1c3df84080a8ecb200187ab42fc028ae0c8aeb6b8c695df37d93514"
+    },
+    {
+      "name": "two-point",
+      "bytes": 592,
+      "sha256": "f45440efe11564d8efbca568c1f3cc646b24fc6f8667c336c6d2955fe2a2fb34"
+    },
+    {
+      "name": "three-point-prefix",
+      "bytes": 320,
+      "sha256": "9bc89739cab344b779eda10859029ac0a5f77f48f6a8561176711222750e22de"
+    },
+    {
+      "name": "three-point-tail-and-adjacent",
+      "bytes": 2240,
+      "sha256": "7ae71c49eedea112d1eb66ffbba82215041a0baa69bc9e191511ff35d0498138"
+    },
+    {
+      "name": "quaternion-blend-world",
+      "bytes": 320,
+      "sha256": "c691befa8ec66e8bf6d5d4c80a784afa9f8a00638fc6d13f5ee4695c9526601c"
+    },
+    {
+      "name": "quaternion-blend-local",
+      "bytes": 352,
+      "sha256": "a02e166d1bb9d980692f8db6e02e455d5c179844fdd78dd38e3a266c709e25a0"
+    },
+    {
+      "name": "record-current",
+      "bytes": 144,
+      "sha256": "6aa9b2008a0bbdfadbf5423ad6a0abe0457f544838d05c7ad2ca5369d6dc4e7c"
+    },
+    {
+      "name": "ring-writer-prefix",
+      "bytes": 1152,
+      "sha256": "326a0f7f3379a902a05061e538272b899159c3f0f083543eb933931c78de987d"
+    },
+    {
+      "name": "get-fallback",
+      "bytes": 384,
+      "sha256": "91c9d1105e16871a9ad20ec56ca31aeb314fcfc05ed5a6bd76f8b3275be75264"
+    },
+    {
+      "name": "setup-prefix",
+      "bytes": 192,
+      "sha256": "34bd5a264e200f2ba1414f41a907858eca5fbf8e849c2ac24efdbcf7e0181cb8"
+    },
+    {
+      "name": "callback-descriptors",
+      "bytes": 112,
+      "sha256": "565eb76cbbe056770d8dba969e75f8834c377f8ed12f64dcdf2626ecd61fe7f1"
+    },
+    {
+      "name": "clear-history",
+      "bytes": 128,
+      "sha256": "5a5ba096533b0bb5c6008dbad35fe5796c190e9a46bd793ff23124052c44ef4b"
+    },
+    {
+      "name": "clear-both",
+      "bytes": 384,
+      "sha256": "82b0f82bcbc73c7917d77f5368839a2b7efb44face7ea0d47961397ea4198d64"
+    },
+    {
+      "name": "evaluate-apply",
+      "bytes": 384,
+      "sha256": "b40f7a2fec0feac5177c4c1c5db02dd4af7b1b2f838cef6922a70656f563fb3c"
+    },
+    {
+      "name": "evaluate-apply-tail",
+      "bytes": 560,
+      "sha256": "7d584363aa315a5eacad68717d7690c72958f0ac2beefe9bb5b8fd1d0d7329ac"
+    },
+    {
+      "name": "registry",
+      "bytes": 800,
+      "sha256": "58e85fd5b5f12686e263c2a0ddcb699cdc6bf345ce2ec54bee8f1e01baf36a06"
+    },
+    {
+      "name": "observed-node-destructors",
+      "bytes": 128,
+      "sha256": "4c0011326f12183b7e5eab71a402db5b535ee351a81ca58ea0bc3639bcfe2257"
+    },
+    {
+      "name": "observed-node-helper",
+      "bytes": 128,
+      "sha256": "e71d32af69aa3c55c0573dd815d18b8c7cde35db53cdf4f59d01dd054968b827"
+    },
+    {
+      "name": "skeleton-registration-prefix",
+      "bytes": 128,
+      "sha256": "8128452d03c18407c325c0ca508380fb6627cabe04f28b56be2b753a23b6ad65"
+    }
+  ],
+  "decoder": {
+    "sha256": "1b1d12dcc28974766a87e6da86467a0af96a32529860063bd323064970063cdb",
+    "maxIndividualReadBytes": 256,
+    "maxTotalReadBytes": 8192,
+    "maximumEntriesPerRing": 32,
+    "maximumRings": 2,
+    "componentsSupported": 1,
+    "synthetic": {
+      "assertions": 21,
+      "maximumReadBytes": 256,
+      "method": "Synthetic guarded decoding only; no native invocation, process read or runtime validation."
+    }
+  },
+  "findings": [
+    {
+      "id": "TH01",
+      "status": "static-bound",
+      "rule": "The scene node registers a distinct procedural TransformHistory wrapper with scene getter/setter callbacks and an owner node. Its shared current storage and ring values use a 96-byte stride, independently bound in TransformHistory code rather than borrowed from velocity history."
+    },
+    {
+      "id": "TH02",
+      "status": "static-bound",
+      "rule": "The shared current record has multiple writers: the recording path calls the scene getter into it before recording history; interpolation evaluates into it and conditionally calls the consumer; failed bracket selection invokes the scene getter as fallback. A sampled current record cannot identify its last writer."
+    },
+    {
+      "id": "TH03",
+      "status": "static-bound",
+      "rule": "Records contain local/world origins and quaternions, two scales, parent identity, an attachment-like token and two flags. The getter can retain world fields in one flag branch. The consumer selects local/world data using parent state, identity and force-world flag; decoding both sets does not imply both were freshly evaluated."
+    },
+    {
+      "id": "TH04",
+      "status": "static-bound",
+      "rule": "One or two ring headers are selected by wrapper flags; history entries store integer ticks and separate value indices. Selection uses explicit context and mode arguments. Normal bracket mode subtracts the selected time offset, converts ticks at 64 Hz, computes a fraction, clamps past-newest to one, and optionally selects a third point. The ordinary clamp upper literal is two, not one."
+    },
+    {
+      "id": "TH05",
+      "status": "static-bound",
+      "rule": "The two-point kernel requires compatible parent identities, attachment-like tokens and force-world flags for its local branch. Origins use linear interpolation; quaternion blending uses a dot-dependent polynomial adjustment, hemisphere choice and normalization, with a zero-norm fallback. It is not established as an exact generic SLERP implementation."
+    },
+    {
+      "id": "TH06",
+      "status": "static-bound",
+      "rule": "The three-point branch still uses the two-point origin/quaternion helpers for its newer pair; scales have a three-point cubic rule. A three-point selection does not make every transform field cubic."
+    },
+    {
+      "id": "TH07",
+      "status": "static-bound",
+      "rule": "The bound clear-history leaf clears head/count, validity tick and free-value mask while preserving allocated storage and the shared current record. The wrapper dispatches it over enabled contexts. No reviewed caller establishes existing-instance body reset ownership for respawn or teleport."
+    },
+    {
+      "id": "TH08",
+      "status": "static-bound",
+      "rule": "Procedural setup replaces the shared current record allocation for the configured component count. This is distinct from the history-clear leaf and from movement/body object construction; none alone establishes a gameplay reset policy."
+    },
+    {
+      "id": "TH09",
+      "status": "static-bound",
+      "rule": "The scene node observed in runtime008 is CBodyComponentSkeletonInstance::NetworkVar_m_skeletonInstance. Exact ABI typeinfo relocation bindings establish single inheritance from CSkeletonInstance and its public zero-displacement CGameSceneNode base. Thirty reviewed virtual targets, including transform registration, match the skeleton base. Four helper/destructor slots differ. The prepared decoder admits this exact subclass; runtime008 used the earlier allowlist and its rejected TransformHistory readouts remain rejected."
+    }
+  ],
+  "preparedCapture": [
+    "Exact wrapper class, registered callback and owner binding; one-component layout only.",
+    "All enabled ring headers and entries without truncation; current local/world transform and flags; node declared/evaluated/absolute angles, origins and scales.",
+    "Parent identity and attachment-like token, dirty fields, relevant interpolation option globals and quaternion fallback.",
+    "Raw read guards for caller revalidation after the entire snapshot; rejection on read error, changed guard or unsupported shape."
+  ],
+  "limits": [
+    "This bounded run does not re-hash the whole client unless wholeArtifactHashVerified is true. The reader requires the outer sampler to bind the full client hash and game-owned process.",
+    "Synthetic decoder checks establish only decoding and resource bounds; no live acceptance/coherence rate has been measured.",
+    "Actual requested time, context selector, bracket mode, apply options, selected endpoints and last writer are invocation arguments/state not identified by a poll. The reader does not guess them.",
+    "Double-read guards reduce torn snapshots but do not make multi-field reads atomic or identify transient calls/ABA writes.",
+    "Quaternion math classification is static; no bit-exact native oracle for these kernels has run in this pass.",
+    "This proof retains some instruction ranges extending into adjacent functions; only the named, explicitly reviewed instructions support findings.",
+    "Parented attachment resolution, interpolation scheduling, alternative overrides and lifecycle call ownership remain incomplete.",
+    "No existing-instance respawn/teleport body reset has been proved or disproved."
+  ],
+  "nextEvidence": [
+    "Coherent readouts of this exact TransformHistory wrapper beside the body writer and scene angles.",
+    "Entry/exit-bound interpolation requested time, context, mode/options and bracket endpoints, with write order relative to body and render consumption.",
+    "Identity-bound lifecycle observations and narrowly bound clear/setup callers across explicit transform changes and death/respawn."
+  ],
+  "probeSha256": "fae03cc2e52286b9560b1dbcd35921b67cff42c5efe6ef6b6bd3b5fb94850b9f"
+}
