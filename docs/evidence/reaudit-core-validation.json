@@ -1,0 +1,38 @@
+{
+  "typescript": {
+    "exit": 0,
+    "log": "core-feel-typescript.log"
+  },
+  "units": {
+    "fullPassed": 2485,
+    "fullFailed": 4,
+    "total": 2489,
+    "recheckPassed": 44,
+    "correctedFixtureFailures": 3,
+    "uniquePassed": 2488,
+    "remainingFailure": "Missing public/models/ak47.json, documented baseline fixture",
+    "logs": [
+      "core-feel-unit.log",
+      "core-feel-unit-recheck.log"
+    ]
+  },
+  "browser": {
+    "firstPassed": 3,
+    "firstFailed": 1,
+    "recheckPassed": 1,
+    "uniquePassed": 4,
+    "fixedFixture": "Clear pending simulation accumulator before exact AWP input-time assertion",
+    "logs": [
+      "core-feel-browser.log",
+      "core-feel-browser-recheck.log"
+    ]
+  },
+  "policy": "All heavy checks serialized with memory/swap/CPU caps; deploy paused; no repo edits during browser execution.",
+  "logHashes": {
+    "core-feel-typescript.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core-feel-unit.log": "49ac7186783be9d0dcd9bc53ed81edcf8a201d7e8171454c18cda544fce4d19b",
+    "core-feel-unit-recheck.log": "65d6131b6152b9708e6b5ef3e2b9052c8ccd6a45d1abf127d441481357beeb9c",
+    "core-feel-browser.log": "7439b22124be3507e252d05d9804e7bdac78514b2bbaa64beb972a1a28cb13f8",
+    "core-feel-browser-recheck.log": "9a3f4a681bcafecfadeaa6c08b8b862230ce5e20f1bf6d74a87afb45d3f38d36"
+  }
+}

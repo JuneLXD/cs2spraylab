@@ -1,5 +1,20 @@
 # Native feel follow-up
 
+## Current priority: common weapons and core feel
+
+The user narrowed follow-up work on October 10 to movement and the weapons that
+matter most: AK-47, M4A4, M4A1-S, AWP, Glock, USP-S and Desert Eagle. Prioritize
+input response, counter-strafe accuracy, recoil/recovery, scope behavior and
+reload/draw timing. Shotguns, R8/revolver follow-up and less-used weapons are
+deferred. Existing evidence and delivered fixes remain valid within their stated
+limits; deferred rows are not requirements for this focused follow-up.
+
+The unfinished empty-shotgun-trigger change is preserved locally under
+`../native-audit/reports/deferred-shotgun-pass35/`, with its patch, source files
+and hashes. It is absent from the active app and has not been committed or
+shipped. Detailed transform/resolver investigation is also lower priority than
+measurable input, movement and common-weapon behavior.
+
 User-approved priority order, October 8, 2026. Local commits and LAN previews;
 publishing still requires approval under the repository workflow.
 
@@ -245,3 +260,16 @@ typed movement callbacks establish the ordinary interior held-deadline clock.
 The full mechanic inventory remains active, including model/graph/renderer work.
 R8 remains excluded. No camera-only or bob/sway tuning is inferred from these
 new motion and command observations.
+
+## Common-weapon and movement corrections, passes 34–36
+
+The [reload admission correction](reaudit-common-reload.md) makes early R taps
+and held retries respect the current native firing deadline and attack priority
+for AK/M4/AWP/Glock/USP/Deagle. The [crouch accuracy correction](reaudit-duck-accuracy.md)
+replaces the 95% amount approximation with the native stance flag in both engines.
+The [common draw correction](reaudit-common-draw.md) preserves authored playback
+for M4s and common pistols after delayed model loading. Numerical controls and
+limits are retained in each report; these do not establish complete rendering
+or physical input parity. Further priority stays with common-weapon behavior,
+including the identified Deagle reload resource mismatch; shell/revolver work
+and deeper transform/resolver investigation remain deferred.

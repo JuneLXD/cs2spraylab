@@ -1250,6 +1250,62 @@ release header, served AK model/audio hashes, pointer lock and firing/reload.
 It writes `../native-audit/reports/reaudit-accuracy-live-release.{json,png}`;
 CLAUDE.md and memory retain the resulting release and worktree state.
 
+## Common-weapon reload input (thirty-fourth pass)
+
+The user's narrowed scope prioritizes movement and AK/M4/AWP/common-pistol
+behavior. Shotguns, revolvers and less-used weapons are deferred; their unfinished
+follow-up is preserved locally. [The reload report](reaudit-common-reload.md)
+binds seven current-server weapon classes to the same input dispatcher with
+102 instruction and 63 virtual-slot checks. Explicit reload requires the primary
+firing deadline to have elapsed; eligible attack inputs take priority.
+
+Both actual trainer engines previously accepted every tested R request 31.25 ms
+after firing, including the AWP with 1.455 s of configured cycle. They now drop a
+released early R tap and retry a held R with the same readiness/priority rules.
+In the fixed 128 Hz bench, held AWP reload begins 1.4609375 s after the shot instead
+of .03125 s; direct deadline inputs also pass. All 56 paired cases agree: 14 early taps,
+14 held retries and 28 unchanged ready controls. These are trainer sample times,
+not a claim about the native scheduler's exact reload-start tick.
+
+Earlier trigger-continuity fixtures forced a manual reload while primary was
+held immediately after a shot. That did not establish native reload admission.
+Those fixtures now use legal manual/automatic reload starts while preserving
+held-fire continuity coverage. Independent player/deploy gates and within-command
+press/release mask lifetime remain unverified; other weapon families are unchanged.
+
+## Crouch stance and accuracy (thirty-fifth pass)
+
+[The crouch report](reaudit-duck-accuracy.md) rejects the engines' former
+`duckAmount >= .95` stance choice. Five retained native transition samples
+contradict it: accuracy uses a separate pawn flag, set at completed crouch and
+retained on successful ground unduck until amount <= .75. Current-byte evidence
+binds the flag's writers and the baseline/recovery readers. The movement service's
+transient `m_bDucked` is also not a substitute.
+
+The shared motor now carries that state, and Range/Duel active and holstered
+recovery consume it. Across 168 supplied native stance/accuracy cases, 120 wrong
+stance selections and 120 penalty mismatches fall to zero; maximum penalty error
+0.0100954175 falls to zero. Nineteen focused regressions cover captured flag paths,
+threshold history, both engines and standing pose resets. Earlier accuracy
+arithmetic/replay results supplied stance externally and therefore did not
+validate this engine conversion. Partial crouch under a blocking ceiling,
+fatigue command boundaries and exact input-to-shot timing remain separate limits.
+
+## Common rifle and pistol draw clocks (thirty-sixth pass)
+
+[The draw report](reaudit-common-draw.md) extends the independently checked
+ordinary graph path to M4A4, M4A1-S, Glock, USP-S and Desert Eagle. Six current
+resource graphs expose 24 unit-rate nodes, with matching draw CRC/size and actual
+imported clip durations. With 250 ms late model attachment, the actual controller
+previously ran M4 draws at 1.283019343× and pistol draws at 1.333333333×; all now use 1×.
+
+The 1,086-row comparison preserves all action lifetimes/weights, 901 unaffected
+controls, 72 interruptions and 24 pause checks. AWP is an unchanged control. This
+corrects relative playback rate; action onset, readiness/fade routing and pickup
+remain separately bounded. The current Deagle reload resource differs from its
+import manifest; no reload asset or timing was changed on the strength of draw
+provenance. The draw report retains that exact limit.
+
 ## Validation retained from passes 11–15
 
 All three targeted Chromium specs pass: `input-timing`, `trigger-continuity`

@@ -1,6 +1,21 @@
-# CS2 independent re-audit: passes 16–33
+# CS2 independent re-audit: passes 16–36
 
-Ten evidenced corrections follow baseline `c488943`: movement (`79832e6`),
+## Current priority: common weapons and core feel
+
+The user narrowed follow-up work on October 10 to movement and the weapons that
+matter most: AK-47, M4A4, M4A1-S, AWP, Glock, USP-S and Desert Eagle. Prioritize
+input response, counter-strafe accuracy, recoil/recovery, scope behavior and
+reload/draw timing. Shotguns, R8/revolver follow-up and less-used weapons are
+deferred. Existing evidence and delivered fixes remain valid within their stated
+limits; deferred rows are not requirements for this focused follow-up.
+
+The unfinished empty-shotgun-trigger change is preserved locally under
+`../native-audit/reports/deferred-shotgun-pass35/`, with its patch, source files
+and hashes. It is absent from the active app and has not been committed or
+shipped. Detailed transform/resolver investigation is also lower priority than
+measurable input, movement and common-weapon behavior.
+
+Thirteen evidenced corrections follow baseline `c488943`: movement (`79832e6`),
 scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
 ordering (`fd328d5`), ordinary footstep cadence (`2aba70c`), and native weapon
 recoil rotation (`5132783`, [pass 23](reaudit-viewmodel-recoil.md)), and
@@ -8,6 +23,10 @@ recoil rotation (`5132783`, [pass 23](reaudit-viewmodel-recoil.md)), and
 [loaded-shell reload interruption](reaudit-shell-reload.md) (`9095bb0`, pass 26),
 and [AK reload playback](reaudit-animation.md) (`7597b1c`, pass 31), and
 [ordinary draw playback](reaudit-draw-and-transform.md) (`64bbe25`, pass 33).
+The focused follow-up adds [common-weapon reload admission](reaudit-common-reload.md)
+(`55602f8`, pass 34), [crouch accuracy stance](reaudit-duck-accuracy.md)
+(`02cc418`, pass 35), and [M4/pistol draw playback](reaudit-common-draw.md)
+(`95788ca`, pass 36).
 This report covers the requested inventory and identifies the remaining work;
 it does not certify complete native parity. The follow-up corrects
 [accuracy/index update order](reaudit-accuracy.md) and
@@ -42,7 +61,26 @@ the native sessions again; transports are healthy, and saved current-hash eviden
 remains available. Bounded current-byte probes continue without new full analysis.
 No active Ghidra request is cancelled or restarted.
 
-## Delivered behavior and validation
+## Verified behavior and validation
+
+Passes 33–36 are committed locally and await push approval. The LAN still serves
+`f0f70ee`; the changes below must not be treated as deployed.
+
+Passes 34–36: TypeScript passes; 2,488 distinct unit cases pass after correcting
+three older reload fixtures, with only the known missing fallback model left.
+All four targeted Chromium cases pass. [Counts and log hashes](evidence/reaudit-core-validation.json)
+retain the full run and focused rechecks; no exact native input latency is inferred.
+
+- Common-weapon reload: both engines reject released early R taps and retry held
+  R after the firing cycle, respecting attack priority. All 56 paired cases
+  agree. Fixed-step AWP start changes 31.25 ms → 1460.9375 ms for a 1455 ms
+  cycle; these are trainer samples, not native scheduling measurements.
+- Crouch accuracy: the native stance flag replaces the 95% amount predicate.
+  Across 168 supplied native state/accuracy cases, 120 mismatches fall to zero;
+  maximum penalty error 0.0100954175 → 0. Both active and carried weapons use it.
+- Common draws: with 250 ms attachment delay, M4 rate 1.283019343× → 1× and
+  Glock/USP/Deagle rate 1.333333333× → 1×. All 1,086 action-lifetime/weight samples,
+  901 unaffected controls, 72 interruptions and 24 pauses remain unchanged.
 
 - Standing launch 298.86838 versus fully crouched 301.99338 u/s; airborne origin
   shifts ±9 units; camera offsets approach 90 units/s. Standing apex 56.9974→55.8255 u,
@@ -189,6 +227,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-combat.md](
 | R8 primary windup | Current server bounded initialization preserves command fraction and adds 13 ticks | 203.125 ms, unchanged; 20 native emulation cases pass | Matched arithmetic; complete charge/animation chain unverified | `c488943` |
 | R8 alternate fire | Current alternate stats; fresh server spread sampler uses `1-r²` | Same alternate cycle/distribution, unchanged | Matched data/distribution branch; native trigger schedule unverified | `c488943` |
 | Reload lock and insertion | Current vdata lock; imported clip insert events; fresh AK capture | Separate insert and attack deadline; unchanged | Matched exported lock, animation event coverage in animation audit | `c488943` |
+| Explicit reload admission / held retry | Current-server dispatcher and seven bound classes; primary deadline inclusive, attacks take priority ([pass 34](reaudit-common-reload.md)) | R at 31.25 ms after a shot always began reload → released early taps dropped, held R retries when ready; 56 paired cases pass | Bounded weapon/input rule corrected; independent player/deploy and within-command edge timing remain partial | `55602f8` |
 | Silent reload | Native gated clock was not independently emulated in this pass | Per-phase windows and half-speed held clock; AK measured lock 4.172391 s; unchanged | Unverified current whole runtime path | `c488943` |
 | Shell loading/interruption | Current native loaded-shell primary path uses the initial attack lock, then switches directly to shooting; [pass 26](reaudit-shell-reload.md) | Early held fire 250 ms → Nova/Sawed-Off468.75 ms, XM609.375 ms; ready taps now fire immediately. Start/insertion/finish estimates and empty-start path retained | Loaded-start interruption corrected; insertion/completion and empty retry ordering remain approximated | `9095bb0` |
 | Recoil pattern seed/parameters | Current vdata seeds/angles/magnitudes; fresh AK native impulse anchors | Parameters identical, AK six-shot impulses verified; unchanged table generator | Matched data and AK sample; current all-weapon table emulation unverified | `c488943` |
@@ -198,7 +237,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-combat.md](
 | Between-spray recovery | Fresh native index snapshots and native update body; long-rest angle samples | Long rests matched; short-pause index now uses full native decay steps and strict gate | Matched captured recovery; full command histories remain bounded | `fd328d5` |
 | Aim punch versus camera-only punch | Current client/server sampler and impulse execution; 52 AK shots; distinct sampling and command-history clocks ([pass 22](reaudit-camera-clocks.md)) | Aim-punch scheduling corrected; camera-only processing anchor retained | Arithmetic matched; camera command-clock integration and rendered parity remain partial | `e85f59a`; camera evidence only in pass 22 |
 | Recoil-follow settings | Client setting lookup and frame presentation handled in response audit | No combat settings change | See response audit | `c488943` |
-| Stand/crouch/air baseline | Current native body and 39,648 independent invocations; air scale 1 | Same baseline choices; native float32 step and parameter changes now preserve accumulated penalty | Matched arithmetic and captured stance rows | `fd328d5` |
+| Stand/crouch/air baseline | Native arithmetic plus current crouch-flag writers/readers and retained transition states ([pass 35](reaudit-duck-accuracy.md)) | Amount ≥ .95 selected crouch → completed-crouch flag retained through successful unduck until ≤ .75; 120/168 consumer mismatches → 0 | Arithmetic and supplied-state engine conversion matched; partial blocked expansion remains approximated | `fd328d5`; `02cc418` |
 | Running/walking velocity mapping | Fresh GetInaccuracy remaps 34–95% mode speed; run quarter-power, walk linear | Bench samples 0/.34/.52/.75/.95/1; same results | Matched arithmetic structure | `c488943` |
 | Jump/fall/landing accuracy | Native square-root vertical term; 12 captured landings use land coefficient × prior fall speed before recovery | Continuous recovery → native full-tick recovery; cumulative penalty error within 3.10e-6 landing-speed precision | Matched captured landing penalty/recovery; coincident firing/stance edges still partial | `fd328d5` |
 | Fire accuracy and tick order | Native movement → PostThink → FinishTick caller chain; 160 captured shots | Advance-then-fire continuous decay → fractional shot before native tick update, exact-boundary shot afterward; fresh recovery max error .00130726 → 1.49e-8 | Matched native arithmetic and captured paths in both engines | `fd328d5` |
@@ -282,7 +321,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | Hit flinch by group and side | 90 VPK flinch entries = 45 base + 45 non-additive variants | 42 bullet-hit family clips imported; three molotov family clips omitted; four freshly sampled retained sets match to .03189° | Matched sampled clip deltas; approximated blending | `c488943` |
 | Death and ragdoll behavior | Native world graph hands death to native physics | Custom joint spheres, distance constraints, damping .98/friction .45, 10 iterations; baked fallback | Approximated | `c488943` |
 | Distance-based animation throttling | Needs native client runtime measurement | Trainer uses visibility and global quality/adaptive rate; no distance input in `animationRate` | Native rule unverified; distance-specific policy not present | `c488943` |
-| View draw, idle, fire, reload, empty reload, inspect | Current package: 20 selected entries; worker and immediate Arms clock paths; four unit-rate draw graphs | AK insertion pose 1.115069→1.1s; ordinary AK/AWP/Nova/XM delayed draws now use authored seconds; 724 lifetime/fade samples unchanged | Bounded relative rates corrected; exact onset/blends/display phase, pickup routing and other action clocks partial | `7597b1c`; `64bbe25` |
+| View draw, idle, fire, reload, empty reload, inspect | Current package, bound Arms clock, ordinary draw graphs; common draws add six graphs/24 unit-rate nodes ([pass 36](reaudit-common-draw.md)) | AK reload and initial four draws corrected; M4/pistol delayed draw rates now 1×, 1,086 lifetime/weight samples unchanged | Bounded relative rates corrected; onset/blends/display/pickup remain partial; Deagle reload resource provenance differs | `7597b1c`; `64bbe25`; `95788ca` |
 | Last-shot/scoped/left/right/alternate variants | Fresh view graphs; selector inventories | Supported dedicated last/scoped/Dualies/R8 variants; generic fire paths use selected native shoot1 clips | Matched selection for implemented variants; full graph not reproduced | `c488943` |
 | View action coverage | Referenced resources in fresh graphs | Unselected referenced actions include AK inspect variants/fixups, AUG/SG fidgets, CZ second reload/draw, MG bullet-hide layers, R8 chamber-position layers and knife hit/backstab variants | Not present for named layers/actions | `c488943` |
 | Settle and action interruption | Native graph transition durations, sync events and inspect fixups | Trainer fades transient end over up to .08 s; inspect onset .06 s; fire resets transient; reload/switch cancels it | Approximated; exact event gating unverified | `c488943` |
@@ -301,6 +340,20 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | Dropped weapons | Native dropped world models and physics | Trainer pickup/drop presentation uses browser scene and simplified placement | Approximated | `c488943` |
 
 ## Claims overturned or not reproduced
+
+The focused follow-up adds three corrections to the earlier claims:
+
+- Trigger continuity tests that forced a manual reload immediately after a held
+  shot did not verify native reload admission. The native common-weapon
+  dispatcher rejects that request; the corrected tests use legal starts.
+- Native accuracy arithmetic passed with externally supplied stance. It did
+  not verify the engines' 95% duck-amount conversion, which disagreed with five
+  recorded states. The new flag and consumer checks close that specific gap.
+- The authored draw-rate correction covered four selected weapons. M4s and
+  common pistols still retimed delayed attachment until pass 36. Draw resource
+  identity does not validate the separately mismatched Deagle reload resource.
+
+Earlier findings remain:
 
 1. Standing and crouched jumps do not share the same observed launch velocity.
 2. Airborne stance changes shift the origin 9 units, not 18, and complete immediately.
