@@ -1462,6 +1462,23 @@ Resource lookup/allocation, command seed generation, table selection, firing
 and presentation are outside this numeric oracle. In particular, it confirms
 the Deagle table while leaving the separate pass-42 seed-generation gap open.
 
+## Ground stopping state (forty-fourth pass)
+
+The [native friction comparison](reaudit-ground-friction.md) executes the current
+quantizer, cache, Friction, Accelerate, cap/work corrections, pre/post helpers
+and strict stop gate with guarded data accesses. The corrected actor matches
+462 combined standing cases and 192 complete-release cases, including state
+handoff and internally inserted saved fractions. The M4/pistol supplied release
+boundary changes from 210.9375 ms to the native 203.125 ms; AK and unscoped
+AWP already reached that evaluated boundary. Native movement-accuracy
+normalization and actual Range/Duel shot tests verify the connection to firing.
+These remain conditional supplied-state results: physical input production,
+complete native command/collision and clean live release coverage are outside
+the proof. Commit `98002af` passes TypeScript, 2,660 unit cases (with only the
+known missing fallback fixture failure) and four isolated Chromium cases.
+The source-hashed [validation ledger](evidence/reaudit-ground-friction-validation.json)
+retains the comparisons and logs. Deployment remains pending.
+
 ## Validation retained from passes 11–15
 
 All three targeted Chromium specs pass: `input-timing`, `trigger-continuity`

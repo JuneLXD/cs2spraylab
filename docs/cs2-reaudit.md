@@ -1,4 +1,4 @@
-# CS2 independent re-audit: passes 16–43
+# CS2 independent re-audit: passes 16–44
 
 ## Current priority: common weapons and core feel
 
@@ -223,10 +223,10 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-movement.md
 
 | Mechanic | Game rule / evidence | Trainer before | Trainer after | Status | Implementation commit |
 |---|---|---|---|---|---|
-| Ground acceleration | M1 Accelerate separates wish speed and acceleration speed; base max(250,wish), weapon/stance scales, 5 u/s walk taper. M4 acceleration 5.5. | Same arithmetic; AK rest→215 u/s at 570.3125 ms. | Unchanged. | Matched equations; complete live acceleration trajectory still approximated. | `c488943` |
-| Ground friction / stop speed | M1 ground-only max(speed,80)×5.2×surface×dt, midpoint movement correction. M4 numeric values. | Default surface=1 behavior matches; surface-specific friction metadata is not consumed by actor motor. | Unchanged. | Matched default-surface equation; variable surfaces approximated. | `c488943` |
-| Counter-strafe / release | M5 position intervals; M1 friction/acceleration. | 34% threshold 78.125 / 203.125 ms; sustained reverse crosses zero 125 ms, release zero 382.8125 ms. | Unchanged. | Matched sampled threshold only; exact subtick stop timing unverified. | `c488943` |
-| Stand / walk / crouch caps | M1 running weapon cap, walk×0.52, crouch×(1−0.66 amount). | AK215 /111.8 /73.1 u/s; ground speed clamps every step. | Unchanged. | Matched equations. | `c488943` |
+| Ground acceleration | Current guarded native normalization/Accelerate/cap/work replay; [pass 44](reaudit-ground-friction.md). | Omits unused friction in acceleration budget and independently rounded work. | Native overshoot budget and work integration; actual standing replay matches 462 cumulative cases. | Matched supplied dry-ground arithmetic; complete live/collision trajectory remains partial. | `98002af`, local |
+| Ground friction / stop speed | Current native quantizer/cache/Friction, command markers, saved fractions, per-segment wish copy and low-speed gate; [pass 44](reaudit-ground-friction.md). | Recomputes unquantized control speed each 128 Hz step; lacks persistent cache/fraction. | Native state carried across commands/segments; all 10,980 release primitive rows match; 192 cumulative actor cases reach matching accuracy/stop boundaries. | Corrected supplied-state replay; variable surfaces and full lifecycle remain partial. | `98002af`, local |
+| Counter-strafe / release | Native combined acceleration plus release through complete stop; native velocity→accuracy normalization; [pass 44](reaudit-ground-friction.md). | Combined maximum error 23.54681 u/s; 164 movement-zero row disagreements. M4/pistol supplied release boundary 210.9375 ms versus native 203.125 ms. | Zero combined trajectory/state/threshold disagreements; seven-weapon Range/Duel shots use corrected boundary. | Corrected under explicit supplied conditions; no accepted clean live release or complete command/collision replay. | `98002af`, local |
+| Stand / walk / crouch caps | M1 cap equations; current guarded cap/work and stance branches with supplied processed caps, [pass 44](reaudit-ground-friction.md). | Ideal decimal caps; reconstructs midpoint from rounded endpoints. | Native independent work/cap/pre/post rounding; 248 supplied stance trajectories match. | Matched supplied cap arithmetic; upstream native modifier pipeline not newly executed. | `c488943`; `98002af`, local |
 | Weapon speed multipliers | M6 all 35 firearms, both modes; knife250. | Extracted speeds; bench enumerates all 71 supported weapon/mode entries. | Unchanged. | Matched data. | `c488943` |
 | Scoped walk acceleration | M1 second zoom with scaled walk speed<110 retains weapon scaling. | Implemented;100 u/s weapon gives4.296875 u/s gain/128 step from rest. | Unchanged. | Matched static branch. | `c488943` |
 | Silent walking threshold | Current-server movement wrapper bypasses the timer while walking or below135.2u/s; speed²<10 resets it. See [footstep ledger](reaudit-footsteps.md). | Gate54% weapon speed; distance accumulator. | Native absolute speed/walk gate and rest reset. | Matched bounded ordinary dry-ground cases; special sounds and client delivery remain partial. | `2aba70c` |
@@ -534,6 +534,17 @@ Earlier findings remain:
     presence. Ordinary interior held deadlines also have an actual native clock
     scope; that does not identify every live resolver branch or cache value.
 
+43. Ordinary Deagle recoil does not select its table entry from the recovering
+    floating accuracy index. Native code uses command-seed low bits, and 14
+    historical impulses uniquely identify different entries. The seed producer
+    is still missing; the optional replay fix does not change default gameplay.
+44. The ground-friction coefficient alone did not establish matched stopping.
+    Native code uses a quantized persistent cache, saved segment fractions,
+    unused-friction acceleration budget and separately rounded work. The
+    correction matches supplied release/counter trajectories and fixes the
+    7.8125 ms M4/pistol release-boundary difference. Native movement accuracy
+    reaches zero at that boundary; base spread and other penalties remain.
+
 ## Exact remaining evidence and implementation
 
 The active follow-up prioritizes the seven common weapons and stopping/first-shot
@@ -541,6 +552,11 @@ movement behavior. The detailed historical inventory below preserves deferred
 work; R8, shotguns, uncommon weapons and deep presentation resolvers are not
 requirements for this focused session.
 
+- Ground stopping: supplied native release/counter/work/stop trajectories now
+  match the corrected actor, with native movement-accuracy normalization.
+  Complete physical input/command production, collision/publisher callbacks,
+  variable surfaces and full mode-transition parity remain outside that proof.
+  No clean retained runtime release window passed the independent eligibility gates.
 - Pistol recoil: the table and selector branch are established, including the
   consumed command field. Native seed generation and its distribution remain
   unproved. The 14 reconstructed Deagle indices are not recorded seeds.
@@ -628,3 +644,10 @@ optional supplied-selector replay interface, with default gameplay unchanged.
 The inventory has 137 mechanic rows, including the newly separated pistol
 selector gap. Current validation and its memory-limited browser retry are
 recorded above; a passed conditional replay is not a shipped pistol feel fix.
+
+Pass 44 (`98002af`) corrects ground stopping and counter-strafe work. TypeScript
+passes; 2,660 units pass with the same known missing fallback model, and four
+isolated Chromium cases pass across release-and-fire, Glock timing and recoil.
+The [validation ledger](evidence/reaudit-ground-friction-validation.json) verifies
+70 bundled sources and the native before/after comparisons. This batch remains
+local; the LAN still serves the approved `e99fd05` release.

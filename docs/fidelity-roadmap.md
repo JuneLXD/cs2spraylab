@@ -353,3 +353,16 @@ No recoil magnitude, smoothing or first-shot suppression change is needed.
 This supplements the old Windows fixtures only for the seven priority weapons;
 command seed generation, selection and full shot/presentation timing remain
 separate. It does not resolve the Deagle default selector boundary in pass 42.
+
+## Ground stopping state, pass 44
+
+The [native friction oracle](reaudit-ground-friction.md) quantifies a missing
+control-speed cache and independently rounded movement work. The corrected
+actor matches 462 combined standing trajectories and 192 complete-release
+trajectories, including saved interior fractions and counter-input. Native
+accuracy normalization confirms the movement-zero boundary; real Range/Duel
+shot tests cover all seven priority weapons. Commit `98002af` passes TypeScript,
+2,660 units (only the known missing fallback fixture fails) and four Chromium
+cases. Delivery remains pending. Full native command/collision and accepted live
+release coverage remain open. No coefficient or simulation rate is fitted to
+the rejected runtime windows.
