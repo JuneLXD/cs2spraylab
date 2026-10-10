@@ -71,6 +71,35 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
     return {played, shots: sim.pop.shots, pops: sim.pop.pops, clouds: engine.impactClouds?.size ?? 0, caption: engine.hitCaption.textContent};
   });
   expect(quiet).toEqual({played: 0, shots: 2, pops: 1, clouds: 0, caption: 'MISS'});
+  // Hits to pop, the peek wall and the background colour.
+  await page.keyboard.press('Escape');
+  await page.getByLabel('Hits to pop').fill('3');
+  await page.getByLabel('Peek wall').selectOption('left');
+  await page.getByRole('button', {name: 'White background'}).click();
+  await expect(page.getByLabel('Background color', {exact: true})).toHaveValue('#f0f0ec');
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await page.waitForFunction(() => !!(window as any).popEngine?.sim?.pop?.wall);
+  const walled = await page.evaluate(() => {
+    const engine = (window as any).popEngine, sim = engine.sim, backdrop = engine.pop.getObjectByName('pop-backdrop');
+    sim.yaw = 0; sim.pitch = 0;   // straight ahead from the spawn: into the wall
+    sim.start(); sim.release('mouse');
+    return {blocked: {shots: sim.pop.shots, hits: sim.pop.hits, caption: engine.hitCaption.textContent}, hits: sim.pop.config.hits,
+      wall: !!engine.pop.getObjectByName('pop-wall'), spawn: {...sim.position}, background: backdrop.material.color.getHexString(),
+      benches: engine.scene.getObjectByName('range-benches').visible};
+  });
+  await page.waitForTimeout(400);   // the AK's cycle, so the next tap fires at once
+  const struck = await page.evaluate(() => {
+    const engine = (window as any).popEngine, sim = engine.sim, ball = sim.pop.balls[0];
+    sim.position.x = -1;          // stepped out to the left: the balls are ahead
+    const dx = ball.x - sim.position.x, dy = ball.y - sim.position.y, dz = ball.z - sim.position.z;
+    sim.yaw = Math.atan2(-dx, -dz); sim.pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
+    sim.start(); sim.release('mouse');
+    return {shots: sim.pop.shots, hits: sim.pop.hits, pops: sim.pop.pops, ballHits: sim.pop.balls.find((b: {id: number}) => b.id === ball.id)?.hits, caption: engine.hitCaption.textContent};
+  });
+  expect(walled.hits).toBe(3); expect(walled.wall).toBe(true); expect(walled.background).toBe('f0f0ec'); expect(walled.benches).toBe(false);
+  expect(walled.spawn.x).toBe(0); expect(walled.spawn.z).toBe(2);
+  expect(walled.blocked).toEqual({shots: 1, hits: 0, caption: 'MISS'});
+  expect(struck).toEqual({shots: 2, hits: 1, pops: 0, ballHits: 1, caption: 'HIT'});
   // The master volume in the top bar is the same level as the Audio setting.
   await page.keyboard.press('Escape');
   const slider = page.getByLabel('Master volume');

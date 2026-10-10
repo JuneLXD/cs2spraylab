@@ -99,3 +99,23 @@ Two slow draft unit runs were manually interrupted while investigating a whole-
 arena serialization mistake in the contact signature. That mistake was fixed
 and covered by a size regression; the final full suite completed in 109.81 s.
 No process hit its memory cap during this implementation pass.
+
+### Integration with the concurrent main update
+
+Movement implementation commit `5d830f1` was then merged with the already-pushed
+main update `2314ea5` (Pop hit counts/peek wall/background and aggressive bots).
+Only the appended changelog sections conflicted; both were retained. The Pop
+environment and all existing feature changes are preserved.
+
+The [combined-source ledger](evidence/reaudit-ground-main-integration.json) pins
+the resulting 71 application inputs and fresh checks. TypeScript and 2,870 unit
+tests pass, with the same single known missing-model failure. All 84 native
+curve comparisons and 16 fresh rescope shots still pass. Four isolated Chromium
+cases pass on this combined source: stopping, scoped movement in Range and Duel,
+and the complete Pop interaction test including its peek wall. The earlier
+scope-recovery presentation test remains pinned to `5d830f1`.
+
+The main update's existing deployment and release verification were allowed to
+finish before the combined validation began. All subsequent checks used the same
+serial 512 MiB/2 GiB limits; the merge is intended for one push/build, not separate
+builds for each earlier audit commit.

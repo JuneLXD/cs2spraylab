@@ -9,6 +9,7 @@ from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument('--reports', type=Path, required=True)
 parser.add_argument('--output', type=Path, required=True)
+parser.add_argument('--integrated-main', action='store_true', help='Validate the merge with the already-pushed Pop/bot update.')
 args = parser.parse_args()
 repo = Path(__file__).resolve().parents[1]
 digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
@@ -39,7 +40,7 @@ unit = (args.reports / 'timing-unit-final.log').read_text()
 assert 'modelAssets.test.ts' in unit and re.search(r'Tests\s+1 failed \| \d+ passed', unit)
 assert (args.reports / 'timing-tsc-final.log').read_text() == ''
 browser_names = ['timing-browser-stop.log', 'timing-browser-scope-range.log',
-    'timing-browser-scope-duel.log', 'timing-browser-rescope.log']
+    'timing-browser-scope-duel.log', 'timing-browser-pop.log' if args.integrated_main else 'timing-browser-rescope.log']
 for name in browser_names:
     log = (args.reports / name).read_text()
     assert re.search(r'1 passed', log) and not re.search(r'\d+ failed', log), name
@@ -47,6 +48,7 @@ files = names + ['timing-unit-final.log', 'timing-tsc-final.log'] + browser_name
 fixtures = ['src/range/native-ground-command-fixture.json', 'src/range/native-scoped-command-fixture.json',
     'src/range/native-scoped-awp-fixture.json']
 result = {'schema': 'spraylab.ground-command-validation.v1', 'status': 'passed',
+    'integratedMain': '2314ea5' if args.integrated_main else None,
     'sourceHashes': sources, 'artifacts': {name: digest(args.reports / name) for name in files},
     'fixtures': {name: digest(repo / name) for name in fixtures},
     'curves': curves, 'phase': phase, 'freshShots': len(shots), 'zeroMovementShots': 0,
