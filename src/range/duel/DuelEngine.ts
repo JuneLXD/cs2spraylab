@@ -10,7 +10,8 @@ import {gameData,loadoutWeapon,resolutionPixelRatio,viewAspect, type Settings, t
 import {requestRawLock} from '../input';
 import {InputClock, inputTimestamp} from '../input-clock';
 import {createGameRenderer} from '../render-context';
-import {mouseAngle, VERTICAL_FOV} from '../simulation';
+import {VERTICAL_FOV} from '../simulation';
+import {mouseLook} from '../mouse-look';
 import {dynamicCrosshairGap} from '../crosshair-spread';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
 import {attachBindInput} from '../keybinds/dom-input';
@@ -847,10 +848,9 @@ export class DuelEngine {
       }
       const actions = this.sim.actors[0].weapon.actions;
       const mouse = event.pointerType === 'mouse';
-      const scale = (mouse ? mouseAngle(1, this.settings.sensitivity) : .0025) *
-        actions.sensitivityAt(this.sim.time + this.sim.accumulator, mouse ? this.settings.keyboard.zoomSensitivity : 1);
-      if (dx || dy) this.sim.command(0, {yawDelta: -dx * scale,
-        pitchDelta: -dy * scale * (this.settings.invertY ? -1 : 1)});
+      const look = mouseLook(dx, dy, this.settings, !mouse);
+      const scale = actions.sensitivityAt(this.sim.time + this.sim.accumulator, mouse ? this.settings.keyboard.zoomSensitivity : 1);
+      if (dx || dy) this.sim.command(0, {yawDelta: look.yaw * scale, pitchDelta: look.pitch * scale});
     }) as EventListener, {capture: true});
     this.listen(document, 'pointerup', ((event: PointerEvent) => {
       if (this.pointer !== event.pointerId) return;

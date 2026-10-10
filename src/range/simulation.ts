@@ -1,3 +1,4 @@
+import {mouseLook} from './mouse-look';
 import { Angle, clamp, gameData, loadoutWeapon, MeasuredProfile, recoilPattern, Settings } from './config';
 import {ViewPunch} from './view-punch';
 import {FootstepCadence} from './footsteps';
@@ -27,7 +28,7 @@ export type ImpactSample = { x: number; y: number; hit: boolean; head: boolean; 
 export type Result = { id: string; weapon: Equipment; mode: Settings['mode'] | 'tracking'; shots: number; hits: number; heads: number; seconds: number; tracking: number; date: string; samples: ImpactSample[]; drill?: DrillMetrics };
 export type Input = MoveInput;
 
-export function mouseAngle(count: number, sensitivity: number) { return count * .022 * sensitivity * DEG; }
+export {mouseAngle} from './mouse-look';
 /** CS2's zoom_sensitivity_ratio, applied to mouse input while scoped. */
 export function targetSpeed(settings: Settings) {
   return (settings.targetSpeed === 'knife' ? 250 : settings.targetSpeed === 'smg' ? 240 : gameData.weapons[settings.weapon].speed) * UNIT;
@@ -310,11 +311,11 @@ export class Simulation {
     this.attempts++; this.onResult(this.latest);
   }
   aim(dx: number, dy: number, touch = false) {
-    const scale = (touch ? .0025 : mouseAngle(1, this.settings.sensitivity)) *
-      this.actions.sensitivityAt(this.time + this.accumulator, touch ? 1 : this.settings.keyboard.zoomSensitivity);
-    this.drill?.mouse(Math.hypot(dx,dy)*scale/DEG);
-    this.yaw -= dx * scale;
-    this.pitch = clamp(this.pitch - dy * scale * (this.settings.invertY ? -1 : 1), -89 * DEG, 89 * DEG);
+    const look = mouseLook(dx, dy, this.settings, touch);
+    const scale = this.actions.sensitivityAt(this.time + this.accumulator, touch ? 1 : this.settings.keyboard.zoomSensitivity);
+    this.drill?.mouse(Math.hypot(look.yaw, look.pitch)*scale/DEG);
+    this.yaw += look.yaw * scale;
+    this.pitch = clamp(this.pitch + look.pitch * scale, -89 * DEG, 89 * DEG);
   }
   /** Mouse/key attack edge. Training's automatic start remains a separate action. */
   pressTrigger(alternate = false) {

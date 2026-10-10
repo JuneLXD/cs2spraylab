@@ -1,22 +1,25 @@
 import * as THREE from 'three';
-import { Angle, Weapon, weaponNames } from './config';
+import { Angle, Weapon, weaponNames, type Settings } from './config';
 import { TARGET_Z } from './simulation';
 
 export const GUIDE_COLORS = { now: '#55ffa4', next: '#ff75d7' };
 const SIZE = 768;
 export type PlotPoint = { x: number; y: number };
 export type DemonstrationKind = 'impact' | 'mouse';
-export function mouseCompensation(point: Angle, invertY = false): PlotPoint {
-  return { x: -point.yaw, y: point.pitch * (invertY ? -1 : 1) };
+type MouseAxes = Pick<Settings, 'mouseYaw' | 'mousePitch' | 'sensitivityYScale' | 'invertX'>;
+export function mouseCompensation(point: Angle, invertY = false, axes?: MouseAxes): PlotPoint {
+  const x = (axes?.mouseYaw ?? .022) * (axes?.invertX ? -1 : 1);
+  const y = (axes?.mousePitch ?? .022) * (axes?.sensitivityYScale ?? 1);
+  return { x: x ? -point.yaw * (.022 / x) : 0, y: y ? point.pitch * (invertY ? -1 : 1) * (.022 / y) : 0 };
 }
 
-export function layoutSprayPattern(pattern: readonly Angle[], kind: DemonstrationKind = 'impact', invertY = false): PlotPoint[] {
+export function layoutSprayPattern(pattern: readonly Angle[], kind: DemonstrationKind = 'impact', invertY = false, axes?: MouseAxes): PlotPoint[] {
   if (!pattern.length) return [];
   // Fit each shape uniformly after applying its coordinate convention.
   const points = pattern.map(p => {
     if (kind === 'mouse') {
       // Mouse counts are proportional to angles, not perspective-projected impacts.
-      const delta = mouseCompensation(p, invertY);
+      const delta = mouseCompensation(p, invertY, axes);
       return { x: delta.x * Math.PI / 180, y: delta.y * Math.PI / 180 };
     }
     return { x: Math.tan(p.yaw * Math.PI / 180), y: -Math.tan(p.pitch * Math.PI / 180) / Math.cos(p.yaw * Math.PI / 180) };
@@ -57,8 +60,8 @@ export class SprayDemonstration {
     this.mesh.position.set(kind === 'impact' ? -5.25 : 5.25, 2.25, TARGET_Z - 1.47);
     this.motionQuery.addEventListener('change', this.motionChanged);
   }
-  setPattern(weapon: Weapon, pattern: readonly Angle[], cycle: number, time: number, invertY = false) {
-    this.points = layoutSprayPattern(pattern, this.kind, invertY); this.cycle = cycle; this.start = time; this.lastFrame = -1;
+  setPattern(weapon: Weapon, pattern: readonly Angle[], cycle: number, time: number, invertY = false, axes?: MouseAxes) {
+    this.points = layoutSprayPattern(pattern, this.kind, invertY, axes); this.cycle = cycle; this.start = time; this.lastFrame = -1;
     const ctx = this.base.getContext('2d')!;
     ctx.fillStyle = '#192b2c'; ctx.fillRect(0, 0, SIZE, SIZE);
     ctx.strokeStyle = '#536d6a'; ctx.lineWidth = 3; ctx.strokeRect(12, 12, SIZE - 24, SIZE - 24);

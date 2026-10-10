@@ -154,7 +154,7 @@ describe('crosshair and setting commands from binds', () => {
     expect(next.crosshair).toMatchObject({size: 5, gap: 2, thickness: 2, color: '#ff00ff'});
     expect(applyConsoleCommand(settings, ['cl_crosshair_recoil', '1'], at1080)!.follow).toBe(true);
     expect(applyConsoleCommand(settings, ['viewmodel_fov', '60'], at1080)!.viewmodel.fov).toBe(60);
-    expect(applyConsoleCommand(settings, ['m_pitch', '-0.022'], at1080)!.invertY).toBe(true);
+    expect(applyConsoleCommand(settings, ['m_pitch', '-0.022'], at1080)!.mousePitch).toBe(-.022);
     expect(applyConsoleCommand(settings, ['buymenu'], at1080)).toBeUndefined();
     expect(applyConsoleCommand(settings, ['sensitivity', '0'], at1080)).toBeUndefined();
   });

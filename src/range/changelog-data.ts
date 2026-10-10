@@ -392,6 +392,11 @@ export const latestChanges = {
     {id: 'duel-aggressive-bots', title: 'Aggressive duel bots', items: [
       'Aggressive bots never hold: they peek as soon as they reach an angle, chase the last place they saw you after a burst loses its target, and sweep the forward crates and lane edges within 1.5 s of losing contact instead of waiting at cover.',
     ]},
+    {id: 'cs2-aim-settings', title: 'CS2 mouse and display settings', items: [
+      'CS2 config import now applies video resolution and aspect ratio, including custom modes, alongside crosshair scale.',
+      'Custom mouse-axis coefficients, vertical sensitivity scaling and axis inversions carry through import, aiming and config export in Range and Duel.',
+      'Video settings explain how graphics quality can lower actual rendering resolution while preserving sensitivity and field of view.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

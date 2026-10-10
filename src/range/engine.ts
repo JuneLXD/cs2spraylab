@@ -502,13 +502,13 @@ export class RangeEngine {
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
       'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popRespawn'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
-      const changedInversion = settings.invertY !== this.sim.settings.invertY;
+      const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
       this.sim.settings = settings;
       this.resizeImpacts();
       if (changedInversion) this.updateDemonstration();
       this.demonstration.mesh.visible = settings.showImpactPattern && this.guidesAllowed;
-      this.mouseDemonstration.mesh.visible = settings.showMousePath && this.guidesAllowed;
+      this.mouseDemonstration.mesh.visible = settings.showMousePath && this.guidesAllowed && settings.mouseYaw !== 0 && settings.mousePitch * settings.sensitivityYScale !== 0;
       this.syncPop(); this.resize(); return;
     }
     this.clearInput?.(); this.sim.configure(settings, measured); this.syncPop(true);
@@ -524,9 +524,9 @@ export class RangeEngine {
   updateDemonstration() {
     const weapon = this.sim.equipped === 'knife' ? loadoutWeapon(this.sim.settings) : this.sim.equipped;
     this.demonstration.mesh.visible = this.sim.settings.showImpactPattern && this.guidesAllowed;
-    this.mouseDemonstration.mesh.visible = this.sim.settings.showMousePath && this.guidesAllowed;
+    this.mouseDemonstration.mesh.visible = this.sim.settings.showMousePath && this.guidesAllowed && this.sim.settings.mouseYaw !== 0 && this.sim.settings.mousePitch * this.sim.settings.sensitivityYScale !== 0;
     this.demonstration.setPattern(weapon, this.sim.pattern, gameData.weapons[weapon].cycle, this.elapsed);
-    this.mouseDemonstration.setPattern(weapon, this.sim.pattern, gameData.weapons[weapon].cycle, this.elapsed, this.sim.settings.invertY);
+    this.mouseDemonstration.setPattern(weapon, this.sim.pattern, gameData.weapons[weapon].cycle, this.elapsed, this.sim.settings.invertY, this.sim.settings);
   }
   clearImpacts() {
     this.shotEffects?.clear(); this.viewFlashes?.clear();

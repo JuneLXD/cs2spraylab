@@ -20,7 +20,14 @@ export type Viewmodel = { fov: number; x: number; y: number; z: number };
 /** CS2 video resolutions. 4:3 and 5:4 fill a widescreen view stretched, like CS2's Stretched scaling mode. */
 export const resolutions = ['native', '1920x1440', '1440x1080', '1280x960', '1024x768', '1280x1024', '1920x1200', '1680x1050',
   '2560x1440', '1920x1080', '1600x900', '1280x720'] as const;
-export type Resolution = typeof resolutions[number];
+export type Resolution = 'native' | `${number}x${number}`;
+/** Preserve valid imported display modes, including modes outside the presets. */
+export function parseResolution(value: unknown): Resolution | undefined {
+  if (value === 'native') return value;
+  if (typeof value !== 'string' || !/^\d{1,5}x\d{1,5}$/.test(value)) return;
+  const [width, height] = value.split('x').map(Number);
+  if (width >= 320 && height >= 200 && width <= 16384 && height <= 16384) return `${width}x${height}`;
+}
 const legacyAspects: Record<string, Resolution> = { '4:3': '1920x1440', '5:4': '1280x1024', '16:10': '1680x1050', '16:9': '1920x1080' };
 export function resolutionSize(resolution: Resolution) {
   if (resolution === 'native') return undefined;
@@ -45,6 +52,8 @@ export const viewmodelLimits = { fov: [54, 68], x: [-2.5, 2.5], y: [-2, 2], z: [
 export const frameLimitRange = [30, 1000] as const;
 export type Settings = {
   weapon: Weapon; sidearm: Pistol; primaryEnabled: boolean; mode: Mode; sensitivity: number; dpi: number; invertY: boolean;
+  /** Signed m_yaw / m_pitch, sensitivity_y_scale, and mouse_x analog inversion. */
+  mouseYaw: number; mousePitch: number; sensitivityYScale: number; invertX: boolean;
   moving: boolean; targetSpeed: 'rifle' | 'smg' | 'knife';
   follow: boolean; volume: number; spread: boolean; burst: number; quality: 'auto' | 'low' | 'high' | 'performance';
   frameLimit: number; showFps: boolean; animatedGuides: boolean; protectShortcuts: boolean;
@@ -94,6 +103,7 @@ export const gameData = data;
 export const loadoutWeapon = (settings: Pick<Settings, 'weapon' | 'sidearm' | 'primaryEnabled'>): Weapon => settings.primaryEnabled ? settings.weapon : settings.sidearm;
 export const defaults: Settings = {
   weapon: 'awp', sidearm: 'usp', primaryEnabled: true, mode: 'redline', sensitivity: 1, dpi: 800, invertY: false,
+  mouseYaw: .022, mousePitch: .022, sensitivityYScale: 1, invertX: false,
   moving: false, targetSpeed: 'rifle', follow: false, volume: 0.2,
   spread: true, burst: 0, quality: 'high', impactSize: 1.5,
   frameLimit: 0, showFps: true, animatedGuides: true, protectShortcuts: false, lowLatency: true, autoFullscreen: true,
@@ -116,6 +126,7 @@ export const presets: Record<string, Crosshair> = {
 };
 export const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 const numeric = (v: unknown, fallback: number, min: number, max: number) => typeof v === 'number' && Number.isFinite(v) ? clamp(v, min, max) : fallback;
+const axisNumber = (v: unknown, fallback: number) => typeof v === 'number' && Number.isFinite(Math.fround(v)) ? v : fallback;
 export function sanitizeSettings(raw: unknown): Settings {
   const s = (raw && typeof raw === 'object' ? raw : {}) as Partial<Settings>;
   const c = s.crosshair && typeof s.crosshair === 'object' ? s.crosshair : defaults.crosshair;
@@ -127,6 +138,8 @@ export function sanitizeSettings(raw: unknown): Settings {
     mode: migrateMode(s.mode),
     sensitivity: numeric(s.sensitivity, 1, .05, 10), dpi: numeric(s.dpi, 800, 100, 32000),
     invertY: s.invertY === true,
+    mouseYaw: axisNumber(s.mouseYaw, .022), mousePitch: axisNumber(s.mousePitch, .022),
+    sensitivityYScale: axisNumber(s.sensitivityYScale, 1), invertX: s.invertX === true,
     moving: s.moving === true, targetSpeed: ['rifle', 'smg', 'knife'].includes(s.targetSpeed!) ? s.targetSpeed! : 'rifle',
     follow: s.follow === true, volume: numeric(s.volume, .2, 0, 1), spread: typeof s.spread === 'boolean' ? s.spread : s.mode !== 'guided',
     impactSize: numeric(s.impactSize,1.5,.5,4),
@@ -143,7 +156,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     showFps: s.showFps === true, animatedGuides: s.animatedGuides !== false, protectShortcuts: s.protectShortcuts !== false,
     lowLatency: s.lowLatency !== false, autoFullscreen: s.autoFullscreen !== false,
     // The former Display aspect setting picks the matching resolution; native moves to the new 1920x1440 default.
-    resolution: resolutions.find(value => value === s.resolution) ?? legacyAspects[(s as { aspect?: string }).aspect ?? ''] ?? defaults.resolution,
+    resolution: parseResolution(s.resolution) ?? legacyAspects[(s as { aspect?: string }).aspect ?? ''] ?? defaults.resolution,
     crosshair: {
       color: /^#[\da-f]{6}$/i.test(c.color) ? c.color : defaults.crosshair.color,
       size: numeric(c.size, 3, ...crosshairLimits.size), gap: numeric(c.gap, 2, ...crosshairLimits.gap),

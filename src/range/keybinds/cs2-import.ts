@@ -1,4 +1,4 @@
-import type {Viewmodel} from '../config';
+import {parseResolution, type Resolution, type Settings, type Viewmodel} from '../config';
 import {commandsOf, parseKeyValues, quote, tokenize, type KeyValues} from './console';
 import {isCrosshairCvar, videoHeight, type Cs2Crosshair} from './crosshair-cvars';
 import {browserReservedKeys, canonicalKey, keyboardKeys, mouseKeys} from './keys';
@@ -17,7 +17,8 @@ export type ImportReport = {
   /** Trainer controls on keys a browser cannot deliver, with the reason. */
   reserved: {key: string; reason: string}[];
 };
-export type ImportResult = {profile: KeyboardProfile; mouse: {sensitivity?: number; invertY?: boolean}; viewmodel: Partial<Viewmodel>;
+export type ImportResult = {profile: KeyboardProfile; mouse: Partial<Pick<Settings, 'sensitivity' | 'invertX' | 'invertY' | 'mouseYaw' | 'mousePitch' | 'sensitivityYScale'>>; viewmodel: Partial<Viewmodel>;
+  resolution?: Resolution;
   /** Crosshair convars in the order CS2 set them; screenHeight comes from cs2_video.txt when chosen. */
   crosshair?: Omit<Cs2Crosshair, 'screenHeight'> & {screenHeight?: number}; report: ImportReport};
 
@@ -41,10 +42,13 @@ export function importCs2Config(files: readonly ImportFile[], base: KeyboardProf
   const convars = new Map<string, string>();
   const setConvar = (name: string, value: string) => {convars.delete(name); convars.set(name, value);};
   let screenHeight: number | undefined;
+  let resolution: Resolution | undefined;
   const report: ImportReport = {files: [], binds: 0, unbinds: 0, aliases: 0, settings: [], missingExec: [], unknownKeys: [], reserved: []};
   const mouse: ImportResult['mouse'] = {};
   const bind = (rawKey: string, command: string) => {
-    if (/^mouse_[xy]$/i.test(rawKey)) {if (/^mouse_y$/i.test(rawKey)) mouse.invertY = command.trim().startsWith('!'); return;}
+    if (/^mouse_[xy]$/i.test(rawKey)) {
+      mouse[/^mouse_y$/i.test(rawKey) ? 'invertY' : 'invertX'] = command.trim().startsWith('!'); return;
+    }
     const key = canonicalKey(rawKey);
     if (!key || !known.has(key)) {if (!report.unknownKeys.includes(rawKey)) report.unknownKeys.push(rawKey); if (!key) return;}
     if (command === '<unbound>' || !command.trim()) {binds.delete(key); report.unbinds++;}
@@ -63,6 +67,9 @@ export function importCs2Config(files: readonly ImportFile[], base: KeyboardProf
       report.files.push({name: file.name, kind: keys ? 'keys' : values ? 'convars' : 'ignored'});
     } else if (/^\s*"video\.cfg"\s*\{/i.test(text)) {
       screenHeight = videoHeight(text) ?? screenHeight;
+      const video = block(parseKeyValues(text), 'video.cfg') ?? {};
+      const size = parseResolution(`${video['setting.defaultres']}x${video['setting.defaultresheight']}`);
+      if (size) resolution = size;
       report.files.push({name: file.name, kind: screenHeight ? 'video' : 'ignored'});
     } else scripts.push({name: file.name, text});
   }
@@ -109,8 +116,13 @@ export function importCs2Config(files: readonly ImportFile[], base: KeyboardProf
   setting('cl_debounce_zoom', value => profile.zoomRepeat = !bool(value));
   setting('zoom_sensitivity_ratio', value => {if (Number.isFinite(Number(value))) profile.zoomSensitivity = Number(value);});
   setting('sensitivity', value => {if (Number(value) > 0) mouse.sensitivity = Math.min(10, Math.max(.05, Number(value)));});
-  setting('m_pitch', value => {if (Number(value)) mouse.invertY = Number(value) < 0;});
-  if (mouse.invertY !== undefined && !report.settings.includes('m_pitch')) report.settings.push('reverse mouse');
+  for (const [name, key] of [['m_yaw', 'mouseYaw'], ['m_pitch', 'mousePitch'], ['sensitivity_y_scale', 'sensitivityYScale']] as const) {
+    const value = convars.get(name);
+    if (value?.trim() && Number.isFinite(Math.fround(Number(value)))) {mouse[key] = Number(value); report.settings.push(name);}
+  }
+  if (mouse.invertY !== undefined) report.settings.push('reverse mouse');
+  if (mouse.invertX !== undefined) report.settings.push('horizontal mouse direction');
+  if (resolution) report.settings.push(`resolution ${resolution}`);
   const viewmodel: Partial<Viewmodel> = {};
   for (const [name, key] of [['viewmodel_fov', 'fov'], ['viewmodel_offset_x', 'x'], ['viewmodel_offset_y', 'y'], ['viewmodel_offset_z', 'z']] as const)
     setting(name, value => {if (value.trim() && Number.isFinite(Number(value))) viewmodel[key] = Number(value);});
@@ -123,11 +135,11 @@ export function importCs2Config(files: readonly ImportFile[], base: KeyboardProf
     if (reason && key !== 'ESCAPE' && expandCommand({aliases: Object.fromEntries(aliases)}, command).some(name => trainerCommands.has(name))) report.reserved.push({key, reason});
   }
   const label = files.map(file => file.name.replace(/\\/g, '/').split('/').pop()).join(', ') || 'Pasted config';
-  return {profile: sanitizeKeyboard({...profile, source: {label, at: new Date().toISOString()}}), mouse, viewmodel, ...(crosshair ? {crosshair} : {}), report};
+  return {profile: sanitizeKeyboard({...profile, source: {label, at: new Date().toISOString()}}), mouse, viewmodel, ...(resolution ? {resolution} : {}), ...(crosshair ? {crosshair} : {}), report};
 }
 
 /** A cfg that recreates the profile on top of CS2's defaults: `exec spraylab`. */
-export function exportCfg(profile: KeyboardProfile, mouse: {sensitivity: number; invertY: boolean; viewmodel?: Viewmodel; crosshair?: Cs2Crosshair}, date = new Date()) {
+export function exportCfg(profile: KeyboardProfile, mouse: Pick<Settings, 'sensitivity' | 'invertY'> & Partial<Pick<Settings, 'invertX' | 'mouseYaw' | 'mousePitch' | 'sensitivityYScale'>> & {viewmodel?: Viewmodel; crosshair?: Cs2Crosshair}, date = new Date()) {
   const lines = [
     '// SprayLab keyboard & mouse profile',
     `// Exported ${date.toISOString().slice(0, 10)} against CS2 build ${keyboardPage.build} default binds.`,
@@ -141,6 +153,9 @@ export function exportCfg(profile: KeyboardProfile, mouse: {sensitivity: number;
     `sensitivity "${mouse.sensitivity}"`, `zoom_sensitivity_ratio "${profile.zoomSensitivity}"`,
     `option_duck_method "${+profile.duckToggle}"`, `option_speed_method "${+profile.walkToggle}"`,
     `cl_debounce_zoom "${+!profile.zoomRepeat}"`, `bind "mouse_y" "${mouse.invertY ? '!pitch' : 'pitch'}"`);
+  if (mouse.invertX !== undefined) lines.push(`bind "mouse_x" "${mouse.invertX ? '!yaw' : 'yaw'}"`);
+  for (const [name, key] of [['m_yaw', 'mouseYaw'], ['m_pitch', 'mousePitch'], ['sensitivity_y_scale', 'sensitivityYScale']] as const)
+    if (mouse[key] !== undefined) lines.push(`${name} "${mouse[key]}"`);
   if (mouse.viewmodel) lines.push(`viewmodel_fov "${mouse.viewmodel.fov}"`, `viewmodel_offset_x "${mouse.viewmodel.x}"`,
     `viewmodel_offset_y "${mouse.viewmodel.y}"`, `viewmodel_offset_z "${mouse.viewmodel.z}"`);
   if (mouse.crosshair) lines.push('', '// Crosshair', ...Object.entries(mouse.crosshair.cvars).map(([name, value]) => `${name} ${quote(value)}`));

@@ -17,8 +17,8 @@ type Props = {settings: Settings; profiles: Partial<Record<Weapon, MeasuredProfi
   importProfile: (file?: File) => Promise<void>; removeCapture: () => void; exportSession: () => void; exportFrames: () => void};
 const help: Record<string, string> = {
   'Low-latency rendering': 'Chrome and Edge can present the frame without waiting for the page compositor. It can tear, like V-Sync off. Takes effect when you switch drills or reload. Software renderers always get a normal canvas.',
-  'Render quality': 'Choose scene detail and rendering density. Adaptive adjusts density as the frame rate changes. Performance also sets a 60 FPS limit.',
-  'Resolution': "Like CS2's Stretched scaling: the world and crosshair are stretched to fill the view, and the scene renders at that many rows. Your hands and weapon keep their proportions.",
+  'Render quality': 'Quality limits rendering resolution to keep the game responsive. Adaptive can lower it further as frame rate changes. Performance also sets a 60 FPS limit. Sensitivity and field of view stay the same.',
+  'Resolution': 'Sets the aspect ratio and requested render height. The view stretches to fill the window. Graphics quality and window size can lower the actual rendering resolution, even with 1920 x 1440 selected.',
   'Show FPS counter': 'Show FPS and the 95th-percentile frame interval. When paused, click the monitor to download frame timings. This measures frame delivery, not physical input latency.',
   'Protect range Ctrl+W': 'Request fullscreen and keyboard lock while playing, where supported, so browser shortcuts do not interrupt practice. Escape still pauses.',
   'Sensitivity': 'Match your CS2 sensitivity. Together with mouse DPI, this determines eDPI and the distance required for a full turn.',
@@ -76,7 +76,7 @@ export const SettingsScreen = memo(function SettingsScreen({settings, profiles, 
             {tab === 'keyboard' && <KeyboardSettings settings={settings} update={update} notify={notify}/>}
             {tab === 'game' && <>
               <h2>Mouse</h2><div className="two-fields"><label>Sensitivity<NumberField label="Sensitivity" min={.05} max={10} step={.05} value={settings.sensitivity} onCommit={sensitivity => update({ sensitivity })} /></label><label>Mouse DPI<NumberField label="Mouse DPI" min={100} max={32000} step={100} value={settings.dpi} onCommit={dpi => update({ dpi })} /></label></div>
-              <div className="readout"><span>cm / 360</span><b>{(360 / (.022 * settings.sensitivity * settings.dpi) * 2.54).toFixed(2)}</b></div>
+              <div className="readout"><span>cm / 360</span><b>{settings.mouseYaw === 0 ? 'Horizontal aim disabled' : (360 / (Math.abs(settings.mouseYaw) * settings.sensitivity * settings.dpi) * 2.54).toFixed(2)}</b></div>
               <div className="readout"><span>eDPI</span><b>{Math.round(settings.sensitivity * settings.dpi)}</b></div>
               <Toggle label="Invert mouse Y" checked={settings.invertY} onChange={v => update({ invertY: v })} />
               <TrainingSettings settings={settings} update={update}/>
@@ -89,9 +89,10 @@ export const SettingsScreen = memo(function SettingsScreen({settings, profiles, 
               <p className="setting-explanation">Same values as CS2&apos;s viewmodel_fov and viewmodel_offset_x/y/z (right, forward, up). Import CS2 config under Keyboard / Mouse reads them from autoexec.cfg or CS2&apos;s saved settings.</p>
 
             </>}
-            {tab === 'video' && <><h2>Display</h2><label className="select-row">Resolution<select aria-label="Resolution" value={settings.resolution} onChange={e => update({ resolution: e.target.value as Resolution })}>{resolutions.map(r => <option key={r} value={r}>{resolutionLabel(r)}</option>)}</select></label>
-              <p className="setting-explanation">Like CS2&apos;s Stretched scaling: the world and crosshair are stretched to fill the view, and the scene renders at that many rows. Your hands and weapon keep their proportions.</p>
+            {tab === 'video' && <><h2>Display</h2><label className="select-row">Resolution<select aria-label="Resolution" value={settings.resolution} onChange={e => update({ resolution: e.target.value as Resolution })}>{[...new Set<Resolution>([...resolutions, settings.resolution])].map(r => <option key={r} value={r}>{resolutionLabel(r)}</option>)}</select></label>
+              <p className="setting-explanation">{help.Resolution}</p>
               <h2>Rendering</h2><label className="select-row">Render quality<select aria-label="Render quality" value={settings.quality} onChange={e => update({ quality: e.target.value as Settings['quality'], ...(e.target.value === 'performance' ? {frameLimit:60} : {}) })}><option value="auto">Adaptive</option><option value="performance">Performance (older PCs)</option><option value="low">Low</option><option value="high">High</option></select></label>
+              <p className="setting-explanation">{help['Render quality']}</p>
               <label className="select-row">Frame limit<select aria-label="Frame limit" value={settings.frameLimit} onChange={e => update({frameLimit: +e.target.value})}>{frameLimitOptions(displayHz, settings.frameLimit).map(n => <option key={n} value={n}>{n ? `${n} FPS` : displayHz ? `Display refresh rate (${displayHz} FPS)` : 'Display refresh rate'}</option>)}</select></label>
               <p className="setting-explanation">Browsers draw at most once per display refresh, so Display refresh rate is the highest frame rate this PC allows: up to 500 FPS on a 500 Hz monitor, when the PC keeps up.{displayHz ? ` This display measures ${displayHz} Hz.` : ''}</p>
               <Toggle label="Low-latency rendering" checked={settings.lowLatency} onChange={lowLatency => update({lowLatency})}/>

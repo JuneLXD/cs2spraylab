@@ -71,11 +71,10 @@ export function KeyboardSettings({settings, update, notify}: Props) {
     setKeyboard({binds}); setChange(`${displayKey(key)} is unbound.`);
   };
   const apply = (result: ImportResult) => {
-    const metrics = screenMetrics(settings.resolution);
+    const metrics = screenMetrics(result.resolution ?? settings.resolution);
     const cs2Crosshair = result.crosshair && {cvars: result.crosshair.cvars, screenHeight: result.crosshair.screenHeight ?? metrics.screenHeight};
     const view = cs2Crosshair && crosshairFromCvars(cs2Crosshair, metrics.cssHeight);
-    update({keyboard: result.profile, ...(result.mouse.sensitivity !== undefined ? {sensitivity: result.mouse.sensitivity} : {}),
-      ...(result.mouse.invertY !== undefined ? {invertY: result.mouse.invertY} : {}),
+    update({keyboard: result.profile, ...result.mouse, ...(result.resolution ? {resolution: result.resolution} : {}),
       ...(Object.keys(result.viewmodel).length ? {viewmodel: sanitizeViewmodel({...settings.viewmodel, ...result.viewmodel})} : {}),
       ...(cs2Crosshair && view ? {crosshair: view.crosshair, cs2Crosshair, ...(view.follow !== undefined ? {follow: view.follow} : {})} : {})});
     setReport(view?.notes.length ? {...result.report, settings: [...result.report.settings, ...view.notes.map(note => `crosshair: ${note}`)]} : result.report);
@@ -152,7 +151,7 @@ export function KeyboardSettings({settings, update, notify}: Props) {
 
     <section id={rowId('import')} className="kb-import" aria-labelledby="kb-import-title">
       <h2 id="kb-import-title">Use your CS2 binds</h2>
-      <p className="setting-explanation">Choose <code>autoexec.cfg</code>, and optionally the <code>cs2_user_keys_0_slot0.vcfg</code> and <code>cs2_user_convars_0_slot0.vcfg</code> files CS2 saves your settings in. Add <code>cs2_video.txt</code> from the same folder so the crosshair is sized for your CS2 resolution. They are read in this browser and never uploaded.</p>
+      <p className="setting-explanation">Choose <code>autoexec.cfg</code>, and optionally the <code>cs2_user_keys_0_slot0.vcfg</code> and <code>cs2_user_convars_0_slot0.vcfg</code> files CS2 saves your settings in. Mouse-axis settings are included. Add <code>cs2_video.txt</code> to match your resolution, aspect ratio and crosshair scale. They are read in this browser and never uploaded.</p>
       <div className="kb-actions">
         <label className="secondary file-button"><FileUp size={15}/>Import CS2 config<input type="file" multiple accept=".cfg,.vcfg,.txt"
           aria-label="Import CS2 config files" onChange={event => {void importFiles(event.target.files); event.target.value = '';}}/></label>
