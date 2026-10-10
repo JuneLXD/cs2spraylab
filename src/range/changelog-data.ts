@@ -389,6 +389,11 @@ export const latestChanges = {
     {id: 'pop-respawn-delay', title: 'Pop: ball respawn delay', items: [
       'Ball respawn delay (0-5 s): a popped ball\'s replacement waits that long before it appears, so the field thins out while you clear it. 0 keeps the instant respawn.',
     ]},
+    {id: 'pop-moving-balls', title: 'Pop: moving balls, two-sided cover and the respawn pad', items: [
+      'Ball movement per axis: speed, range each way from where the ball appeared, and sudden direction changes per second. Balls turn back at the ends of their range and the field, bounce off each other, and stay still at 0.',
+      'Peek wall "Both sides": a 1.6 m pillar straight ahead with a marked edge on each side, so you can step out left or right; the balls stay centred.',
+      'Ball respawn "When you step on the pad behind cover": popped balls wait until you step onto the ring at your spawn point, which lights up while balls are waiting.',
+    ]},
     {id: 'duel-aggressive-bots', title: 'Aggressive duel bots', items: [
       'Aggressive bots never hold: they peek as soon as they reach an angle, chase the last place they saw you after a burst loses its target, and sweep the forward crates and lane edges within 1.5 s of losing contact instead of waiting at cover.',
     ]},

@@ -55,3 +55,17 @@ ones every other range drill uses.
   replacement waits. `PopField` queues each due time in `pending`; `advance(time)`, called from every
   `Simulation.step()`, spawns the replacements whose time has come, and `hit()` takes the shot's `at` time
   (the engine passes `shot.at`). 0 spawns at once as before; `reset()` drops the queue.
+- Moving balls (2026-10-10): per axis `popMoveX`/`popMoveY` (speed, m/s), `popRangeX`/`popRangeY` (how far a ball
+  travels each way from where it appeared, m; clipped to the field) and `popFlipX`/`popFlipY` (sudden reversals per
+  second, each due about 1/flips seconds after the last, jittered by half). `PopField.spawn()` gives a moving ball a
+  random direction and a travel window; `advance(time)` (every simulation step) moves it, turns it back at the window's
+  ends, reverses it when a flip is due and parts balls that overlap, bouncing them along the axis they met on. A still
+  axis (speed or range 0) draws no extra random numbers, so seeded layouts are unchanged. Shots test the positions of
+  the current tick; the renderer reads them every frame.
+- Two-sided cover (same day): `popWall: 'both'` is a 1.6 m wide pillar (`POP_WALL.pillar`) centred on you, 1.5 m
+  ahead, with an edge strip on each side; `PopWall.edges` lists every edge you can step past (`side` 0) and the ball
+  field stays centred. Single-sided walls keep their 3 m width and one edge.
+- Respawn pad (same day): `popRespawnMode` 'pad' queues each popped ball with an Infinity due time; `advance(time,
+  player)` (the simulation passes its position) spawns every waiting ball the moment the player steps onto the pad
+  (`POP_PAD.radius` 0.45 m around `POP_SPAWN`), edge-triggered so standing on it does nothing and a session never
+  starts by triggering it. The engine draws it as a flat ring (`pop-pad`) that turns yellow while balls are waiting.

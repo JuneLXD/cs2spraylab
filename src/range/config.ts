@@ -1,5 +1,5 @@
 import data from './game-data.json';
-import type {PopWallSide} from './pop';
+import type {PopRespawnMode, PopWallSide} from './pop';
 import { nativeRecoilPattern } from './recoil';
 import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybinds/profile';
 import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
@@ -84,8 +84,10 @@ export type Settings = {
   popMuteGun: boolean; popHideImpacts: boolean; popHideHud: boolean;
   /** Pop: the backdrop colour behind the balls, bullets a ball takes before it pops, and which side the peek wall opens to. */
   popBackground: string; popHits: number; popWall: PopWallSide;
-  /** Pop: seconds before a popped ball's replacement appears (0 = at once). */
-  popRespawn: number;
+  /** Pop: how popped balls come back (after `popRespawn` seconds, or when you step on the pad) and ball movement per
+   * axis: speed (m/s), range each way from where the ball appeared (m) and sudden direction changes per second. */
+  popRespawn: number; popRespawnMode: PopRespawnMode; popMoveX: number; popRangeX: number; popFlipX: number;
+  popMoveY: number; popRangeY: number; popFlipY: number;
   /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
   cs2Crosshair?: Cs2Crosshair;
 };
@@ -116,7 +118,7 @@ export const defaults: Settings = {
   viewmodel: classicViewmodel,
   tracers: 'native',
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
-  popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popRespawn: 0,
+  popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0,
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -173,8 +175,12 @@ export function sanitizeSettings(raw: unknown): Settings {
     popAmmo: s.popAmmo === 'off' || s.popAmmo === 'reserve' ? s.popAmmo : 'magazine', popSound: s.popSound === 'pop' || s.popSound === 'synth' ? s.popSound : 'hitmarker',
     popMuteGun: s.popMuteGun === true, popHideImpacts: s.popHideImpacts === true, popHideHud: s.popHideHud === true,
     popBackground: typeof s.popBackground === 'string' && /^#[\da-f]{6}$/i.test(s.popBackground) ? s.popBackground.toLowerCase() : defaults.popBackground,
-    popHits: Math.round(numeric(s.popHits, defaults.popHits, 1, 10)), popWall: s.popWall === 'left' || s.popWall === 'right' ? s.popWall : 'off',
+    popHits: Math.round(numeric(s.popHits, defaults.popHits, 1, 10)), popWall: s.popWall === 'left' || s.popWall === 'right' || s.popWall === 'both' ? s.popWall : 'off',
     popRespawn: Math.round(numeric(s.popRespawn, defaults.popRespawn, 0, 5) * 10) / 10,
+    popRespawnMode: s.popRespawnMode === 'pad' ? 'pad' : 'timer',
+    popMoveX: Math.round(numeric(s.popMoveX, defaults.popMoveX, 0, 6) * 10) / 10, popRangeX: Math.round(numeric(s.popRangeX, defaults.popRangeX, 0, 5) * 10) / 10,
+    popFlipX: Math.round(numeric(s.popFlipX, defaults.popFlipX, 0, 4) * 10) / 10, popMoveY: Math.round(numeric(s.popMoveY, defaults.popMoveY, 0, 4) * 10) / 10,
+    popRangeY: Math.round(numeric(s.popRangeY, defaults.popRangeY, 0, 1.4) * 10) / 10, popFlipY: Math.round(numeric(s.popFlipY, defaults.popFlipY, 0, 4) * 10) / 10,
     ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }
