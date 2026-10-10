@@ -1,0 +1,126 @@
+{
+  "schema": "cs2.ground-friction-accuracy-package.v1",
+  "localProofIdentifier": "AUDIT-GROUND-FRICTION-ACCURACY-01",
+  "identifierKind": "Locally assigned proof identifier, not an REA-issued ledger ID",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "files": [
+    {
+      "path": "bounded_elf.py",
+      "sha256": "0c41202cb771e5252977b4158b5ab93f41b2665682527d40859950c57d4fe695"
+    },
+    {
+      "path": "normalize.py",
+      "sha256": "a62b57b03ba684d2c95e01b07fb29cc234cb73fc982664fa118c95e930268fec"
+    },
+    {
+      "path": "summarize.py",
+      "sha256": "b04b1a165b71d3d9c210187e7a398e79494cf656b2e2ecb930c0a8d0e9ec85c8"
+    },
+    {
+      "path": "prepare-input.py",
+      "sha256": "d55cfc99e3ae2b3acb66b89793497c3a4ec76396a93b6971ba7ab43934acbabf"
+    },
+    {
+      "path": "normalize-portable.py",
+      "sha256": "d28f64346f41648ccd49920eaa077b3e417916362d11352c436692ca392d978a"
+    },
+    {
+      "path": "summarize-portable.py",
+      "sha256": "92db429eea81bf8cca7b166e422c64b9748cd227d4b1f6cab02d1a38c6b4e087"
+    },
+    {
+      "path": "README.md",
+      "sha256": "98a8fa2a23d4a7fd06178ce3737489dc5de4aacd9bd4155e8e58fba8f25dbcc5"
+    },
+    {
+      "path": "README-v3-raw.md",
+      "sha256": "ce2753f29ac52f1799ef27343467e4479a7962b91e4356414241c78d639c69e3"
+    },
+    {
+      "path": "manifest-v3-raw.json",
+      "sha256": "0ad45830074b7341b879625f40f68d2ab75d459257e4daa24c7241f17b9a1ef9"
+    },
+    {
+      "path": "summarize-portable-with-archive.py",
+      "sha256": "969a0bd1b56c415f980a853ba4e6057a62585481c0e9ee32b17a0cc8fa7ac326"
+    },
+    {
+      "path": "manifest-portable-with-archive.json",
+      "sha256": "51b4e63044f16f5c1dad4c382b15b9d39d9015e99408565afd7aa6215000a9ea"
+    },
+    {
+      "path": "README-portable-with-archive.md",
+      "sha256": "985114c81594b1382fdc817100765ed83e35850ef43d899948a6820751af7de3"
+    }
+  ],
+  "retainedPrerequisites": [
+    {
+      "name": "current-inaccuracy-proof.json",
+      "sha256": "824eb4eb4b04ad6bc47e29a2b857120a00ea6e6cb13fb1083ce70db4747088ee",
+      "retainedOrigin": "native-audit/reports/reaudit-duck-accuracy/current-byte-proof.json"
+    },
+    {
+      "name": "get-inaccuracy.txt",
+      "sha256": "8d04b1f3fdbbc9f58e880dbd1935a40fc4620e2813e3b593b701c360146f6284",
+      "retainedOrigin": "native-audit/reports/reaudit-duck-accuracy/get-inaccuracy-current.txt"
+    },
+    {
+      "name": "common-getters-proof.json",
+      "sha256": "504e2c71f541941e100aaa83cbb0f67d5c3f20948e5978edd4721e6c0dd6fc75",
+      "retainedOrigin": "native-audit/reports/core-shooting-next/movement/movement-inaccuracy/native/proof.json"
+    }
+  ],
+  "staticPublicationProofs": [
+    {
+      "path": "native-audit/reports/core-shooting-next/movement/movement-inaccuracy/publisher/proof.json",
+      "sha256": "180a4f2ca624738bac3084c448c3a5c0d953724e72f7e228f6d06b3d6ad70f32"
+    },
+    {
+      "path": "native-audit/reports/core-shooting-next/movement/movement-inaccuracy/publisher-tail/proof.json",
+      "sha256": "8a6a5a745aecefb75bebf5148f6dd0644c24a62410c01f759f9f38e7f050bb22"
+    },
+    {
+      "path": "native-audit/reports/core-shooting-next/movement/movement-inaccuracy/publisher-xy/proof.json",
+      "sha256": "a80048655dc60e7b38ffa288f09edeca91d928910577624298f808365e847f0b"
+    }
+  ],
+  "bounds": {
+    "selectedCodeBytes": 134,
+    "constantBytes": 12,
+    "maximumHeaderBytes": 3648,
+    "totalReadBytesExcludingStreamingHash": 3794,
+    "instructionsPerCase": 80,
+    "maximumInputRows": 25000
+  },
+  "historicalV2": {
+    "nativeProofSha256": "91ac101a4e06a7278923c5a5de2a1eace6b6d3dce5ab099920ee4785aca8b9b3",
+    "fixtureDefinitionSha256": "ba8d33064e3adc70aa4fa4a04486dd7941650034271947c3ca4cb0d294cf1bc4",
+    "normalizationProofSha256": "584bd4ec61cebe00e29b1b3b960166427a48296e1e3babbc738ff8828aac4b9b"
+  },
+  "inputV3": {
+    "nativeReportSha256": "2149c9a308674fbb3198318419e434fb2eabaa5ba0f83b0ab6d11498600d60df",
+    "compactEndpointSha256": "453a5156ccbf95ee38bea518a9da965d566e0840ea6cce77ce72db3efab25c8c",
+    "nativeReaderSha256": "4c039bd146a6069f9a5d223e36d341f2baa56fe39a0ba6a508cbb516fb0fe8c5",
+    "fixtureDefinitionSha256": "4600d5b952bef24f8fa6b21d6553b04f01a297f536acaf304da910459bf63a71",
+    "fixtureFileSha256": "eca45368486a58eb9753f21dbe3d0ec29403d82564c5c4c992de9905764d9abb",
+    "releaseEndpointRows": 10939,
+    "releaseSequences": 98,
+    "uniqueReleaseFixtures": 96
+  },
+  "portableInput": {
+    "schema": "cs2.verified-accuracy-release-endpoints.v1",
+    "movementExecutionSha256": "b8dbfe8e2b6997488e8f3b6da5ebf3fb01dbf68200f94ea9d03af07d6f8f46e9",
+    "stableEndpointContentSha256": "0f6688a632ff3a51f427afb38b8a5d1ee7f5a307ac200285957101bd90324b05",
+    "stableEndpointFileSha256": "1bca7690d6112e29df61de904fb7ea37c9623cdfd277d340caf2dd1e1920277e",
+    "comparisonDependency": "../reaudit-ground-friction-native/compare.py",
+    "comparisonDependencySha256": "3433a8539a8060af211097d350c35885a33e12f222f69b83ecb16dd424a384b6",
+    "originalNormalizationProofSha256": "8afbe32b9d37c38908eb31d353d97a2b05b20d71c869d6b8243083e7493efe41",
+    "preservedManifestSha256": "0ad45830074b7341b879625f40f68d2ab75d459257e4daa24c7241f17b9a1ef9",
+    "normalizationExecutionContentSha256": "dd8414d5d818951b81aa2cfb8db8831bacf506ab90f59594c75e5705eb20307e",
+    "normalizationExecutionEvidence": {
+      "path": "docs/evidence/reaudit-ground-friction-accuracy-portable.json",
+      "sha256": "52f39f4d24058dfa0b8e3992576b69df05ce9eb9d4e31e805c8cbea900c889ee"
+    },
+    "originalRawProofRequired": false
+  }
+}

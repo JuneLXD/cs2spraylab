@@ -1,0 +1,202 @@
+{
+  "method": "Two actual historical-test prior states supplied independently to native one-step execution. No native preceding trajectory or input-production claim.",
+  "sourceHashes": {
+    "src/range/terrain.ts": "979141f9ae6c230a709a6621bb14010fd8c3d90f582a319b4bb70538f65336c1",
+    "src/range/actor-collision.ts": "738d52cf56ea8759ce961ff4a4619825b21a8815bb19d85a5e50602614d5ee47",
+    "src/range/actor-contact.ts": "584def69ea5b0526b5838b42fbdaa22d331de4e28fa4eb05f598992118d7cbba",
+    "src/range/actor-jump.ts": "ed054b70ded5910172c86dc82bd5fb35eb2fb7ba6cb5b94d8506b87a0aa76df7",
+    "src/range/ground-friction.ts": "294848dac635baf98bbfe633a9a25549a0518a3af715fe33b2f1cdf6150a2e9c",
+    "src/range/actor-physics.ts": "b390cbd8a89b3ee9c2504dec2a783cea0a4a52bd171bf69a4f0892d65d1dce29",
+    "src/range/game-data.json": "5903a1deeb1ff4181c7203f4c8b1e9690ee17e5573db558e424388c204ab990e",
+    "src/range/punch-recovery.ts": "15f52d055a76eaa452b3095284d900982ec0a76ab18a925f74e20f8dcc2a54dd",
+    "src/range/recoil.ts": "971a48783512ff9cb9449ea7cc7a199d30ca12fddac75ca704b9f5439df0866d",
+    "src/range/keybinds/cs2-keyboard-page.json": "f98e6b2f26172329d40f4d134362aa6a6bf07916d3c6b3ffd0959fe62bd95cce",
+    "src/range/keybinds/keys.ts": "83af1248f374e3d86835c57ec83366e2c03525bc96bbf4a6d9769e2d8699435b",
+    "src/range/keybinds/console.ts": "96789f931baf46e84ccdc685a5f3fe5cf8674e37345c6ec36cba71d90396c996",
+    "src/range/keybinds/profile.ts": "ff86e8ed2a420e1926c2b87fb64af6ad6863644eb0d9915ed32cbea7034958f6",
+    "src/range/keybinds/crosshair-cvars.ts": "b699fa3d99b4ddb17a798117f5591292f1ffe2cd0d8d04388e8c53c9235b7f01",
+    "src/range/config.ts": "9614e31f18cbe0307d584420449f10fb8cc4efd6708ca8cedd4558de45a4a323",
+    "src/range/view-punch.ts": "4ecaca6b2a49057c196169ac220584ce6c9b4602bed5d85639f5d2946ddf7c11",
+    "src/range/footsteps.ts": "a94c77af8d58de3a413ef14facb0a5bb67117327060d70f9dad6972160f4ae0c",
+    "src/range/equipment-data.json": "003273a675b9b130627bf4c2f253c5b679b433ee9a243e990a5824703262f988",
+    "src/range/equipment.ts": "1cf6d2639c344fd2bcad3cf76ab65e2b2a00d506cf1f7fb2406f9245b8d69960",
+    "src/range/drills.ts": "94da89745937422016fbfe343c561f9c5778a490c0268c3ad173ab4396a53da5",
+    "src/range/ballistics.ts": "8ef2d44eea3c56b2296547a236de504ed11000e71848c1ce6b03c97064ee9b9c",
+    "src/range/shot-model.ts": "09766c6c2458bb2a70fdc1a2b7bcbb04de820a124b4d5232a8c0995495ecc47d",
+    "src/range/duel/damage.ts": "a98348763e3a6e96ab4adebb7d9bcd06550e8a1e1d654117265d9ff1dd74c8da",
+    "src/range/scope-transition.ts": "0180e13606cd98595142754a1503ced607489e5bb820d1d9d5bcb27bc3b74b3c",
+    "src/range/native-reload-timing.json": "c1303c82e1a51f216f3c74dd2fd5c85c930823004259253746d59d25dfeb54ee",
+    "src/range/native-reload-presentation.json": "55971a004b55f2d765169098224f48acfcb5ea6643eb9ae22a1e726a015d8167",
+    "src/range/reload-clock.ts": "c8a35cd1d5603db064d86fc22a262917d7274f9dd79c5d4d9b271feccd296188",
+    "src/range/weapon-actions.ts": "0dee51f4575b050378e3b7c56e5a56d5ca11fc13135aee9b276cb7fbc97c2cac",
+    "src/range/reload-input.ts": "0c0c062d3e9a8cbfbdc159ac95a8e83688c41278aebb32b58e89f144adde83ed",
+    "src/range/pop.ts": "bb1352529c6b6de2655f545c309bd969210974df8ea57cdc7f92146adeec58fb",
+    "src/range/simulation.ts": "f9a168d865a7b4269c4e1924ef8340adefe9ff09643f2b8be89f664e24c4bc09"
+  },
+  "cases": [
+    {
+      "id": "running-to-tag-half-215",
+      "stance": "stand",
+      "weaponSpeed": 215,
+      "suppliedSpeed": 107.5,
+      "dt": 0.0078125,
+      "startFraction": 0,
+      "endFraction": 0.5,
+      "beginCommand": true,
+      "finishCommand": false,
+      "initialState": {
+        "velocity": [
+          0,
+          -214.99999999999997
+        ],
+        "previousWish": [
+          0,
+          -215
+        ],
+        "active": false,
+        "savedFraction": 0,
+        "storedSpeed": 214.9845733642578,
+        "commandMarked": false
+      },
+      "wish": [
+        0,
+        -107.5
+      ],
+      "actor": {
+        "position": {
+          "x": 0,
+          "y": 1.6256,
+          "z": -10.013280729138868
+        },
+        "velocity": {
+          "x": 0,
+          "z": -5.460999999999999
+        },
+        "movementTime": 2,
+        "friction": {
+          "command": 127,
+          "state": {
+            "active": false,
+            "savedFraction": 0,
+            "storedSpeed": 214.9845733642578,
+            "commandMarked": false,
+            "previousWish": {
+              "x": 0,
+              "z": -215
+            }
+          }
+        }
+      },
+      "input": {
+        "forward": 1,
+        "side": 0,
+        "walk": false,
+        "crouch": false,
+        "jump": false
+      },
+      "trainerAfter": {
+        "velocity": [
+          0,
+          0
+        ],
+        "derivedPosition": [
+          0,
+          0
+        ],
+        "state": {
+          "active": true,
+          "savedFraction": 0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarked": true,
+          "previousWish": {
+            "x": 0,
+            "z": -107.5
+          }
+        }
+      }
+    },
+    {
+      "id": "ak-diagonal-one-second",
+      "stance": "stand",
+      "weaponSpeed": 215,
+      "suppliedSpeed": 215,
+      "dt": 0.0078125,
+      "startFraction": 0.5,
+      "endFraction": 1,
+      "beginCommand": false,
+      "finishCommand": true,
+      "initialState": {
+        "velocity": [
+          152.0279541015625,
+          -152.0279541015625
+        ],
+        "previousWish": [
+          215,
+          -215
+        ],
+        "active": false,
+        "savedFraction": 0,
+        "storedSpeed": 214.9845733642578,
+        "commandMarked": false
+      },
+      "wish": [
+        215,
+        -215
+      ],
+      "actor": {
+        "position": {
+          "x": 3.1887795337442246,
+          "y": 1.6256,
+          "z": -63.188779533744125
+        },
+        "velocity": {
+          "x": 3.8615100341796875,
+          "z": -3.8615100341796875
+        },
+        "movementTime": 0.9921875,
+        "friction": {
+          "command": 63,
+          "state": {
+            "active": false,
+            "savedFraction": 0,
+            "storedSpeed": 214.9845733642578,
+            "commandMarked": false,
+            "previousWish": {
+              "x": 215,
+              "z": -215
+            }
+          }
+        }
+      },
+      "input": {
+        "forward": 1,
+        "side": 1,
+        "walk": false,
+        "crouch": false,
+        "jump": false,
+        "jumpPressed": false,
+        "jumpPressOffset": 0
+      },
+      "trainerAfter": {
+        "velocity": [
+          152.0279541015625,
+          -152.0279541015625
+        ],
+        "derivedPosition": [
+          1.1877183914184528,
+          -1.1877183914183829
+        ],
+        "state": {
+          "active": false,
+          "savedFraction": 0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarked": false,
+          "previousWish": {
+            "x": 215,
+            "z": -215
+          }
+        }
+      }
+    }
+  ]
+}

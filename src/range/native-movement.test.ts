@@ -2,6 +2,8 @@ import {describe, expect, it} from 'vitest';
 import {accelerateGround, advanceActor, airAcceleration, DUCK_SECONDS, UNDUCK_SECONDS, idleInput, STEP, UNIT, type ActorKinematics} from './actor-physics';
 import fixture from './native-movement-fixture.json';
 import airFixture from './native-air-movement-fixture.json';
+import stanceFixture from '../../docs/evidence/reaudit-ground-stance-regressions.json';
+import capFixture from '../../docs/evidence/reaudit-ground-tag-diagonal-regressions.json';
 
 const standing = (): ActorKinematics => ({position: {x: 0, y: 64 * UNIT, z: 0},
   velocity: {x: 0, z: 0}, yaw: 0, feet: 0, verticalVelocity: 0,
@@ -44,10 +46,14 @@ describe('installed-build movement arithmetic', () => {
       expect((sample.initialVelocity + sample.finalVelocity) / 2).toBeCloseTo(sample.movementVelocity, 4);
       expect(sample.restoredVelocity).toBeCloseTo(sample.finalVelocity, 4);
     }
-    for (const [initial, side] of [[0, 1], [215, 0], [215, -1], [3, 0]]) {
+    // Native work and endpoint round independently. Their midpoint is not
+    // necessarily the double-precision mean of the initial/final endpoints.
+    for (const {fixture: sample, native} of stanceFixture.oldMidpointControls) {
+      const initial = sample.initialState.velocity[0], side = sample.commands[0].wishAtStart[0] / 215;
       const actor = {...standing(), velocity: {x: initial * UNIT, z: 0}};
       const next = advanceActor(actor, {...idleInput(), side}, 215 * UNIT, STEP);
-      expect(next.position.x).toBeCloseTo((actor.velocity.x + next.velocity.x) * STEP / 2, 10);
+      expect(next.position.x).toBeCloseTo(native.derivedUncollidedDisplacement.x * UNIT, 12);
+      expect(next.velocity.x / UNIT).toBeCloseTo(native.afterPostHelper.speedX, 10);
     }
   });
 
@@ -67,7 +73,7 @@ describe('installed-build movement arithmetic', () => {
     expect(next.position.z / UNIT).toBeCloseTo(-10.078125 * STEP, 6);
   });
 
-  it('clamps ground speed to the stance cap on the next tick, before any landing has happened', () => {
+  it('applies native ground caps and the projected stop gate before any landing has happened', () => {
     let actor = standing();
     for (let i = 0; i < 256; i++) actor = advanceActor(actor, {...idleInput(), forward: 1}, 215 * UNIT, STEP);
     expect(Math.hypot(actor.velocity.x, actor.velocity.z) / UNIT).toBeCloseTo(215, 3);
@@ -75,7 +81,9 @@ describe('installed-build movement arithmetic', () => {
     // Native WalkMove clamps to m_flMaxSpeed every ground tick: walking cuts
     // speed to 52% at once instead of bleeding it off through friction.
     const walking = advanceActor(actor, {...idleInput(), forward: 1, walk: true}, 215 * UNIT, STEP);
-    expect(Math.hypot(walking.velocity.x, walking.velocity.z) / UNIT).toBeCloseTo(215 * .52, 5);
+    const nativeWalk = stanceFixture.suppliedStateRegressions.find(s => s.id === 'running-to-walk-215')!;
+    expect(Math.hypot(walking.velocity.x, walking.velocity.z) / UNIT)
+      .toBeCloseTo(Math.hypot(...nativeWalk.nativeVelocityAfter), 10);
     // Crouching clamps to the current duck factor as the duck amount ramps.
     let ducking = actor;
     for (let i = 0; i < 4; i++) {
@@ -83,9 +91,12 @@ describe('installed-build movement arithmetic', () => {
       expect(Math.hypot(ducking.velocity.x, ducking.velocity.z) / UNIT)
         .toBeCloseTo(215 * (1 - .66 * (ducking.duckAmount ?? 0)), 4);
     }
-    // Damage tagging lowers the cap the same way.
+    // An abrupt supplied half-cap also reaches the native projected stop gate.
     const tagged = advanceActor({...actor, velocityModifier: .5}, {...idleInput(), forward: 1}, 215 * UNIT, STEP);
-    expect(Math.hypot(tagged.velocity.x, tagged.velocity.z) / UNIT).toBeCloseTo(215 * .5, 5);
+    const nativeTag = capFixture.suppliedStateRegressions.find(s => s.id === 'running-to-tag-half-215')!;
+    expect(nativeTag.native.nativeStopGate.taken).toBe(true);
+    expect(Math.hypot(tagged.velocity.x, tagged.velocity.z) / UNIT)
+      .toBeCloseTo(Math.hypot(...nativeTag.nativeVelocityAfter), 10);
   });
 
   it('limits a jump to 1.1x the weapon speed unless bunnyhopping is enabled', () => {
@@ -104,7 +115,11 @@ describe('installed-build movement arithmetic', () => {
   it.each([150, 215, 225, 240, 250])('can reach the full %s u/s weapon crouch cap from rest', speed => {
     let actor = standing();
     for (let i = 0; i < 256; i++) actor = advanceActor(actor, {...idleInput(), crouch: true, side: 1}, speed * UNIT, STEP);
-    expect(actor.velocity.x / UNIT).toBeCloseTo(speed * .34, 5);
+    const native = stanceFixture.suppliedStateRegressions.find(s => s.id === `crouch-steady-${speed}`);
+    // At 215/240 the native post-helper endpoint is one rounded step above
+    // the ideal decimal cap. These exact supplied-state controls preserve it.
+    if (native) expect(actor.velocity.x / UNIT).toBeCloseTo(native.nativeVelocityAfter[0], 10);
+    else expect(actor.velocity.x / UNIT).toBeCloseTo(speed * .34, 5);
   });
 
   it('uses the native maximum 6.4/s down and 8/s up rates when crouch speed is recovered', () => {

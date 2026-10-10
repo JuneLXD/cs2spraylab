@@ -1,0 +1,667 @@
+{
+  "schema": "cs2.ground-friction-accuracy-summary.v1",
+  "status": "passed",
+  "localProofIdentifier": "AUDIT-GROUND-FRICTION-ACCURACY-01",
+  "identifierKind": "Locally assigned proof identifier, not an REA-issued ledger ID",
+  "method": "Guarded native normalization block, followed by exact saved-output boundary comparison",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "normalizationProofSha256": "8afbe32b9d37c38908eb31d353d97a2b05b20d71c869d6b8243083e7493efe41",
+  "normalizerSha256": "a62b57b03ba684d2c95e01b07fb29cc234cb73fc982664fa118c95e930268fec",
+  "summaryToolSha256": "b04b1a165b71d3d9c210187e7a398e79494cf656b2e2ecb930c0a8d0e9ec85c8",
+  "manifestSha256": "0ad45830074b7341b879625f40f68d2ab75d459257e4daa24c7241f17b9a1ef9",
+  "v3CompactEndpointProofSha256": "453a5156ccbf95ee38bea518a9da965d566e0840ea6cce77ce72db3efab25c8c",
+  "v3NativeProofSha256": "2149c9a308674fbb3198318419e434fb2eabaa5ba0f83b0ab6d11498600d60df",
+  "fixtureDefinitionSha256": "4600d5b952bef24f8fa6b21d6553b04f01a297f536acaf304da910459bf63a71",
+  "guardedNativeExecution": true,
+  "nativeCodeBytes": 134,
+  "constantBytes": 12,
+  "nativeExecutionCounts": {
+    "instructions": 329070,
+    "reads": 65814,
+    "writes": 32907,
+    "cases": 10969
+  },
+  "unexpectedAccesses": 0,
+  "releaseSequences": 98,
+  "uniqueReleaseFixtures": 96,
+  "endpointCases": 10939,
+  "thresholdNeighborCases": 30,
+  "allDerivedBoundarySelectionsMatchNativeNormalization": true,
+  "allMovementZeroBoundariesPrecedeExactStop": true,
+  "allThresholdNeighborsBelowOrAtAreZeroAndAboveArePositive": true,
+  "mxcsrExecutionResults": {
+    "nearest-gradual:0x1f80": 10737,
+    "nearest-ftz-daz:0x9fc0": 232
+  },
+  "commonClassBinding": {
+    "weapons": [
+      "ak47",
+      "m4a4",
+      "m4a1s",
+      "deagle",
+      "glock",
+      "usp",
+      "awp"
+    ],
+    "normalizationSpeed": "Shared getter selects current-mode native maximum speed; no crouch or owner velocity scaling in that getter",
+    "retainedProofSha256": "504e2c71f541941e100aaa83cbb0f67d5c3f20948e5978edd4721e6c0dd6fc75"
+  },
+  "staticPublicationAssociation": {
+    "proved": "Completed segment velocity is passed to owner setter; its ordinary changed-vector path clears the getter refresh bit and copies the exact vector read by GetInaccuracy",
+    "ordinaryLocalXYInlinePaths": "Update separate local and quantized fields and rejoin; no direct rewrite of the published vector or refresh bit in those paths",
+    "remainingBoundary": "Pre-copy notification, range helper and optional indirect component callbacks are uninspected; complete setter side effects and live shot schedule remain unproved",
+    "retainedProofs": [
+      {
+        "path": "native-audit/reports/core-shooting-next/movement/movement-inaccuracy/publisher/proof.json",
+        "sha256": "180a4f2ca624738bac3084c448c3a5c0d953724e72f7e228f6d06b3d6ad70f32"
+      },
+      {
+        "path": "native-audit/reports/core-shooting-next/movement/movement-inaccuracy/publisher-tail/proof.json",
+        "sha256": "8a6a5a745aecefb75bebf5148f6dd0644c24a62410c01f759f9f38e7f050bb22"
+      },
+      {
+        "path": "native-audit/reports/core-shooting-next/movement/movement-inaccuracy/publisher-xy/proof.json",
+        "sha256": "a80048655dc60e7b38ffa288f09edeca91d928910577624298f808365e847f0b"
+      }
+    ]
+  },
+  "limits": [
+    "Only the call-free normalization block executes; the owner getter, speed getter, coefficient and power paths do not execute.",
+    "Endpoint samples and positive normalization speed are supplied from exact-hash v3 release fixtures; no live velocity or command timing is sampled.",
+    "A zero result means zero movement contribution on the ordinary native path, not zero total inaccuracy or spread.",
+    "First zero is an evaluated endpoint relative to a supplied release boundary, not a continuous crossing or physical input latency.",
+    "MXCSR controls are supplied to match each source sequence and are not observed live process state.",
+    "The supplied 250-unit speed is a sensitivity input, not a common-weapon identity.",
+    "Static publication association does not prove all callbacks leave the published vector and refresh bit unchanged."
+  ],
+  "boundaries": [
+    {
+      "fixtureId": "release-200--1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.359375
+    },
+    {
+      "fixtureId": "release-200--1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3515625
+    },
+    {
+      "fixtureId": "release-200--1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.35546875
+    },
+    {
+      "fixtureId": "release-200--1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.34765625
+    },
+    {
+      "fixtureId": "release-200--1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3515625
+    },
+    {
+      "fixtureId": "release-200--1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3515625
+    },
+    {
+      "fixtureId": "release-200--1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.34765625
+    },
+    {
+      "fixtureId": "release-200--1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.34765625
+    },
+    {
+      "fixtureId": "release-200-+1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.359375
+    },
+    {
+      "fixtureId": "release-200-+1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3515625
+    },
+    {
+      "fixtureId": "release-200-+1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.35546875
+    },
+    {
+      "fixtureId": "release-200-+1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.34765625
+    },
+    {
+      "fixtureId": "release-200-+1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3515625
+    },
+    {
+      "fixtureId": "release-200-+1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3515625
+    },
+    {
+      "fixtureId": "release-200-+1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.34765625
+    },
+    {
+      "fixtureId": "release-200-+1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.34765625
+    },
+    {
+      "fixtureId": "release-215--1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-215--1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3671875
+    },
+    {
+      "fixtureId": "release-215--1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.37109375
+    },
+    {
+      "fixtureId": "release-215--1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-ftz-daz",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.37109375
+    },
+    {
+      "fixtureId": "release-215--1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.36328125
+    },
+    {
+      "fixtureId": "release-215--1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3671875
+    },
+    {
+      "fixtureId": "release-215--1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3671875
+    },
+    {
+      "fixtureId": "release-215--1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.36328125
+    },
+    {
+      "fixtureId": "release-215--1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.36328125
+    },
+    {
+      "fixtureId": "release-215-+1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-215-+1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3671875
+    },
+    {
+      "fixtureId": "release-215-+1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.37109375
+    },
+    {
+      "fixtureId": "release-215-+1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.36328125
+    },
+    {
+      "fixtureId": "release-215-+1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3671875
+    },
+    {
+      "fixtureId": "release-215-+1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3671875
+    },
+    {
+      "fixtureId": "release-215-+1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.36328125
+    },
+    {
+      "fixtureId": "release-215-+1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.36328125
+    },
+    {
+      "fixtureId": "release-225--1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-225--1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-225--1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-225--1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-225--1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-225--1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-225--1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-225--1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-225-+1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-225-+1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-225-+1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-225-+1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-225-+1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-225-+1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-225-+1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-225-+1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-230--1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230--1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230--1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-230--1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-230--1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230--1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230--1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230--1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-230-+1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230-+1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230-+1-at-0-half-grid",
+      "mxcsrProfile": "nearest-ftz-daz",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230-+1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-230-+1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-230-+1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230-+1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230-+1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-230-+1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.375
+    },
+    {
+      "fixtureId": "release-240--1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-240--1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3984375
+    },
+    {
+      "fixtureId": "release-240--1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.40234375
+    },
+    {
+      "fixtureId": "release-240--1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-240--1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3984375
+    },
+    {
+      "fixtureId": "release-240--1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3984375
+    },
+    {
+      "fixtureId": "release-240--1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-240--1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-240-+1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-240-+1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3984375
+    },
+    {
+      "fixtureId": "release-240-+1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.40234375
+    },
+    {
+      "fixtureId": "release-240-+1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-240-+1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3984375
+    },
+    {
+      "fixtureId": "release-240-+1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.3984375
+    },
+    {
+      "fixtureId": "release-240-+1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-240-+1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.38671875
+    },
+    {
+      "fixtureId": "release-250--1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250--1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250--1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-250--1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-250--1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250--1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250--1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250--1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-250-+1-at-0-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250-+1-at-0-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250-+1-at-0.25-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-250-+1-at-0.25-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    },
+    {
+      "fixtureId": "release-250-+1-at-0.5-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250-+1-at-0.5-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250-+1-at-0.75-events-only",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.203125,
+      "sourceFirstExactStopEndpointSeconds": 0.40625
+    },
+    {
+      "fixtureId": "release-250-+1-at-0.75-half-grid",
+      "mxcsrProfile": "nearest-gradual",
+      "nativeFirstZeroEndpointSeconds": 0.19921875,
+      "sourceFirstExactStopEndpointSeconds": 0.390625
+    }
+  ]
+}

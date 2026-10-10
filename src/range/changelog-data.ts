@@ -370,6 +370,10 @@ export const latestChanges = {
       'Ready AWP primary input takes priority over zoom, including a held trigger after bolt recovery.',
       'Repeat zoom keeps its existing preference and resumes on a later eligible input after releasing primary.',
     ]},
+    {id: 'native-ground-friction', title: 'Stopping and first-shot accuracy', items: [
+      'Ground stopping carries CS2’s friction state across movement segments, correcting the last movement-accuracy step after releasing a strafe.',
+      'Counter-strafing accounts for unused braking and the native stop rule. Range, Duel and movement lessons share the same calculation.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

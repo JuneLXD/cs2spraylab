@@ -1,0 +1,39 @@
+{
+  "schema": "cs2.ground-friction-low-speed-proof.v1",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "readerSha256": "dd5d0c90645fa57780109ed23b8f5f7b9ff0e1b3bd7cafaddcad7ba9a813ac6e",
+  "sourceProofSha256": "6d9595dfbfb34e1f737f97d6e67f386ec4e2279e2d4f484c9a295db64367cc0c",
+  "savedSpanSha256": "d92904abc0f050a5a0f921fb0d87c163cddded85cea5dc0a2231edc9469b01f5",
+  "callerProofSha256": "f77053616f53e37fda7d0f641c7532d526c75f7e442e2861642b29eec43dce8e",
+  "newBinaryBytesRead": 0,
+  "savedBytesDecoded": 179,
+  "ranges": [
+    {
+      "role": "projected-speed-predicate",
+      "start": "0x15d67ad",
+      "bytes": 134,
+      "sha256": "99331da9a04455de522b5e70be0f2c281c402e53a6bc4817d1e8a9ec5186a4a9",
+      "listingSha256": "87a3b9a1a68e105aea8270a24166e649c3aa6123a6b0c61fb06656c1f81a7d31"
+    },
+    {
+      "role": "clear-motion",
+      "start": "0x15d7070",
+      "bytes": 45,
+      "sha256": "a0e1531a20d04e99ef7dec21deeec3b11717294f7cb5411ee5485ba20dfcd5eb",
+      "listingSha256": "7cce54f865ce4317a7ff7b6233e7800625aaf3ce0e14aeb156da61220c8f2f14"
+    }
+  ],
+  "addressDomains": {
+    "current": "ELF virtual addresses",
+    "retainedGhidraToElf": "Subtract retained analysis image-base adjustment 0x100000."
+  },
+  "rule": {
+    "predicate": "float32 XYZ norm of midpointVelocity + accelerationWork * float32(1/64 - float32(dt/2)) is strictly below 1",
+    "taken": "Clear velocity, accelerationWork and carriedDelta before the existing post-velocity helper.",
+    "notTaken": "Continue into the unexecuted position/collision path."
+  },
+  "limits": [
+    "Selected branch only, not full WalkMove or collision.",
+    "Threshold one comes from the retained ordinary view-basis path stack constant; no arbitrary runtime stack value is inferred."
+  ]
+}

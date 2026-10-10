@@ -1,0 +1,259 @@
+{
+  "schema": "spraylab.ground-friction-validation.v1",
+  "scope": "Current supplied native stopping/counter/cap/work/accuracy proof and actual Range/Duel integration for seven common weapons.",
+  "typescript": {
+    "exitCode": 0
+  },
+  "units": {
+    "passed": 2660,
+    "failed": 1,
+    "total": 2661,
+    "knownFailure": "Missing public/models/ak47.json fallback fixture"
+  },
+  "browser": {
+    "casesPassed": 4,
+    "runs": [
+      {
+        "log": "browser-stopping-final.log",
+        "passed": 1
+      },
+      {
+        "log": "browser-glock-final.log",
+        "passed": 1
+      },
+      {
+        "log": "browser-duel-final.log",
+        "passed": 1
+      },
+      {
+        "log": "browser-range-final.log",
+        "passed": 1
+      }
+    ]
+  },
+  "comparisons": {
+    "combined": {
+      "report": "portable-ground-001/combined/trainer-final-002.json",
+      "sha256": "22af48cd606452152a4422c753e3ed778b12081c3d53574a8b60021cdc886e0a",
+      "summary": {
+        "cases": 462,
+        "rows": 10332,
+        "maxVelocityError": 2.847716647714797e-14,
+        "maxPositionError": 9.057678187205883e-15,
+        "primitiveRows": 5648,
+        "primitiveMismatches": 0,
+        "mismatches": 0,
+        "stateMismatches": 0,
+        "thresholdMismatches": 0
+      },
+      "probeSha256": "afca1d3f73e7b39e5cbf4f20703d715715c4e8b6acae8a0d325abba5f62e60b9"
+    },
+    "stance": {
+      "report": "portable-stance-001/trainer-final-002.json",
+      "sha256": "c7de80f8182b642acc2c7611815eaada9217f55389ba3dda5c018d2d3284b629",
+      "summary": {
+        "cases": 248,
+        "rows": 7688,
+        "maxVelocityError": 2.842170943040401e-14,
+        "maxPositionError": 4.263256414560601e-14,
+        "primitiveRows": 3909,
+        "primitiveMismatches": 0,
+        "mismatches": 0,
+        "stateMismatches": 0,
+        "thresholdMismatches": 0
+      },
+      "probeSha256": "afca1d3f73e7b39e5cbf4f20703d715715c4e8b6acae8a0d325abba5f62e60b9"
+    },
+    "release": {
+      "report": "portable-ground-001/release/trainer-final-002.json",
+      "sha256": "a3b92c596635d836fdcf5ccf7e63f212686230f5d0140fa592f60cbfef3bc613",
+      "summary": {
+        "primitiveRows": 10980,
+        "actorCases": 192,
+        "actorRows": 19914,
+        "maxPrimitiveError": 0,
+        "maxVelocityError": 2.842170943040401e-14,
+        "maxPositionError": 3.874301981454664e-07,
+        "mismatches": 0
+      },
+      "probeSha256": "955814fb7676d79e5d37229686cdfa87d8e0be720a5ac51355ba617af9224063"
+    },
+    "engineConsistency": {
+      "report": "stopping-engines-final-002.json",
+      "sha256": "885dadc0355620cf2bf3370dab1b1093292a535da3a88940d1bbaf6a2a4015f4",
+      "summary": {
+        "cases": 168,
+        "triplets": 56,
+        "mismatchedTriplets": []
+      },
+      "probeSha256": "939a020ab73d39e919b03d8a5b21a0882ebc8e63ae7729bcd56da31df44d8d22"
+    },
+    "baseline": {
+      "commit": "e99fd0520230b0f8ff88c1d11d02c9bf1d96b5e7",
+      "sha256": "894874d70d551b2e9466a83f89fa73fa919bbb85e355261ade3b3194c0d5152c",
+      "summary": {
+        "cases": 462,
+        "rows": 10332,
+        "maxVelocityError": 23.546807353902107,
+        "maxPositionError": 2.5422423896087807,
+        "primitiveRows": 0,
+        "primitiveMismatches": 0,
+        "mismatches": 10230,
+        "stateMismatches": 0,
+        "thresholdMismatches": 164
+      },
+      "sourceHashes": {
+        "src/range/actor-collision.ts": "738d52cf56ea8759ce961ff4a4619825b21a8815bb19d85a5e50602614d5ee47",
+        "src/range/actor-contact.ts": "584def69ea5b0526b5838b42fbdaa22d331de4e28fa4eb05f598992118d7cbba",
+        "src/range/actor-jump.ts": "ed054b70ded5910172c86dc82bd5fb35eb2fb7ba6cb5b94d8506b87a0aa76df7",
+        "src/range/actor-physics.ts": "4af8a21b90e1e0339aed8a569c6ae743eacf4dbc5a8f74541f1b7e2702f2a87a",
+        "src/range/terrain.ts": "979141f9ae6c230a709a6621bb14010fd8c3d90f582a319b4bb70538f65336c1"
+      }
+    }
+  },
+  "sourceHashes": {
+    "src/range/actor-collision.ts": "738d52cf56ea8759ce961ff4a4619825b21a8815bb19d85a5e50602614d5ee47",
+    "src/range/actor-contact.ts": "584def69ea5b0526b5838b42fbdaa22d331de4e28fa4eb05f598992118d7cbba",
+    "src/range/actor-jump.ts": "ed054b70ded5910172c86dc82bd5fb35eb2fb7ba6cb5b94d8506b87a0aa76df7",
+    "src/range/actor-physics.ts": "3538fbc156a760f3030528bbb1bd2028038e95d24a10c3128e1104d5e0b89a8c",
+    "src/range/ground-friction.ts": "294848dac635baf98bbfe633a9a25549a0518a3af715fe33b2f1cdf6150a2e9c",
+    "src/range/terrain.ts": "979141f9ae6c230a709a6621bb14010fd8c3d90f582a319b4bb70538f65336c1",
+    "../../cs2spraylab/node_modules/three/build/three.module.js": "ce1fa418de16a19495a9f72495580e3015d7745c296d3ce0485897f902ddedfb",
+    "src/range/aim-punch.ts": "5df3265ec35b6492fbdd38cdec700ac840322c073a18cf344c79c30462498875",
+    "src/range/ballistics.ts": "8ef2d44eea3c56b2296547a236de504ed11000e71848c1ce6b03c97064ee9b9c",
+    "src/range/config.ts": "9614e31f18cbe0307d584420449f10fb8cc4efd6708ca8cedd4558de45a4a323",
+    "src/range/drills.ts": "94da89745937422016fbfe343c561f9c5778a490c0268c3ad173ab4396a53da5",
+    "src/range/duel/arena-layout.ts": "8c70e10766e3584024324bd90023bf7d29b608eeec45e54cd794ddbd67a4ef99",
+    "src/range/duel/arena-pois.ts": "a000f4de8632e8b8697edcfcc8c71fd8fd844d6a811d56016f7b2843823a9013",
+    "src/range/duel/awareness.ts": "e9c69c52b983cbb1d3ccbe078376dfba9695946046c08701417267d12987e922",
+    "src/range/duel/botz.ts": "867f941ffb0f522b03945302b1bd3d0db47f02a4b38df418fce37a731186d5ed",
+    "src/range/duel/brain.ts": "66ed8bba8f1f0fb070df08907b3cfc87d853d810bd359e9f0d29e2edde1712fa",
+    "src/range/duel/coaching.ts": "d9768dc2bdb8ad9a140180d0ee4cba7680a1471e27e710e2bde15d12221a65aa",
+    "src/range/duel/config.ts": "6ce065c22f3ad65ed5dc470a0969deb8e7891d0d1df0e548d32cfced87ad85cb",
+    "src/range/duel/coordination.ts": "f088e158073ec537589b1b0e732f81aefba022c783f4cb167c90303d93c1727a",
+    "src/range/duel/damage.ts": "a98348763e3a6e96ab4adebb7d9bcd06550e8a1e1d654117265d9ff1dd74c8da",
+    "src/range/duel/environment.ts": "4c896dbf8bb4aedc347f151a1642e218a46236eb5c6e010fa3891e3a9f627336",
+    "src/range/duel/geometry.ts": "1328b4bdbcac1805fe21a62dcc1bb449bbbfbc96672a71814c29049691a71dd4",
+    "src/range/duel/hitboxes.ts": "1c7e85b5073b437e3f026299a7602a916e038555d4af1696a58b8e3932291fdf",
+    "src/range/duel/melee.ts": "95da6e4a75c2947eea25a1f89e9a7c8a3013517eaa524eb8c242ee3072208d9e",
+    "src/range/duel/motor.ts": "e5e880d0220cb6fda3938f521215eccf715085ab755d67d6d3d2af9a150e5de4",
+    "src/range/duel/native-surface-fixture.json": "d03d15edeac24396194e9a516390046932fe47e35455b6885bacdec5b1345140",
+    "src/range/duel/navigation.ts": "5726288a092a6aadbe11ec7558c37ff9fa2bcf272c3f7e081f54450571936c30",
+    "src/range/duel/penetration.ts": "c835583ef1bbead21450ab1a0c97963cf5d8d74202f590a20e942f74e00e3fad",
+    "src/range/duel/perception.ts": "63d61eaf17493ecf25af24145c69c1d656cb2e71a2ad3ccd5e3d6d8fe53843b5",
+    "src/range/duel/presentation.ts": "725eac33a0cce32ae17bbeda149efa3705109f60b1c7371011871115aa425eb4",
+    "src/range/duel/radar.ts": "362993853b12dcaef5982a3980404640aac6b0cdb36bec43e0cb683d4e57559c",
+    "src/range/duel/reflex.ts": "db2d2880e2c0fb266dd1e5869da64b432947d1d4a148fdcbbb1db2bb23522f0b",
+    "src/range/duel/rng.ts": "252a71d609f2e775e469512b14a70b4d6b20a7803bf369ff7db648e4b79937db",
+    "src/range/duel/shadow-scene.ts": "e2abe7e4fa6f728a94cb47754573baaba6dd5ee32d71b18ddd32e9c4a7b4cba3",
+    "src/range/duel/shadows.ts": "aaf198e0f4241df1bc8de01b6b9af2dd4ec0655934d605b6ce7e0dd22937ffb0",
+    "src/range/duel/simulation.ts": "5d7c4243244a4d112a266fe4ae6926e951f98d0e0ebe199da2129b943e47a301",
+    "src/range/duel/skill.ts": "8b2f58f0417e67a6c46e48dce919e806e4e2956ece40e7b363f58e75e4bc6e60",
+    "src/range/duel/spawns.ts": "e271b2b350c05f44253a5052e91faf320b9a265108fe64de24f258ea2c4d6d5c",
+    "src/range/duel/tactics.ts": "0302616e94ed1f1796175671dcb461b91606d97464200a2d07f8993fa754bf7d",
+    "src/range/duel/team-spawns.ts": "40f95bf5abc657479b58d8b8076853754c063a62e8f5fcd8ff6a34265a435394",
+    "src/range/duel/terrain-tactics.ts": "0eb09edc2395d457c19fe99836708490b55bac72e918dd7902498f2d454fc0ac",
+    "src/range/duel/traversal.ts": "e6bcf377238f40a5c7d82a27e69d889e5d65ef69018065c5b8d81b89294cfe36",
+    "src/range/duel/types.ts": "7db253ae0ceda8ceca1cdb53cc40a207f945832926db2e80da7c7c57c5c3557d",
+    "src/range/duel/weapon-state.ts": "a1933c9f8744100a0b2a06977fef738ab7435dbf52380d1a89584217721b1d2c",
+    "src/range/equipment-data.json": "003273a675b9b130627bf4c2f253c5b679b433ee9a243e990a5824703262f988",
+    "src/range/equipment.ts": "1cf6d2639c344fd2bcad3cf76ab65e2b2a00d506cf1f7fb2406f9245b8d69960",
+    "src/range/footsteps.ts": "a94c77af8d58de3a413ef14facb0a5bb67117327060d70f9dad6972160f4ae0c",
+    "src/range/game-data.json": "5903a1deeb1ff4181c7203f4c8b1e9690ee17e5573db558e424388c204ab990e",
+    "src/range/keybinds/console.ts": "96789f931baf46e84ccdc685a5f3fe5cf8674e37345c6ec36cba71d90396c996",
+    "src/range/keybinds/crosshair-cvars.ts": "b699fa3d99b4ddb17a798117f5591292f1ffe2cd0d8d04388e8c53c9235b7f01",
+    "src/range/keybinds/cs2-keyboard-page.json": "f98e6b2f26172329d40f4d134362aa6a6bf07916d3c6b3ffd0959fe62bd95cce",
+    "src/range/keybinds/keys.ts": "83af1248f374e3d86835c57ec83366e2c03525bc96bbf4a6d9769e2d8699435b",
+    "src/range/keybinds/profile.ts": "ff86e8ed2a420e1926c2b87fb64af6ad6863644eb0d9915ed32cbea7034958f6",
+    "src/range/native-reload-presentation.json": "55971a004b55f2d765169098224f48acfcb5ea6643eb9ae22a1e726a015d8167",
+    "src/range/native-reload-timing.json": "c1303c82e1a51f216f3c74dd2fd5c85c930823004259253746d59d25dfeb54ee",
+    "src/range/pop.ts": "bb1352529c6b6de2655f545c309bd969210974df8ea57cdc7f92146adeec58fb",
+    "src/range/punch-recovery.ts": "15f52d055a76eaa452b3095284d900982ec0a76ab18a925f74e20f8dcc2a54dd",
+    "src/range/recoil.ts": "971a48783512ff9cb9449ea7cc7a199d30ca12fddac75ca704b9f5439df0866d",
+    "src/range/reload-clock.ts": "c8a35cd1d5603db064d86fc22a262917d7274f9dd79c5d4d9b271feccd296188",
+    "src/range/reload-input.ts": "0c0c062d3e9a8cbfbdc159ac95a8e83688c41278aebb32b58e89f144adde83ed",
+    "src/range/scope-transition.ts": "0180e13606cd98595142754a1503ced607489e5bb820d1d9d5bcb27bc3b74b3c",
+    "src/range/shot-model.ts": "09766c6c2458bb2a70fdc1a2b7bcbb04de820a124b4d5232a8c0995495ecc47d",
+    "src/range/simulation.ts": "f9a168d865a7b4269c4e1924ef8340adefe9ff09643f2b8be89f664e24c4bc09",
+    "src/range/sound-events-data.json": "d12eb56d308937ce27b086d9e9e9edea4a93aa65eddb15ba2d82efad0c2f5f67",
+    "src/range/sound-model.ts": "712620fc194f6c8e87cd8dac7de3d0ae8cc72d48969476f732969f0125a26531",
+    "src/range/spatial-audio.ts": "18d9a13ea84793dca7c3cc8c308d1e59b42def9d77029065c663c05aaa274725",
+    "src/range/tagging-data.json": "d799bd71ffa1257b2908aa7fe8005c71b2cdc8d529247439af65d03878114195",
+    "src/range/tagging.ts": "7743ed139c5f5e9034ca9e53470f810af76c8cb9eaa1b397e3d22a73c07eb8ba",
+    "src/range/view-punch.ts": "4ecaca6b2a49057c196169ac220584ce6c9b4602bed5d85639f5d2946ddf7c11",
+    "src/range/weapon-actions.ts": "0dee51f4575b050378e3b7c56e5a56d5ca11fc13135aee9b276cb7fbc97c2cac"
+  },
+  "testHashes": {
+    "src/range/ground-friction.test.ts": "6543bb6629858549ecfb0fd16be83d67e7abf9bb367805463be691678f686da0",
+    "src/range/ground-friction-stop.test.ts": "ee9493e96eee7d8e248db19495298ef1723b55bc97011f0c24c19ba1ecbb7ef1",
+    "src/range/ground-counter.test.ts": "b401d2623fa5ccb482e0f7d3845742382a974ce87be877fa198601c0eb06b3cd",
+    "src/range/stopping-accuracy.test.ts": "a67a7bf61ccc410ed3731eb80e2ddcc40b50f3ef4b430b47709e2a40cce19a5b",
+    "src/range/actor-contact.test.ts": "9b7e1ce39e6945b6b9d89c5cee9e790533e8474530b451255f443ad7ae743e56",
+    "src/range/native-movement.test.ts": "da36427cb6673f2b808315e9249f945622d57bab5bbd840ddeec094a01009002",
+    "src/range/simulation.test.ts": "bfd26187ea27b2f453b85457dc2d6e5dbe4d4f42e66ac0c8ba27fc82690dbf10",
+    "src/range/duel/arena-index.test.ts": "ec82380228e24fd86e95ea9084cc7d34a53fdae0fa36d19a5df8ae89ed633a23",
+    "src/range/view-animation.test.ts": "cb5eef9d5be3d342116f639bb75a60010a033e4f93a5d25df2afbc4b9b43aa4f",
+    "src/range/changelog.test.ts": "547620beb31357007968af6ab982af6c06a97a406336b671b3adc65badc253b8",
+    "tests/stopping-accuracy.spec.ts": "9f38ec7031862cb9f096ef24af76843fbc7fba434953385216cf73c077fdafbe",
+    "tests/glock-timing.spec.ts": "af8b66fd17cc000abe3915d49590aa8585cbed4e37a0bd6f8d5b06cff5057391",
+    "tests/view-punch.spec.ts": "0931d15ff1d6ddd4c0c8a2919255a057495f3ed6998b29fa94f5b82916658e22"
+  },
+  "evidenceHashes": {
+    "docs/evidence/reaudit-ground-friction-accuracy-native.json": "cd7923792e9ee4adcc2a565f81a2d34692d055ff1423d0da4ad924cea8899a59",
+    "docs/evidence/reaudit-ground-friction-accuracy-portable-standalone.json": "431aa18ce099351b9786b335e9608d8eb1dcf076ec75ab47522a03588b9bf97f",
+    "docs/evidence/reaudit-ground-friction-accuracy-portable.json": "52f39f4d24058dfa0b8e3992576b69df05ce9eb9d4e31e805c8cbea900c889ee",
+    "docs/evidence/reaudit-ground-friction-native.json": "62a07838842e186464f9ed6889aa62eafdff282fb44a3cecf739fb82db9072f9",
+    "docs/evidence/reaudit-ground-stance-regressions.json": "58cb1052d7eca007e8895add681485c61bd83ed87183dfd445bfee5d27d9ac48",
+    "docs/evidence/reaudit-ground-tag-diagonal-regressions.json": "a8d960ca8039136a645266cdc8e3fed5643b8b1f1d476b94216e17b6fa5fee0a"
+  },
+  "logs": {
+    "tsc-final-002.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "units-final-002.log": {
+      "sha256": "769bae4fff1380eb1d609c4ddeadbf29381e1daa4254ddf0ead696c12bb27702",
+      "bytes": 6429
+    },
+    "browser-stopping-final.log": {
+      "sha256": "72c9283677f2cf8cd39d7bae09f6c5498213048fee16c9c0c9f87e869ad55ca4",
+      "bytes": 683
+    },
+    "browser-glock-final.log": {
+      "sha256": "ce067d45e9c718cda0779e87138e96d45b3bd9e5dc05d9875f529a5a49bbaf20",
+      "bytes": 701
+    },
+    "browser-duel-final.log": {
+      "sha256": "6dbaff46dd12b0076b4ec06ae8d1646ba1c8dbf1736b665dca9badcb033adc69",
+      "bytes": 684
+    },
+    "browser-range-final.log": {
+      "sha256": "0b8432bc4e2f51cbe44794c298334cd66e24f3c22e0779538d8d5f93b3147532",
+      "bytes": 688
+    },
+    "browser-freeze.sha256": {
+      "sha256": "c1dc7e7fa3c51eaa34b30ee023ec7e5234100459c05683d570a4d58b17b637e6",
+      "bytes": 652
+    }
+  },
+  "caps": {
+    "nativeProbesMiB": 512,
+    "appChecksMiB": 2048,
+    "swapBytes": 0,
+    "cpuPercent": 100,
+    "workers": 1,
+    "concurrentHeavyJobs": 1,
+    "deployPausedDuringChecks": true
+  },
+  "priorAttempts": {
+    "focused004": "301 passed, four ideal-double midpoint/cap assertions failed; independently checked native outputs replaced the assumptions.",
+    "unitsInitial": "2655 passed, five failed: known missing model, long-dt recursive stack overflow, tagged stop-gate expectation, diagonal rounding, and random-walk net-distance guard.",
+    "corrections": "Iterative bounded-depth segmentation, exact supplied native expectations, and cumulative movement for the arena-index non-vacuity check. Focused250 then full suite repeated.",
+    "memory": "No scope or host OOM during this movement pass; earlier pass41\u201343 contained Duel browser cap incident is retained in its separate validation ledger."
+  },
+  "limits": [
+    "Supplied-state native replay, not full command/collision or physical input latency parity.",
+    "Native accuracy normalization/zero branch only; base spread and other penalties remain.",
+    "Variable surfaces, full mode transitions and upstream stance/tag/input production remain partial."
+  ]
+}

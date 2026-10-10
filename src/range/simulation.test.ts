@@ -3,6 +3,7 @@ import {SERVER_TICK, tickAligned} from './actor-physics';
 import { defaults, gameData, loadSettings, migrateLegacySettings, migrateMode, parseProfile, recoilPattern, resolutionPixelRatio, sanitizeSettings, viewAspect, weaponIds } from './config';
 import { DEG, direction, groundVelocity, mouseAngle, Simulation, STEP, targetSpeed, UNIT, VERTICAL_FOV, TARGET_Z, SPAWN_Z, JUMP_SPEED, GRAVITY } from './simulation';
 import {REVOLVER_WINDUP} from './weapon-actions';
+import capFixture from '../../docs/evidence/reaudit-ground-tag-diagonal-regressions.json';
 
 const make = (extra = {}) => new Simulation({ ...defaults, weapon: 'ak47', mode:'guided', ...extra, crosshair: { ...defaults.crosshair } });
 const run = (s: Simulation, seconds: number, fps = 60) => { for (let i = 0; i < Math.round(seconds * fps); i++) s.advance(1 / fps); };
@@ -30,7 +31,14 @@ describe('Source scale and input', () => {
     // Measure open-floor speed, away from the side-lane cover collision tests.
     for (const side of [0, 1]) {
       const s = make(); s.position.z = -60; s.active = true; s.input.forward = 1; s.input.side = side; run(s, 1);
-      expect(Math.hypot(s.velocity.x, s.velocity.z) / UNIT).toBeCloseTo(215, 5);
+      if (side === 0) expect(Math.hypot(s.velocity.x, s.velocity.z) / UNIT).toBeCloseTo(215, 5);
+      else {
+        // Native float32 diagonal components have a double-precision norm
+        // just below 215. Compare the independently executed components.
+        const native = capFixture.suppliedStateRegressions.find(sample => sample.id === 'ak-diagonal-one-second')!;
+        expect(s.velocity.x / UNIT).toBeCloseTo(native.nativeVelocityAfter[0], 10);
+        expect(s.velocity.z / UNIT).toBeCloseTo(native.nativeVelocityAfter[1], 10);
+      }
     }
   });
   it('walk is slower, crouch changes eye height, and friction stops movement', () => {

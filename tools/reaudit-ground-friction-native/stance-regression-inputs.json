@@ -1,0 +1,316 @@
+{
+  "method": "Actual prior state from three historical unit scenarios. Feed declared state to independent native one-step execution; these are supplied-state controls, not native stance-ramp trajectories.",
+  "sourceHashes": {
+    "src/range/terrain.ts": "979141f9ae6c230a709a6621bb14010fd8c3d90f582a319b4bb70538f65336c1",
+    "src/range/actor-collision.ts": "738d52cf56ea8759ce961ff4a4619825b21a8815bb19d85a5e50602614d5ee47",
+    "src/range/actor-contact.ts": "584def69ea5b0526b5838b42fbdaa22d331de4e28fa4eb05f598992118d7cbba",
+    "src/range/actor-jump.ts": "ed054b70ded5910172c86dc82bd5fb35eb2fb7ba6cb5b94d8506b87a0aa76df7",
+    "src/range/ground-friction.ts": "294848dac635baf98bbfe633a9a25549a0518a3af715fe33b2f1cdf6150a2e9c",
+    "src/range/actor-physics.ts": "b390cbd8a89b3ee9c2504dec2a783cea0a4a52bd171bf69a4f0892d65d1dce29"
+  },
+  "cases": [
+    {
+      "id": "running-to-walk-215",
+      "weaponSpeed": 215,
+      "stance": "walk",
+      "suppliedSpeed": 111.80000305175781,
+      "dt": 0.0078125,
+      "startFraction": 0,
+      "endFraction": 0.5,
+      "beginCommand": true,
+      "finishCommand": false,
+      "initialState": {
+        "velocity": [
+          0,
+          -214.99999999999997
+        ],
+        "previousWish": [
+          0,
+          -215
+        ],
+        "active": false,
+        "savedFraction": 0,
+        "storedSpeed": 214.9845733642578,
+        "commandMarked": false
+      },
+      "wish": [
+        0,
+        -111.80000305175781
+      ],
+      "actor": {
+        "position": {
+          "x": 0,
+          "y": 1.6256,
+          "z": -10.013280729138868
+        },
+        "velocity": {
+          "x": 0,
+          "z": -5.460999999999999
+        },
+        "yaw": 0,
+        "feet": 0,
+        "verticalVelocity": 0,
+        "eyeHeight": 1.6256,
+        "duckAmount": 0,
+        "duckFlag": false,
+        "jumpHeld": false,
+        "grounded": true,
+        "duckSpeed": 8,
+        "duckViewOffset": 0,
+        "duckRootOffset": 0,
+        "crouchHeld": false,
+        "duckCooldown": 0,
+        "duckRecoveryOrigin": {
+          "x": 0,
+          "z": -9.970616666638868
+        },
+        "movementTime": 2,
+        "friction": {
+          "command": 127,
+          "state": {
+            "active": false,
+            "savedFraction": 0,
+            "storedSpeed": 214.9845733642578,
+            "commandMarked": false,
+            "previousWish": {
+              "x": 0,
+              "z": -215
+            }
+          }
+        },
+        "moveMode": "ground",
+        "waterLevel": 0,
+        "ladderDetached": false
+      },
+      "input": {
+        "forward": 1,
+        "side": 0,
+        "walk": true,
+        "crouch": false,
+        "jump": false
+      },
+      "trainerAfter": {
+        "velocity": [
+          0,
+          -111.80001831054688
+        ],
+        "derivedPosition": [
+          0,
+          -1.276562571525596
+        ],
+        "state": {
+          "active": true,
+          "savedFraction": 0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarked": true,
+          "previousWish": {
+            "x": 0,
+            "z": -111.80000305175781
+          }
+        }
+      }
+    },
+    {
+      "id": "crouch-steady-215",
+      "weaponSpeed": 215,
+      "stance": "crouch",
+      "suppliedSpeed": 73.0999984741211,
+      "dt": 0.0078125,
+      "startFraction": 0.5,
+      "endFraction": 1,
+      "beginCommand": false,
+      "finishCommand": true,
+      "initialState": {
+        "velocity": [
+          73.10000610351562,
+          0
+        ],
+        "previousWish": [
+          73.0999984741211,
+          0
+        ],
+        "active": false,
+        "savedFraction": 0,
+        "storedSpeed": 73.10944366455078,
+        "commandMarked": false
+      },
+      "wish": [
+        73.0999984741211,
+        0
+      ],
+      "actor": {
+        "position": {
+          "x": 2.6038568308114933,
+          "y": 1.1683999999999999,
+          "z": 0
+        },
+        "velocity": {
+          "x": 1.8567401550292968,
+          "z": 0
+        },
+        "yaw": 0,
+        "feet": 0,
+        "verticalVelocity": 0,
+        "eyeHeight": 1.1683999999999999,
+        "duckAmount": 1,
+        "duckFlag": true,
+        "jumpHeld": false,
+        "grounded": true,
+        "duckSpeed": 8,
+        "duckViewOffset": -0.4572,
+        "duckRootOffset": 0,
+        "crouchHeld": true,
+        "duckCooldown": 0,
+        "duckRecoveryOrigin": {
+          "x": 2.589351048350327,
+          "z": 0
+        },
+        "movementTime": 1.9921875,
+        "friction": {
+          "command": 127,
+          "state": {
+            "active": false,
+            "savedFraction": 0,
+            "storedSpeed": 73.10944366455078,
+            "commandMarked": false,
+            "previousWish": {
+              "x": 73.0999984741211,
+              "z": 0
+            }
+          }
+        },
+        "moveMode": "ground",
+        "waterLevel": 0,
+        "ladderDetached": false
+      },
+      "input": {
+        "forward": 0,
+        "side": 1,
+        "walk": false,
+        "crouch": true,
+        "jump": false
+      },
+      "trainerAfter": {
+        "velocity": [
+          73.10000610351562,
+          0
+        ],
+        "derivedPosition": [
+          0.5710937976837124,
+          0
+        ],
+        "state": {
+          "active": false,
+          "savedFraction": 0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarked": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "z": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "crouch-steady-240",
+      "weaponSpeed": 240,
+      "stance": "crouch",
+      "suppliedSpeed": 81.5999984741211,
+      "dt": 0.0078125,
+      "startFraction": 0.5,
+      "endFraction": 1,
+      "beginCommand": false,
+      "finishCommand": true,
+      "initialState": {
+        "velocity": [
+          81.60000610351562,
+          0
+        ],
+        "previousWish": [
+          81.5999984741211,
+          0
+        ],
+        "active": false,
+        "savedFraction": 0,
+        "storedSpeed": 81.60945129394531,
+        "commandMarked": false
+      },
+      "wish": [
+        81.5999984741211,
+        0
+      ],
+      "actor": {
+        "position": {
+          "x": 2.736938845086291,
+          "y": 1.1683999999999999,
+          "z": 0
+        },
+        "velocity": {
+          "x": 2.0726401550292968,
+          "z": 0
+        },
+        "yaw": 0,
+        "feet": 0,
+        "verticalVelocity": 0,
+        "eyeHeight": 1.1683999999999999,
+        "duckAmount": 1,
+        "duckFlag": true,
+        "jumpHeld": false,
+        "grounded": true,
+        "duckSpeed": 8,
+        "duckViewOffset": -0.4572,
+        "duckRootOffset": 0,
+        "crouchHeld": true,
+        "duckCooldown": 0,
+        "duckRecoveryOrigin": {
+          "x": 2.7207463438751245,
+          "z": 0
+        },
+        "movementTime": 1.9921875,
+        "friction": {
+          "command": 127,
+          "state": {
+            "active": false,
+            "savedFraction": 0,
+            "storedSpeed": 81.60945129394531,
+            "commandMarked": false,
+            "previousWish": {
+              "x": 81.5999984741211,
+              "z": 0
+            }
+          }
+        },
+        "moveMode": "ground",
+        "waterLevel": 0,
+        "ladderDetached": false
+      },
+      "input": {
+        "forward": 0,
+        "side": 1,
+        "walk": false,
+        "crouch": true,
+        "jump": false
+      },
+      "trainerAfter": {
+        "velocity": [
+          81.60000610351562,
+          0
+        ],
+        "derivedPosition": [
+          0.6375000476837226,
+          0
+        ],
+        "state": {
+          "active": false,
+          "savedFraction": 0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarked": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "z": 0
+          }
+        }
+      }
+    }
+  ]
+}

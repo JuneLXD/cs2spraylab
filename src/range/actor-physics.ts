@@ -3,6 +3,9 @@ import {actorContactSolids, actorHull, supportDisplacement, resizeSupportedStack
 import {TERRAIN_RULES, CONTACT_EPSILON, ladderAt, waterLevel, normalize, dot, add, scale, subtract,
   type ContactId, type TerrainSolid, type TerrainWorld} from './terrain';
 import {acceptedJumpPress, isBhopPress, jumpLandingFactor, groundLandingFactor, ballisticContactTime, type JumpRules} from './actor-jump';
+import {groundFrictionAt, groundFrictionFraction, nextGroundFrictionBoundary, finishActorFriction,
+  selectGroundFriction, groundFrictionStep, accelerateGroundMotion, capGroundMotion, prepareGroundMotion,
+  type ActorFriction} from './ground-friction';
 
 export const UNIT = .0254;
 export const DEG = Math.PI / 180;
@@ -45,6 +48,7 @@ export type ActorKinematics = {
   grounded?: boolean;
   velocityModifier?: number;
   movementTime?: number;
+  friction?: ActorFriction;
   lastJumpPressTime?: number;
   pendingJumpPressTime?: number;
   landedAt?: number;
@@ -68,24 +72,16 @@ export const stanceCurve = (amount: number) => amount * amount * (3 - 2 * amount
 
 type GroundStance = {weaponSpeed: number; ducking: boolean; walking: boolean; scopedSlow?: boolean};
 
-// Build 2000919, server Accelerate (RVA ab1ff0): wish-speed and acceleration
-// speed are different, especially while ducking, walking or damage-tagged.
+// Standalone acceleration adapter retained for historical native fixtures.
+// Actual ground movement also passes friction's work and unused drop.
 export function accelerateGround(
   vx: number, vz: number, x: number, z: number, wishSpeed: number, dt: number,
   {weaponSpeed, ducking, walking, scopedSlow = false}: GroundStance = {weaponSpeed: wishSpeed, ducking: false, walking: false},
 ) {
-  const length = Math.hypot(x, z);
-  if (!length) return {x: vx, z: vz};
-  x /= length; z /= length;
-  const current = vx * x + vz * z;
-  const base = Math.max(250 * UNIT, wishSpeed);
-  const weaponScale = Math.min(1, weaponSpeed / (250 * UNIT));
-  // Server Accelerate (build 2000930): walking at zoom level 2 with a walking speed below 110 u/s skips the 0.52.
-  const accelerationSpeed = base * (ducking ? .34 : walking ? (scopedSlow ? weaponScale : .52) : weaponScale);
-  const walkCap = base * weaponScale * .52;
-  const taper = walking && !ducking ? clamp((walkCap - Math.max(0, current)) / (5 * UNIT), 0, 1) : 1;
-  const add = Math.min(Math.max(0, wishSpeed - current), 5.5 * accelerationSpeed * taper * dt);
-  return {x: vx + x * add, z: vz + z * add};
+  const next = accelerateGroundMotion({x: Math.fround(vx / UNIT), z: Math.fround(vz / UNIT)}, {x: 0, z: 0},
+    {x: Math.fround(x * wishSpeed / UNIT), z: Math.fround(z * wishSpeed / UNIT)}, wishSpeed / UNIT, dt, 0,
+    {weaponSpeed: weaponSpeed / UNIT, ducking, walking, scopedSlow});
+  return {x: next.velocity.x * UNIT, z: next.velocity.z * UNIT};
 }
 
 export function groundVelocity(vx: number, vz: number, x: number, z: number, speed: number, dt: number, stance?: GroundStance) {
@@ -124,6 +120,22 @@ export function airVelocity(vx: number, vz: number, x: number, z: number, speed:
   return {x: movement.x + deferred.x, z: movement.z + deferred.z};
 }
 
+function nextSegmentEnvironment(actor: ActorKinematics, next: ActorKinematics,
+  environment: ActorEnvironment | undefined, time: number): ActorEnvironment | undefined {
+  if (!environment) return undefined;
+  let actors = environment.actors;
+  if (actors && environment.selfId !== undefined && next.duckAmount !== actor.duckAmount) {
+    // The first segment already admitted this stance change. Carry its virtual
+    // rider poses into the next clearance check without mutating real actors.
+    const resized = resizeSupportedStack({...actor, id: environment.selfId}, next, actors, environment);
+    if (resized) {
+      const poses = new Map(resized.map(body => [body.id, body]));
+      actors = actors.map(body => poses.get(body.id) ?? body);
+    }
+  }
+  return {...environment, time, actors: actors?.map(body => ({...body, previous: undefined}))};
+}
+
 export function advanceActor(
   actor: ActorKinematics, input: MoveInput, runningSpeed: number, dt: number,
   resolve: ResolveMove = (_from, desired) => desired,
@@ -138,8 +150,28 @@ export function advanceActor(
     const before = advanceActor(actor, {...input, jump: actor.jumpHeld, jumpPressed: false, jumpPressOffset: 0},
       runningSpeed, pressOffset, resolve, canOccupy, vertical, environment);
     return advanceActor(before, {...input, jumpPressed: true, jumpPressOffset: 0}, runningSpeed, dt - pressOffset,
-      resolve, canOccupy, vertical, environment ? {...environment, time: time + pressOffset,
-        actors: environment.actors?.map(body => ({...body, previous: undefined}))} : undefined);
+      resolve, canOccupy, vertical, nextSegmentEnvironment(actor, before, environment, time + pressOffset));
+  }
+  let friction = dt > 0 ? groundFrictionAt(actor.friction, time) : actor.friction;
+  if (friction && dt > 0) {
+    const duration = nextGroundFrictionBoundary(friction, time) - time;
+    if (duration > 1e-10 && duration < dt - 1e-10) {
+      // Long action fast-forwards can span thousands of commands. Iterate
+      // their segments so stack depth does not grow with elapsed time.
+      let current = actor, command = input, segmentEnvironment = environment;
+      let remaining = dt, segmentTime = time;
+      while (remaining > 0) {
+        const clock = groundFrictionAt(current.friction, segmentTime);
+        const untilBoundary = nextGroundFrictionBoundary(clock, segmentTime) - segmentTime;
+        const segment = untilBoundary > 1e-10 && untilBoundary < remaining - 1e-10 ? untilBoundary : remaining;
+        const next = advanceActor(current, command, runningSpeed, segment, resolve, canOccupy, vertical, segmentEnvironment);
+        segmentTime += segment; remaining -= segment;
+        segmentEnvironment = nextSegmentEnvironment(current, next, segmentEnvironment, segmentTime);
+        current = next;
+        command = {...input, jumpPressed: false, jumpPressOffset: 0};
+      }
+      return current;
+    }
   }
   const bodies = environment?.actors ?? [];
   const world = environment ? {...environment,
@@ -190,6 +222,10 @@ export function advanceActor(
   }
   const airborne = !supported || verticalVelocity > 0;
   let duckAmount = clamp(currentDuck + (wantsDuck ? .8 * duckSpeed : -Math.max(1.5, duckSpeed)) * dt, 0, 1);
+  // Segment subdivision can leave a double a few ulps short of an exact
+  // endpoint. Finish the stance and its flag on that segment, not one later.
+  if (duckAmount < 4 * Number.EPSILON) duckAmount = 0;
+  else if (1 - duckAmount < 4 * Number.EPSILON) duckAmount = 1;
   // FinishDuck/FinishUnDuck complete in air, preserving the hull centre:
   // the 72-to-54-unit height change moves its origin by nine units.
   if (airborne) duckAmount = wantsDuck ? 1 : 0;
@@ -230,10 +266,8 @@ export function advanceActor(
   if (wantsJump && supported) initialVelocity = clampJumpSpeed(initialVelocity, runningSpeed, rules);
   const air = airborne ? airAcceleration(initialVelocity.x, initialVelocity.z, wishX, wishZ, runningSpeed, dt) : undefined;
   let deferredVelocity = air?.deferred;
-  let velocity = air
-    ? air.movement
-    : groundVelocity(initialVelocity.x, initialVelocity.z, wishX, wishZ, speed, dt,
-      {weaponSpeed: runningSpeed, ducking, walking: walk && !ducking, scopedSlow: input.scopedSlow});
+  let groundWork: {x: number; z: number} | undefined;
+  let velocity = air ? air.movement : {...initialVelocity};
   let moveMode: NonNullable<ActorKinematics['moveMode']> = airborne ? 'air' : 'ground';
   const hullHeight = (72 - 18 * duckCurve) * UNIT;
   if (world && environment?.selfId !== undefined && duckAmount !== currentDuck) {
@@ -278,17 +312,43 @@ export function advanceActor(
     specialVelocity = add(swimming, waterSettings?.current ?? {x: 0, y: 0, z: 0});
     velocity = {x: specialVelocity.x, z: specialVelocity.z}; verticalVelocity = specialVelocity.y;
   }
+  let completedWish = {x: 0, z: 0};
+  if (!airborne && !specialVelocity && moveMode === 'ground') {
+    // Native WalkMove compares the processed wish in speed units before
+    // direction normalization. Empty segments never consume that history.
+    completedWish = {x: Math.fround(wishX * speed / UNIT), z: Math.fround(wishZ * speed / UNIT)};
+    if (friction && dt > 0) {
+      const incoming = {x: initialVelocity.x / UNIT, z: initialVelocity.z / UNIT};
+      const selected = selectGroundFriction(friction.state, incoming, completedWish, groundFrictionFraction(friction, time));
+      friction = {...friction, state: selected.state};
+      const retained = groundFrictionStep(incoming, selected.controlSpeed, dt);
+      const accelerated = accelerateGroundMotion(retained.velocity, retained.acceleration, completedWish, speed / UNIT,
+        dt, retained.overshoot, {weaponSpeed: runningSpeed / UNIT, ducking, walking: walk && !ducking, scopedSlow: input.scopedSlow});
+      groundWork = accelerated.acceleration;
+      velocity = {x: accelerated.velocity.x * UNIT, z: accelerated.velocity.z * UNIT};
+    } else {
+      velocity = groundVelocity(initialVelocity.x, initialVelocity.z, wishX, wishZ, speed, dt,
+        {weaponSpeed: runningSpeed, ducking, walking: walk && !ducking, scopedSlow: input.scopedSlow});
+    }
+  }
   // WalkMove caps the final ground momentum, then defers half the entire
   // friction/acceleration/cap correction until after the collision move.
   if (!airborne && !specialVelocity) {
     const cap = speed * (actor.landedAt !== undefined && actor.landingVelocity !== undefined
       ? groundLandingFactor(actor.landingVelocity, time + dt - actor.landedAt) : 1);
-    const actualSpeed = Math.hypot(velocity.x, velocity.z);
-    if (actualSpeed > cap) {
-      velocity.x *= cap / actualSpeed; velocity.z *= cap / actualSpeed;
+    if (groundWork) {
+      const capped = capGroundMotion({x: Math.fround(velocity.x / UNIT), z: Math.fround(velocity.z / UNIT)}, groundWork, cap / UNIT, dt);
+      const prepared = prepareGroundMotion(capped.velocity, capped.acceleration, dt);
+      deferredVelocity = {x: prepared.deferred.x * UNIT, z: prepared.deferred.z * UNIT};
+      velocity = {x: prepared.movement.x * UNIT, z: prepared.movement.z * UNIT};
+    } else {
+      const actualSpeed = Math.hypot(velocity.x, velocity.z);
+      if (actualSpeed > cap) {
+        velocity.x *= cap / actualSpeed; velocity.z *= cap / actualSpeed;
+      }
+      deferredVelocity = {x: (velocity.x - initialVelocity.x) / 2, z: (velocity.z - initialVelocity.z) / 2};
+      velocity = {x: velocity.x - deferredVelocity.x, z: velocity.z - deferredVelocity.z};
     }
-    deferredVelocity = {x: (velocity.x - initialVelocity.x) / 2, z: (velocity.z - initialVelocity.z) / 2};
-    velocity = {x: velocity.x - deferredVelocity.x, z: velocity.z - deferredVelocity.z};
   }
   const beforeVertical = feet, initialVerticalVelocity = verticalVelocity;
   if (specialVelocity) feet += specialVelocity.y * dt;
@@ -314,7 +374,10 @@ export function advanceActor(
     velocity = {x: clipped.x, z: clipped.z}; verticalVelocity = clipped.y;
   }
   if (deferredVelocity && !specialVelocity) {
-    velocity = {x: velocity.x + deferredVelocity.x, z: velocity.z + deferredVelocity.z};
+    velocity = groundWork ? {
+      x: Math.fround(Math.fround(velocity.x / UNIT) + Math.fround(deferredVelocity.x / UNIT)) * UNIT,
+      z: Math.fround(Math.fround(velocity.z / UNIT) + Math.fround(deferredVelocity.z / UNIT)) * UNIT,
+    } : {x: velocity.x + deferredVelocity.x, z: velocity.z + deferredVelocity.z};
   }
   feet = contact.feet;
   if (contact.support?.traversal?.kind === 'actor' &&
@@ -342,7 +405,7 @@ export function advanceActor(
   // Native WalkMove (build 2000927) clamps horizontal speed to the current max
   // speed on every ground tick after acceleration, so walking, crouching or
   // damage tagging cut speed at once; the landing factor only lowers that cap.
-  if (contact.grounded) {
+  if (contact.grounded && !groundWork) {
     const cap = speed * (landedAt !== undefined && landingVelocity !== undefined
       ? groundLandingFactor(landingVelocity, time + dt - landedAt) : 1);
     const length = Math.hypot(velocity.x, velocity.z);
@@ -360,7 +423,8 @@ export function advanceActor(
     yaw: actor.yaw, feet, verticalVelocity, eyeHeight, duckAmount, duckFlag, jumpHeld: jump, grounded: contact.grounded,
     duckSpeed, duckViewOffset, duckRootOffset, crouchHeld: crouch, duckCooldown, duckRecoveryOrigin,
     velocityModifier: actor.velocityModifier,
-    movementTime: time + dt, lastJumpPressTime: pressed ? time : actor.lastJumpPressTime, pendingJumpPressTime,
+    movementTime: time + dt, friction: friction && dt > 0 ? finishActorFriction(friction, completedWish, time + dt) : actor.friction,
+    lastJumpPressTime: pressed ? time : actor.lastJumpPressTime, pendingJumpPressTime,
     landedAt, landingVelocity, landingVelocityXY,
     supportId: contact.grounded && contact.support?.traversal?.kind === 'actor' ? contact.support.traversal.actorId : undefined,
     moveMode: specialVelocity ? moveMode : contact.grounded ? 'ground' : 'air', waterLevel: water, ladderDetached,
@@ -378,7 +442,7 @@ export function swimVelocity(velocity: Vec, wish: Vec, speed: number, dt: number
 }
 
 export function resetActorMovementHistory(actor: ActorKinematics): ActorKinematics {
-  return {...actor, movementTime: undefined, lastJumpPressTime: undefined, pendingJumpPressTime: undefined,
+  return {...actor, movementTime: undefined, friction: undefined, lastJumpPressTime: undefined, pendingJumpPressTime: undefined,
     landedAt: undefined, landingVelocity: undefined, landingVelocityXY: undefined, supportId: undefined,
     moveMode: actor.grounded ? 'ground' : 'air', waterLevel: 0, ladderDetached: false};
 }

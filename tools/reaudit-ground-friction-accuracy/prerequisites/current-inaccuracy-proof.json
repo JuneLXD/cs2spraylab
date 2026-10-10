@@ -1,0 +1,163 @@
+{
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "wholeArtifactHashRecomputed": true,
+  "probeSha256": "4677a5a9fcd1ea3dff7a8feed169d5fa76a2ef2a8ccf64e136e23e55dff3f428",
+  "ranges": {
+    "duck": {
+      "address": "0x15b2200",
+      "bytes": 5602,
+      "codeSha256": "676f9505be48a62c08d7e9e221754378131f7e81946c2d06f1bb01dfc3ef04cf",
+      "listingSha256": "1b2283aafb685206b2c8fdc9955a4ba6f6aa38dec3c99d9a2f726e8b2e074211",
+      "instructions": 1017,
+      "constantValues": [
+        -8.0,
+        -0.0,
+        1.8322401173702595e-37,
+        2.288310975516746e-37,
+        0.3400000035762787,
+        0.4000000059604645,
+        0.75,
+        0.800000011920929,
+        1.0,
+        1.5,
+        3.0,
+        6.0,
+        6.400000095367432,
+        8.0,
+        4096.0,
+        5.127022907781822e+24
+      ]
+    },
+    "finish-duck": {
+      "address": "0x15aa6c0",
+      "bytes": 1520,
+      "codeSha256": "9282892175961a50858d8e0cc6eec9c8b1cddd2387217650de25876cc9c88660",
+      "listingSha256": "b299e076db37a2dbceadb257f4f7f0c7ef6405bcda59f072e626ec6cd51fe806",
+      "instructions": 326,
+      "constantValues": [
+        -0.0,
+        1.8322401173702595e-37,
+        0.5,
+        1.0
+      ]
+    },
+    "finish-unduck": {
+      "address": "0x15a9c90",
+      "bytes": 1440,
+      "codeSha256": "3ac0857c761457a3429ad457806f290a203bca067b437eec4b6af78b3410daab",
+      "listingSha256": "bb2f4a43b11f2bd77fb161022f4a5b4a4e9ab6345d879d7d9284d08c0f9f2a0d",
+      "instructions": 308,
+      "constantValues": [
+        -8.103731232774271e+22,
+        -0.5,
+        0.0
+      ]
+    },
+    "can-unduck": {
+      "address": "0x158a210",
+      "bytes": 1040,
+      "codeSha256": "65ed42f075b97649cd83de11399e3ed03311c12fe4db51245c4d1b37a03ce395",
+      "listingSha256": "02295a9751ccc2a43d35257b6322876b4c112eb40cd6c0cb9eaa17cd1daea733",
+      "instructions": 220,
+      "constantValues": [
+        -0.5,
+        -6.46324479021132e-05,
+        0.0,
+        1.5858707718130532e-38,
+        3.9655849709375155e-38,
+        2.288310975516746e-37,
+        1.0
+      ]
+    },
+    "set-flags": {
+      "address": "0xd56050",
+      "bytes": 1024,
+      "codeSha256": "a9ec911cf95fb95f1821b4b2803b3448d2c1156d09aa5f7cf976a6cf7828c1db",
+      "listingSha256": "9d96d458159361629feb25bc764d22a2a11aaa86f7a936472ce2a7047c957378",
+      "instructions": 229,
+      "constantValues": [
+        -8.103731232774271e+22,
+        0.0,
+        6.269207542410369e-39,
+        8.031982155995487e-39,
+        1.8322401173702595e-37,
+        2.6336793774946412e+20,
+        2.8063456279894216e+20,
+        7.0382898991292825e+22,
+        7.266988017825005e+31
+      ]
+    },
+    "clear-flags": {
+      "address": "0xd57fc0",
+      "bytes": 448,
+      "codeSha256": "bef1627a5d2b3db3efde407efbedd31c69329be132e2b7207bc32ff9636701b4",
+      "listingSha256": "42890257e9a792b01ec0cc6c911a9b2a36a226efdce679f9b9cb0716c2fd2db4",
+      "instructions": 93,
+      "constantValues": [
+        -8.103731232774271e+22,
+        0.0,
+        6.269207542410369e-39,
+        1.8322401173702595e-37
+      ]
+    },
+    "accuracy-update": {
+      "address": "0x14a5310",
+      "bytes": 1488,
+      "codeSha256": "277c831964a549d200304b55beaf3b6b3edb410479c24983cb7f4a4459dc0be5",
+      "listingSha256": "ef8b24e02d20f143b8aa6b6435d27b94558ba30fecc56e2b33e83be286b79c79",
+      "instructions": 320,
+      "constantValues": [
+        -0.015625,
+        -0.0,
+        1.244775667937278e-38,
+        0.015625,
+        0.10000000149011612,
+        10.0
+      ]
+    },
+    "accuracy-recovery": {
+      "address": "0x14988d0",
+      "bytes": 352,
+      "codeSha256": "72fd14a6b2c02302239722b8413d139c32af66012b7dd96d54a29d362c8a59b8",
+      "listingSha256": "c0e6e98746ede505029e581e08d1795a694b3fc2e6b09966923e29ed6d432c4c",
+      "instructions": 93,
+      "constantValues": [
+        -1.0,
+        1.0,
+        4.0
+      ]
+    },
+    "get-inaccuracy": {
+      "address": "0x1495b90",
+      "bytes": 1296,
+      "codeSha256": "a60046ec62548cfd08e2ffca25adbf1aa65e307318f0493c9bbc04f60e3c177c",
+      "listingSha256": "8d04b1f3fdbbc9f58e880dbd1935a40fc4620e2813e3b593b701c360146f6284",
+      "instructions": 338,
+      "constantValues": [
+        1.244775667937278e-38,
+        0.25,
+        0.3400000035762787,
+        0.949999988079071,
+        1.0
+      ]
+    }
+  },
+  "checks": {
+    "duckCallsFinishDuck": true,
+    "duckCallsFinishUnduck": true,
+    "duckCallsCanUnduck": true,
+    "duckContainsThreeQuarterThreshold": true,
+    "finishDuckCallsSetFlags": true,
+    "finishUnduckCallsClearFlags": true,
+    "duckContainsDirectForcedSet": true,
+    "duckContainsDirectThresholdClear": true,
+    "accuracyUpdateTestsDuckFlag": true,
+    "recoveryLoadsFlags": true,
+    "recoveryTestsGroundFlag": true,
+    "recoveryTestsDuckFlag": true,
+    "getInaccuracyLoadsPenalty": true
+  },
+  "exactInstructionAssertions": 44,
+  "passed": true,
+  "limit": "Static byte anchors; control-flow interpretation requires the retained listing review. No invocation or native arithmetic was executed."
+}

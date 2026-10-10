@@ -117,9 +117,11 @@ describe('boost stack support and clearance', () => {
     expect(supportedActorStack(base, [base, top, body(4, 4), rider, {...body(5, 0, R.standingHeight), alive: false}])
       .map(actor => actor.id)).toEqual([2, 3]);
   });
-  it('carries a support displacement once and preserves height after a stance change', () => {
+  it.each([false, true])('carries support displacement once after a stance change, saved split=%s', split => {
     const previous = body(1, 0, 0, 1), base = {...body(1), previous};
-    const rider = {...body(2, 0, R.crouchingHeight), supportId: 1};
+    const rider = {...body(2, 0, R.crouchingHeight), supportId: 1,
+      friction: split ? {command: 0, state: {active: true, savedFraction: .25, storedSpeed: 0,
+        commandMarked: false, previousWish: {x: 0, z: 0}}} : undefined};
     expect(supportDisplacement(rider, [base]).y).toBeCloseTo(18 * UNIT);
     const next = advanceActor(rider, idleInput(), 250 * UNIT, STEP, undefined, undefined, undefined,
       {solids: [], actors: [base], selfId: 2});
@@ -139,6 +141,24 @@ describe('boost stack support and clearance', () => {
       expect(rider.verticalVelocity).toBe(0);
     }
     expect(base.duckAmount).toBe(0); expect(rider.feet).toBeCloseTo(R.standingHeight);
+  });
+  it('preserves rider clearance when a saved friction fraction splits an unduck', () => {
+    const base = {...body(1, 0, 0, 1), crouchHeld: false, duckSpeed: 8, movementTime: 0,
+      friction: {command: 0, state: {active: true, savedFraction: .25, storedSpeed: 0,
+        commandMarked: false, previousWish: {x: 0, z: 0}}}};
+    const rider = {...body(2, 0, R.crouchingHeight), supportId: 1};
+    const snapshot = JSON.stringify(rider);
+    const alone = advanceActor(base, idleInput(), 250 * UNIT, STEP);
+    const stacked = advanceActor(base, idleInput(), 250 * UNIT, STEP, undefined, undefined, undefined,
+      {solids: [], actors: [rider], selfId: 1});
+    expect(stacked.duckAmount).toBe(alone.duckAmount);
+    expect(stacked.eyeHeight).toBe(alone.eyeHeight);
+    expect(stacked.feet).toBe(alone.feet);
+    expect(JSON.stringify(rider)).toBe(snapshot);
+    const carried = advanceActor(rider, idleInput(), 250 * UNIT, STEP, undefined, undefined, undefined,
+      {solids: [], actors: [{...base, ...stacked, previous: base}], selfId: 2});
+    expect(carried.feet).toBeCloseTo(stacked.feet + actorHeight(stacked));
+    expect(carried.verticalVelocity).toBe(0);
   });
   it('does not treat a jumping base as grounded jump support', () => {
     const base = {...body(1), grounded: false, verticalVelocity: 2};

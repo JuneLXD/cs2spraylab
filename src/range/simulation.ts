@@ -40,6 +40,7 @@ export class Simulation {
   duckViewOffset = 0; duckRootOffset = 0;
   grounded = true;
   velocityModifier = 1; movementTime = 0;
+  friction?: ActorKinematics['friction'];
   lastJumpPressTime?: number; pendingJumpPressTime?: number; landedAt?: number; landingVelocity?: number;
   landingVelocityXY?: {x: number; z: number}; supportId?: ActorKinematics['supportId'];
   moveMode: ActorKinematics['moveMode'] = 'ground'; waterLevel: ActorKinematics['waterLevel'] = 0; ladderDetached = false;
@@ -253,6 +254,7 @@ export class Simulation {
   private resetMovementHistory() {
     this.footsteps.reset();
     this.velocityModifier = 1; this.movementTime = this.time;
+    this.friction = undefined;
     this.lastJumpPressTime = this.pendingJumpPressTime = this.landedAt = this.landingVelocity = undefined;
     this.landingVelocityXY = undefined; this.supportId = undefined;
     this.moveMode = this.grounded ? 'ground' : 'air'; this.waterLevel = 0; this.ladderDetached = false;
@@ -361,6 +363,7 @@ export class Simulation {
     this.burstLeft = 0;
     if (this.firing) this.finish();
     this.active = false; this.input = idleInput(); this.velocity = { x: 0, z: 0 };
+    this.friction = undefined;
     this.footsteps.reset();
     this.reloadHeld = this.secondaryHeld = false;
     for (const state of this.ammoStates.values()) state.cancel();
@@ -439,6 +442,7 @@ export class Simulation {
     this.duckViewOffset = next.duckViewOffset ?? 0; this.duckRootOffset = next.duckRootOffset ?? 0;
     this.duckCooldown = next.duckCooldown ?? 0; this.duckRecoveryOrigin = next.duckRecoveryOrigin;
     this.velocityModifier = next.velocityModifier ?? 1; this.movementTime = next.movementTime ?? this.time;
+    this.friction = next.friction;
     this.lastJumpPressTime = next.lastJumpPressTime; this.pendingJumpPressTime = next.pendingJumpPressTime;
     this.landedAt = next.landedAt; this.landingVelocity = next.landingVelocity; this.landingVelocityXY = next.landingVelocityXY;
     this.supportId = next.supportId; this.moveMode = next.moveMode; this.waterLevel = next.waterLevel;

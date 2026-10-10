@@ -4,7 +4,7 @@ import {ViewAnimation} from './view-animation';
 import {Simulation} from './simulation';
 import {defaults} from './config';
 import {MovementLesson} from './lesson-model';
-import {groundVelocity, STEP} from './actor-physics';
+import {STEP} from './actor-physics';
 import {createScenario, angleTo, exposedHead} from './drills';
 
 function viewFixture(names = ['idle', 'reload', 'reload-empty', 'draw', 'inspect']) {
@@ -225,12 +225,15 @@ describe('reload and lesson continuity', () => {
     expect(sim.reload()).toBe(true); sim.equip(2); expect(sim.primaryReloadAt).toBe(0);
   });
   it('keeps tutorial braking identical to the range instead of freezing at the accuracy threshold', () => {
-    const lesson = new MovementLesson(0); let speed = 0;
+    const lesson = new MovementLesson(0), range = new Simulation({...defaults, weapon: 'm4a4', mode: 'spray'});
+    const lessonStart = lesson.x, rangeStart = range.position.x;
     for (let tick = 0; tick < 100; tick++) {
-      const input = tick < 46 ? 1 : speed > .02 ? -1 : 0;
-      speed = groundVelocity(speed, 0, lesson.complete ? 0 : input, 0, lesson.cap, STEP).x;
+      const input = tick < 46 ? 1 : range.velocity.x > .02 ? -1 : 0;
+      range.input.side = lesson.complete ? 0 : input;
+      range.step(STEP);
       lesson.update(STEP, input);
-      expect(lesson.velocity).toBeCloseTo(speed, 9);
+      expect(lesson.velocity).toBeCloseTo(range.velocity.x, 9);
+      expect(lesson.x - lessonStart).toBeCloseTo(range.position.x - rangeStart, 9);
     }
     expect(lesson.complete).toBe(true); expect(Math.abs(lesson.velocity)).toBe(0);
   });

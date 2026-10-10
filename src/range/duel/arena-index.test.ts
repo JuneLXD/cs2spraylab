@@ -46,15 +46,20 @@ describe('large arena indexes', () => {
     let full: ActorKinematics = {position: start, velocity: {x: 0, z: 0}, yaw: 0, feet: 0, verticalVelocity: 0,
       eyeHeight: 64 * UNIT, duckAmount: 0, jumpHeld: false};
     let local = {...full};
+    let traveled = 0;
     let input: MoveInput = {forward: 1, side: 0, walk: false, crouch: false, jump: false};
     for (let tick = 0; tick < 1500; tick++) {
+      const previous = full.position;
       if (tick % 40 === 0) input = {forward: random() < .8 ? 1 : -1, side: Math.round(random() * 2 - 1), walk: false, crouch: random() < .2, jump: random() < .15};
       full = advanceActor({...full, yaw: full.yaw + .01}, input, 250 * UNIT, STEP, undefined, undefined, undefined, arenaMovementEnvironment(arena, [], 0, tick * STEP, 0));
       local = advanceActor({...local, yaw: local.yaw + .01}, input, 250 * UNIT, STEP, undefined, undefined, undefined,
         arenaMovementEnvironment(arena, [], 0, tick * STEP, 0, local.position));
       expect(local.position, `tick ${tick}`).toEqual(full.position);
       expect(local.feet).toBe(full.feet);
+      traveled += Math.hypot(full.position.x - previous.x, full.position.z - previous.z);
     }
-    expect(Math.hypot(full.position.x - start.x, full.position.z - start.z)).toBeGreaterThan(1);
+    // Prove the equality checks exercised motion. A random walk can return
+    // near its start even after traveling through many indexed cells.
+    expect(traveled).toBeGreaterThan(1);
   });
 });

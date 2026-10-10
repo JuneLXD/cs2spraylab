@@ -1,0 +1,2959 @@
+{
+  "schema": "spraylab.native-ground-stance-regressions.v1",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "readerSha256": "0dccc2e7101f1f0097815945c028a01225e0582074d337c72246673b3309e5f5",
+  "stanceReaderSha256": "caba74a0ae3ffb4e32a3d3a5ba329f88aa5ae9a111e36ff4d44590c6e99c3584",
+  "suppliedInputsSha256": "dc6d7bc3d392c718cdc20e5e1d81f7ae99354ccc25c9657f4b9a668830a8c2b3",
+  "sourceHashes": {
+    "src/range/terrain.ts": "979141f9ae6c230a709a6621bb14010fd8c3d90f582a319b4bb70538f65336c1",
+    "src/range/actor-collision.ts": "738d52cf56ea8759ce961ff4a4619825b21a8815bb19d85a5e50602614d5ee47",
+    "src/range/actor-contact.ts": "584def69ea5b0526b5838b42fbdaa22d331de4e28fa4eb05f598992118d7cbba",
+    "src/range/actor-jump.ts": "ed054b70ded5910172c86dc82bd5fb35eb2fb7ba6cb5b94d8506b87a0aa76df7",
+    "src/range/ground-friction.ts": "294848dac635baf98bbfe633a9a25549a0518a3af715fe33b2f1cdf6150a2e9c",
+    "src/range/actor-physics.ts": "b390cbd8a89b3ee9c2504dec2a783cea0a4a52bd171bf69a4f0892d65d1dce29"
+  },
+  "sourceStanceReportSha256": "ac86e4b666e400bb080ec7c06354ee3e260872462f302a37894e8fc2e6fbcf33",
+  "sourceStanceExecutionContentSha256": "07a134fd393ed319968f2c51b644c3152ea46cae8d4d3cba868a3ab0439e0ce1",
+  "guardedNativeExecution": true,
+  "selectedNativeCodeBytes": 7192,
+  "addedNativeCodeBytes": 0,
+  "stancePrivateExtensionBytes": 88,
+  "newNativeAccessorHooks": 0,
+  "memoryGuard": {
+    "unexpectedAccesses": 0,
+    "counts": {
+      "reads": 480,
+      "writes": 253
+    }
+  },
+  "mxcsrProfiles": {
+    "nearest-gradual": 8064,
+    "nearest-ftz-daz": 40896
+  },
+  "mxcsrExecutionResults": {
+    "nearest-gradual:0x1f80": 27
+  },
+  "hooks": {
+    "initialization-guard-acquire": 1,
+    "initialization-guard-release": 1,
+    "notification-array-allocation": 1,
+    "field-change-notification": 1,
+    "notification-array-release": 1,
+    "ground-entity-accessor": 3,
+    "owner-friction-accessor": 3,
+    "supplied-zero-owner-velocity-vector": 6,
+    "supplied-active-weapon": 2,
+    "supplied-mode-weapon-speed": 2,
+    "supplied-unscoped-zoom-level": 2,
+    "supplied-dry-water-level": 2
+  },
+  "comparisonBounds": {
+    "velocityNativeUnitsPerSecond": 1e-11,
+    "derivedPositionNativeUnits": 1e-11,
+    "cacheState": "Exact",
+    "reason": "Only trainer SI conversion/subtraction round trips; native float32 endpoint precision is preserved."
+  },
+  "oldMidpointControls": [
+    {
+      "fixture": {
+        "id": "old-midpoint-0-+1",
+        "kind": "old-midpoint-state",
+        "stance": "stand",
+        "weaponSpeed": 215,
+        "suppliedSpeed": 215,
+        "suppliedProcessedCap": 215,
+        "capLabelMultiplier": 1,
+        "tagLabel": 1,
+        "initialState": {
+          "velocity": [
+            0.0,
+            0.0
+          ],
+          "previousWish": [
+            0.0,
+            0.0
+          ],
+          "active": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarked": false
+        },
+        "commands": [
+          {
+            "startFraction": 0.0,
+            "endFraction": 0.5,
+            "wishAtStart": [
+              215.0,
+              0.0
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": true,
+            "finishCommand": false
+          }
+        ],
+        "mxcsrProfiles": [
+          "nearest-gradual"
+        ]
+      },
+      "native": {
+        "command": 1,
+        "startFraction": 0.0,
+        "endFraction": 0.5,
+        "duration": 0.0078125,
+        "startTimeFromFixtureStart": 0.0,
+        "endTimeFromFixtureStart": 0.0078125,
+        "beforePreparation": {
+          "speedX": 0.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "before": {
+          "speedX": 0.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "currentWish": {
+          "x": 215.0,
+          "y": 0.0
+        },
+        "afterCache": {
+          "speedX": 0.0,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeControlSpeed": 0.0,
+        "afterFriction": {
+          "speedX": 0.0,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "preparedWish": {
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "nativeLength": 215.0,
+          "wishSpeed": 215.0
+        },
+        "afterAccelerate": {
+          "speedX": 9.23828125,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 1182.5,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterNativeCap": {
+          "speedX": 9.23828125,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 1182.5,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterPreHelper": {
+          "speedX": 4.619140625,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 1182.5,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 4.619140625,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeStopGate": {
+          "taken": false,
+          "state": {
+            "speedX": 4.619140625,
+            "speedY": 0.0,
+            "stashActive": true,
+            "savedFraction": 0.0,
+            "storedSpeed": 0.0,
+            "commandMarker": true,
+            "previousWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 215.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": 1182.5,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": 4.619140625,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "vectors": {
+            "velocity": [
+              4.619140625,
+              0.0,
+              0.0
+            ],
+            "accelerationWork": [
+              1182.5,
+              0.0,
+              0.0
+            ],
+            "carriedDelta": [
+              4.619140625,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "afterPostHelper": {
+          "speedX": 9.23828125,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 1182.5,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 4.619140625,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterWishCopy": {
+          "speedX": 9.23828125,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 215.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 1182.5,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 4.619140625,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "derivedUncollidedDisplacement": {
+          "x": 0.0360870361328125,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": "old-midpoint-215-+0",
+        "kind": "old-midpoint-state",
+        "stance": "stand",
+        "weaponSpeed": 215,
+        "suppliedSpeed": 215,
+        "suppliedProcessedCap": 215,
+        "capLabelMultiplier": 1,
+        "tagLabel": 1,
+        "initialState": {
+          "velocity": [
+            215.0,
+            0.0
+          ],
+          "previousWish": [
+            0.0,
+            0.0
+          ],
+          "active": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarked": false
+        },
+        "commands": [
+          {
+            "startFraction": 0.0,
+            "endFraction": 0.5,
+            "wishAtStart": [
+              0.0,
+              0.0
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": true,
+            "finishCommand": false
+          }
+        ],
+        "mxcsrProfiles": [
+          "nearest-gradual"
+        ]
+      },
+      "native": {
+        "command": 1,
+        "startFraction": 0.0,
+        "endFraction": 0.5,
+        "duration": 0.0078125,
+        "startTimeFromFixtureStart": 0.0,
+        "endTimeFromFixtureStart": 0.0078125,
+        "beforePreparation": {
+          "speedX": 215.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "before": {
+          "speedX": 215.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "currentWish": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "afterCache": {
+          "speedX": 215.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeControlSpeed": 214.9845733642578,
+        "afterFriction": {
+          "speedX": 206.26625061035156,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -1117.9197998046875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "preparedWish": {
+          "direction": [
+            0,
+            0,
+            0
+          ],
+          "nativeLength": 0,
+          "wishSpeed": 0
+        },
+        "afterAccelerate": {
+          "speedX": 206.26625061035156,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -1117.9197998046875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterNativeCap": {
+          "speedX": 206.26625061035156,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -1117.9197998046875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterPreHelper": {
+          "speedX": 210.63311767578125,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -1117.9197998046875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -4.3668742179870605,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeStopGate": {
+          "taken": false,
+          "state": {
+            "speedX": 210.63311767578125,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 0.0,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": -1117.9197998046875,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": -4.3668742179870605,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "vectors": {
+            "velocity": [
+              210.63311767578125,
+              0.0,
+              0.0
+            ],
+            "accelerationWork": [
+              -1117.9197998046875,
+              0.0,
+              0.0
+            ],
+            "carriedDelta": [
+              -4.3668742179870605,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "afterPostHelper": {
+          "speedX": 206.26625061035156,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -1117.9197998046875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -4.3668742179870605,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterWishCopy": {
+          "speedX": 206.26625061035156,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -1117.9197998046875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -4.3668742179870605,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "derivedUncollidedDisplacement": {
+          "x": 1.645571231842041,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": "old-midpoint-215--1",
+        "kind": "old-midpoint-state",
+        "stance": "stand",
+        "weaponSpeed": 215,
+        "suppliedSpeed": 215,
+        "suppliedProcessedCap": 215,
+        "capLabelMultiplier": 1,
+        "tagLabel": 1,
+        "initialState": {
+          "velocity": [
+            215.0,
+            0.0
+          ],
+          "previousWish": [
+            0.0,
+            0.0
+          ],
+          "active": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarked": false
+        },
+        "commands": [
+          {
+            "startFraction": 0.0,
+            "endFraction": 0.5,
+            "wishAtStart": [
+              -215.0,
+              0.0
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": true,
+            "finishCommand": false
+          }
+        ],
+        "mxcsrProfiles": [
+          "nearest-gradual",
+          "nearest-ftz-daz"
+        ]
+      },
+      "native": {
+        "command": 1,
+        "startFraction": 0.0,
+        "endFraction": 0.5,
+        "duration": 0.0078125,
+        "startTimeFromFixtureStart": 0.0,
+        "endTimeFromFixtureStart": 0.0078125,
+        "beforePreparation": {
+          "speedX": 215.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "before": {
+          "speedX": 215.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "currentWish": {
+          "x": -215.0,
+          "y": 0.0
+        },
+        "afterCache": {
+          "speedX": 215.0,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": -215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeControlSpeed": 214.9845733642578,
+        "afterFriction": {
+          "speedX": 206.26625061035156,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": -215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -1117.9197998046875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "preparedWish": {
+          "direction": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "nativeLength": 215.0,
+          "wishSpeed": 215.0
+        },
+        "afterAccelerate": {
+          "speedX": 197.02796936035156,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": -215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -2300.419921875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterNativeCap": {
+          "speedX": 197.02796936035156,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": -215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -2300.419921875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterPreHelper": {
+          "speedX": 206.01397705078125,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": -215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -2300.419921875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -8.986015319824219,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeStopGate": {
+          "taken": false,
+          "state": {
+            "speedX": 206.01397705078125,
+            "speedY": 0.0,
+            "stashActive": true,
+            "savedFraction": 0.0,
+            "storedSpeed": 214.9845733642578,
+            "commandMarker": true,
+            "previousWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": -215.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": -2300.419921875,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": -8.986015319824219,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "vectors": {
+            "velocity": [
+              206.01397705078125,
+              0.0,
+              0.0
+            ],
+            "accelerationWork": [
+              -2300.419921875,
+              0.0,
+              0.0
+            ],
+            "carriedDelta": [
+              -8.986015319824219,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "afterPostHelper": {
+          "speedX": 197.0279541015625,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": -215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -2300.419921875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -8.986015319824219,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterWishCopy": {
+          "speedX": 197.0279541015625,
+          "speedY": 0.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": -215.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": -215.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -2300.419921875,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -8.986015319824219,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "derivedUncollidedDisplacement": {
+          "x": 1.6094841957092285,
+          "y": 0.0
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": "old-midpoint-3-+0",
+        "kind": "old-midpoint-state",
+        "stance": "stand",
+        "weaponSpeed": 215,
+        "suppliedSpeed": 215,
+        "suppliedProcessedCap": 215,
+        "capLabelMultiplier": 1,
+        "tagLabel": 1,
+        "initialState": {
+          "velocity": [
+            3.0,
+            0.0
+          ],
+          "previousWish": [
+            0.0,
+            0.0
+          ],
+          "active": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarked": false
+        },
+        "commands": [
+          {
+            "startFraction": 0.0,
+            "endFraction": 0.5,
+            "wishAtStart": [
+              0.0,
+              0.0
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": true,
+            "finishCommand": false
+          }
+        ],
+        "mxcsrProfiles": [
+          "nearest-gradual"
+        ]
+      },
+      "native": {
+        "command": 1,
+        "startFraction": 0.0,
+        "endFraction": 0.5,
+        "duration": 0.0078125,
+        "startTimeFromFixtureStart": 0.0,
+        "endTimeFromFixtureStart": 0.0078125,
+        "beforePreparation": {
+          "speedX": 3.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "before": {
+          "speedX": 3.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "currentWish": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "afterCache": {
+          "speedX": 3.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeControlSpeed": 2.984377861022949,
+        "afterFriction": {
+          "speedX": 0.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -384.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.25
+        },
+        "preparedWish": {
+          "direction": [
+            0,
+            0,
+            0
+          ],
+          "nativeLength": 0,
+          "wishSpeed": 0
+        },
+        "afterAccelerate": {
+          "speedX": 0.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -384.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.25
+        },
+        "afterNativeCap": {
+          "speedX": 0.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -384.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.25
+        },
+        "afterPreHelper": {
+          "speedX": 1.5,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -384.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -1.5,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.25
+        },
+        "nativeStopGate": {
+          "taken": false,
+          "state": {
+            "speedX": 1.5,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 0.0,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": -384.0,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": -1.5,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.25
+          },
+          "vectors": {
+            "velocity": [
+              1.5,
+              0.0,
+              0.0
+            ],
+            "accelerationWork": [
+              -384.0,
+              0.0,
+              0.0
+            ],
+            "carriedDelta": [
+              -1.5,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "afterPostHelper": {
+          "speedX": 0.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -384.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -1.5,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.25
+        },
+        "afterWishCopy": {
+          "speedX": 0.0,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 0.0,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -384.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -1.5,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.25
+        },
+        "derivedUncollidedDisplacement": {
+          "x": 0.01171875,
+          "y": 0.0
+        }
+      }
+    }
+  ],
+  "suppliedStateRegressions": [
+    {
+      "id": "running-to-walk-215",
+      "fixture": {
+        "id": "running-to-walk-215",
+        "kind": "supplied-historical-test-state",
+        "stance": "walk",
+        "weaponSpeed": 215,
+        "suppliedSpeed": 111.80000305175781,
+        "suppliedProcessedCap": 111.80000305175781,
+        "initialState": {
+          "velocity": [
+            0,
+            -214.99999999999997
+          ],
+          "previousWish": [
+            0,
+            -215
+          ],
+          "active": false,
+          "savedFraction": 0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarked": false
+        },
+        "commands": [
+          {
+            "startFraction": 0.0,
+            "endFraction": 0.5,
+            "wishAtStart": [
+              0.0,
+              -111.80000305175781
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": true,
+            "finishCommand": false
+          }
+        ],
+        "mxcsrProfiles": [
+          "nearest-gradual"
+        ]
+      },
+      "generatedCommands": [
+        {
+          "command": 1,
+          "supplied": {
+            "startFraction": 0.0,
+            "endFraction": 0.5,
+            "wishAtStart": [
+              0.0,
+              -111.80000305175781
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": true,
+            "finishCommand": false
+          },
+          "beforeCommand": {
+            "speedX": 0.0,
+            "speedY": -215.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 214.9845733642578,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 0.0,
+              "y": -215.0
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "afterBeginCommand": {
+            "speedX": 0.0,
+            "speedY": -215.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 214.9845733642578,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 0.0,
+              "y": -215.0
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "boundaries": [
+            {
+              "fraction": 0.0,
+              "reasons": [
+                "supplied-start"
+              ]
+            },
+            {
+              "fraction": 0.5,
+              "reasons": [
+                "supplied-end"
+              ]
+            }
+          ],
+          "afterCommand": {
+            "speedX": 0.0,
+            "speedY": -111.80001831054688,
+            "stashActive": true,
+            "savedFraction": 0.0,
+            "storedSpeed": 214.9845733642578,
+            "commandMarker": true,
+            "previousWish": {
+              "x": 0.0,
+              "y": -111.80000305175781
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": -111.80000305175781
+            },
+            "accelerationWork": {
+              "x": 0.0,
+              "y": 13209.5986328125
+            },
+            "carriedDelta": {
+              "x": 0.0,
+              "y": 51.59999465942383
+            },
+            "frictionOvershoot": 0.0
+          }
+        }
+      ],
+      "native": {
+        "command": 1,
+        "startFraction": 0.0,
+        "endFraction": 0.5,
+        "duration": 0.0078125,
+        "startTimeFromFixtureStart": 0.0,
+        "endTimeFromFixtureStart": 0.0078125,
+        "beforePreparation": {
+          "speedX": 0.0,
+          "speedY": -215.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": -215.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "before": {
+          "speedX": 0.0,
+          "speedY": -215.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 0.0,
+            "y": -215.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "currentWish": {
+          "x": 0.0,
+          "y": -111.80000305175781
+        },
+        "afterCache": {
+          "speedX": 0.0,
+          "speedY": -215.0,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": -215.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": -111.80000305175781
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeControlSpeed": 214.9845733642578,
+        "afterFriction": {
+          "speedX": 0.0,
+          "speedY": -206.26625061035156,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": -215.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": -111.80000305175781
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 1117.9197998046875
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "preparedWish": {
+          "direction": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "nativeLength": 111.80000305175781,
+          "wishSpeed": 111.80000305175781
+        },
+        "afterAccelerate": {
+          "speedX": 0.0,
+          "speedY": -206.26625061035156,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": -215.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": -111.80000305175781
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 1117.9197998046875
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterNativeCap": {
+          "speedX": 0.0,
+          "speedY": -111.80001068115234,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": -215.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": -111.80000305175781
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 13209.5986328125
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterPreHelper": {
+          "speedX": 0.0,
+          "speedY": -163.40000915527344,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": -215.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": -111.80000305175781
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 13209.5986328125
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 51.59999465942383
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeStopGate": {
+          "taken": false,
+          "state": {
+            "speedX": 0.0,
+            "speedY": -163.40000915527344,
+            "stashActive": true,
+            "savedFraction": 0.0,
+            "storedSpeed": 214.9845733642578,
+            "commandMarker": true,
+            "previousWish": {
+              "x": 0.0,
+              "y": -215.0
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": -111.80000305175781
+            },
+            "accelerationWork": {
+              "x": 0.0,
+              "y": 13209.5986328125
+            },
+            "carriedDelta": {
+              "x": 0.0,
+              "y": 51.59999465942383
+            },
+            "frictionOvershoot": 0.0
+          },
+          "vectors": {
+            "velocity": [
+              0.0,
+              -163.40000915527344,
+              0.0
+            ],
+            "accelerationWork": [
+              0.0,
+              13209.5986328125,
+              0.0
+            ],
+            "carriedDelta": [
+              0.0,
+              51.59999465942383,
+              0.0
+            ]
+          }
+        },
+        "afterPostHelper": {
+          "speedX": 0.0,
+          "speedY": -111.80001831054688,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": -215.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": -111.80000305175781
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 13209.5986328125
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 51.59999465942383
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterWishCopy": {
+          "speedX": 0.0,
+          "speedY": -111.80001831054688,
+          "stashActive": true,
+          "savedFraction": 0.0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarker": true,
+          "previousWish": {
+            "x": 0.0,
+            "y": -111.80000305175781
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": -111.80000305175781
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 13209.5986328125
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 51.59999465942383
+          },
+          "frictionOvershoot": 0.0
+        },
+        "derivedUncollidedDisplacement": {
+          "x": 0.0,
+          "y": -1.2765625715255737
+        }
+      },
+      "nativeCacheAfter": {
+        "active": true,
+        "savedFraction": 0.0,
+        "storedSpeed": 214.9845733642578,
+        "commandMarked": true,
+        "previousWish": {
+          "x": 0.0,
+          "z": -111.80000305175781
+        }
+      },
+      "nativeVelocityAfter": [
+        0.0,
+        -111.80001831054688
+      ],
+      "nativeDerivedDisplacement": [
+        0.0,
+        -1.2765625715255737
+      ],
+      "trainerAfter": {
+        "velocity": [
+          0,
+          -111.80001831054688
+        ],
+        "derivedPosition": [
+          0,
+          -1.276562571525596
+        ],
+        "state": {
+          "active": true,
+          "savedFraction": 0,
+          "storedSpeed": 214.9845733642578,
+          "commandMarked": true,
+          "previousWish": {
+            "x": 0,
+            "z": -111.80000305175781
+          }
+        }
+      },
+      "comparison": {
+        "velocityDifferenceNativeUnitsPerSecond": [
+          0.0,
+          0.0
+        ],
+        "derivedPositionDifferenceNativeUnits": [
+          0.0,
+          -2.220446049250313e-14
+        ],
+        "cacheStateExact": true,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "crouch-steady-215",
+      "fixture": {
+        "id": "crouch-steady-215",
+        "kind": "supplied-historical-test-state",
+        "stance": "crouch",
+        "weaponSpeed": 215,
+        "suppliedSpeed": 73.0999984741211,
+        "suppliedProcessedCap": 73.0999984741211,
+        "initialState": {
+          "velocity": [
+            73.10000610351562,
+            0
+          ],
+          "previousWish": [
+            73.0999984741211,
+            0
+          ],
+          "active": false,
+          "savedFraction": 0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarked": false
+        },
+        "commands": [
+          {
+            "startFraction": 0.5,
+            "endFraction": 1.0,
+            "wishAtStart": [
+              73.0999984741211,
+              0.0
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": false,
+            "finishCommand": true
+          }
+        ],
+        "mxcsrProfiles": [
+          "nearest-gradual"
+        ]
+      },
+      "generatedCommands": [
+        {
+          "command": 1,
+          "supplied": {
+            "startFraction": 0.5,
+            "endFraction": 1.0,
+            "wishAtStart": [
+              73.0999984741211,
+              0.0
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": false,
+            "finishCommand": true
+          },
+          "beforeCommand": {
+            "speedX": 73.10000610351562,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 73.10944366455078,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 73.0999984741211,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "afterBeginCommand": {
+            "speedX": 73.10000610351562,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 73.10944366455078,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 73.0999984741211,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "boundaries": [
+            {
+              "fraction": 0.5,
+              "reasons": [
+                "supplied-start"
+              ]
+            },
+            {
+              "fraction": 1.0,
+              "reasons": [
+                "supplied-end"
+              ]
+            }
+          ],
+          "afterCommand": {
+            "speedX": 73.10000610351562,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 73.10944366455078,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 73.0999984741211,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 73.0999984741211,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": -0.0009765625,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": -3.814697265625e-06,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          }
+        }
+      ],
+      "native": {
+        "command": 1,
+        "startFraction": 0.5,
+        "endFraction": 1.0,
+        "duration": 0.0078125,
+        "startTimeFromFixtureStart": 0.0,
+        "endTimeFromFixtureStart": 0.0078125,
+        "beforePreparation": {
+          "speedX": 73.10000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "before": {
+          "speedX": 73.10000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "currentWish": {
+          "x": 73.0999984741211,
+          "y": 0.0
+        },
+        "afterCache": {
+          "speedX": 73.10000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeControlSpeed": 73.10944366455078,
+        "afterFriction": {
+          "speedX": 69.85000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -416.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "preparedWish": {
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "nativeLength": 73.0999984741211,
+          "wishSpeed": 73.0999984741211
+        },
+        "afterAccelerate": {
+          "speedX": 73.0999984741211,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterNativeCap": {
+          "speedX": 73.0999984741211,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterPreHelper": {
+          "speedX": 73.10000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -3.814697265625e-06,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeStopGate": {
+          "taken": false,
+          "state": {
+            "speedX": 73.10000610351562,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 73.10944366455078,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 73.0999984741211,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 73.0999984741211,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": -0.0009765625,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": -3.814697265625e-06,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "vectors": {
+            "velocity": [
+              73.10000610351562,
+              0.0,
+              0.0
+            ],
+            "accelerationWork": [
+              -0.0009765625,
+              0.0,
+              0.0
+            ],
+            "carriedDelta": [
+              -3.814697265625e-06,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "afterPostHelper": {
+          "speedX": 73.10000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -3.814697265625e-06,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterWishCopy": {
+          "speedX": 73.10000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -3.814697265625e-06,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "derivedUncollidedDisplacement": {
+          "x": 0.5710937976837158,
+          "y": 0.0
+        },
+        "afterCommandHandoff": {
+          "speedX": 73.10000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 73.0999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -3.814697265625e-06,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        }
+      },
+      "nativeCacheAfter": {
+        "active": false,
+        "savedFraction": 0.0,
+        "storedSpeed": 73.10944366455078,
+        "commandMarked": false,
+        "previousWish": {
+          "x": 73.0999984741211,
+          "z": 0.0
+        }
+      },
+      "nativeVelocityAfter": [
+        73.10000610351562,
+        0.0
+      ],
+      "nativeDerivedDisplacement": [
+        0.5710937976837158,
+        0.0
+      ],
+      "trainerAfter": {
+        "velocity": [
+          73.10000610351562,
+          0
+        ],
+        "derivedPosition": [
+          0.5710937976837124,
+          0
+        ],
+        "state": {
+          "active": false,
+          "savedFraction": 0,
+          "storedSpeed": 73.10944366455078,
+          "commandMarked": false,
+          "previousWish": {
+            "x": 73.0999984741211,
+            "z": 0
+          }
+        }
+      },
+      "comparison": {
+        "velocityDifferenceNativeUnitsPerSecond": [
+          0.0,
+          0.0
+        ],
+        "derivedPositionDifferenceNativeUnits": [
+          -3.4416913763379853e-15,
+          0.0
+        ],
+        "cacheStateExact": true,
+        "status": "passed"
+      }
+    },
+    {
+      "id": "crouch-steady-240",
+      "fixture": {
+        "id": "crouch-steady-240",
+        "kind": "supplied-historical-test-state",
+        "stance": "crouch",
+        "weaponSpeed": 240,
+        "suppliedSpeed": 81.5999984741211,
+        "suppliedProcessedCap": 81.5999984741211,
+        "initialState": {
+          "velocity": [
+            81.60000610351562,
+            0
+          ],
+          "previousWish": [
+            81.5999984741211,
+            0
+          ],
+          "active": false,
+          "savedFraction": 0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarked": false
+        },
+        "commands": [
+          {
+            "startFraction": 0.5,
+            "endFraction": 1.0,
+            "wishAtStart": [
+              81.5999984741211,
+              0.0
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": false,
+            "finishCommand": true
+          }
+        ],
+        "mxcsrProfiles": [
+          "nearest-gradual"
+        ]
+      },
+      "generatedCommands": [
+        {
+          "command": 1,
+          "supplied": {
+            "startFraction": 0.5,
+            "endFraction": 1.0,
+            "wishAtStart": [
+              81.5999984741211,
+              0.0
+            ],
+            "extraBoundaries": [],
+            "events": [],
+            "beginCommand": false,
+            "finishCommand": true
+          },
+          "beforeCommand": {
+            "speedX": 81.60000610351562,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 81.60945129394531,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 81.5999984741211,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "afterBeginCommand": {
+            "speedX": 81.60000610351562,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 81.60945129394531,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 81.5999984741211,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "boundaries": [
+            {
+              "fraction": 0.5,
+              "reasons": [
+                "supplied-start"
+              ]
+            },
+            {
+              "fraction": 1.0,
+              "reasons": [
+                "supplied-end"
+              ]
+            }
+          ],
+          "afterCommand": {
+            "speedX": 81.60000610351562,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 81.60945129394531,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 81.5999984741211,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 81.5999984741211,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": -0.0009765625,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": -3.814697265625e-06,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          }
+        }
+      ],
+      "native": {
+        "command": 1,
+        "startFraction": 0.5,
+        "endFraction": 1.0,
+        "duration": 0.0078125,
+        "startTimeFromFixtureStart": 0.0,
+        "endTimeFromFixtureStart": 0.0078125,
+        "beforePreparation": {
+          "speedX": 81.60000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "before": {
+          "speedX": 81.60000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "currentWish": {
+          "x": 81.5999984741211,
+          "y": 0.0
+        },
+        "afterCache": {
+          "speedX": 81.60000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeControlSpeed": 81.60945129394531,
+        "afterFriction": {
+          "speedX": 78.28462219238281,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -424.369140625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "preparedWish": {
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "nativeLength": 81.5999984741211,
+          "wishSpeed": 81.5999984741211
+        },
+        "afterAccelerate": {
+          "speedX": 81.5999984741211,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterNativeCap": {
+          "speedX": 81.5999984741211,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": 0.0,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterPreHelper": {
+          "speedX": 81.60000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -3.814697265625e-06,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "nativeStopGate": {
+          "taken": false,
+          "state": {
+            "speedX": 81.60000610351562,
+            "speedY": 0.0,
+            "stashActive": false,
+            "savedFraction": 0.0,
+            "storedSpeed": 81.60945129394531,
+            "commandMarker": false,
+            "previousWish": {
+              "x": 81.5999984741211,
+              "y": 0.0
+            },
+            "currentWish": {
+              "x": 81.5999984741211,
+              "y": 0.0
+            },
+            "accelerationWork": {
+              "x": -0.0009765625,
+              "y": 0.0
+            },
+            "carriedDelta": {
+              "x": -3.814697265625e-06,
+              "y": 0.0
+            },
+            "frictionOvershoot": 0.0
+          },
+          "vectors": {
+            "velocity": [
+              81.60000610351562,
+              0.0,
+              0.0
+            ],
+            "accelerationWork": [
+              -0.0009765625,
+              0.0,
+              0.0
+            ],
+            "carriedDelta": [
+              -3.814697265625e-06,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "afterPostHelper": {
+          "speedX": 81.60000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -3.814697265625e-06,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "afterWishCopy": {
+          "speedX": 81.60000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -3.814697265625e-06,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        },
+        "derivedUncollidedDisplacement": {
+          "x": 0.6375000476837158,
+          "y": 0.0
+        },
+        "afterCommandHandoff": {
+          "speedX": 81.60000610351562,
+          "speedY": 0.0,
+          "stashActive": false,
+          "savedFraction": 0.0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarker": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "currentWish": {
+            "x": 81.5999984741211,
+            "y": 0.0
+          },
+          "accelerationWork": {
+            "x": -0.0009765625,
+            "y": 0.0
+          },
+          "carriedDelta": {
+            "x": -3.814697265625e-06,
+            "y": 0.0
+          },
+          "frictionOvershoot": 0.0
+        }
+      },
+      "nativeCacheAfter": {
+        "active": false,
+        "savedFraction": 0.0,
+        "storedSpeed": 81.60945129394531,
+        "commandMarked": false,
+        "previousWish": {
+          "x": 81.5999984741211,
+          "z": 0.0
+        }
+      },
+      "nativeVelocityAfter": [
+        81.60000610351562,
+        0.0
+      ],
+      "nativeDerivedDisplacement": [
+        0.6375000476837158,
+        0.0
+      ],
+      "trainerAfter": {
+        "velocity": [
+          81.60000610351562,
+          0
+        ],
+        "derivedPosition": [
+          0.6375000476837226,
+          0
+        ],
+        "state": {
+          "active": false,
+          "savedFraction": 0,
+          "storedSpeed": 81.60945129394531,
+          "commandMarked": false,
+          "previousWish": {
+            "x": 81.5999984741211,
+            "z": 0
+          }
+        }
+      },
+      "comparison": {
+        "velocityDifferenceNativeUnitsPerSecond": [
+          0.0,
+          0.0
+        ],
+        "derivedPositionDifferenceNativeUnits": [
+          6.772360450213455e-15,
+          0.0
+        ],
+        "cacheStateExact": true,
+        "status": "passed"
+      }
+    }
+  ],
+  "limits": [
+    "Actual prior state from three historical unit scenarios. Feed declared state to independent native one-step execution; these are supplied-state controls, not native stance-ramp trajectories.",
+    "Only the three supplied states are newly executed; the four midpoint controls come from the digest-checked stance replay.",
+    "The walking case starts a command; the crouch cases start at the supplied half-command fraction without resetting the marker.",
+    "Stance flags, processed cap, getter speed, prior wish, cache state, marker and command fractions are supplied.",
+    "No claim that the native game produced the preceding trainer stance ramp or complete trajectory.",
+    "Derived displacement is the existing uncollided midpoint diagnostic; collision and position publishing remain outside the replay."
+  ],
+  "status": "passed",
+  "sourceNativeReportSha256": "d80225e3546e0ad1cde74621590405178f4c72d2247a7713e186cba0a9bc1a28"
+}

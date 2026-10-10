@@ -1,20 +1,24 @@
-import {groundVelocity, UNIT} from './actor-physics';
+import {advanceActor, idleInput, UNIT, type ActorKinematics} from './actor-physics';
 import {gameData} from './config';
 
 export class MovementLesson {
   x = -1.4; velocity = 0; peak = 0; time = 0; counterAt = -Infinity;
   complete = false; message = 'Hold D to move right.'; shots = 0; shotSpeed: number | null = null;
   readonly cap = gameData.weapons.m4a4.speed * UNIT;
+  private friction?: ActorKinematics['friction'];
   constructor(public lesson: number) {}
   get settled() {return Math.abs(this.velocity) <= this.cap * .34;}
   get visible() {return this.lesson < 2 || this.x > -.35;}
   get aligned() {return Math.abs(this.x) <= .3 && this.visible;}
   update(dt: number, input: number) {
     if (this.complete) input = 0;
+    const next = advanceActor({position: {x: this.x, y: 64 * UNIT, z: 0}, velocity: {x: this.velocity, z: 0},
+      yaw: 0, feet: 0, verticalVelocity: 0, eyeHeight: 64 * UNIT, jumpHeld: false, grounded: true,
+      movementTime: this.time, friction: this.friction}, {...idleInput(), side: input}, this.cap, dt);
     this.time += dt;
     if (input * this.velocity < -.5) this.counterAt = this.time;
-    this.velocity = groundVelocity(this.velocity, 0, input, 0, this.cap, dt).x;
-    this.x = Math.max(-5, Math.min(5, this.x + this.velocity * dt));
+    this.velocity = next.velocity.x; this.friction = next.friction;
+    this.x = Math.max(-5, Math.min(5, next.position.x));
     if (Math.abs(this.x) === 5) this.velocity = 0;
     this.peak = Math.max(this.peak, Math.abs(this.velocity));
     if (this.complete) return;

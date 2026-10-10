@@ -1,0 +1,175 @@
+{
+  "schema": "spraylab.native-ground-friction-evidence.v1",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "portableManifestSha256": "4301da07c6c74b0e473749cd5d568fa768d1b28fa4049f11f8ad6fa3164d01c8",
+  "portableValidation": {
+    "allProcessesExitCode": 0,
+    "memoryMaxMiB": 512,
+    "memorySwapMaxBytes": 0,
+    "cpuQuotaPercent": 100,
+    "staticProofSha256": "5ce46efa743d866f74e482624e5825d2dd655196b23f0e006bbf60e5ee8b54a4",
+    "staticSelectedRanges": 81,
+    "staticSelectedRangeBytes": 22513,
+    "releaseReportSha256": "6e5006feec972da972a344838fcf1e6b9b1fcfc8f97fd473b24000677bae4977",
+    "combinedReportSha256": "ffc14a75fe24bff5dd22ba9e54252acb0b401e481e4b41bde951fcdb6eb6ce9d",
+    "executionContentComparison": "Exact match for every execution row, fixture, cache/work state, control and hook count in both portable replays."
+  },
+  "nativeReplays": {
+    "stance": {
+      "schema": "cs2.native-ground-stance-oracle.v1",
+      "originalNativeSha256": "a0a4bd5eaac151935160cc4d5f9cc87548a05784628c348acea55bab4cf081f8",
+      "originalReaderSha256": "700f1bfe61ee7a3eeed7ff1d00495e80399923263d429edadc956188de822888",
+      "fixtureDefinitionSha256": "8566185762f1f19251f0b322abd2e1d57f1e2fcee30cae980b5a3ca974f7e568",
+      "fixtureFileSha256": "bb90a3665d2c748f8b1ac45789a4d9620a7addbf920cc1e910da663c558a95f8",
+      "executionContentSha256": "07a134fd393ed319968f2c51b644c3152ea46cae8d4d3cba868a3ab0439e0ce1",
+      "portableValidation": {
+        "status": "Exact original-content match for every execution row, fixture, cache/work state and hook count.",
+        "replayExitCode": 0,
+        "comparisonExitCode": 0,
+        "memoryMaxMiB": 512,
+        "memorySwapMaxBytes": 0,
+        "cpuQuotaPercent": 100,
+        "portableReaderSha256": "caba74a0ae3ffb4e32a3d3a5ba329f88aa5ae9a111e36ff4d44590c6e99c3584",
+        "portableReportSha256": "ac86e4b666e400bb080ec7c06354ee3e260872462f302a37894e8fc2e6fbcf33"
+      },
+      "fixtureCount": 124,
+      "sequenceCount": 127,
+      "rowCount": 3909,
+      "selectedNativeCodeBytes": 7192,
+      "newNativeCodeBytes": 0,
+      "newPrivateBytes": 88,
+      "privateStateExtension": [
+        {"role": "Supplied owner movement-service pointer", "bytes": 8},
+        {"role": "Supplied movement-service object with invalid handle", "bytes": 80}
+      ],
+      "existingBranchesEnabled": ["Declared walking stance", "Declared crouched stance"],
+      "newNativeAccessorHooks": 0,
+      "guardCounts": {"reads": 641661, "writes": 323130},
+      "unexpectedAccesses": 0,
+      "fixtureInputs": {
+        "weaponSpeeds": [200, 215, 225, 230, 240],
+        "suppliedCapFormula": "float32(weaponSpeed * stanceLabelMultiplier * tagLabel), with one final rounding",
+        "stanceLabelMultipliers": {"stand": 1, "walk": 0.52, "crouch": 0.34},
+        "tagLabels": [1, 0.5],
+        "initialLevels": ["Zero", "One float32 ULP below supplied cap", "At supplied cap", "float32(1.2 * supplied cap)"],
+        "commandsPerCapControl": 16,
+        "extraCommandFraction": 0.5,
+        "oldMidpointStates": [[0, 1], [215, 0], [215, -1], [3, 0]],
+        "oldMidpointDurationSeconds": 0.0078125,
+        "walkServiceHandle": -1
+      },
+      "numericFindings": {
+        "releaseMidpointNativeUnits": 210.63311767578125,
+        "releaseDoubleEndpointMeanNativeUnits": 210.63312530517578,
+        "releaseDerivedDisplacementDifferenceMeters": -1.5139579772949218e-9,
+        "otherThreeOldMidpointControlsMatchDoubleEndpointMean": true,
+        "largestObservedFinalEndpointMinusSuppliedCapNativeUnits": 0.00000762939453125,
+        "capOvershootInterpretation": "Final post-helper endpoints can exceed the supplied cap by one float32 ULP. These cases do not prove any particular upstream cap construction."
+      },
+      "historicalTestRegressions": {
+        "evidence": "docs/evidence/reaudit-ground-stance-regressions.json",
+        "evidenceSha256": "58cb1052d7eca007e8895add681485c61bd83ed87183dfd445bfee5d27d9ac48",
+        "suppliedInputSha256": "dc6d7bc3d392c718cdc20e5e1d81f7ae99354ccc25c9657f4b9a668830a8c2b3",
+        "sourceNativeReportSha256": "d80225e3546e0ad1cde74621590405178f4c72d2247a7713e186cba0a9bc1a28",
+        "newSuppliedStateSteps": 3,
+        "retainedMidpointControls": 4,
+        "velocityAndCacheMatchExactly": true,
+        "maxDisplacementConversionDifferenceNativeUnits": 2.220446049250313e-14,
+        "unexpectedAccesses": 0,
+        "guardCounts": {"reads": 480, "writes": 253},
+        "exitCode": 0,
+        "scope": "One native step from each supplied historical-test state; no claim that the native game produced the prior stance ramp."
+      },
+      "limits": [
+        "All stance flags, weapon getter speeds, processed caps and schedules are explicitly supplied.",
+        "The upstream native stance/tag/cap-modifier pipeline is not invoked or newly validated.",
+        "Same finite grounded arithmetic as the combined replay, with only existing walk/crouch branches enabled.",
+        "Walking uses an explicitly invalid movement-service handle; other handle cases remain outside this replay.",
+        "Tag factors label supplied caps only; tag recovery/application is outside this replay.",
+        "No new native code, accessor hook, collision, physical input replay or complete command dispatcher.",
+        "MXCSR profiles, zero external owner velocity, unit owner/surface factors and unscoped dry state are supplied."
+      ]
+    },
+    "combined": {
+      "schema": "cs2.native-ground-combined-oracle.v1",
+      "originalNativeSha256": "e1951a3aa3a41a857342df87d22529e90b23d4022d8b908da9eafb7ebd44f69e",
+      "originalReaderSha256": "cc784a00031e18006d57da6da252a6fd5916b4768278e3885cd146a50368dd74",
+      "fixtureDefinitionSha256": "dfca8e8935df9b8a717b64eb67d55fcdb75369f5456750eb9c0571df69beae11",
+      "fixtureFileSha256": "2aea1c884cc413b8e0722c87d5810515838a178e3836e3ec89fdd3f40b176b79",
+      "executionContentSha256": "b1e454f893f7c85e6ea1e2f43afd71d9b6895749348f26ae17ac350616cd4548",
+      "fixtureCount": 231,
+      "sequenceCount": 234,
+      "rowCount": 5648,
+      "selectedNativeCodeBytes": 7192,
+      "guardCounts": {
+        "reads": 841528,
+        "writes": 503082
+      },
+      "unexpectedAccesses": 0,
+      "limits": [
+        "Explicit supplied states and schedules, not live physical input replay.",
+        "Standing, unscoped, dry ground only; ordinary getter results and scaling/debug settings are supplied private inputs.",
+        "Weapon labels map supplied cap values; this harness does not invoke the real per-weapon getter implementations.",
+        "Native finite nonzero wish normalization is invoked; min(length,supplied cap) is the retained MINSS selection reproduced by the harness.",
+        "Native acceleration, overshoot budget, final cap/work correction, pre/stop/post and wish copy execute; collision and position publishing do not.",
+        "Temporary preparation, marker lifecycle and saved-fraction boundaries remain byte-bound harness operations.",
+        "Derived uncollided displacement is authored; no complete WalkMove or complete command dispatcher is invoked.",
+        "MXCSR is explicitly supplied, not sampled from a live process."
+      ],
+      "positiveOvershootRows": 83
+    },
+    "release": {
+      "schema": "cs2.native-friction-segment-oracle.v3",
+      "originalNativeSha256": "2149c9a308674fbb3198318419e434fb2eabaa5ba0f83b0ab6d11498600d60df",
+      "originalReaderSha256": "4c039bd146a6069f9a5d223e36d341f2baa56fe39a0ba6a508cbb516fb0fe8c5",
+      "fixtureDefinitionSha256": "4600d5b952bef24f8fa6b21d6553b04f01a297f536acaf304da910459bf63a71",
+      "fixtureFileSha256": "eca45368486a58eb9753f21dbe3d0ec29403d82564c5c4c992de9905764d9abb",
+      "executionContentSha256": "b8dbfe8e2b6997488e8f3b6da5ebf3fb01dbf68200f94ea9d03af07d6f8f46e9",
+      "fixtureCount": 105,
+      "sequenceCount": 108,
+      "rowCount": 10980,
+      "selectedNativeCodeBytes": 5217,
+      "guardCounts": {
+        "reads": 922553,
+        "writes": 504039
+      },
+      "unexpectedAccesses": 0,
+      "limits": [
+        "Explicit supplied initial state, processed wish and command schedules; no live physical input replay.",
+        "Native selected blocks only: no Accelerate, collision, complete WalkMove, pawn publishing or full command dispatcher.",
+        "The stop predicate is executed after the pre helper and before the post helper; non-taken collision path is omitted.",
+        "Nonzero-wish controls test cache/friction/stop state without acceleration.",
+        "Zero owner external vector and unit owner/surface factors are supplied.",
+        "Active saved-fraction insertion, temporary preparation and command-marker lifecycle are byte-bound harness rules.",
+        "Derived position is zero when the native stop branch skips position movement; otherwise supplied uncollided midpoint integration.",
+        "Thresholds use supplied speeds and float32(.34); GetInaccuracy is not invoked.",
+        "MXCSR settings are explicit supplied profiles, not observed runtime configuration."
+      ],
+      "gateBoundaryControls": 12,
+      "smallControlSpeedCases": 4,
+      "allReleaseSequencesReachZero": true
+    }
+  },
+  "staticRules": [
+    "Current class schema binds active stash, saved fraction, stashed speed and previous wish.",
+    "The completed segment copies current processed wish XY into previous wish before the next input edge.",
+    "An active saved interior fraction is included in later command segmentation; command marker reset/handoff remains a supplied harness rule.",
+    "Processed forward/side/up are multiplied separately by the processed cap; wish is stored before direction normalization.",
+    "Friction produces velocity, acceleration work and overshoot; acceleration subtracts overshoot divided by duration from its budget.",
+    "The native final cap adds its velocity correction to acceleration work before midpoint preparation.",
+    "The post-midpoint native stop gate uses the full float32 projected XYZ norm and clears motion only below one."
+  ],
+  "scope": "Supplied unscoped dry-ground numeric replays. The combined replay is standing only; the separate stance replay enables existing walk/crouch branches with supplied processed caps. Upstream stance/tag modifiers and scoped behavior remain outside these replays.",
+  "notEstablished": [
+    "Full native command or physical input latency replay",
+    "Collision/terrain or live position publishing parity",
+    "Complete client keyboard component production",
+    "Every stance/tag/weapon cap modifier",
+    "Existing-instance reset ownership across every movement mode"
+  ],
+  "preservation": {
+    "originalReadersAndReportsUnchanged": true,
+    "nativeBinarySpanPackaged": false,
+    "fullRawOracleReportsPackaged": false
+  }
+}
