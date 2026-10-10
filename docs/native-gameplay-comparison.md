@@ -854,6 +854,37 @@ jump/landing sounds, native client delivery, mixer loudness, occlusion and heari
 distance remain outside complete parity. No mixer constant was tuned from the
 old gapped capture.
 
+## Camera sampling and command-history clocks (twenty-second pass, 2026-10-09)
+
+The [camera-clock ledger](reaudit-camera-clocks.md) and portable
+[results](evidence/reaudit-camera-clocks.json) supersede the broad inference that
+matching the old 14-shot camera fixture established the complete caller clock.
+Current client/server instruction execution verifies 512 sampler cases and 72
+impulses; four client setter cases preserve the explicit tick/fraction. The
+separate native sampling and stored command clocks matter even with correct
+float32 decay and impulse arithmetic.
+
+Four original AK demos contain 52 shots/48 pairs. Using the recorded clocks reduces
+cumulative anchor discrepancy to 0.000228°; the old fixture's near-coincident
+clocks hid the wider differences. Actual ViewPunch class replay at a declared
+demo reference clock has maximum 0.499441° discrepancy. A schedule-only candidate
+still reaches 0.177648°; supplying both recorded clocks lowers all four replay
+maxima below 0.000199°. These are exogenous class inputs, not screen errors.
+
+Current-server resolver instructions and embedded protobuf/generated parsers
+identify attack-start history indices and distinct player/render clocks.
+Exact-history selection, tick-domain conversion, clamping and cached fallback
+explain why camera anchors need not equal firing deadlines. Static evidence
+does not identify every demo shot's runtime branch or establish a browser input
+mapping. Production camera behavior is deliberately unchanged pending that data.
+
+Continuous Recovery002 yields 386 scene-rotation measurements. With one clock
+offset and no amplitude fit, recorded aim plus kick gives 0.09055° two-axis RMS,
+versus 0.11085° for aim alone. Maximum residual remains 1.24452°; selected displayed
+GameTime/container offsets vary by 49.7 ms. This is partial native presentation
+evidence, not a rendered parity claim. No new game launch or Ghidra analysis
+was needed; bounded probes and saved matching-hash evidence survived reboot.
+
 ## Re-audit delivery validation
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph

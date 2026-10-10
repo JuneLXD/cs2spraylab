@@ -1,0 +1,482 @@
+{
+  "baseline": "5356f9bcd8949fc7e6793059f79b7cac318e2194",
+  "productionChange": false,
+  "binarySha256": {
+    "client": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+    "server": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a"
+  },
+  "nativeArithmetic": {
+    "samples": 512,
+    "impulses": 72,
+    "maxSampleError": 0,
+    "maxImpulseError": 0,
+    "explicitClientAnchors": 4,
+    "decay": 18,
+    "decaySource": "supplied convar value; live default not queried here"
+  },
+  "demoAnchors": {
+    "totalShots": 52,
+    "nonInitialShotPairs": 48,
+    "summary": {
+      "maxMixedClockCumulativeAnchorError": 0.0002276526431495706,
+      "maxMixedClockOneStepAnchorError": 0.00022291468575850575,
+      "maxAimMinusCameraDeviationFrom1Over128": 9.313225746154785e-10
+    },
+    "old14ShotFixture": {
+      "source": "native_audit_ak_002.dem",
+      "hashMatchesOriginal": true,
+      "samples": 14,
+      "maxRelativeTimeError": 6.821210263296962e-13,
+      "cameraMinusScheduleRange": [
+        -0.00011056195944547653,
+        -4.382804036140442e-05
+      ]
+    },
+    "limitations": [
+      "The first shot in each recording has no prior-shot carry comparison. Non-shot camera writes are listed separately; all precede the first analyzed shot in these recordings.",
+      "Network camera-angle quantization limits inverse elapsed precision, especially when carried angle is small.",
+      "Clock comparisons are fixed arithmetic hypotheses. Native sampler/caller/time-control evidence is required to identify actual global sampling time.",
+      "The recoil table is independently reproduced from shipped trainer parameters with float32 arithmetic; this script does not emulate the native recoil generator."
+    ]
+  },
+  "recordings": [
+    {
+      "demo": "native_reaudit_recovery_001.dem",
+      "sha256": "9f2616be8f3232651f2b2be130b48dbf3881709f35d302d9b656aded4a659f50",
+      "maxBeforeError": 0.37211599045123694,
+      "maxScheduleOnlyError": 0.1225184003023092,
+      "maxRecordedClockCandidateError": 0.00015091917537855465
+    },
+    {
+      "demo": "native_reaudit_recovery_002.dem",
+      "sha256": "7b171ce98d2983a471c13c094c89cbbf020956cd71a6c55faf244811110c8b2d",
+      "maxBeforeError": 0.4994411662190193,
+      "maxScheduleOnlyError": 0.13418774333826589,
+      "maxRecordedClockCandidateError": 0.00013045027673597566
+    },
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "sha256": "37b6f44d6c8ca327d580f9eeb289928eb917d0ec9b7e05e8dfc241eced4b9442",
+      "maxBeforeError": 0.3422093812072968,
+      "maxScheduleOnlyError": 0.17764805908681536,
+      "maxRecordedClockCandidateError": 0.00019190898370188226
+    },
+    {
+      "demo": "native_audit_ak_002.dem",
+      "sha256": "feadebd8538a044283a42ef2e78fa97db98591d9c2565c6fbce22d684b76835c",
+      "maxBeforeError": 0.38726000328107724,
+      "maxScheduleOnlyError": 0.002438322720039086,
+      "maxRecordedClockCandidateError": 0.00019802098334168
+    }
+  ],
+  "anchorRanges": [
+    {
+      "demo": "native_reaudit_recovery_001.dem",
+      "shots": 8,
+      "cameraMinusScheduleMs": [
+        -3.4154467284679413,
+        0.0009122304618358612
+      ],
+      "clockComparisons": {
+        "schedule_delta": {
+          "pairs": 7,
+          "maxError": 0.017383374184732115,
+          "rmsError": 0.01247296545905434,
+          "maxCumulativeError": 0.020399811049993524
+        },
+        "camera_anchor_delta": {
+          "pairs": 7,
+          "maxError": 0.017383374184732115,
+          "rmsError": 0.01247296545905434,
+          "maxCumulativeError": 0.020399811049993524
+        },
+        "processing_tick_delta": {
+          "pairs": 7,
+          "maxError": 0.05222815823385886,
+          "rmsError": 0.03201298199939168,
+          "maxCumulativeError": 0.04972694959644435
+        },
+        "schedule_now_minus_previous_camera": {
+          "pairs": 7,
+          "maxError": 0.0001832053586292732,
+          "rmsError": 0.000110585378097095,
+          "maxCumulativeError": 0.00016446903890264913
+        },
+        "float32_schedule_now_minus_previous_camera": {
+          "pairs": 7,
+          "maxError": 0.00018053593581233887,
+          "rmsError": 0.00010919590215242656,
+          "maxCumulativeError": 0.00016341495932116278
+        },
+        "last_shot_now_minus_previous_camera": {
+          "pairs": 7,
+          "maxError": 0.00018053593581233887,
+          "rmsError": 0.00010919590215242656,
+          "maxCumulativeError": 0.00016341495932116278
+        },
+        "processing_now_minus_previous_camera": {
+          "pairs": 7,
+          "maxError": 0.04260383134770588,
+          "rmsError": 0.025647411075634435,
+          "maxCumulativeError": 0.04371149847758191
+        },
+        "previous_camera_plus_cycle": {
+          "pairs": 7,
+          "maxError": 0.3092824246033643,
+          "rmsError": 0.14070963480373547,
+          "maxCumulativeError": 0.31265709535205827
+        }
+      }
+    },
+    {
+      "demo": "native_reaudit_recovery_002.dem",
+      "shots": 8,
+      "cameraMinusScheduleMs": [
+        -5.847298540174961,
+        -4.105601459741592
+      ],
+      "clockComparisons": {
+        "schedule_delta": {
+          "pairs": 7,
+          "maxError": 0.02065698757362983,
+          "rmsError": 0.014786309954221642,
+          "maxCumulativeError": 0.02423055337801114
+        },
+        "camera_anchor_delta": {
+          "pairs": 7,
+          "maxError": 0.02065698757362983,
+          "rmsError": 0.014786309954221642,
+          "maxCumulativeError": 0.02423055337801114
+        },
+        "processing_tick_delta": {
+          "pairs": 7,
+          "maxError": 0.055435977823414403,
+          "rmsError": 0.03279170591788431,
+          "maxCumulativeError": 0.05252405725391422
+        },
+        "schedule_now_minus_previous_camera": {
+          "pairs": 7,
+          "maxError": 0.00015137326831341793,
+          "rmsError": 0.00010960873338247214,
+          "maxCumulativeError": 0.00016099265050677564
+        },
+        "float32_schedule_now_minus_previous_camera": {
+          "pairs": 7,
+          "maxError": 0.00017612679600877723,
+          "rmsError": 0.00011553161196902303,
+          "maxCumulativeError": 0.00016447582045640236
+        },
+        "last_shot_now_minus_previous_camera": {
+          "pairs": 7,
+          "maxError": 0.00017612679600877723,
+          "rmsError": 0.00011553161196902303,
+          "maxCumulativeError": 0.00016447582045640236
+        },
+        "processing_now_minus_previous_camera": {
+          "pairs": 7,
+          "maxError": 0.058519295371989515,
+          "rmsError": 0.03189558237539485,
+          "maxCumulativeError": 0.06170221606975974
+        },
+        "previous_camera_plus_cycle": {
+          "pairs": 7,
+          "maxError": 0.3086490902002629,
+          "rmsError": 0.14073504623032165,
+          "maxCumulativeError": 0.31265709535205827
+        }
+      }
+    },
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "shots": 22,
+      "cameraMinusScheduleMs": [
+        -0.1526307314634323,
+        15.625
+      ],
+      "clockComparisons": {
+        "schedule_delta": {
+          "pairs": 21,
+          "maxError": 0.0005782613485129936,
+          "rmsError": 0.0002757965751683606,
+          "maxCumulativeError": 0.0005930358463208251
+        },
+        "camera_anchor_delta": {
+          "pairs": 21,
+          "maxError": 0.050091138390289475,
+          "rmsError": 0.010933684676809876,
+          "maxCumulativeError": 0.0500889218416334
+        },
+        "processing_tick_delta": {
+          "pairs": 21,
+          "maxError": 0.048405042146046164,
+          "rmsError": 0.03097131099424002,
+          "maxCumulativeError": 0.04283327479977103
+        },
+        "schedule_now_minus_previous_camera": {
+          "pairs": 21,
+          "maxError": 0.0003246689471336781,
+          "rmsError": 0.00019494865517349997,
+          "maxCumulativeError": 0.0002969407943415782
+        },
+        "float32_schedule_now_minus_previous_camera": {
+          "pairs": 21,
+          "maxError": 0.00019883685148923161,
+          "rmsError": 0.00014441255578951542,
+          "maxCumulativeError": 0.00021173752027086638
+        },
+        "last_shot_now_minus_previous_camera": {
+          "pairs": 21,
+          "maxError": 0.00019883685148923161,
+          "rmsError": 0.00014441255578951542,
+          "maxCumulativeError": 0.00021173752027086638
+        },
+        "processing_now_minus_previous_camera": {
+          "pairs": 21,
+          "maxError": 0.05836834820535693,
+          "rmsError": 0.030982290463210087,
+          "maxCumulativeError": 0.06081525171874876
+        },
+        "previous_camera_plus_cycle": {
+          "pairs": 21,
+          "maxError": 0.31810249249804423,
+          "rmsError": 0.10999567713044608,
+          "maxCumulativeError": 0.3181772899585927
+        }
+      }
+    },
+    {
+      "demo": "native_audit_ak_002.dem",
+      "shots": 14,
+      "cameraMinusScheduleMs": [
+        -0.11056195944547653,
+        -0.04382804036140442
+      ],
+      "clockComparisons": {
+        "schedule_delta": {
+          "pairs": 13,
+          "maxError": 0.0006211851383127957,
+          "rmsError": 0.0002806352886709876,
+          "maxCumulativeError": 0.0006659961945050138
+        },
+        "camera_anchor_delta": {
+          "pairs": 13,
+          "maxError": 0.0006211851383127957,
+          "rmsError": 0.00028063762191190205,
+          "maxCumulativeError": 0.0006659961945050138
+        },
+        "processing_tick_delta": {
+          "pairs": 13,
+          "maxError": 0.04913842991852537,
+          "rmsError": 0.03351317866562942,
+          "maxCumulativeError": 0.04538292496696821
+        },
+        "schedule_now_minus_previous_camera": {
+          "pairs": 13,
+          "maxError": 0.00039849768372937324,
+          "rmsError": 0.00020035086559796355,
+          "maxCumulativeError": 0.00039573825547152585
+        },
+        "float32_schedule_now_minus_previous_camera": {
+          "pairs": 13,
+          "maxError": 0.00022291468575850575,
+          "rmsError": 0.00013927505437158727,
+          "maxCumulativeError": 0.0002276526431495706
+        },
+        "last_shot_now_minus_previous_camera": {
+          "pairs": 13,
+          "maxError": 0.00022291468575850575,
+          "rmsError": 0.00013927505437158727,
+          "maxCumulativeError": 0.0002276526431495706
+        },
+        "processing_now_minus_previous_camera": {
+          "pairs": 13,
+          "maxError": 0.07064225418475323,
+          "rmsError": 0.03536257447000872,
+          "maxCumulativeError": 0.07471002652242076
+        },
+        "previous_camera_plus_cycle": {
+          "pairs": 13,
+          "maxError": 0.20469847313399714,
+          "rmsError": 0.09802983617367544,
+          "maxCumulativeError": 0.2439774812900766
+        }
+      }
+    }
+  ],
+  "resolver": {
+    "resolved": [
+      "Generated parser wire-tag stores identify the exact player/render tick and fraction members read by the resolver.",
+      "Primary and secondary paths select their corresponding attack-start history indices. Invalid or out-of-range indices enter the calculated/history fallback.",
+      "The exact-history path converts the selected player clock into the weapon context, normalizes it, then clamps it between current-time pair minus three ticks and current-time pair plus one tick.",
+      "The selected entry render-time pair is separate from the first output pair passed to recoil.",
+      "The calculated candidate is next-attack pair plus one tick plus the cached timing difference, normalized as a tick pair.",
+      "The caller refreshes that timing difference as resolved first pair minus current-time pair minus one tick, represented as a float number of ticks.",
+      "The fallback searches a 32-entry history ring. Its interpolated and last-history paths retain the calculated first pair and resolve the separate render pair and pose. No-history paths can replace or bound the first pair."
+    ],
+    "conditionalInference": [
+      "When the shot-time current pair equals the shot schedule, and the calculated candidate is retained, the caller/cache recurrence preserves the initial camera-anchor minus schedule difference across held shots. This explains the constant per-burst demo differences without fitting a constant.",
+      "The recurrence alone does not establish which branch each recorded shot took or the player command-history entry that set the initial difference."
+    ],
+    "missingNativeState": [
+      "For every shot: primary/secondary attack-history index, input_history count and selected entry player/render tick pairs.",
+      "Current-time tick/fraction and weapon/prediction tick-domain conversion state at resolver entry and camera sampling.",
+      "Resolver status (exact/interpolated/last/no-history), cached timing difference before and after, and original next-attack pair.",
+      "If fallback selected: ordered history-ring player/render pairs, ring indices/count, and any clamp or stale-history branch.",
+      "Client-side history construction from physical input and render/prediction frames, to map trainer DOM timestamps to comparable native history."
+    ],
+    "trainerBoundary": {
+      "input": "src/range/input-clock.ts uses one monotonic DOM/render clock.",
+      "trigger": "src/range/simulation.ts pressTrigger/start retain held state and scheduled nextShot; there is no corresponding command input_history or attack-start index.",
+      "camera": "src/range/simulation.ts passes processing time to viewPunch.add while scheduled processingDelay is used by recoil recovery.",
+      "decision": "Preserve production behavior. Two native clocks are established, but the live trainer-to-native command-history mapping is missing. No fitted offset or schedule-only camera correction is justified."
+    },
+    "limits": [
+      "This is bounded static inspection of one installed server hash, not native resolver execution or per-shot branch telemetry.",
+      "Client history generation and nonfinite/malformed protobuf inputs are outside this probe.",
+      "The earlier pair-from-seconds artifact name was provisional: that helper only increments the integer tick; pair-increment is its corrected artifact."
+    ]
+  },
+  "video": {
+    "video": "native_reaudit_recovery_002.mkv",
+    "referenceVideoTime": 3.0,
+    "measuredTimeRange": [
+      2.5,
+      8.983
+    ],
+    "observedSha256": "e5be9db83cf467c1811469d2efc622341335f4ef6d75eb3341c50bc4ced82f36",
+    "predictionSha256": "6fa2dde225088e3a871663a826f1da3ecaa8f4b0a8ef316ee466bc985aefa4eb",
+    "fit": "One constant game-minus-video clock offset, 1ms coarse / 0.05ms fine search; no amplitude fitting.",
+    "authoritativeIntrinsics": {
+      "fx": 360,
+      "fy": 360,
+      "width": 960,
+      "height": 540
+    },
+    "minimumInliers": 227,
+    "maxHomographyResidualPixels": 0.3847154378890991,
+    "manualHudClockChecks": {
+      "method": "GameTime read manually to 0.0001s from retained full frames; rounded observations, not a fitted correction.",
+      "samples": [
+        {
+          "videoTime": 3.0,
+          "displayedGameTime": 236.3714,
+          "offset": 233.3714,
+          "image": "reaudit-camera-clock-3.000.png"
+        },
+        {
+          "videoTime": 3.317,
+          "displayedGameTime": 236.6387,
+          "offset": 233.3217,
+          "image": "reaudit-camera-clock-3.317.png"
+        },
+        {
+          "videoTime": 5.35,
+          "displayedGameTime": 238.71,
+          "offset": 233.36,
+          "image": "reaudit-camera-clock-5.350.png"
+        },
+        {
+          "videoTime": 6.083,
+          "displayedGameTime": 239.4496,
+          "offset": 233.3666,
+          "image": "reaudit-camera-clock-6.083.png"
+        }
+      ],
+      "offsetRangeMs": 49.7,
+      "interpretation": "Continuous container timestamps do not imply equally spaced native game frames. One constant offset leaves frame-timing error."
+    },
+    "results": [
+      {
+        "model": "recorded-aim-and-camera",
+        "fx": 360,
+        "fy": 360,
+        "offsetGameMinusVideo": 233.35725000000616,
+        "frames": 386,
+        "rms": 0.09054766564238464,
+        "pitchRms": 0.11945047074959352,
+        "yawRms": 0.04614482142419315,
+        "maxAngularError": 1.2445157976296524,
+        "p95AngularError": 0.16937396922323467
+      },
+      {
+        "model": "recorded-aim-only",
+        "fx": 360,
+        "fy": 360,
+        "offsetGameMinusVideo": 233.38445000000624,
+        "frames": 386,
+        "rms": 0.11084612790830052,
+        "pitchRms": 0.14861988707743756,
+        "yawRms": 0.04985837251271186,
+        "maxAngularError": 0.8781838354546675,
+        "p95AngularError": 0.3521625232334398
+      },
+      {
+        "model": "recorded-aim-and-camera",
+        "fx": 480,
+        "fy": 360,
+        "offsetGameMinusVideo": 233.35725000000616,
+        "frames": 386,
+        "rms": 0.09059010357454227,
+        "pitchRms": 0.1194488643072138,
+        "yawRms": 0.04631525177529983,
+        "maxAngularError": 1.2440880210535683,
+        "p95AngularError": 0.17006760818744548
+      },
+      {
+        "model": "recorded-aim-only",
+        "fx": 480,
+        "fy": 360,
+        "offsetGameMinusVideo": 233.38445000000624,
+        "frames": 386,
+        "rms": 0.11038391756727864,
+        "pitchRms": 0.14862277105249283,
+        "yawRms": 0.04775448083350743,
+        "maxAngularError": 0.8746363400390481,
+        "p95AngularError": 0.3497719279829172
+      },
+      {
+        "model": "recorded-aim-and-camera",
+        "fx": 480,
+        "fy": 480,
+        "offsetGameMinusVideo": 233.35725000000616,
+        "frames": 386,
+        "rms": 0.08939473433992051,
+        "pitchRms": 0.1176324393782343,
+        "yawRms": 0.046318962222139194,
+        "maxAngularError": 1.268286367071866,
+        "p95AngularError": 0.1500319422547505
+      },
+      {
+        "model": "recorded-aim-only",
+        "fx": 480,
+        "fy": 480,
+        "offsetGameMinusVideo": 233.38460000000646,
+        "frames": 386,
+        "rms": 0.1297176651791497,
+        "pitchRms": 0.17711422990959577,
+        "yawRms": 0.04779011281207477,
+        "maxAngularError": 1.0355219432319793,
+        "p95AngularError": 0.47621176086054273
+      }
+    ],
+    "limitations": [
+      "The fitted clock offset does not measure input-to-photon latency or sample-exact AV synchronization.",
+      "The video contains quantized display frames, while the demo contains replicated states; client prediction and render interpolation are not reconstructed.",
+      "The two alternative intrinsics are diagnostics, not candidate FOV values to tune.",
+      "This is a native scene-rotation comparison. It does not measure the trainer screen, weapon motion or rendering parity.",
+      "RMS values include unresolved frame-clock mismatch and are not a tolerance for declaring visual parity."
+    ]
+  },
+  "replayLimitations": [
+    "Class replay uses recorded shot events and states as exogenous inputs; it is not a reconstruction of browser or native button input.",
+    "gameTime is a chosen reference sample clock, not an observed display time.",
+    "Recorded-clock candidate needs the native command-history anchor, which current trainer input does not supply; it is not a shipped feel fix."
+  ],
+  "sourceReportSha256": {
+    "reaudit-camera-native.json": "bce1763e72cf7cd232860e7c35ed53f0b9d146cff7ab6a32baa576d5ba2299d8",
+    "reaudit-camera-anchor-clocks.json": "bb5157ce93a1f9b6b9d61256f5cfeda787e5cd265231002b4f62983bdec6f7dc",
+    "reaudit-camera-production-before.json": "f8e6775e7bf491da2b7f81981f0754ddf0c445adc368ec760b9d8ad11281465c",
+    "reaudit-attack-history-resolution.json": "b68f124787088b99c9cbf77415b7d1ec8ae400a86d4a787cc3fca90a8c69c85a",
+    "reaudit-camera-video-fit.json": "e97b1719d908afef1fb7dab2ecd993504bfa546146c94ee4d47c76f596a075b6"
+  }
+}

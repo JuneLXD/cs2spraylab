@@ -100,3 +100,16 @@ shot/reload ordering tests. The [footstep correction](reaudit-footsteps.md) repl
 distance-based cadence with the native speed-gated command clock. Special-state
 accuracy, material/ladder/water sound paths and physical presentation remain
 open. R8-specific follow-up is excluded at the user’s request.
+
+
+### Camera clocks, pass 22
+
+The [current camera investigation](reaudit-camera-clocks.md) confirms the native
+sampler/impulse arithmetic but overturns the assumption that the firing deadline
+alone supplies the camera anchor. 52 AK shots expose separate command-history
+storage and decay clocks. No production feel change is justified until native
+attack-history selection, tick-domain state and client history construction map
+to trainer input. 386 continuous scene frames now have measured rotations, but
+variable game-frame timing still prevents a complete rendered comparison.
+Next capture/trace must retain per-shot history/resolver metadata and per-frame
+game/prediction clocks; fitting a constant millisecond offset is excluded.

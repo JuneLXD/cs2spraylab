@@ -26,7 +26,7 @@ timestamp gaps despite a nominal 60fps header. They cannot establish continuous
 | Input→simulation→render | Native video lacks synchronized device edge/presentation instrumentation | Browser tests record DOM dispatch, shot and renderer submission; no production delay tuned | CPU/browser response measured; native and physical mouse-to-photon unverified | `c488943` |
 | Frame pacing | Native engine presentation is outside demo sampling | Synthetic60/144/240Hz clocks, limits0/60/120; uncapped renders every supplied frame; unchanged | Trainer measured, native comparison unverified | `c488943` |
 | Low-latency canvas | No native presentation equivalence established | Requests desynchronized WebGL2 when enabled, rejects software-renderer path, falls back to regular context; unchanged | Browser implementation only; actual scanout benefit unverified | `c488943` |
-| Shot camera / aim punch | Hash-bound camera sampler and fresh native recoil anchors; combat fixture samples same processing times | .45 physical punch share plus view punch; scheduled recoil corrected in pass18 | Matched bounded native arithmetic; complete rendered camera unverified | `e85f59a` |
+| Shot camera / aim punch | Current client/server: 512 sampler cases, 72 impulses, 4 explicit anchors; 52 AK shots and 386 scene frames ([pass 22](reaudit-camera-clocks.md)) | .45 physical punch share plus camera kick; processing-clock class replay differs up to 0.499441°; no speculative change | Arithmetic matched; native command-history mapping missing; continuous video comparison remains partial | `e85f59a`; evidence only in pass 22 |
 | Crosshair on shot | Current-client saved pixel conversion and recoil-follow evidence; earlier bounded arithmetic retained | Render-time sample and pixel snapping retained; unchanged in this pass | Bounded prior arithmetic independently traced; new video parity unverified | `c488943` |
 | Viewmodel on shot | Fresh native clips independently compared; procedural share requires rendered landmarks | Clip timing retained; .22 procedural recoil share remains; R8 mount corrected in pass19 | Matched sampled clip data; procedural movement unverified | `9b94483` |
 | Muzzle flash / tracer onset | Native clip event tracks and tracer data; see animation/combat inventories | Simulated shot triggers pooled flash/tracer; native cadence option retained | Approximated particles and renderer timing | `c488943` |
@@ -69,3 +69,13 @@ video/audio processes retained 480 video frames with no gap over 50 ms.
 size before capture, and records optional output audio as a separate WAV.
 Process launch clocks are retained as approximate alignment; no sample-exact
 AV synchronization is claimed. Existing native demo measurements are unaffected.
+
+## Current camera clock follow-up
+
+[Pass 22](reaudit-camera-clocks.md) executes the current client/server arithmetic,
+reparses 52 AK shots, identifies the native attack-history clock selection and
+measures 386 frames from continuous Recovery002. Camera-only timing remains
+approximated: the trainer lacks the corresponding command-history inputs.
+No camera feel constant is changed. The video also has variable game-frame
+timing despite its continuous container timestamps; its fit is not a parity
+certificate or physical latency measurement.

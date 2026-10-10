@@ -1,4 +1,4 @@
-# CS2 independent re-audit: passes 16–21
+# CS2 independent re-audit: passes 16–22
 
 Five evidenced corrections follow baseline `c488943`: movement (`79832e6`),
 scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
@@ -6,7 +6,9 @@ ordering (`fd328d5`) and ordinary footstep cadence (`2aba70c`).
 This report covers the requested inventory and identifies the remaining work;
 it does not certify complete native parity. The follow-up corrects
 [accuracy/index update order](reaudit-accuracy.md) and
-[footstep timing](reaudit-footsteps.md). R8-specific follow-up is excluded at the user’s request.
+[footstep timing](reaudit-footsteps.md). [Camera-clock pass 22](reaudit-camera-clocks.md) confirms native arithmetic and
+identifies a remaining command-history mismatch without changing production feel.
+R8-specific follow-up is excluded at the user’s request.
 
 Current binary/config provenance is retained in
 [evidence/reaudit-runtime-settings.json](evidence/reaudit-runtime-settings.json).
@@ -103,7 +105,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-combat.md](
 | Aim-punch decay and velocity decay | Fresh native anchor-to-anchor carry in both captures, `PunchRecovery` comparison | Native carry error ≤0.000000478°; unchanged decay math | Matched sampled current native trajectories | `c488943` |
 | Recoil time anchor in actual engines | Fresh AK native anchors use exact command schedule | Maximum sampled live error 0.338199° → 0.00000239° | Matched sampled trajectory after fix | `e85f59a` |
 | Between-spray recovery | Fresh native index snapshots and native update body; long-rest angle samples | Long rests matched; short-pause index now uses full native decay steps and strict gate | Matched captured recovery; full command histories remain bounded | `fd328d5` |
-| Aim punch versus camera-only punch | Native aim-punch anchors available; separate view-punch field needs its own renderer comparison | Bullet punch ×2, camera view-punch separate; scheduling fix applies aim punch | Partially matched; presentation audit owns camera composition | `c488943` |
+| Aim punch versus camera-only punch | Current client/server sampler and impulse execution; 52 AK shots; distinct sampling and command-history clocks ([pass 22](reaudit-camera-clocks.md)) | Aim-punch scheduling corrected; camera-only processing anchor retained | Arithmetic matched; camera command-clock integration and rendered parity remain partial | `e85f59a`; camera evidence only in pass 22 |
 | Recoil-follow settings | Client setting lookup and frame presentation handled in response audit | No combat settings change | See response audit | `c488943` |
 | Stand/crouch/air baseline | Current native body and 39,648 independent invocations; air scale 1 | Same baseline choices; native float32 step and parameter changes now preserve accumulated penalty | Matched arithmetic and captured stance rows | `fd328d5` |
 | Running/walking velocity mapping | Fresh GetInaccuracy remaps 34–95% mode speed; run quarter-power, walk linear | Bench samples 0/.34/.52/.75/.95/1; same results | Matched arithmetic structure | `c488943` |
@@ -143,7 +145,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-response.md
 | Input→simulation→render | Native video lacks synchronized device edge/presentation instrumentation | Browser tests record DOM dispatch, shot and renderer submission; no production delay tuned | CPU/browser response measured; native and physical mouse-to-photon unverified | `c488943` |
 | Frame pacing | Native engine presentation is outside demo sampling | Synthetic60/144/240Hz clocks, limits0/60/120; uncapped renders every supplied frame; unchanged | Trainer measured, native comparison unverified | `c488943` |
 | Low-latency canvas | No native presentation equivalence established | Requests desynchronized WebGL2 when enabled, rejects software-renderer path, falls back to regular context; unchanged | Browser implementation only; actual scanout benefit unverified | `c488943` |
-| Shot camera / aim punch | Hash-bound camera sampler and fresh native recoil anchors; combat fixture samples same processing times | .45 physical punch share plus view punch; scheduled recoil corrected in pass18 | Matched bounded native arithmetic; complete rendered camera unverified | `e85f59a` |
+| Shot camera / aim punch | Current client/server: 512 sampler cases, 72 impulses, 4 explicit anchors; 52 AK shots and 386 scene frames ([pass 22](reaudit-camera-clocks.md)) | .45 physical punch share plus camera kick; processing-clock class replay differs up to 0.499441°; no speculative change | Arithmetic matched; native command-history mapping missing; continuous video comparison remains partial | `e85f59a`; evidence only in pass 22 |
 | Crosshair on shot | Current-client saved pixel conversion and recoil-follow evidence; earlier bounded arithmetic retained | Render-time sample and pixel snapping retained; unchanged in this pass | Bounded prior arithmetic independently traced; new video parity unverified | `c488943` |
 | Viewmodel on shot | Fresh native clips independently compared; procedural share requires rendered landmarks | Clip timing retained; .22 procedural recoil share remains; R8 mount corrected in pass19 | Matched sampled clip data; procedural movement unverified | `9b94483` |
 | Muzzle flash / tracer onset | Native clip event tracks and tracer data; see animation/combat inventories | Simulated shot triggers pooled flash/tracer; native cadence option retained | Approximated particles and renderer timing | `c488943` |
@@ -260,6 +262,14 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
     the native footstep clock. The native wrapper has absolute speed gates,
     rest resets, walk/slow clock preservation and command-time countdowns.
 
+22. The old 14-shot camera fixture verified arithmetic for almost coincident
+    clocks; it did not establish the general shot caller. Current native camera
+    sampling and command-history storage use separate clocks. A schedule-only
+    candidate still differs by up to 0.177648° in the new class replay.
+23. Continuous capture timestamps do not establish uniform game-frame timing.
+    Recovery002 retains continuous video but selected displayed GameTime offsets
+    vary by about 49.7 ms. A single-offset fit cannot certify rendered recoil.
+
 ## Exact remaining evidence and implementation
 
 - Accuracy/index: common captured paths are corrected in both engines. Native
@@ -273,6 +283,10 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   boundary presses; constrained unduck and partial-duck takeoffs; matched
   stairs, slopes, surface friction and ladders; rendered camera frames paired
   with camera-service offsets.
+- Camera clocks: selected attack-history index and player/render pairs, resolver
+  branch/cache and current-time/domain state per shot; native client history
+  construction and actual captured frame clocks. [Pass 22](reaudit-camera-clocks.md)
+  records the exact remaining metadata and rules out a fitted schedule offset.
 - Presentation/audio: continuous timestamped native camera and gun landmarks
   through shots, recovery, crouch, landing and zoom; footstep material,
   listener-distance, water/ladder and separate jump/landing sound paths.
