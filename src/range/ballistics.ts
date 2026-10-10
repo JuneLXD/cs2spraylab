@@ -10,6 +10,18 @@ export type AccuracyParameters=RecoilParameters&{
 };
 const clamp=(x:number,lo=0,hi=1)=>Math.max(lo,Math.min(hi,x));
 const ZERO=()=>({yaw:0,pitch:0});
+const ACCURACY_TICK=1/64, f32=Math.fround, LOG_TEN=f32(Math.log(10));
+const INDEX_DECAY=f32(Math.exp(f32(f32(-2*LOG_TEN)*ACCURACY_TICK)));
+
+function nativeRecoveryTime(w:AccuracyParameters,index:number,crouch:boolean,airborne:boolean){
+  const initial=f32(crouch||airborne?w.recoveryCrouch??w.recovery:w.recovery);
+  if(airborne)return f32(4*initial);
+  const final=crouch?w.recoveryCrouchFinal:w.recoveryFinal;
+  if(final===undefined||final<0)return initial;
+  const start=w.recoveryStart??2,end=w.recoveryEnd??5,n=Math.trunc(index);
+  const blend=start===end?Number(n>=end):clamp(f32(f32(n-start)/f32(end-start)));
+  return f32(initial+f32(blend*f32(f32(final)-initial)));
+}
 
 export function recoveryTime(w:AccuracyParameters,index:number,crouch:boolean,airborne=false){
   if(airborne)return 4*(w.recoveryCrouch ?? w.recovery);
@@ -63,9 +75,11 @@ export class WeaponRecovery {
   private punch=new PunchRecovery();private anchorAt=0;private roll=0;
   private impulses:RecoilAngle[];
   private viewImpulses:RecoilAngle[];
+  private accuracyClock=0;private nextAccuracyTick=1;
+  private accuracyCrouch=false;private accuracyAirborne=false;
   lastViewPunch:RecoilAngle=ZERO();
-  constructor(public weapon:AccuracyParameters,capture?:RecoilAngle[]){
-    this.penalty=weapon.stand;
+  constructor(public weapon:AccuracyParameters,capture?:RecoilAngle[],private readonly primaryCycle=weapon.cycle){
+    this.penalty=f32(weapon.stand);
     this.impulses=capture?captureImpulses(weapon,capture):recoilTable(weapon).map(p=>{
       const radians=Math.fround(p.angle*Math.fround(Math.PI/180));
       return {yaw:Math.fround(Math.sin(radians)*p.magnitude),pitch:Math.fround(Math.cos(radians)*p.magnitude)};
@@ -82,8 +96,8 @@ export class WeaponRecovery {
   }
   setParameters(weapon: AccuracyParameters) {
     if (this.weapon === weapon) return;
-    // Preserve accumulated firing error while switching stance/zoom baselines.
-    this.penalty = Math.max(weapon.stand, this.penalty - this.weapon.stand + weapon.stand);
+    // Native mode changes preserve the accumulated penalty. PostThink applies
+    // the new baseline through the normal snap-up/decay rule.
     this.weapon = weapon;
     this.impulses = recoilTable(weapon).map(p => {
       const radians = Math.fround(p.angle * Math.fround(Math.PI / 180));
@@ -91,25 +105,52 @@ export class WeaponRecovery {
     });
     this.viewImpulses = recoilTable(weapon).map(p => viewPunchImpulse(p.angle, p.magnitude));
   }
-  advance(dt:number,crouch=false,airborne=false){
-    const baseline=airborne?this.weapon.stand+(this.weapon.jump ?? 0):crouch?this.weapon.crouch:this.weapon.stand;
-    const recovery=recoveryTime(this.weapon,this.index,crouch,airborne);
-    const decay=dt===0?1:recovery>0?Math.pow(10,-dt/recovery):0;
-    this.penalty=baseline+Math.max(0,this.penalty-baseline)*decay;
-    // Native index decay starts after last shot + cycle + one 64 Hz tick.
-    const decayTime=Math.max(0,this.time+dt-Math.max(this.time,this.lastShot+this.weapon.cycle+1/64));
-    this.index*=Math.pow(10,-2*decayTime);
-    if(this.index<=.1)this.index=0;
+  advance(dt:number,crouch=false,airborne=false,deferAccuracy=false,clock=this.accuracyClock+dt){
+    // Punch has a continuous local clock. Accuracy uses the simulation's 64 Hz
+    // clock, including weapons created part-way through a round.
+    if(Math.abs(this.accuracyClock-(clock-dt))>1e-8)
+      this.nextAccuracyTick=Math.floor((clock-dt)*64+1e-8)+1;
     this.time+=dt;
+    this.accuracyClock=clock;this.accuracyCrouch=crouch;this.accuracyAirborne=airborne;
+    this.recoverThrough(deferAccuracy?clock-1e-8:clock);
     const elapsed=this.time-this.anchorAt,angle=this.punch.sample(elapsed),velocity=this.punch.velocity(elapsed);
     this.angle={yaw:angle.yaw,pitch:angle.pitch};this.roll=angle.roll;
     this.velocity={yaw:velocity.yaw,pitch:velocity.pitch};
   }
+  private updateAccuracy(clock:number){
+    const w=this.weapon,crouch=this.accuracyCrouch,airborne=this.accuracyAirborne;
+    const baseline=airborne?f32(f32(w.stand)+f32(w.jump??0)):f32(crouch?w.crouch:w.stand);
+    const recovery=nativeRecoveryTime(w,this.index,crouch,airborne);
+    const decay=recovery>0?f32(Math.exp(f32(f32(LOG_TEN/recovery)*-ACCURACY_TICK))):0;
+    this.penalty=this.penalty<baseline?baseline:f32(baseline+f32(f32(f32(this.penalty)-baseline)*decay));
+    const last=f32(this.lastShot+this.accuracyClock-this.time);
+    if(this.index>0&&f32(clock)>f32(f32(last+f32(this.primaryCycle))+ACCURACY_TICK)){
+      this.index=f32(f32(this.index)*INDEX_DECAY);
+      if(this.index<=f32(.1))this.index=0;
+    }
+  }
+  private recoverThrough(clock:number){
+    while(this.nextAccuracyTick*ACCURACY_TICK<=clock+1e-10){
+      this.updateAccuracy(this.nextAccuracyTick*ACCURACY_TICK);this.nextAccuracyTick++;
+    }
+  }
+  /** Called after fractional commands, before the boundary's remaining actions. */
+  finishAccuracy(){this.recoverThrough(this.accuracyClock);}
+  /** Native fractional shots precede PostThink; exact-boundary shots follow it. */
+  beforeShot(processingDelay=0){
+    const scheduled=this.accuracyClock-Math.max(0,processingDelay);
+    if(Math.abs(scheduled*64-Math.round(scheduled*64))<1e-7)this.finishAccuracy();
+  }
+  reloadStarted(automatic=false){
+    if(!automatic)this.finishAccuracy();
+    this.index=f32(f32(this.index)+1);
+  }
+  reloadFinished(){this.finishAccuracy();this.index=0;}
   /** Native landing hook (server build 2000927): the mode's inaccuracy_land
    * times the landing speed in units/s is added to the accuracy penalty, then
    * recovers like any other penalty. A normal jump adds about half a jump's worth. */
   land(landingSpeedUnits:number){
-    this.penalty+=(this.weapon.land ?? 0)*Math.max(0,landingSpeedUnits);
+    this.penalty=f32(f32(this.penalty)+f32(f32(this.weapon.land??0)*f32(Math.max(0,landingSpeedUnits))));
   }
   fire(processingDelay=0){
     const shotTime=this.time-Math.max(0,processingDelay),elapsed=shotTime-this.anchorAt;
@@ -122,7 +163,7 @@ export class WeaponRecovery {
     this.angle={yaw:carried.yaw,pitch:carried.pitch};this.roll=carried.roll;
     this.velocity={yaw:Math.fround(velocity.yaw+impulse.yaw),pitch:Math.fround(velocity.pitch+impulse.pitch)};
     this.punch=new PunchRecovery({...this.angle,roll:this.roll},{...this.velocity,roll:0});this.anchorAt=shotTime;
-    this.penalty+=this.weapon.fire;this.index++;this.lastShot=shotTime;
+    this.penalty=f32(f32(this.penalty)+f32(this.weapon.fire));this.index=f32(f32(this.index)+1);this.lastShot=shotTime;
     // Rendering stays at the processed time; only the impulse's anchor and the
     // bullet's pre-shot punch are sampled at the earlier schedule.
     if(processingDelay>0){

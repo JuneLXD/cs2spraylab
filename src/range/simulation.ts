@@ -116,7 +116,14 @@ export class Simulation {
   }
   get recovery() {
     let state=this.recoveryStates.get(this.equipped);
-    if(!state){state=new WeaponRecovery(this.stats,this.slot===1?this.measured?.points:undefined);this.recoveryStates.set(this.equipped,state);}
+    if(!state){
+      const base=equipmentStats(this.equipped),capture=this.slot===1?this.measured?.points:undefined;
+      // Lazy creation must start from the same base state as an eagerly created
+      // Duel weapon, even if its mode changed before the first recovery read.
+      state=new WeaponRecovery(capture?this.stats:base,capture,base.cycle);
+      if(!capture)state.setParameters(this.stats);
+      this.recoveryStates.set(this.equipped,state);
+    }
     return state;
   }
   resetRecovery(){this.recoveryStates.clear();this.recoil={yaw:0,pitch:0};this.viewPunch.reset();}
@@ -217,8 +224,9 @@ export class Simulation {
     this.resumeHeldAt = this.triggerHeld ? this.equipReadyAt : undefined;
     return true;
   }
-  reload(silent = this.reloadHeld) {
+  reload(silent = this.reloadHeld, automatic = false) {
     if (!this.reloadState.start(this.time, silent)) return false;
+    if (!this.stats.reloadsSingleShells) this.recovery.reloadStarted(automatic);
     this.finish(); this.burstLeft = 0; this.actions.holster(); this.active = true; this.reloadHeld = silent;
     this.resumeHeldAt = this.triggerHeld ? this.time : undefined;
     return true;
@@ -300,7 +308,7 @@ export class Simulation {
       if (!this.reloadState.stats.reloadsSingleShells) return false;
       this.reloadState.interrupt();
     }
-    if (!this.reloadState.active && this.equipped !== 'knife' && this.loadedAmmo === 0) { this.reload(); return false; }
+    if (!this.reloadState.active && this.equipped !== 'knife' && this.loadedAmmo === 0) { this.reload(this.reloadHeld, true); return false; }
     this.meleeSecondary = this.equipped === 'knife' && alternate;
     this.actions.alternateFire = this.actions.isRevolver && alternate;
     this.active = true; this.firing = true; this.automatic = automatic;
@@ -418,8 +426,9 @@ export class Simulation {
       if (id === 'zeus') {
         const stats = equipmentStats(id);
         state.penalty = !this.grounded ? stats.stand + stats.jump : crouch ? stats.crouch : stats.stand;
-      } else state.advance(dt,crouch,!this.grounded);
+      } else state.advance(dt,crouch,!this.grounded,id===this.equipped,this.time);
     }
+    if (reloading && !this.reloadState.active && !weapon.reloadsSingleShells) recovery.reloadFinished();
     this.recoil=this.equipped==='knife' || this.equipped==='zeus'?{yaw:0,pitch:0}:recovery.recoil;
     if (this.settings.moving && !this.drill) {
       const extent = this.settings.mode === 'transfer' ? 1.25 : 3;
@@ -453,7 +462,9 @@ export class Simulation {
     // CS2 reloads an empty magazine by itself once the last shot's cycle ends. shotReady alone can
     // lag behind a shot queued through a long shell reload, so time the cycle from the shot itself.
     if (!this.firing && this.loadedAmmo === 0 && this.equipped !== 'knife' && !this.reloadState.active && this.time + 1e-9 >=
-      Math.max(this.shotReady.get(this.equipped) ?? 0, this.lastShotAt + this.stats.cycle, this.equipReadyAt, this.actions.readyAt)) this.reload();
+      Math.max(this.shotReady.get(this.equipped) ?? 0, this.lastShotAt + this.stats.cycle, this.equipReadyAt, this.actions.readyAt)) this.reload(this.reloadHeld, true);
+    if (!this.measured || this.slot !== 1) recovery.setParameters(this.stats);
+    recovery.finishAccuracy();
   }
   fire() {
     const weapon = this.stats;
@@ -479,6 +490,7 @@ export class Simulation {
     if (this.time - this.nextShot > SERVER_TICK + 1e-9) this.nextShot = this.time;
     if (this.actions.burst && !this.burstLeft) {this.burstLeft = 3; this.burstEnd = this.nextShot + this.actions.burstCycle;}
     const processingDelay = Math.max(0, this.time - this.nextShot);
+    this.recovery.beforeShot(processingDelay);
     this.recoil = this.equipped === 'zeus' ? {yaw: 0, pitch: 0} : this.recovery.recoilBefore(processingDelay);
     if (this.equipped === 'zeus') this.recovery.penalty = !this.grounded ? weapon.stand + weapon.jump : this.duckAmount >= .95 ? weapon.crouch : weapon.stand;
     const ordinal = this.shotOrdinals.get(this.equipped) ?? 0;
@@ -500,6 +512,8 @@ export class Simulation {
     // The game records the scheduled time as the last shot time; a tick-aligned shot keeps its schedule.
     this.lastShotAt = this.nextShot;
     this.actions.afterShot(this.time);
+    if (!this.measured || this.slot !== 1) this.recovery.setParameters(this.actions.stats);
+    this.recovery.finishAccuracy();
     this.onShot({index, ordinal, at:this.time, origin:{...this.position}, direction:directions[0], recoil:this.recoil, equipment:this.equipped,
       kind:this.equipped==='zeus'?'zeus':directions.length>1?'pellets':'bullet', attack:this.actions.alternateFire?'secondary':'primary',
       maxDistance:weapon.range*UNIT, ...(directions.length>1?{pelletDirections:directions}:{})});

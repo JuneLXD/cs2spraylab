@@ -14,7 +14,7 @@ export type FiredRound = {
   viewPunch?: RecoilAngle;
 };
 export type WeaponActionEvent = ReloadActionEvent | {kind: 'zeus-discharge' | 'zeus-ready'; at: number};
-export type WeaponCommand = ActorCommand & {reloadHeld?: boolean};
+export type WeaponCommand = ActorCommand & {reloadHeld?: boolean; reloadAutomatic?: boolean};
 export type WeaponStateOptions = {spread?: boolean; silentReloadMultiplier?: number};
 
 export class DuelWeaponState {
@@ -70,14 +70,14 @@ export class DuelWeaponState {
     return command.firePressed ? due : tickAligned(due);
   }
 
-  advancePassive(time: number, dt: number, crouch = false, airborne = false) {
+  advancePassive(time: number, dt: number, crouch = false, airborne = false, deferAccuracy = false) {
     if (this.id === 'zeus') {
       const stats = equipmentStats(this.id);
       this.recovery.penalty = airborne ? stats.stand + stats.jump : crouch ? stats.crouch : stats.stand;
       if (this.rechargeUntil && time + 1e-9 >= this.rechargeUntil) {
         this.ammo = 1; this.rechargeUntil = 0; this.actionEvents.push({kind: 'zeus-ready', at: time});
       }
-    } else this.recovery.advance(dt, crouch, airborne);
+    } else this.recovery.advance(dt, crouch, airborne, deferAccuracy, time);
   }
 
   // Main calls this after resolving the knife trace, including misses. It must
@@ -108,7 +108,9 @@ export class DuelWeaponState {
     const stats = this.actions.stats;
     this.recovery.setParameters(stats);
     const airborne = !(actor.grounded ?? actor.feet === 0);
-    this.advancePassive(time, dt, (actor.duckAmount ?? Number(command.crouch)) >= .95, airborne);
+    this.advancePassive(time, dt, (actor.duckAmount ?? Number(command.crouch)) >= .95, airborne, true);
+    if (reloading && !this.reload.active && !stats.reloadsSingleShells) this.recovery.reloadFinished();
+    try {
     const punch = actor.punch?.shotFor(this.recovery.angle);
     if (this.id === 'knife') {
       const secondary = !!(command.secondaryHeld || command.secondaryPressed);
@@ -123,6 +125,7 @@ export class DuelWeaponState {
         maxDistance: (secondary ? knifeModel.secondaryRangeUnits : knifeModel.primaryRangeUnits) * UNIT};
     }
     if (command.reloadPressed && this.reload.start(time, !!command.reloadHeld)) {
+      if (!stats.reloadsSingleShells) this.recovery.reloadStarted(!!command.reloadAutomatic);
       this.pendingPress = false;
       this.actions.holster(); this.burstLeft = 0;
       return;
@@ -138,7 +141,7 @@ export class DuelWeaponState {
     if (!this.pendingPress && !this.burstLeft && !(command.fireHeld && stats.fullAuto) && !this.actions.alternateFire) return;
     if (this.reload.active) {this.reload.interrupt(); return;}
     if (this.ammo === 0) {
-      this.reload.start(time, !!command.reloadHeld);
+      if (this.reload.start(time, !!command.reloadHeld) && !stats.reloadsSingleShells) this.recovery.reloadStarted(true);
       this.pendingPress = false;
       this.actions.holster(); this.burstLeft = 0;
       return;
@@ -160,6 +163,7 @@ export class DuelWeaponState {
     }
     const speedRatio = Math.hypot(actor.velocity.x, actor.velocity.z) / (stats.speed * UNIT);
     const processingDelay = Math.max(0, time - scheduled);
+    this.recovery.beforeShot(processingDelay);
     const directions = shotDirections({
       yaw: actor.yaw, pitch: actor.pitch, recoil: this.recovery.recoilBefore(processingDelay), punch, weapon: stats,
       recovery: this.recovery, speedRatio, walking: command.walk, airborne,
@@ -170,6 +174,7 @@ export class DuelWeaponState {
     const direction = directions[0];
     if (this.id !== 'zeus') this.recovery.fire(processingDelay);
     this.actions.afterShot(time);
+    this.recovery.setParameters(this.actions.stats);
     this.ammo--;
     if (isPumpShotgun(this.id)) this.pumpUntil = scheduled + stats.cycle;
     if (this.id === 'zeus') {
@@ -189,5 +194,9 @@ export class DuelWeaponState {
       kind: this.id === 'zeus' ? 'zeus' : directions.length > 1 ? 'pellets' : 'bullet',
       attack: this.actions.alternateFire ? 'secondary' : 'primary', maxDistance: stats.range * UNIT,
       ...(directions.length > 1 ? {pelletDirections: directions} : {})};
+    } finally {
+      this.recovery.setParameters(this.actions.stats);
+      this.recovery.finishAccuracy();
+    }
   }
 }

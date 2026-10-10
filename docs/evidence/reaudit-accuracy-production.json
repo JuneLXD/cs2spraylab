@@ -1,0 +1,488 @@
+{
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "beforeBaseline": "cb47b69",
+  "beforeArtifactSha256": "fd309573878ceff00c3616dc82e2979f946cf6a4436e61621b5a959ee02720b3",
+  "method": "Current production WeaponRecovery cumulative replay; original captured mode/stance/shot/reload/landing events are exogenous. This is not an input-command replay. The bounded arithmetic grid invokes the private native-update body directly; engine ordering is tested separately.",
+  "grid": {
+    "cases": 39648,
+    "maxPenaltyError": 0,
+    "maxIndexError": 0
+  },
+  "demos": [
+    {
+      "demo": "native_audit_ak_001.dem",
+      "sha256": "2956a11f15de8d45acf77941e9fc3f9dda3e54ad524325091b61e4d55698d8b6",
+      "exclusion": "No usable rows",
+      "rows": 0,
+      "shots": 0,
+      "decodedWeapons": [],
+      "before": {
+        "maxPenaltyError": 0,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 0,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_ak_002.dem",
+      "sha256": "feadebd8538a044283a42ef2e78fa97db98591d9c2565c6fbce22d684b76835c",
+      "exclusion": null,
+      "rows": 4145,
+      "shots": 14,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0014778250289986562,
+        "maxIndexError": 1
+      },
+      "maxPenaltyError": 2.6822090098965745e-7,
+      "maxIndexError": 8.881784197001252e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_aug_scope_001.dem",
+      "sha256": "85e948f0be0e9578d9f57be2c384b4c036f879e0660b239229504369bc7ea24d",
+      "exclusion": null,
+      "rows": 116,
+      "shots": 0,
+      "decodedWeapons": [
+        "usp"
+      ],
+      "before": {
+        "maxPenaltyError": 4.631711680858075e-16,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 4.709774237277031e-16,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_aug_scope_002.dem",
+      "sha256": "083ef8600700dd3d7de30b12362a7d3eb9c594fee3bfdf91206da4e99107b6ca",
+      "exclusion": null,
+      "rows": 137,
+      "shots": 0,
+      "decodedWeapons": [
+        "aug"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0011220173910256271,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 4.77048955893622e-16,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_awp_001.dem",
+      "sha256": "4a3cdbbbdedc39d5c1233fb2e44c467203d5a4105ac571545f8caf46e044886d",
+      "exclusion": null,
+      "rows": 3859,
+      "shots": 3,
+      "decodedWeapons": [
+        "usp",
+        "ak47"
+      ],
+      "before": {
+        "maxPenaltyError": 0.005086191375077112,
+        "maxIndexError": 1
+      },
+      "maxPenaltyError": 4.98732999343332e-16,
+      "maxIndexError": 4.440892098500626e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_awp_002.dem",
+      "sha256": "d0a07ff5c7cf0c9e19d40a6b0254727877317608fe7ba49edac3250abd99bcd4",
+      "exclusion": null,
+      "rows": 1235,
+      "shots": 3,
+      "decodedWeapons": [
+        "awp"
+      ],
+      "before": {
+        "maxPenaltyError": 0.07354830523005838,
+        "maxIndexError": 0.9932266374423455
+      },
+      "maxPenaltyError": 4.96564594998361e-16,
+      "maxIndexError": 5.551115123125783e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_deagle_001.dem",
+      "sha256": "0fdd476a1650f7a58af769d789bdaaebc41469f88b457eaadf97abe2053772be",
+      "exclusion": null,
+      "rows": 3027,
+      "shots": 5,
+      "decodedWeapons": [
+        "deagle"
+      ],
+      "before": {
+        "maxPenaltyError": 0.004740399629393849,
+        "maxIndexError": 1.010480794506278
+      },
+      "maxPenaltyError": 4.98732999343332e-16,
+      "maxIndexError": 5.551115123125783e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_scope_slow_001.dem",
+      "sha256": "6d8fe4c9ce2ec99255d04abf70b6c7b1a6389f9e0d5297fc29a74034afa337e4",
+      "exclusion": null,
+      "rows": 146,
+      "shots": 0,
+      "decodedWeapons": [
+        "awp"
+      ],
+      "before": {
+        "maxPenaltyError": 0.07100476720370298,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 4.753142324176451e-16,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_scope_slow_002.dem",
+      "sha256": "0a82470f4ef21e57c43a49182bb49b3b28c773c131db09732e41dbf19d94c1ee",
+      "exclusion": null,
+      "rows": 404,
+      "shots": 1,
+      "decodedWeapons": [
+        "awp"
+      ],
+      "before": {
+        "maxPenaltyError": 0.07100476720370298,
+        "maxIndexError": 0.10681996456856217
+      },
+      "maxPenaltyError": 4.996003610813204e-16,
+      "maxIndexError": 4.440892098500626e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_tv_probe.dem",
+      "sha256": "f0265d218a95659eb590d4a10819ae84da859ee3f69f7cab1b0b56de5b6141c5",
+      "exclusion": null,
+      "rows": 186,
+      "shots": 0,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": {
+        "maxPenaltyError": 2.328306636031896e-9,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 2.2898349882893854e-16,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_audit_zoom_modes_001.dem",
+      "sha256": "1ac400f77f2b94d7fa08b8015dc71f2bc19680aa15148274486a2189eb4f4605",
+      "exclusion": null,
+      "rows": 963,
+      "shots": 1,
+      "decodedWeapons": [
+        "awp",
+        "usp"
+      ],
+      "before": {
+        "maxPenaltyError": 0.07100476720370309,
+        "maxIndexError": 0.10200768657196865
+      },
+      "maxPenaltyError": 4.996003610813204e-16,
+      "maxIndexError": 4.440892098500626e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_phase3_m4a1s_001.dem",
+      "sha256": "2783d539fca2df90766626d2b498c184673103260c746d2376dad942708bad76",
+      "exclusion": null,
+      "rows": 5238,
+      "shots": 33,
+      "decodedWeapons": [
+        "m4a4"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0014880967216604965,
+        "maxIndexError": 1.0292110638896013
+      },
+      "maxPenaltyError": 4.996003610813204e-16,
+      "maxIndexError": 8.881784197001252e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_phase3_m4a4_001.dem",
+      "sha256": "afe08c691cc55078e0cd863340e0e5eed08748c917f1d0e14cd7c8bc2256d79f",
+      "exclusion": "No usable rows",
+      "rows": 0,
+      "shots": 0,
+      "decodedWeapons": [],
+      "before": {
+        "maxPenaltyError": 0,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 0,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_phase3_m4a4_002.dem",
+      "sha256": "f53be58ed36519b8b75a0fe233cad7abf3fc2593947f86a4cdc6659f38d4d774",
+      "exclusion": null,
+      "rows": 5036,
+      "shots": 36,
+      "decodedWeapons": [
+        "m4a4"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0014880927216330588,
+        "maxIndexError": 0.9835128843887659
+      },
+      "maxPenaltyError": 4.996003610813204e-16,
+      "maxIndexError": 8.881784197001252e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_airduck_001.dem",
+      "sha256": "d926c66975abdc8d5175fc45fc0942b8a44b6f3ca2a61117bb24259e1404276c",
+      "exclusion": "Interrupted capture",
+      "rows": 17395,
+      "shots": 0,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0014208881300957262,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 0.000001966953277948713,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_airduck_003.dem",
+      "sha256": "b2e4254179264568f323339cb87b22d1217b9447c88b4a419fb75b9d88e0ceb8",
+      "exclusion": null,
+      "rows": 1187,
+      "shots": 0,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0014181458507747267,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 0.0000030994415278762233,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_footsteps_001.dem",
+      "sha256": "9e36750139e14d749de13978d8a7cec3fd1223ec654dba41dbde0296ccb47049",
+      "exclusion": null,
+      "rows": 1537,
+      "shots": 0,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0014221095596517264,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 5.960464499743523e-8,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_footsteps_awp_001.dem",
+      "sha256": "4532802a7e840d72de94f61983077f0d680a87f7de579d3a6157da11285acb0d",
+      "exclusion": null,
+      "rows": 1535,
+      "shots": 0,
+      "decodedWeapons": [
+        "awp"
+      ],
+      "before": {
+        "maxPenaltyError": 0.017458926096464572,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 1.1920928955078125e-7,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_movement_001.dem",
+      "sha256": "3507368d95765a12075236380cd4c35605300995d0cef3de107c93f22856c44a",
+      "exclusion": null,
+      "rows": 1825,
+      "shots": 0,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0014093620819117265,
+        "maxIndexError": 0
+      },
+      "maxPenaltyError": 5.960464499743523e-8,
+      "maxIndexError": 0,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_r8_001.dem",
+      "sha256": "0cd327a7dd53a98187c7cfea4e1e8bb078b43d3c61e4d91dd02df08aaf2c2da0",
+      "exclusion": "Wrong selected weapon: AK, not R8",
+      "rows": 1416,
+      "shots": 11,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": null,
+      "maxPenaltyError": 5.960464499743523e-8,
+      "maxIndexError": 5.551115123125783e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_r8_002.dem",
+      "sha256": "d30f7ce08301dc45fb438b436d461a1fd041d90a55d5ec0ee516de3d2e25c285",
+      "exclusion": "Wrong selected weapon: AK, not R8",
+      "rows": 1417,
+      "shots": 12,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": null,
+      "maxPenaltyError": 5.960464499743523e-8,
+      "maxIndexError": 5.551115123125783e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_recovery_001.dem",
+      "sha256": "9f2616be8f3232651f2b2be130b48dbf3881709f35d302d9b656aded4a659f50",
+      "exclusion": null,
+      "rows": 1136,
+      "shots": 8,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0013072614851227828,
+        "maxIndexError": 1
+      },
+      "maxPenaltyError": 1.490116116609208e-8,
+      "maxIndexError": 5.551115123125783e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_recovery_002.dem",
+      "sha256": "7b171ce98d2983a471c13c094c89cbbf020956cd71a6c55faf244811110c8b2d",
+      "exclusion": null,
+      "rows": 1176,
+      "shots": 8,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": null,
+      "maxPenaltyError": 5.960464499743523e-8,
+      "maxIndexError": 5.551115123125783e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "sha256": "37b6f44d6c8ca327d580f9eeb289928eb917d0ec9b7e05e8dfc241eced4b9442",
+      "exclusion": null,
+      "rows": 1264,
+      "shots": 22,
+      "decodedWeapons": [
+        "ak47"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0014092454124551047,
+        "maxIndexError": 1.0004354037403205
+      },
+      "maxPenaltyError": 5.960464499743523e-8,
+      "maxIndexError": 8.881784197001252e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reload_deagle_empty_001.dem",
+      "sha256": "1ef9d9f889765c74f0eb0b28e26908d1b1efa9795d82eb24939b3105b5f03c4a",
+      "exclusion": null,
+      "rows": 1994,
+      "shots": 8,
+      "decodedWeapons": [
+        "m4a4"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0007225533427327614,
+        "maxIndexError": 0.994976230170626
+      },
+      "maxPenaltyError": 4.996003610813204e-16,
+      "maxIndexError": 5.551115123125783e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reload_deagle_empty_002.dem",
+      "sha256": "aa0c7cceda6d3d1afef7113b76c8795d02c5dbf8ecac1ed9c2cd3fffce2313dd",
+      "exclusion": null,
+      "rows": 1090,
+      "shots": 9,
+      "decodedWeapons": [
+        "deagle"
+      ],
+      "before": {
+        "maxPenaltyError": 0.003975235453164486,
+        "maxIndexError": 1.0224116842739845
+      },
+      "maxPenaltyError": 5.134781488891349e-16,
+      "maxIndexError": 5.551115123125783e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    },
+    {
+      "demo": "native_reload_gate_001.dem",
+      "sha256": "18aa47897cdf52ce325fb6eb97e587452ebc84cf8da23ff52fce34643c11cd3e",
+      "exclusion": null,
+      "rows": 4348,
+      "shots": 9,
+      "decodedWeapons": [
+        "m4a4"
+      ],
+      "before": {
+        "maxPenaltyError": 0.0011399839078365358,
+        "maxIndexError": 0.9972460402991394
+      },
+      "maxPenaltyError": 4.996003610813204e-16,
+      "maxIndexError": 5.551115123125783e-16,
+      "mismatchCount": 0,
+      "firstMismatches": []
+    }
+  ]
+}

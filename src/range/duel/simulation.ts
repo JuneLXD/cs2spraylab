@@ -487,7 +487,7 @@ export class DuelSimulation {
         this.time + 1e-9 >= Math.max(actor.weapon.nextShotAt, actor.weapon.actions.readyAt, actor.equipReadyAt);
       const fired = actor.weapon.advance(this.time, dt, this.time < actor.equipReadyAt
         ? {...command, fireHeld: false, firePressed: false, secondaryHeld: false, secondaryPressed: false}
-        : autoReload ? {...command, reloadPressed: true} : command, actor);
+        : autoReload ? {...command, reloadPressed: true, reloadAutomatic: true} : command, actor);
       if ((this.botz || this.deathmatch) && actor.id === 0) this.refillAmmo(actor);
       if(zoomBefore!==actor.weapon.actions.zoom)this.emit({kind:'action',tick:this.tick,actorId:actor.id,equipment:actor.weapon.id,
         action:actor.weapon.actions.zoom?'scope-in':'scope-out'});

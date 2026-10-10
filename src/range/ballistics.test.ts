@@ -19,32 +19,34 @@ describe('Recovered accuracy formulas',()=>{
     expect(recoveryTime(ak,10,true)).toBe(ak.recoveryCrouchFinal);
     expect(recoveryTime(ak,10,false,true)).toBe(ak.recoveryCrouch*4);
   });
-  it('recovers 90% of excess accuracy penalty over the initial recovery time',()=>{
+  it('recovers approximately 90% over the initial recovery time using complete native ticks',()=>{
     const state=new WeaponRecovery(ak);state.fire();state.advance(ak.recovery);
-    expect(state.penalty-ak.stand).toBeCloseTo(ak.fire*.1,10);
+    expect(state.penalty-ak.stand).toBeGreaterThan(ak.fire*.1);
+    expect(state.penalty-ak.stand).toBeLessThan(ak.fire*.1*Math.pow(10,(1/64)/ak.recovery));
   });
   it('recovers recoil index only after cycle plus tick, at 10^(-2t)',()=>{
     const state=new WeaponRecovery(ak);state.fire();state.advance(ak.cycle+1/64);
     expect(state.index).toBe(1);state.advance(.2);
-    expect(state.index).toBeCloseTo(Math.pow(10,-.4),10);
+    expect(state.index).toBeCloseTo(Math.pow(10,-2*13/64),6);
     state.advance(1);expect(state.index).toBe(0);
   });
   it('adds the mode inaccuracy_land times the landing speed, then recovers it',()=>{
     const r=new WeaponRecovery(ak);
     r.land(301.993);
-    expect(r.penalty).toBeCloseTo(ak.stand+ak.land*301.993,9);
+    expect(r.penalty).toBeCloseTo(ak.stand+ak.land*301.993,7);
     expect(ak.land*301.993).toBeGreaterThan(ak.jump*.4); // about half a jump's inaccuracy
     r.land(-5); // never negative
-    expect(r.penalty).toBeCloseTo(ak.stand+ak.land*301.993,9);
+    expect(r.penalty).toBeCloseTo(ak.stand+ak.land*301.993,7);
     r.advance(ak.recovery);
-    expect(r.penalty-ak.stand).toBeCloseTo(ak.land*301.993*.1,6);
+    expect(r.penalty-ak.stand).toBeGreaterThan(ak.land*301.993*.1);
+    expect(r.penalty-ak.stand).toBeLessThan(ak.land*301.993*.1*Math.pow(10,(1/64)/ak.recovery));
     const scoped=new WeaponRecovery({...ak,land:ak.land*2});
     scoped.land(301.993);
-    expect(scoped.penalty).toBeCloseTo(ak.stand+ak.land*2*301.993,9);
+    expect(scoped.penalty).toBeCloseTo(ak.stand+ak.land*2*301.993,7);
   });
   it('penalizes airborne shots even at the jump apex',()=>{
     expect(airborneInaccuracy(ak,0)).toBe(0);
-    const state=new WeaponRecovery(ak);state.advance(STEP,false,true);
+    const state=new WeaponRecovery(ak);state.advance(1/64,false,true);
     expect(state.inaccuracy(0,false,true,0)).toBeCloseTo(ak.stand+ak.jump);
     expect(airborneInaccuracy(ak,301.993)).toBeCloseTo(ak.jumpInitial);
   });
@@ -85,11 +87,11 @@ describe('Persistent shot state',()=>{
   it('keeps Zeus recoil zero while retaining its extracted firing penalty',()=>{
     const weapon=gameData.weapons.zeus,state=new WeaponRecovery(weapon);
     expect(weapon.recoilMagnitude).toBe(0);expect(weapon.fire).toBe(.05);
-    state.fire();expect(state.penalty).toBeCloseTo(weapon.stand+weapon.fire,12);
-    state.advance(0);expect(state.penalty).toBeCloseTo(weapon.stand+weapon.fire,12);
+    state.fire();expect(state.penalty).toBeCloseTo(weapon.stand+weapon.fire,7);
+    state.advance(0);expect(state.penalty).toBeCloseTo(weapon.stand+weapon.fire,7);
     expect(state.predict(0)).toEqual({yaw:0,pitch:0});
     state.advance(weapon.cycle);
-    expect(state.recoil).toEqual({yaw:0,pitch:0});expect(state.penalty).toBe(weapon.stand);
+    expect(state.recoil).toEqual({yaw:0,pitch:0});expect(state.penalty).toBe(Math.fround(weapon.stand));
   });
   it('predicts guidance without mutating weapon state',()=>{
     const s=new Simulation({...defaults,weapon:'ak47'});s.start();s.release('mouse');advance(s,.2);

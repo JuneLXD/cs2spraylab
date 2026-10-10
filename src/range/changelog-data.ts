@@ -321,6 +321,10 @@ export const latestChanges = {
     {id: 'native-r8-charge-mount', title: 'R8 charge animation alignment', items: [
       'The R8 now keeps its hands on the grip while charging. Both model variants combine the native charge motion with its firing-start pose and preserve the weapon attachment through charge, fire and cancellation.',
     ]},
+    {id: 'native-accuracy-phase', title: 'Accuracy recovery between shots', items: [
+      'Firing accuracy and recoil-index recovery now follow the recorded CS2 update timing in both the range and duel. Scope changes preserve accumulated inaccuracy, and magazine reloads apply the native recoil-index changes.',
+      'Native instruction checks and recorded tick replays cover the correction; scheduled aim-punch timing is preserved.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

@@ -1,0 +1,7471 @@
+{
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "method": "Portable original demo snapshots and bounded native invocations (no fitted outputs). Retained recordings are not retrospectively bound to the current ELF hash.",
+  "episodes": [
+    {
+      "demo": "native_reaudit_recovery_001.dem",
+      "sha256": "9f2616be8f3232651f2b2be130b48dbf3881709f35d302d9b656aded4a659f50",
+      "weapon": "ak47",
+      "rows": [
+        {
+          "tick": 460,
+          "time": 93.203125,
+          "penalty": 0.006410023663193,
+          "index": 0.0,
+          "lastShot": 91.184814453125,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 461,
+          "time": 93.21875,
+          "penalty": 0.013483537361026,
+          "index": 1.0,
+          "lastShot": 93.214599609375,
+          "mode": 0,
+          "shot": 93.214599609375
+        },
+        {
+          "tick": 462,
+          "time": 93.234375,
+          "penalty": 0.012824716046453,
+          "index": 1.0,
+          "lastShot": 93.214599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 463,
+          "time": 93.25,
+          "penalty": 0.01222725585103,
+          "index": 1.0,
+          "lastShot": 93.214599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 464,
+          "time": 93.265625,
+          "penalty": 0.011685442179441,
+          "index": 1.0,
+          "lastShot": 93.214599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 465,
+          "time": 93.28125,
+          "penalty": 0.011194093152881,
+          "index": 1.0,
+          "lastShot": 93.214599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 466,
+          "time": 93.296875,
+          "penalty": 0.010748507454991,
+          "index": 1.0,
+          "lastShot": 93.214599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 467,
+          "time": 93.3125,
+          "penalty": 0.010344423353672,
+          "index": 1.0,
+          "lastShot": 93.214599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 468,
+          "time": 93.328125,
+          "penalty": 0.017051491886377,
+          "index": 2.0,
+          "lastShot": 93.3145980834961,
+          "mode": 0,
+          "shot": 93.31459961086512
+        },
+        {
+          "tick": 469,
+          "time": 93.34375,
+          "penalty": 0.01606035605073,
+          "index": 2.0,
+          "lastShot": 93.3145980834961,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 470,
+          "time": 93.359375,
+          "penalty": 0.015161531977355,
+          "index": 2.0,
+          "lastShot": 93.3145980834961,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 471,
+          "time": 93.375,
+          "penalty": 0.014346423558891,
+          "index": 2.0,
+          "lastShot": 93.3145980834961,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 472,
+          "time": 93.390625,
+          "penalty": 0.013607233762741,
+          "index": 2.0,
+          "lastShot": 93.3145980834961,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 473,
+          "time": 93.40625,
+          "penalty": 0.012936891056597,
+          "index": 2.0,
+          "lastShot": 93.3145980834961,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 474,
+          "time": 93.421875,
+          "penalty": 0.019544405862689,
+          "index": 3.0,
+          "lastShot": 93.41459655761719,
+          "mode": 0,
+          "shot": 93.41459961235523
+        },
+        {
+          "tick": 475,
+          "time": 93.4375,
+          "penalty": 0.018451176583767,
+          "index": 3.0,
+          "lastShot": 93.41459655761719,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 476,
+          "time": 93.453125,
+          "penalty": 0.01744893938303,
+          "index": 3.0,
+          "lastShot": 93.41459655761719,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 477,
+          "time": 93.46875,
+          "penalty": 0.016530122607946,
+          "index": 3.0,
+          "lastShot": 93.41459655761719,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 478,
+          "time": 93.484375,
+          "penalty": 0.0156877823174,
+          "index": 3.0,
+          "lastShot": 93.41459655761719,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 479,
+          "time": 93.5,
+          "penalty": 0.014915554784238,
+          "index": 3.0,
+          "lastShot": 93.41459655761719,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 480,
+          "time": 93.515625,
+          "penalty": 0.021488849073648,
+          "index": 4.0,
+          "lastShot": 93.51460266113281,
+          "mode": 0,
+          "shot": 93.51459961384535
+        },
+        {
+          "tick": 481,
+          "time": 93.53125,
+          "penalty": 0.020354431122541,
+          "index": 4.0,
+          "lastShot": 93.51460266113281,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 482,
+          "time": 93.546875,
+          "penalty": 0.019305359572172,
+          "index": 4.0,
+          "lastShot": 93.51460266113281,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 483,
+          "time": 93.5625,
+          "penalty": 0.018335212022066,
+          "index": 4.0,
+          "lastShot": 93.51460266113281,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 484,
+          "time": 93.578125,
+          "penalty": 0.017438050359488,
+          "index": 4.0,
+          "lastShot": 93.51460266113281,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 485,
+          "time": 93.59375,
+          "penalty": 0.016608383506536,
+          "index": 4.0,
+          "lastShot": 93.51460266113281,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 486,
+          "time": 93.609375,
+          "penalty": 0.015841133892536,
+          "index": 4.0,
+          "lastShot": 93.51460266113281,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 487,
+          "time": 93.625,
+          "penalty": 0.022458497434855,
+          "index": 5.0,
+          "lastShot": 93.6146011352539,
+          "mode": 0,
+          "shot": 93.61459961533546
+        },
+        {
+          "tick": 488,
+          "time": 93.640625,
+          "penalty": 0.021357031539083,
+          "index": 5.0,
+          "lastShot": 93.6146011352539,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 489,
+          "time": 93.65625,
+          "penalty": 0.020331162959337,
+          "index": 5.0,
+          "lastShot": 93.6146011352539,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 490,
+          "time": 93.671875,
+          "penalty": 0.019375704228878,
+          "index": 5.0,
+          "lastShot": 93.6146011352539,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 491,
+          "time": 93.6875,
+          "penalty": 0.018485821783543,
+          "index": 5.0,
+          "lastShot": 93.6146011352539,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 492,
+          "time": 93.703125,
+          "penalty": 0.017657015472651,
+          "index": 5.0,
+          "lastShot": 93.6146011352539,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 493,
+          "time": 93.71875,
+          "penalty": 0.024149749428034,
+          "index": 6.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": 93.71459961682558
+        },
+        {
+          "tick": 494,
+          "time": 93.734375,
+          "penalty": 0.022932205349207,
+          "index": 6.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 495,
+          "time": 93.75,
+          "penalty": 0.021798226982355,
+          "index": 6.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 496,
+          "time": 93.765625,
+          "penalty": 0.020742077380419,
+          "index": 6.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 497,
+          "time": 93.78125,
+          "penalty": 0.01975841447711,
+          "index": 6.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 498,
+          "time": 93.796875,
+          "penalty": 0.01884226500988,
+          "index": 6.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 499,
+          "time": 93.8125,
+          "penalty": 0.017988994717598,
+          "index": 6.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 500,
+          "time": 93.828125,
+          "penalty": 0.017194285988808,
+          "index": 6.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 501,
+          "time": 93.84375,
+          "penalty": 0.016454121097922,
+          "index": 5.583432197570801,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 502,
+          "time": 93.859375,
+          "penalty": 0.015764757990837,
+          "index": 5.195785999298096,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 503,
+          "time": 93.875,
+          "penalty": 0.015122707001865,
+          "index": 4.835052967071533,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 504,
+          "time": 93.890625,
+          "penalty": 0.014467229135334,
+          "index": 4.499364852905273,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 505,
+          "time": 93.90625,
+          "penalty": 0.013861063867807,
+          "index": 4.186983108520508,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 506,
+          "time": 93.921875,
+          "penalty": 0.013300502672791,
+          "index": 3.896289348602295,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 507,
+          "time": 93.9375,
+          "penalty": 0.012726977467537,
+          "index": 3.625777959823608,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 508,
+          "time": 93.953125,
+          "penalty": 0.012201189994812,
+          "index": 3.374047517776489,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 509,
+          "time": 93.96875,
+          "penalty": 0.011719165369868,
+          "index": 3.13979434967041,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 510,
+          "time": 93.984375,
+          "penalty": 0.011277262121439,
+          "index": 2.921804904937744,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 511,
+          "time": 94.0,
+          "penalty": 0.010823930613697,
+          "index": 2.718950033187866,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 512,
+          "time": 94.015625,
+          "penalty": 0.010412821546197,
+          "index": 2.530178785324097,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 513,
+          "time": 94.03125,
+          "penalty": 0.01004000287503,
+          "index": 2.354513645172119,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 514,
+          "time": 94.046875,
+          "penalty": 0.009701908566058,
+          "index": 2.191044569015503,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 515,
+          "time": 94.0625,
+          "penalty": 0.009395303204656,
+          "index": 2.038924694061279,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 516,
+          "time": 94.078125,
+          "penalty": 0.009117254987359,
+          "index": 1.897366285324097,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 517,
+          "time": 94.09375,
+          "penalty": 0.008865104056895,
+          "index": 1.765635967254639,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 518,
+          "time": 94.109375,
+          "penalty": 0.008636438287795,
+          "index": 1.643051505088806,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 519,
+          "time": 94.125,
+          "penalty": 0.008429070003331,
+          "index": 1.528977751731873,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 520,
+          "time": 94.140625,
+          "penalty": 0.008241016417742,
+          "index": 1.422823905944824,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 521,
+          "time": 94.15625,
+          "penalty": 0.008070477284491,
+          "index": 1.324040174484253,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 522,
+          "time": 94.171875,
+          "penalty": 0.00791582185775,
+          "index": 1.232114791870117,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 523,
+          "time": 94.1875,
+          "penalty": 0.007775571197271,
+          "index": 1.146571516990662,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 524,
+          "time": 94.203125,
+          "penalty": 0.007648383267224,
+          "index": 1.066967368125916,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 525,
+          "time": 94.21875,
+          "penalty": 0.007533041760325,
+          "index": 0.992890000343323,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 526,
+          "time": 94.234375,
+          "penalty": 0.007428443059325,
+          "index": 0.923955678939819,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 527,
+          "time": 94.25,
+          "penalty": 0.007333586458117,
+          "index": 0.859807312488556,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 528,
+          "time": 94.265625,
+          "penalty": 0.007247564382851,
+          "index": 0.800112664699554,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 529,
+          "time": 94.28125,
+          "penalty": 0.007169554475695,
+          "index": 0.744562447071076,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 530,
+          "time": 94.296875,
+          "penalty": 0.007098810281605,
+          "index": 0.692869007587433,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 531,
+          "time": 94.3125,
+          "penalty": 0.00703465519473,
+          "index": 0.644764542579651,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 532,
+          "time": 94.328125,
+          "penalty": 0.006976475473493,
+          "index": 0.599999845027924,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 533,
+          "time": 94.34375,
+          "penalty": 0.006923714652658,
+          "index": 0.558343052864075,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 534,
+          "time": 94.359375,
+          "penalty": 0.006875867955387,
+          "index": 0.519578456878662,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 535,
+          "time": 94.375,
+          "penalty": 0.006832477636635,
+          "index": 0.483505189418793,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 536,
+          "time": 94.390625,
+          "penalty": 0.006793128326535,
+          "index": 0.449936419725418,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 537,
+          "time": 94.40625,
+          "penalty": 0.006757444236428,
+          "index": 0.418698251247406,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 538,
+          "time": 94.421875,
+          "penalty": 0.006725083570927,
+          "index": 0.389628887176514,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 539,
+          "time": 94.4375,
+          "penalty": 0.00669573713094,
+          "index": 0.362577736377716,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 540,
+          "time": 94.453125,
+          "penalty": 0.006669123657048,
+          "index": 0.337404698133469,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 541,
+          "time": 94.46875,
+          "penalty": 0.006644989363849,
+          "index": 0.313979387283325,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 542,
+          "time": 94.484375,
+          "penalty": 0.006623102817684,
+          "index": 0.292180448770523,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 543,
+          "time": 94.5,
+          "penalty": 0.006603254470974,
+          "index": 0.271894961595535,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 544,
+          "time": 94.515625,
+          "penalty": 0.006585254799575,
+          "index": 0.253017842769623,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 545,
+          "time": 94.53125,
+          "penalty": 0.006568931974471,
+          "index": 0.235451325774193,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 546,
+          "time": 94.546875,
+          "penalty": 0.006554129067808,
+          "index": 0.219104424118996,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 547,
+          "time": 94.5625,
+          "penalty": 0.006540704984218,
+          "index": 0.203892454504967,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 548,
+          "time": 94.578125,
+          "penalty": 0.006528531201184,
+          "index": 0.189736619591713,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 549,
+          "time": 94.59375,
+          "penalty": 0.006517491303384,
+          "index": 0.176563590764999,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 550,
+          "time": 94.609375,
+          "penalty": 0.006507479585707,
+          "index": 0.164305135607719,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 551,
+          "time": 94.625,
+          "penalty": 0.006498400587589,
+          "index": 0.152897760272026,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 552,
+          "time": 94.640625,
+          "penalty": 0.006490167230368,
+          "index": 0.142282381653786,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 553,
+          "time": 94.65625,
+          "penalty": 0.006482700351626,
+          "index": 0.132403999567032,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 554,
+          "time": 94.671875,
+          "penalty": 0.006475929170847,
+          "index": 0.123211458325386,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 555,
+          "time": 94.6875,
+          "penalty": 0.006469788495451,
+          "index": 0.114657133817673,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 556,
+          "time": 94.703125,
+          "penalty": 0.006464219652116,
+          "index": 0.106696724891663,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 557,
+          "time": 94.71875,
+          "penalty": 0.006459169555455,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 558,
+          "time": 94.734375,
+          "penalty": 0.006454589776695,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 559,
+          "time": 94.75,
+          "penalty": 0.006450436543673,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 560,
+          "time": 94.765625,
+          "penalty": 0.006446670275182,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 561,
+          "time": 94.78125,
+          "penalty": 0.006443254649639,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 562,
+          "time": 94.796875,
+          "penalty": 0.006440157536417,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 563,
+          "time": 94.8125,
+          "penalty": 0.006437348667532,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 564,
+          "time": 94.828125,
+          "penalty": 0.006434801500291,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 565,
+          "time": 94.84375,
+          "penalty": 0.006432491354644,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 566,
+          "time": 94.859375,
+          "penalty": 0.006430396344513,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 567,
+          "time": 94.875,
+          "penalty": 0.00642849644646,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 568,
+          "time": 94.890625,
+          "penalty": 0.006426773499697,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 569,
+          "time": 94.90625,
+          "penalty": 0.006425211206079,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 570,
+          "time": 94.921875,
+          "penalty": 0.006423794664443,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 571,
+          "time": 94.9375,
+          "penalty": 0.006422509904951,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 572,
+          "time": 94.953125,
+          "penalty": 0.00642134482041,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 573,
+          "time": 94.96875,
+          "penalty": 0.006420288234949,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 574,
+          "time": 94.984375,
+          "penalty": 0.00641932990402,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 575,
+          "time": 95.0,
+          "penalty": 0.006418460980058,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 576,
+          "time": 95.015625,
+          "penalty": 0.00641767308116,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 577,
+          "time": 95.03125,
+          "penalty": 0.006416958291084,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 578,
+          "time": 95.046875,
+          "penalty": 0.006416310090572,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 579,
+          "time": 95.0625,
+          "penalty": 0.006415722426027,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 580,
+          "time": 95.078125,
+          "penalty": 0.006415189243853,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 581,
+          "time": 95.09375,
+          "penalty": 0.006414705887437,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 582,
+          "time": 95.109375,
+          "penalty": 0.006414267700166,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 583,
+          "time": 95.125,
+          "penalty": 0.006413870025426,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 584,
+          "time": 95.140625,
+          "penalty": 0.00641350960359,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 585,
+          "time": 95.15625,
+          "penalty": 0.006413182709366,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 586,
+          "time": 95.171875,
+          "penalty": 0.006412886083126,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 587,
+          "time": 95.1875,
+          "penalty": 0.006412617396563,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 588,
+          "time": 95.203125,
+          "penalty": 0.006412373390049,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 589,
+          "time": 95.21875,
+          "penalty": 0.006412152200937,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 590,
+          "time": 95.234375,
+          "penalty": 0.006411951966584,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 591,
+          "time": 95.25,
+          "penalty": 0.006411770358682,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 592,
+          "time": 95.265625,
+          "penalty": 0.006411605514586,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 593,
+          "time": 95.28125,
+          "penalty": 0.006411456037313,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 594,
+          "time": 95.296875,
+          "penalty": 0.006411320529878,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 595,
+          "time": 95.3125,
+          "penalty": 0.006411197595298,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 596,
+          "time": 95.328125,
+          "penalty": 0.006411085836589,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 597,
+          "time": 95.34375,
+          "penalty": 0.00641098478809,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 598,
+          "time": 95.359375,
+          "penalty": 0.006410893052816,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 599,
+          "time": 95.375,
+          "penalty": 0.006410809699446,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 600,
+          "time": 95.390625,
+          "penalty": 0.006410734262317,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 601,
+          "time": 95.40625,
+          "penalty": 0.006410665810108,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 602,
+          "time": 95.421875,
+          "penalty": 0.006410603877157,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 603,
+          "time": 95.4375,
+          "penalty": 0.006410547532141,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 604,
+          "time": 95.453125,
+          "penalty": 0.0064104963094,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 605,
+          "time": 95.46875,
+          "penalty": 0.006410450208932,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 606,
+          "time": 95.484375,
+          "penalty": 0.006410408299416,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 607,
+          "time": 95.5,
+          "penalty": 0.006410370115191,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 608,
+          "time": 95.515625,
+          "penalty": 0.006410335656255,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 609,
+          "time": 95.53125,
+          "penalty": 0.006410304456949,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 610,
+          "time": 95.546875,
+          "penalty": 0.006410276051611,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 611,
+          "time": 95.5625,
+          "penalty": 0.00641025044024,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 612,
+          "time": 95.578125,
+          "penalty": 0.006410227157176,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 613,
+          "time": 95.59375,
+          "penalty": 0.006410206202418,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 614,
+          "time": 95.609375,
+          "penalty": 0.006410187110305,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 615,
+          "time": 95.625,
+          "penalty": 0.006410169880837,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 616,
+          "time": 95.640625,
+          "penalty": 0.006410154048353,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 617,
+          "time": 95.65625,
+          "penalty": 0.006410139612854,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 618,
+          "time": 95.671875,
+          "penalty": 0.006410126574337,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 619,
+          "time": 95.6875,
+          "penalty": 0.006410114932805,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 620,
+          "time": 95.703125,
+          "penalty": 0.006410104222596,
+          "index": 0.0,
+          "lastShot": 93.714599609375,
+          "mode": 0,
+          "shot": null
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "sha256": "37b6f44d6c8ca327d580f9eeb289928eb917d0ec9b7e05e8dfc241eced4b9442",
+      "weapon": "ak47",
+      "rows": [
+        {
+          "tick": 953,
+          "time": 590.8125,
+          "penalty": 0.006409999914467,
+          "index": 0.0,
+          "lastShot": 585.3073120117188,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 954,
+          "time": 590.828125,
+          "penalty": 0.006409999914467,
+          "index": 0.0,
+          "lastShot": 585.3073120117188,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 955,
+          "time": 590.84375,
+          "penalty": 0.014209999702871,
+          "index": 1.0,
+          "lastShot": 590.84375,
+          "mode": 0,
+          "shot": 590.84375
+        },
+        {
+          "tick": 956,
+          "time": 590.859375,
+          "penalty": 0.013483515940607,
+          "index": 1.0,
+          "lastShot": 590.84375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 957,
+          "time": 590.875,
+          "penalty": 0.012824695557356,
+          "index": 1.0,
+          "lastShot": 590.84375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 958,
+          "time": 590.890625,
+          "penalty": 0.012227237224579,
+          "index": 1.0,
+          "lastShot": 590.84375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 959,
+          "time": 590.90625,
+          "penalty": 0.011685425415635,
+          "index": 1.0,
+          "lastShot": 590.84375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 960,
+          "time": 590.921875,
+          "penalty": 0.011194078251719,
+          "index": 1.0,
+          "lastShot": 590.84375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 961,
+          "time": 590.9375,
+          "penalty": 0.010748494416475,
+          "index": 1.0,
+          "lastShot": 590.84375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 962,
+          "time": 590.953125,
+          "penalty": 0.01741792820394,
+          "index": 2.0,
+          "lastShot": 590.9437255859375,
+          "mode": 0,
+          "shot": 590.9437500014901
+        },
+        {
+          "tick": 963,
+          "time": 590.96875,
+          "penalty": 0.016392661258578,
+          "index": 2.0,
+          "lastShot": 590.9437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 964,
+          "time": 590.984375,
+          "penalty": 0.015462886542082,
+          "index": 2.0,
+          "lastShot": 590.9437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 965,
+          "time": 591.0,
+          "penalty": 0.014619709923863,
+          "index": 2.0,
+          "lastShot": 590.9437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 966,
+          "time": 591.015625,
+          "penalty": 0.013855066150427,
+          "index": 2.0,
+          "lastShot": 590.9437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 967,
+          "time": 591.03125,
+          "penalty": 0.013161640614271,
+          "index": 2.0,
+          "lastShot": 590.9437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 968,
+          "time": 591.046875,
+          "penalty": 0.019750447943807,
+          "index": 3.0,
+          "lastShot": 591.0437622070312,
+          "mode": 0,
+          "shot": 591.0437500029802
+        },
+        {
+          "tick": 969,
+          "time": 591.0625,
+          "penalty": 0.01864006742835,
+          "index": 3.0,
+          "lastShot": 591.0437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 970,
+          "time": 591.078125,
+          "penalty": 0.017622109502554,
+          "index": 3.0,
+          "lastShot": 591.0437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 971,
+          "time": 591.09375,
+          "penalty": 0.016688879579306,
+          "index": 3.0,
+          "lastShot": 591.0437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 972,
+          "time": 591.109375,
+          "penalty": 0.015833325684071,
+          "index": 3.0,
+          "lastShot": 591.0437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 973,
+          "time": 591.125,
+          "penalty": 0.015048983506858,
+          "index": 3.0,
+          "lastShot": 591.0437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 974,
+          "time": 591.140625,
+          "penalty": 0.014329926110804,
+          "index": 3.0,
+          "lastShot": 591.0437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 975,
+          "time": 591.15625,
+          "penalty": 0.020947281271219,
+          "index": 4.0,
+          "lastShot": 591.1437377929688,
+          "mode": 0,
+          "shot": 591.1437500044703
+        },
+        {
+          "tick": 976,
+          "time": 591.171875,
+          "penalty": 0.019853606820107,
+          "index": 4.0,
+          "lastShot": 591.1437377929688,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 977,
+          "time": 591.1875,
+          "penalty": 0.018842212855816,
+          "index": 4.0,
+          "lastShot": 591.1437377929688,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 978,
+          "time": 591.203125,
+          "penalty": 0.017906907945871,
+          "index": 4.0,
+          "lastShot": 591.1437377929688,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 979,
+          "time": 591.21875,
+          "penalty": 0.017041968181729,
+          "index": 4.0,
+          "lastShot": 591.1437377929688,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 980,
+          "time": 591.234375,
+          "penalty": 0.016242099925876,
+          "index": 4.0,
+          "lastShot": 591.1437377929688,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 981,
+          "time": 591.25,
+          "penalty": 0.022831946611404,
+          "index": 5.0,
+          "lastShot": 591.2437744140625,
+          "mode": 0,
+          "shot": 591.2437499985099
+        },
+        {
+          "tick": 982,
+          "time": 591.265625,
+          "penalty": 0.021704848855734,
+          "index": 5.0,
+          "lastShot": 591.2437744140625,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 983,
+          "time": 591.28125,
+          "penalty": 0.020655106753111,
+          "index": 5.0,
+          "lastShot": 591.2437744140625,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 984,
+          "time": 591.296875,
+          "penalty": 0.019677413627505,
+          "index": 5.0,
+          "lastShot": 591.2437744140625,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 985,
+          "time": 591.3125,
+          "penalty": 0.018766824156046,
+          "index": 5.0,
+          "lastShot": 591.2437744140625,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 986,
+          "time": 591.328125,
+          "penalty": 0.017918732017279,
+          "index": 5.0,
+          "lastShot": 591.2437744140625,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 987,
+          "time": 591.34375,
+          "penalty": 0.024928845465183,
+          "index": 6.0,
+          "lastShot": 591.34375,
+          "mode": 0,
+          "shot": 591.34375
+        },
+        {
+          "tick": 988,
+          "time": 591.359375,
+          "penalty": 0.023657832294703,
+          "index": 6.0,
+          "lastShot": 591.34375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 989,
+          "time": 591.375,
+          "penalty": 0.022474050521851,
+          "index": 6.0,
+          "lastShot": 591.34375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 990,
+          "time": 591.390625,
+          "penalty": 0.021371517330408,
+          "index": 6.0,
+          "lastShot": 591.34375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 991,
+          "time": 591.40625,
+          "penalty": 0.020344654098153,
+          "index": 6.0,
+          "lastShot": 591.34375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 992,
+          "time": 591.421875,
+          "penalty": 0.019388269633055,
+          "index": 6.0,
+          "lastShot": 591.34375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 993,
+          "time": 591.4375,
+          "penalty": 0.01849752292037,
+          "index": 6.0,
+          "lastShot": 591.34375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 994,
+          "time": 591.453125,
+          "penalty": 0.024932570755482,
+          "index": 7.0,
+          "lastShot": 591.4437255859375,
+          "mode": 0,
+          "shot": 591.4437500014901
+        },
+        {
+          "tick": 995,
+          "time": 591.46875,
+          "penalty": 0.02366130053997,
+          "index": 7.0,
+          "lastShot": 591.4437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 996,
+          "time": 591.484375,
+          "penalty": 0.02247728407383,
+          "index": 7.0,
+          "lastShot": 591.4437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 997,
+          "time": 591.5,
+          "penalty": 0.021374529227614,
+          "index": 7.0,
+          "lastShot": 591.4437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 998,
+          "time": 591.515625,
+          "penalty": 0.020347459241748,
+          "index": 7.0,
+          "lastShot": 591.4437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 999,
+          "time": 591.53125,
+          "penalty": 0.019390881061554,
+          "index": 7.0,
+          "lastShot": 591.4437255859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1000,
+          "time": 591.546875,
+          "penalty": 0.025764614343643,
+          "index": 8.0,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": 591.5437500029802
+        },
+        {
+          "tick": 1001,
+          "time": 591.5625,
+          "penalty": 0.024436239153147,
+          "index": 8.0,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1002,
+          "time": 591.578125,
+          "penalty": 0.023199032992125,
+          "index": 8.0,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1003,
+          "time": 591.59375,
+          "penalty": 0.022046741098166,
+          "index": 8.0,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1004,
+          "time": 591.609375,
+          "penalty": 0.020973537117243,
+          "index": 8.0,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1005,
+          "time": 591.625,
+          "penalty": 0.019973989576101,
+          "index": 8.0,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1006,
+          "time": 591.640625,
+          "penalty": 0.019043043255806,
+          "index": 8.0,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1007,
+          "time": 591.65625,
+          "penalty": 0.01817599311471,
+          "index": 8.0,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1008,
+          "time": 591.671875,
+          "penalty": 0.017368450760841,
+          "index": 7.444576263427734,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1009,
+          "time": 591.6875,
+          "penalty": 0.016616333276033,
+          "index": 6.927714347839356,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1010,
+          "time": 591.703125,
+          "penalty": 0.015915835276246,
+          "index": 6.446737289428711,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1011,
+          "time": 591.71875,
+          "penalty": 0.015263415873051,
+          "index": 5.99915361404419,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1012,
+          "time": 591.734375,
+          "penalty": 0.01465577352792,
+          "index": 5.582644462585449,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1013,
+          "time": 591.75,
+          "penalty": 0.014089835807681,
+          "index": 5.195052623748779,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1014,
+          "time": 591.765625,
+          "penalty": 0.013562740758061,
+          "index": 4.834370613098144,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1015,
+          "time": 591.78125,
+          "penalty": 0.013024622574449,
+          "index": 4.498730182647705,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1016,
+          "time": 591.796875,
+          "penalty": 0.012526988983154,
+          "index": 4.186392307281494,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1017,
+          "time": 591.8125,
+          "penalty": 0.012066792696714,
+          "index": 3.895739555358887,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1018,
+          "time": 591.828125,
+          "penalty": 0.011595955118537,
+          "index": 3.625266313552856,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1019,
+          "time": 591.84375,
+          "penalty": 0.011164307594299,
+          "index": 3.373571395874023,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1020,
+          "time": 591.859375,
+          "penalty": 0.0107685867697,
+          "index": 3.13935112953186,
+          "lastShot": 591.5437622070312,
+          "mode": 0,
+          "shot": null
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_scope_slow_001.dem",
+      "sha256": "6d8fe4c9ce2ec99255d04abf70b6c7b1a6389f9e0d5297fc29a74034afa337e4",
+      "weapon": "awp",
+      "rows": [
+        {
+          "tick": 0,
+          "time": 375.0,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 1,
+          "time": 375.015625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 2,
+          "time": 375.03125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 3,
+          "time": 375.046875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 4,
+          "time": 375.0625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 5,
+          "time": 375.078125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 6,
+          "time": 375.09375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 7,
+          "time": 375.109375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 8,
+          "time": 375.125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 9,
+          "time": 375.140625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 10,
+          "time": 375.15625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 11,
+          "time": 375.171875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 12,
+          "time": 375.1875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 13,
+          "time": 375.203125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 14,
+          "time": 375.21875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 15,
+          "time": 375.234375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 16,
+          "time": 375.25,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 17,
+          "time": 375.265625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 18,
+          "time": 375.28125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 19,
+          "time": 375.296875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 20,
+          "time": 375.3125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 21,
+          "time": 375.328125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 22,
+          "time": 375.34375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 23,
+          "time": 375.359375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 24,
+          "time": 375.375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 25,
+          "time": 375.390625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 26,
+          "time": 375.40625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 27,
+          "time": 375.421875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 28,
+          "time": 375.4375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 29,
+          "time": 375.453125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 30,
+          "time": 375.46875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 31,
+          "time": 375.484375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 32,
+          "time": 375.5,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 33,
+          "time": 375.515625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 34,
+          "time": 375.53125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 35,
+          "time": 375.546875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 36,
+          "time": 375.5625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 37,
+          "time": 375.578125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 38,
+          "time": 375.59375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 39,
+          "time": 375.609375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 40,
+          "time": 375.625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 41,
+          "time": 375.640625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 42,
+          "time": 375.65625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 43,
+          "time": 375.671875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 44,
+          "time": 375.6875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 45,
+          "time": 375.703125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 46,
+          "time": 375.71875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 47,
+          "time": 375.734375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 48,
+          "time": 375.75,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 49,
+          "time": 375.765625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 50,
+          "time": 375.78125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 51,
+          "time": 375.796875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 52,
+          "time": 375.8125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 53,
+          "time": 375.828125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 54,
+          "time": 375.84375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 55,
+          "time": 375.859375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 56,
+          "time": 375.875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 57,
+          "time": 375.890625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 58,
+          "time": 375.90625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 59,
+          "time": 375.921875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 60,
+          "time": 375.9375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 61,
+          "time": 375.953125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 62,
+          "time": 375.96875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 63,
+          "time": 375.984375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 64,
+          "time": 376.0,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 65,
+          "time": 376.015625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 66,
+          "time": 376.03125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 67,
+          "time": 376.046875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 68,
+          "time": 376.0625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 69,
+          "time": 376.078125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 70,
+          "time": 376.09375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 71,
+          "time": 376.109375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 72,
+          "time": 376.125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 73,
+          "time": 376.140625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 74,
+          "time": 376.15625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 75,
+          "time": 376.171875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 76,
+          "time": 376.1875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 77,
+          "time": 376.203125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 78,
+          "time": 376.21875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 79,
+          "time": 376.234375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 80,
+          "time": 376.25,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 81,
+          "time": 376.265625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 82,
+          "time": 376.28125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 83,
+          "time": 376.296875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 84,
+          "time": 376.3125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 85,
+          "time": 376.328125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 86,
+          "time": 376.34375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 87,
+          "time": 376.359375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 88,
+          "time": 376.375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 89,
+          "time": 376.390625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 90,
+          "time": 376.40625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 91,
+          "time": 376.421875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 92,
+          "time": 376.4375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 93,
+          "time": 376.453125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 94,
+          "time": 376.46875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 95,
+          "time": 376.484375,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 96,
+          "time": 376.5,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 97,
+          "time": 376.515625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 98,
+          "time": 376.53125,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 99,
+          "time": 376.546875,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 100,
+          "time": 376.5625,
+          "penalty": 0.080799996852875,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 101,
+          "time": 376.578125,
+          "penalty": 0.073004767298698,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 102,
+          "time": 376.59375,
+          "penalty": 0.065980672836304,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 103,
+          "time": 376.609375,
+          "penalty": 0.059651434421539,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 104,
+          "time": 376.625,
+          "penalty": 0.053948309272528,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 105,
+          "time": 376.640625,
+          "penalty": 0.048809360712767,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 106,
+          "time": 376.65625,
+          "penalty": 0.044178780168295,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 107,
+          "time": 376.671875,
+          "penalty": 0.040006276220083,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 108,
+          "time": 376.6875,
+          "penalty": 0.036246534436941,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 109,
+          "time": 376.703125,
+          "penalty": 0.032858718186617,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 110,
+          "time": 376.71875,
+          "penalty": 0.029806042090058,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 111,
+          "time": 376.734375,
+          "penalty": 0.027055349200964,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 112,
+          "time": 376.75,
+          "penalty": 0.02457676641643,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 113,
+          "time": 376.765625,
+          "penalty": 0.022343376651406,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 114,
+          "time": 376.78125,
+          "penalty": 0.020330922678113,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 115,
+          "time": 376.796875,
+          "penalty": 0.018517550081015,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 116,
+          "time": 376.8125,
+          "penalty": 0.016883563250303,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 117,
+          "time": 376.828125,
+          "penalty": 0.015411217696965,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 118,
+          "time": 376.84375,
+          "penalty": 0.014084522612393,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 119,
+          "time": 376.859375,
+          "penalty": 0.012889069505036,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 120,
+          "time": 376.875,
+          "penalty": 0.011811875738204,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 121,
+          "time": 376.890625,
+          "penalty": 0.010841242969036,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 122,
+          "time": 376.90625,
+          "penalty": 0.009966629557312,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 123,
+          "time": 376.921875,
+          "penalty": 0.009178536012769,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 124,
+          "time": 376.9375,
+          "penalty": 0.00846840441227,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 125,
+          "time": 376.953125,
+          "penalty": 0.007828521542251,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 126,
+          "time": 376.96875,
+          "penalty": 0.007251938804984,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 127,
+          "time": 376.984375,
+          "penalty": 0.006732393987477,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 128,
+          "time": 377.0,
+          "penalty": 0.006264245137572,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 129,
+          "time": 377.015625,
+          "penalty": 0.005842407234013,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 130,
+          "time": 377.03125,
+          "penalty": 0.005462300032377,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 131,
+          "time": 377.046875,
+          "penalty": 0.00511979451403,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 132,
+          "time": 377.0625,
+          "penalty": 0.00481117144227,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 133,
+          "time": 377.078125,
+          "penalty": 0.00453307852149,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 134,
+          "time": 377.09375,
+          "penalty": 0.00428249547258,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 135,
+          "time": 377.109375,
+          "penalty": 0.004056701436639,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 136,
+          "time": 377.125,
+          "penalty": 0.003853243775666,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 137,
+          "time": 377.140625,
+          "penalty": 0.003669912926853,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 138,
+          "time": 377.15625,
+          "penalty": 0.003504717955366,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 139,
+          "time": 377.171875,
+          "penalty": 0.003355864901096,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 140,
+          "time": 377.1875,
+          "penalty": 0.003221736988053,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 141,
+          "time": 377.203125,
+          "penalty": 0.00310087762773,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 142,
+          "time": 377.21875,
+          "penalty": 0.00299197412096,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 143,
+          "time": 377.234375,
+          "penalty": 0.002893843688071,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 144,
+          "time": 377.25,
+          "penalty": 0.002805420896038,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 145,
+          "time": 377.265625,
+          "penalty": 0.002725745085627,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        },
+        {
+          "tick": 146,
+          "time": 377.28125,
+          "penalty": 0.002653951290995,
+          "index": 0.0,
+          "lastShot": 0.0,
+          "mode": 1,
+          "shot": null
+        }
+      ]
+    }
+  ],
+  "reloads": [
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "sha256": "37b6f44d6c8ca327d580f9eeb289928eb917d0ec9b7e05e8dfc241eced4b9442",
+      "weapon": "ak47",
+      "automatic": false,
+      "rows": [
+        {
+          "tick": 397,
+          "time": 582.125,
+          "penalty": 0.006901920773089,
+          "index": 0.405522346496582,
+          "lastShot": 581.640380859375,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 398,
+          "time": 582.140625,
+          "penalty": 0.006856103893369,
+          "index": 1.377367734909058,
+          "lastShot": 581.640380859375,
+          "mode": 0,
+          "shot": null
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "sha256": "37b6f44d6c8ca327d580f9eeb289928eb917d0ec9b7e05e8dfc241eced4b9442",
+      "weapon": "ak47",
+      "automatic": false,
+      "rows": [
+        {
+          "tick": 637,
+          "time": 585.875,
+          "penalty": 0.007320969365537,
+          "index": 0.992749869823456,
+          "lastShot": 585.3073120117188,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 638,
+          "time": 585.890625,
+          "penalty": 0.007236122619361,
+          "index": 1.923825263977051,
+          "lastShot": 585.3073120117188,
+          "mode": 0,
+          "shot": null
+        }
+      ]
+    },
+    {
+      "demo": "native_phase3_m4a4_002.dem",
+      "sha256": "f53be58ed36519b8b75a0fe233cad7abf3fc2593947f86a4cdc6659f38d4d774",
+      "weapon": "m4a4",
+      "automatic": true,
+      "rows": [
+        {
+          "tick": 4102,
+          "time": 279.53125,
+          "penalty": 0.005029800347984,
+          "index": 0.821525573730469,
+          "lastShot": 278.6483154296875,
+          "mode": 0,
+          "shot": null
+        },
+        {
+          "tick": 4103,
+          "time": 279.546875,
+          "penalty": 0.005016728304327,
+          "index": 1.695060729980469,
+          "lastShot": 278.6483154296875,
+          "mode": 0,
+          "shot": null
+        }
+      ]
+    }
+  ],
+  "nativeUpdates": [
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 0.05,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18778221309185028,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 0.05,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18778221309185028,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 0.1001,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18778221309185028,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 0.1001,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18778221309185028,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18976318836212158,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 3,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18976318836212158,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 0.05,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18257391452789307,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 0.05,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18257391452789307,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 0.1001,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18257391452789307,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 0.1001,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18257391452789307,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.184917151927948,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 3,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.184917151927948,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 0.05,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 0.05,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 0.1001,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 0.1001,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 3,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 0.05,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18778221309185028,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 0.05,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18778221309185028,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 0.1001,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18778221309185028,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 0.1001,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18778221309185028,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18976318836212158,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 3,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18976318836212158,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 0.05,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18257391452789307,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 0.05,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18257391452789307,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 0.1001,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18257391452789307,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 0.1001,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18257391452789307,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.184917151927948,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 3,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.184917151927948,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 0.05,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 0.05,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 0.1001,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 0.1001,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 3,
+      "time": 0.11563500149011612,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20759000000000002,
+      "index": 0.05,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18078285455703735,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20759000000000002,
+      "index": 0.05,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18078285455703735,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20759000000000002,
+      "index": 0.1001,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18078285455703735,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20759000000000002,
+      "index": 0.1001,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18078285455703735,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20759000000000002,
+      "index": 3,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18712742626667023,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20759000000000002,
+      "index": 3,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18712742626667023,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20550000000000002,
+      "index": 0.05,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.15369094908237457,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20550000000000002,
+      "index": 0.05,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.15369094908237457,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20550000000000002,
+      "index": 0.1001,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.15369094908237457,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20550000000000002,
+      "index": 0.1001,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.15369094908237457,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20550000000000002,
+      "index": 3,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17765745520591736,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20550000000000002,
+      "index": 3,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17765745520591736,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.31798000000000004,
+      "index": 0.05,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.3035372495651245,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.31798000000000004,
+      "index": 0.05,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.3035372495651245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.31798000000000004,
+      "index": 0.1001,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.3035372495651245,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.31798000000000004,
+      "index": 0.1001,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.3035372495651245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.31798000000000004,
+      "index": 3,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.3035372495651245,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.31798000000000004,
+      "index": 3,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.3035372495651245,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20369,
+      "index": 0.05,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17688286304473877,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20369,
+      "index": 0.05,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17688286304473877,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20369,
+      "index": 0.1001,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17688286304473877,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20369,
+      "index": 0.1001,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17688286304473877,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20369,
+      "index": 3,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18322743475437164,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20369,
+      "index": 3,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18322743475437164,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20325000000000001,
+      "index": 0.05,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.15144094824790955,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20325000000000001,
+      "index": 0.05,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.15144094824790955,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20325000000000001,
+      "index": 0.1001,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.15144094824790955,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20325000000000001,
+      "index": 0.1001,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.15144094824790955,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20325000000000001,
+      "index": 3,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17540745437145233,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20325000000000001,
+      "index": 3,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17540745437145233,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.31408,
+      "index": 0.05,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2996372580528259,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.31408,
+      "index": 0.05,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2996372580528259,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.31408,
+      "index": 0.1001,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2996372580528259,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.31408,
+      "index": 0.1001,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2996372580528259,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.31408,
+      "index": 3,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2996372580528259,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "famas",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.31408,
+      "index": 3,
+      "time": 0.10563500357627868,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2996372580528259,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21017000000000002,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18756715953350067,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20763,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18082284927368164,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 0.05,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 0.05,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 0.1001,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 0.1001,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3014,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3024,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30240002274513245,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.3034,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.30336466431617737,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 3,
+      "time": 0.09062500298023224,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "negev",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.5024,
+      "index": 3,
+      "time": 0.09063500298023223,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.4953323006629944,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 0.05,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17267251014709473,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 0.05,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17267251014709473,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 0.1001,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17267251014709473,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 0.1001,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17267251014709473,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 3,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18132151663303375,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 3,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18132151663303375,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20420000000000002,
+      "index": 0.05,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17127251625061035,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20420000000000002,
+      "index": 0.05,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17127251625061035,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20420000000000002,
+      "index": 0.1001,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17127251625061035,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20420000000000002,
+      "index": 0.1001,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17127251625061035,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20420000000000002,
+      "index": 3,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17992152273654938,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20420000000000002,
+      "index": 3,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17992152273654938,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 0.05,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 0.05,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 0.1001,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 0.1001,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 3,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 3,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 0.05,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17267251014709473,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 0.05,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17267251014709473,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 0.1001,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17267251014709473,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 0.1001,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17267251014709473,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 3,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18132151663303375,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.2056,
+      "index": 3,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18132151663303375,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.203,
+      "index": 0.05,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.1700725108385086,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.203,
+      "index": 0.05,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.1700725108385086,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.203,
+      "index": 0.1001,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.1700725108385086,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.203,
+      "index": 0.1001,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.1700725108385086,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.203,
+      "index": 3,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17872151732444763,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.203,
+      "index": 3,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17872151732444763,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 0.05,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 0.05,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 0.1001,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 0.1001,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 3,
+      "time": 0.16562500596046448,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "glock",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.29347,
+      "index": 3,
+      "time": 0.1656350059604645,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2846747636795044,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 0.05,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19416262209415436,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 0.05,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19416262209415436,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 0.1001,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19416262209415436,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 0.1001,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19416262209415436,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 3,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19416262209415436,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 3,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19416262209415436,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.201,
+      "index": 0.05,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19098031520843506,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.201,
+      "index": 0.05,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19098031520843506,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.201,
+      "index": 0.1001,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19098031520843506,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.201,
+      "index": 0.1001,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19098031520843506,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.201,
+      "index": 3,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19098031520843506,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.201,
+      "index": 3,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19098031520843506,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.25523,
+      "index": 0.05,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2526766061782837,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.25523,
+      "index": 0.05,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2526766061782837,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.25523,
+      "index": 0.1001,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2526766061782837,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.25523,
+      "index": 0.1001,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2526766061782837,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.25523,
+      "index": 3,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2526766061782837,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.25523,
+      "index": 3,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2526766061782837,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21200000000000002,
+      "index": 0.05,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2041626125574112,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21200000000000002,
+      "index": 0.05,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2041626125574112,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21200000000000002,
+      "index": 0.1001,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2041626125574112,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21200000000000002,
+      "index": 0.1001,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2041626125574112,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21200000000000002,
+      "index": 3,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2041626125574112,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.21200000000000002,
+      "index": 3,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2041626125574112,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20500000000000002,
+      "index": 0.05,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19498030841350555,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20500000000000002,
+      "index": 0.05,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19498030841350555,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20500000000000002,
+      "index": 0.1001,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19498030841350555,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20500000000000002,
+      "index": 0.1001,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19498030841350555,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20500000000000002,
+      "index": 3,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19498030841350555,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20500000000000002,
+      "index": 3,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19498030841350555,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.26523,
+      "index": 0.05,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2626765966415405,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.26523,
+      "index": 0.05,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2626765966415405,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.26523,
+      "index": 0.1001,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2626765966415405,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.26523,
+      "index": 0.1001,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2626765966415405,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.26523,
+      "index": 3,
+      "time": 0.515625,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2626765966415405,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "revolver",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.26523,
+      "index": 3,
+      "time": 0.515635,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2626765966415405,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2808,
+      "index": 0.05,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2610151767730713,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2808,
+      "index": 0.05,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2610151767730713,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2808,
+      "index": 0.1001,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2610151767730713,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2808,
+      "index": 0.1001,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2610151767730713,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2808,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2610151767730713,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2808,
+      "index": 3,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.2610151767730713,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.2606,
+      "index": 0.05,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.23346079885959625,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.2606,
+      "index": 0.05,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.23346079885959625,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.2606,
+      "index": 0.1001,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.23346079885959625,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.2606,
+      "index": 0.1001,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.23346079885959625,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.2606,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.23346079885959625,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.2606,
+      "index": 3,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.23346079885959625,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21363,
+      "index": 0.05,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21363,
+      "index": 0.05,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21463,
+      "index": 0.05,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21463,
+      "index": 0.05,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21563,
+      "index": 0.05,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.21559418737888336,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21563,
+      "index": 0.05,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.21559418737888336,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.41463,
+      "index": 0.05,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.407469779253006,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.41463,
+      "index": 0.05,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.407469779253006,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21363,
+      "index": 0.1001,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21363,
+      "index": 0.1001,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21463,
+      "index": 0.1001,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21463,
+      "index": 0.1001,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21563,
+      "index": 0.1001,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.21559418737888336,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21563,
+      "index": 0.1001,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.21559418737888336,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.41463,
+      "index": 0.1001,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.407469779253006,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.41463,
+      "index": 0.1001,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.407469779253006,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21363,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21363,
+      "index": 3,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21463,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21463,
+      "index": 3,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.21462999284267426,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21563,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.21559418737888336,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.21563,
+      "index": 3,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.21559418737888336,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.41463,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.407469779253006,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.41463,
+      "index": 3,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.407469779253006,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 0.05,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18221515417099,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 0.05,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18221515417099,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 0.1001,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18221515417099,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 0.1001,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18221515417099,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18221515417099,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.202,
+      "index": 3,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18221515417099,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.2015,
+      "index": 0.05,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17436079680919647,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.2015,
+      "index": 0.05,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17436079680919647,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.2015,
+      "index": 0.1001,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17436079680919647,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.2015,
+      "index": 0.1001,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17436079680919647,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.2015,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17436079680919647,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.2015,
+      "index": 3,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.17436079680919647,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33583,
+      "index": 0.05,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.32866978645324707,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33583,
+      "index": 0.05,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.32866978645324707,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33583,
+      "index": 0.1001,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.32866978645324707,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33583,
+      "index": 0.1001,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.32866978645324707,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33583,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.32866978645324707,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33583,
+      "index": 3,
+      "time": 1.4706350429153443,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.32866978645324707,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 0.05,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 0.05,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 0.1001,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 0.1001,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 3,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 3,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 0.05,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 0.05,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 0.1001,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 0.1001,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 3,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 3,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 0.05,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 0.05,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 0.1001,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 0.1001,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 3,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 3,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 0.05,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 0.05,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 0.1001,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 0.1001,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 3,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "stand",
+      "penalty": 0.20700000000000002,
+      "index": 3,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.19196976721286774,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 0.05,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 0.05,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 0.1001,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 0.1001,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 3,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "crouch",
+      "penalty": 0.20525000000000002,
+      "index": 3,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.18452884256839752,
+        "index": 2.7917160987854004
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 0.05,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 0.05000000074505806
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 0.05,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 0.1001,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 0.10010000318288803
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 0.1001,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 0.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 3,
+      "time": 0.8956249952316284,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "nova",
+      "mode": 1,
+      "stance": "air",
+      "penalty": 0.33331,
+      "index": 3,
+      "time": 0.8956349952316284,
+      "gate": "after",
+      "actual": {
+        "penalty": 0.32791537046432495,
+        "index": 2.7917160987854004
+      }
+    }
+  ]
+}

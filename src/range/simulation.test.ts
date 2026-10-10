@@ -211,8 +211,9 @@ describe('walking distance, jumping and moving lanes', () => {
     for (let i = 0; i < 256 && s.feet > 0; i++) s.advance(STEP);
     expect(s.feet).toBe(0);
     // In the air the penalty sat at stand + jump; the landing tick adds
-    // land * |landing speed| and then decays one step toward stand.
-    const decay = Math.pow(10, -STEP / ak.recovery);
+    // land * |landing speed| and then takes its complete native 64 Hz
+    // accuracy step, independent of the 128 Hz movement subdivision.
+    const decay = Math.pow(10, -(1 / 64) / ak.recovery);
     const landing = (s.recovery.penalty - ak.stand) / decay - ak.jump;
     expect(landing / ak.land).toBeGreaterThan(290);
     expect(landing / ak.land).toBeLessThan(302);

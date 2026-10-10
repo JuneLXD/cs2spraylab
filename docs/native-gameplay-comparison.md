@@ -793,6 +793,39 @@ procedural aim, blending and ragdolls are approximations. The 90 flinch resource
 entries contain 45 paired representations, not 90 distinct bullet-hit gestures.
 [The full model/animation inventory](reaudit-animation.md) records those limits.
 
+## Accuracy and index update phase (twentieth pass, 2026-10-09)
+
+The full native caller investigation and numeric evidence are in
+[reaudit-accuracy.md](reaudit-accuracy.md). Current-hash server instruction
+emulation covers 39,648 supplied weapon/mode/stance/boundary cases. The new
+production `WeaponRecovery` has zero penalty/index error across that grid.
+Original cumulative demo replay covers 22 accepted recordings, 41,584 ticks
+and 160 shots; only the already bounded network landing-speed precision
+remains above decoded float precision.
+
+Both engines now apply accuracy/index recovery in complete 64 Hz steps,
+while continuous aim-punch keeps its scheduled anchors. Fractional shots
+precede the pending accuracy step, exact-boundary shots follow it. Mode
+changes preserve accumulated penalty and the index gate uses the primary
+cycle. Common magazine reloads apply the captured index increment/reset;
+R8-specific follow-up is excluded at the user’s request.
+
+Fresh AK recovery penalty error falls from 0.0013072615 to 1.4901161e-8;
+index error falls from 1 to decoded float precision. The new independent
+recovery_002 recording reaches 5.9604645e-8 penalty and 5.5511151e-16 index
+error. Portable tests carry original snapshots cumulatively, exercise both
+live engines against fractional/boundary AK bursts and explicit/automatic
+reload starts, and check subdivision/prediction invariance.
+
+This does not establish complete native parity. The common caller chain is
+read directly, but the full engine scheduler is not emulated. Only two
+exact-boundary AK examples are available; burst subshots, shell-reload
+cancellation, suppressor/holster transitions and simultaneous stance/landing
+shots remain outside runtime coverage. The first two R8 capture attempts decode as AK and are excluded;
+R8-specific changes are outside this correction. Final combined validation passes
+TypeScript, 2,325 unit cases (only the known missing fallback fixture fails) and
+all five targeted Chromium cases; deployment verification follows the batched push.
+
 ## Re-audit delivery validation
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph
