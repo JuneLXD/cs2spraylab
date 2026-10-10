@@ -497,11 +497,13 @@ the audible-threshold/forced-volume convar pointers are bounded negative results
 proof that those convars have no effect elsewhere. Walk/crouch suppression is established
 for the tested normal-ground states; complete client/audio transport remains unverified.
 
-Movement audit. Accelerate matches the fixture-derived function: base max(250, wish speed), the
+Movement audit (scoped condition corrected by pass45). Accelerate matches the fixture-derived function: base max(250, wish speed), the
 weapon's speed scale when `sv_accelerate_use_weapon_speed` is on (default 1), 0.34 while ducking,
-0.52 while walking, and the 5 u/s taper under the walking cap. One corner case was added: at zoom
-level 2 with a walking speed under 110 u/s (AWP, auto-snipers) walking keeps the weapon scale instead
-of 0.52. `sv_backspeed` and `sv_condense_late_buttons` have no readers; `sv_bhop_time_window`,
+0.52 while walking, and the 5 u/s taper under the walking cap. The earlier interpretation
+required active zoom level2; pass45 binds the separate getter to configured zoom count.
+Positive current zoom with configured count>1 and walking speed under110 u/s retains
+weapon scaling. Both AWP scopes satisfy this condition; other weapon trajectories are
+outside the new replay. `sv_backspeed` and `sv_condense_late_buttons` have no readers; `sv_bhop_time_window`,
 `sv_jump_spam_penalty_time`, `sv_timebetweenducks`, `sv_ladder_scale_speed`, the walkable and
 standable normals and `sv_jump_impulse` are read where the trainer's rules expect them; the weapon
 encumbrance convars do not exist (weapon speed is vdata). The numeric defaults are not in the
@@ -1478,6 +1480,32 @@ the proof. Commit `98002af` passes TypeScript, 2,660 unit cases (with only the
 known missing fallback fixture failure) and four isolated Chromium cases.
 The source-hashed [validation ledger](evidence/reaudit-ground-friction-validation.json)
 retains the comparisons and logs. Deployment remains pending.
+
+## AWP walking and render prediction (forty-fifth pass)
+
+The [scoped movement re-audit](reaudit-scoped-awp-movement.md) separates active zoom
+from configured zoom count using current AWP class slots, getter instructions,
+server schema and the retained scope setter. Thirty guarded fixtures produce
+844 rows; all15 zoom1/zoom2 pairs match. The trainer's first-scope walking rule
+and both engines' render prediction are corrected through a shared predicate.
+Actual cumulative actor/Range/Duel maximum velocity error drops from24.5625 u/s
+to7.11×10⁻¹⁵; all3,120 predicted positions agree within float precision. Native
+scope transitions, physical input and full collision remain outside this replay.
+Commit `4bb6223` passes TypeScript, 2,730 units with the known missing fallback
+fixture as the sole failure, and four isolated Chromium cases. The combined
+batch is held by the transition risk found below.
+
+## AWP rescope movement and fresh shots (forty-sixth pass)
+
+The [phase audit](reaudit-awp-movement-phase.md) binds native whole-command order
+but does not map it to the trainer's half-ticks. Actual Range/Duel approach
+traces agree; at a supplied next-boundary rescope, running endpoints change
+from baseline100/200 u/s to candidate0/200 u/s. Four of16 candidate fresh shots
+consume zero movement ratio, versus zero of16 baseline shots. Separate normal
+and zero-time diagnostic continuations avoid conflating their effects. All
+application sources remain the tested pass-45 snapshot. The combined batch is
+held locally pending native command/cap association; no arithmetic or phase
+timing is guessed from this observation.
 
 ## Validation retained from passes 11–15
 

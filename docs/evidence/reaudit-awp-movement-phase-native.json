@@ -1,0 +1,74 @@
+{
+  "schema": "cs2.awp-movement-phase-native-evidence.v1",
+  "status": "passed",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "checkerSha256": "872e46f6c23ae757259b63e34d0b34e50ddf117531c6c4398f4f1d21dde482ba",
+  "sources": {
+    "read-caller.py": "8470448849d11d0bea09f9b519c2cad0e5b0584ad4dc78e7b70d486c2f0201ff",
+    "pawn-caller-location.json": "eb103b04b97338e15e09ea96ff9122b4debf293ebfaa1a7daf2804cee04bbbd1",
+    "pawn-caller-rea.json": "31d826ac9da61c8ac089c5fa9bda6b72ab21c7b09536d8cf34e1ff485a21c48d",
+    "caller-proof.json": "15bb73c8a63534f68b24fe5e38b816906cc111c4db1981b1ddd48f22ecd5ecfb",
+    "pawn-command-caller.txt": "f255edbf96ef277ffde39d6b1825973aef4352b7d81cf8c0bd27450c7af55889",
+    "retained/movement-ownership.json": "e243934f73f5bd970205b6ee3b2f945ec73c3da4df1450116e4bff17f8dd6c59",
+    "retained/movement-wrapper.txt": "0e0e46bbc3b2ac6269776e0661add43435eddf50631c41c40a48ebd9782c3387",
+    "retained/movement-loop.txt": "63a3d7661224f5088fb74c07b33fa8cf8cd33f1bfbab1f8f82e4b16bb4dacfa8",
+    "retained/prepare-segments.txt": "e40343bf8c4cfa9d24f991659ec1acc7cda9e17d7271689b0e677e45d1a95cb3",
+    "retained/held-clock-report.json": "563ccae5468a3f2e554d8859d6962bf96892ce8f18222f67f2eb0c534bc95334",
+    "retained/remaining-clock.txt": "93d77170857df7c06e046e15c5a7af5d7fd815480999c308934123ad3a212e80",
+    "retained/remaining-callback.txt": "cdf7f270c361310a39500f8683febd7218ed1a88aeff1c326e03a8c8be5e9328",
+    "retained/remaining-weapon.txt": "188ffe987b8f466955f6455693a7a670cdbcb9c9cd410d0d3d4f21deba5ffd45",
+    "retained/awp-current.json": "78bc6b31b20fd4461905f8f5f21c6fa166c31e474ccd17f06d58b3a5ed20595d",
+    "retained/awp-postframe.txt": "95b62bd98c996fdda68e8bf6f98e508998ed251b06f542280015ce50a9b88f45",
+    "retained/awp-input.txt": "ca07840cf94ef9bc5c7d4f56733e90f122ea7c08fd145ea3c67faeaf2bd77f94",
+    "retained/awp-secondary.txt": "03d60e21ee51ec602a1a75925fe750b7ed56fecf7962da269947eb42b487cbe0",
+    "retained/secondary-wrapper-report.json": "6a4efd9b6317901279fe1517534937c05bf2fb30639071287f2056db6322d1ba",
+    "retained/secondary-wrapper.txt": "ac5eac2990dfe250e472962be955086af3d9e4e5fbe1859353c9697a5e878f92",
+    "retained/secondary-thunk-report.json": "d48c876b1de89f3de8988afbd28df62413a20ec4f456826537fb3dd7c6df5f42",
+    "retained/secondary-thunk.txt": "f5b2f6e66bf95bc053bed975f7ef8e11fa7b6eb2f87afb91f4c4c14c4d1a58cf"
+  },
+  "instructionFacts": 69,
+  "nativeExecution": false,
+  "newBinaryReads": 0,
+  "freshCallerProof": {
+    "selectedBytes": 1350,
+    "selectedByteCeiling": 1350,
+    "wholeArtifactHashVerified": true,
+    "readerSha256": "8470448849d11d0bea09f9b519c2cad0e5b0584ad4dc78e7b70d486c2f0201ff",
+    "decodedInstructions": 293,
+    "ranges": [
+      {
+        "bytes": 794,
+        "sha256": "d062d80788e1d77ad2ec1c3bc896ae2207551977c92c0e43e5c5f788de5d9faf"
+      },
+      {
+        "bytes": 556,
+        "sha256": "da17971865f2e96bf63d0da151af3ab6778f0d31d20bb38e993b80f7328d34ec"
+      }
+    ],
+    "straightLineMovementThenPostMovementThenRemainingEvents": true,
+    "sameReceiverAndMoveDataAtAllThreeCalls": true
+  },
+  "ordering": [
+    "Command preparation",
+    "Complete movement-segment loop",
+    "Typed post-movement preparation",
+    "Remaining-event weapon postframes",
+    "Input finalization"
+  ],
+  "lowerJoins": [
+    "The actual movement class segment callback samples maximum speed and stores it before the ground dispatcher.",
+    "The demonstrated subtick preprocessing branch separates primary and secondary button payloads from movement records into remaining-event records.",
+    "Remaining-event processing installs normalized event tick/fraction and applies edges before its one callback per distinct fraction.",
+    "The actual movement remaining callback obtains the active weapon and invokes its postframe slot.",
+    "The actual AWP postframe runs eligible automatic rescope before common input processing.",
+    "Eligible secondary input reaches the common secondary wrapper and thunk, then the actual AWP secondary implementation."
+  ],
+  "limits": [
+    "The top caller was reread from the matching server; lower bindings are checked retained evidence.",
+    "The held-clock read ledger records that its own pass did not recompute the full binary hash.",
+    "Secondary edges are moved only on the demonstrated input preprocessing branch.",
+    "Automatic rescope and manual secondary remain subject to weapon eligibility/readiness gates.",
+    "Per-event normalized time and one callback per distinct fraction do not imply a 128Hz trainer-step rule.",
+    "No native/trainer command association, live invocation or phase correction is established."
+  ]
+}

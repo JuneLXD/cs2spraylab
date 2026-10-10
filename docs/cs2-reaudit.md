@@ -1,4 +1,4 @@
-# CS2 independent re-audit: passes 16–44
+# CS2 independent re-audit: passes 16–46
 
 ## Current priority: common weapons and core feel
 
@@ -228,7 +228,8 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-movement.md
 | Counter-strafe / release | Native combined acceleration plus release through complete stop; native velocity→accuracy normalization; [pass 44](reaudit-ground-friction.md). | Combined maximum error 23.54681 u/s; 164 movement-zero row disagreements. M4/pistol supplied release boundary 210.9375 ms versus native 203.125 ms. | Zero combined trajectory/state/threshold disagreements; seven-weapon Range/Duel shots use corrected boundary. | Corrected under explicit supplied conditions; no accepted clean live release or complete command/collision replay. | `98002af`, local |
 | Stand / walk / crouch caps | M1 cap equations; current guarded cap/work and stance branches with supplied processed caps, [pass 44](reaudit-ground-friction.md). | Ideal decimal caps; reconstructs midpoint from rounded endpoints. | Native independent work/cap/pre/post rounding; 248 supplied stance trajectories match. | Matched supplied cap arithmetic; upstream native modifier pipeline not newly executed. | `c488943`; `98002af`, local |
 | Weapon speed multipliers | M6 all 35 firearms, both modes; knife250. | Extracted speeds; bench enumerates all 71 supported weapon/mode entries. | Unchanged. | Matched data. | `c488943` |
-| Scoped walk acceleration | M1 second zoom with scaled walk speed<110 retains weapon scaling. | Implemented;100 u/s weapon gives4.296875 u/s gain/128 step from rest. | Unchanged. | Matched static branch. | `c488943` |
+| Scoped walk acceleration | Current AWP class/getter/schema proof and 844 guarded native rows: positive current zoom, configured count>1 and float32 walking speed<110; [pass 45](reaudit-scoped-awp-movement.md). | First zoom uses faster ordinary walking acceleration; render prediction omits the scope rule at both levels. | Shared condition in all four movement callers; 180 cumulative cases and 3,120 predicted positions match supplied native motion. | Supplied-state correction tested locally; combined release held by pass 46. | `4bb6223` |
+| Movement during AWP rescope | Current native command completes movement before remaining weapon postframes; [pass 46](reaudit-awp-movement-phase.md). | Range and Duel sample opposite scope states at arrival; baseline running endpoints100/200 u/s. | Candidate endpoints0/200 u/s at a supplied half-tick arrival; four fresh Range shots lose movement inaccuracy. | Native command association unresolved; combined movement batch held, no guessed phase fix. | Pass 46 evidence only |
 | Silent walking threshold | Current-server movement wrapper bypasses the timer while walking or below135.2u/s; speed²<10 resets it. See [footstep ledger](reaudit-footsteps.md). | Gate54% weapon speed; distance accumulator. | Native absolute speed/walk gate and rest reset. | Matched bounded ordinary dry-ground cases; special sounds and client delivery remain partial. | `2aba70c` |
 | Air acceleration / wish cap | M1 AirAccelerate/AirMove; M4 12/30. Gain budget12×uncapped wish×dt; capped directional deficit; half budget before movement, remainder after. | AK from rest20.15625 u/s gain/128step; pre-move10.078125. | Unchanged. | Matched arithmetic. | `c488943` |
 | Air-strafe / no-key control | M1 uses wish direction and dot product; zero wish gives no gain. | No-key momentum retained; directional cap 30; orthogonal strafe can add speed. | Unchanged. | Matched isolated arithmetic; full curved runtime path/collision unverified. | `c488943` |
@@ -544,6 +545,15 @@ Earlier findings remain:
     correction matches supplied release/counter trajectories and fixes the
     7.8125 ms M4/pistol release-boundary difference. Native movement accuracy
     reaches zero at that boundary; base spread and other penalties remain.
+45. The slow scoped-walk condition does not require active zoom level two.
+    The native code separately tests positive active zoom and configured zoom
+    count above one. Current AWP class/data proof and 15 paired native sequences
+    establish identical movement at both scopes. Render prediction also needed
+    the condition; the old committed-only check did not cover displayed motion.
+46. Matching supplied movement states does not establish native scope-transition
+    integration. A new actual-engine check exposes zero-speed Range arrivals and
+    zero movement contribution on four immediate AWP shots. Native whole-command
+    ordering does not justify a trainer half-step reorder; the batch is held.
 
 ## Exact remaining evidence and implementation
 
@@ -574,6 +584,10 @@ requirements for this focused session.
   presentation. Bounded primary/secondary priority is corrected in
   [pass 40](reaudit-awp-input.md); native command aggregation and input-state
   producer/reset lifetime remain open. See also [pass 39](reaudit-awp-clocks.md).
+  The immediate priority is the [moving-rescope gap](reaudit-awp-movement-phase.md):
+  correlate native movement segments, sampled speed cap and weapon events before
+  shipping the new stopping batch. Existing captures lack a planned moving-rescope
+  window; current instruction and supplied-state proofs do not resolve it.
 - Movement: flat unobstructed trajectories and exact input edges; landing/bhop
   boundary presses; constrained unduck and partial-duck takeoffs; matched
   stairs, slopes, surface friction and ladders; rendered camera frames paired
@@ -641,7 +655,7 @@ and clean. The earlier nine-commit and AWP approvals are fulfilled.
 
 Passes 41–43 (`0fc433f`, `5a1a10e`, `049c278`) remain local pending a new delivery batch. They add evidence and an
 optional supplied-selector replay interface, with default gameplay unchanged.
-The inventory has 137 mechanic rows, including the newly separated pistol
+The inventory has 138 mechanic rows, including the newly separated pistol
 selector gap. Current validation and its memory-limited browser retry are
 recorded above; a passed conditional replay is not a shipped pistol feel fix.
 
@@ -651,3 +665,11 @@ isolated Chromium cases pass across release-and-fire, Glock timing and recoil.
 The [validation ledger](evidence/reaudit-ground-friction-validation.json) verifies
 70 bundled sources and the native before/after comparisons. This batch remains
 local; the LAN still serves the approved `e99fd05` release.
+
+Pass 45 (`4bb6223`) passes TypeScript, 2,730 units with only the known missing
+fallback model, and four isolated Chromium cases across three specs. Its
+[validation ledger](evidence/reaudit-scoped-awp-validation.json) preserves the
+fixed-state native comparisons and application checks. Pass 46 then found a
+material moving-rescope/shot integration risk. The combined batch is held
+locally despite those passed checks; no new push or deployment is authorized
+by this report and no speculative phase patch has been applied.

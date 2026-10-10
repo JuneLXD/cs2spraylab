@@ -1,0 +1,151 @@
+14957f0: push rbp
+14957f1: mov rbp, rsp
+14957f4: push r14
+14957f6: push r13
+14957f8: push r12
+14957fa: push rbx
+14957fb: mov rbx, rdi
+14957fe: call 0x1641650
+1495803: test rax, rax
+1495806: je 0x1495950
+149580c: mov r12, rax
+149580f: mov rax, qword ptr [rbx]
+1495812: mov rdi, rbx
+1495815: call qword ptr [rax + 0xac8]
+149581b: test al, al
+149581d: je 0x1495950
+1495823: mov rax, qword ptr [rbx]
+1495826: mov rdi, rbx
+1495829: call qword ptr [rax + 0xd08]
+149582f: test al, al
+1495831: je 0x14958e0
+1495837: mov ecx, dword ptr [r12 + 0xf78]
+149583f: cmp ecx, -1
+1495842: je 0x14958e0
+1495848: mov rsi, qword ptr [rip + 0x1338511] ; rip=0x27cdd60
+149584f: test rsi, rsi
+1495852: je 0x14958e0
+1495858: cmp ecx, -2
+149585b: je 0x14958e0
+1495861: movzx eax, word ptr [r12 + 0xf78]
+149586a: mov rdx, rax
+149586d: shr rdx, 9
+1495871: and edx, 0x3f
+1495874: mov rdx, qword ptr [rsi + rdx*8]
+1495878: test rdx, rdx
+149587b: je 0x14958e0
+149587d: and eax, 0x1ff
+1495882: imul rax, rax, 0x70
+1495886: add rax, rdx
+1495889: cmp ecx, dword ptr [rax + 0x10]
+149588c: jne 0x14958e0
+149588e: mov rax, qword ptr [rax]
+1495891: test rax, rax
+1495894: je 0x14958e0
+1495896: test byte ptr [rax + 0x669], 1
+149589d: jne 0x14958e0
+149589f: lea rax, [rip + 0x155dca2] ; rip=0x29f3548
+14958a6: mov rdi, r12
+14958a9: mov r13, qword ptr [rax]
+14958ac: mov rax, qword ptr [r13]
+14958b0: mov r14, qword ptr [rax + 0x1a8]
+14958b7: call 0x163ec40
+14958bc: lea rdx, [rip - 0xbc0ab2] ; rip=0x8d4e11
+14958c3: mov rdi, r13
+14958c6: mov esi, eax
+14958c8: call r14
+14958cb: test rax, rax
+14958ce: je 0x14958e0
+14958d0: mov rdi, rax
+14958d3: call 0x9fc500
+14958d8: test eax, eax
+14958da: setg r12b
+14958de: jmp 0x14958e3
+14958e0: xor r12d, r12d
+14958e3: mov rdx, qword ptr [rbx]
+14958e6: lea rcx, [rip - 0x9ca62d] ; rip=0xacb2c0
+14958ed: mov rax, qword ptr [rdx + 0xb00]
+14958f4: cmp rax, rcx
+14958f7: jne 0x1495980
+14958fd: mov rax, qword ptr [rbx + 0x600]
+1495904: cmp byte ptr [rax + 0x4e1], 0
+149590b: je 0x1495960
+149590d: mov eax, dword ptr [rbx + 0x11a0]
+1495913: cmp eax, -1
+1495916: je 0x149592d
+1495918: mov esi, 1
+149591d: mov rdi, rbx
+1495920: call qword ptr [rdx + 0xb30]
+1495926: test eax, eax
+1495928: je 0x1495970
+149592a: mov rdx, qword ptr [rbx]
+149592d: mov rdi, rbx
+1495930: call qword ptr [rdx + 0xd38]
+1495936: test r12b, r12b
+1495939: mov edx, 1
+149593e: pop rbx
+149593f: cmovne eax, edx
+1495942: pop r12
+1495944: pop r13
+1495946: pop r14
+1495948: pop rbp
+1495949: ret 
+149594a: nop word ptr [rax + rax]
+1495950: pop rbx
+1495951: xor eax, eax
+1495953: pop r12
+1495955: pop r13
+1495957: pop r14
+1495959: pop rbp
+149595a: ret 
+149595b: nop dword ptr [rax + rax]
+1495960: mov eax, dword ptr [rbx + 0x11a4]
+1495966: jmp 0x1495913
+1495968: nop dword ptr [rax + rax]
+1495970: mov byte ptr [rbx + 0x1228], 1
+1495977: jmp 0x149592a
+1495979: nop dword ptr [rax]
+1495980: mov esi, 1
+1495985: mov rdi, rbx
+1495988: call rax
+149598a: mov rdx, qword ptr [rbx]
+149598d: jmp 0x1495913
+149598f: int3 
+1495990: mov rax, qword ptr [rip + 0x14cb931] ; rip=0x29612c8
+1495997: cmp byte ptr [rax + 0x58], 0
+149599b: jne 0x14959a8
+149599d: pxor xmm0, xmm0
+14959a1: ret 
+14959a2: nop word ptr [rax + rax]
+14959a8: push rbp
+14959a9: mov rbp, rsp
+14959ac: push rbx
+14959ad: sub rsp, 0x58
+14959b1: call 0x1641650
+14959b6: mov rbx, rax
+14959b9: test rax, rax
+14959bc: je 0x1495ad8
+14959c2: mov rdi, rax
+14959c5: call 0xd41f90
+14959ca: movshdup xmm5, xmm0
+14959ce: movaps xmm7, xmm0
+14959d1: movaps xmm6, xmm1
+14959d4: movq qword ptr [rbp - 0x38], xmm0
+14959d9: mulss xmm7, xmm0
+14959dd: movlps qword ptr [rbp - 0x58], xmm0
+14959e1: mulss xmm6, xmm1
+14959e5: movss dword ptr [rbp - 0x60], xmm0
+14959ea: movss dword ptr [rbp - 0x30], xmm1
+14959ef: movaps xmm8, xmm5
+14959f3: movss dword ptr [rbp - 0x50], xmm1
+14959f8: movss xmm1, dword ptr [rip - 0xbc7e54] ; rip=0x8cdbac, f32=0.0010000000474974513
+1495a00: mulss xmm8, xmm5
+1495a05: movss dword ptr [rbp - 0x5c], xmm5
+1495a0a: movss dword ptr [rbp - 0x48], xmm7
+1495a0f: movss dword ptr [rbp - 0x44], xmm6
+1495a14: movaps xmm0, xmm8
+1495a18: movss dword ptr [rbp - 0x4c], xmm8
+1495a1e: addss xmm0, xmm7
+1495a22: addss xmm0, xmm6
+1495a26: comiss xmm1, xmm0
+1495a29: ja 0x1495ad8

@@ -80,7 +80,9 @@ rescoping and the M4 release-and-fire boundary. The
 [validation ledger](evidence/reaudit-scoped-awp-validation.json) verifies all
 70 bundled sources, fixtures, comparisons and check logs. Of 180 committed
 trajectories, 156 retain their complete velocity traces unchanged. The correction
-is committed locally for review; deployment remains pending.
+is committed locally as `4bb6223`. A subsequent
+[moving-rescope check](reaudit-awp-movement-phase.md) exposed a combined stopping
+integration risk; deployment of this batch is held.
 
 ## Reproduction and boundaries
 

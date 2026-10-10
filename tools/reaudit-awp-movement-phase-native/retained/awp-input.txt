@@ -1,0 +1,169 @@
+14b3fd0: push rbp
+14b3fd1: mov rbp, rsp
+14b3fd4: push r13
+14b3fd6: push r12
+14b3fd8: push rbx
+14b3fd9: mov rbx, rdi
+14b3fdc: sub rsp, 8
+14b3fe0: call 0x1641650
+14b3fe5: test rax, rax
+14b3fe8: je 0x14b40a0
+14b3fee: mov esi, 1
+14b3ff3: mov rdi, rbx
+14b3ff6: mov r12, rax
+14b3ff9: call 0x16412f0
+14b3ffe: test al, al
+14b4000: je 0x14b4012
+14b4002: mov rdi, rbx
+14b4005: call 0x1641710
+14b400a: test al, al
+14b400c: jne 0x14b4128
+14b4012: movabs rsi, 0x400000000
+14b401c: mov rdi, rbx
+14b401f: call 0x16412f0
+14b4024: test al, al
+14b4026: jne 0x14b40b0
+14b402c: mov esi, 0x800
+14b4031: mov rdi, rbx
+14b4034: call 0x16412f0
+14b4039: test al, al
+14b403b: je 0x14b404d
+14b403d: mov rdi, rbx
+14b4040: call 0x16417a0
+14b4045: test al, al
+14b4047: jne 0x14b4188
+14b404d: mov esi, 0x2000
+14b4052: mov rdi, rbx
+14b4055: call 0x16412f0
+14b405a: test al, al
+14b405c: je 0x14b41b0
+14b4062: cmp byte ptr [rbx + 0x1280], 0
+14b4069: je 0x14b4150
+14b406f: movabs rsi, 0x800000000
+14b4079: mov rdi, rbx
+14b407c: call 0x16412f0
+14b4081: test al, al
+14b4083: je 0x14b40a0
+14b4085: add rsp, 8
+14b4089: mov rdi, rbx
+14b408c: pop rbx
+14b408d: pop r12
+14b408f: pop r13
+14b4091: pop rbp
+14b4092: jmp 0x14b3e20
+14b4097: nop word ptr [rax + rax]
+14b40a0: add rsp, 8
+14b40a4: pop rbx
+14b40a5: pop r12
+14b40a7: pop r13
+14b40a9: pop rbp
+14b40aa: ret 
+14b40ab: nop dword ptr [rax + rax]
+14b40b0: mov rdi, rbx
+14b40b3: call 0x16417a0
+14b40b8: test al, al
+14b40ba: je 0x14b402c
+14b40c0: mov rax, qword ptr [rbx]
+14b40c3: mov rdi, rbx
+14b40c6: call qword ptr [rax + 0xd68]
+14b40cc: test al, al
+14b40ce: jne 0x14b4260
+14b40d4: mov rax, qword ptr [rbx]
+14b40d7: mov rdi, rbx
+14b40da: call qword ptr [rax + 0xd08]
+14b40e0: test al, al
+14b40e2: jne 0x14b40f9
+14b40e4: mov rax, qword ptr [rbx + 0x600]
+14b40eb: mov edx, dword ptr [rax + 0x520]
+14b40f1: test edx, edx
+14b40f3: jne 0x14b406f
+14b40f9: mov rdi, rbx
+14b40fc: call 0x14957f0
+14b4101: cmp eax, 1
+14b4104: jne 0x14b406f
+14b410a: movabs rsi, 0x400000000
+14b4114: mov rdi, rbx
+14b4117: call 0x1641460
+14b411c: jmp 0x14b406f
+14b4121: nop dword ptr [rax]
+14b4128: mov rsi, r12
+14b412b: mov rdi, rbx
+14b412e: call 0x14b0360
+14b4133: cmp eax, 1
+14b4136: jne 0x14b406f
+14b413c: mov esi, 1
+14b4141: mov rdi, rbx
+14b4144: call 0x1641460
+14b4149: jmp 0x14b406f
+14b414e: nop 
+14b4150: mov rdi, rbx
+14b4153: call 0x14986a0
+14b4158: test eax, eax
+14b415a: jne 0x14b416e
+14b415c: cmp word ptr [rbx + 0x11d4], 0x32
+14b4164: je 0x14b416e
+14b4166: mov rdi, rbx
+14b4169: call 0x14ab770
+14b416e: mov rdi, rbx
+14b4171: call 0x1641710
+14b4176: test al, al
+14b4178: je 0x14b406f
+14b417e: jmp 0x14b4220
+14b4183: nop dword ptr [rax + rax]
+14b4188: mov rsi, r12
+14b418b: mov rdi, rbx
+14b418e: call 0x14a9b70
+14b4193: cmp eax, 1
+14b4196: jne 0x14b406f
+14b419c: mov esi, 0x800
+14b41a1: mov rdi, rbx
+14b41a4: call 0x1641460
+14b41a9: jmp 0x14b406f
+14b41ae: nop 
+14b41b0: movabs rsi, 0x100000000
+14b41ba: mov rdi, rbx
+14b41bd: call 0x16412f0
+14b41c2: test al, al
+14b41c4: je 0x14b4230
+14b41c6: mov rax, qword ptr [rbx]
+14b41c9: xor esi, esi
+14b41cb: mov rdi, rbx
+14b41ce: call qword ptr [rax + 0xaf0]
+14b41d4: test eax, eax
+14b41d6: je 0x14b4230
+14b41d8: cmp byte ptr [rbx + 0x1280], 0
+14b41df: jne 0x14b4230
+14b41e1: mov rdi, rbx
+14b41e4: call 0x1641710
+14b41e9: test al, al
+14b41eb: je 0x14b4230
+14b41ed: mov eax, dword ptr [r12 + 0x17a0]
+14b41f5: test eax, eax
+14b41f7: jne 0x14b4230
+14b41f9: mov r13, qword ptr [r12 + 0xe18]
+14b4201: mov rdi, r13
+14b4204: call 0x17d8f30
+14b4209: mov edi, eax
+14b420b: call 0x134e850
+14b4210: subss xmm0, dword ptr [r13 + 0x4c]
+14b4216: comiss xmm0, dword ptr [rip - 0xbe886d] ; rip=0x8cb9b0, f32=0.20000000298023224
+14b421d: jbe 0x14b4230
+14b421f: nop 
+14b4220: mov rsi, r12
+14b4223: mov rdi, rbx
+14b4226: call 0x14b3c90
+14b422b: jmp 0x14b406f
+14b4230: movabs rsi, 0x400000801
+14b423a: mov rdi, rbx
+14b423d: call 0x16412f0
+14b4242: test al, al
+14b4244: jne 0x14b406f
+14b424a: mov rsi, r12
+14b424d: mov rdi, rbx
+14b4250: call 0x14af980
+14b4255: jmp 0x14b406f
+14b425a: nop word ptr [rax + rax]
+14b4260: mov rsi, r12
+14b4263: mov rdi, rbx
+14b4266: call 0x14a9b70
+14b426b: jmp 0x14b4101

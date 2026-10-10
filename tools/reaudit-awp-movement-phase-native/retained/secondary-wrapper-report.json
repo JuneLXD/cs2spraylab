@@ -1,0 +1,20 @@
+{
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "wholeArtifactHashVerified": true,
+  "readerSha256": "8f6f0fe424c560b6c3a6d19d776f83b615b38bc41cfe0d6a9a9d702f5094c7ab",
+  "ranges": [
+    {
+      "name": "secondary-input-wrapper",
+      "address": "0x14a9b70",
+      "size": 1280,
+      "codeSha256": "2ad8a33e1b22983ed3cd3bef63acbf6c6afa1790df3a32b5516a8a2a38b103a6",
+      "listingSha256": "ac5eac2990dfe250e472962be955086af3d9e4e5fbe1859353c9697a5e878f92"
+    }
+  ],
+  "totalBytesRead": 1456,
+  "method": "Bounded static Glock burst clock audit; no target or native execution.",
+  "limits": [
+    "Static current-byte ranges derived from matching-hash retained REA bodies; no live call observation.",
+    "Reads selected paths only, not complete external callees."
+  ]
+}

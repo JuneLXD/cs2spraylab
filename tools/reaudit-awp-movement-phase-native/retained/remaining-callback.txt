@@ -1,0 +1,77 @@
+157f2c0: mov rax, qword ptr [rdi + 0x38]
+157f2c4: test rax, rax
+157f2c7: je 0x157f2d8
+157f2c9: mov rdi, qword ptr [rax + 0xdf0]
+157f2d0: jmp 0x15e1420
+157f2d5: nop dword ptr [rax]
+157f2d8: push rbp
+157f2d9: mov rbp, rsp
+157f2dc: sub rsp, 0x10
+157f2e0: mov qword ptr [rbp - 8], rdi
+157f2e4: call 0x17d8dd0
+157f2e9: mov rdi, qword ptr [rbp - 8]
+157f2ed: mov rax, qword ptr [rdi + 0x38]
+157f2f1: mov rdi, qword ptr [rax + 0xdf0]
+157f2f8: leave 
+157f2f9: jmp 0x15e1420
+157f2fe: int3 
+157f2ff: int3 
+157f300: push rbp
+157f301: mov rbp, rsp
+157f304: push r12
+157f306: push rbx
+157f307: movzx eax, byte ptr [rip + 0x1424ac2] ; rip=0x29a3dd0
+157f30e: mov rbx, rdi
+157f311: test al, al
+157f313: je 0x157f340
+157f315: movzx eax, byte ptr [rip + 0x1424aa4] ; rip=0x29a3dc0
+157f31c: test al, al
+157f31e: je 0x157f380
+157f320: mov rdi, rbx
+157f323: call 0x17d93a0
+157f328: pop rbx
+157f329: cmp eax, 3
+157f32c: pop r12
+157f32e: mov rax, qword ptr [rip + 0x1424a93] ; rip=0x29a3dc8
+157f335: pop rbp
+157f336: cmovne rax, qword ptr [rip + 0x1424a9a] ; rip=0x29a3dd8
+157f33e: ret 
+157f33f: nop 
+157f340: lea r12, [rip + 0x1424a89] ; rip=0x29a3dd0
+157f347: mov rdi, r12
+157f34a: call 0x9f3120
+157f34f: test eax, eax
+157f351: je 0x157f315
+157f353: lea rsi, [rip - 0xc8063f] ; rip=0x8fed1b
+157f35a: lea rdi, [rip + 0x1424a77] ; rip=0x29a3dd8
+157f361: call 0x162e340
+157f366: mov rdi, r12
+157f369: call 0x9f3140
+157f36e: movzx eax, byte ptr [rip + 0x1424a4b] ; rip=0x29a3dc0
+157f375: test al, al
+157f377: jne 0x157f320
+157f379: nop dword ptr [rax]
+157f380: lea r12, [rip + 0x1424a39] ; rip=0x29a3dc0
+157f387: mov rdi, r12
+157f38a: call 0x9f3120
+157f38f: test eax, eax
+157f391: je 0x157f320
+157f393: lea rsi, [rip - 0xc7886e] ; rip=0x906b2c
+157f39a: lea rdi, [rip + 0x1424a27] ; rip=0x29a3dc8
+157f3a1: call 0x162e340
+157f3a6: mov rdi, r12
+157f3a9: call 0x9f3140
+157f3ae: jmp 0x157f320
+157f3b3: int3 
+157f3b4: int3 
+157f3b5: int3 
+157f3b6: int3 
+157f3b7: int3 
+157f3b8: int3 
+157f3b9: int3 
+157f3ba: int3 
+157f3bb: int3 
+157f3bc: int3 
+157f3bd: int3 
+157f3be: int3 
+157f3bf: int3 

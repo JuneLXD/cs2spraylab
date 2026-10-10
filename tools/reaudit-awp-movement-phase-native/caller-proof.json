@@ -1,0 +1,124 @@
+{
+  "schema": "cs2.awp-movement-phase-caller.v1",
+  "status": "passed",
+  "failure": null,
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "wholeArtifactHashVerified": true,
+  "readerSha256": "8470448849d11d0bea09f9b519c2cad0e5b0584ad4dc78e7b70d486c2f0201ff",
+  "retainedLocationSha256": "eb103b04b97338e15e09ea96ff9122b4debf293ebfaa1a7daf2804cee04bbbd1",
+  "retainedCallerReaSha256": "31d826ac9da61c8ac089c5fa9bda6b72ab21c7b09536d8cf34e1ff485a21c48d",
+  "selectedBytes": 1350,
+  "selectedByteCeiling": 1350,
+  "decodedInstructions": 293,
+  "reads": [
+    {
+      "address": "0x17c3080",
+      "bytes": 794,
+      "sha256": "d062d80788e1d77ad2ec1c3bc896ae2207551977c92c0e43e5c5f788de5d9faf",
+      "hex": "554889e541574989ff4156415541544989f4534883ec78e8945e010089c7e80db8b8ff4983bc248800000000440fb6e80f841d040000660fefc9488d056733fd00488b18f30f1043300f28d0f30f1145980f14d166490f7ed6e8d29023ff488b4b304c897330f30f104598f30f59057db110fff30f5805ddb010ff48898d78ffffff8b4b44f30f105b50c7435000000000f30f2cd0f30f115d90894d94488b4b5848894358498d87d8010000895344f3410f6f475848894580498b4768498b7738410f1187e0010000f3410f7e878000000048894d8866490f3a22879001000001410f118708020000f3410f7e4f7066490f3a224f7801f3410f1087a8010000498987f0010000498b87a0010000410f118ff8010000f3410f118720020000498987180200004885f60f840c040000488d45a84889c748898570ffffffe85e7c57ff488d05a78f1f01be01000000488b38e8bac2b000498b7f384885ff0f8413030000488d05266b2001488d150f65d4ff48898560ffffff488938498b07488b80700100004839d00f851b030000488b07ff90180b0000498b7f384885ff0f8486030000e8d7922a00498b07488d15cdc2feff4531f6488b80100100004839d00f85a30200004584ed7414498b074c89ffff906801000084c00f856a02000031c94983bc2488000000000f95c1488d05b431fd004c89e64c89f7488b008b5044e83b41fcff498b074c89e64c89f24c89ffff90180100004c8d4db049c78798010000000000004c89ca4c898d68ffffff4c8d1df9ec1bffc745b8150800004c8d15afe611ff4c895db0488d35e044fc004c8955c0488d3d055c19ffe8708e23ff4489e94c89e64c89f24c89ff48894598e89b75ffff488b4598ffd0498b074c89e64c89f24c89ffff90380100004489e94c89f24c89e64c89ffe8727affff498b87980100004c89ff488b758049898738020000e8d87cffff488b9568ffffff4c8d1d6aec1bffc745b82b0800004c8d1520e611ff4c895db0488d354144fc004c8955c0488d3d5f3512ffe8e18d23ff4c89e64c89ff41bc010000004989c5498b07ff90c000000041ffd54c89ff41bd40000000e8c8e9ffffeb0f"
+    },
+    {
+      "address": "0x17c33a0",
+      "bytes": 556,
+      "sha256": "da17971865f2e96bf63d0da151af3ab6778f0d31d20bb38e993b80f7328d34ec",
+      "hex": "4d01e44183ed0174204c89e04923873802000074eb4c89e64c89ff4d01e4e84deaffff4183ed0175e0498b07488d15cd62d4ff488b80c80000004839d00f8571010000488b8560ffffff498b7f3848c700000000004885ff0f849b010000488b07ff90200b0000498b47384885c00f8463010000488b90a80e0000498997280200008b90b00e000041899730020000488b90a80e0000488990b40e00008b90b00e00008990bc0e0000498b9728020000488990a80e0000418b97300200008990b00e0000498b7f384885ff0f8417010000488b07ff90280b0000488d05ef8c1f0131f6488b38e805c0b000488bbd70ffffffe8397a57ff488b8578fffffff30f106590f30f116350488943308b4594894344488b4588488943584883c4785b415c415d415e415f5dc3b901000000e99afdffff4584ed0f8582000000f30f100da0ac10ffe9d1fbffff4c89ffffd04989c6e950fdffff4c89ffe8d2580100498b7f38488d15f761d4ff488d050068200148898560ffffff488938498b07488b80700100004839d074114c89fff20f1005ccc310ffffd0498b7f384885ff0f85cbfcffff4c89ffe885580100498b7f38e9bafcffff4c89ffffd0e985feffff498b074c89ffff906801000084c00f8544fbffffe965ffffff4c89ffe851580100498b4738e98cfeffff4c89ffe840580100498b7f38e9d8feffff4c89ffe82f580100498b7f38e954feffff4c89ffe81e580100498b7f38e969fcffff4c89ffe80d580100498b7738e9e3fbffff"
+    }
+  ],
+  "matches": {
+    "movementLoop": {
+      "address": 24916720,
+      "bytes": "e89b75ffff",
+      "mnemonic": "call",
+      "operands": "0x17ba890"
+    },
+    "remainingEvents": {
+      "address": 24916761,
+      "bytes": "e8727affff",
+      "mnemonic": "call",
+      "operands": "0x17bad90"
+    },
+    "postMovementCallback": {
+      "address": 24916743,
+      "bytes": "ff9038010000",
+      "mnemonic": "call",
+      "operands": "qword ptr [rax + 0x138]"
+    },
+    "orderingBlockInstructions": [
+      {
+        "address": 24916725,
+        "bytes": "488b4598",
+        "mnemonic": "mov",
+        "operands": "rax, qword ptr [rbp - 0x68]"
+      },
+      {
+        "address": 24916729,
+        "bytes": "ffd0",
+        "mnemonic": "call",
+        "operands": "rax"
+      },
+      {
+        "address": 24916731,
+        "bytes": "498b07",
+        "mnemonic": "mov",
+        "operands": "rax, qword ptr [r15]"
+      },
+      {
+        "address": 24916734,
+        "bytes": "4c89e6",
+        "mnemonic": "mov",
+        "operands": "rsi, r12"
+      },
+      {
+        "address": 24916737,
+        "bytes": "4c89f2",
+        "mnemonic": "mov",
+        "operands": "rdx, r14"
+      },
+      {
+        "address": 24916740,
+        "bytes": "4c89ff",
+        "mnemonic": "mov",
+        "operands": "rdi, r15"
+      },
+      {
+        "address": 24916743,
+        "bytes": "ff9038010000",
+        "mnemonic": "call",
+        "operands": "qword ptr [rax + 0x138]"
+      },
+      {
+        "address": 24916749,
+        "bytes": "4489e9",
+        "mnemonic": "mov",
+        "operands": "ecx, r13d"
+      },
+      {
+        "address": 24916752,
+        "bytes": "4c89f2",
+        "mnemonic": "mov",
+        "operands": "rdx, r14"
+      },
+      {
+        "address": 24916755,
+        "bytes": "4c89e6",
+        "mnemonic": "mov",
+        "operands": "rsi, r12"
+      },
+      {
+        "address": 24916758,
+        "bytes": "4c89ff",
+        "mnemonic": "mov",
+        "operands": "rdi, r15"
+      }
+    ]
+  },
+  "listingSha256": "f255edbf96ef277ffde39d6b1825973aef4352b7d81cf8c0bd27450c7af55889",
+  "addressDomains": "Resolved retained Ghidra body translated by its verified image-base adjustment to ELF load virtual addresses.",
+  "rule": "Within this command caller, the complete movement-loop call precedes the typed post-movement callback and remaining-event loop in a straight-line block.",
+  "limits": [
+    "Static caller code only; no game, emulator, broad scan or callee read.",
+    "Lower class/accessor/weapon bindings are separate retained evidence.",
+    "Does not associate a trainer 128Hz step with a native 64Hz command or change scope timing.",
+    "Does not prove the invocation or eligibility of any particular live scope transition."
+  ]
+}

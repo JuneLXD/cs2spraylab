@@ -366,3 +366,25 @@ shot tests cover all seven priority weapons. Commit `98002af` passes TypeScript,
 cases. Delivery remains pending. Full native command/collision and accepted live
 release coverage remain open. No coefficient or simulation rate is fitted to
 the rejected runtime windows.
+
+## Scoped AWP movement, pass 45
+
+The [current scoped branch proof](reaudit-scoped-awp-movement.md) corrects the
+old second-zoom interpretation: the native comparison uses configured zoom
+count after separately checking positive active zoom. Both AWP scopes share
+the slow walking branch. Range and Duel now apply it to committed movement
+and render prediction; 180 cumulative cases and 3,120 predicted positions match
+the guarded native fixtures. Commit `4bb6223` passes TypeScript, 2,730 units
+(only the known missing model fails) and four Chromium cases. The combined
+batch is held by the transition issue below; full collision remains partial.
+
+## Moving AWP rescope and shot accuracy, pass 46
+
+The [transition audit](reaudit-awp-movement-phase.md) proves native command-level
+movement/weapon order and measures the actual trainer divergence. A candidate
+half-tick rescope can stop Range motion and remove movement inaccuracy from a
+fresh shot. The steady/supplied-state proofs do not validate this integration.
+Keep the stopping batch local until native command association and speed-cap
+sampling settle the transition; do not invent a delay or change matched cap
+arithmetic. This is the next important shooting issue, ahead of deferred weapons
+and presentation resolvers.
