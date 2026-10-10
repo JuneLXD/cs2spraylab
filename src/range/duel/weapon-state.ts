@@ -110,12 +110,12 @@ export class DuelWeaponState {
     const reloadEnd = this.reload.phase === 'finish' || this.reload.phase === 'magazine' ? this.reload.until : time;
     this.reload.advance(time, command.reloadHeld);
     if (reloading && !this.reload.active) this.nextShotAt = Math.max(this.nextShotAt, reloadEnd);
-    // Native pending Glock rounds run before secondary input; an eligible
-    // primary input also consumes the update before the mode-switch branch.
-    const glockPrimaryPriority = this.id === 'glock' && time + 1e-9 >= this.nextShotAt &&
+    // Pending Glock rounds and eligible Glock/AWP primary input precede
+    // secondary, including a held semiautomatic primary that produces no shot.
+    const primaryPriority = (this.id === 'glock' || this.id === 'awp') && time + 1e-9 >= this.nextShotAt &&
       (command.fireHeld || command.firePressed || this.burstLeft > 0 && this.ammo > 0);
     if ((command.secondaryPressed || this.id === 'glock' && command.secondaryHeld) &&
-      !this.reloadUntil && !glockPrimaryPriority) this.actions.secondary(time);
+      !this.reloadUntil && !primaryPriority) this.actions.secondary(time);
     this.actions.alternateFire = this.id === 'revolver' && !!(command.secondaryHeld || command.secondaryPressed);
     const stats = this.actions.stats;
     this.recovery.setParameters(stats);

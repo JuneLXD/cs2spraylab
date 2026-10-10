@@ -1,4 +1,4 @@
-# CS2 independent re-audit: passes 16–39
+# CS2 independent re-audit: passes 16–40
 
 ## Current priority: common weapons and core feel
 
@@ -15,7 +15,7 @@ and hashes. It is absent from the active app and has not been committed or
 shipped. Detailed transform/resolver investigation is also lower priority than
 measurable input, movement and common-weapon behavior.
 
-Sixteen evidenced corrections follow baseline `c488943`: movement (`79832e6`),
+Seventeen evidenced corrections follow baseline `c488943`: movement (`79832e6`),
 scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
 ordering (`fd328d5`), ordinary footstep cadence (`2aba70c`), and native weapon
 recoil rotation (`5132783`, [pass 23](reaudit-viewmodel-recoil.md)), and
@@ -31,6 +31,8 @@ The focused follow-up adds [common-weapon reload admission](reaudit-common-reloa
 [Glock attack clocks](reaudit-glock-timing.md) (`ae2f6cf`, pass 38). The isolated [AWP scope-clock correction](reaudit-awp-clocks.md)
 (`81f9c27`, pass 39) aligns ordinary recovery with the existing shot schedule
 and checks primary readiness/ammo before starting a processing-time transition.
+[AWP input priority](reaudit-awp-input.md) (pass 40) preserves scope while ready
+primary input stays held, without changing the zoom-repeat preference or cadence.
 This report covers the requested inventory and identifies the remaining work;
 it does not certify complete native parity. The follow-up corrects
 [accuracy/index update order](reaudit-accuracy.md) and
@@ -69,7 +71,7 @@ No active Ghidra request is cancelled or restarted.
 
 Passes 33–38 were deployed together after explicit user approval, through
 `feb6a50`. The LAN serves `20261010T084128Z-feb6a50`; served assets and live
-firing/reload were verified. Pass 39 remains a separate local correction.
+firing/reload were verified. Passes 39–40 remain separate local corrections.
 
 Passes 37–38 were prepared on `audit/common-pistol-clocks` and are included in
 that approved deployment with the verified Deagle audio manifest. TypeScript passes; 2,509 distinct unit cases
@@ -352,7 +354,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | Shell ejection | AK fire clip includes `weapon_shell_casing_rifle` event at frame zero | No ejected shell/casing simulation/rendering found | Not present | `c488943` |
 | Tracer cadence and shape | Native per-weapon tracer data and particle systems | Native cadence option plus every-shot training option; browser trail/rope approximations | Approximated shape; combat/data bench owns cadence | `c488943` |
 | Gun smoke | Native particle graph hierarchy | One simplified expanding/fading sprite per muzzle slot | Approximated | `c488943` |
-| Scope overlays, automatic rescope and unscoped blur | Current AWP class/postframe/FOV setter: primary-ready and ammo gate, 100 ms transition starts at call ([pass 39](reaudit-awp-clocks.md)) | Queued scope deadline3.92375→3.913s; late onset82.1875→90°; empty-magazine auto-rescope removed | Bounded AWP rule corrected; native context selection, client prediction, overlays/blur rendering remain partial | `81f9c27` |
+| Scope overlays, automatic rescope and unscoped blur | Current AWP postframe/FOV setter and input dispatcher: primary-ready/ammo rescope gate, call-time 100 ms transition, ready-primary input priority ([pass 39](reaudit-awp-clocks.md), [pass 40](reaudit-awp-input.md)) | Queued scope deadline3.92375→3.913s; late onset82.1875→90°; empty-magazine auto-rescope removed; held ready-primary now preserves restored zoom | Bounded AWP rules corrected; command aggregation, mask lifetime, client prediction and overlays/blur rendering remain partial | `81f9c27`; pass 40 |
 | World weapon attachment | Native `wpn` and secondary weapon skeleton | Native hand/anchor transforms plus procedural aim correction; secondary part bench checks mounted pose separately | Approximated runtime aim; measured clip mounts | `c488943` |
 | World weapon moving parts when bots fire/reload | Native weapon skeleton action layers | `attachWorldWeapon` clones a static model under `wpn`; the only bot mixer binds character gestures, with no secondary part tracks | Not present | `c488943` |
 | Dropped weapons | Native dropped world models and physics | Trainer pickup/drop presentation uses browser scene and simplified placement | Approximated | `c488943` |
@@ -522,8 +524,9 @@ Earlier findings remain:
   Mouse-to-photon requires synchronized device/display instrumentation.
 - AWP: capture native command/history rebase selection beside both attack clocks,
   rescope call and camera start time; establish reset ordering and client
-  presentation. Simultaneous primary/secondary priority remains a separate
-  existing trainer gap. See [pass 39](reaudit-awp-clocks.md).
+  presentation. Bounded primary/secondary priority is corrected in
+  [pass 40](reaudit-awp-input.md); native command aggregation and input-state
+  producer/reset lifetime remain open. See also [pass 39](reaudit-awp-clocks.md).
 - Movement: flat unobstructed trajectories and exact input edges; landing/bhop
   boundary presses; constrained unduck and partial-duck takeoffs; matched
   stairs, slopes, surface friction and ladders; rendered camera frames paired
@@ -579,3 +582,10 @@ three targeted Chromium specs pass. [Validation](evidence/reaudit-awp-validation
 retains source/log hashes, the corrected working-directory invocation, native
 proof rerun and trainer comparison boundaries. The inventory still has 136
 mechanic rows; the scoped AWP correction does not establish full native parity.
+
+Pass 40 adds ready-primary priority to two AWP guards. TypeScript passes;
+2,523 units pass and the same missing fallback fixture fails. All four targeted
+Chromium cases pass. [Validation](evidence/reaudit-awp-input-validation.json)
+records 23 actual-engine before/after cases, unchanged shot times and 14 complete
+controls. No assets changed; the pass 39 approval payload remains frozen. Both
+AWP corrections are local pending explicit batch approval.

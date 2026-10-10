@@ -1,0 +1,28 @@
+{
+  "method": "Exact byte copies of the four local AWP input investigation tools. No path adapters or original evidence rewrites.",
+  "originalSourceRoot": "native-audit/reports/awp-input-next",
+  "sourceCopies": [
+    {"name": "read-gaps.py", "sha256": "e6033cff429137c47911a4bb5014010e024243d01bf6d6c38674cea80d39fa0c"},
+    {"name": "read-consume-tail.py", "sha256": "8e8aa75b0c4d090c20862b2b46dab3c11327cf48575c425e3f81dee7d8e90e22"},
+    {"name": "check-priority.py", "sha256": "54c1581f43c33394d1ae3a9254c5ab11c430351bd4ae162f744f96bb48506a5d"},
+    {"name": "derive-cases.py", "sha256": "1739c0ab8333376d289aac08f2a1db2c92628af9cca658c3ce12f786ef0c3778"}
+  ],
+  "validatedOutputs": [
+    {"name": "checked/priority-proof.json", "sha256": "ce14b1725d0871e737091fe97eac7f7a1283a1eced8ae0e85e1049dc1046fac1"},
+    {"name": "checked/derived-cases.json", "sha256": "2f628d01753a27dffaf642d02abea501701269834d9489cf1d0279726483d41e"}
+  ],
+  "validation": {
+    "nativeReadersExitCodes": [0, 0],
+    "packagedCheckerExitCode": 0,
+    "packagedDerivedCasesExitCode": 0,
+    "memoryMax": "512M",
+    "memorySwapMax": 0,
+    "cpuQuota": "100%",
+    "newReadBytes": 1536,
+    "instructionAssertions": 96,
+    "concreteBindingAssertions": 7,
+    "derivedTruthTableCases": 64,
+    "namedExamples": 8
+  },
+  "boundary": "Static proof and derived branch cases, not native execution or input-mask lifetime proof. Current compiled/hash-verified retained data provenance remains in pass39 sources."
+}

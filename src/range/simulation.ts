@@ -339,8 +339,8 @@ export class Simulation {
     if (this.firing || this.reloadState.active) return false;
     // The primary branch consumes held input when ready, even when the
     // semiautomatic weapon rejects another shot without a fresh press.
-    if (this.equipped === 'glock' && this.triggerHeld &&
-      this.time + 1e-9 >= (this.shotReady.get('glock') ?? 0)) return false;
+    if ((this.equipped === 'glock' || this.equipped === 'awp') && this.triggerHeld &&
+      this.time + 1e-9 >= (this.shotReady.get(this.equipped) ?? 0)) return false;
     return this.actions.secondary(this.time);
   }
   release(pointerType: string) {

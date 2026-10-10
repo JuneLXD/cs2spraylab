@@ -1,0 +1,1375 @@
+{
+  "method": "Compare actual trainer traces for the bounded AWP input-priority correction.",
+  "baseline": "9021527c735c5974f287d9377b13dd5daa1ffbf8",
+  "cases": 23,
+  "unchangedCases": 14,
+  "changedCases": 9,
+  "shotScheduleChanges": 0,
+  "bundledSourceCount": 127,
+  "changedBundledSources": [
+    "src/range/duel/weapon-state.ts",
+    "src/range/simulation.ts"
+  ],
+  "atomicDuelCases": 3,
+  "pairedScenarioCount": 10,
+  "comparison": "Exact JSON equality for whole-case controls and exact scheduled/processed shot times. Release frame expected times checked within 1e-9 seconds.",
+  "boundary": "Trainer measurements, not native execution. Ten scenarios use both engines but are not asserted to have identical frame-queued zoom timing. Atomic both-input cases are Duel-only; separate Range DOM-equivalent edges retain ordering. With repeat enabled and primary released at 3 s, Range zooms at 3.008333333 s and Duel at 3 s. Existing preference and frame/event cadence are unchanged; no native cadence parity claim.",
+  "probeSha256": "89dfc14dc786a460216dd1ba82793f404d4ea4c4065967cf42a68ffc5724af90",
+  "comparatorSha256": "a3a5a5c0c70f5ce405b4249eb264e1a7b35faef33ba92bea60c5d16519be8654",
+  "files": {
+    "/home/junel/Desktop/cs2/native-audit/reports/awp-input-next/trainer-before-final.json": "06147879b2f49ef49ba7bdd229726d32b782dd974a64a10134a644eaa8c886cd",
+    "/home/junel/Desktop/cs2/native-audit/reports/awp-input-next/trainer-after.json": "97d12b083a6c27427b919573f47937ef9192b8af0cec2fb5b9286552aff88b59"
+  },
+  "rows": [
+    {
+      "engine": "duel",
+      "scenario": "atomic-both-zoom-0",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        0
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "atomic-both-zoom-1",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        2
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "both-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 2
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "both-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "atomic-both-zoom-2",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        0
+      ],
+      "shotZoomAfter": [
+        2
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.7,
+          "zoom": 2,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "both-down"
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.7,
+          "zoom": 2,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "both-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 2
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "held-primary-secondary-tap-zoom-1",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 2.5999999999999934,
+          "zoom": 2,
+          "edge": "secondary-down"
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "held-primary-secondary-tap-zoom-1",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 2.5999999999999934,
+          "zoom": 2,
+          "edge": "secondary-down"
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "held-primary-secondary-tap-zoom-2",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        2
+      ],
+      "shotZoomAfter": [
+        2
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.7,
+          "zoom": 2,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 2
+        },
+        {
+          "at": 2.5999999999999934,
+          "zoom": 0,
+          "edge": "secondary-down"
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.7,
+          "zoom": 2,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 2
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "held-primary-secondary-tap-zoom-2",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        2
+      ],
+      "shotZoomAfter": [
+        2
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.7,
+          "zoom": 2,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 2
+        },
+        {
+          "at": 2.5999999999999934,
+          "zoom": 0,
+          "edge": "secondary-down"
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.7,
+          "zoom": 2,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 2
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "repeat-false-primary-released",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "repeat-false-primary-released",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "repeat-false-primary-held",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "repeat-false-primary-held",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "repeat-true-primary-released",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 2.4583333333333273,
+          "zoom": 2
+        },
+        {
+          "at": 2.7666666666666595,
+          "zoom": 0
+        },
+        {
+          "at": 3.0749999999999917,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 2.4583333333333273,
+          "zoom": 2
+        },
+        {
+          "at": 2.7666666666666595,
+          "zoom": 0
+        },
+        {
+          "at": 3.0749999999999917,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "repeat-true-primary-released",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 2.4609375,
+          "zoom": 2
+        },
+        {
+          "at": 2.7734375,
+          "zoom": 0
+        },
+        {
+          "at": 3.078125,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 2.4609375,
+          "zoom": 2
+        },
+        {
+          "at": 2.7734375,
+          "zoom": 0
+        },
+        {
+          "at": 3.078125,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "repeat-true-primary-held",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 2.4583333333333273,
+          "zoom": 2
+        },
+        {
+          "at": 2.7666666666666595,
+          "zoom": 0
+        },
+        {
+          "at": 3.0749999999999917,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 3.0083333333333253,
+          "zoom": 2
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "repeat-true-primary-held",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 2.4609375,
+          "zoom": 2
+        },
+        {
+          "at": 2.7734375,
+          "zoom": 0
+        },
+        {
+          "at": 3.078125,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        },
+        {
+          "at": 2.999999999999992,
+          "zoom": 2,
+          "edge": "primary-up"
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "secondary-only",
+      "unchanged": true,
+      "shotTimes": [],
+      "shotZoomBefore": [],
+      "shotZoomAfter": [],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 1,
+          "edge": "secondary-down"
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 1,
+          "edge": "secondary-down"
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "secondary-only",
+      "unchanged": true,
+      "shotTimes": [],
+      "shotZoomBefore": [],
+      "shotZoomAfter": [],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 1,
+          "edge": "secondary-down"
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 1,
+          "edge": "secondary-down"
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "primary-only",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "primary-only",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.4,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "scope-then-fire-ordered",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "scope-then-fire-ordered",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        1
+      ],
+      "shotZoomAfter": [
+        1
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 1,
+          "edge": "secondary-down"
+        },
+        {
+          "at": 0.9999999999999989,
+          "zoom": 0,
+          "edge": "primary-down"
+        },
+        {
+          "at": 2.454999999999999,
+          "zoom": 1
+        }
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "fire-then-scope-ordered",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        0
+      ],
+      "shotZoomAfter": [
+        0
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        }
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "fire-then-scope-ordered",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          0.9999999999999989,
+          0.9999999999999989
+        ]
+      ],
+      "shotZoomBefore": [
+        0
+      ],
+      "shotZoomAfter": [
+        0
+      ],
+      "zoomEdgesBefore": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        }
+      ],
+      "zoomEdgesAfter": [
+        {
+          "at": 0,
+          "zoom": 0,
+          "edge": "initial"
+        }
+      ]
+    }
+  ]
+}

@@ -366,6 +366,10 @@ export const latestChanges = {
       'Queued AWP shots keep scope recovery aligned with their firing schedule.',
       'Automatic rescoping checks firing readiness and remaining ammo, and starts its camera transition when processed.',
     ]},
+    {id: 'native-awp-input-priority', title: 'AWP overlapping inputs', items: [
+      'Ready AWP primary input takes priority over zoom, including a held trigger after bolt recovery.',
+      'Repeat zoom keeps its existing preference and resumes on a later eligible input after releasing primary.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

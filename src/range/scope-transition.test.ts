@@ -95,7 +95,10 @@ describe('native scope transitions', () => {
     const shots: number[] = []; range.onShot = shot => shots.push(shot.at);
     range.actions.secondary(0); range.start();
     expect(shots).toEqual([0]);
-    const shot = duel.advance(0, 0, {...idleCommand(), secondaryPressed: true, firePressed: true}, actor);
+    // Separate scope and fire inputs. An atomic AWP command with both buttons
+    // gives primary priority and does not zoom before its shot.
+    duel.advance(0, 0, {...idleCommand(), secondaryPressed: true}, actor);
+    const shot = duel.advance(0, 0, {...idleCommand(), firePressed: true}, actor);
     expect(shot).toBeDefined();
     const until = .3 + gameData.weapons[id].alternate.cycle;
     for (const action of [range.actions, duel.actions]) {

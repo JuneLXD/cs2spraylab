@@ -302,6 +302,20 @@ rescope checks current primary readiness/ammo and starts its100ms transition
 when processed. Twenty actual-engine cases retain identical shot schedules,
 with ten unchanged controls. Native historical/fresh context selection and
 reset invariants remain outside this correction. Native postframe cadence,
-client presentation and simultaneous primary/secondary ordering need separate
-evidence. The pass38 Glock scheduled-time label is corrected without rewriting
+client presentation and native command aggregation need separate evidence.
+Pass 40 below establishes bounded AWP primary/secondary arbitration.
+The pass38 Glock scheduled-time label is corrected without rewriting
 its original evidence or changing the published processing-time comparisons.
+
+## AWP input priority, pass 40
+
+The [input report](reaudit-awp-input.md) establishes active-and-ready primary
+priority independently of whether another semiautomatic shot is accepted. Range
+and Duel preserve the restored AWP scope while primary remains held. The existing
+Zoom Button Hold setting and frame/event cadence remain unchanged. All 23 trainer
+cases preserve shot times; 14 complete controls are unchanged. Native evidence
+checks 96 instructions and seven concrete bindings; 64 derived cases do not claim
+runtime input-mask behavior. Four targeted browser cases pass. Remaining work is
+native command aggregation, input-state producer/reset lifetime, client prediction
+and live timing; the measured 8.333 ms Range/Duel repeat-release difference is
+retained rather than assigned an invented native delay.

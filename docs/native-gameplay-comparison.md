@@ -1382,6 +1382,34 @@ native postframe cadence, context/reset mapping, simultaneous AWP input priority
 and client presentation remain partial. No new game capture or full analysis
 was launched; no uncommon weapon behavior was expanded.
 
+## AWP primary and secondary input (fortieth pass)
+
+[Report](reaudit-awp-input.md), [native proof](evidence/reaudit-awp-input-native.json),
+[trainer comparison](evidence/reaudit-awp-input-comparison.json). The current AWP
+dispatcher gives active, ready primary input priority even when its semiautomatic
+handler rejects another shot. Primary cooldown falls through to secondary's own
+readiness check. The proof checks 96 instructions and seven concrete bindings;
+64 derived branch cases are static models, not native execution. The preference-
+dependent consume path does not establish physical-held mask lifetime or defaults.
+
+Two trainer guards now include AWP. In 23 actual-engine cases, all shot counts and
+times stay identical; 14 complete controls are unchanged. Atomic Duel both-button
+shots previously saw zoom 1/2/0 from initial 0/1/2; they now retain 0/1/2. A zoom
+tap while primary stays held after recovery now preserves the restored scope.
+Existing repeat-zoom preference and cadence remain: with primary released at 3 s,
+Range repeats at 3.008333 s and Duel at 3 s. This is a measured integration boundary,
+not a native delay claim. Equal-time DOM events remain sequential.
+
+The old combined-command quickscope test expected the wrong AWP priority. Its
+fixture now separates scope and fire, while six new units pin the bounded rule.
+TypeScript passes; 2,523 units pass with the known absent fallback-model fixture
+as the only failure. Four Chromium checks pass, including real held mouse inputs
+in both modes. [Validation](evidence/reaudit-awp-input-validation.json) retains
+source and log hashes. No new game session, full analysis or asset rebuild occurred.
+Native command aggregation, history/reset selection and client prediction remain
+partial. The pass 39 priority gap is narrowed by this evidence, not fully replaced
+by a native command scheduler.
+
 ## Validation retained from passes 11–15
 
 All three targeted Chromium specs pass: `input-timing`, `trigger-continuity`

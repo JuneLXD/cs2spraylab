@@ -1,0 +1,92 @@
+{
+  "baseline": "9021527c735c5974f287d9377b13dd5daa1ffbf8",
+  "typescript": {
+    "exit": 0
+  },
+  "focusedUnits": {
+    "passed": 49,
+    "failed": 0,
+    "files": 5
+  },
+  "units": {
+    "passed": 2523,
+    "failed": 1,
+    "total": 2524,
+    "filesPassed": 156,
+    "filesFailed": 1,
+    "knownFailure": "Missing public/models/ak47.json fallback fixture",
+    "durationSeconds": 51.58
+  },
+  "browser": {
+    "passed": 4,
+    "failed": 0,
+    "specs": [
+      "awp-input-priority (Range and Duel)",
+      "awp-rescope",
+      "glock-timing"
+    ],
+    "durationSeconds": 42.4
+  },
+  "native": {
+    "instructionAssertions": 96,
+    "bindings": 7,
+    "derivedCases": 64,
+    "namedExamples": 8,
+    "newReadBytes": 1536,
+    "nativeReadersExitCodes": [
+      0,
+      0
+    ],
+    "packagedCheckerAndDerivedCasesExitCodes": [
+      0,
+      0
+    ],
+    "boundary": "Static checks and derived cases, not native execution."
+  },
+  "trainer": {
+    "cases": 23,
+    "changedCases": 9,
+    "unchangedCases": 14,
+    "shotScheduleChanges": 0,
+    "changedBundledSources": [
+      "src/range/duel/weapon-state.ts",
+      "src/range/simulation.ts"
+    ],
+    "sourceCount": 127
+  },
+  "caps": {
+    "probes": "512M",
+    "typescriptUnitsBrowser": "4G",
+    "swap": 0,
+    "probeCpu": "100%",
+    "typescriptUnitCpu": "200%",
+    "browserCpu": "400%",
+    "unitWorkers": 2,
+    "browserWorkers": 1
+  },
+  "policy": "Serial capped jobs with deploy inactive and timer paused. Repo frozen during browser run. No production/test edits after full unit run. No game launch or full native analysis.",
+  "logHashes": {
+    "focused.log": "e324425021698abadc5856e901578d060fea66cff9bda67dd656e304d2c2d91c",
+    "typescript.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "unit-full.log": "4b629cf85a3f91e3f12dae6a952ee12c5421f59c5542bbf33f5936abbee430c1",
+    "browser.log": "a265eb96dd93fab2ba8b97a3a0449f9077c7a2578baa1b8e0ab59050a92af209"
+  },
+  "validatedSourceHashes": {
+    "src/range/simulation.ts": "9fc78a42934ffe9b3db3879ae14827714b25835b3b71e9078251b1982fcc07b2",
+    "src/range/duel/weapon-state.ts": "13532d4808f4d4a86fd3b183fd74ee2a28f3ccaf3ec3acf9b4daa3621977119e",
+    "src/range/scope-transition.test.ts": "7c5cee21eab3e6d26efecc84a4262d3ded5dfde5e2af232d454f02d0d943ec71",
+    "src/range/awp-input-priority.test.ts": "91bff215fe6e51d6b3e1c8a72ccb709f92a766c34c805234df08912b8ed06a3e",
+    "src/range/changelog-data.ts": "96857b0166677c130414eaa28e8f1e8655a1f6dcb08a30df150c7e1ab015ede5",
+    "src/range/changelog.test.ts": "362ac33a3e23f7b6180a2c3a96b20c38b702bc4470d211131b2f103cd21e035b",
+    "tests/awp-input-priority.spec.ts": "1e114eedefbd9f2adb9ae504cd2a6bc36a1ac29f03a5f28793010d2164ad3fc6",
+    "tests/awp-rescope.spec.ts": "08a2077389402957b07b1278c80260fb59a831e23383a4b85e44f3d7c59f4684",
+    "tests/glock-timing.spec.ts": "af8b66fd17cc000abe3915d49590aa8585cbed4e37a0bd6f8d5b06cff5057391"
+  },
+  "evidenceHashes": {
+    "reaudit-awp-input-native.json": "ce14b1725d0871e737091fe97eac7f7a1283a1eced8ae0e85e1049dc1046fac1",
+    "reaudit-awp-input-derived.json": "2f628d01753a27dffaf642d02abea501701269834d9489cf1d0279726483d41e",
+    "reaudit-awp-input-before.json": "06147879b2f49ef49ba7bdd229726d32b782dd974a64a10134a644eaa8c886cd",
+    "reaudit-awp-input-after.json": "97d12b083a6c27427b919573f47937ef9192b8af0cec2fb5b9286552aff88b59",
+    "reaudit-awp-input-comparison.json": "6ce2002cac756935d8cf06a6ddf320612a1f1694aa13dcd715366cce26b543d1"
+  }
+}

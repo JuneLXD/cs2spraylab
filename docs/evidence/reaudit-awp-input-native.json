@@ -1,0 +1,139 @@
+{
+  "method": "Check hash-bound retained AWP dispatch evidence; emit named portable findings.\n\nThis reads local proof files only. It does not execute native code or infer a\nphysical button lifetime from the weapon input predicate.\n",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "checkerSha256": "54c1581f43c33394d1ae3a9254c5ab11c430351bd4ae162f744f96bb48506a5d",
+  "sourceReports": [
+    {
+      "report": "native-audit/reports/awp-clocks-next/current-read.json",
+      "reportSha256": "78bc6b31b20fd4461905f8f5f21c6fa166c31e474ccd17f06d58b3a5ed20595d",
+      "reader": "native-audit/reports/awp-clocks-next/read-current.py",
+      "readerSha256": "532e7f3c9ed03042a6577901580b3dc9bcfc73e4a61fbe9b44c544379d258d62"
+    },
+    {
+      "report": "native-audit/reports/awp-clocks-next/metadata-read.json",
+      "reportSha256": "84af5cdc9daf546d8de43f0ecc7b11647ae955e46b798c0be45cbe84ce93544d",
+      "reader": "native-audit/reports/awp-clocks-next/read-metadata.py",
+      "readerSha256": "538d84088f5ba134856d472a9b8c7f8cfe08767f480aed5ece1ec4723720a2aa"
+    },
+    {
+      "report": "native-audit/reports/common-burst-next/secondary-wrapper-read.json",
+      "reportSha256": "6a4efd9b6317901279fe1517534937c05bf2fb30639071287f2056db6322d1ba",
+      "reader": "native-audit/reports/common-burst-next/read-secondary-wrapper.py",
+      "readerSha256": "8f6f0fe424c560b6c3a6d19d776f83b615b38bc41cfe0d6a9a9d702f5094c7ab"
+    },
+    {
+      "report": "native-audit/reports/common-burst-next/secondary-thunk-read.json",
+      "reportSha256": "d48c876b1de89f3de8988afbd28df62413a20ec4f456826537fb3dd7c6df5f42",
+      "reader": "native-audit/reports/common-burst-next/read-secondary-thunk.py",
+      "readerSha256": "a08412233ee84106ffc0be5028128cee78ef6b729ac06e2d199f0ae735aa64cd"
+    },
+    {
+      "report": "native-audit/reports/awp-input-next/current-gaps/current-read.json",
+      "reportSha256": "6415b83f561329a8eb570bf768090d17b62af1d09c64e258f7af2a5b1d8064b2",
+      "readerSha256": "e6033cff429137c47911a4bb5014010e024243d01bf6d6c38674cea80d39fa0c"
+    },
+    {
+      "report": "native-audit/reports/awp-input-next/consume-tail/current-read.json",
+      "reportSha256": "9b4737fd1e646d4f4ef75379a96bf2d27933baaccfe1483e553660d30b899288",
+      "readerSha256": "8e8aa75b0c4d090c20862b2b46dab3c11327cf48575c425e3f81dee7d8e90e22"
+    }
+  ],
+  "dataProofSha256": "473089f681a3296ec69de31b84dfd137ad3df42e110bd8833f18fbf282c27bfe",
+  "concreteClass": "CWeaponAWP",
+  "concreteBindingAssertions": 7,
+  "instructionAssertions": 96,
+  "evidence": [
+    {
+      "name": "common-input-dispatch",
+      "assertions": 21,
+      "codeSha256": "419bb34dfb203669bd499331edef948925065d6793d416236efccaff88f3ebe4",
+      "listingSha256": "ca07840cf94ef9bc5c7d4f56733e90f122ea7c08fd145ea3c67faeaf2bd77f94"
+    },
+    {
+      "name": "primary-dispatch",
+      "assertions": 16,
+      "codeSha256": "d435032a6b5b71674e453a6158b90658c6f4fdd386771a7a1259a299b8c93409",
+      "listingSha256": "ff794aa2914f2e59240b48e5176afb7e86c279a48efab0e1671ce822f52248f1"
+    },
+    {
+      "name": "primary-ready",
+      "assertions": 4,
+      "codeSha256": "8ca92825d9e18ea6a5ecffdc6d89774674f90b04f10822d25256cf722e3cbc2d",
+      "listingSha256": "1fc7b581e34f190c7bd380186c64330f4304b8954226965182a7c2b194c5590d"
+    },
+    {
+      "name": "secondary-ready",
+      "assertions": 4,
+      "codeSha256": "901ae4e929d0ff2f0872d03950d819e16a24d1e24d1742498ab4611662f093a9",
+      "listingSha256": "b568e6f86eb4f8e476bce4999be491b5ad08837b0e9417da451aa3eed738083c"
+    },
+    {
+      "name": "input-active",
+      "assertions": 6,
+      "codeSha256": "c434991702f6cfc3740fb0cbc8aa6d95b4585db2bd6cfd030100be2739bb7da2",
+      "listingSha256": "246521935b2429bcc3e1c99a30bf361f01d016f299050946777a18445ae03981"
+    },
+    {
+      "name": "ordinary-postframe",
+      "assertions": 8,
+      "codeSha256": "312c231dace22a3669bca43be574941a042106204dcb6cca7d3ee0811b9683e3",
+      "listingSha256": "95b62bd98c996fdda68e8bf6f98e508998ed251b06f542280015ce50a9b88f45"
+    },
+    {
+      "name": "secondary-input-wrapper",
+      "assertions": 3,
+      "codeSha256": "2ad8a33e1b22983ed3cd3bef63acbf6c6afa1790df3a32b5516a8a2a38b103a6",
+      "listingSha256": "ac5eac2990dfe250e472962be955086af3d9e4e5fbe1859353c9697a5e878f92"
+    },
+    {
+      "name": "secondary-dispatch-thunk",
+      "assertions": 16,
+      "codeSha256": "1e06643d17a7e1867e58ae67d0eb6e5519f7fbdf7dc4c86968ee3f981160b88f",
+      "listingSha256": "f5b2f6e66bf95bc053bed975f7ef8e11fa7b6eb2f87afb91f4c4c14c4d1a58cf"
+    },
+    {
+      "name": "secondary-dispatch",
+      "assertions": 10,
+      "codeSha256": "d450a90d93c95f5ec3101c63ff112fafb3df523669c5ce6cf4c37b6689e4e1bc",
+      "listingSha256": "03d60e21ee51ec602a1a75925fe750b7ed56fecf7962da269947eb42b487cbe0"
+    },
+    {
+      "name": "awp-secondary-eligibility",
+      "assertions": 4,
+      "codeSha256": "eef421c19661d6ae8dd0c4c6edb2fde10f5f856f334600cb6d688d97983ada2b",
+      "listingSha256": "dbd702e1ca06410685feb5a5ca9bd653ecbd3edbe762bc03cd0c95baad207f99"
+    },
+    {
+      "name": "input-consume",
+      "assertions": 1,
+      "codeSha256": "d13cc7ee87a10787d3116a724bc96ba3852251fd3290652374df31a3774d4176",
+      "listingSha256": "02e52a3be34f2ac8736a18176eb953280f28696cd914b67108c109b780c70915"
+    },
+    {
+      "name": "input-consume-body",
+      "assertions": 3,
+      "codeSha256": "fcc860fe4be13a338937d1236d0245e24406404349ebfccc03e6562e58a2f188",
+      "listingSha256": "ccbe38724b2b603b3e475af3159ee7ae2b10033b51f354c4a804015522543c5d"
+    }
+  ],
+  "newReadBytes": 1536,
+  "rules": {
+    "arbitration": "Given active primary input and a ready primary clock, the shared dispatcher selects primary before secondary. Both the primary-success and primary-rejection returns bypass the secondary branch.",
+    "semiautoRejection": "For the bound AWP fullAuto=false path, a positive retained shot counter rejects another primary shot. That rejection still owns primary dispatch for the command and does not permit secondary fallback.",
+    "primaryNotReady": "Active primary whose clock is not ready does not own that branch. In the ordinary command with no intervening special button, active secondary is checked against its own deadline.",
+    "secondaryRetry": "The dispatcher re-evaluates active secondary and its readiness on each invocation. Before readiness it does not enter the secondary thunk or its consume path. Once ready, it dispatches if primary does not own the command. This is conditional on the native input predicate remaining active, not a claim about a browser physical-held event.",
+    "release": "When the next invocation reports primary inactive, it can admit ready active secondary in that same invocation. No additional one-update delay is authored by this dispatcher.",
+    "autoRescopeOrder": "Ordinary postframe handles pending primary-ready rescope before this shared input arbitration, subject to the previously proved ammo/saved-level gates.",
+    "zoomPreference": "For a qualifying scope/controller path, the secondary thunk reads cl_debounce_zoom. A parsed positive value forces return1 after SecondaryAttack; common dispatch then invokes the input-consume path. Zero/nonpositive or missing preference leaves the SecondaryAttack return unchanged. The retained ordinary AWP zoom branch returns0.",
+    "consumeObserved": "The selected consume path calls another service helper and then ORs the button bit into a service mask. Immediate helper semantics and the producer/reset lifetime of this mask are outside the selected reads."
+  },
+  "implementationBoundary": "A priority-only AWP guard can require active primary plus primary readiness before refusing secondary. It must not use primary shot acceptance as the priority test, and must not block secondary merely because primary is held during cooldown. Keep existing engine zoom-repeat preference gating and cadence unchanged.",
+  "limits": [
+    "No game, native execution, client prediction, or runtime preference/default observation.",
+    "Native input predicate combines service state and a transition fallback; producer/reset lifetimes are not established here.",
+    "The full secondary-wrapper special-weapon branch and its current field-name schema are not newly proved; the ordinary scope path and preference result are stated conditionally.",
+    "Other action buttons, player/equip/reload gates, empty-fire outcomes, and native command/subtick aggregation remain outside the derived arbitration cases.",
+    "Separate equal-time browser DOM edges need not form one atomic native command; event order remains an explicit integration boundary.",
+    "The native shot-counter lifetime is retained from prior evidence; this pass checks its dispatch read and semiauto branch, not all producers/resets."
+  ]
+}

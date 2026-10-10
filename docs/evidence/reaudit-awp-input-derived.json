@@ -1,0 +1,1177 @@
+{
+  "method": "Reproducible branch-table examples derived from the checked native dispatcher.\n\nThis is a small decision model, not execution of native instructions or a model\nof physical input masks. All unmodeled player/weapon gates are assumed to allow\nthe ordinary loaded AWP path, with other action buttons absent.\n",
+  "sourceSha256": "1739c0ab8333376d289aac08f2a1db2c92628af9cca658c3ce12f786ef0c3778",
+  "proofSha256": "ce14b1725d0871e737091fe97eac7f7a1283a1eced8ae0e85e1049dc1046fac1",
+  "cases": 64,
+  "namedExamples": [
+    {
+      "name": "both-ready-fresh-primary",
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": true,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "name": "both-ready-semi-rejection",
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "name": "held-primary-cooldown-allows-secondary",
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "name": "secondary-before-readiness",
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "name": "secondary-ready-repeat-enabled",
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "name": "secondary-ready-debounce-enabled",
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": true
+      }
+    },
+    {
+      "name": "released-primary-same-invocation",
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "name": "released-secondary-before-ready",
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    }
+  ],
+  "truthTable": [
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": true
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": true
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": true
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": false,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": true
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": true
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "none",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": false,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "secondary",
+        "fires": false,
+        "secondaryCalls": 1,
+        "secondaryConsumeRequested": true
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": true,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": true,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": true,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": true,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": true,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": true,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": true,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": false,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": true,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": false,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": false,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": false
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    },
+    {
+      "input": {
+        "primaryActive": true,
+        "primaryReady": true,
+        "priorShot": true,
+        "secondaryActive": true,
+        "secondaryReady": true,
+        "debounce": true
+      },
+      "result": {
+        "dispatch": "primary",
+        "fires": false,
+        "secondaryCalls": 0,
+        "secondaryConsumeRequested": false
+      }
+    }
+  ],
+  "notRuntime": true,
+  "limits": [
+    "Inputs are already evaluated native activity/readiness booleans, not physical browser buttons.",
+    "Fresh primary acceptance assumes all omitted gates allow firing; primary priority itself does not require acceptance.",
+    "No input-mask state evolution, natural reachability of every readiness combination, repeat cadence, or cooldown/FOV timing is modeled.",
+    "The debounce result is a consume request at the ordinary scope thunk, not proof of its lifetime through future commands."
+  ]
+}
