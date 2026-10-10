@@ -1,0 +1,378 @@
+{
+  "schema": 1,
+  "scope": "Ordinary draw relative rate for M4A4, M4A1-S, Glock, USP-S and Deagle; AWP unchanged control.",
+  "artifacts": [
+    {
+      "path": "docs/evidence/reaudit-common-draw-before.json",
+      "sha256": "17850b7b2f52a54582ac9a6ac52578ae4f0e5a2fd3181dbdc896f1c7e7974c4d"
+    },
+    {
+      "path": "docs/evidence/reaudit-common-draw-after.json",
+      "sha256": "d79ef7359116a08caa6dd8e68e9c8e8ade31489994a959501f8d10c1eb546321"
+    },
+    {
+      "path": "docs/evidence/reaudit-common-draw-graph.json",
+      "sha256": "02f4a04c0f61c2b7cef325e04e30dc538967c6bb162b7ae42adcd2e73280ec4b"
+    },
+    {
+      "path": "tools/reaudit-common-draw-graph.mjs",
+      "sha256": "246dfaef5b5379fd32671e1f9385d8fc365524d8db07cf42de655ccc0c6ddd46"
+    },
+    {
+      "path": "tools/reaudit-common-draw-runtime.mjs",
+      "sha256": "af0ef682ee243aa8a282272586585206d24179285fd3018aadee82c950e2b297"
+    }
+  ],
+  "baseline": {
+    "revision": "90c756280839740754989183d034c607eda8c10d",
+    "sourceSha256": "9918b5f47f939f9fefb6f6c59307af4ae9ee62045e780213f8c0543f54e00969",
+    "path": "docs/evidence/reaudit-common-draw-baseline-view-animation.txt"
+  },
+  "afterSourceSha256": "f811f4e2e79e01db887a1e343a00957f3ce515463abb27e2ba3d5f55036223cc",
+  "nativeGraph": {
+    "graphs": 6,
+    "clipNodes": 24,
+    "drawRate": 1,
+    "connectedClipInputs": 0,
+    "drawStartSyncOffset": 0,
+    "loop": false,
+    "entrySeconds": 0,
+    "idleExitSeconds": 0.2,
+    "completionRemainingSeconds": 0.1,
+    "identity": "Current installed VPK directory and selected compiled entries hashed; draw CRC/size matches retained extraction listing and imported export manifests. Retained decoded graph hashes match prior extraction index. No fresh package decode."
+  },
+  "comparison": {
+    "beforeSha256": "17850b7b2f52a54582ac9a6ac52578ae4f0e5a2fd3181dbdc896f1c7e7974c4d",
+    "beforeSourceSha256": "9918b5f47f939f9fefb6f6c59307af4ae9ee62045e780213f8c0543f54e00969",
+    "unchangedControls": 901,
+    "unchangedLifetimesAndWeights": 1086,
+    "interruptControls": 72,
+    "pauseChecks": 24,
+    "midpoints": [
+      {
+        "id": "m4a4",
+        "attachmentDelay": 0,
+        "remaining": 1.133333,
+        "elapsed": 0.5666665,
+        "beforeClock": 0.5666666626930237,
+        "afterClock": 0.5666665,
+        "nativeUnitRateReference": 0.5666665,
+        "beforeRate": 1.0000002871054203,
+        "afterRate": 1
+      },
+      {
+        "id": "m4a4",
+        "attachmentDelay": 0.25,
+        "remaining": 0.8833329999999999,
+        "elapsed": 0.44166649999999996,
+        "beforeClock": 0.5666666626930237,
+        "afterClock": 0.44166649999999996,
+        "nativeUnitRateReference": 0.44166649999999996,
+        "beforeRate": 1.2830193430858436,
+        "afterRate": 1
+      },
+      {
+        "id": "m4a4",
+        "attachmentDelay": 0.75,
+        "remaining": 0.3833329999999999,
+        "elapsed": 0.19166649999999996,
+        "beforeClock": 0.5666666626930237,
+        "afterClock": 0.19166649999999996,
+        "nativeUnitRateReference": 0.19166649999999996,
+        "beforeRate": 2.9565242892890713,
+        "afterRate": 1
+      },
+      {
+        "id": "m4a4",
+        "attachmentDelay": 1.233333,
+        "remaining": 0.01,
+        "elapsed": 0.005,
+        "beforeClock": 0.5666666626930237,
+        "afterClock": 0.005,
+        "nativeUnitRateReference": 0.005,
+        "beforeRate": 113.33333253860474,
+        "afterRate": 1
+      },
+      {
+        "id": "m4a1s",
+        "attachmentDelay": 0,
+        "remaining": 1.133333,
+        "elapsed": 0.5666665,
+        "beforeClock": 0.5666666626930237,
+        "afterClock": 0.5666665,
+        "nativeUnitRateReference": 0.5666665,
+        "beforeRate": 1.0000002871054203,
+        "afterRate": 1
+      },
+      {
+        "id": "m4a1s",
+        "attachmentDelay": 0.25,
+        "remaining": 0.8833329999999999,
+        "elapsed": 0.44166649999999996,
+        "beforeClock": 0.5666666626930237,
+        "afterClock": 0.44166649999999996,
+        "nativeUnitRateReference": 0.44166649999999996,
+        "beforeRate": 1.2830193430858436,
+        "afterRate": 1
+      },
+      {
+        "id": "m4a1s",
+        "attachmentDelay": 0.75,
+        "remaining": 0.3833329999999999,
+        "elapsed": 0.19166649999999996,
+        "beforeClock": 0.5666666626930237,
+        "afterClock": 0.19166649999999996,
+        "nativeUnitRateReference": 0.19166649999999996,
+        "beforeRate": 2.9565242892890713,
+        "afterRate": 1
+      },
+      {
+        "id": "m4a1s",
+        "attachmentDelay": 1.233333,
+        "remaining": 0.01,
+        "elapsed": 0.005,
+        "beforeClock": 0.5666666626930237,
+        "afterClock": 0.005,
+        "nativeUnitRateReference": 0.005,
+        "beforeRate": 113.33333253860474,
+        "afterRate": 1
+      },
+      {
+        "id": "glock",
+        "attachmentDelay": 0,
+        "remaining": 1,
+        "elapsed": 0.5,
+        "beforeClock": 0.5,
+        "afterClock": 0.5,
+        "nativeUnitRateReference": 0.5,
+        "beforeRate": 1,
+        "afterRate": 1
+      },
+      {
+        "id": "glock",
+        "attachmentDelay": 0.25,
+        "remaining": 0.75,
+        "elapsed": 0.375,
+        "beforeClock": 0.5,
+        "afterClock": 0.375,
+        "nativeUnitRateReference": 0.375,
+        "beforeRate": 1.3333333333333333,
+        "afterRate": 1
+      },
+      {
+        "id": "glock",
+        "attachmentDelay": 0.75,
+        "remaining": 0.25,
+        "elapsed": 0.125,
+        "beforeClock": 0.5,
+        "afterClock": 0.125,
+        "nativeUnitRateReference": 0.125,
+        "beforeRate": 4,
+        "afterRate": 1
+      },
+      {
+        "id": "glock",
+        "attachmentDelay": 1.1,
+        "remaining": 0.01,
+        "elapsed": 0.005,
+        "beforeClock": 0.5,
+        "afterClock": 0.005,
+        "nativeUnitRateReference": 0.005,
+        "beforeRate": 100,
+        "afterRate": 1
+      },
+      {
+        "id": "usp",
+        "attachmentDelay": 0,
+        "remaining": 1,
+        "elapsed": 0.5,
+        "beforeClock": 0.5,
+        "afterClock": 0.5,
+        "nativeUnitRateReference": 0.5,
+        "beforeRate": 1,
+        "afterRate": 1
+      },
+      {
+        "id": "usp",
+        "attachmentDelay": 0.25,
+        "remaining": 0.75,
+        "elapsed": 0.375,
+        "beforeClock": 0.5,
+        "afterClock": 0.375,
+        "nativeUnitRateReference": 0.375,
+        "beforeRate": 1.3333333333333333,
+        "afterRate": 1
+      },
+      {
+        "id": "usp",
+        "attachmentDelay": 0.75,
+        "remaining": 0.25,
+        "elapsed": 0.125,
+        "beforeClock": 0.5,
+        "afterClock": 0.125,
+        "nativeUnitRateReference": 0.125,
+        "beforeRate": 4,
+        "afterRate": 1
+      },
+      {
+        "id": "usp",
+        "attachmentDelay": 1.1,
+        "remaining": 0.01,
+        "elapsed": 0.005,
+        "beforeClock": 0.5,
+        "afterClock": 0.005,
+        "nativeUnitRateReference": 0.005,
+        "beforeRate": 100,
+        "afterRate": 1
+      },
+      {
+        "id": "deagle",
+        "attachmentDelay": 0,
+        "remaining": 1,
+        "elapsed": 0.5,
+        "beforeClock": 0.5,
+        "afterClock": 0.5,
+        "nativeUnitRateReference": 0.5,
+        "beforeRate": 1,
+        "afterRate": 1
+      },
+      {
+        "id": "deagle",
+        "attachmentDelay": 0.25,
+        "remaining": 0.75,
+        "elapsed": 0.375,
+        "beforeClock": 0.5,
+        "afterClock": 0.375,
+        "nativeUnitRateReference": 0.375,
+        "beforeRate": 1.3333333333333333,
+        "afterRate": 1
+      },
+      {
+        "id": "deagle",
+        "attachmentDelay": 0.75,
+        "remaining": 0.25,
+        "elapsed": 0.125,
+        "beforeClock": 0.5,
+        "afterClock": 0.125,
+        "nativeUnitRateReference": 0.125,
+        "beforeRate": 4,
+        "afterRate": 1
+      },
+      {
+        "id": "deagle",
+        "attachmentDelay": 1.1,
+        "remaining": 0.01,
+        "elapsed": 0.005,
+        "beforeClock": 0.5,
+        "afterClock": 0.005,
+        "nativeUnitRateReference": 0.005,
+        "beforeRate": 100,
+        "afterRate": 1
+      },
+      {
+        "id": "awp",
+        "attachmentDelay": 0,
+        "remaining": 1.266667,
+        "elapsed": 0.6333335,
+        "beforeClock": 0.6333335,
+        "afterClock": 0.6333335,
+        "nativeUnitRateReference": 0.6333335,
+        "beforeRate": 1,
+        "afterRate": 1
+      },
+      {
+        "id": "awp",
+        "attachmentDelay": 0.25,
+        "remaining": 1.016667,
+        "elapsed": 0.5083335,
+        "beforeClock": 0.5083335,
+        "afterClock": 0.5083335,
+        "nativeUnitRateReference": 0.5083335,
+        "beforeRate": 1,
+        "afterRate": 1
+      },
+      {
+        "id": "awp",
+        "attachmentDelay": 0.75,
+        "remaining": 0.516667,
+        "elapsed": 0.2583335,
+        "beforeClock": 0.2583335,
+        "afterClock": 0.2583335,
+        "nativeUnitRateReference": 0.2583335,
+        "beforeRate": 1,
+        "afterRate": 1
+      },
+      {
+        "id": "awp",
+        "attachmentDelay": 1.366667,
+        "remaining": 0.01,
+        "elapsed": 0.005,
+        "beforeClock": 0.005,
+        "afterClock": 0.005,
+        "nativeUnitRateReference": 0.005,
+        "beforeRate": 1,
+        "afterRate": 1
+      }
+    ]
+  },
+  "validation": {
+    "graph": {
+      "exitCode": 0,
+      "capMiB": 512
+    },
+    "before": {
+      "exitCode": 0,
+      "capMiB": 512,
+      "rows": 1086
+    },
+    "after": {
+      "exitCode": 0,
+      "capMiB": 512,
+      "rows": 1086
+    },
+    "focusedUnitRun": {
+      "exitCode": 1,
+      "capMiB": 2048,
+      "workers": 1,
+      "filesPassed": 3,
+      "filesFailed": 1,
+      "testsPassed": 43,
+      "testsFailed": 1,
+      "passedFiles": [
+        "src/range/view-animation-common-draw.test.ts",
+        "src/range/view-animation-draw.test.ts",
+        "src/range/view-animation-ak-reload.test.ts"
+      ],
+      "failure": "src/range/view-animation.test.ts:224 expected sim.reload() true immediately after sim.start() shot. Separate new reload-admission behavior requires release and cycle elapsed. Root owns fixture correction and final integrated rerun."
+    }
+  },
+  "outOfScope": [
+    {
+      "action": "deagle/reload",
+      "path": "animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.vnmclip_c",
+      "importedCRC": "a0de1be2",
+      "currentCRC": "05d10c92",
+      "bytes": 27162,
+      "currentCompiledSha256": "3966fb59252703eaf905a5cbda2c0c778a2837f0ab27e14a819a155a14ff8f3e",
+      "conclusion": "Native resource identity changed. No reload asset correction or behavioral cause inferred in this draw-only pass."
+    }
+  ],
+  "limits": [
+    "Measures actual ViewAnimation clock and linear-track pose with real imported durations under synthetic attachment delays, not native live pose/display onset.",
+    "Existing readiness-based lifetime, action onset and fades remain approximations and are unchanged.",
+    "Pickup remains proportional; unknown/missing equipment and AWP remain unchanged.",
+    "Retained one-sample idle clips are padded to one30Hz frame in imported assemblies; old inventory durations differ from normalized export clocks by at most33.45 microseconds.",
+    "No shell, revolver, reload, fire, recoil or gameplay deadline change."
+  ],
+  "originalEvidence": {
+    "before": {
+      "path": "../native-audit/reports/animation-common-draw/original-before.json",
+      "sha256": "750e3d67354e530edd7d23fc1bfd57f020aa065811bb83adb109520df60bf956"
+    },
+    "after": {
+      "path": "../native-audit/reports/animation-common-draw/original-after.json",
+      "sha256": "39feba4962e2f7e933f3c0d9db9c95637fab244be733f9361ef3f9849e85b8b2"
+    },
+    "reason": "Preserved first successful run before removing redundant current-file guard. Portable reruns load the same exact historical baseline after the production change; source/measurements/counts unchanged."
+  }
+}

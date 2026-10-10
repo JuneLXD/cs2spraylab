@@ -30,7 +30,7 @@ describe('ordinary draw authored clock', () => {
   });
 
   it('keeps other graph and pickup clocks separate from ordinary audited draws', () => {
-    for (const equipment of ['deagle', undefined]) {
+    for (const equipment of ['unaudited', undefined]) {
       const f = fixture(); f.animation.playDraw(.75);
       f.animation.update(0, 1, .375, {equipment});
       expect(f.hand.position.x).toBeCloseTo(.5, 7); f.animation.dispose();

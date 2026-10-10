@@ -7,9 +7,9 @@ export type ViewAction = 'idle' | 'reload' | 'reload-empty' | 'draw' | 'pickup' 
 export interface ViewAnimationOptions {reloadEmpty?: boolean; ammo?: number; charging?: boolean; chargeDuration?: number;
   equipment?: string; reloadPhase?: ReloadPhase; reloadProgress?: number}
 
-// Current native Arms callers and these verified graphs advance ordinary draw
+// Current native Arms callers and these four graphs advance ordinary draw
 // clips in authored seconds. Pickup and other weapon graphs remain separate.
-const authoredDrawWeapons = new Set(['ak47', 'awp', 'nova', 'xm1014', 'm4a4', 'm4a1s', 'glock', 'usp', 'deagle']);
+const authoredDrawWeapons = new Set(['ak47', 'awp', 'nova', 'xm1014']);
 
 /** Presentation only: gameplay still owns ammo, deploy delays, and firing permissions. */
 export class ViewAnimation {

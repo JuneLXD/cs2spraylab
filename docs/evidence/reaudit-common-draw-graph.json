@@ -1,0 +1,2068 @@
+{
+  "schema": 1,
+  "scope": "Ordinary M4A4/M4A1-S/Glock/USP/Deagle draw relative rate; AWP unchanged control",
+  "provenance": {
+    "path": "research/reaudit-animation/provenance.json",
+    "sha256": "0fd062a71037ffb664aed5fd3f2472845dde21e99171187b345f636509e31670"
+  },
+  "retainedGraphIndex": {
+    "path": "tools/reaudit-animation-graph-results.json",
+    "sha256": "26f950b98e31d74dfe8bc7994b5a74e5412509ced67c8e3cc9614fb8ee0f3822"
+  },
+  "listing": {
+    "path": "research/reaudit-animation/listing.txt",
+    "sha256": "cac53a8d185a272f941dec040fcc524d77d1a86f42dced2a5b21e40042458371"
+  },
+  "inventory": {
+    "path": "docs/weapon-animation-inventory.json",
+    "sha256": "5db65d43ecf5923b5732f6fcf240491e0ca711ca8cb704b9661bf95f614cad43"
+  },
+  "stats": {
+    "path": "src/range/game-data.json",
+    "sha256": "5903a1deeb1ff4181c7203f4c8b1e9690ee17e5573db558e424388c204ab990e"
+  },
+  "currentPackage": {
+    "path": "/home/junel/Desktop/cs2/cs2-game/game/csgo/pak01_dir.vpk",
+    "sha256": "48018be3f8da306ce9b48bf746bce08ceff19fe4dff15c9d5e2e53b3c3e9bbad",
+    "metadataEntries": 137693
+  },
+  "parser": {
+    "path": "tools/kv3.mjs",
+    "sha256": "c4d3715b5e419530bd7cd439c9c3ecc4ba3a5ccba309b98c82131d5c3c1612c0"
+  },
+  "probeSha256": "246dfaef5b5379fd32671e1f9385d8fc365524d8db07cf42de655ccc0c6ddd46",
+  "weapons": {
+    "m4a4": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+m4a4.vnmgraph",
+      "sha256": "99d6dab46dc4084fed833cd51dee68c5fd35e1d5d3692aa1f0c881197d000fb4",
+      "compiledGraph": {
+        "path": "animation/graphs/viewmodel/viewmodel_gun.vnmgraph+m4a4.vnmgraph_c",
+        "crc": "a7827918",
+        "bytes": 11397,
+        "compiledSha256": "ecf9b35b44c274c914f4650f849443bf886bb6629950bef15eb08b4fc9199db5",
+        "matchesRetainedListing": true
+      },
+      "nodes": 459,
+      "export": {
+        "path": "research/weapon-actions/m4a4-export.json",
+        "sha256": "5eb7886e191eae5c63d6a9a3c3a5f263c141e2c8cdc7e0f598bfb1d13395ec0b"
+      },
+      "importBuild": "2000927",
+      "import": {
+        "path": "public/revamp/models/view-m4a4.glb",
+        "jsonSha256": "65226d55d571a4d4072504d41808bff79e6f6ca9fe469e475d5f197df0b4be81",
+        "bytes": 3476692,
+        "durations": {
+          "idle": 0.03333333507180214,
+          "draw": 1.1333333253860474,
+          "inspect": 5.300000190734863,
+          "reload": 3.066666603088379,
+          "fire": 0.4000000059604645
+        }
+      },
+      "clips": {
+        "idle": {
+          "path": "animation/anims/viewmodel/rifle/rifle_m4a4/idle_m4a4.vnmclip_c",
+          "seconds": 0,
+          "importedIdentity": {
+            "crc": "0110f626",
+            "bytes": 4339
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0.03333333507180214,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_m4a4/idle_m4a4.vnmclip_c",
+            "crc": "0110f626",
+            "bytes": 4339,
+            "compiledSha256": "1e12f3489269713e10ddab7a71754b85c641ab3e655bba32e627f631c536027d",
+            "matchesRetainedListing": true
+          }
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/rifle/rifle_m4a4/draw_m4a4.vnmclip_c",
+          "seconds": 1.1333333333333333,
+          "importedIdentity": {
+            "crc": "11bb4d9d",
+            "bytes": 12621
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 1.1332998911539713,
+          "inventoryClockDifference": -0.000033442179361964364,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_m4a4/draw_m4a4.vnmclip_c",
+            "crc": "11bb4d9d",
+            "bytes": 12621,
+            "compiledSha256": "5bf64a2118bca6019e2f87851fa04f01053a7cd942b5b3de145bde618f9aeb6d",
+            "matchesRetainedListing": true
+          }
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/rifle/rifle_m4a4/lookat01_m4a4.vnmclip_c",
+          "seconds": 5.3,
+          "importedIdentity": {
+            "crc": "bc82e57b",
+            "bytes": 32896
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 5.3,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_m4a4/lookat01_m4a4.vnmclip_c",
+            "crc": "bc82e57b",
+            "bytes": 32896,
+            "compiledSha256": "722a2a7763cb77153913a65e63b810f087a723bdd53dd8ffec5f60cabf9a06eb",
+            "matchesRetainedListing": true
+          }
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/rifle/rifle_m4a4/reload_m4a4.vnmclip_c",
+          "seconds": 3.066666666666667,
+          "importedIdentity": {
+            "crc": "4662a6b9",
+            "bytes": 26285
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 3.066699981689453,
+          "inventoryClockDifference": 0.00003331502278625109,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_m4a4/reload_m4a4.vnmclip_c",
+            "crc": "4662a6b9",
+            "bytes": 26285,
+            "compiledSha256": "374df832ac893cba445a25ca4ec6ecfd1ef7aff6567385df605c1ada54467407",
+            "matchesRetainedListing": true
+          }
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/rifle/rifle_m4a4/shoot1_m4a4.vnmclip_c",
+          "seconds": 0.4,
+          "importedIdentity": {
+            "crc": "5010b2ae",
+            "bytes": 7066
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0.4,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_m4a4/shoot1_m4a4.vnmclip_c",
+            "crc": "5010b2ae",
+            "bytes": 7066,
+            "compiledSha256": "aaeff0d0b3041bf5db76fc9672ccb031fa7b06f55c69340e4c42e06110c8f93d",
+            "matchesRetainedListing": true
+          }
+        }
+      },
+      "stats": {
+        "deploy": 1.133333,
+        "cycle": 0.09,
+        "reload": 3.066667
+      },
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_m4a4/draw_m4a4.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_m4a4/draw_m4a4.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    },
+    "m4a1s": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+m4a1s.vnmgraph",
+      "sha256": "9ca1a393c40d80f3085ffb1aded5336e43f9e39715923033ca25729270445bcb",
+      "compiledGraph": {
+        "path": "animation/graphs/viewmodel/viewmodel_gun.vnmgraph+m4a1s.vnmgraph_c",
+        "crc": "f8b414b8",
+        "bytes": 11639,
+        "compiledSha256": "fcf70ef6efdcfb8d06b8b70d64c94c5c2aecbddc033cb632763a08ea8bfe1928",
+        "matchesRetainedListing": true
+      },
+      "nodes": 459,
+      "export": {
+        "path": "research/weapon-actions/m4a1s-export.json",
+        "sha256": "0d71586b55223120a9734129e3c2a72291a1bf9e7ed1fc806430b0bec9c91ebc"
+      },
+      "importBuild": "2000927",
+      "import": {
+        "path": "public/revamp/models/view-m4a1s.glb",
+        "jsonSha256": "6bf3e711804e41f902d0dc6e717bc20823f15cafcf707761783781b6ec1470de",
+        "bytes": 3110300,
+        "durations": {
+          "idle": 0.03333333507180214,
+          "draw": 1.1333333253860474,
+          "inspect": 5.300000190734863,
+          "reload": 3.066666603088379,
+          "fire": 0.4000000059604645
+        }
+      },
+      "clips": {
+        "idle": {
+          "path": "animation/anims/viewmodel/rifle/_default_rifle/idle_rifle.vnmclip_c",
+          "seconds": 0,
+          "importedIdentity": {
+            "crc": "c969d812",
+            "bytes": 4396
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0.03333333507180214,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/_default_rifle/idle_rifle.vnmclip_c",
+            "crc": "c969d812",
+            "bytes": 4396,
+            "compiledSha256": "e1e31b66f14d16b3480728215c5c2b81da03d78a0ba2269b01bdb6157f7cf311",
+            "matchesRetainedListing": true
+          }
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/rifle/_default_rifle/draw_rifle.vnmclip_c",
+          "seconds": 1.1333333333333333,
+          "importedIdentity": {
+            "crc": "7255883b",
+            "bytes": 12793
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 1.1332998911539713,
+          "inventoryClockDifference": -0.000033442179361964364,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/_default_rifle/draw_rifle.vnmclip_c",
+            "crc": "7255883b",
+            "bytes": 12793,
+            "compiledSha256": "3564286a093546e992cc8b38fd39ccbaf95bfe34ded971957235a8d321e436ee",
+            "matchesRetainedListing": true
+          }
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/rifle/_default_rifle/lookat01_rifle.vnmclip_c",
+          "seconds": 5.3,
+          "importedIdentity": {
+            "crc": "a441ebfd",
+            "bytes": 33171
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 5.3,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/_default_rifle/lookat01_rifle.vnmclip_c",
+            "crc": "a441ebfd",
+            "bytes": 33171,
+            "compiledSha256": "185044dcf8a923cf779769fc863e8a7bdbf39deb03f2c4b0853fca5130fd9c1c",
+            "matchesRetainedListing": true
+          }
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/rifle/_default_rifle/reload_rifle.vnmclip_c",
+          "seconds": 3.066666666666667,
+          "importedIdentity": {
+            "crc": "4ef5f6b6",
+            "bytes": 26601
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 3.066699981689453,
+          "inventoryClockDifference": 0.00003331502278625109,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/_default_rifle/reload_rifle.vnmclip_c",
+            "crc": "4ef5f6b6",
+            "bytes": 26601,
+            "compiledSha256": "22291887c9e72333ce299c6336b5424ac4bbe80ae23644296a2c7225e56256e3",
+            "matchesRetainedListing": true
+          }
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/rifle/_default_rifle/shoot1_rifle.vnmclip_c",
+          "seconds": 0.4,
+          "importedIdentity": {
+            "crc": "7ecd5390",
+            "bytes": 7076
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0.4,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/_default_rifle/shoot1_rifle.vnmclip_c",
+            "crc": "7ecd5390",
+            "bytes": 7076,
+            "compiledSha256": "32e1afb1adb6bd8d191a0b406b00c1ee6dc333503352e30f5f7f4e86391ffcc8",
+            "matchesRetainedListing": true
+          }
+        }
+      },
+      "stats": {
+        "deploy": 1.133333,
+        "cycle": 0.1,
+        "reload": 3.066667
+      },
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/_default_rifle/draw_rifle.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/_default_rifle/draw_rifle.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    },
+    "glock": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+glock.vnmgraph",
+      "sha256": "0048aab3705a286a2b58ef1cefc03399a5d46f30cebcba4db4b92446c1d1ec02",
+      "compiledGraph": {
+        "path": "animation/graphs/viewmodel/viewmodel_gun.vnmgraph+glock.vnmgraph_c",
+        "crc": "9f022b67",
+        "bytes": 11769,
+        "compiledSha256": "738ee448b52813fed32212dec322d75abf6d7b24d87f8b1647ba51d213eca31e",
+        "matchesRetainedListing": true
+      },
+      "nodes": 459,
+      "export": {
+        "path": "research/weapon-actions/glock-export.json",
+        "sha256": "cda50fc4e3ef7654dba81cc18e3f588fa994e72ee88a15a25675f2aed6a70f0b"
+      },
+      "importBuild": "2000927",
+      "import": {
+        "path": "public/revamp/models/view-glock.glb",
+        "jsonSha256": "9a635cfd2a3184846be1897f6108db40e898bff1721e4ec4f8f06e15c06cd58e",
+        "bytes": 2414172,
+        "durations": {
+          "idle": 0.03333333507180214,
+          "draw": 1,
+          "inspect": 6.433333396911621,
+          "reload": 2.2666666507720947,
+          "reload-empty": 2.2666666507720947,
+          "fire": 0.4000000059604645,
+          "fire-last": 0.4000000059604645,
+          "idle-empty": 0.03333333507180214
+        }
+      },
+      "clips": {
+        "idle": {
+          "path": "animation/anims/viewmodel/pistol/pistol_glock18/idle_glock.vnmclip_c",
+          "seconds": 0,
+          "importedIdentity": {
+            "crc": "17c7820f",
+            "bytes": 4359
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0.03333333507180214,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_glock18/idle_glock.vnmclip_c",
+            "crc": "17c7820f",
+            "bytes": 4359,
+            "compiledSha256": "e6f913eba41309ada7fe6cc454f837d03122d71198041d7d848a1996cf6ee1a0",
+            "matchesRetainedListing": true
+          }
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/pistol/pistol_glock18/draw_glock.vnmclip_c",
+          "seconds": 1,
+          "importedIdentity": {
+            "crc": "9fd3f58c",
+            "bytes": 14161
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 1,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_glock18/draw_glock.vnmclip_c",
+            "crc": "9fd3f58c",
+            "bytes": 14161,
+            "compiledSha256": "14bca7e8dcf9c9ed344892a29191223e3d80d2b7c25f1c3851f7ca5ae0417a0f",
+            "matchesRetainedListing": true
+          }
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/pistol/pistol_glock18/lookat01_glock.vnmclip_c",
+          "seconds": 6.433333333333334,
+          "importedIdentity": {
+            "crc": "f3a9386f",
+            "bytes": 57405
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 6.433333333333334,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_glock18/lookat01_glock.vnmclip_c",
+            "crc": "f3a9386f",
+            "bytes": 57405,
+            "compiledSha256": "a917020e0599cdca5a529553ce5f75c2d2eba733bcbb0e7b67f7151c7ff8535b",
+            "matchesRetainedListing": true
+          }
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/pistol/pistol_glock18/reload_glock.vnmclip_c",
+          "seconds": 2.2666666666666666,
+          "importedIdentity": {
+            "crc": "3a88d3d2",
+            "bytes": 27502
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 2.2666666666666666,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_glock18/reload_glock.vnmclip_c",
+            "crc": "3a88d3d2",
+            "bytes": 27502,
+            "compiledSha256": "54fd38faa260832669bff6c54c622d45ec69b5a809fff856f14d6c2bf3a0a498",
+            "matchesRetainedListing": true
+          }
+        },
+        "reload-empty": {
+          "path": "animation/anims/viewmodel/pistol/pistol_glock18/reload_empty_glock.vnmclip_c",
+          "seconds": 2.2666666666666666,
+          "importedIdentity": {
+            "crc": "857c475f",
+            "bytes": 28352
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 2.2666666666666666,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_glock18/reload_empty_glock.vnmclip_c",
+            "crc": "857c475f",
+            "bytes": 28352,
+            "compiledSha256": "ecaa7d73de697109468b460ac0e0c738e0ad18373890a03f09c8c49efc2848d4",
+            "matchesRetainedListing": true
+          }
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/pistol/pistol_glock18/shoot1_glock.vnmclip_c",
+          "seconds": 0.4,
+          "importedIdentity": {
+            "crc": "e9d607da",
+            "bytes": 8442
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0.4,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_glock18/shoot1_glock.vnmclip_c",
+            "crc": "e9d607da",
+            "bytes": 8442,
+            "compiledSha256": "96c532ee07a406b9d0fb216edd432f4b5a88ecfc0431b257d169915e755c72f2",
+            "matchesRetainedListing": true
+          }
+        },
+        "fire-last": {
+          "path": "animation/anims/viewmodel/pistol/pistol_glock18/shoot_empty_glock.vnmclip_c",
+          "seconds": 0.4,
+          "importedIdentity": {
+            "crc": "6a982846",
+            "bytes": 8479
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0.4,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_glock18/shoot_empty_glock.vnmclip_c",
+            "crc": "6a982846",
+            "bytes": 8479,
+            "compiledSha256": "f4effc2062832cb1ad2e8660baef79fc8743f0830ba07ef5556ea06003c3ccfa",
+            "matchesRetainedListing": true
+          }
+        },
+        "idle-empty": {
+          "path": "animation/anims/viewmodel/pistol/pistol_glock18/idle_slide_back_glock.vnmclip_c",
+          "seconds": 0,
+          "importedIdentity": {
+            "crc": "1d681b04",
+            "bytes": 4375
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0.03333333507180214,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_glock18/idle_slide_back_glock.vnmclip_c",
+            "crc": "1d681b04",
+            "bytes": 4375,
+            "compiledSha256": "eafeac7fc45e791b02a8d0bf75c2964dbc3c8daacf24095fee1b2df0e3e35abb",
+            "matchesRetainedListing": true
+          }
+        }
+      },
+      "stats": {
+        "deploy": 1,
+        "cycle": 0.15,
+        "reload": 2.266667
+      },
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/pistol/pistol_glock18/draw_glock.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/pistol/pistol_glock18/draw_glock.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    },
+    "usp": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+usp.vnmgraph",
+      "sha256": "1e6aff5a2cc5ec22cc2e38fab80c5eef6f6b1415ebea1c76450e6427e7a83255",
+      "compiledGraph": {
+        "path": "animation/graphs/viewmodel/viewmodel_gun.vnmgraph+usp.vnmgraph_c",
+        "crc": "5a8b611c",
+        "bytes": 11998,
+        "compiledSha256": "797a6eb342c6c14bb583cd108c76d709d4ff8dae40abd742dbe5224a77467712",
+        "matchesRetainedListing": true
+      },
+      "nodes": 459,
+      "export": {
+        "path": "research/weapon-actions/usp-export.json",
+        "sha256": "9591dde2889de10f1b3859441c6c8574d13f436cfcc3fa1da70f98e2d7be7ba2"
+      },
+      "importBuild": "2000927",
+      "import": {
+        "path": "public/revamp/models/view-usp.glb",
+        "jsonSha256": "6547bd1d06372290e12f1f4459a39d8e910746ba2e456175cc3b55fec6bd07b8",
+        "bytes": 2556404,
+        "durations": {
+          "idle": 0.03333333507180214,
+          "draw": 1,
+          "inspect": 6.433333396911621,
+          "reload": 2.1666667461395264,
+          "reload-empty": 2.1666667461395264,
+          "fire": 0.4000000059604645,
+          "fire-last": 0.4000000059604645,
+          "idle-empty": 0.03333333507180214
+        }
+      },
+      "clips": {
+        "idle": {
+          "path": "animation/anims/viewmodel/pistol/_default_pistol/idle_pistol.vnmclip_c",
+          "seconds": 0,
+          "importedIdentity": {
+            "crc": "700d6878",
+            "bytes": 4528
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0.03333333507180214,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/_default_pistol/idle_pistol.vnmclip_c",
+            "crc": "700d6878",
+            "bytes": 4528,
+            "compiledSha256": "0772f3366cf614db20487166f76e861ff4c58f0682d416cf4030640a60d2f212",
+            "matchesRetainedListing": true
+          }
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/pistol/_default_pistol/draw_pistol.vnmclip_c",
+          "seconds": 1,
+          "importedIdentity": {
+            "crc": "249fb9fc",
+            "bytes": 14310
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 1,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/_default_pistol/draw_pistol.vnmclip_c",
+            "crc": "249fb9fc",
+            "bytes": 14310,
+            "compiledSha256": "92a944a80081a927766c6f08af254933bd6e8cfd9a17cdb284b3d1086055f84d",
+            "matchesRetainedListing": true
+          }
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/pistol/_default_pistol/lookat01_pistol.vnmclip_c",
+          "seconds": 6.433333333333334,
+          "importedIdentity": {
+            "crc": "f12247a6",
+            "bytes": 58969
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 6.433333333333334,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/_default_pistol/lookat01_pistol.vnmclip_c",
+            "crc": "f12247a6",
+            "bytes": 58969,
+            "compiledSha256": "6ea5c3eb8d2dc3a0d4dbee854e0471409cc2968f93022419543706f1ac6606a2",
+            "matchesRetainedListing": true
+          }
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/pistol/_default_pistol/reload_pistol.vnmclip_c",
+          "seconds": 2.1666666666666665,
+          "importedIdentity": {
+            "crc": "604e1e72",
+            "bytes": 27680
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 2.1666666666666665,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/_default_pistol/reload_pistol.vnmclip_c",
+            "crc": "604e1e72",
+            "bytes": 27680,
+            "compiledSha256": "b48c306073060aea84d2ac9418383ef13b8f66ed8ef527e154f9fb6aad5a0b2c",
+            "matchesRetainedListing": true
+          }
+        },
+        "reload-empty": {
+          "path": "animation/anims/viewmodel/pistol/_default_pistol/reload_empty_pistol.vnmclip_c",
+          "seconds": 2.1666666666666665,
+          "importedIdentity": {
+            "crc": "a774edd0",
+            "bytes": 23546
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 2.1666666666666665,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/_default_pistol/reload_empty_pistol.vnmclip_c",
+            "crc": "a774edd0",
+            "bytes": 23546,
+            "compiledSha256": "c212bb99b28a76f31dbd50dc52a58d877dda89ffc53be7cb81d1faa9b8c4b0f0",
+            "matchesRetainedListing": true
+          }
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/pistol/_default_pistol/shoot1_pistol.vnmclip_c",
+          "seconds": 0.4,
+          "importedIdentity": {
+            "crc": "59953f6c",
+            "bytes": 8868
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0.4,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/_default_pistol/shoot1_pistol.vnmclip_c",
+            "crc": "59953f6c",
+            "bytes": 8868,
+            "compiledSha256": "4dcbce948efd94e47f1da6bb5467c2e95217a5c7b9f961e12795d4476b87fa46",
+            "matchesRetainedListing": true
+          }
+        },
+        "fire-last": {
+          "path": "animation/anims/viewmodel/pistol/_default_pistol/shoot_empty_pistol.vnmclip_c",
+          "seconds": 0.4,
+          "importedIdentity": {
+            "crc": "73f96b9e",
+            "bytes": 8888
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0.4,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/_default_pistol/shoot_empty_pistol.vnmclip_c",
+            "crc": "73f96b9e",
+            "bytes": 8888,
+            "compiledSha256": "30c930f5b4519ff625b8a5c7883ef20e3c488a2f6191ff1fc50bdada20df71dc",
+            "matchesRetainedListing": true
+          }
+        },
+        "idle-empty": {
+          "path": "animation/anims/viewmodel/pistol/_default_pistol/idle_slide_back_pistol.vnmclip_c",
+          "seconds": 0,
+          "importedIdentity": {
+            "crc": "c4827c0c",
+            "bytes": 4467
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0.03333333507180214,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/_default_pistol/idle_slide_back_pistol.vnmclip_c",
+            "crc": "c4827c0c",
+            "bytes": 4467,
+            "compiledSha256": "6bbdbaa457045287e129085507eb0e5ff12e1d016dfebfadd823664101b1879e",
+            "matchesRetainedListing": true
+          }
+        }
+      },
+      "stats": {
+        "deploy": 1,
+        "cycle": 0.17,
+        "reload": 2.2
+      },
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/pistol/_default_pistol/draw_pistol.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/pistol/_default_pistol/draw_pistol.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    },
+    "deagle": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+deagle.vnmgraph",
+      "sha256": "ff63b39a02f19e8c684684860f8551aafa93e155d89b4e4961a614571d51972f",
+      "compiledGraph": {
+        "path": "animation/graphs/viewmodel/viewmodel_gun.vnmgraph+deagle.vnmgraph_c",
+        "crc": "de3c4687",
+        "bytes": 11767,
+        "compiledSha256": "cbb4cd6c1000c148dbca78b3d1f1fbc2625ee9855ce4b5bc690015f1ba5acab8",
+        "matchesRetainedListing": true
+      },
+      "nodes": 459,
+      "export": {
+        "path": "research/weapon-actions/deagle-export.json",
+        "sha256": "e7556e15dfca5127e81e096e5bdb3bc57709f0087bc465fe268baa4a09659da9"
+      },
+      "importBuild": "2000927",
+      "import": {
+        "path": "public/revamp/models/view-deagle.glb",
+        "jsonSha256": "53574bb523c17f7935d7d0499a771bbd3358abfefaa20853a5244f7df73855b2",
+        "bytes": 2638604,
+        "durations": {
+          "idle": 0.03333333507180214,
+          "draw": 1,
+          "inspect": 5.666666507720947,
+          "reload": 2.200000047683716,
+          "reload-empty": 2.200000047683716,
+          "fire": 0.699999988079071,
+          "fire-last": 0.699999988079071,
+          "idle-empty": 0.03333333507180214
+        }
+      },
+      "clips": {
+        "idle": {
+          "path": "animation/anims/viewmodel/pistol/pistol_deagle/idle_deagle.vnmclip_c",
+          "seconds": 0,
+          "importedIdentity": {
+            "crc": "53b0d475",
+            "bytes": 3966
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0.03333333507180214,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_deagle/idle_deagle.vnmclip_c",
+            "crc": "53b0d475",
+            "bytes": 3966,
+            "compiledSha256": "1748b44b72cd1b505e203fc4acc7a8c4b7d2e0a0966292bed1ed7fc6cbfa3737",
+            "matchesRetainedListing": true
+          }
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/pistol/pistol_deagle/draw_deagle.vnmclip_c",
+          "seconds": 1,
+          "importedIdentity": {
+            "crc": "91026d7e",
+            "bytes": 12004
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 1,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_deagle/draw_deagle.vnmclip_c",
+            "crc": "91026d7e",
+            "bytes": 12004,
+            "compiledSha256": "20716b8551404c5e223a3720ca0ad913f4d0fe679dbed5fc203b1d68bfdc5754",
+            "matchesRetainedListing": true
+          }
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/pistol/pistol_deagle/lookat01_deagle.vnmclip_c",
+          "seconds": 5.666666666666667,
+          "importedIdentity": {
+            "crc": "bc0ab099",
+            "bytes": 46695
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 5.666699727376302,
+          "inventoryClockDifference": 0.00003306070963482455,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_deagle/lookat01_deagle.vnmclip_c",
+            "crc": "bc0ab099",
+            "bytes": 46695,
+            "compiledSha256": "f6d3140eca855c54d71c06885c977a18f23aa8b6cda1dba970cceb395b892cb5",
+            "matchesRetainedListing": true
+          }
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.vnmclip_c",
+          "seconds": 2.2,
+          "importedIdentity": {
+            "crc": "a0de1be2",
+            "bytes": 27162
+          },
+          "matchesImportedManifest": false,
+          "inventorySeconds": 2.2,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.vnmclip_c",
+            "crc": "05d10c92",
+            "bytes": 27162,
+            "compiledSha256": "3966fb59252703eaf905a5cbda2c0c778a2837f0ab27e14a819a155a14ff8f3e",
+            "matchesRetainedListing": true
+          }
+        },
+        "reload-empty": {
+          "path": "animation/anims/viewmodel/pistol/pistol_deagle/reload_empty_deagle.vnmclip_c",
+          "seconds": 2.2,
+          "importedIdentity": {
+            "crc": "18ad7a33",
+            "bytes": 24340
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 2.2,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_deagle/reload_empty_deagle.vnmclip_c",
+            "crc": "18ad7a33",
+            "bytes": 24340,
+            "compiledSha256": "a8247ccc4900080169aab16fe01b7535ace37d2c9aa64e875d09f4fcedcfca9d",
+            "matchesRetainedListing": true
+          }
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/pistol/pistol_deagle/shoot1_deagle.vnmclip_c",
+          "seconds": 0.7,
+          "importedIdentity": {
+            "crc": "a4474643",
+            "bytes": 8361
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0.7,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_deagle/shoot1_deagle.vnmclip_c",
+            "crc": "a4474643",
+            "bytes": 8361,
+            "compiledSha256": "c6348f085999abda88d01150bfb3ce14aa34ca5421964235e5fa7cc7a927f605",
+            "matchesRetainedListing": true
+          }
+        },
+        "fire-last": {
+          "path": "animation/anims/viewmodel/pistol/pistol_deagle/shoot_empty_deagle.vnmclip_c",
+          "seconds": 0.7,
+          "importedIdentity": {
+            "crc": "24c50f80",
+            "bytes": 8563
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0.7,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_deagle/shoot_empty_deagle.vnmclip_c",
+            "crc": "24c50f80",
+            "bytes": 8563,
+            "compiledSha256": "6616b3a62daf2e007bdefbd8749a09cbe3ed9688208041b57b9ff43df75dcc1b",
+            "matchesRetainedListing": true
+          }
+        },
+        "idle-empty": {
+          "path": "animation/anims/viewmodel/pistol/pistol_deagle/idle_slide_back_deagle.vnmclip_c",
+          "seconds": 0,
+          "importedIdentity": {
+            "crc": "a7c8ba29",
+            "bytes": 4373
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0.03333333507180214,
+          "current": {
+            "path": "animation/anims/viewmodel/pistol/pistol_deagle/idle_slide_back_deagle.vnmclip_c",
+            "crc": "a7c8ba29",
+            "bytes": 4373,
+            "compiledSha256": "4fa912217cf3be82ae6296178fe7267995a04edb6920dfa9bdf164c89c055acc",
+            "matchesRetainedListing": true
+          }
+        }
+      },
+      "stats": {
+        "deploy": 1,
+        "cycle": 0.225,
+        "reload": 2.2
+      },
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/pistol/pistol_deagle/draw_deagle.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/pistol/pistol_deagle/draw_deagle.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    },
+    "awp": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+awp.vnmgraph",
+      "sha256": "c19204ab30e42d5ca5b69d4bbc5ed38ef09b1d6bd1737c31867eb2f79b537ab2",
+      "compiledGraph": {
+        "path": "animation/graphs/viewmodel/viewmodel_gun.vnmgraph+awp.vnmgraph_c",
+        "crc": "74af9acf",
+        "bytes": 11377,
+        "compiledSha256": "39d655124a67349cc017a994ab4307c2c48526331872feeea62c33f65e07a145",
+        "matchesRetainedListing": true
+      },
+      "nodes": 459,
+      "export": {
+        "path": "research/weapon-actions/awp-export.json",
+        "sha256": "33e37225ef9cb853b627bf7c4ce7ba35606905b11d9c81ea1bd9f94d682bd814"
+      },
+      "importBuild": "2000927",
+      "import": {
+        "path": "public/revamp/models/view-awp.glb",
+        "jsonSha256": "d117f3a81ce1ee09a490db632471b76bab8e03f9d5bfdee5989a5bebab804f9a",
+        "bytes": 3106892,
+        "durations": {
+          "idle": 0.03333333507180214,
+          "draw": 1.2666666507720947,
+          "inspect": 5,
+          "reload": 3.6666667461395264,
+          "fire": 1.600000023841858
+        }
+      },
+      "clips": {
+        "idle": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/idle_awp.vnmclip_c",
+          "seconds": 0,
+          "importedIdentity": {
+            "crc": "e569b4de",
+            "bytes": 4370
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 0,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0.03333333507180214,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_awp/idle_awp.vnmclip_c",
+            "crc": "e569b4de",
+            "bytes": 4370,
+            "compiledSha256": "f5a941c2a270b0f0072d48a80d91b9fe8f2ebc78bd8d2eb797163e843c0fda97",
+            "matchesRetainedListing": true
+          }
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/draw_awp.vnmclip_c",
+          "seconds": 1.2666666666666666,
+          "importedIdentity": {
+            "crc": "a2f78d17",
+            "bytes": 13824
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 1.2666998545328776,
+          "inventoryClockDifference": 0.00003318786621098191,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_awp/draw_awp.vnmclip_c",
+            "crc": "a2f78d17",
+            "bytes": 13824,
+            "compiledSha256": "75a1a3fc3b02d25c23d623711b4f22ceb774a233e708971ef1c81fa646b60258",
+            "matchesRetainedListing": true
+          }
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/lookat01_awp.vnmclip_c",
+          "seconds": 5,
+          "importedIdentity": {
+            "crc": "e4a9be1d",
+            "bytes": 27412
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 5,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_awp/lookat01_awp.vnmclip_c",
+            "crc": "e4a9be1d",
+            "bytes": 27412,
+            "compiledSha256": "f30132af23465f5d2e1e7ddef2f57a346ddf659e78d9a3bd850923a7db48e8f6",
+            "matchesRetainedListing": true
+          }
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/reload_awp.vnmclip_c",
+          "seconds": 3.6666666666666665,
+          "importedIdentity": {
+            "crc": "80de5cc3",
+            "bytes": 37694
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 3.666699981689453,
+          "inventoryClockDifference": 0.00003331502278669518,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_awp/reload_awp.vnmclip_c",
+            "crc": "80de5cc3",
+            "bytes": 37694,
+            "compiledSha256": "3331c7363f8080b62848e36b9fa0d1a3b499791727cda2cba91cede8659736a5",
+            "matchesRetainedListing": true
+          }
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/shoot1_awp.vnmclip_c",
+          "seconds": 1.6,
+          "importedIdentity": {
+            "crc": "0186d631",
+            "bytes": 15636
+          },
+          "matchesImportedManifest": true,
+          "inventorySeconds": 1.6,
+          "inventoryClockDifference": 0,
+          "constantPosePaddingSeconds": 0,
+          "current": {
+            "path": "animation/anims/viewmodel/rifle/rifle_awp/shoot1_awp.vnmclip_c",
+            "crc": "0186d631",
+            "bytes": 15636,
+            "compiledSha256": "cf25fc8fafa694d1d7b77ca78881473fc5659dde52bf1badfee75be1f4370087",
+            "matchesRetainedListing": true
+          }
+        }
+      },
+      "stats": {
+        "deploy": 1.266667,
+        "cycle": 1.455,
+        "reload": 3.666667
+      },
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_awp/draw_awp.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_awp/draw_awp.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    }
+  },
+  "conclusion": "All six graphs use unit-speed, unconnected, non-looping ordinary draw clips. Entry/reset has zero duration and no time match. Global idle requires external action_idle or empty action and uses a 200 ms transition. Deploying emits action complete with at most 100 ms of state time remaining.",
+  "boundaries": [
+    "The completion event is a graph event, not a proved gameplay readiness deadline or proved immediate exit.",
+    "The external action_idle writer and event-consumer ordering remain unbound; no always-finish, cancel-at-readiness or seek-on-attachment behavior is certified.",
+    "The proposed rate-only correction preserves the trainer onset, readiness-based lifetime and fade approximations.",
+    "Pickup reuse in the trainer does not independently bind native pickup to action_deploy; keep pickup behavior unchanged.",
+    "The live VPK directory and selected compiled graph/clip bytes are read and hashed; CRC/size must match the retained extraction listing. Draw identity must also match imported export metadata; other action mismatches are recorded without certifying current native parity.",
+    "Retained decoded graph hashes must match the prior extraction index. This does not perform a fresh compiled-to-decoded conversion.",
+    "The imported GLB JSON, duration metadata and file size are bound; this probe does not revalidate binary animation poses."
+  ]
+}

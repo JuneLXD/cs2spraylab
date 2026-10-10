@@ -1,11 +1,11 @@
 import {expect, test} from '@playwright/test';
 
 for (const mode of ['guided', 'duel'] as const) {
-  test(`${mode}: delayed model attachment preserves the ordinary AK draw rate`, async ({page}, info) => {
+  test(`${mode}: delayed model attachment preserves the ordinary M4A4 draw rate`, async ({page}, info) => {
     test.skip(info.project.name !== 'chromium'); test.setTimeout(180000);
     const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
     await page.addInitScript(mode => {
-      localStorage.setItem('spraylab.range.v2', JSON.stringify({mode, weapon: 'ak47', quality: 'performance',
+      localStorage.setItem('spraylab.range.v2', JSON.stringify({mode, weapon: 'm4a4', quality: 'performance',
         autoFullscreen: false, volume: 0, frameLimit: 0, protectShortcuts: false}));
       localStorage.setItem('spraylab.duel.v1', JSON.stringify({botCount: 1, skill: 1, shortcutProtection: false}));
     }, mode);
@@ -21,7 +21,7 @@ for (const mode of ['guided', 'duel'] as const) {
     await page.waitForFunction(mode => {
       const e = (window as any).drawEngine;
       return e && (mode === 'duel' ? e.motionReady && e.worldLoading.size === 0 && e.viewRoot.children.length
-        : e.loadedTarget && e.modelCache.has('ak47'));
+        : e.loadedTarget && e.modelCache.has('m4a4'));
     }, mode);
     const result = await page.evaluate(async mode => {
       const e = (window as any).drawEngine;
@@ -33,14 +33,14 @@ for (const mode of ['guided', 'duel'] as const) {
         e.setWeapon = async (id: string) => {await prepare(id); e.sim.time = 10.25;};
         await e.equip(1); e.setWeapon = prepare;
       } else {
-        e.paused = false; e.sim.phase = 'fighting'; e.sim.actors[0].equipReadyAt = 11;
+        e.paused = false; e.sim.phase = 'fighting'; e.sim.actors[0].equipReadyAt = 11.133333;
         e.sim.actors[1].weapon.ammo = e.sim.actors[1].weapon.reserve = 0;
         const prepare = e.viewModel.bind(e);
         e.viewModel = async (id: string) => {const model = await prepare(id); e.sim.time = 10.25; return model;};
-        e.pickupDrawing = false; await e.loadViewModel('ak47'); e.viewModel = prepare;
+        e.pickupDrawing = false; await e.loadViewModel('m4a4'); e.viewModel = prepare;
         e.viewAnimationElapsed = 0;
       }
-      const animation = mode === 'duel' ? e.viewAnimation : e.viewAnimations.get('ak47');
+      const animation = mode === 'duel' ? e.viewAnimation : e.viewAnimations.get('m4a4');
       const actor = mode === 'duel' ? e.sim.actors[0] : e.sim;
       const readyAt = actor.equipReadyAt, attachedAt = e.sim.time;
       const scene = (mode === 'duel' ? e.viewRoot : e.weaponRoot).children[0];
@@ -53,7 +53,7 @@ for (const mode of ['guided', 'duel'] as const) {
       let timestamp = performance.now();
       if (mode === 'duel') e.last = timestamp; else e.previous = timestamp;
       const samples: any[] = [];
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 8; i++) {
         timestamp += 125; e.sim.time += .125;
         e.tick(timestamp); cancelAnimationFrame(e.frame);
         samples.push({action: animation.activeAction, clipTime: animation.actions.get('draw').time,
@@ -62,14 +62,14 @@ for (const mode of ['guided', 'duel'] as const) {
       }
       return {attachedAt, readyAt, initialPose, samples};
     }, mode);
-    expect(result.attachedAt).toBe(10.25); expect(result.readyAt).toBe(11);
-    for (let i = 0; i < 5; i++) {
+    expect(result.attachedAt).toBe(10.25); expect(result.readyAt).toBeCloseTo(11.133333, 6);
+    for (let i = 0; i < 7; i++) {
       expect(result.samples[i].action).toBe('draw');
       expect(result.samples[i].clipTime).toBeCloseTo((i + 1) * .125, 7);
     }
     expect(result.samples[0].pose).not.toEqual(result.initialPose);
-    expect(result.samples[5].action).toBe('idle');
-    expect(result.samples.every(sample => sample.readyAt === 11 && sample.ammo === 30)).toBe(true);
+    expect(result.samples[7].action).toBe('idle');
+    expect(result.samples.every(sample => Math.abs(sample.readyAt - 11.133333) < 1e-6 && sample.ammo === 30)).toBe(true);
     expect(errors).toEqual([]);
   });
 }
