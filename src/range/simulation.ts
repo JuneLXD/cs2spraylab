@@ -90,7 +90,7 @@ export class Simulation {
   get stats() { return this.actions.stats; }
   get environment(): ActorEnvironment {
     const radius = TERRAIN_RULES.hullRadius;
-    return {solids: this.drill?.scenario.covers ?? RANGE_WALLS, floor: 0, time: this.time, pitch: this.pitch,
+    return {solids: this.drill?.scenario.covers ?? (this.pop?.wall ? [this.pop.wall, ...RANGE_WALLS] : RANGE_WALLS), floor: 0, time: this.time, pitch: this.pitch,
       bounds: {minX: -11.3 - radius, maxX: 11.3 + radius, minZ: TARGET_Z + 2.2 - radius, maxZ: 5 + radius}};
   }
   ammoFor(id: Equipment) {
@@ -171,6 +171,8 @@ export class Simulation {
   constructor(public settings: Settings, private readonly random?: () => number) {this.slot = settings.primaryEnabled ? 1 : 2; this.pattern = recoilPattern(loadoutWeapon(settings)); this.configure(settings);}
   configure(s: Settings, measured?: MeasuredProfile) {
     const changedMode = s.mode !== this.settings.mode;
+    // Raising or moving the peek wall puts you back behind it: you may be standing where it goes up.
+    const changedWall = s.mode === 'pop' && s.popWall !== this.settings.popWall;
     const leavingPositionedDrill = isDrillMode(this.settings.mode) || this.settings.mode === 'pop';
     this.cancel(); this.settings = s; this.measured = measured;
     if (!s.primaryEnabled && this.slot === 1) this.slot = 2;
@@ -192,7 +194,7 @@ export class Simulation {
     if (s.mode === 'pop') {
       this.pop = new PopField(popConfig(s), POP_SPAWN, this.random ?? Math.random); this.popPublishedShots = 0;
       // A fresh simulation starts in Pop too (the constructor configures with the mode already set).
-      if (changedMode || !this.popPlaced) {
+      if (changedMode || !this.popPlaced || changedWall) {
         this.popPlaced = true;
         this.position = {...POP_SPAWN}; this.yaw = this.pitch = this.feet = this.verticalVelocity = this.duckAmount = 0;
         this.duckFlag = false;
@@ -214,7 +216,7 @@ export class Simulation {
     const pop = this.pop;
     if (!pop || !pop.shots || pop.shots === this.popPublishedShots) return;
     this.popPublishedShots = pop.shots;
-    this.latest = {id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, weapon: this.equipped, mode: 'pop', shots: pop.shots, hits: pop.pops,
+    this.latest = {id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, weapon: this.equipped, mode: 'pop', shots: pop.shots, hits: pop.hits,
       heads: 0, seconds: this.time - this.popStartedAt, tracking: 0, date: new Date().toISOString(), samples: []};
     this.attempts++; this.onResult(this.latest);
   }

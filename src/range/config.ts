@@ -1,4 +1,5 @@
 import data from './game-data.json';
+import type {PopWallSide} from './pop';
 import { nativeRecoilPattern } from './recoil';
 import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybinds/profile';
 import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
@@ -72,6 +73,8 @@ export type Settings = {
   popAmmo: 'off' | 'reserve' | 'magazine'; popSound: 'hitmarker' | 'synth' | 'pop';
   /** Pop only: no gunshot audio, no miss marks on the wall, no HUD over the view. */
   popMuteGun: boolean; popHideImpacts: boolean; popHideHud: boolean;
+  /** Pop: the backdrop colour behind the balls, bullets a ball takes before it pops, and which side the peek wall opens to. */
+  popBackground: string; popHits: number; popWall: PopWallSide;
   /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
   cs2Crosshair?: Cs2Crosshair;
 };
@@ -101,7 +104,7 @@ export const defaults: Settings = {
   viewmodel: classicViewmodel,
   tracers: 'native',
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
-  popMuteGun: false, popHideImpacts: false, popHideHud: false,
+  popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off',
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -154,6 +157,8 @@ export function sanitizeSettings(raw: unknown): Settings {
     popColor: typeof s.popColor === 'string' && /^#[\da-f]{6}$/i.test(s.popColor) ? s.popColor.toLowerCase() : defaults.popColor,
     popAmmo: s.popAmmo === 'off' || s.popAmmo === 'reserve' ? s.popAmmo : 'magazine', popSound: s.popSound === 'pop' || s.popSound === 'synth' ? s.popSound : 'hitmarker',
     popMuteGun: s.popMuteGun === true, popHideImpacts: s.popHideImpacts === true, popHideHud: s.popHideHud === true,
+    popBackground: typeof s.popBackground === 'string' && /^#[\da-f]{6}$/i.test(s.popBackground) ? s.popBackground.toLowerCase() : defaults.popBackground,
+    popHits: Math.round(numeric(s.popHits, defaults.popHits, 1, 10)), popWall: s.popWall === 'left' || s.popWall === 'right' ? s.popWall : 'off',
     ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }

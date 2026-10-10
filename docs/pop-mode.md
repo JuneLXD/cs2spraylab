@@ -39,4 +39,15 @@ ones every other range drill uses.
   user supplied (decoded at audio unlock; the synthesized tick stands in until then), 'synth' the synthesized
   tick, 'pop' the bloop. The master volume (top bar and Settings > Audio) is `settings.volume`, applied to
   every sound.
-
+- Spray, peeking and looks (2026-10-10): `popHits` (1-10, default 1) is how many bullets a ball takes before it
+  pops; `PopField.hit()` counts every bullet that crosses a ball as a hit (`hits`), pops the ball on its last one
+  (`pops`), and a hit ball dims in three steps (`popDamagedMaterial`). HIT RATE and MISS count hits; POPS counts
+  bursts; the hit caption says HIT for a hit that did not pop. A held spray always popped whatever each bullet
+  crossed; what made spraying useless was the AK's recoil carrying the burst above the 2.8 m field within five
+  rounds and the spread scattering the rest wider than a 30 cm ball, so one-hit balls vanished on the first round.
+  `popWall` ('off', 'left', 'right') raises a peek wall (`popWall()`: 3 m wide, 2.8 m tall, 0.4 m thick, 1.5 m
+  ahead, its edge 0.35 m past your shoulder on the chosen side, a yellow strip on that edge) that stops bullets
+  (`wallHit`, `rayBoxDistance`) and movement (it joins `Simulation.environment.solids`); the ball field is centred
+  1 m to the peek side, and changing the wall puts you back at `POP_SPAWN`. `popBackground` colours the backdrop
+  plane, which is now unlit (`MeshBasicMaterial`) so the picked colour shows as picked; presets in `popBackgrounds`.
+  The entrance benches live in `RangeEngine.benches`, outside the static batches, and are hidden in Pop.

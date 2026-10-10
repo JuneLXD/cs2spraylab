@@ -24,7 +24,9 @@ older range drills.
   slower recognition, worse preaim, aim error, and less reliable braking.
   The expanded arena includes entry, flank and camp angles, low barriers and
   independently varied flanks with paired north/south cover; sound responses differ by holder/patient/aggressive
-  behavior. Each side has an entry, flank, camp, and off-angle route. Bots can
+  behavior. Aggressive bots never hold (2026-10-10): they peek within about 0.1 s of reaching an angle, never
+  settle into a hold-angle, chase the last sighting when a burst loses its target, and push through the forward
+  crate edges (or the lane edges) once they have been blind for 1.5 s instead of waiting at cover. Each side has an entry, flank, camp, and off-angle route. Bots can
   switch routes after a fight, when hurt, or when a hold stays blind, vary
   burst and hold durations, counter-strafe for short combat displacements,
   and reload behind cover. A confirmed visual contact can generate a delayed,

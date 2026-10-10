@@ -370,6 +370,14 @@ export const latestChanges = {
       'Ready AWP primary input takes priority over zoom, including a held trigger after bolt recovery.',
       'Repeat zoom keeps its existing preference and resumes on a later eligible input after releasing primary.',
     ]},
+    {id: 'pop-spray-peek', title: 'Pop: sprays, peeking and looks', items: [
+      'Hits to pop (1-10) keeps a ball up through a spray: every bullet that crosses it counts as a hit and dims it, and it bursts on the last one. HIT RATE and MISS count hits; POPS counts bursts.',
+      'A peek wall (off, peek out to the left or right) stands 1.5 m ahead with its edge just past your shoulder; it stops bullets and movement, and the balls are centred on your peek line.',
+      'Background color behind the balls, with presets, shown unlit so it matches the picked color. The entrance benches are hidden in Pop.',
+    ]},
+    {id: 'duel-aggressive-bots', title: 'Aggressive duel bots', items: [
+      'Aggressive bots never hold: they peek as soon as they reach an angle, chase the last place they saw you after a burst loses its target, and sweep the forward crates and lane edges within 1.5 s of losing contact instead of waiting at cover.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

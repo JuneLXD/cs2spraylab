@@ -34,6 +34,7 @@ describe('append-only changelog', () => {
       'play-fullscreen-exit', 'deathmatch-ammo', 'spawn-unstick', 'native-audio-mix', 'pop-mode', 'pop-ammo-sound', 'pop-quiet', 'client-crosshair-zoom', 'server-tick-fire', 'bots-hit-reactions', 'deathmatch-protection-fullscreen', 'native-movement-integration', 'held-trigger-continuity', 'native-r8-windup', 'native-follow-recoil', 'native-aug-reload', 'native-air-duck-camera', 'native-scheduled-recoil', 'native-r8-charge-mount', 'native-accuracy-phase', 'native-footstep-cadence', 'native-viewmodel-recoil', 'native-viewmodel-air', 'native-shell-interruption', 'native-ak-reload-clock', 'native-draw-clock', 'native-common-reload-input', 'native-duck-accuracy-flag', 'native-common-draw-clock', 'native-deagle-reload-events', 'native-glock-attack-clocks',
       'native-awp-rescope-clock',
       'native-awp-input-priority',
+      'pop-spray-peek', 'duel-aggressive-bots',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'reflex')!.items.join(' ')).toContain('come at you through its gaps');
     expect(latestChanges.sections.find(section => section.id === 'aim-redline')!.items.join(' ')).toContain('BOT Reed');

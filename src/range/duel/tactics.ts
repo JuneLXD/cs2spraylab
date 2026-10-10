@@ -100,6 +100,7 @@ export class TacticalBrain {
   private controlVariation = 1;
   private searchGoal?: Vec;
   private searchIndex = 0;
+  private searchLegs = 0;
   private readonly cueChecks: CueAngleChecks;
   private shadowAt = -Infinity;
   private shadowReadyAt = Infinity;
@@ -136,11 +137,13 @@ export class TacticalBrain {
     })));
     this.sideScanPoints = {'-1': this.scanPoints.filter(point => point.x < 0),
       1: this.scanPoints.filter(point => point.x > 0)};
-    this.searchPoints = arena.solids.filter(solid => solid.center.z > 5 && solid.size.x >= 3)
+    const forwardSweep = arena.solids.filter(solid => solid.center.z > 5 && solid.size.x >= 3)
       .flatMap(solid => [-1, 1].map(side => ({
         x: clamp(solid.center.x + side * (solid.size.x / 2 + .9), arena.minX + 1, arena.maxX - 1),
         y: 0, z: Math.min(arena.maxZ - 1, solid.center.z + solid.size.z / 2 + 1.2),
       })));
+    // Without forward crates to sweep (small or imported layouts), a search walks the lane edges instead.
+    this.searchPoints = forwardSweep.length ? forwardSweep : lanes.map(lane => ({x: lane.edge.x, y: 0, z: lane.edge.z}));
     this.stealthRoll = this.random();
     // Hearing must not perturb route/peek rolls before its reaction deadline.
     this.hearingRandom = randomStream(Math.floor(this.random() * 0x100000000), 'auditory-localization');
@@ -257,8 +260,10 @@ export class TacticalBrain {
     if (phase === 'setup') {
       const contact = time - this.lastSeenAt < 2.5 ||
         time >= this.heardReadyAt && time >= this.heardAt && time - this.heardAt < 2.5;
-      const baseline = this.behavior === 'holder' ? 1.1 : this.behavior === 'patient' ? .65 : .28;
-      this.setupWait = (baseline + this.random() * (contact ? .8 : 1.7) + this.stagger) * (contact ? .65 : 1);
+      // Aggressive bots do not settle at an angle: they turn the corner as soon as they reach it.
+      const baseline = this.behavior === 'holder' ? 1.1 : this.behavior === 'patient' ? .65 : this.behavior === 'aggressive' ? .05 : .28;
+      const spread = this.behavior === 'aggressive' ? .1 : contact ? .8 : 1.7;
+      this.setupWait = (baseline + this.random() * spread + this.stagger) * (contact ? .65 : 1);
     }
     if (phase === 'attack') {
       this.beginBurst(time);
@@ -292,6 +297,7 @@ export class TacticalBrain {
   }
 
   private usefulHold(self: DuelActorSnapshot, point: Vec, time: number) {
+    if (this.behavior === 'aggressive') return false;
     if (this.behavior !== 'holder' && this.lane.role !== 'camp' && this.lane.role !== 'offAngle') return false;
     if (time - this.lastHurtAt < 1.2 || self.health < 40 || distance(self.position, point) < 8) return false;
     if (Math.min(distance(self.position, this.lane.anchor), distance(self.position, this.exposurePoint())) > .9) return false;
@@ -318,7 +324,7 @@ export class TacticalBrain {
     const roleWeights: Record<NonNullable<CoverLane['role']>, number> = this.behavior === 'holder'
       ? {entry: .65, flank: 1.15, camp: 3.2, offAngle: 1.6}
       : this.behavior === 'patient' ? {entry: 1, flank: 2, camp: 1.4, offAngle: 2.1}
-        : {entry: 2.4, flank: 1.6, camp: .55, offAngle: 1.25};
+        : {entry: 2.6, flank: 1.6, camp: .2, offAngle: .9};
     if (self.health < 40) {roleWeights.camp *= 2; roleWeights.entry *= .55;}
     if (self.armor === 0 && self.health < 65) {roleWeights.entry *= .7; roleWeights.offAngle *= 1.3;}
     if (sniperIds.includes(this.weapon)) {roleWeights.camp *= 1.5; roleWeights.offAngle *= 1.3; roleWeights.entry *= .6;}
@@ -408,6 +414,11 @@ export class TacticalBrain {
       [this.repeat]: .42,
     });
     this.activePeek = samplePeek(distribution, this.random);
+    // An aggressive bot never settles into a hold while any swing is possible.
+    if (this.behavior === 'aggressive' && this.activePeek === 'hold') {
+      const swing = (['run', 'wide', 'quick'] as const).find(type => eligible[type]);
+      if (swing) this.activePeek = swing;
+    }
     this.repeat = this.activePeek;
     this.transition(this.activePeek === 'hold' ? 'setup' : 'expose', time);
   }
@@ -483,9 +494,16 @@ export class TacticalBrain {
     holdingUsefulAngle: boolean) {
     this.nextBurstAt = time + this.burstRecovery;
     if (self.ammo === 0) {this.intent = 'reset'; this.transition('reload', time); return;}
+    const pressured = time - this.lastHurtAt < 1.2 || self.health < 45;
     if (!target) {
       if (this.memory.focus(time) && time - this.lastSeenAt < .65) {
         this.intent = 'hold-angle'; this.beginBurst(time);
+      } else if (this.behavior === 'aggressive' && this.lastSeen && !pressured) {
+        // Chase the last sighting instead of resetting to cover.
+        this.intent = 'seek'; this.forceReposition = false;
+        this.searchGoal = this.searchPointNear(this.lastSeen.position);
+        this.scanAim = {...this.searchGoal, y: this.preaimHeight};
+        this.transition('push', time);
       } else {this.intent = 'change-angle'; this.forceReposition = true; this.transition('return', time);}
       return;
     }
@@ -497,7 +515,6 @@ export class TacticalBrain {
     }
     // The next decision is taken after a real burst, not a fresh coin flip
     // each frame. Open duels change aim line; covered duels can reset/re-peek.
-    const pressured = time - this.lastHurtAt < 1.2 || self.health < 45;
     const reposition = pressured || holdingUsefulAngle || this.combatStrafes >= 2 ||
       sniper || distance(self.position, target.position) > 20 && this.behavior !== 'aggressive';
     if (!reposition && this.dodge(self, target, time)) {
@@ -507,6 +524,11 @@ export class TacticalBrain {
     this.intent = 'change-angle'; this.forceReposition = true;
     this.transition('return', time);
     // Lane selection occurs at cover arrival, keeping this route committed.
+  }
+
+  /** A spot inside the arena to walk to when searching for a sighting. */
+  private searchPointNear(point: Vec): Vec {
+    return {x: clamp(point.x, this.arena.minX + 2, this.arena.maxX - 2), y: 0, z: clamp(point.z, 1, this.arena.maxZ - 2)};
   }
 
   private knifeCommand(self:DuelActorSnapshot,time:number):Partial<ActorCommand> {
@@ -634,22 +656,32 @@ export class TacticalBrain {
       this.transition(speed > .4 ? 'brake' : 'attack', time);
     }
     const blindFor = time - Math.max(this.lastSeenAt, this.heardAt);
-    const searchDelay = this.behavior === 'holder' ? 8 : this.behavior === 'patient' ? 6 : 4.5;
+    const searchDelay = this.behavior === 'holder' ? 8 : this.behavior === 'patient' ? 6 : this.behavior === 'aggressive' ? 1.5 : 4.5;
+    // An aggressive bot swings the angle it has reached before it goes searching; the others search from a hold.
+    const searchFrom = this.behavior === 'aggressive' ? ['return'] : ['setup', 'return'];
     if (!identified && !sound && time > searchDelay && blindFor > searchDelay &&
-      ['setup', 'return'].includes(this.phase) && !this.forceReposition) {
+      searchFrom.includes(this.phase) && !this.forceReposition) {
       this.chooseLane(self, teammates, time, true);
       this.transition('push', time);
     }
     if (this.phase === 'push' && (!this.searchGoal || distance(self.position, this.searchGoal) < .5)) {
-      this.searchGoal = this.searchPoints.length ? this.searchPoints[this.searchIndex++ % this.searchPoints.length]
-        : {x: this.lane.side * 4, y: 0, z: 6};
-      this.scanAim = {...this.searchGoal, y: this.preaimHeight};
+      if (this.behavior === 'aggressive' && this.searchGoal && ++this.searchLegs % 2 === 0) {
+        // Between sweeps an aggressive bot takes a fresh angle and swings it, rather than settling anywhere.
+        this.chooseLane(self, teammates, time, true); this.searchGoal = undefined;
+        this.transition('approach', time);
+      } else {
+        this.searchGoal = this.searchPoints.length ? this.searchPoints[this.searchIndex++ % this.searchPoints.length]
+          : {x: this.lane.side * 4, y: 0, z: 6};
+        this.scanAim = {...this.searchGoal, y: this.preaimHeight};
+      }
     }
     const soundAim = sound ? {...sound, y: this.preaimHeight} : null;
     const informationAim = soundAim && this.heardAt > this.lastSeenAt && memoryAge > .18 ? soundAim : memoryAim ?? soundAim;
     const holdAim = visible?.aimPoint ?? informationAim;
     const holdingUsefulAngle = !!holdAim && this.usefulHold(self, holdAim, time);
-    if (this.phase === 'setup' && !holdingUsefulAngle && (team
+    // An aggressive bot that can already see a figure waits out its recognition instead of swinging past it.
+    const recognizing = this.behavior === 'aggressive' && !!visible && !identified;
+    if (this.phase === 'setup' && !holdingUsefulAngle && !recognizing && (team
       ? !team.waitForPartner && time >= team.peekAt && time - this.phaseAt > .08
       : time - this.phaseAt > this.setupWait)) {
       if (blindFor > 3 && this.lane.role === 'camp') {
@@ -702,7 +734,8 @@ export class TacticalBrain {
       this.forceReposition = false;
       this.combatStrafes = 0;
       this.intent = 'seek'; this.engagementAt = -Infinity;
-      if (time > 12 && memoryAge > 6 && this.behavior === 'aggressive' && this.random() < .35) this.transition('push', time);
+      // Aggressive bots do not wait at cover once contact is lost: they go looking.
+      if (this.behavior === 'aggressive' && blindFor > 1.5) this.transition('push', time);
       else this.transition(distance(self.position, this.lane.anchor) > .55 ? 'approach' : 'setup', time);
     }
     if (this.phase === 'investigate' && (identified || distance(self.position, sound ?? self.position) < 1.3 ||
@@ -836,7 +869,7 @@ export class TacticalBrain {
       (botCount <= 2 ? (botCount - 1) * .1 : .42);
     const quietTravel = !visible && time - this.lastHurtAt > 1.2 &&
       ['approach', 'push', 'investigate', 'return', 'reload'].includes(this.phase) && this.stealthRoll < quietChance &&
-      (this.behavior !== 'aggressive' || this.phase !== 'approach' || remaining < 4);
+      (this.behavior !== 'aggressive' || this.phase === 'approach' && remaining < 4 || this.phase === 'return' || this.phase === 'reload');
     return {forward, side, walk: this.phase === 'expose' && this.activePeek === 'slice' || quietTravel ||
       this.phase === 'approach' && this.behavior === 'patient' && remaining < 3 && time > 1,
       crouch: this.activePeek === 'crouch' && ['expose', 'brake'].includes(this.phase) || lateCrouchWide || fightingCrouch,
