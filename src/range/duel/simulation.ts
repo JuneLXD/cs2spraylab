@@ -24,6 +24,7 @@ import {coveredSpawns} from './spawns';
 import {applyTagging, recoverTagging, type TaggingState} from '../tagging';
 import {DamagePunch} from '../aim-punch';
 import {ViewPunch} from '../view-punch';
+import {FootstepCadence} from '../footsteps';
 import {RadarMemory} from './radar';
 import {resolveBulletRay} from './penetration';
 import {traceMelee} from './melee';
@@ -56,7 +57,7 @@ type CombatActor = ActorKinematics & TaggingState & {
   alive: boolean;
   weapon: DuelWeaponState;
   command: ActorCommand;
-  stepDistance: number;
+  footsteps: FootstepCadence;
   inventory: Map<Equipment, DuelWeaponState>;
   equipReadyAt: number;
 };
@@ -73,7 +74,7 @@ const makeActor = (id: number, side: CombatActor['side'], x: number, z: number, 
   punch: new DamagePunch(randomStream(seed, `damage-punch:${id}`)),
   viewPunch: new ViewPunch(),
   weapon: new DuelWeaponState(weapon, randomStream(seed, `shot:${id}`)), command: idleCommand(),
-  stepDistance: 0,
+  footsteps: new FootstepCadence(),
   inventory: new Map(), equipReadyAt: 0,
 });
 
@@ -445,6 +446,7 @@ export class DuelSimulation {
       if (actor.id !== 0 && actor.weapon.id !== 'knife' && gameData.weapons[actor.weapon.id].zoomLevels && !actor.weapon.actions.zoom && !actor.weapon.actions.pendingZoom && command.fireHeld) {
         actor.weapon.actions.secondary(this.time);
       }
+      if (actor.footsteps.update(this.time, dt, actor, command)) this.emitSound(actor, 'footstep', actor.position);
       const next = advanceActor(actor, {...command, scopedSlow: actor.weapon.actions.zoom >= 2 && actor.weapon.actions.stats.speed * .52 < 110}, actor.weapon.actions.stats.speed * UNIT, dt,
         (from, desired, feet, height) => {
           const staticPosition = moveInArena(from, desired, feet, height, this.arena);
@@ -459,7 +461,6 @@ export class DuelSimulation {
         (position, from, to, height) => verticalContact(position, from, to, height, this.arena.solids),
         arenaMovementEnvironment(this.arena,this.actors.filter(other=>!this.passesThrough(actor,other))
           .map(other=>({...other,previous:this.previous[other.id]})),actor.id,this.time-dt,actor.pitch,actor.position));
-      const traveled = Math.hypot(next.position.x - actor.position.x, next.position.z - actor.position.z);
       const landed=next.grounded&&!(actor.grounded??actor.feet===0);
       if (next.landedAt !== undefined && next.landedAt !== actor.landedAt && next.landingVelocity !== undefined &&
         !next.waterLevel && next.supportId === undefined) {
@@ -468,14 +469,6 @@ export class DuelSimulation {
       }
       Object.assign(actor,next);
       if (landed) this.emitSound(actor, 'landing', next.position);
-      const audible = Math.hypot(next.velocity.x, next.velocity.z) > equipmentStats(actor.weapon.id).speed * UNIT * .54;
-      if (next.grounded && audible && traveled > 0) {
-        actor.stepDistance += traveled;
-        if (actor.stepDistance >= 1.35) {
-          actor.stepDistance %= 1.35;
-          this.emitSound(actor, 'footstep', next.position);
-        }
-      } else if (!audible) actor.stepDistance = 0;
       if(actor.id!==0 && (command.forward||command.side)) {
         const door=this.nearestDoor(actor.id);
         if(door && !this.environment.pieces[door.id]?.open && this.time-(this.usedAt.get(actor.id)??-Infinity)>1)

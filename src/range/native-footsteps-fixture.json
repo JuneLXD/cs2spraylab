@@ -1,0 +1,1181 @@
+{
+  "binarySha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "method": "Unicorn executes current server wrapper, base timer/generator and CS2 timer override; sound emission and scene accessors stubbed.",
+  "rows": [
+    {
+      "name": "gate-0-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 0,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 300.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-0-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 0,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 300.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-3.16-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 3.16,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 300.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-3.16-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 3.16,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 300.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-3.17-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 3.17,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-3.17-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 3.17,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-100-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 100,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-100-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 100,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-135-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 135,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-135-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 135,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-135.19-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 135.19,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-135.19-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 135.19,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-135.2-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 135.2,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 107.375,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-135.2-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 135.2,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-135.21-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 135.21,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 107.375,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-135.21-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 135.21,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-219.99-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 219.99,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 107.375,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-219.99-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 219.99,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-220-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 220,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 107.375,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-220-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 220,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-220.01-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 220.01,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 107.375,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-220.01-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 220.01,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-250-False",
+      "beforeMs": 123,
+      "input": {
+        "speed": 250,
+        "walking": false
+      },
+      "after": {
+        "remainingMs": 107.375,
+        "events": []
+      }
+    },
+    {
+      "name": "gate-250-True",
+      "beforeMs": 123,
+      "input": {
+        "speed": 250,
+        "walking": true
+      },
+      "after": {
+        "remainingMs": 123.0,
+        "events": []
+      }
+    },
+    {
+      "name": "expire-135.19-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 135.19,
+        "ducked": false
+      },
+      "after": {
+        "remainingMs": 0.0,
+        "events": []
+      }
+    },
+    {
+      "name": "expire-135.19-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 135.19,
+        "ducked": true
+      },
+      "after": {
+        "remainingMs": 0.0,
+        "events": []
+      }
+    },
+    {
+      "name": "expire-135.2-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 135.2,
+        "ducked": false
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "expire-135.2-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 135.2,
+        "ducked": true
+      },
+      "after": {
+        "remainingMs": 500.0,
+        "events": [
+          0.12999999523162842
+        ]
+      }
+    },
+    {
+      "name": "expire-135.21-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 135.21,
+        "ducked": false
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "expire-135.21-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 135.21,
+        "ducked": true
+      },
+      "after": {
+        "remainingMs": 500.0,
+        "events": [
+          0.12999999523162842
+        ]
+      }
+    },
+    {
+      "name": "expire-200-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 200,
+        "ducked": false
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "expire-200-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 200,
+        "ducked": true
+      },
+      "after": {
+        "remainingMs": 500.0,
+        "events": [
+          0.12999999523162842
+        ]
+      }
+    },
+    {
+      "name": "expire-215-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 215,
+        "ducked": false
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "expire-215-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 215,
+        "ducked": true
+      },
+      "after": {
+        "remainingMs": 500.0,
+        "events": [
+          0.12999999523162842
+        ]
+      }
+    },
+    {
+      "name": "expire-219.99-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 219.99,
+        "ducked": false
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "expire-219.99-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 219.99,
+        "ducked": true
+      },
+      "after": {
+        "remainingMs": 500.0,
+        "events": [
+          0.12999999523162842
+        ]
+      }
+    },
+    {
+      "name": "expire-220-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 220,
+        "ducked": false
+      },
+      "after": {
+        "remainingMs": 300.0,
+        "events": [
+          0.5
+        ]
+      }
+    },
+    {
+      "name": "expire-220-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 220,
+        "ducked": true
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.32499998807907104
+        ]
+      }
+    },
+    {
+      "name": "expire-220.01-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 220.01,
+        "ducked": false
+      },
+      "after": {
+        "remainingMs": 300.0,
+        "events": [
+          0.5
+        ]
+      }
+    },
+    {
+      "name": "expire-220.01-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 220.01,
+        "ducked": true
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.32499998807907104
+        ]
+      }
+    },
+    {
+      "name": "expire-250-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 250,
+        "ducked": false
+      },
+      "after": {
+        "remainingMs": 300.0,
+        "events": [
+          0.5
+        ]
+      }
+    },
+    {
+      "name": "expire-250-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 250,
+        "ducked": true
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.32499998807907104
+        ]
+      }
+    },
+    {
+      "name": "timer-0-False",
+      "beforeMs": 0,
+      "input": {
+        "speed": 215,
+        "grounded": false
+      },
+      "after": {
+        "remainingMs": 0.0,
+        "events": []
+      }
+    },
+    {
+      "name": "timer-0-True",
+      "beforeMs": 0,
+      "input": {
+        "speed": 215,
+        "grounded": true
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "timer-1-False",
+      "beforeMs": 1,
+      "input": {
+        "speed": 215,
+        "grounded": false
+      },
+      "after": {
+        "remainingMs": 0.0,
+        "events": []
+      }
+    },
+    {
+      "name": "timer-1-True",
+      "beforeMs": 1,
+      "input": {
+        "speed": 215,
+        "grounded": true
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "timer-7.8125-False",
+      "beforeMs": 7.8125,
+      "input": {
+        "speed": 215,
+        "grounded": false
+      },
+      "after": {
+        "remainingMs": 0.0,
+        "events": []
+      }
+    },
+    {
+      "name": "timer-7.8125-True",
+      "beforeMs": 7.8125,
+      "input": {
+        "speed": 215,
+        "grounded": true
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "timer-15.625-False",
+      "beforeMs": 15.625,
+      "input": {
+        "speed": 215,
+        "grounded": false
+      },
+      "after": {
+        "remainingMs": 0.0,
+        "events": []
+      }
+    },
+    {
+      "name": "timer-15.625-True",
+      "beforeMs": 15.625,
+      "input": {
+        "speed": 215,
+        "grounded": true
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "timer-15.626-False",
+      "beforeMs": 15.626,
+      "input": {
+        "speed": 215,
+        "grounded": false
+      },
+      "after": {
+        "remainingMs": 0.0010004043579101562,
+        "events": []
+      }
+    },
+    {
+      "name": "timer-15.626-True",
+      "beforeMs": 15.626,
+      "input": {
+        "speed": 215,
+        "grounded": true
+      },
+      "after": {
+        "remainingMs": 0.0010004043579101562,
+        "events": []
+      }
+    },
+    {
+      "name": "timer-300-False",
+      "beforeMs": 300,
+      "input": {
+        "speed": 215,
+        "grounded": false
+      },
+      "after": {
+        "remainingMs": 284.375,
+        "events": []
+      }
+    },
+    {
+      "name": "timer-300-True",
+      "beforeMs": 300,
+      "input": {
+        "speed": 215,
+        "grounded": true
+      },
+      "after": {
+        "remainingMs": 284.375,
+        "events": []
+      }
+    },
+    {
+      "name": "timer-400-False",
+      "beforeMs": 400,
+      "input": {
+        "speed": 215,
+        "grounded": false
+      },
+      "after": {
+        "remainingMs": 384.375,
+        "events": []
+      }
+    },
+    {
+      "name": "timer-400-True",
+      "beforeMs": 400,
+      "input": {
+        "speed": 215,
+        "grounded": true
+      },
+      "after": {
+        "remainingMs": 384.375,
+        "events": []
+      }
+    },
+    {
+      "name": "enabled-True",
+      "beforeMs": 7,
+      "input": {
+        "speed": 215,
+        "enabled": true
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "fractional-boundary-0",
+      "beforeMs": 0.1,
+      "input": {
+        "speed": 215,
+        "dt": 0.0001
+      },
+      "after": {
+        "remainingMs": 7.450580596923828e-09,
+        "events": []
+      }
+    },
+    {
+      "name": "fractional-boundary-1",
+      "beforeMs": 0.3,
+      "input": {
+        "speed": 215,
+        "dt": 0.0003
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "fractional-boundary-2",
+      "beforeMs": 1,
+      "input": {
+        "speed": 215,
+        "dt": 0.001
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "fractional-boundary-3",
+      "beforeMs": 123.456,
+      "input": {
+        "speed": 215,
+        "dt": 0.123456
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "fractional-boundary-4",
+      "beforeMs": 0.30000000000000004,
+      "input": {
+        "speed": 215,
+        "dt": 0.0003
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    },
+    {
+      "name": "fractional-boundary-5",
+      "beforeMs": 15.6249999,
+      "input": {
+        "speed": 215,
+        "dt": 0.015625
+      },
+      "after": {
+        "remainingMs": 400.0,
+        "events": [
+          0.20000000298023224
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "name": "ak47",
+      "speed": 215,
+      "events": [
+        {
+          "time": 0.3046875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 0.7109375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.1171875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.5234375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.9296875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 2.3359375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 2.7421875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        }
+      ]
+    },
+    {
+      "name": "awp",
+      "speed": 200,
+      "events": [
+        {
+          "time": 0.3046875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 0.7109375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.1171875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.5234375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.9296875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 2.3359375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 2.7421875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        }
+      ]
+    },
+    {
+      "name": "knife",
+      "speed": 250,
+      "events": [
+        {
+          "time": 0.3046875,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 0.609375,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 0.9140625,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 1.21875,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 1.5234375,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 1.828125,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 2.1328125,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 2.4375,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 2.7421875,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        }
+      ]
+    }
+  ],
+  "commandSequences": [
+    {
+      "name": "ak47",
+      "speed": 215,
+      "events": [
+        {
+          "time": 0.3125,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 0.71875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.125,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.53125,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.9375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 2.34375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 2.75,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        }
+      ]
+    },
+    {
+      "name": "awp",
+      "speed": 200,
+      "events": [
+        {
+          "time": 0.3125,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 0.71875,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.125,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.53125,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 1.9375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 2.34375,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        },
+        {
+          "time": 2.75,
+          "remainingMs": 400.0,
+          "events": [
+            0.20000000298023224
+          ]
+        }
+      ]
+    },
+    {
+      "name": "knife",
+      "speed": 250,
+      "events": [
+        {
+          "time": 0.3125,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 0.625,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 0.9375,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 1.25,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 1.5625,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 1.875,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 2.1875,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 2.5,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        },
+        {
+          "time": 2.8125,
+          "remainingMs": 300.0,
+          "events": [
+            0.5
+          ]
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Synthetic supplied state; not a live server observation.",
+    "Flat dry normal movement only; material lookup, player sound routing, water, ladder and freeze/death states not reconstructed.",
+    "Command producer separately proves ordinary unchanged-input commands use one 64 Hz segment; exact input-fraction quantization and weapon/jump/landing segment inserts remain outside trainer parity."
+  ]
+}

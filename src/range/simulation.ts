@@ -1,5 +1,6 @@
 import { Angle, clamp, gameData, loadoutWeapon, MeasuredProfile, recoilPattern, Settings } from './config';
 import {ViewPunch} from './view-punch';
+import {FootstepCadence} from './footsteps';
 import {equipmentForSlot, equipmentStats, isPumpShotgun, knifeModel, ZEUS_RECHARGE_SECONDS, type Equipment, type Slot} from './equipment';
 import {createScenario, DrillCoach, isDrillMode, RANGE_WALLS, REPOSITION_SHOTS, type CoachSample, type DrillMetrics} from './drills';
 import {WeaponRecovery} from './ballistics';
@@ -47,7 +48,7 @@ export class Simulation {
   }
   targetX = 0; targetVelocity = 0; targetSign = 1;
   targetHealth = [100, 100];
-  private stepDistance = 0;
+  private readonly footsteps = new FootstepCadence();
   input = idleInput(); active = false; firing = false; automatic = false;
   readyAt = 0; nextShot = 0; startedAt = 0; shots = 0; hits = 0; heads = 0;
   recoil: Angle = { yaw: 0, pitch: 0 };
@@ -237,6 +238,7 @@ export class Simulation {
     this.burstLeft = 0; this.burstEnd = 0; this.reloadHeld = false;
   }
   private resetMovementHistory() {
+    this.footsteps.reset();
     this.velocityModifier = 1; this.movementTime = this.time;
     this.lastJumpPressTime = this.pendingJumpPressTime = this.landedAt = this.landingVelocity = undefined;
     this.landingVelocityXY = undefined; this.supportId = undefined;
@@ -334,6 +336,7 @@ export class Simulation {
     this.burstLeft = 0;
     if (this.firing) this.finish();
     this.active = false; this.input = idleInput(); this.velocity = { x: 0, z: 0 };
+    this.footsteps.reset();
     this.reloadHeld = false;
     for (const state of this.ammoStates.values()) state.cancel();
     this.drill?.interruptMovement();
@@ -391,21 +394,16 @@ export class Simulation {
       this.ammoFor(id).ammo = 1; this.rechargeTimes.delete(id);
       this.actionEvents.push({kind: 'zeus-ready', at: this.time, equipment: id});
     }
+    if (this.footsteps.update(this.time, dt, this, this.input)) this.onSound(false);
     const next = advanceActor(this, {...this.input, scopedSlow: this.actions.zoom >= 2 && weapon.speed * .52 < 110}, weapon.speed * UNIT, dt, undefined, undefined, undefined,
       {...this.environment, time: this.time - dt});
     this.input.jumpPressed = false; this.input.jumpPressOffset = 0;
-    const traveled = Math.hypot(next.position.x - this.position.x, next.position.z - this.position.z);
     if (next.landedAt !== undefined && next.landedAt !== this.landedAt && next.landingVelocity !== undefined &&
       !next.waterLevel && next.supportId === undefined) {
       this.viewPunch.land(-next.landingVelocity / UNIT, next.landedAt);
       this.recovery.land(-next.landingVelocity / UNIT);
     }
     if (next.grounded && !this.grounded) this.onSound(true);
-    const audible = Math.hypot(next.velocity.x, next.velocity.z) > weapon.speed * UNIT * .54;
-    if (next.grounded && audible && traveled > 0) {
-      this.stepDistance += traveled;
-      if (this.stepDistance >= 1.35) {this.stepDistance %= 1.35; this.onSound(false);}
-    } else if (!audible) this.stepDistance = 0;
     this.velocity = next.velocity;
     this.position.x = next.position.x; this.position.y = next.position.y; this.position.z = next.position.z;
     this.feet = next.feet; this.verticalVelocity = next.verticalVelocity;

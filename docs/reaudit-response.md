@@ -38,8 +38,8 @@ timestamp gaps despite a nominal 60fps header. They cannot establish continuous
 | Hit sounds / damage indicators | Native hit/hurt event assets and mixer metadata; fresh sound onset alignment not captured | Head/helmet/body/armor and shooter/victim event selection; training indicators and damage camera retained | Native asset selection supported; timing/loudness and UI parity approximated | `c488943` |
 | Kill confirmation | Native event/UI rendering not frame-compared | Trainer kill feed/count and target feedback follow simulated death | Approximated training feedback | `c488943` |
 | Blood / bot flinch | Fresh native flinch clips and flags; animation inventory | Imported bullet-hit deltas plus simplified blood particles; unchanged | Matched sampled clips; approximated effects/blends | `c488943` |
-| Footstep cadence | Approved AK/AWP run/walk/crouch audio, per-tick position and speed; exact native trigger rule still unknown |1.35m travel cadence above54% weapon speed; AK steady intervals242.1875–250ms, AWP265.625–273.4375ms; unchanged | Unverified full native rule; AK candidate run audio is around400ms and warrants further measurement | `c488943` |
-| Footstep loudness / stance | Output-monitor audio captured at known game/sink levels, no calibrated source loudness or listener-distance sweep | Walk/crouch probes emit0steps; loudness uses browser spatial model | Unverified threshold/loudness parity; zero callbacks does not prove every native stance is silent | `c488943` |
+| Footstep cadence | Current-server instructions and command-producer emulation establish pre-movement timer, speed gate and ordinary64Hz cadence; [full ledger](reaudit-footsteps.md) | Distance accumulator replaced: both engines AK242.1875–250→406.25ms, AWP265.625–273.4375→406.25ms, knife210.9375–218.75→312.5ms | Matched ordinary flat dry-ground timer; special states, exact edge quantization and audible onset remain partial | Pass21, pending commit |
+| Footstep loudness / stance | Native scalar volume/duck multiplier and current soundevent metadata inspected; no calibrated source loudness or listener-distance sweep | Walk/crouch probes emit0steps under the verified gate; browser spatial mixer unchanged | Normal-ground gate matched; complete loudness, occlusion and every special stance unverified | Pass21 gate; existing mixer retained |
 | Weapon sound timing / distance layers | Fresh native action timelines/mixer imports and clip event metadata | Imported gun/action events, distant layer and browser spatial gain; unchanged | Matched imported data; runtime spatial mix/occlusion approximated | `c488943` |
 | Bot target locomotion / turning / landing / death | Fresh world clips/graphs, pose/capsule bench | Native clips in custom blends; missing turn/planted/additive states; custom ragdoll | See full animation inventory; overall approximated | `c488943` |
 
@@ -48,7 +48,9 @@ remaining evidence: high-rate game-only capture with reliable decoded timestamps
 and synchronized input edges; controlled constant-speed sound runs at multiple
 weapon caps, surfaces and listener distances; matched native/trainer camera and
 gun landmarks through fire, recovery, crouch, landing and zoom; native client
-footstep trigger and animation-update readers after bridge analysis completes.
+footstep delivery/special-state paths and animation-update readers after bridge
+analysis completes. Normal-ground timer/command cadence is now established in
+the separate footstep ledger; no sound-mix constant was fitted to these captures.
 
 ## Recorder diagnosis
 

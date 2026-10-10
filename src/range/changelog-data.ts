@@ -325,6 +325,10 @@ export const latestChanges = {
       'Firing accuracy and recoil-index recovery now follow the recorded CS2 update timing in both the range and duel. Scope changes preserve accumulated inaccuracy, and magazine reloads apply the native recoil-index changes.',
       'Native instruction checks and recorded tick replays cover the correction; scheduled aim-punch timing is preserved.',
     ]},
+    {id: 'native-footstep-cadence', title: 'Footstep timing while running', items: [
+      'Running footsteps now follow the native movement timer in both the range and duel. AK and AWP steps are about 406 ms apart, and knife steps about 313 ms apart, correcting the faster distance-based cadence.',
+      'Walking and crouching stay quiet; stopping resets the countdown and slow movement preserves it.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

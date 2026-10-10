@@ -488,15 +488,14 @@ trainer never needs. Not reproduced: one surface-flag special case (modifier 1/3
 trigger could not be identified, and the debug-impact record's 1.18 / 2.8 / 0.15 terms, which never
 touch damage.
 
-Footsteps. With `mp_footsteps_serverside` 1 (default) the server plays footsteps from the animation
-graph's footstep node; the `player_footstep` event reaches players within 75 units and other player
-sound events within 500; jump and landing sounds (`Default.WalkJump`) are capped by
-`sv_max_distance_transmit_footsteps`. `footstep_audible_threshold` and `footstep_force_volume` exist
-but no server code reads them. The cadence comes from the run and walk cycles (the run clip is
-0.708 s, the walk clip longer, the world-model graph blends them by `move_speed_horizontal`), and
-neither the shipped text data (the clips carry only sync markers) nor the demos (no footstep events
-were recorded) give the stride, so the trainer's rule of a step every 1.35 m above 54% of the
-weapon's speed stays unverified. Walking and crouching are silent in both.
+Footsteps (corrected by pass21). The earlier inference that cadence came from animation
+cycle length was unsupported. Current native instructions establish a movement countdown,
+described in [the footstep re-audit](reaudit-footsteps.md), and the 1.35 m trainer rule has
+been replaced. The retained 75/500 u branch belongs to an entity-event listener and does
+not establish sound transmission radii. Searches finding no direct server readers for
+the audible-threshold/forced-volume convar pointers are bounded negative results, not
+proof that those convars have no effect elsewhere. Walk/crouch suppression is established
+for the tested normal-ground states; complete client/audio transport remains unverified.
 
 Movement audit. Accelerate matches the fixture-derived function: base max(250, wish speed), the
 weapon's speed scale when `sv_accelerate_use_weapon_speed` is on (default 1), 0.34 while ducking,
@@ -825,6 +824,35 @@ shots remain outside runtime coverage. The first two R8 capture attempts decode 
 R8-specific changes are outside this correction. Final combined validation passes
 TypeScript, 2,325 unit cases (only the known missing fallback fixture fails) and
 all five targeted Chromium cases; deployment verification follows the batched push.
+
+## Normal-ground footstep cadence (twenty-first pass, 2026-10-09)
+
+The [footstep evidence ledger](reaudit-footsteps.md) replaces the distance accumulator
+with the current native movement countdown in both engines. Hash-bound instruction
+emulation covers 63 enabled timer/gate/boundary cases plus six sustained sequences.
+The native command producer emits one complete 64 Hz segment for unchanged ordinary
+input and inserts supplied input edges; there is no unconditional 128 Hz half-tick.
+The footstep hook samples velocity and stance before movement.
+
+Both actual engines previously emitted AK steps every 242.1875–250 ms, AWP steps
+every 265.625–273.4375 ms and knife steps every 210.9375–218.75 ms. They now emit
+every 406.25, 406.25 and 312.5 ms respectively, matching the ordinary-command
+native countdown with zero steady interval error. Walking and fully crouched probes
+emit no steps. Slow movement preserves the countdown; stopping resets it. Pending
+samples are discarded on pose/actor resets and range cancellation.
+
+Timer arithmetic retains native float32 rounding, including fractional expiration
+cases where double arithmetic changed whether the command emitted. The focused
+run passes 187 cases, including 82 footstep cases and both-engine pre-move/input-edge
+checks; TypeScript passes. The portable [before/after report](evidence/reaudit-footsteps.json)
+retains all measured events and limits. Full-suite/browser validation is recorded
+separately after source freeze.
+
+This establishes ordinary flat dry-ground cadence. Exact native input-fraction
+quantization and weapon/jump/landing command inserts, water/ladder rules, special
+jump/landing sounds, native client delivery, mixer loudness, occlusion and hearing
+distance remain outside complete parity. No mixer constant was tuned from the
+old gapped capture.
 
 ## Re-audit delivery validation
 

@@ -1,0 +1,427 @@
+{
+  "auditDate": "2026-10-09",
+  "trainerBeforeCommit": "cb47b699bc710d196288e8d600ea50f853321562",
+  "nativeServerSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "soundeventExportSha256": "a5e880fb7f55be614163bb9058b10dd39f318411e6891448f5bfb6cdb09dfccc",
+  "method": "Hash-bound native instructions execute the timer/gates and command producer in Unicorn with bounded scene/accessor/sound-emission stubs. Trainer measurements invoke actual range and Duel sound callbacks.",
+  "commandProducer": {
+    "binarySha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+    "rows": [
+      {
+        "inputEdgeFraction": null,
+        "nativeFractions": [
+          1.0
+        ]
+      },
+      {
+        "inputEdgeFraction": 0.25,
+        "nativeFractions": [
+          0.25,
+          1.0
+        ]
+      },
+      {
+        "inputEdgeFraction": 0.5,
+        "nativeFractions": [
+          0.5,
+          1.0
+        ]
+      },
+      {
+        "inputEdgeFraction": 0.9,
+        "nativeFractions": [
+          0.90625,
+          1.0
+        ]
+      }
+    ],
+    "method": "Native command segment producer and CS movement override; no weapon, jump or landing transition in the supplied tick. Accessor/time-offset and fmodf imports are host shims.",
+    "limitation": "Controlled supplied command; not a live command capture."
+  },
+  "nativeFixtureCases": 63,
+  "nativeSequenceCases": {
+    "kernel128Hz": 3,
+    "command64Hz": 3
+  },
+  "rows": [
+    {
+      "engine": "range",
+      "weapon": "ak47",
+      "stance": "run",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [
+        0.9609375,
+        1.2109375,
+        1.4609375,
+        1.703125,
+        1.953125
+      ],
+      "afterEventTimes": [
+        1.015625,
+        1.421875,
+        1.828125
+      ],
+      "beforeIntervalsMs": [
+        250.0,
+        250.0,
+        242.1875,
+        250.0
+      ],
+      "afterIntervalsMs": [
+        406.25,
+        406.25
+      ],
+      "nativeSteadyIntervalMs": 406.25,
+      "afterTailSpeedUnits": 214.99999999999997,
+      "maxIntervalErrorBeforeMs": 164.0625,
+      "maxIntervalErrorAfterMs": 0.0
+    },
+    {
+      "engine": "range",
+      "weapon": "ak47",
+      "stance": "walk",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 111.8,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "range",
+      "weapon": "ak47",
+      "stance": "crouch",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 73.1,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "range",
+      "weapon": "awp",
+      "stance": "run",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [
+        0.984375,
+        1.2578125,
+        1.5234375,
+        1.7890625
+      ],
+      "afterEventTimes": [
+        1.03125,
+        1.4375,
+        1.84375
+      ],
+      "beforeIntervalsMs": [
+        273.4375,
+        265.625,
+        265.625
+      ],
+      "afterIntervalsMs": [
+        406.25,
+        406.25
+      ],
+      "nativeSteadyIntervalMs": 406.25,
+      "afterTailSpeedUnits": 200,
+      "maxIntervalErrorBeforeMs": 140.625,
+      "maxIntervalErrorAfterMs": 0.0
+    },
+    {
+      "engine": "range",
+      "weapon": "awp",
+      "stance": "walk",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 104,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "range",
+      "weapon": "awp",
+      "stance": "crouch",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 68,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "range",
+      "weapon": "knife",
+      "stance": "run",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [
+        0.921875,
+        1.1328125,
+        1.3515625,
+        1.5625,
+        1.7734375,
+        1.984375
+      ],
+      "afterEventTimes": [
+        0.96875,
+        1.28125,
+        1.59375,
+        1.90625
+      ],
+      "beforeIntervalsMs": [
+        210.9375,
+        218.75,
+        210.9375,
+        210.9375,
+        210.9375
+      ],
+      "afterIntervalsMs": [
+        312.5,
+        312.5,
+        312.5
+      ],
+      "nativeSteadyIntervalMs": 312.5,
+      "afterTailSpeedUnits": 250,
+      "maxIntervalErrorBeforeMs": 101.5625,
+      "maxIntervalErrorAfterMs": 0.0
+    },
+    {
+      "engine": "range",
+      "weapon": "knife",
+      "stance": "walk",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 130,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "range",
+      "weapon": "knife",
+      "stance": "crouch",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 74.46484375000044,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "duel",
+      "weapon": "ak47",
+      "stance": "run",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [
+        0.9609375,
+        1.2109375,
+        1.4609375,
+        1.703125,
+        1.953125
+      ],
+      "afterEventTimes": [
+        1.015625,
+        1.421875,
+        1.828125
+      ],
+      "beforeIntervalsMs": [
+        250.0,
+        250.0,
+        242.1875,
+        250.0
+      ],
+      "afterIntervalsMs": [
+        406.25,
+        406.25
+      ],
+      "nativeSteadyIntervalMs": 406.25,
+      "afterTailSpeedUnits": 214.99999999999997,
+      "maxIntervalErrorBeforeMs": 164.0625,
+      "maxIntervalErrorAfterMs": 0.0
+    },
+    {
+      "engine": "duel",
+      "weapon": "ak47",
+      "stance": "walk",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 111.8,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "duel",
+      "weapon": "ak47",
+      "stance": "crouch",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 73.1,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "duel",
+      "weapon": "awp",
+      "stance": "run",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [
+        0.984375,
+        1.2578125,
+        1.5234375,
+        1.7890625
+      ],
+      "afterEventTimes": [
+        1.03125,
+        1.4375,
+        1.84375
+      ],
+      "beforeIntervalsMs": [
+        273.4375,
+        265.625,
+        265.625
+      ],
+      "afterIntervalsMs": [
+        406.25,
+        406.25
+      ],
+      "nativeSteadyIntervalMs": 406.25,
+      "afterTailSpeedUnits": 200,
+      "maxIntervalErrorBeforeMs": 140.625,
+      "maxIntervalErrorAfterMs": 0.0
+    },
+    {
+      "engine": "duel",
+      "weapon": "awp",
+      "stance": "walk",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 104,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "duel",
+      "weapon": "awp",
+      "stance": "crouch",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 68,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "duel",
+      "weapon": "knife",
+      "stance": "run",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [
+        0.921875,
+        1.1328125,
+        1.3515625,
+        1.5625,
+        1.7734375,
+        1.984375
+      ],
+      "afterEventTimes": [
+        0.96875,
+        1.28125,
+        1.59375,
+        1.90625
+      ],
+      "beforeIntervalsMs": [
+        210.9375,
+        218.75,
+        210.9375,
+        210.9375,
+        210.9375
+      ],
+      "afterIntervalsMs": [
+        312.5,
+        312.5,
+        312.5
+      ],
+      "nativeSteadyIntervalMs": 312.5,
+      "afterTailSpeedUnits": 250,
+      "maxIntervalErrorBeforeMs": 101.5625,
+      "maxIntervalErrorAfterMs": 0.0
+    },
+    {
+      "engine": "duel",
+      "weapon": "knife",
+      "stance": "walk",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 130,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    },
+    {
+      "engine": "duel",
+      "weapon": "knife",
+      "stance": "crouch",
+      "windowSeconds": 1.5,
+      "beforeEventTimes": [],
+      "afterEventTimes": [],
+      "beforeIntervalsMs": [],
+      "afterIntervalsMs": [],
+      "nativeSteadyIntervalMs": null,
+      "afterTailSpeedUnits": 74.46484375000044,
+      "maxIntervalErrorBeforeMs": null,
+      "maxIntervalErrorAfterMs": null
+    }
+  ],
+  "validation": {
+    "focusedTestsPassed": 187,
+    "footstepTestsPassed": 82,
+    "typecheck": "pass"
+  },
+  "limitations": [
+    "Flat dry normal movement steady cadence is verified; runtime waveform onset and complete client prediction/transport are not.",
+    "Exact native input-fraction quantization and weapon/jump/landing-specific command segment insertion are not reproduced.",
+    "Water, ladders, special jump/landing sounds and freeze/death flags remain outside the implemented normal-ground timer.",
+    "Native volume scalar and imported mixer metadata were inspected, but runtime loudness, occlusion and listener-distance parity were not changed or calibrated.",
+    "Earlier AK capture supports roughly 400 ms cadence only; gappy video and audio alignment are not a synchronized first-step latency measurement."
+  ],
+  "nativeFractionalBoundaryCases": 6,
+  "doubleArithmeticEmissionMismatchesBefore": 2,
+  "float32ArithmeticEmissionMismatchesAfter": 0
+}
