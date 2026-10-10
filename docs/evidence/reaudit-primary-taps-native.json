@@ -1,0 +1,306 @@
+{
+  "method": "Check retained byte-bound common-primary evidence and derive supplied-state cases.\n\nNo native binary is opened and no native code executes. The cases below are\nstatic-derived implications of the checked branches, not observed gameplay or\nan assertion that a physical mouse release cleared all native transition masks.\n",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "readerSha256": "6ae75a5572c065b2b2f8c75f0f7f63717c29ce1e7beae4fa0b321e85c56f67db",
+  "checkerSha256": "904013cc9f8d11433ae0c7aae8e89c2814b36ab6c8edcc7ba6e8db2d1ad91780",
+  "sourceReports": [
+    {
+      "report": "native-audit/reports/reaudit-common-reload-portable/current-read.json",
+      "sha256": "65949208d8a8f32dab3b86896472268e0878469f1d34dbc2d05195666e598825",
+      "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a"
+    },
+    {
+      "report": "native-audit/reports/core-shooting-next/primary-packaged/current-reset/current-read.json",
+      "sha256": "821a99a28ff8d13b94e8aa52b7501fc3e7b07139e807c2fd311fae655caf279a",
+      "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a"
+    },
+    {
+      "report": "native-audit/reports/awp-clocks-next/metadata-read.json",
+      "sha256": "84af5cdc9daf546d8de43f0ecc7b11647ae955e46b798c0be45cbe84ce93544d",
+      "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a"
+    }
+  ],
+  "fullAutoFieldDescriptorSha256": "cbf5427ee4ebbaa1010d2ce9b4b7a7e35570d3113b81cc29cc3690a0e1c1bbe7",
+  "instructionAssertions": 59,
+  "newVirtualSlotAssertions": 28,
+  "newReadBytes": 2896,
+  "weapons": [
+    "ak47",
+    "m4a4",
+    "m4a1s",
+    "awp",
+    "glock",
+    "usp",
+    "deagle"
+  ],
+  "evidence": [
+    {
+      "name": "common-input-dispatch",
+      "codeSha256": "419bb34dfb203669bd499331edef948925065d6793d416236efccaff88f3ebe4",
+      "listingSha256": "ca07840cf94ef9bc5c7d4f56733e90f122ea7c08fd145ea3c67faeaf2bd77f94",
+      "assertions": 10
+    },
+    {
+      "name": "primary-dispatch",
+      "codeSha256": "d435032a6b5b71674e453a6158b90658c6f4fdd386771a7a1259a299b8c93409",
+      "listingSha256": "0278b0bb904f234f7f1cdf2f666cb5755aece416d5a34709c3985d22c5862fc6",
+      "assertions": 16
+    },
+    {
+      "name": "primary-ready",
+      "codeSha256": "8ca92825d9e18ea6a5ecffdc6d89774674f90b04f10822d25256cf722e3cbc2d",
+      "listingSha256": "1fc7b581e34f190c7bd380186c64330f4304b8954226965182a7c2b194c5590d",
+      "assertions": 4
+    },
+    {
+      "name": "input-active",
+      "codeSha256": "c434991702f6cfc3740fb0cbc8aa6d95b4585db2bd6cfd030100be2739bb7da2",
+      "listingSha256": "246521935b2429bcc3e1c99a30bf361f01d016f299050946777a18445ae03981",
+      "assertions": 4
+    },
+    {
+      "name": "input-transition-wrapper",
+      "codeSha256": "c12cff772597b213356fe8396b1f27809fc1d02f9ead5c8689f1bf3a77c721e5",
+      "listingSha256": "835a79558c824737ef34d71d9175a79126e2005cf81774ee1223eb04ad565cba",
+      "assertions": 2
+    },
+    {
+      "name": "input-transition-predicate",
+      "codeSha256": "86ed295e998548e3c958686015b9be847e30bb1ab035a0b30956b18652dd276a",
+      "listingSha256": "5f927e8a76a0a8db28a07dfb77c11cade549c3ee67026b377edeb7bfd906169e",
+      "assertions": 6
+    },
+    {
+      "name": "idle-counter-reset",
+      "codeSha256": "7f32c283b206450613defdf97f1a76e5576c99ddfac38c0693d6651f91659b18",
+      "listingSha256": "651433dda3dfd391473549c025b44e4169e84f0adfb6dd661851aae4cb80b792",
+      "assertions": 10
+    },
+    {
+      "name": "full-auto-accessor",
+      "codeSha256": "ce3a0ea6f98e22f1254b666470a77082af8a7a1352facc2a8c160296941f6e6d",
+      "listingSha256": "7c9383a1f002d78b07d95750a720a5cfcd964c525a29e3bc4bc2fa4492d1f93c",
+      "assertions": 2
+    },
+    {
+      "name": "full-auto-wrapper",
+      "codeSha256": "cc90a14b2a1a6e1b99fa086c589f60551dba41adae7cd282b4b4433eae5bf8a7",
+      "listingSha256": "92cfe115d333200501044a60bd874fde6814b038a27e4085284b21f0baa63c98",
+      "assertions": 5
+    }
+  ],
+  "rules": {
+    "readyGate": "In the bound ordinary shared dispatcher, active primary is admitted only when its primary deadline is ready, including equality. A failed readiness check does not call primary dispatch or its consume path.",
+    "heldRetry": "A primary-state bit still set on a later invocation again satisfies active input. If the deadline is then ready and the ordinary primary/player/ammo gates pass, it reaches primary dispatch without requiring a new edge.",
+    "releasedInput": "If both the primary-state bit and the fallback transition-result bit are absent at the later invocation, primary is inactive and is not dispatched. This is supplied native state, not proof that a physical release produced it.",
+    "semiautoLatch": "A positive retained player shot counter blocks another ordinary fullAuto=false primary shot. The ready active primary branch still owns arbitration when this rejection occurs.",
+    "idleReset": "When ordinary dispatch reaches idle with no selected primary/secondary attack input, it clears the same player counter before testing primary readiness for automatic reload. Thus that reset does not wait for firing cooldown to expire.",
+    "physicalBoundary": "A released tap may still satisfy a retained native transition bit. These reads do not prove the producer/reset lifetime, command aggregation, or the next invocation time, so they do not establish an exact physical click buffer window."
+  },
+  "maskCases": [
+    {
+      "primaryStateBit": false,
+      "transitionSelectorBit": false,
+      "transitionResultBit": false,
+      "active": false
+    },
+    {
+      "primaryStateBit": false,
+      "transitionSelectorBit": false,
+      "transitionResultBit": true,
+      "active": true
+    },
+    {
+      "primaryStateBit": false,
+      "transitionSelectorBit": true,
+      "transitionResultBit": false,
+      "active": false
+    },
+    {
+      "primaryStateBit": false,
+      "transitionSelectorBit": true,
+      "transitionResultBit": true,
+      "active": true
+    },
+    {
+      "primaryStateBit": true,
+      "transitionSelectorBit": false,
+      "transitionResultBit": false,
+      "active": true
+    },
+    {
+      "primaryStateBit": true,
+      "transitionSelectorBit": false,
+      "transitionResultBit": true,
+      "active": true
+    },
+    {
+      "primaryStateBit": true,
+      "transitionSelectorBit": true,
+      "transitionResultBit": false,
+      "active": true
+    },
+    {
+      "primaryStateBit": true,
+      "transitionSelectorBit": true,
+      "transitionResultBit": true,
+      "active": true
+    }
+  ],
+  "ordinaryCases": [
+    {
+      "active": false,
+      "ready": false,
+      "fullAuto": false,
+      "counterPositive": false,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": true
+    },
+    {
+      "active": false,
+      "ready": false,
+      "fullAuto": false,
+      "counterPositive": true,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": true
+    },
+    {
+      "active": false,
+      "ready": false,
+      "fullAuto": true,
+      "counterPositive": false,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": true
+    },
+    {
+      "active": false,
+      "ready": false,
+      "fullAuto": true,
+      "counterPositive": true,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": true
+    },
+    {
+      "active": false,
+      "ready": true,
+      "fullAuto": false,
+      "counterPositive": false,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": true
+    },
+    {
+      "active": false,
+      "ready": true,
+      "fullAuto": false,
+      "counterPositive": true,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": true
+    },
+    {
+      "active": false,
+      "ready": true,
+      "fullAuto": true,
+      "counterPositive": false,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": true
+    },
+    {
+      "active": false,
+      "ready": true,
+      "fullAuto": true,
+      "counterPositive": true,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": true
+    },
+    {
+      "active": true,
+      "ready": false,
+      "fullAuto": false,
+      "counterPositive": false,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": false
+    },
+    {
+      "active": true,
+      "ready": false,
+      "fullAuto": false,
+      "counterPositive": true,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": false
+    },
+    {
+      "active": true,
+      "ready": false,
+      "fullAuto": true,
+      "counterPositive": false,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": false
+    },
+    {
+      "active": true,
+      "ready": false,
+      "fullAuto": true,
+      "counterPositive": true,
+      "primaryChosen": false,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": false
+    },
+    {
+      "active": true,
+      "ready": true,
+      "fullAuto": false,
+      "counterPositive": false,
+      "primaryChosen": true,
+      "primaryVirtualAdmitted": true,
+      "idleCounterCleared": false
+    },
+    {
+      "active": true,
+      "ready": true,
+      "fullAuto": false,
+      "counterPositive": true,
+      "primaryChosen": true,
+      "primaryVirtualAdmitted": false,
+      "idleCounterCleared": false
+    },
+    {
+      "active": true,
+      "ready": true,
+      "fullAuto": true,
+      "counterPositive": false,
+      "primaryChosen": true,
+      "primaryVirtualAdmitted": true,
+      "idleCounterCleared": false
+    },
+    {
+      "active": true,
+      "ready": true,
+      "fullAuto": true,
+      "counterPositive": true,
+      "primaryChosen": true,
+      "primaryVirtualAdmitted": true,
+      "idleCounterCleared": false
+    }
+  ],
+  "implementationConclusion": "No new unconditional physical-input timing fix is justified. Existing release-before-readiness behavior matches the supplied inactive-native-input branch; held retry matches the supplied active branch. Preserve source behavior pending observed command masks and caller timing.",
+  "smallestRemainingEvidence": "For one ordinary common pistol and one rifle, pair a near-deadline press/release with the active predicate masks, selected command invocation time and shot result. Especially distinguish press/release in one command from separate commands; do not add an arbitrary buffer constant.",
+  "limits": [
+    "Static-derived cases; no native code execution or live gameplay observations.",
+    "No proof of physical input-to-command aggregation, producer/reset mask lifetimes or wall-clock latency.",
+    "The counter is tied by matching native reads/writes, not a new field-name schema export.",
+    "Idle reset is conditional on reaching idle; other active action buttons can take earlier branches.",
+    "Generic full-auto/semiauto rules are conditional on compiled weapon data and exclude pending burst continuation.",
+    "No claim that all weapon/deploy/player/ammo gates or full scheduling semantics are covered."
+  ]
+}
