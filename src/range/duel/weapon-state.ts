@@ -110,7 +110,12 @@ export class DuelWeaponState {
     const reloadEnd = this.reload.phase === 'finish' || this.reload.phase === 'magazine' ? this.reload.until : time;
     this.reload.advance(time, command.reloadHeld);
     if (reloading && !this.reload.active) this.nextShotAt = Math.max(this.nextShotAt, reloadEnd);
-    if (command.secondaryPressed && !this.reloadUntil) this.actions.secondary(time);
+    // Native pending Glock rounds run before secondary input; an eligible
+    // primary input also consumes the update before the mode-switch branch.
+    const glockPrimaryPriority = this.id === 'glock' && time + 1e-9 >= this.nextShotAt &&
+      (command.fireHeld || command.firePressed || this.burstLeft > 0 && this.ammo > 0);
+    if ((command.secondaryPressed || this.id === 'glock' && command.secondaryHeld) &&
+      !this.reloadUntil && !glockPrimaryPriority) this.actions.secondary(time);
     this.actions.alternateFire = this.id === 'revolver' && !!(command.secondaryHeld || command.secondaryPressed);
     const stats = this.actions.stats;
     this.recovery.setParameters(stats);
@@ -184,7 +189,7 @@ export class DuelWeaponState {
     }, stats.pellets, this.random);
     const direction = directions[0];
     if (this.id !== 'zeus') this.recovery.fire(processingDelay);
-    this.actions.afterShot(time);
+    this.actions.afterShot(time, scheduled, this.burstLeft);
     this.recovery.setParameters(this.actions.stats);
     this.ammo--;
     if (isPumpShotgun(this.id)) this.pumpUntil = scheduled + stats.cycle;

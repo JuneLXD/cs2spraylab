@@ -335,10 +335,19 @@ export class Simulation {
     if (this.time >= this.nextShot) this.fire();
     return true;
   }
+  secondary() {
+    if (this.firing || this.reloadState.active) return false;
+    // The primary branch consumes held input when ready, even when the
+    // semiautomatic weapon rejects another shot without a fresh press.
+    if (this.equipped === 'glock' && this.triggerHeld &&
+      this.time + 1e-9 >= (this.shotReady.get('glock') ?? 0)) return false;
+    return this.actions.secondary(this.time);
+  }
   release(pointerType: string) {
     if (pointerType !== 'touch') {this.triggerHeld = false; this.resumeHeldAt = undefined;}
     if (this.automatic || pointerType === 'touch') return;
     if (this.burstLeft) this.releasedBurst = true; else this.finish();
+    if (this.equipped === 'glock' && this.secondaryHeld) this.secondary();
   }
   cancel() {
     this.triggerHeld = false; this.resumeHeldAt = undefined;
@@ -468,6 +477,8 @@ export class Simulation {
     // A shot the weapon becomes ready for while the trigger is held is processed on the next server tick; its
     // schedule (nextShot) keeps accumulating exactly, as the game's demos show (AK sprays alternate 6 and 7 ticks).
     if (this.firing && this.time + 1e-9 >= tickAligned(this.nextShot)) this.fire();
+    // Pending Glock rounds update both clocks before the secondary branch.
+    if (this.equipped === 'glock' && this.secondaryHeld) this.secondary();
     // Held R retries the same admission rule; an early released tap is not queued.
     if (this.reloadHeld && usesNativeReloadInput(this.equipped)) this.reload(true);
     // CS2 reloads an empty magazine by itself once the last shot's cycle ends. shotReady alone can
@@ -523,7 +534,7 @@ export class Simulation {
     }
     // The game records the scheduled time as the last shot time; a tick-aligned shot keeps its schedule.
     this.lastShotAt = this.nextShot;
-    this.actions.afterShot(this.time);
+    this.actions.afterShot(this.time, this.nextShot, this.burstLeft);
     if (!this.measured || this.slot !== 1) this.recovery.setParameters(this.actions.stats);
     this.recovery.finishAccuracy();
     this.onShot({index, ordinal, at:this.time, origin:{...this.position}, direction:directions[0], recoil:this.recoil, equipment:this.equipped,

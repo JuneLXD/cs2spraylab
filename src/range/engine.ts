@@ -355,7 +355,7 @@ export class RangeEngine {
     }
     else {
       const zoom=this.sim.actions.zoom;
-      this.sim.actions.secondary(this.sim.time);
+      this.sim.secondary();
       if(zoom!==this.sim.actions.zoom)this.audio.playScope(this.sim.equipped,!!this.sim.actions.zoom,this.sim.settings.volume);
     }
   }

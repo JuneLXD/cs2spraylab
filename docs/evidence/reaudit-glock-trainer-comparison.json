@@ -1,0 +1,614 @@
+{
+  "method": "Compare retained actual-trainer Glock runs; no simulation/native execution.\n\nRequires the exact same probe and fixture list, a clean bfebff8 baseline, and\nthe explicit source-change allowlist. Reports processed shot times separately\nfrom the Range-only scheduled timestamps carried by the raw input reports.\n",
+  "scriptSha256": "f4e24f3d9694d77f3017b66a1c2ea610169e224e54a8c3e0628af54b93f66030",
+  "probeSha256": "34ad548ab7b91bb52ed5a33ae427e141c8bdefbbf33f92cec94ca92b5987047a",
+  "baselineCommit": "bfebff89319f90d7451b1dbe4e6cb9f4c9b38b79",
+  "beforeSha256": "e0d778709046926f41ab6dda71bf0e04e929fa599b9745933ef2d2848f7523d3",
+  "afterSha256": "01b1d33ed64f4ae7ad41c6280d4057b2913bcfd34f034440387e311b9218ac71",
+  "sameFixtureAndInputSources": true,
+  "changedSourceInputs": [
+    "src/range/duel/weapon-state.ts",
+    "src/range/engine.ts",
+    "src/range/native-reload-timing.json",
+    "src/range/simulation.ts",
+    "src/range/sound-events-data.json",
+    "src/range/weapon-actions.ts"
+  ],
+  "otherPatchInputs": "The integrated isolated checkout also contains the independently audited Deagle reload metadata correction in native-reload-timing.json and sound-events-data.json. Glock data and non-action source inputs are otherwise byte-identical; these scenarios do not reload or render/play audio.",
+  "pairedScenarios": 12,
+  "afterShotAndModeParity": 12,
+  "unchangedNormalControls": 6,
+  "rows": [
+    {
+      "engine": "range",
+      "scenario": "toggle-immediate-burst",
+      "before": {
+        "shots": [],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "toggle-immediate-burst",
+      "before": {
+        "shots": [],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "toggle-immediate-semi",
+      "before": {
+        "shots": [],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": false
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": false
+          }
+        ]
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "toggle-immediate-semi",
+      "before": {
+        "shots": [],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": false
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": false
+          }
+        ]
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "toggle-early-held",
+      "before": {
+        "shots": [
+          1.3125,
+          1.359375,
+          1.40625
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1.03125,
+          1.09375,
+          1.140625
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "toggle-early-held",
+      "before": {
+        "shots": [
+          1.3125,
+          1.359375,
+          1.40625
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1.03125,
+          1.09375,
+          1.140625
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "burst-mid-secondary-tap",
+      "before": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "burst-mid-secondary-tap",
+      "before": {
+        "shots": [
+          1,
+          1.34375,
+          1.390625
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.03125,
+            "burst": false
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "burst-mid-secondary-held",
+      "before": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.5,
+            "burst": false
+          }
+        ]
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "burst-mid-secondary-held",
+      "before": {
+        "shots": [
+          1,
+          1.34375,
+          1.390625
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.03125,
+            "burst": false
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.5,
+            "burst": false
+          }
+        ]
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "primary-then-secondary-held",
+      "before": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.5,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "primary-then-secondary-held",
+      "before": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.5,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "secondary-repeat",
+      "before": {
+        "shots": [],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          },
+          {
+            "at": 1.3046875,
+            "burst": false
+          },
+          {
+            "at": 1.609375,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "secondary-repeat",
+      "before": {
+        "shots": [],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [],
+        "modeTransitions": [
+          {
+            "at": 1,
+            "burst": true
+          },
+          {
+            "at": 1.3046875,
+            "burst": false
+          },
+          {
+            "at": 1.609375,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "semi-cooldown-secondary-tap",
+      "before": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.03125,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": []
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "semi-cooldown-secondary-tap",
+      "before": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.03125,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": []
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "semi-cooldown-secondary-held",
+      "before": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.03125,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.15625,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "semi-cooldown-secondary-held",
+      "before": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.03125,
+            "burst": true
+          }
+        ]
+      },
+      "after": {
+        "shots": [
+          1
+        ],
+        "modeTransitions": [
+          {
+            "at": 1.15625,
+            "burst": true
+          }
+        ]
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "normal-semi",
+      "before": {
+        "shots": [
+          1,
+          1.15,
+          1.3
+        ],
+        "modeTransitions": []
+      },
+      "after": {
+        "shots": [
+          1,
+          1.15,
+          1.3
+        ],
+        "modeTransitions": []
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "normal-semi",
+      "before": {
+        "shots": [
+          1,
+          1.15,
+          1.3
+        ],
+        "modeTransitions": []
+      },
+      "after": {
+        "shots": [
+          1,
+          1.15,
+          1.3
+        ],
+        "modeTransitions": []
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "normal-burst-released",
+      "before": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "normal-burst-released",
+      "before": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      }
+    },
+    {
+      "engine": "range",
+      "scenario": "normal-burst-held",
+      "before": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      }
+    },
+    {
+      "engine": "duel",
+      "scenario": "normal-burst-held",
+      "before": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      },
+      "after": {
+        "shots": [
+          1,
+          1.0625,
+          1.109375
+        ],
+        "modeTransitions": []
+      }
+    }
+  ],
+  "limits": [
+    "Actual trainer measurements, not native runtime observations.",
+    "128 Hz maximum steps quantize held-input admission; native float32/subtick mask production is not emulated.",
+    "Primary-then-secondary fixture uses ordered input edges; the simultaneous Duel command is covered separately in glock-timing.test.ts."
+  ]
+}

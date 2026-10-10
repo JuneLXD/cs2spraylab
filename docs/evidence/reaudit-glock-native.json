@@ -1,0 +1,198 @@
+{
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "wholeArtifactHashVerified": true,
+  "readerSha256": "3544ed51de7c8f9b479ba8eaad9f4f25e76b585fe843452d085018112ec83852",
+  "sharedToolHashes": {
+    "reaudit-common-reload-native.py": "dce51222803ecd06d0fbcf9353d6026eb403879f48d985fdf56ea58e0a199d5a",
+    "reaudit-common-reload-proof.py": "ea1fa5a94bbf4d5b87e92178857c817663892fe2b7193f00ed884e8efe3747c3"
+  },
+  "method": "Current-byte bounded disassembly assertions and exact concrete Glock/schema bindings; no native execution.",
+  "class": "CWeaponGlock",
+  "virtualBindings": 6,
+  "schema": [
+    {
+      "field": "m_bLinkedCooldowns",
+      "descriptorSha256": "d0715e6bab68f40f890ddea58bf16729549d5d198a0ff58bb2b8650faff8b74e"
+    },
+    {
+      "field": "m_nBurstShotCount",
+      "descriptorSha256": "fbfe1353be0f4d88ff3ddaf6e5304ff709a46b653170c219c419e0123848178f"
+    }
+  ],
+  "vdataClasses": [
+    {
+      "class": "CBasePlayerWeaponVData",
+      "operationBindingVerified": true,
+      "metadataSha256": "9d7b5489b80e6e03e7fa2ffa2fd7c7310dbe2792b6cbc84169492068767d2771"
+    },
+    {
+      "class": "CCSWeaponBaseVData",
+      "operationBindingVerified": true,
+      "metadataSha256": "35f7c1d9a034b436546d948908fabad54c046cc5b140266195ff9fe45d676c23"
+    }
+  ],
+  "bytesRead": 21544,
+  "codeBytes": 20504,
+  "instructionAssertions": 141,
+  "evidence": [
+    {
+      "id": "common-input-dispatch",
+      "bytes": 672,
+      "assertions": 30,
+      "codeSha256": "419bb34dfb203669bd499331edef948925065d6793d416236efccaff88f3ebe4",
+      "listingSha256": "f19877973ddf2c5e5fb0a361c544099e23315a34336fbb9a3a796d3314352a5d"
+    },
+    {
+      "id": "primary-dispatch",
+      "bytes": 1424,
+      "assertions": 6,
+      "codeSha256": "d435032a6b5b71674e453a6158b90658c6f4fdd386771a7a1259a299b8c93409",
+      "listingSha256": "045043edcede467eccf8375b3ccdeaa6ff198fe7c006c9fab20a16696f6f5812"
+    },
+    {
+      "id": "ordinary-gun-postframe",
+      "bytes": 590,
+      "assertions": 14,
+      "codeSha256": "312c231dace22a3669bca43be574941a042106204dcb6cca7d3ee0811b9683e3",
+      "listingSha256": "3bad52bb9ab0574bb17a2f25004f4f136505474054c718bbe22b12c20b401a50"
+    },
+    {
+      "id": "primary-ready",
+      "bytes": 144,
+      "assertions": 8,
+      "codeSha256": "8ca92825d9e18ea6a5ecffdc6d89774674f90b04f10822d25256cf722e3cbc2d",
+      "listingSha256": "1fc7b581e34f190c7bd380186c64330f4304b8954226965182a7c2b194c5590d"
+    },
+    {
+      "id": "secondary-ready",
+      "bytes": 144,
+      "assertions": 6,
+      "codeSha256": "901ae4e929d0ff2f0872d03950d819e16a24d1e24d1742498ab4611662f093a9",
+      "listingSha256": "b568e6f86eb4f8e476bce4999be491b5ad08837b0e9417da451aa3eed738083c"
+    },
+    {
+      "id": "input-active",
+      "bytes": 192,
+      "assertions": 4,
+      "codeSha256": "c434991702f6cfc3740fb0cbc8aa6d95b4585db2bd6cfd030100be2739bb7da2",
+      "listingSha256": "8f2657a217c856cac79d3bafb606aa65a8bc6ad573976a6f84c3a28aa5eff64a"
+    },
+    {
+      "id": "input-transition-wrapper",
+      "bytes": 16,
+      "assertions": 2,
+      "codeSha256": "c12cff772597b213356fe8396b1f27809fc1d02f9ead5c8689f1bf3a77c721e5",
+      "listingSha256": "835a79558c824737ef34d71d9175a79126e2005cf81774ee1223eb04ad565cba"
+    },
+    {
+      "id": "input-transition-predicate",
+      "bytes": 120,
+      "assertions": 6,
+      "codeSha256": "86ed295e998548e3c958686015b9be847e30bb1ab035a0b30956b18652dd276a",
+      "listingSha256": "5f927e8a76a0a8db28a07dfb77c11cade549c3ee67026b377edeb7bfd906169e"
+    },
+    {
+      "id": "burst-continuation",
+      "bytes": 976,
+      "assertions": 5,
+      "codeSha256": "24aedfc1ce874085af97b80bac950204ccae45faeddae2afba804aa07c83cffe",
+      "listingSha256": "0e110ad5fc0a8c6662968bb91e98e333fa0fe1fe11845d3832139f322f3597b7"
+    },
+    {
+      "id": "gun-primary",
+      "bytes": 1024,
+      "assertions": 9,
+      "codeSha256": "324d4bd2808ae964d51602e2a3d3237bc9258f6dc3eedf47be22f6d07af26ffb",
+      "listingSha256": "ac2b3e57fa83c182c8a931b3f0ea6cb08e42e51ebe738a97c4e88ff579d66c6e"
+    },
+    {
+      "id": "gun-fire-entry",
+      "bytes": 528,
+      "assertions": 1,
+      "codeSha256": "4e776eeff3701025a9872af2e9db87c43efef6572de86ea583354f7be403ffeb",
+      "listingSha256": "f750bbd4202f5fc99b83283a8b385450ae90a030a03dd443b625d3ab791a318f"
+    },
+    {
+      "id": "secondary-dispatch",
+      "bytes": 2304,
+      "assertions": 3,
+      "codeSha256": "d450a90d93c95f5ec3101c63ff112fafb3df523669c5ce6cf4c37b6689e4e1bc",
+      "listingSha256": "8824b5b0e4e823c4e3c55de01b926fe8332e80dda65de4f3f57be5b5060bc7e2"
+    },
+    {
+      "id": "secondary-wrapper",
+      "bytes": 1280,
+      "assertions": 1,
+      "codeSha256": "2ad8a33e1b22983ed3cd3bef63acbf6c6afa1790df3a32b5516a8a2a38b103a6",
+      "listingSha256": "8ed110337540298b0d255c3d9506a9d4229daa92217fb8314dc7ec90fc2b5154"
+    },
+    {
+      "id": "secondary-thunk",
+      "bytes": 415,
+      "assertions": 2,
+      "codeSha256": "e12ac7ff2aa20ca70f684d9f4440d024fe65d9a1f01ae620780d43dda8b7bae2",
+      "listingSha256": "96b043d6439c1917287312a73729710cac1ab001f3eb709c27cbddf79bc0a1cf"
+    },
+    {
+      "id": "secondary-setter",
+      "bytes": 928,
+      "assertions": 8,
+      "codeSha256": "8598cb9bcd61179e3fc8205791a4ea0b97bd1af79267ea6a91472167e28d67b2",
+      "listingSha256": "2ed8c6867999c970b77e101151d5d15f200ae4805a6d08f55c2d4c2f6ab189bd"
+    },
+    {
+      "id": "attack-clock-compute",
+      "bytes": 1155,
+      "assertions": 17,
+      "codeSha256": "42a57c99ce4228d5bb0ee675421ad9754980267c7b5813f2be96766b74cfc81f",
+      "listingSha256": "1c3ef7a7dfc0c19b33e6ebe8f32947ec0f53c8e594ecf329ca32a8ad0c03e8b7"
+    },
+    {
+      "id": "attack-context",
+      "bytes": 4096,
+      "assertions": 12,
+      "codeSha256": "a83a04c053041b39e3aa9581fe0e72b729af2311a1ed9fd97e913095fc3c1a05",
+      "listingSha256": "fed17a00d94f90aae76d1cfae16ec80c84b29565807e7f77088625bf6a4eebe6"
+    },
+    {
+      "id": "cs-vdata-constructor",
+      "bytes": 1056,
+      "assertions": 3,
+      "codeSha256": "c4fb41cf1601f0cedbed0af4c72ec8b6e646f0e903e05584c0bfda96c575973c",
+      "listingSha256": "2dfe419f4d52e84123397cedfe49e26e5ea0ca83cc7c865ea92c09d430af3b2b"
+    },
+    {
+      "id": "cs-vdata-operation",
+      "bytes": 1536,
+      "assertions": 2,
+      "codeSha256": "87253116e2adcc16f8b20c8db5a33580acc28d599e091054cd44baf833b2ee3f",
+      "listingSha256": "a1ea1f66a21c88f0ab0e926632496d87c5cbf4bc84e289525ae51ab6031fad1b"
+    },
+    {
+      "id": "base-vdata-operation",
+      "bytes": 1536,
+      "assertions": 1,
+      "codeSha256": "03b7ec54f6669aee324233d8e839765a7ae1c8f1597c99533b27c7239a4e8b5c",
+      "listingSha256": "621793faed1a6b41ac77ce4f91f60d9c7e430bfa7df1556874f39defdff936c0"
+    },
+    {
+      "id": "base-vdata-placement-tail",
+      "bytes": 368,
+      "assertions": 1,
+      "codeSha256": "b8b7e5bfde6f117a0fd8a38dabac2fd71913e511ab549bf1437d3010e01eac0d",
+      "listingSha256": "6e72a7cc994061ba2f3ab42ce8ccd7851920151f74fa29119c9377f33220e8f1"
+    }
+  ],
+  "conclusions": {
+    "constructors": "Base and CS vdata constructors initialize LinkedCooldowns=false. CS constructor initializes pending continuation count=2. Compiled weapon-data overrides require a separate data proof.",
+    "toggle": "Accepted Glock mode switch uses secondary setter mode0 and a 0.3-second constant. Unlinked setter returns without mirroring to primary. Accepted secondary thunk adds no primary lock.",
+    "shot": "Gun firing calls the clock helper; it calls both attack setters in mode1. Secondary mode1 starts from the existing secondary tick/fraction. The stale-clock branch raises a past clock to the current attack context; a future/equal clock is retained.",
+    "priority": "Post-frame handles due pending burst rounds before shared inputs. Eligible held primary wins even if semiautomatic dispatch rejects another shot. Otherwise held secondary is retried against its own clock on every processed update.",
+    "release": "Once primary is no longer active, the shared dispatcher reaches an eligible held secondary on that processed command. No additional one-step delay is authored here."
+  },
+  "limits": [
+    "No live capture, native execution or native input-mask producer/reset proof.",
+    "Upstream player/equip gates, empty magazine and excluded weapon state machines are outside the correction.",
+    "Native clocks use float32 normalized tick/fraction arithmetic; trainer seconds preserve their existing representation."
+  ]
+}

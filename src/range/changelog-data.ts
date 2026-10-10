@@ -359,6 +359,9 @@ export const latestChanges = {
     {id: 'native-deagle-reload-events', title: 'Deagle reload timing', items: [
       'Deagle magazine-removal audio now follows current CS2 timing, and held reloads retain the full native silent window.',
     ]},
+    {id: 'native-glock-attack-clocks', title: 'Glock firing and mode switching', items: [
+      'Switching Glock fire mode allows an immediate shot. Firing and pending burst rounds delay the next mode switch consistently in Range and Duel.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

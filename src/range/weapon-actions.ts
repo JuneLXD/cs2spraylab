@@ -53,8 +53,16 @@ export class WeaponActions {
       this.setZoom(this.resumeZoom, this.resumeAt, .1); this.resumeZoom = 0;
     }
   }
-  afterShot(time: number) {
+  afterShot(time: number, scheduledAt = time, burstShotsLeft = 0) {
     if (this.isRevolver) this.chargedAt = undefined;
+    // Glock's native firing helper advances both attack clocks. The final
+    // burst round leaves the rest of the burst cycle after two short intervals.
+    // Its mode switch changes only the secondary clock (LinkedCooldowns=false).
+    if (this.id === 'glock') {
+      const cycle = burstShotsLeft > 1 ? this.burstInterval : burstShotsLeft === 1
+        ? Math.max(1 / 64, this.burstCycle - 2 * this.burstInterval) : this.stats.cycle;
+      this.secondaryReadyAt = Math.max(scheduledAt, this.secondaryReadyAt) + cycle;
+    }
     // Native firing advances both attack clocks by the firing cycle. A recent
     // zoom can leave the secondary clock ahead of the primary one.
     if (this.id !== 'knife' && gameData.weapons[this.id].zoomLevels) {
@@ -78,7 +86,12 @@ export class WeaponActions {
       this.secondaryReadyAt = time + .3;
       return true;
     }
-    if (data.hasBurst) {this.burst = !this.burst; this.readyAt = time + .3; return true;}
+    if (data.hasBurst) {
+      this.burst = !this.burst;
+      if (this.id === 'glock') this.secondaryReadyAt = time + .3;
+      else this.readyAt = time + .3;
+      return true;
+    }
     return false;
   }
   private setZoom(zoom: number, time: number, duration: number, manualSniperUnzoom = false) {
