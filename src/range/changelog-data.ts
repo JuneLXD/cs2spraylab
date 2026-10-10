@@ -344,6 +344,9 @@ export const latestChanges = {
     {id: 'native-ak-reload-clock', title: 'AK reload motion', items: [
       'AK-47 reload motion now plays at its authored speed, while magazine insertion and firing readiness keep their existing timing.',
     ]},
+    {id: 'native-draw-clock', title: 'Weapon draw motion', items: [
+      'AK-47, AWP, Nova and XM1014 draw motion now keeps its authored speed when a model finishes loading after the weapon switch.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

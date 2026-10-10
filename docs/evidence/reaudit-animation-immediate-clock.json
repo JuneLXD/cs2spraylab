@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "wholeArtifactHashVerified": true,
+  "probeSha256": "16ea1916f14de4dca8a95cdec32ad2c095eae2e46db711a6e51bc26aba4c78c0",
+  "scope": "Local-view first-person Arms immediate animation caller and phase gate; static current-byte proof",
+  "ranges": [
+    {
+      "name": "local-view-hud-call",
+      "bytes": 451,
+      "sha256": "6b91734c6ff4dc4c8ee0de9866905f3be4b3c82fc647ed0cb95a59611ffd0838"
+    },
+    {
+      "name": "player-hud-handle-forwarder",
+      "bytes": 97,
+      "sha256": "01bfb4b80678a176675158364c1995a21260b6c9b5ea6cedeb1bab413158eeba"
+    },
+    {
+      "name": "arms-update-and-setup-view",
+      "bytes": 2027,
+      "sha256": "1949ced81a08deb5ac0faf6e8fa1399a09ba77d4f4dea534356f50e4fecd464d"
+    },
+    {
+      "name": "arms-reflect-and-evaluate",
+      "bytes": 624,
+      "sha256": "10799160978e4341776de0603eebcf162fd9a3a586acfc61023eff14400e9927"
+    },
+    {
+      "name": "immediate-ag2-evaluator",
+      "bytes": 1152,
+      "sha256": "b0dfe7628fa98eca4c626e0964aa6f601e2a26aa7e7e52748da597699788abd3"
+    }
+  ],
+  "assertions": {
+    "instructions": 72,
+    "classes": 2,
+    "virtualTargets": 3,
+    "profileNames": 1,
+    "globalReferences": 3,
+    "floatConstants": 1
+  },
+  "receiver": "C_CS2HudModelArms",
+  "incomingPath": [
+    "retained ordinary local HUD path",
+    "player HUD handle forwarder",
+    "C_CS2HudModelArms::UpdateAndSetupView",
+    "Arms action reflection/update helper",
+    "immediate AG2 evaluator",
+    "graph context / pose evaluation",
+    "Arms skeleton callback"
+  ],
+  "localForceFlag": false,
+  "phaseGates": {
+    "graphMode": 2,
+    "interpolationSelector": -1,
+    "graphInstanceRequired": true,
+    "normalDeltaStrictlyPositive": true,
+    "forcedDeltaMayEqualZero": true
+  },
+  "clock": {
+    "currentField": "bodyClockGlobalCurrentTime",
+    "deltaField": "bodyClockGlobalFrameDelta",
+    "sameCurrentTimeDelta": 0,
+    "differentCurrentTimeDelta": "unscaled global frame delta",
+    "storesCurrentTimeAfterImmediateCall": true,
+    "actionAgeSeekUsed": false,
+    "refreshThresholdSecondsFloat32": 0.10000000149011612
+  },
+  "conclusion": "The ordinary local HUD path directly invokes the concrete Arms immediate evaluator. It updates only in graph mode 2 with interpolation selector -1, passes an unscaled frame delta (or zero for an equal-time repeat), and reaches the Arms skeleton callback. This displayed-Arms route is distinct from the earlier general tick-worker route.",
+  "limits": [
+    "Static caller/path proof, not observation or counting of actual graph invocations.",
+    "Dynamic mode overrides, graph-instance availability and the complete frame scheduler remain runtime conditions.",
+    "First ClipNode initialization versus first displayed sample is not bound by these outer callers.",
+    "Long-gap reset/refresh behavior is identified by its flag and threshold, not fully reconstructed.",
+    "No shell insertion/completion deadline or gameplay change is established."
+  ]
+}

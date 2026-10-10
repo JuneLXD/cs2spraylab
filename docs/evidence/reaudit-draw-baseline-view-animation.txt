@@ -7,17 +7,13 @@ export type ViewAction = 'idle' | 'reload' | 'reload-empty' | 'draw' | 'pickup' 
 export interface ViewAnimationOptions {reloadEmpty?: boolean; ammo?: number; charging?: boolean; chargeDuration?: number;
   equipment?: string; reloadPhase?: ReloadPhase; reloadProgress?: number}
 
-// Current native Arms callers and these four graphs advance ordinary draw
-// clips in authored seconds. Pickup and other weapon graphs remain separate.
-const authoredDrawWeapons = new Set(['ak47', 'awp', 'nova', 'xm1014']);
-
 /** Presentation only: gameplay still owns ammo, deploy delays, and firing permissions. */
 export class ViewAnimation {
   readonly hasFireMotion: boolean;
   private mixer: THREE.AnimationMixer;
   private actions = new Map<ViewAction, THREE.AnimationAction>();
   private activeActions = new Set<THREE.AnimationAction>();
-  private transient?: {name: ViewAction; elapsed: number; duration: number; ordinaryDraw?: boolean};
+  private transient?: {name: ViewAction; elapsed: number; duration: number};
   private idleTime = 0;
   private reloading = false;
   private disposed = false;
@@ -48,15 +44,15 @@ export class ViewAnimation {
     if (!played && !this.disposed) this.update(0, 1);
     return played;
   }
-  playDraw(duration?: number) {this.cancel(); return this.play('draw', duration, true);}
+  playDraw(duration?: number) {this.cancel(); return this.play('draw', duration);}
   // CS2's audited viewmodel set has no distinct pickup action; draw is explicit reuse.
   playPickup(duration?: number) {this.cancel(); return this.play(this.has('pickup') ? 'pickup' : 'draw', duration);}
 
-  private play(name: ViewAction, duration?: number, ordinaryDraw = false) {
+  private play(name: ViewAction, duration?: number) {
     if (this.disposed || this.reloading || !this.has(name)) return false;
     const seconds = duration ?? this.duration(name);
     if (!Number.isFinite(seconds) || seconds <= 0 || this.duration(name) <= 0) return false;
-    this.transient = {name, elapsed: 0, duration: seconds, ordinaryDraw};
+    this.transient = {name, elapsed: 0, duration: seconds};
     this.update(0, 1);
     return true;
   }
@@ -103,11 +99,7 @@ export class ViewAnimation {
       if (action.elapsed >= action.duration && action.name !== 'charge') this.transient = undefined;
       else {
         name = action.name;
-        // A late model attachment must not speed up the clip to consume the
-        // remaining deploy lock. Keep the existing onset, lifetime and fades.
-        time = action.ordinaryDraw && authoredDrawWeapons.has(options.equipment ?? '')
-          ? Math.min(action.elapsed, this.duration(name))
-          : Math.min(1, action.elapsed / action.duration) * this.duration(name);
+        time = Math.min(1, action.elapsed / action.duration) * this.duration(name);
         const fade = Math.min(.08, action.duration / 4);
         weight = action.name === 'charge' ? 1 : Math.max(0,Math.min(1, (action.duration - action.elapsed) / fade));
         if (name === 'inspect') weight = Math.min(weight, action.elapsed / .06);

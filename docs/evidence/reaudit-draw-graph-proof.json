@@ -1,0 +1,743 @@
+{
+  "schema": 1,
+  "scope": "Ordinary AK/AWP/Nova/XM draw relative rate and graph entry/exit conditions",
+  "parser": {
+    "path": "tools/kv3.mjs",
+    "sha256": "c4d3715b5e419530bd7cd439c9c3ecc4ba3a5ccba309b98c82131d5c3c1612c0"
+  },
+  "probeSha256": "9d557fd402965f502ddd8234fdc725c5d5e9437623066fdfebc904ef6752f5dc",
+  "weapons": {
+    "ak47": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+ak47.vnmgraph",
+      "sha256": "87908d9b2ff24890dc95503916452c64274f713b5452eda0497038ce1c7b1317",
+      "nodes": 459,
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_ak/draw_ak.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_ak/draw_ak.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    },
+    "awp": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+awp.vnmgraph",
+      "sha256": "c19204ab30e42d5ca5b69d4bbc5ed38ef09b1d6bd1737c31867eb2f79b537ab2",
+      "nodes": 459,
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_awp/draw_awp.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_awp/draw_awp.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    },
+    "nova": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+nova.vnmgraph",
+      "sha256": "18f0da4fb222d339b2581cd24616ecdecfe0d8d2c30f43c6468a71a5e25ceacf",
+      "nodes": 459,
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_nova/draw_nova.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_nova/draw_nova.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    },
+    "xm1014": {
+      "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+xm1014.vnmgraph",
+      "sha256": "1be1052157a59ca2f8c7fe6132276000b840ea625b78d79086142439b11eddbb",
+      "nodes": 459,
+      "entry": {
+        "duration": 0,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_deploy"
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idleExit": {
+        "duration": 0.2,
+        "timeMatch": "None",
+        "timeOffset": 0,
+        "clampToSource": false,
+        "condition": {
+          "_class": "CNmGraphDocAndNode",
+          "m_name": "And",
+          "inputs": [
+            {
+              "_class": "CNmGraphDocBoolParameterReferenceNode",
+              "m_name": "weapon_is_gun",
+              "inputs": []
+            },
+            {
+              "_class": "CNmGraphDocIDComparisonNode",
+              "m_name": "ID Comparison",
+              "m_comparison": "Matches",
+              "m_values": [
+                "action_idle",
+                ""
+              ],
+              "inputs": [
+                {
+                  "_class": "CNmGraphDocIDParameterReferenceNode",
+                  "m_name": "action",
+                  "inputs": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "completionEvents": [
+        {
+          "m_ID": "WPN_ACTION_COMPLETE",
+          "m_type": "TimeRemaining",
+          "m_comparisonOperator": "LessThanEqual",
+          "m_flTimeValueSeconds": 0.1
+        }
+      ],
+      "drawClips": [
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_xm1014/draw_xm1014.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw0",
+          "clip": "animation/anims/viewmodel/rifle/rifle_xm1014/draw_xm1014.vnmclip",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        },
+        {
+          "name": "draw1",
+          "clip": "",
+          "rate": 1,
+          "syncOffset": 0,
+          "loop": false,
+          "connectedInputs": 0
+        }
+      ],
+      "resetTransitions": [
+        {
+          "name": "Deploy0",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Deploy2",
+          "duration": 0,
+          "timeMatch": "None",
+          "timeOffset": 0,
+          "clampToSource": false,
+          "condition": {
+            "_class": "CNmGraphDocAndNode",
+            "m_name": "And",
+            "inputs": [
+              {
+                "_class": "CNmGraphDocBoolParameterReferenceNode",
+                "m_name": "action_reset",
+                "inputs": []
+              },
+              {
+                "_class": "CNmGraphDocIDComparisonNode",
+                "m_name": "ID Comparison",
+                "m_comparison": "Matches",
+                "m_values": [
+                  "action_deploy"
+                ],
+                "inputs": [
+                  {
+                    "_class": "CNmGraphDocIDParameterReferenceNode",
+                    "m_name": "action",
+                    "inputs": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "genericSpeedParameterDeclared": false
+    }
+  },
+  "conclusion": "All four graphs use unit-speed, unconnected, non-looping ordinary draw clips. Entry/reset has zero duration and no time match. Global idle requires external action_idle or empty action and uses a 200 ms transition. Deploying emits action complete with at most 100 ms of state time remaining.",
+  "boundaries": [
+    "The completion event is a graph event, not a proved gameplay readiness deadline or proved immediate exit.",
+    "The external action_idle writer and event-consumer ordering remain unbound; no always-finish, cancel-at-readiness or seek-on-attachment behavior is certified.",
+    "The proposed rate-only correction preserves the trainer onset, readiness-based lifetime and fade approximations.",
+    "Pickup reuse in the trainer does not independently bind native pickup to action_deploy; keep pickup behavior unchanged.",
+    "Decoded exports retain pass29 current compiled CRC/size corroboration; this is a fresh parser execution, not a fresh package extraction."
+  ]
+}

@@ -336,6 +336,22 @@ Current hashes, listings, graph checks and limits are retained under
 `native-audit/reports/animation-draw-shell`, including `verify-retained.py`,
 `reference-proof.json`, token-initializer ranges and `NOTES.md`.
 
+## Pass 33: ordinary draw rate and concrete immediate Arms path
+
+[Pass 33](reaudit-draw-and-transform.md) binds the previously unresolved immediate
+caller's concrete Arms receiver and ordinary HUD call chain. Five current-byte
+ranges and 72 instruction checks prove unscaled frame delta in graph mode 2,
+selector -1. This is an additional displayed-Arms path; the older worker route
+is not the sole graph clock.
+
+The four audited ordinary draw graphs now use authored seconds even when model
+preparation finishes after the switch. At 250 ms attachment delay, AK/Nova/XM
+rate changes 1.333333×→1× and AWP 1.245901×→1×. All 724 measured action lifetimes
+and fade weights remain unchanged; 576 equipment/pickup controls, 48 interruption
+controls and 16 pause checks pass. Native first-display onset, readiness/idle
+ordering and complete shell event timing remain unverified. Pickup fallback
+retains its previous clock because native pickup-to-deploy routing is unbound.
+
 ## Passes 30–31 integration validation
 
 TypeScript passes. The full unit suite has 2,367 passes and only the documented
