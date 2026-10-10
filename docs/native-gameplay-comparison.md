@@ -1356,6 +1356,32 @@ gates remain outside this bounded static correction. Other weapon families
 retain their existing behavior. The correction is committed locally as `ae2f6cf`,
 pending delivery.
 
+## AWP scope and attack clocks (thirty-ninth pass)
+
+Commit `81f9c27`. [Report](reaudit-awp-clocks.md), [native proof](evidence/reaudit-awp-native.json),
+[actual trainer comparison](evidence/reaudit-awp-comparison.json). Current server
+class/callers establish the primary-readiness/ammo rescope gate and a100ms FOV
+transition starting at the processing call. Attack clocks advance independently;
+a constructed context decides whether past clocks are rebased to current command
+time. The integration preserves the existing trainer shot scheduler and future
+secondary deadlines. It does not claim native context/history selection.
+
+Twenty cases across10 Range/Duel pairs agree on completed state and clocks.
+All shot times are unchanged;10 complete cases are unchanged controls. The held
+AWP shot scheduled2.458s and processed2.46875s previously delayed scope recovery
+to3.92375s; it now uses3.913s, matching the existing primary schedule. A future
+secondary deadline4.06s is retained. A rescope processed25ms late previously
+started partway through its FOV curve(82.1875°); it now begins at90°. An empty
+magazine consumes pending rescope without zooming.
+
+Earlier delayed-scope tests explicitly expected backdating; those AWP assertions
+were wrong. The pass38 Glock raw field named scheduledAt contained callback
+processing time; its published comparisons used at and remain valid. Original
+evidence is preserved and the portable probe label/source is corrected. Exact
+native postframe cadence, context/reset mapping, simultaneous AWP input priority
+and client presentation remain partial. No new game capture or full analysis
+was launched; no uncommon weapon behavior was expanded.
+
 ## Validation retained from passes 11–15
 
 All three targeted Chromium specs pass: `input-timing`, `trigger-continuity`

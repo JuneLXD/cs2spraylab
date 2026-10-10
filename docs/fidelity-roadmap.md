@@ -293,3 +293,15 @@ retries when ready in both engines. All 12 paired input scenarios agree on shot
 and mode-transition times, with six unchanged normal shot/mode controls. Current
 code and vdata support the bounded rule. Native live command timing, float32
 clock normalization and upstream player/equip gates remain separately unverified.
+
+## AWP scope recovery, pass 39
+
+Commit `81f9c27`: the [AWP clock report](reaudit-awp-clocks.md) separates attack readiness from
+processing-time FOV onset. Ordinary queued shots retain their existing schedule;
+rescope checks current primary readiness/ammo and starts its100ms transition
+when processed. Twenty actual-engine cases retain identical shot schedules,
+with ten unchanged controls. Native historical/fresh context selection and
+reset invariants remain outside this correction. Native postframe cadence,
+client presentation and simultaneous primary/secondary ordering need separate
+evidence. The pass38 Glock scheduled-time label is corrected without rewriting
+its original evidence or changing the published processing-time comparisons.

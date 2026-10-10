@@ -23,7 +23,7 @@ A recent mode switch makes the two clocks visibly different. Toggle and shoot at
 
 ## Actual trainer measurements
 
-The portable [probe](../tools/reaudit-glock-trainer.mjs) bundles the actual Range and Duel simulations. It records exact input edges, processed shot times, Range scheduled timestamps, mode changes, both clocks, source hashes, and bundle hashes. It uses no substitute firing model. The original Range input guard is reproduced for the frozen baseline; the patch uses the same Simulation method called by RangeEngine. Public mouse handlers are exercised separately by the Chromium fixture.
+The portable [probe](../tools/reaudit-glock-trainer.mjs) bundles the actual Range and Duel simulations. It records exact input edges, processed shot times, Range callback timestamps (mislabeled `scheduledAt` in the original traces), mode changes, both clocks, source hashes, and bundle hashes. It uses no substitute firing model. The original Range input guard is reproduced for the frozen baseline; the patch uses the same Simulation method called by RangeEngine. Public mouse handlers are exercised separately by the Chromium fixture.
 
 The final [before trace](evidence/reaudit-glock-trainer-before.json) comes from clean `bfebff89319f90d7451b1dbe4e6cb9f4c9b38b79`. The [after trace](evidence/reaudit-glock-trainer-after.json) comes from the isolated checkout based on that same commit. Both use an identical probe hash and 12 fixtures in both engines. The [comparison](evidence/reaudit-glock-trainer-comparison.json) checks those identities before accepting results. Its input manifest explicitly identifies the four Glock source edits and the two separately audited Deagle metadata JSON edits in that integrated checkout; no scenario reloads or plays audio.
 
@@ -70,3 +70,22 @@ Run heavy commands serially with deploy inactive and sufficient host memory. The
 ## Evidence boundary
 
 This pass establishes current static native behavior and measures the actual trainer before and after. It adds no live CS2 capture or native execution/emulation. It does not establish the producer/reset lifetime of native transition masks, physical input latency, every float32 normalization boundary, or all upstream player/equip gates. The correction leaves those broader gates in place. Empty-magazine special states, excluded weapons, reload playback, recoil/spread, and first-person animation remain outside this Glock correction.
+
+## Pass 39 timestamp-label correction
+
+The retained pass-38 Range trace copied `onShot.at` into a field named
+`scheduledAt`. That event reports the **processing** time; the scheduled time is
+`Simulation.lastShotAt`. The original evidence remains unchanged; the exact old harness is retained as
+`tools/reaudit-glock-trainer-pass38.mjs`, and the historical comparator verifies
+that frozen source hash. All published
+shot/mode comparisons used the separate processing-time `at` field, so their
+numbers are unaffected. The probe now records `scheduledAt` from `lastShotAt`
+and preserves the event time as `callbackAt`. The AWP pass independently checks
+both clocks. Do not use the original mislabeled field to infer native schedule
+parity.
+
+The corrected probe was rerun: all 24 shot/event traces are unchanged; 25 Range
+shots now have separately named clocks, including 12 delayed shots where schedule
+and callback time differ. [Comparison](evidence/reaudit-glock-label-comparison.json)
+and [new trace](evidence/reaudit-glock-corrected-labels.json) retain that check.
+The historical comparator still passes all 12 engine pairs and six controls.

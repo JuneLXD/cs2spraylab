@@ -40,7 +40,7 @@ for (const fixture of fixtures) for (const engine of ['range', 'duel']) {
   else {sim.start(); sim.actors[0].yaw = Math.PI; sim.command(1, {fireHeld: false});}
   if (fixture.burst) actions.burst = true;
   const shots = [], events = []; let last = '';
-  if (range) sim.onShot = s => shots.push({at: sim.time, scheduledAt: sim.lastShotAt, callbackAt: s.at});
+  if (range) sim.onShot = s => shots.push({at: sim.time, scheduledAt: s.at});
   function sample(edge) {
     if (!range) for (const event of sim.drainEvents()) if (event.kind === 'fire' && event.actorId === 0)
       shots.push({at: sim.time});

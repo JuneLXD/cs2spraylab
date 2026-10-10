@@ -1,0 +1,15 @@
+{
+  "method": "Verify the Glock timestamp-label erratum without changing historical evidence.",
+  "cases": 24,
+  "unchangedShotAndEventTraces": 24,
+  "rangeShotsWithCorrectedLabels": 25,
+  "rangeShotsWithDifferentScheduledTime": 12,
+  "originalProbeSha256": "34ad548ab7b91bb52ed5a33ae427e141c8bdefbbf33f92cec94ca92b5987047a",
+  "correctedProbeSha256": "909f36d295eddd8d3a282a15b97f79f139302535b0c35e2254d346ee8db31dce",
+  "files": {
+    "docs/evidence/reaudit-glock-trainer-after.json": "01b1d33ed64f4ae7ad41c6280d4057b2913bcfd34f034440387e311b9218ac71",
+    "/home/junel/Desktop/cs2/native-audit/reports/awp-clocks-next/glock-corrected-labels.json": "a3249c2f94c67fc8056cc941edb712f4546a19c6f2b6630946b6acebef0fa9b5"
+  },
+  "scriptSha256": "be6ccadb81326f28539ef80afe1a8af0ef8c6c8e63921c55aa8c661355ff9a7a",
+  "boundary": "Trainer event/schedule labels only; no native scheduler or history claim."
+}

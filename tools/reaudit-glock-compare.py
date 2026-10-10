@@ -2,7 +2,8 @@
 
 Requires the exact same probe and fixture list, a clean bfebff8 baseline, and
 the explicit source-change allowlist. Reports processed shot times separately
-from the Range-only scheduled timestamps carried by the raw input reports.
+from the original Range callback timestamps mislabeled as scheduledAt.
+The original pass38 probe is preserved separately for hash verification.
 """
 import argparse
 import hashlib
@@ -18,7 +19,7 @@ before, after = [json.loads(p.read_text()) for p in [args.before, args.after]]
 sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 assert before['commit'] == after['commit'] == 'bfebff89319f90d7451b1dbe4e6cb9f4c9b38b79'
 assert before['trackedChanges'] == []
-assert before['scriptSha256'] == after['scriptSha256'] == sha(Path(__file__).with_name('reaudit-glock-trainer.mjs'))
+assert before['scriptSha256'] == after['scriptSha256'] == sha(Path(__file__).with_name('reaudit-glock-trainer-pass38.mjs'))
 assert before['fixtures'] == after['fixtures']
 assert before['sourceHashes'].keys() == after['sourceHashes'].keys()
 changes = [k for k in before['sourceHashes'] if before['sourceHashes'][k] != after['sourceHashes'][k]]
