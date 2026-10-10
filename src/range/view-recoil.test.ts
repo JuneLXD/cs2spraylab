@@ -1,14 +1,36 @@
 import {describe, expect, it} from 'vitest';
+import {Quaternion} from 'three';
 import {DEG, STEP} from './actor-physics';
 import {defaults} from './config';
 import {Simulation} from './simulation';
-import {AIM_PUNCH_CAMERA_SCALE, recoilView} from './view-recoil';
+import {AIM_PUNCH_CAMERA_SCALE, applyViewmodelRecoil, recoilView} from './view-recoil';
+import nativeModel from '../../docs/evidence/reaudit-viewmodel-native.json';
 import native from './native-view-punch-fixture.json';
 import {direction, shotDirection} from './shot-model';
 import {WeaponRecovery} from './ballistics';
 import {gameData} from './config';
 
 describe('shared camera presentation', () => {
+  it('matches current native world-angle recoil in the separate model scene at steep aim and with roll', () => {
+    const source = ([x, y, z, w]: number[]) => new Quaternion(-y, z, -x, w).normalize();
+    for (const row of nativeModel.rows) {
+      const view = recoilView(row.base[1] * DEG, -row.base[0] * DEG,
+        {pitch: -row.physical[0], yaw: -row.physical[1], roll: -row.physical[2]},
+        {pitch: -row.kick[0], yaw: -row.kick[1]});
+      view.roll += (-row.base[2] - row.kick[2]) * DEG;
+      const actual = new Quaternion(); applyViewmodelRecoil(actual, view);
+      const expected = source(row.cameraQuaternion).invert().multiply(source(row.modelQuaternion));
+      // Native trigonometry and angles round to float32; Three uses doubles.
+      expect(actual.angleTo(expected) / DEG).toBeLessThan(.00005);
+    }
+  });
+
+  it('carries camera-only kick in the model base without applying it twice', () => {
+    const model = new Quaternion();
+    applyViewmodelRecoil(model, recoilView(1, -.7, {pitch: 0, yaw: 0}, {pitch: 2, yaw: -1}));
+    expect(model.angleTo(new Quaternion())).toBeLessThan(1e-7);
+  });
+
   it('matches 12 native camera compositions, including full aim punch from damage', () => {
     for (const row of native.composition) {
       const view = recoilView(0, 0, {pitch: -row.physical[0], yaw: -row.physical[1]},

@@ -11,6 +11,8 @@ const {chromium, expect} = require('@playwright/test');
 const base = 'http://192.168.0.18:3500';
 const expected = process.argv[2];
 assert(expected, 'Pass expected short commit');
+const reportPrefix = process.argv[3] ?? 'reaudit-accuracy-live-release';
+assert(/^[a-z0-9-]+$/.test(reportPrefix), 'Report prefix must be a simple filename');
 const out = {base, checkedAt: new Date().toISOString(), expected, assets: [], pageErrors: [], failedResponses: []};
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const response = await fetch(base + '/', {cache: 'no-store'});
@@ -50,7 +52,7 @@ try {
   await page.keyboard.press('r');
   await expect(ammo).toHaveText(/^30\s*\//, {timeout: 15000});
   out.ammoAfterReload = await ammo.textContent();
-  await page.screenshot({path: path.join(reports, 'reaudit-accuracy-live-release.png')});
+  await page.screenshot({path: path.join(reports, reportPrefix + '.png')});
   out.title = await page.title();
   out.canvas = await page.locator('canvas[data-range]').evaluate(canvas => ({width: canvas.width, height: canvas.height}));
   assert(out.canvas.width > 0 && out.canvas.height > 0);
@@ -59,6 +61,6 @@ try {
   out.status = 'passed';
 } finally {
   await browser.close();
-  await writeFile(path.join(reports, 'reaudit-accuracy-live-release.json'), JSON.stringify(out, null, 2) + '\n');
+  await writeFile(path.join(reports, reportPrefix + '.json'), JSON.stringify(out, null, 2) + '\n');
 }
 console.log(JSON.stringify(out, null, 2));

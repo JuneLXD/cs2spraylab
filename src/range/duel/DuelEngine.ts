@@ -30,7 +30,7 @@ import {batchStaticMeshes, disposeResources, disposeSkeletons} from './render-re
 import {fullyOccluded} from './visibility';
 import {muzzleAnchor, viewMuzzleToWorld} from './tracers';
 import type {SpatialSound} from '../spatial-audio';
-import {AIM_PUNCH_CAMERA_SCALE, recoilView} from '../view-recoil';
+import {applyViewmodelRecoil, recoilView} from '../view-recoil';
 import {followCrosshairDirection, followCrosshairOffset} from '../crosshair-follow';
 import {RoundFlow, deathView, deathFeet} from './round-flow';
 import {type Equipment, type Slot} from '../equipment';
@@ -1241,15 +1241,15 @@ export class DuelEngine {
     const punch = this.sim.actors[0].punch.predict(this.paused || this.sim.phase !== 'fighting' ? 0 : this.sim.accumulator,
       viewWeapon.recovery.angle);
     const viewPunch = this.sim.actors[0].viewPunch.sample(this.sim.time + this.sim.accumulator);
-    const view = recoilView(player.yaw - punch.yaw * DEG * AIM_PUNCH_CAMERA_SCALE,
-      player.pitch + punch.pitch * DEG * AIM_PUNCH_CAMERA_SCALE, visualRecoil, viewPunch);
+    const view = recoilView(player.yaw, player.pitch, {pitch: visualRecoil.pitch + punch.pitch,
+      yaw: visualRecoil.yaw + punch.yaw, roll: punch.roll}, viewPunch);
     const deathAge = this.animationClock - (this.deaths.get(0) ?? this.animationClock);
     const death = deathView(deathAge, player.position.y - player.feet);
     this.camera.position.set(player.position.x, player.position.y, player.position.z);
     if (!player.alive) this.camera.position.y = deathFeet(player, deathAge, this.sim.arena.solids,
       this.sim.actors[0].verticalVelocity) + death.height;
     this.camera.rotation.set(view.pitch + (player.alive ? 0 : death.pitch), view.yaw,
-      punch.roll * DEG * AIM_PUNCH_CAMERA_SCALE + (player.alive ? 0 : death.roll), 'YXZ');
+      view.roll + (player.alive ? 0 : death.roll), 'YXZ');
     const scoped = this.scope.update(viewWeapon.actions, this.camera, this.sim.time + this.sim.accumulator, player.alive);
     this.camera.updateMatrixWorld();
     this.syncActors(snapshots, this.sim.phase !== 'ready' && !this.paused ? dt : 0);
@@ -1260,9 +1260,8 @@ export class DuelEngine {
     this.viewRoot.position.set(offset.x,
       offset.y + Math.sin(this.sim.time * 12) * Math.min(speed, 1) * .002 - (player.alive ? 0 : death.weaponDrop * .5), offset.z + modelKick * .018);
     this.viewRoot.visible = !scoped && (player.alive || deathAge < .25);
-    this.viewRoot.rotation.x = modelKick * (player.equipment === 'knife' ? 0 : .035) + view.weaponPitch;
-    this.viewRoot.rotation.y = view.weaponYaw;
-    this.viewRoot.rotation.z = 0;
+    applyViewmodelRecoil(this.viewRoot.quaternion, view);
+    if (modelKick && player.equipment !== 'knife') this.viewRoot.rotation.x += modelKick * .035;
     this.audio.updateListener(this.camera.position, view.yaw, view.pitch);
     for(const actor of snapshots) {
       const state=actor.id===0?viewWeapon:this.sim.actors[actor.id].weapon;

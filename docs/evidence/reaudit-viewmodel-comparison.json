@@ -1,0 +1,20 @@
+{
+  "baseline": "9391437687f5939e9ea9844323daca21ee603506",
+  "nativeFixture": "reaudit-viewmodel-native.json",
+  "before": {
+    "cases": 108,
+    "maxErrorDegrees": 3.2958365063649984,
+    "rmsErrorDegrees": 1.6629092381707709,
+    "levelAimExampleError": 2.641958525476078
+  },
+  "after": {
+    "cases": 108,
+    "maxErrorDegrees": 1.4501716163382397e-05,
+    "rmsErrorDegrees": 5.253884126914405e-06,
+    "levelAimExampleError": 2.2353353619443903e-06
+  },
+  "limits": [
+    "Native angle add and quaternion instructions with supplied base/physical/kick values; not rendered landmarks or a complete native procedural frame.",
+    "Before uses the production shared helper plus the actual XYZ root assignment. After uses the production shared helper and quaternion application. No coefficient or clock is fitted."
+  ]
+}

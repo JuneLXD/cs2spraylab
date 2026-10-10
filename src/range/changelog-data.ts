@@ -329,6 +329,10 @@ export const latestChanges = {
       'Running footsteps now follow the native movement timer in both the range and duel. AK and AWP steps are about 406 ms apart, and knife steps about 313 ms apart, correcting the faster distance-based cadence.',
       'Walking and crouching stay quiet; stopping resets the countdown and slow movement preserves it.',
     ]},
+    {id: 'native-viewmodel-recoil', title: 'Weapon recoil motion', items: [
+      'Weapon recoil now uses the measured native rotation in range and duel, including its change in direction when aiming up or down.',
+      'Damage punch also moves the first-person weapon in Duel. Bullet directions and weapon accuracy remain separate from this visual motion.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

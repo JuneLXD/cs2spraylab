@@ -1,4 +1,5 @@
 import {expect, test} from '@playwright/test';
+import nativeModel from '../docs/evidence/reaudit-viewmodel-native.json' with {type: 'json'};
 
 for (const mode of ['duel', 'guided'] as const) {
   test(`${mode}: native camera kick responds on the first rendered frame and decays between ticks`, async ({page}, info) => {
@@ -116,6 +117,28 @@ for (const mode of ['duel', 'guided'] as const) {
       expect(damage.roll).toBeCloseTo(1.8, 7);
       expect(damage.shot).toEqual({pitch: 6, yaw: -2, roll: 4});
       expect(damage.crosshair).toBe(damage.expectedCrosshair);
+    }
+    const modelCases = [nativeModel.rows.find(row => row.base[0] === -60 && row.base[1] === 0 &&
+      row.physical[0] === -24 && row.kick.every(value => value === 0))!];
+    if (mode === 'duel') modelCases.push(nativeModel.rows.find(row => row.base.every(value => value === 0) &&
+      row.physical[0] === 6 && row.kick.every(value => value === 0))!);
+    for (const row of modelCases) {
+      const angleError = await page.evaluate(({mode, row}) => {
+        const e = (window as any).punchEngine, actor = mode === 'duel' ? e.sim.actors[0] : e.sim;
+        const recovery = mode === 'duel' ? actor.weapon.recovery : actor.recovery;
+        const damage = mode === 'duel' && row.physical[2] !== 0;
+        actor.yaw = row.base[1] * Math.PI / 180; actor.pitch = -row.base[0] * Math.PI / 180;
+        recovery.predict = () => ({pitch: damage ? 0 : -row.physical[0], yaw: damage ? 0 : -row.physical[1]});
+        if (mode === 'duel') actor.punch.predict = () => ({pitch: damage ? -row.physical[0] : 0,
+          yaw: damage ? -row.physical[1] : 0, roll: damage ? -row.physical[2] : 0});
+        actor.viewPunch.sample = () => ({pitch: 0, yaw: 0});
+        e.kick = 0; e.sim.accumulator = 0;
+        e.tick(performance.now() + 4000); cancelAnimationFrame(e.frame);
+        const nativeQuaternion = ([x, y, z, w]: number[]) => e.camera.quaternion.clone().set(-y, z, -x, w).normalize();
+        const expected = nativeQuaternion(row.cameraQuaternion).invert().multiply(nativeQuaternion(row.modelQuaternion));
+        return (mode === 'duel' ? e.viewRoot : e.weaponRoot).quaternion.angleTo(expected) * 180 / Math.PI;
+      }, {mode, row});
+      expect(angleError).toBeLessThan(.00005);
     }
     expect(errors).toEqual([]);
   });
