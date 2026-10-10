@@ -398,6 +398,9 @@ export const latestChanges = {
       'Peek wall width (0.6-8 m): a one-sided wall keeps its edge past your shoulder and runs that wide the other way; the pillar is that wide, centred.',
       'You start, and the respawn pad sits, centred behind the wall instead of at its edge, so every peek starts from cover.',
     ]},
+    {id: 'pop-move-chance', title: 'Pop: mixed moving and still balls', items: [
+      'Chance a ball moves (default 50%): each ball that appears rolls once whether it moves with the configured motion or stays still, so a field can mix moving and static balls.',
+    ]},
     {id: 'duel-aggressive-bots', title: 'Aggressive duel bots', items: [
       'Aggressive bots never hold: they peek as soon as they reach an angle, chase the last place they saw you after a burst loses its target, and sweep the forward crates and lane edges within 1.5 s of losing contact instead of waiting at cover.',
     ]},

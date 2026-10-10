@@ -219,7 +219,7 @@ describe('pop peek wall and hits to pop', () => {
   });
 
   it('drifts the balls at the chosen speed within their range, turning back at the ends and parting when they meet', () => {
-    const config = popConfig({...base, popCount: 4, popSize: 30, popDistance: 12, popMoveX: 2, popRangeX: .8, popMoveY: .5, popRangeY: .3});
+    const config = popConfig({...base, popCount: 4, popSize: 30, popDistance: 12, popMoveX: 2, popRangeX: .8, popMoveY: .5, popRangeY: .3, popMoveChance: 1});
     const field = new PopField(config, POP_SPAWN, lcg(17)), {region} = field, r = .15;
     const start = field.balls.map(ball => ({...ball}));
     expect(field.balls.every(ball => Math.abs(ball.vx) === 2 && Math.abs(ball.vy) === .5)).toBe(true);
@@ -240,7 +240,7 @@ describe('pop peek wall and hits to pop', () => {
     expect(turned).toBeGreaterThanOrEqual(4);
     expect(field.balls.some((ball, i) => Math.abs(ball.x - start[i].x) > .4)).toBe(true);
     // Without sudden changes a lone ball only turns at the ends of its window; with them it also reverses in between.
-    const calm = new PopField(popConfig({...base, popCount: 1, popMoveX: 1, popRangeX: .6}), POP_SPAWN, lcg(5)), [lone] = calm.balls;
+    const calm = new PopField(popConfig({...base, popCount: 1, popMoveX: 1, popRangeX: .6, popMoveChance: 1}), POP_SPAWN, lcg(5)), [lone] = calm.balls;
     const ends = [Math.max(calm.region.x - calm.region.halfW, lone.x - .6), Math.min(calm.region.x + calm.region.halfW, lone.x + .6)];
     let last = lone.vx, turns = 0;
     for (let t = 1 / 128; t <= 6; t += 1 / 128) {
@@ -248,7 +248,7 @@ describe('pop peek wall and hits to pop', () => {
       if (lone.vx !== last) {last = lone.vx; turns++; expect(ends.some(end => Math.abs(lone.x - end) < 1e-9)).toBe(true);}
     }
     expect(turns).toBeGreaterThanOrEqual(4);
-    const sudden = new PopField(popConfig({...base, popCount: 1, popMoveX: 1, popRangeX: 5, popFlipX: 2}), POP_SPAWN, lcg(5)), [jumpy] = sudden.balls;
+    const sudden = new PopField(popConfig({...base, popCount: 1, popMoveX: 1, popRangeX: 5, popFlipX: 2, popMoveChance: 1}), POP_SPAWN, lcg(5)), [jumpy] = sudden.balls;
     const edges = [sudden.region.x - sudden.region.halfW, sudden.region.x + sudden.region.halfW];
     let away = 0; last = jumpy.vx;
     for (let t = 1 / 128; t <= 6; t += 1 / 128) {
@@ -257,12 +257,29 @@ describe('pop peek wall and hits to pop', () => {
     }
     expect(away).toBeGreaterThanOrEqual(6);
     // A ball heading for the field's edge turns back there; a still field never moves and draws no extra random numbers.
-    const edge = new PopField(popConfig({...base, popCount: 1, popMoveX: 2, popRangeX: 5}), POP_SPAWN, lcg(3)), [runner] = edge.balls;
+    const edge = new PopField(popConfig({...base, popCount: 1, popMoveX: 2, popRangeX: 5, popMoveChance: 1}), POP_SPAWN, lcg(3)), [runner] = edge.balls;
     runner.x = edge.region.x + edge.region.halfW - .1; runner.vx = 2;
     edge.advance(.1); expect(runner.x).toBeCloseTo(edge.region.x + edge.region.halfW, 9); expect(runner.vx).toBe(-2);
     const still = new PopField(popConfig(base), POP_SPAWN, lcg(3)), frozen = still.balls.map(ball => ({...ball}));
     still.advance(5); expect(still.balls).toEqual(frozen);
     expect(new PopField(popConfig({...base, popMoveX: 3, popRangeX: 0}), POP_SPAWN, lcg(3)).balls.map(({x, y}) => [x, y])).toEqual(frozen.map(({x, y}) => [x, y]));
+  });
+
+  it('rolls the chance a ball moves once per ball, so a field can mix moving and still balls', () => {
+    const roll = (popMoveChance: number) => new PopField(popConfig({...base, popCount: 12, popSize: 8, popSpacing: .2, popDistance: 12, popMoveX: 2, popMoveChance}), POP_SPAWN, lcg(41));
+    const half = roll(.5), movers = half.balls.filter(ball => ball.vx !== 0);
+    expect(movers.length).toBeGreaterThan(2); expect(movers.length).toBeLessThan(10);
+    expect(half.balls.every(ball => ball.vx === 0 || Math.abs(ball.vx) === 2)).toBe(true);
+    const before = half.balls.map(ball => ({...ball}));
+    half.advance(.5);
+    half.balls.forEach((ball, i) => expect(ball.x !== before[i].x).toBe(before[i].vx !== 0));
+    expect(roll(0).balls.every(ball => ball.vx === 0)).toBe(true);
+    expect(roll(1).balls.every(ball => Math.abs(ball.vx) === 2)).toBe(true);
+    expect([sanitizeSettings({}).popMoveChance, sanitizeSettings({popMoveChance: 2}).popMoveChance, sanitizeSettings({popMoveChance: -1}).popMoveChance, sanitizeSettings({popMoveChance: .33}).popMoveChance]).toEqual([.5, 1, 0, .35]);
+    const botz = sanitizeBotzConfig({}), duel = sanitizeDuelConfig({});
+    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popMoveX: 2}), botz, duel)).toContain('2 m/s ±1.5 m left-right · 50% of balls move');
+    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popMoveX: 2, popMoveChance: 1}), botz, duel)).not.toContain('of balls move');
+    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popMoveChance: .2}), botz, duel)).not.toContain('of balls move');
   });
 
   it('in pad mode, popped balls wait until you step onto the pad', () => {
@@ -295,7 +312,7 @@ describe('pop peek wall and hits to pop', () => {
   });
 
   it('moves the balls from the simulation clock and pops them where they are now', () => {
-    const sim = new Simulation({...defaults, mode: 'pop', weapon: 'ak47', spread: false, popCount: 3, popMoveX: 3}, lcg(23));
+    const sim = new Simulation({...defaults, mode: 'pop', weapon: 'ak47', spread: false, popCount: 3, popMoveX: 3, popMoveChance: 1}, lcg(23));
     const before = sim.pop!.balls.map(ball => ball.x);
     sim.active = true; sim.advance(.25);
     expect(sim.pop!.balls.map(ball => ball.x)).not.toEqual(before);
