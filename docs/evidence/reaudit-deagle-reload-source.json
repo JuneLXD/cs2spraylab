@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "importManifest": {
+    "path": "/home/junel/Desktop/cs2/cs2spraylab/research/weapon-actions/deagle-export.json",
+    "bytes": 6040,
+    "sha256": "e7556e15dfca5127e81e096e5bdb3bc57709f0087bc465fe268baa4a09659da9"
+  },
+  "importClipDefinitions": [
+    {
+      "path": "/home/junel/Desktop/cs2/cs2spraylab/research/reload_deagle.vnmclip",
+      "bytes": 3891,
+      "sha256": "cdeb039a1d2625315cfc2ccd42758b36f7e4f850f309f1a26c3bd2e8993682aa"
+    },
+    {
+      "path": "/home/junel/Desktop/cs2/cs2spraylab/research/reload_empty_deagle.vnmclip",
+      "bytes": 3897,
+      "sha256": "0577adece84a547e3e1946f6915432ea3da08bb1e8c23b3f3ffbed0eb22fdb56"
+    }
+  ],
+  "installedBuild": "2000930",
+  "probeSha256": "f5042d6bfe596bc3109f5ce01a38e7d841481d23bfacdcdfb04cc7e39a2b85ff",
+  "package": {
+    "path": "/home/junel/Desktop/cs2/cs2-game/game/csgo/pak01_dir.vpk",
+    "bytes": 7706992,
+    "sha256": "48018be3f8da306ce9b48bf746bce08ceff19fe4dff15c9d5e2e53b3c3e9bbad"
+  },
+  "exporter": {
+    "path": "/home/junel/Desktop/cs2/cs2spraylab/.local-tools/vrf-linux/Source2Viewer-CLI",
+    "bytes": 113898175,
+    "sha256": "1c43b87e0bda995c0e1f2df8828c64510e3dd6fed32038ea9870aafa9801a5a4"
+  },
+  "compiled": [
+    {
+      "path": "animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.vnmclip_c",
+      "bytes": 27162,
+      "crc": "05d10c92",
+      "sha256": "3966fb59252703eaf905a5cbda2c0c778a2837f0ab27e14a819a155a14ff8f3e"
+    },
+    {
+      "path": "animation/anims/viewmodel/pistol/pistol_deagle/reload_empty_deagle.vnmclip_c",
+      "bytes": 24340,
+      "crc": "18ad7a33",
+      "sha256": "a8247ccc4900080169aab16fe01b7535ace37d2c9aa64e875d09f4fcedcfca9d"
+    },
+    {
+      "path": "animation/graphs/viewmodel/viewmodel_gun.vnmgraph+deagle.vnmgraph_c",
+      "bytes": 11767,
+      "crc": "de3c4687",
+      "sha256": "cbb4cd6c1000c148dbca78b3d1f1fbc2625ee9855ce4b5bc690015f1ba5acab8"
+    }
+  ],
+  "decoded": [
+    {
+      "path": "/home/junel/Desktop/cs2/native-audit/reports/deagle-reload-next/fresh/animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.vnmclip",
+      "bytes": 3887,
+      "sha256": "4806f9248b993e0cfa98a4643d66e3d901147c630a80e82a4dbdd7a139ff75a8"
+    },
+    {
+      "path": "/home/junel/Desktop/cs2/native-audit/reports/deagle-reload-next/fresh/animation/anims/viewmodel/pistol/pistol_deagle/reload_empty_deagle.vnmclip",
+      "bytes": 3892,
+      "sha256": "f48d4078720c0ba77adef868f00c0860fd81bb3537addfe80517932d85fc0c4f"
+    },
+    {
+      "path": "/home/junel/Desktop/cs2/native-audit/reports/deagle-reload-next/fresh/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+deagle.vnmgraph",
+      "bytes": 660499,
+      "sha256": "cd7e25fe46da0fe1d17f6ad2d1fa0976601f6b0fb90df533274809a735db81f5"
+    }
+  ],
+  "motionComparison": {
+    "schema": 1,
+    "probeSha256": "4fc5cf32a843797d4a8c5de846ef95ebf90af3b3eec97918cb29d672887c9575",
+    "parserSha256": "a40fc1967dfba8ac4a06024a97a5f1af5dfc88f7422ea009a06d32cfade668b9",
+    "rows": {
+      "import-era": {
+        "path": "/home/junel/Desktop/cs2/cs2spraylab/research/reload_deagle.dmx",
+        "sha256": "b48bf13710aadab28f66a0002f0b6bee0337befaa6c1ffe72c1406b22e7952de",
+        "elements": 520,
+        "channels": 128,
+        "keys": 8688,
+        "frameRate": 30,
+        "duration": 2.2,
+        "semanticSha256": "38ee94612616b0479b1a939160731c37731ff51156ca2e0b10af21eed2c8e7b5"
+      },
+      "fresh": {
+        "path": "/home/junel/Desktop/cs2/native-audit/reports/deagle-reload-next/fresh/animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.dmx",
+        "sha256": "f2e6409c62e3046c48af4cbc7b0a3a62fb4aa11b211f934b6e811e282efbc42c",
+        "elements": 520,
+        "channels": 128,
+        "keys": 8688,
+        "frameRate": 30,
+        "duration": 2.2,
+        "semanticSha256": "38ee94612616b0479b1a939160731c37731ff51156ca2e0b10af21eed2c8e7b5"
+      }
+    },
+    "differences": [],
+    "method": "Compare every decoded element name, type, attribute and reference by element ordinal; ignore exporter-generated element UUIDs only. No native runtime or trainer skeleton equivalence inferred."
+  },
+  "reloadNodes": [
+    {
+      "name": "partial_mag_reload",
+      "clip": "animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.vnmclip",
+      "rate": 1,
+      "connectedInputs": 0
+    },
+    {
+      "name": "empty_mag_reload",
+      "clip": "animation/anims/viewmodel/pistol/pistol_deagle/reload_empty_deagle.vnmclip",
+      "rate": 1,
+      "connectedInputs": 0
+    },
+    {
+      "name": "partial_mag_reload",
+      "clip": "animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.vnmclip",
+      "rate": 1,
+      "connectedInputs": 0
+    },
+    {
+      "name": "empty_mag_reload",
+      "clip": "animation/anims/viewmodel/pistol/pistol_deagle/reload_empty_deagle.vnmclip",
+      "rate": 1,
+      "connectedInputs": 0
+    }
+  ],
+  "normal": {
+    "fps": 30,
+    "duration": 2.2,
+    "insert": 0.7666666666666667,
+    "silent": [
+      {
+        "start": 0,
+        "end": 1.6666666666666667
+      }
+    ],
+    "sound": [
+      {
+        "source": "Weapon_DEagle.Clipout",
+        "time": 0.3333333333333333,
+        "nativeFrame": 10,
+        "audience": "all",
+        "nativeRelevance": "ClientAndServer"
+      },
+      {
+        "source": "Weapon_DEagle.Clipin",
+        "time": 0.7,
+        "nativeFrame": 21,
+        "audience": "all",
+        "nativeRelevance": "ClientAndServer"
+      },
+      {
+        "source": "Weapon_DEagle.AddAmmo",
+        "time": 0.7666666666666667,
+        "nativeFrame": 23,
+        "audience": "all",
+        "nativeRelevance": "ClientAndServer"
+      },
+      {
+        "source": "Weapon_DEagle.Slideback",
+        "time": 1.3666666666666667,
+        "nativeFrame": 41,
+        "audience": "all",
+        "nativeRelevance": "ClientAndServer"
+      },
+      {
+        "source": "Weapon_DEagle.Slideforward",
+        "time": 1.5666666666666667,
+        "nativeFrame": 47,
+        "audience": "all",
+        "nativeRelevance": "ClientAndServer"
+      }
+    ]
+  },
+  "changes": [
+    {
+      "event": "Weapon_DEagle.Clipout",
+      "beforeFrame": 4,
+      "currentFrame": 10
+    },
+    {
+      "event": "WPN_RELOAD_SILENT",
+      "beforeEndFrame": 49,
+      "currentEndFrame": 50
+    }
+  ],
+  "emptyUnchanged": true,
+  "boundaries": [
+    "Fresh selected static resource exports; no current Deagle live reload capture.",
+    "All decoded pose semantics match the import-era export, excluding generated UUIDs; this does not independently validate the assembled trainer skeleton.",
+    "Native silent-gate coefficients and runtime event-consumer ordering are not newly established by this resource update."
+  ]
+}

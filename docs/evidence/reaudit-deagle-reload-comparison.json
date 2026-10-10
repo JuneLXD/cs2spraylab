@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "probeSha256": "3219a54c8351c69dada398593e1e79577be0f14d15ea2a1072c030ccb7bfe4a6",
+  "cases": 84,
+  "unchangedControls": 78,
+  "changed": [
+    [
+      "deagle",
+      false,
+      "normal",
+      "hearing"
+    ],
+    [
+      "deagle",
+      false,
+      "normal",
+      "browser"
+    ],
+    [
+      "deagle",
+      false,
+      "held",
+      "hearing"
+    ],
+    [
+      "deagle",
+      false,
+      "held",
+      "browser"
+    ],
+    [
+      "deagle",
+      false,
+      "released",
+      "hearing"
+    ],
+    [
+      "deagle",
+      false,
+      "released",
+      "browser"
+    ]
+  ],
+  "sourceChanges": [
+    "src/range/native-reload-timing.json",
+    "src/range/sound-events-data.json"
+  ],
+  "hearingBrowserPairsAgree": 42,
+  "hashes": {
+    "trainer-before.json": "f5e993bf8e59c4bdd586b38c3d7f3a14d5ed310aed393f6ba50df9223bbb60df",
+    "trainer-after.json": "c69f398088f151c344b4ce3163a1da276de10d62afff6f23055871504b46c7be",
+    "source-proof.json": "fcf6cc30f8aed7d43725a9664c15e4d28d1737b526dc2b3ec2efd3265c00277d",
+    "motion-comparison.json": "4fa25f108a0bfd9df01dac13808fbd7cae4c9527292c9a334d80a849596c6662"
+  },
+  "changes": {
+    "clipoutSeconds": [
+      0.13333333333333333,
+      0.3333333333333333
+    ],
+    "silentWorkEnd": [
+      1.6333333333333333,
+      1.6666666666666667
+    ],
+    "heldSilenceEnd": [
+      3.066666666666667,
+      3.1333333333333337
+    ]
+  },
+  "heldCompletion": {
+    "before": 3.6390572390572005,
+    "after": 3.6720538720538367
+  }
+}

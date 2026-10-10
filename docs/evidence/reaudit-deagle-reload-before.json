@@ -1,0 +1,7363 @@
+{
+  "schema": 1,
+  "method": "Actual NativeReloadState plus ActionSoundTimeline, using either shipped browser manifest or compiled hearing metadata, sampled at 960 Hz. No native runtime or audio-device timing is inferred.",
+  "probeSha256": "c9582bb07903f2281377a1c95116d782f30621aaf73433568da5b9973041bc06",
+  "bundleSha256": "4104c2262b5d85a82a4225d752e2562191caf585ceef6cf3b3468a31ecb4ea06",
+  "sourceHashes": {
+    "src/range/config.ts": "9614e31f18cbe0307d584420449f10fb8cc4efd6708ca8cedd4558de45a4a323",
+    "src/range/equipment-data.json": "003273a675b9b130627bf4c2f253c5b679b433ee9a243e990a5824703262f988",
+    "src/range/equipment.ts": "1cf6d2639c344fd2bcad3cf76ab65e2b2a00d506cf1f7fb2406f9245b8d69960",
+    "src/range/game-data.json": "5903a1deeb1ff4181c7203f4c8b1e9690ee17e5573db558e424388c204ab990e",
+    "src/range/keybinds/console.ts": "96789f931baf46e84ccdc685a5f3fe5cf8674e37345c6ec36cba71d90396c996",
+    "src/range/keybinds/crosshair-cvars.ts": "b699fa3d99b4ddb17a798117f5591292f1ffe2cd0d8d04388e8c53c9235b7f01",
+    "src/range/keybinds/cs2-keyboard-page.json": "f98e6b2f26172329d40f4d134362aa6a6bf07916d3c6b3ffd0959fe62bd95cce",
+    "src/range/keybinds/keys.ts": "83af1248f374e3d86835c57ec83366e2c03525bc96bbf4a6d9769e2d8699435b",
+    "src/range/keybinds/profile.ts": "ff86e8ed2a420e1926c2b87fb64af6ad6863644eb0d9915ed32cbea7034958f6",
+    "src/range/native-reload-presentation.json": "55971a004b55f2d765169098224f48acfcb5ea6643eb9ae22a1e726a015d8167",
+    "src/range/native-reload-timing.json": "87e13cd83fbc6ae67895d0e13152ebf5840c1ec6ca4f57eceab1eea613207a36",
+    "src/range/punch-recovery.ts": "15f52d055a76eaa452b3095284d900982ec0a76ab18a925f74e20f8dcc2a54dd",
+    "src/range/recoil.ts": "6d534b323ce1aae8a4c7ec82deb334d63e8b8614278808b2524926b6acb81e44",
+    "src/range/reload-clock.ts": "c8a35cd1d5603db064d86fc22a262917d7274f9dd79c5d4d9b271feccd296188",
+    "src/range/scope-transition.ts": "0180e13606cd98595142754a1503ced607489e5bb820d1d9d5bcb27bc3b74b3c",
+    "src/range/sound-events-data.json": "205366d1ffc27bb1aa302bcc9b86071697b80f83c629727a68111647a00975fd",
+    "src/range/sound-model.ts": "712620fc194f6c8e87cd8dac7de3d0ae8cc72d48969476f732969f0125a26531",
+    "src/range/weapon-actions.ts": "b11a027fbc071e594e7e295cffa6ce3a0103c064aaf09e9370379d9aa5beda20"
+  },
+  "manifestSha256": "23bfe69961e116e58049774aaf4a3c688bfb7970bc8a355f9cba52952374be2f",
+  "cases": [
+    {
+      "weapon": "ak47",
+      "empty": false,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.371875,
+          "key": "cue-452a00ef92dc1fb7",
+          "source": "Weapon_AK47.Clipout",
+          "time": 0.36666666666666664
+        },
+        {
+          "observedAt": 0.7104166666666667,
+          "key": "cue-a0e872b906e106e4",
+          "source": "Weapon_AK47.Inspect_F100",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.0822916666666667,
+          "key": "cue-a327f8b9367a4b7f",
+          "source": "Weapon_AK47.Clipin",
+          "time": 1.0666666666666667
+        },
+        {
+          "observedAt": 1.115625,
+          "key": "cue-f047aae78be1fbbe",
+          "source": "Weapon_AK47.AddAmmo",
+          "time": 1.1
+        },
+        {
+          "observedAt": 1.6229166666666666,
+          "key": "cue-898301e36c5575d2",
+          "source": "Weapon_AK47.BoltPull",
+          "time": 1.6
+        },
+        {
+          "observedAt": 1.6895833333333334,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.466667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 1.1,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 2.4677083333333334,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": false,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.371875,
+          "key": "cue-452a00ef92dc1fb7",
+          "source": "Weapon_AK47.Clipout",
+          "time": 0.36666666666666664
+        },
+        {
+          "observedAt": 0.7104166666666667,
+          "key": "cue-a0e872b906e106e4",
+          "source": "Weapon_AK47.Inspect_F100",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.0822916666666667,
+          "key": "cue-a327f8b9367a4b7f",
+          "source": "Weapon_AK47.Clipin",
+          "time": 1.0666666666666667
+        },
+        {
+          "observedAt": 1.115625,
+          "key": "cue-f047aae78be1fbbe",
+          "source": "Weapon_AK47.AddAmmo",
+          "time": 1.1
+        },
+        {
+          "observedAt": 1.6229166666666666,
+          "key": "cue-898301e36c5575d2",
+          "source": "Weapon_AK47.BoltPull",
+          "time": 1.6
+        },
+        {
+          "observedAt": 1.6895833333333334,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.466667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 1.1,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 2.4677083333333334,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": false,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.6,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.172390909090871,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 2,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 3.6,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 4.172916666666667,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": false,
+      "mode": "held",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.6,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.172390909090871,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 2,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 3.6,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 4.172916666666667,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": false,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.5229166666666667,
+          "key": "cue-452a00ef92dc1fb7",
+          "source": "Weapon_AK47.Clipout",
+          "time": 0.36666666666666664
+        },
+        {
+          "observedAt": 0.8635416666666667,
+          "key": "cue-a0e872b906e106e4",
+          "source": "Weapon_AK47.Inspect_F100",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.2395833333333333,
+          "key": "cue-a327f8b9367a4b7f",
+          "source": "Weapon_AK47.Clipin",
+          "time": 1.0666666666666667
+        },
+        {
+          "observedAt": 1.2729166666666667,
+          "key": "cue-f047aae78be1fbbe",
+          "source": "Weapon_AK47.AddAmmo",
+          "time": 1.1
+        },
+        {
+          "observedAt": 1.7854166666666667,
+          "key": "cue-898301e36c5575d2",
+          "source": "Weapon_AK47.BoltPull",
+          "time": 1.6
+        },
+        {
+          "observedAt": 1.853125,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.6380474747473466,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 1.2583333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 2.638541666666667,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": false,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.5229166666666667,
+          "key": "cue-452a00ef92dc1fb7",
+          "source": "Weapon_AK47.Clipout",
+          "time": 0.36666666666666664
+        },
+        {
+          "observedAt": 0.8635416666666667,
+          "key": "cue-a0e872b906e106e4",
+          "source": "Weapon_AK47.Inspect_F100",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.2395833333333333,
+          "key": "cue-a327f8b9367a4b7f",
+          "source": "Weapon_AK47.Clipin",
+          "time": 1.0666666666666667
+        },
+        {
+          "observedAt": 1.2729166666666667,
+          "key": "cue-f047aae78be1fbbe",
+          "source": "Weapon_AK47.AddAmmo",
+          "time": 1.1
+        },
+        {
+          "observedAt": 1.7854166666666667,
+          "key": "cue-898301e36c5575d2",
+          "source": "Weapon_AK47.BoltPull",
+          "time": 1.6
+        },
+        {
+          "observedAt": 1.853125,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.6380474747473466,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 29,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 1.2583333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 2.638541666666667,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": true,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.371875,
+          "key": "cue-452a00ef92dc1fb7",
+          "source": "Weapon_AK47.Clipout",
+          "time": 0.36666666666666664
+        },
+        {
+          "observedAt": 0.7104166666666667,
+          "key": "cue-a0e872b906e106e4",
+          "source": "Weapon_AK47.Inspect_F100",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.0822916666666667,
+          "key": "cue-a327f8b9367a4b7f",
+          "source": "Weapon_AK47.Clipin",
+          "time": 1.0666666666666667
+        },
+        {
+          "observedAt": 1.115625,
+          "key": "cue-f047aae78be1fbbe",
+          "source": "Weapon_AK47.AddAmmo",
+          "time": 1.1
+        },
+        {
+          "observedAt": 1.6229166666666666,
+          "key": "cue-898301e36c5575d2",
+          "source": "Weapon_AK47.BoltPull",
+          "time": 1.6
+        },
+        {
+          "observedAt": 1.6895833333333334,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.466667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 1.1,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 2.4677083333333334,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": true,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.371875,
+          "key": "cue-452a00ef92dc1fb7",
+          "source": "Weapon_AK47.Clipout",
+          "time": 0.36666666666666664
+        },
+        {
+          "observedAt": 0.7104166666666667,
+          "key": "cue-a0e872b906e106e4",
+          "source": "Weapon_AK47.Inspect_F100",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.0822916666666667,
+          "key": "cue-a327f8b9367a4b7f",
+          "source": "Weapon_AK47.Clipin",
+          "time": 1.0666666666666667
+        },
+        {
+          "observedAt": 1.115625,
+          "key": "cue-f047aae78be1fbbe",
+          "source": "Weapon_AK47.AddAmmo",
+          "time": 1.1
+        },
+        {
+          "observedAt": 1.6229166666666666,
+          "key": "cue-898301e36c5575d2",
+          "source": "Weapon_AK47.BoltPull",
+          "time": 1.6
+        },
+        {
+          "observedAt": 1.6895833333333334,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.466667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 1.1,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 2.4677083333333334,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": true,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.6,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.172390909090871,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 2,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 3.6,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 4.172916666666667,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": true,
+      "mode": "held",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.6,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.172390909090871,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 2,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 3.6,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 4.172916666666667,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": true,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.5229166666666667,
+          "key": "cue-452a00ef92dc1fb7",
+          "source": "Weapon_AK47.Clipout",
+          "time": 0.36666666666666664
+        },
+        {
+          "observedAt": 0.8635416666666667,
+          "key": "cue-a0e872b906e106e4",
+          "source": "Weapon_AK47.Inspect_F100",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.2395833333333333,
+          "key": "cue-a327f8b9367a4b7f",
+          "source": "Weapon_AK47.Clipin",
+          "time": 1.0666666666666667
+        },
+        {
+          "observedAt": 1.2729166666666667,
+          "key": "cue-f047aae78be1fbbe",
+          "source": "Weapon_AK47.AddAmmo",
+          "time": 1.1
+        },
+        {
+          "observedAt": 1.7854166666666667,
+          "key": "cue-898301e36c5575d2",
+          "source": "Weapon_AK47.BoltPull",
+          "time": 1.6
+        },
+        {
+          "observedAt": 1.853125,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.6380474747473466,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 1.2583333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 2.638541666666667,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "ak47",
+      "empty": true,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.13541666666666666,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.5229166666666667,
+          "key": "cue-452a00ef92dc1fb7",
+          "source": "Weapon_AK47.Clipout",
+          "time": 0.36666666666666664
+        },
+        {
+          "observedAt": 0.8635416666666667,
+          "key": "cue-a0e872b906e106e4",
+          "source": "Weapon_AK47.Inspect_F100",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.2395833333333333,
+          "key": "cue-a327f8b9367a4b7f",
+          "source": "Weapon_AK47.Clipin",
+          "time": 1.0666666666666667
+        },
+        {
+          "observedAt": 1.2729166666666667,
+          "key": "cue-f047aae78be1fbbe",
+          "source": "Weapon_AK47.AddAmmo",
+          "time": 1.1
+        },
+        {
+          "observedAt": 1.7854166666666667,
+          "key": "cue-898301e36c5575d2",
+          "source": "Weapon_AK47.BoltPull",
+          "time": 1.6
+        },
+        {
+          "observedAt": 1.853125,
+          "key": "cue-c96128bc5892fc2b",
+          "source": "Weapon_AK47.Inspect_F245",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.6380474747473466,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 60
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 1.2583333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 2.638541666666667,
+          "active": false,
+          "ammo": 30,
+          "reserve": 60,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": false,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.43333333333333335,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.1666666666666667,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.066667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 3.0677083333333335,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": false,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.43333333333333335,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.1666666666666667,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.066667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 3.0677083333333335,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": false,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.933333333333333,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.943434680134599,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": true
+        },
+        {
+          "observedAt": 2.533333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 3.933333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 4.94375,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": false,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.933333333333333,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.943434680134599,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": true
+        },
+        {
+          "observedAt": 2.533333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 3.933333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 4.94375,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": false,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.584375,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.325,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.2441080808078944,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 3.2447916666666665,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": false,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.584375,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.325,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 29,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.2441080808078944,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 29,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 3.2447916666666665,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": true,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.43333333333333335,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.1666666666666667,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.066667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 3.0677083333333335,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": true,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.43333333333333335,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.1666666666666667,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.066667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 3.0677083333333335,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": true,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.933333333333333,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.943434680134599,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": true
+        },
+        {
+          "observedAt": 2.533333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 3.933333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 4.94375,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": true,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.933333333333333,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.943434680134599,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": true
+        },
+        {
+          "observedAt": 2.533333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": true
+        },
+        {
+          "observedAt": 3.933333333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 4.94375,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": true,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.584375,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.325,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.2441080808078944,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 3.2447916666666665,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a4",
+      "empty": true,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.584375,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.325,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 120
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.2441080808078944,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 30,
+          "reserve": 90
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 120,
+          "silent": false
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "active": true,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        },
+        {
+          "observedAt": 3.2447916666666665,
+          "active": false,
+          "ammo": 30,
+          "reserve": 90,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": false,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.43333333333333335,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.1666666666666667,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.066667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.0677083333333335,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": false,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.43333333333333335,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.1666666666666667,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.066667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.0677083333333335,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": false,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.933333333333333,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.943434680134599,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 2.533333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": true
+        },
+        {
+          "observedAt": 3.933333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 4.94375,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": false,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.933333333333333,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.943434680134599,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 2.533333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": true
+        },
+        {
+          "observedAt": 3.933333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 4.94375,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": false,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.584375,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.325,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.2441080808078944,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.2447916666666665,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": false,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.584375,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.325,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.2441080808078944,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.2447916666666665,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": true,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.43333333333333335,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.1666666666666667,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.066667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.0677083333333335,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": true,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.43333333333333335,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.1666666666666667,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.066667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.0677083333333335,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": true,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.933333333333333,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.943434680134599,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 2.533333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": true
+        },
+        {
+          "observedAt": 3.933333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 4.94375,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": true,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.933333333333333,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        },
+        {
+          "kind": "reload-end",
+          "at": 4.943434680134599,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 2.533333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": true
+        },
+        {
+          "observedAt": 3.933333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 4.94375,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": true,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.584375,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.325,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.2441080808078944,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.2447916666666665,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "m4a1s",
+      "empty": true,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.584375,
+          "key": "cue-df78baeb3d509cec",
+          "source": "Weapon_M4A1.Clipout",
+          "time": 0.43333333333333335
+        },
+        {
+          "observedAt": 1.325,
+          "key": "cue-92c2949500c3fd35",
+          "source": "Weapon_M4A1.Clipin",
+          "time": 1.1666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-d1160d84de95cceb",
+          "source": "Weapon_M4A1.AddAmmo",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-66dcd3ddd0c6b472",
+          "source": "Weapon_M4A1.ClipHit",
+          "time": 2
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.2441080808078944,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.2447916666666665,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": false,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.26666666666666666,
+          "key": "cue-17e326aa712eb97b",
+          "source": "Weapon_AWP.Clipout",
+          "time": 0.26666666666666666
+        },
+        {
+          "observedAt": 1.5333333333333334,
+          "key": "cue-c48ab6f7a8a8d817",
+          "source": "Weapon_AWP.Clipin",
+          "time": 1.5333333333333334
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-d9b52150512f08ff",
+          "source": "Weapon_AWP.Cliphit",
+          "time": 2
+        },
+        {
+          "observedAt": 2.6333333333333333,
+          "key": "cue-a88a205fa228fb06",
+          "source": "Weapon_AWP.BoltBack",
+          "time": 2.6333333333333333
+        },
+        {
+          "observedAt": 2.966666666666667,
+          "key": "cue-bf55aa3eec2101cd",
+          "source": "Weapon_AWP.BoltForward",
+          "time": 2.966666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 2,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 3.667708333333333,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": false,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.26666666666666666,
+          "key": "cue-17e326aa712eb97b",
+          "source": "Weapon_AWP.Clipout",
+          "time": 0.26666666666666666
+        },
+        {
+          "observedAt": 1.5333333333333334,
+          "key": "cue-c48ab6f7a8a8d817",
+          "source": "Weapon_AWP.Clipin",
+          "time": 1.5333333333333334
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-d9b52150512f08ff",
+          "source": "Weapon_AWP.Cliphit",
+          "time": 2
+        },
+        {
+          "observedAt": 2.6333333333333333,
+          "key": "cue-a88a205fa228fb06",
+          "source": "Weapon_AWP.BoltBack",
+          "time": 2.6333333333333333
+        },
+        {
+          "observedAt": 2.966666666666667,
+          "key": "cue-bf55aa3eec2101cd",
+          "source": "Weapon_AWP.BoltForward",
+          "time": 2.966666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 2,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 3.667708333333333,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": false,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 6.066666666666666,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        },
+        {
+          "kind": "reload-end",
+          "at": 6.605387542087507,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": true
+        },
+        {
+          "observedAt": 3.8,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": true
+        },
+        {
+          "observedAt": 6.066666666666666,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 6.60625,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": false,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 6.066666666666666,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        },
+        {
+          "kind": "reload-end",
+          "at": 6.605387542087507,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": true
+        },
+        {
+          "observedAt": 3.8,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": true
+        },
+        {
+          "observedAt": 6.066666666666666,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 6.60625,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": false,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 1.6958333333333333,
+          "key": "cue-c48ab6f7a8a8d817",
+          "source": "Weapon_AWP.Clipin",
+          "time": 1.5333333333333334
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-d9b52150512f08ff",
+          "source": "Weapon_AWP.Cliphit",
+          "time": 2
+        },
+        {
+          "observedAt": 2.8072916666666665,
+          "key": "cue-a88a205fa228fb06",
+          "source": "Weapon_AWP.BoltBack",
+          "time": 2.6333333333333333
+        },
+        {
+          "observedAt": 3.14375,
+          "key": "cue-bf55aa3eec2101cd",
+          "source": "Weapon_AWP.BoltForward",
+          "time": 2.966666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.8501686868684426,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 3.8510416666666667,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": false,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 1.6958333333333333,
+          "key": "cue-c48ab6f7a8a8d817",
+          "source": "Weapon_AWP.Clipin",
+          "time": 1.5333333333333334
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-d9b52150512f08ff",
+          "source": "Weapon_AWP.Cliphit",
+          "time": 2
+        },
+        {
+          "observedAt": 2.8072916666666665,
+          "key": "cue-a88a205fa228fb06",
+          "source": "Weapon_AWP.BoltBack",
+          "time": 2.6333333333333333
+        },
+        {
+          "observedAt": 3.14375,
+          "key": "cue-bf55aa3eec2101cd",
+          "source": "Weapon_AWP.BoltForward",
+          "time": 2.966666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 4,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.8501686868684426,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 4,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 3.8510416666666667,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": true,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.26666666666666666,
+          "key": "cue-17e326aa712eb97b",
+          "source": "Weapon_AWP.Clipout",
+          "time": 0.26666666666666666
+        },
+        {
+          "observedAt": 1.5333333333333334,
+          "key": "cue-c48ab6f7a8a8d817",
+          "source": "Weapon_AWP.Clipin",
+          "time": 1.5333333333333334
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-d9b52150512f08ff",
+          "source": "Weapon_AWP.Cliphit",
+          "time": 2
+        },
+        {
+          "observedAt": 2.6333333333333333,
+          "key": "cue-a88a205fa228fb06",
+          "source": "Weapon_AWP.BoltBack",
+          "time": 2.6333333333333333
+        },
+        {
+          "observedAt": 2.966666666666667,
+          "key": "cue-bf55aa3eec2101cd",
+          "source": "Weapon_AWP.BoltForward",
+          "time": 2.966666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 2,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 3.667708333333333,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": true,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.26666666666666666,
+          "key": "cue-17e326aa712eb97b",
+          "source": "Weapon_AWP.Clipout",
+          "time": 0.26666666666666666
+        },
+        {
+          "observedAt": 1.5333333333333334,
+          "key": "cue-c48ab6f7a8a8d817",
+          "source": "Weapon_AWP.Clipin",
+          "time": 1.5333333333333334
+        },
+        {
+          "observedAt": 2,
+          "key": "cue-d9b52150512f08ff",
+          "source": "Weapon_AWP.Cliphit",
+          "time": 2
+        },
+        {
+          "observedAt": 2.6333333333333333,
+          "key": "cue-a88a205fa228fb06",
+          "source": "Weapon_AWP.BoltBack",
+          "time": 2.6333333333333333
+        },
+        {
+          "observedAt": 2.966666666666667,
+          "key": "cue-bf55aa3eec2101cd",
+          "source": "Weapon_AWP.BoltForward",
+          "time": 2.966666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 2,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 3.667708333333333,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": true,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 6.066666666666666,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        },
+        {
+          "kind": "reload-end",
+          "at": 6.605387542087507,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": true
+        },
+        {
+          "observedAt": 3.8,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": true
+        },
+        {
+          "observedAt": 6.066666666666666,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 6.60625,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": true,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 6.066666666666666,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        },
+        {
+          "kind": "reload-end",
+          "at": 6.605387542087507,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": true
+        },
+        {
+          "observedAt": 3.8,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": true
+        },
+        {
+          "observedAt": 6.066666666666666,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 6.60625,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": true,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 1.6958333333333333,
+          "key": "cue-c48ab6f7a8a8d817",
+          "source": "Weapon_AWP.Clipin",
+          "time": 1.5333333333333334
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-d9b52150512f08ff",
+          "source": "Weapon_AWP.Cliphit",
+          "time": 2
+        },
+        {
+          "observedAt": 2.8072916666666665,
+          "key": "cue-a88a205fa228fb06",
+          "source": "Weapon_AWP.BoltBack",
+          "time": 2.6333333333333333
+        },
+        {
+          "observedAt": 3.14375,
+          "key": "cue-bf55aa3eec2101cd",
+          "source": "Weapon_AWP.BoltForward",
+          "time": 2.966666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.8501686868684426,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 3.8510416666666667,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "awp",
+      "empty": true,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 1.6958333333333333,
+          "key": "cue-c48ab6f7a8a8d817",
+          "source": "Weapon_AWP.Clipin",
+          "time": 1.5333333333333334
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "key": "cue-d9b52150512f08ff",
+          "source": "Weapon_AWP.Cliphit",
+          "time": 2
+        },
+        {
+          "observedAt": 2.8072916666666665,
+          "key": "cue-a88a205fa228fb06",
+          "source": "Weapon_AWP.BoltBack",
+          "time": 2.6333333333333333
+        },
+        {
+          "observedAt": 3.14375,
+          "key": "cue-bf55aa3eec2101cd",
+          "source": "Weapon_AWP.BoltForward",
+          "time": 2.966666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 10
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.8501686868684426,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 5,
+          "reserve": 5
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 10,
+          "silent": false
+        },
+        {
+          "observedAt": 2.1666666666666665,
+          "active": true,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        },
+        {
+          "observedAt": 3.8510416666666667,
+          "active": false,
+          "ammo": 5,
+          "reserve": 5,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": false,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.46770833333333334,
+          "key": "cue-a828a979ebb45692",
+          "source": "Weapon_Glock.Clipout",
+          "time": 0.4666666666666667
+        },
+        {
+          "observedAt": 0.834375,
+          "key": "cue-9f93e036b9284b1d",
+          "source": "Weapon_Glock.Clipin",
+          "time": 0.8333333333333334
+        },
+        {
+          "observedAt": 1.4677083333333334,
+          "key": "cue-7e5821f1f1a5b21e",
+          "source": "Weapon_Glock.Slideback",
+          "time": 1.4666666666666666
+        },
+        {
+          "observedAt": 1.6677083333333333,
+          "key": "cue-041dbd594d356bd7",
+          "source": "Weapon_Glock.Sliderelease",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.266667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.9333333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 2.267708333333333,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": false,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.46770833333333334,
+          "key": "cue-a828a979ebb45692",
+          "source": "Weapon_Glock.Clipout",
+          "time": 0.4666666666666667
+        },
+        {
+          "observedAt": 0.834375,
+          "key": "cue-9f93e036b9284b1d",
+          "source": "Weapon_Glock.Clipin",
+          "time": 0.8333333333333334
+        },
+        {
+          "observedAt": 1.4677083333333334,
+          "key": "cue-7e5821f1f1a5b21e",
+          "source": "Weapon_Glock.Slideback",
+          "time": 1.4666666666666666
+        },
+        {
+          "observedAt": 1.6677083333333333,
+          "key": "cue-041dbd594d356bd7",
+          "source": "Weapon_Glock.Sliderelease",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.266667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.9333333333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 2.267708333333333,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": false,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.2666666666666666,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.8053875420875065,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 1.6666666666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": true
+        },
+        {
+          "observedAt": 3.2666666666666666,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.80625,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": false,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.2666666666666666,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.8053875420875065,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 1.6666666666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": true
+        },
+        {
+          "observedAt": 3.2666666666666666,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.80625,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": false,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.61875,
+          "key": "cue-a828a979ebb45692",
+          "source": "Weapon_Glock.Clipout",
+          "time": 0.4666666666666667
+        },
+        {
+          "observedAt": 0.9885416666666667,
+          "key": "cue-9f93e036b9284b1d",
+          "source": "Weapon_Glock.Clipin",
+          "time": 0.8333333333333334
+        },
+        {
+          "observedAt": 1.628125,
+          "key": "cue-7e5821f1f1a5b21e",
+          "source": "Weapon_Glock.Slideback",
+          "time": 1.4666666666666666
+        },
+        {
+          "observedAt": 1.8302083333333334,
+          "key": "cue-041dbd594d356bd7",
+          "source": "Weapon_Glock.Sliderelease",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.4360272727271637,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.0895833333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 2.4364583333333334,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": false,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.61875,
+          "key": "cue-a828a979ebb45692",
+          "source": "Weapon_Glock.Clipout",
+          "time": 0.4666666666666667
+        },
+        {
+          "observedAt": 0.9885416666666667,
+          "key": "cue-9f93e036b9284b1d",
+          "source": "Weapon_Glock.Clipin",
+          "time": 0.8333333333333334
+        },
+        {
+          "observedAt": 1.628125,
+          "key": "cue-7e5821f1f1a5b21e",
+          "source": "Weapon_Glock.Slideback",
+          "time": 1.4666666666666666
+        },
+        {
+          "observedAt": 1.8302083333333334,
+          "key": "cue-041dbd594d356bd7",
+          "source": "Weapon_Glock.Sliderelease",
+          "time": 1.6666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 19,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.4360272727271637,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 19,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.0895833333333333,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 2.4364583333333334,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": true,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.46770833333333334,
+          "key": "cue-a828a979ebb45692",
+          "source": "Weapon_Glock.Clipout",
+          "time": 0.4666666666666667
+        },
+        {
+          "observedAt": 1.134375,
+          "key": "cue-9f93e036b9284b1d",
+          "source": "Weapon_Glock.Clipin",
+          "time": 1.1333333333333333
+        },
+        {
+          "observedAt": 1.534375,
+          "key": "cue-041dbd594d356bd7",
+          "source": "Weapon_Glock.Sliderelease",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.266667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.2666666666666666,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 2.267708333333333,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": true,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.46770833333333334,
+          "key": "cue-a828a979ebb45692",
+          "source": "Weapon_Glock.Clipout",
+          "time": 0.4666666666666667
+        },
+        {
+          "observedAt": 1.134375,
+          "key": "cue-9f93e036b9284b1d",
+          "source": "Weapon_Glock.Clipin",
+          "time": 1.1333333333333333
+        },
+        {
+          "observedAt": 1.534375,
+          "key": "cue-041dbd594d356bd7",
+          "source": "Weapon_Glock.Sliderelease",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.266667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.2666666666666666,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 2.267708333333333,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": true,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.066666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.7063976430975982,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 2.3333333333333335,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": true
+        },
+        {
+          "observedAt": 3.066666666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.707291666666667,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": true,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.066666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.7063976430975982,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 2.3333333333333335,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": true
+        },
+        {
+          "observedAt": 3.066666666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 3.707291666666667,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": true,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.61875,
+          "key": "cue-a828a979ebb45692",
+          "source": "Weapon_Glock.Clipout",
+          "time": 0.4666666666666667
+        },
+        {
+          "observedAt": 1.2916666666666667,
+          "key": "cue-9f93e036b9284b1d",
+          "source": "Weapon_Glock.Clipin",
+          "time": 1.1333333333333333
+        },
+        {
+          "observedAt": 1.6958333333333333,
+          "key": "cue-041dbd594d356bd7",
+          "source": "Weapon_Glock.Sliderelease",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.4360272727271637,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.4260416666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 2.4364583333333334,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "glock",
+      "empty": true,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.61875,
+          "key": "cue-a828a979ebb45692",
+          "source": "Weapon_Glock.Clipout",
+          "time": 0.4666666666666667
+        },
+        {
+          "observedAt": 1.2916666666666667,
+          "key": "cue-9f93e036b9284b1d",
+          "source": "Weapon_Glock.Clipin",
+          "time": 1.1333333333333333
+        },
+        {
+          "observedAt": 1.6958333333333333,
+          "key": "cue-041dbd594d356bd7",
+          "source": "Weapon_Glock.Sliderelease",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 60
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.4360272727271637,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 20,
+          "reserve": 40
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 60,
+          "silent": false
+        },
+        {
+          "observedAt": 1.4260416666666667,
+          "active": true,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        },
+        {
+          "observedAt": 2.4364583333333334,
+          "active": false,
+          "ammo": 20,
+          "reserve": 40,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": false,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.2375,
+          "key": "cue-33d2218f3806c674",
+          "source": "Weapon_USP.Clipout",
+          "time": 0.23333333333333334
+        },
+        {
+          "observedAt": 0.7114583333333333,
+          "key": "cue-e4618179c9a3cbf9",
+          "source": "Weapon_USP.Clipin",
+          "time": 0.7
+        },
+        {
+          "observedAt": 0.9145833333333333,
+          "key": "cue-94883570376c0c76",
+          "source": "Weapon_USP.AddAmmo",
+          "time": 0.9
+        },
+        {
+          "observedAt": 1.3885416666666666,
+          "key": "cue-8a65588b2e83c1e4",
+          "source": "Weapon_USP.Slideback",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 1.5572916666666667,
+          "key": "cue-fe2068dd53c28147",
+          "source": "Weapon_USP.Sliderelease",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.2,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.9,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 2.2,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": false,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.2375,
+          "key": "cue-33d2218f3806c674",
+          "source": "Weapon_USP.Clipout",
+          "time": 0.23333333333333334
+        },
+        {
+          "observedAt": 0.7114583333333333,
+          "key": "cue-e4618179c9a3cbf9",
+          "source": "Weapon_USP.Clipin",
+          "time": 0.7
+        },
+        {
+          "observedAt": 0.9145833333333333,
+          "key": "cue-94883570376c0c76",
+          "source": "Weapon_USP.AddAmmo",
+          "time": 0.9
+        },
+        {
+          "observedAt": 1.3885416666666666,
+          "key": "cue-8a65588b2e83c1e4",
+          "source": "Weapon_USP.Slideback",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 1.5572916666666667,
+          "key": "cue-fe2068dd53c28147",
+          "source": "Weapon_USP.Sliderelease",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.2,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.9,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 2.2,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": false,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.066666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.6390572390572005,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": true
+        },
+        {
+          "observedAt": 1.6,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": true
+        },
+        {
+          "observedAt": 3.066666666666667,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 3.6395833333333334,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": false,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.066666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.6390572390572005,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": true
+        },
+        {
+          "observedAt": 1.6,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": true
+        },
+        {
+          "observedAt": 3.066666666666667,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 3.6395833333333334,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": false,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.8645833333333334,
+          "key": "cue-e4618179c9a3cbf9",
+          "source": "Weapon_USP.Clipin",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.0697916666666667,
+          "key": "cue-94883570376c0c76",
+          "source": "Weapon_USP.AddAmmo",
+          "time": 0.9
+        },
+        {
+          "observedAt": 1.5489583333333334,
+          "key": "cue-8a65588b2e83c1e4",
+          "source": "Weapon_USP.Slideback",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 1.7197916666666666,
+          "key": "cue-fe2068dd53c28147",
+          "source": "Weapon_USP.Sliderelease",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.368686868686766,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 1.05625,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 2.36875,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": false,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.8645833333333334,
+          "key": "cue-e4618179c9a3cbf9",
+          "source": "Weapon_USP.Clipin",
+          "time": 0.7
+        },
+        {
+          "observedAt": 1.0697916666666667,
+          "key": "cue-94883570376c0c76",
+          "source": "Weapon_USP.AddAmmo",
+          "time": 0.9
+        },
+        {
+          "observedAt": 1.5489583333333334,
+          "key": "cue-8a65588b2e83c1e4",
+          "source": "Weapon_USP.Slideback",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 1.7197916666666666,
+          "key": "cue-fe2068dd53c28147",
+          "source": "Weapon_USP.Sliderelease",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 11,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.368686868686766,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 11,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 1.05625,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 2.36875,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": true,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.2375,
+          "key": "cue-33d2218f3806c674",
+          "source": "Weapon_USP.Clipout",
+          "time": 0.23333333333333334
+        },
+        {
+          "observedAt": 0.8125,
+          "key": "cue-e4618179c9a3cbf9",
+          "source": "Weapon_USP.Clipin",
+          "time": 0.8
+        },
+        {
+          "observedAt": 1.015625,
+          "key": "cue-94883570376c0c76",
+          "source": "Weapon_USP.AddAmmo",
+          "time": 1
+        },
+        {
+          "observedAt": 1.45625,
+          "key": "cue-fe2068dd53c28147",
+          "source": "Weapon_USP.Sliderelease",
+          "time": 1.4333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.2,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 1,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 2.2,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": true,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.2375,
+          "key": "cue-33d2218f3806c674",
+          "source": "Weapon_USP.Clipout",
+          "time": 0.23333333333333334
+        },
+        {
+          "observedAt": 0.8125,
+          "key": "cue-e4618179c9a3cbf9",
+          "source": "Weapon_USP.Clipin",
+          "time": 0.8
+        },
+        {
+          "observedAt": 1.015625,
+          "key": "cue-94883570376c0c76",
+          "source": "Weapon_USP.AddAmmo",
+          "time": 1
+        },
+        {
+          "observedAt": 1.45625,
+          "key": "cue-fe2068dd53c28147",
+          "source": "Weapon_USP.Sliderelease",
+          "time": 1.4333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.2,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 1,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 2.2,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": true,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 2.8666666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.540067340067292,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": true
+        },
+        {
+          "observedAt": 1.8,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": true
+        },
+        {
+          "observedAt": 2.8666666666666667,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 3.540625,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": true,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 2.8666666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.540067340067292,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": true
+        },
+        {
+          "observedAt": 1.8,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": true
+        },
+        {
+          "observedAt": 2.8666666666666667,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 3.540625,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": true,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.9677083333333333,
+          "key": "cue-e4618179c9a3cbf9",
+          "source": "Weapon_USP.Clipin",
+          "time": 0.8
+        },
+        {
+          "observedAt": 1.1729166666666666,
+          "key": "cue-94883570376c0c76",
+          "source": "Weapon_USP.AddAmmo",
+          "time": 1
+        },
+        {
+          "observedAt": 1.6166666666666667,
+          "key": "cue-fe2068dd53c28147",
+          "source": "Weapon_USP.Sliderelease",
+          "time": 1.4333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.368686868686766,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 1.1572916666666666,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 2.36875,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "usp",
+      "empty": true,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.9677083333333333,
+          "key": "cue-e4618179c9a3cbf9",
+          "source": "Weapon_USP.Clipin",
+          "time": 0.8
+        },
+        {
+          "observedAt": 1.1729166666666666,
+          "key": "cue-94883570376c0c76",
+          "source": "Weapon_USP.AddAmmo",
+          "time": 1
+        },
+        {
+          "observedAt": 1.6166666666666667,
+          "key": "cue-fe2068dd53c28147",
+          "source": "Weapon_USP.Sliderelease",
+          "time": 1.4333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 24
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.368686868686766,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 12,
+          "reserve": 12
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 24,
+          "silent": false
+        },
+        {
+          "observedAt": 1.1572916666666666,
+          "active": true,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        },
+        {
+          "observedAt": 2.36875,
+          "active": false,
+          "ammo": 12,
+          "reserve": 12,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": false,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.13333333333333333,
+          "key": "cue-799b69b72a58785d",
+          "source": "Weapon_DEagle.Clipout",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.7,
+          "key": "cue-d199d5206623f455",
+          "source": "Weapon_DEagle.Clipin",
+          "time": 0.7
+        },
+        {
+          "observedAt": 0.7666666666666667,
+          "key": "cue-c547a3bd41182fc3",
+          "source": "Weapon_DEagle.AddAmmo",
+          "time": 0.7666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-a1b3f6c43834074c",
+          "source": "Weapon_DEagle.Slideback",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 1.5666666666666667,
+          "key": "cue-01fd6f70eb4b957f",
+          "source": "Weapon_DEagle.Slideforward",
+          "time": 1.5666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.2,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.7666666666666667,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 2.2,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": false,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.13333333333333333,
+          "key": "cue-799b69b72a58785d",
+          "source": "Weapon_DEagle.Clipout",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.7,
+          "key": "cue-d199d5206623f455",
+          "source": "Weapon_DEagle.Clipin",
+          "time": 0.7
+        },
+        {
+          "observedAt": 0.7666666666666667,
+          "key": "cue-c547a3bd41182fc3",
+          "source": "Weapon_DEagle.AddAmmo",
+          "time": 0.7666666666666667
+        },
+        {
+          "observedAt": 1.3666666666666667,
+          "key": "cue-a1b3f6c43834074c",
+          "source": "Weapon_DEagle.Slideback",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 1.5666666666666667,
+          "key": "cue-01fd6f70eb4b957f",
+          "source": "Weapon_DEagle.Slideforward",
+          "time": 1.5666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.2,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.7666666666666667,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 2.2,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": false,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.13333333333333333,
+          "key": "cue-799b69b72a58785d",
+          "source": "Weapon_DEagle.Clipout",
+          "time": 0.13333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.066666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.6390572390572005,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": true
+        },
+        {
+          "observedAt": 1.3333333333333333,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": true
+        },
+        {
+          "observedAt": 3.066666666666667,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 3.6395833333333334,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": false,
+      "mode": "held",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.13333333333333333,
+          "key": "cue-799b69b72a58785d",
+          "source": "Weapon_DEagle.Clipout",
+          "time": 0.13333333333333333
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.066666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.6390572390572005,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": true
+        },
+        {
+          "observedAt": 1.3333333333333333,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": true
+        },
+        {
+          "observedAt": 3.066666666666667,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 3.6395833333333334,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": false,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.13333333333333333,
+          "key": "cue-799b69b72a58785d",
+          "source": "Weapon_DEagle.Clipout",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.8541666666666666,
+          "key": "cue-d199d5206623f455",
+          "source": "Weapon_DEagle.Clipin",
+          "time": 0.7
+        },
+        {
+          "observedAt": 0.921875,
+          "key": "cue-c547a3bd41182fc3",
+          "source": "Weapon_DEagle.AddAmmo",
+          "time": 0.7666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-a1b3f6c43834074c",
+          "source": "Weapon_DEagle.Slideback",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 1.7291666666666667,
+          "key": "cue-01fd6f70eb4b957f",
+          "source": "Weapon_DEagle.Slideforward",
+          "time": 1.5666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.368686868686766,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.921875,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 2.36875,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": false,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.13333333333333333,
+          "key": "cue-799b69b72a58785d",
+          "source": "Weapon_DEagle.Clipout",
+          "time": 0.13333333333333333
+        },
+        {
+          "observedAt": 0.8541666666666666,
+          "key": "cue-d199d5206623f455",
+          "source": "Weapon_DEagle.Clipin",
+          "time": 0.7
+        },
+        {
+          "observedAt": 0.921875,
+          "key": "cue-c547a3bd41182fc3",
+          "source": "Weapon_DEagle.AddAmmo",
+          "time": 0.7666666666666667
+        },
+        {
+          "observedAt": 1.5270833333333333,
+          "key": "cue-a1b3f6c43834074c",
+          "source": "Weapon_DEagle.Slideback",
+          "time": 1.3666666666666667
+        },
+        {
+          "observedAt": 1.7291666666666667,
+          "key": "cue-01fd6f70eb4b957f",
+          "source": "Weapon_DEagle.Slideforward",
+          "time": 1.5666666666666667
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 6,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.368686868686766,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 6,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.921875,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 2.36875,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": true,
+      "mode": "normal",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 0.2,
+          "key": "cue-799b69b72a58785d",
+          "source": "Weapon_DEagle.Clipout",
+          "time": 0.2
+        },
+        {
+          "observedAt": 0.9333333333333333,
+          "key": "cue-d199d5206623f455",
+          "source": "Weapon_DEagle.Clipin",
+          "time": 0.9333333333333333
+        },
+        {
+          "observedAt": 1.0333333333333334,
+          "key": "cue-c547a3bd41182fc3",
+          "source": "Weapon_DEagle.AddAmmo",
+          "time": 1.0333333333333334
+        },
+        {
+          "observedAt": 1.5,
+          "key": "cue-01fd6f70eb4b957f",
+          "source": "Weapon_DEagle.Slideforward",
+          "time": 1.5
+        },
+        {
+          "observedAt": 1.5333333333333334,
+          "key": "cue-a1b3f6c43834074c",
+          "source": "Weapon_DEagle.Slideback",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.2,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 1.0333333333333334,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 2.2,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": true,
+      "mode": "normal",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 0.2,
+          "key": "cue-799b69b72a58785d",
+          "source": "Weapon_DEagle.Clipout",
+          "time": 0.2
+        },
+        {
+          "observedAt": 0.9333333333333333,
+          "key": "cue-d199d5206623f455",
+          "source": "Weapon_DEagle.Clipin",
+          "time": 0.9333333333333333
+        },
+        {
+          "observedAt": 1.0333333333333334,
+          "key": "cue-c547a3bd41182fc3",
+          "source": "Weapon_DEagle.AddAmmo",
+          "time": 1.0333333333333334
+        },
+        {
+          "observedAt": 1.5,
+          "key": "cue-01fd6f70eb4b957f",
+          "source": "Weapon_DEagle.Slideforward",
+          "time": 1.5
+        },
+        {
+          "observedAt": 1.5333333333333334,
+          "key": "cue-a1b3f6c43834074c",
+          "source": "Weapon_DEagle.Slideback",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.2,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 1.0333333333333334,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 2.2,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": true,
+      "mode": "held",
+      "source": "hearing",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.066666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.6390572390572005,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": true
+        },
+        {
+          "observedAt": 1.8666666666666667,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": true
+        },
+        {
+          "observedAt": 3.066666666666667,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 3.6395833333333334,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": true,
+      "mode": "held",
+      "source": "browser",
+      "cues": [],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 3.066666666666667,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        },
+        {
+          "kind": "reload-end",
+          "at": 3.6390572390572005,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": true
+        },
+        {
+          "observedAt": 1.8666666666666667,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": true
+        },
+        {
+          "observedAt": 3.066666666666667,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 3.6395833333333334,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": true,
+      "mode": "released",
+      "source": "hearing",
+      "cues": [
+        {
+          "observedAt": 1.0895833333333333,
+          "key": "cue-d199d5206623f455",
+          "source": "Weapon_DEagle.Clipin",
+          "time": 0.9333333333333333
+        },
+        {
+          "observedAt": 1.190625,
+          "key": "cue-c547a3bd41182fc3",
+          "source": "Weapon_DEagle.AddAmmo",
+          "time": 1.0333333333333334
+        },
+        {
+          "observedAt": 1.6625,
+          "key": "cue-01fd6f70eb4b957f",
+          "source": "Weapon_DEagle.Slideforward",
+          "time": 1.5
+        },
+        {
+          "observedAt": 1.6958333333333333,
+          "key": "cue-a1b3f6c43834074c",
+          "source": "Weapon_DEagle.Slideback",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.368686868686766,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 1.190625,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 2.36875,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    },
+    {
+      "weapon": "deagle",
+      "empty": true,
+      "mode": "released",
+      "source": "browser",
+      "cues": [
+        {
+          "observedAt": 1.0895833333333333,
+          "key": "cue-d199d5206623f455",
+          "source": "Weapon_DEagle.Clipin",
+          "time": 0.9333333333333333
+        },
+        {
+          "observedAt": 1.190625,
+          "key": "cue-c547a3bd41182fc3",
+          "source": "Weapon_DEagle.AddAmmo",
+          "time": 1.0333333333333334
+        },
+        {
+          "observedAt": 1.6625,
+          "key": "cue-01fd6f70eb4b957f",
+          "source": "Weapon_DEagle.Slideforward",
+          "time": 1.5
+        },
+        {
+          "observedAt": 1.6958333333333333,
+          "key": "cue-a1b3f6c43834074c",
+          "source": "Weapon_DEagle.Slideback",
+          "time": 1.5333333333333334
+        }
+      ],
+      "events": [
+        {
+          "kind": "reload-start",
+          "at": 0,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.2,
+          "silent": true,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-mode",
+          "at": 0.5,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 0,
+          "reserve": 21
+        },
+        {
+          "kind": "reload-end",
+          "at": 2.368686868686766,
+          "silent": false,
+          "phase": "magazine",
+          "ammo": 7,
+          "reserve": 14
+        }
+      ],
+      "states": [
+        {
+          "observedAt": 0,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 0.2,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": true
+        },
+        {
+          "observedAt": 0.5,
+          "active": true,
+          "ammo": 0,
+          "reserve": 21,
+          "silent": false
+        },
+        {
+          "observedAt": 1.190625,
+          "active": true,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        },
+        {
+          "observedAt": 2.36875,
+          "active": false,
+          "ammo": 7,
+          "reserve": 14,
+          "silent": false
+        }
+      ]
+    }
+  ]
+}

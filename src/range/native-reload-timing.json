@@ -392,14 +392,14 @@
     "deagle": {
       "normal": {
         "source": "animation/anims/viewmodel/pistol/pistol_deagle/reload_deagle.vnmclip_c",
-        "sha256": "7e2ff25139ac3d60014573d474d04411e960f69c3a424ac01c330324bf0bedf5",
+        "sha256": "4806f9248b993e0cfa98a4643d66e3d901147c630a80e82a4dbdd7a139ff75a8",
         "fps": 30,
         "duration": 2.2,
         "insert": 0.7666666666666667,
         "silent": [
           {
             "start": 0,
-            "end": 1.6333333333333333
+            "end": 1.6666666666666667
           }
         ]
       },

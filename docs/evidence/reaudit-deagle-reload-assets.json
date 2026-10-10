@@ -1,0 +1,28 @@
+{
+  "files": {
+    "src/range/native-reload-timing.json": {
+      "beforeSha256": "87e13cd83fbc6ae67895d0e13152ebf5840c1ec6ca4f57eceab1eea613207a36",
+      "afterSha256": "c1303c82e1a51f216f3c74dd2fd5c85c930823004259253746d59d25dfeb54ee",
+      "beforeBytes": 18039,
+      "afterBytes": 18039
+    },
+    "src/range/sound-events-data.json": {
+      "beforeSha256": "205366d1ffc27bb1aa302bcc9b86071697b80f83c629727a68111647a00975fd",
+      "afterSha256": "d12eb56d308937ce27b086d9e9e9edea4a93aa65eddb15ba2d82efad0c2f5f67",
+      "beforeBytes": 215949,
+      "afterBytes": 215948
+    },
+    "public/revamp/audio/events.json": {
+      "beforeSha256": "23bfe69961e116e58049774aaf4a3c688bfb7970bc8a355f9cba52952374be2f",
+      "afterSha256": "db0a541e795ece542adea32324b7f4ec2204a47dac6d1727a77bc8ed1b4a8bc4",
+      "beforeBytes": 380976,
+      "afterBytes": 380977
+    }
+  },
+  "publicManifestOnlyChange": "timelines.deagle.reload",
+  "deploymentAsset": {
+    "source": "/home/junel/Desktop/cs2/native-audit/core-followup/public/revamp/audio/events.json",
+    "destination": "/home/junel/Desktop/cs2/cs2spraylab/public/revamp/audio/events.json",
+    "copyStatus": "NOT COPIED; original six-commit approval payload is unchanged"
+  }
+}

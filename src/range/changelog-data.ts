@@ -356,6 +356,9 @@ export const latestChanges = {
     {id: 'native-common-draw-clock', title: 'Rifle and pistol draw motion', items: [
       'M4 and common pistol draw animations now keep their authored speed when a model finishes loading after a weapon switch.',
     ]},
+    {id: 'native-deagle-reload-events', title: 'Deagle reload timing', items: [
+      'Deagle magazine-removal audio now follows current CS2 timing, and held reloads retain the full native silent window.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
