@@ -143,10 +143,12 @@ describe('reserve-aware reload phases', () => {
     const empty = new NativeReloadState('nova'); empty.ammo = 0; empty.reserve = 0;
     expect(empty.start(0)).toBe(false);
   });
-  it('does not restart the finish timer on repeated trigger interruptions', () => {
-    const reload = new NativeReloadState('nova'); reload.ammo = 1; reload.start(0); reload.interrupt();
-    reload.advance(.1); reload.interrupt(); expect(reload.until).toBeCloseTo(SHELL_RELOAD_FINISH);
-    reload.advance(SHELL_RELOAD_FINISH); expect(reload.active).toBe(false); expect(reload.ammo).toBe(1);
+  it('does not restart the retained empty-start finish approximation on repeated requests', () => {
+    const reload = new NativeReloadState('nova'); reload.ammo = 0; reload.start(0);
+    const inserted = SHELL_RELOAD_START + reload.stats.reload;
+    reload.advance(inserted); reload.interrupt();
+    reload.advance(inserted + .1); reload.interrupt(); expect(reload.until).toBeCloseTo(inserted + SHELL_RELOAD_FINISH);
+    reload.advance(inserted + SHELL_RELOAD_FINISH); expect(reload.active).toBe(false); expect(reload.ammo).toBe(1);
   });
   it('restores loud playback before completion when the authored silent section ends', () => {
     const reload = new NativeReloadState('mag7'); reload.ammo = 0; reload.start(0, true);

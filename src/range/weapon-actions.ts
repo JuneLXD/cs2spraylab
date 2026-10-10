@@ -114,6 +114,10 @@ export class NativeReloadState {
     this.ammo = this.stats.magazine; this.reserve = this.stats.reserve;
   }
   get active() {return this.phase !== 'idle';}
+  /** stats.reload is exported m_flDisallowAttackAfterReloadStartDuration.
+   * Native action start uses this absolute lock independently of phase playback;
+   * it is not inferred from the trainer's estimated shell-insertion duration. */
+  get attackReadyAt() {return this.active ? this.startedAt + this.stats.reload : 0;}
   get phaseDuration() {return this.phase === 'idle' ? 0 : this.phase === 'start' ? SHELL_RELOAD_START
     : this.phase === 'finish' ? SHELL_RELOAD_FINISH : this.stats.reload;}
   get silent() {return this.active && this.clock.silent;}
@@ -168,11 +172,18 @@ export class NativeReloadState {
       if (silent !== this.silent) this.emit('reload-mode', time);
     }
   }
-  interrupt() {
+  interrupt(time = this.clock.now) {
     if (!this.active || !this.stats.reloadsSingleShells || this.ammo <= 0) return false;
-    if (this.phase !== 'finish') {
-      this.phase = 'finish'; const silent = this.silent; this.clock.phase(this.windows());
-      if (silent !== this.silent) this.emit('reload-mode', this.clock.now);
+    if (this.empty) {
+      // Preserve the existing empty-start approximation until insertion/event
+      // ordering and the native empty-fire retry clock are measured together.
+      if (this.phase !== 'finish') {
+        this.phase = 'finish'; const silent = this.silent; this.clock.phase(this.windows());
+        if (silent !== this.silent) this.emit('reload-mode', this.clock.now);
+      }
+    } else {
+      if (time + 1e-9 < this.attackReadyAt) return false;
+      this.cancel();
     }
     return true;
   }

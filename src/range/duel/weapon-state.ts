@@ -59,15 +59,16 @@ export class DuelWeaponState {
   /** An already requested shot must sample movement/recovery at its deadline,
    * even when the weapon cycle does not divide the 128 Hz movement grid. */
   nextAttackTime(command: WeaponCommand) {
-    if (this.reload.active) return this.reload.nextEventAt;
+    const reloadEvent = this.reload.active ? this.reload.nextEventAt : Infinity;
+    if (this.reload.active && this.reload.empty) return reloadEvent;
     const alternate = this.id === 'revolver' && !!(command.secondaryHeld || command.secondaryPressed);
     if (!this.pendingPress && !this.burstLeft && !command.firePressed &&
       !(command.fireHeld && (this.actions.stats.fullAuto || this.id === 'knife')) && !alternate &&
-      !(this.id === 'knife' && command.secondaryHeld)) return Infinity;
-    if (this.ammo <= 0 && this.id !== 'knife') return Infinity;
+      !(this.id === 'knife' && command.secondaryHeld)) return reloadEvent;
+    if (this.ammo <= 0 && this.id !== 'knife' || this.reload.active && !this.reload.stats.reloadsSingleShells) return reloadEvent;
     // A press that finds the weapon ready fires at its own time; anything else waits for the next server tick.
-    const due = Math.max(this.nextShotAt, this.actions.readyAt, this.actions.chargeReadyAt);
-    return command.firePressed ? due : tickAligned(due);
+    const due = Math.max(this.nextShotAt, this.actions.readyAt, this.actions.chargeReadyAt, this.reload.attackReadyAt);
+    return Math.min(reloadEvent, command.firePressed ? due : tickAligned(due));
   }
 
   advancePassive(time: number, dt: number, crouch = false, airborne = false, deferAccuracy = false) {
@@ -97,8 +98,8 @@ export class DuelWeaponState {
     punch?: DamagePunch;
   }): FiredRound | undefined {
     this.actions.advance(time);
-    // A reload sets the next attack time to its end (the game's reload sequence does the same): a shot held or
-    // queued through it is processed on the first server tick after the reload and keeps that schedule.
+    // Shell attacks have a reload-start lock independent of insertion/outro.
+    // Magazine completion retains its existing deadline.
     const reloading = this.reload.active;
     const reloadEnd = this.reload.phase === 'finish' || this.reload.phase === 'magazine' ? this.reload.until : time;
     this.reload.advance(time, command.reloadHeld);
@@ -139,7 +140,8 @@ export class DuelWeaponState {
       this.actions.chargeTrigger(time, false); // an R8 windup released early is cancelled
     }
     if (!this.pendingPress && !this.burstLeft && !(command.fireHeld && stats.fullAuto) && !this.actions.alternateFire) return;
-    if (this.reload.active) {this.reload.interrupt(); return;}
+    if (this.reload.active && this.reload.empty) {this.reload.interrupt(); return;}
+    if (this.reload.active && (!stats.reloadsSingleShells || this.ammo === 0)) return;
     if (this.ammo === 0) {
       if (this.reload.start(time, !!command.reloadHeld) && !stats.reloadsSingleShells) this.recovery.reloadStarted(true);
       this.pendingPress = false;
@@ -151,11 +153,13 @@ export class DuelWeaponState {
     // The weapon is due at the latest of its schedule, its deploy and (R8) its windup. A press that finds it ready
     // fires at its own subtick time; a held or queued trigger is processed on the next server tick, and that shot
     // keeps its exact schedule unless it is more than a tick late, like the game's stale next-attack time.
-    const due = Math.max(this.nextShotAt, this.actions.readyAt, this.actions.isRevolver && !this.actions.alternateFire ? chargedAt : -Infinity);
+    const due = Math.max(this.nextShotAt, this.actions.readyAt, this.reload.attackReadyAt,
+      this.actions.isRevolver && !this.actions.alternateFire ? chargedAt : -Infinity);
     if (time + 1e-9 < (command.firePressed ? due : tickAligned(due))) {
       if (!triggerHeld) this.pendingPress = false;
       return;
     }
+    if (this.reload.active && !this.reload.interrupt(time)) return;
     const scheduled = command.firePressed || time - due > SERVER_TICK + 1e-9 ? time : due;
     if (this.actions.burst && !this.burstLeft) {
       this.burstLeft = 3;

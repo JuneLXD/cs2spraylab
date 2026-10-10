@@ -337,6 +337,10 @@ export const latestChanges = {
       'Weapons now ease downward and tilt on takeoff, then recover on landing using the native per-frame air transition.',
       'Range and Duel share the measured world-space motion, including steep aim and recoil.',
     ]},
+    {id: 'native-shell-interruption', title: 'Interrupting a shotgun reload', items: [
+      'When a Nova, XM1014 or Sawed-Off reload starts with shells still loaded, firing now respects the native initial attack lock and cancels the reload directly once ready.',
+      'A short tap after readiness fires immediately. A tap released before readiness keeps the reload running in Range and Duel.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

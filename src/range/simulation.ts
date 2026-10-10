@@ -308,7 +308,7 @@ export class Simulation {
     if(this.equipped==='knife'&&this.time<(this.shotReady.get('knife')??0))return false;
     if (this.reloadState.active) {
       if (!this.reloadState.stats.reloadsSingleShells) return false;
-      this.reloadState.interrupt();
+      if (this.reloadState.empty) this.reloadState.interrupt();
     }
     if (!this.reloadState.active && this.equipped !== 'knife' && this.loadedAmmo === 0) { this.reload(this.reloadHeld, true); return false; }
     this.meleeSecondary = this.equipped === 'knife' && alternate;
@@ -317,7 +317,9 @@ export class Simulation {
     this.resumeHeldAt = undefined;
     this.shots = this.hits = this.heads = 0;
     this.startedAt = this.time; this.nextShot = Math.max(scheduledAt, this.shotReady.get(this.equipped) ?? 0,
-      this.equipReadyAt, this.actions.readyAt, this.burstEnd, this.reloadState.until,
+      this.equipReadyAt, this.actions.readyAt, this.burstEnd,
+      this.reloadState.active ? this.stats.reloadsSingleShells && !this.reloadState.empty
+        ? this.reloadState.attackReadyAt : this.reloadState.until : 0,
       this.actions.isRevolver ? this.actions.chargeTrigger(this.time, true) : 0);
     this.releasedBurst = false;
     this.targetHealth = [100, 100];
@@ -367,7 +369,8 @@ export class Simulation {
   private untilTick() { return (Math.floor((this.time + 1e-10) / STEP) + 1) * STEP - this.time; }
   private untilEvent() {
     let duration = this.untilTick();
-    const at = Math.min(this.actions.nextEventAt, this.reloadState.active ? this.reloadState.nextEventAt : this.firing ? tickAligned(this.nextShot) : Infinity);
+    const at = Math.min(this.actions.nextEventAt, this.reloadState.active ? this.reloadState.nextEventAt : Infinity,
+      this.firing && (!this.reloadState.active || !this.reloadState.empty) ? tickAligned(this.nextShot) : Infinity);
     if (at > this.time + 1e-10) duration = Math.min(duration, at - this.time);
     return duration;
   }
@@ -379,8 +382,8 @@ export class Simulation {
     this.time += dt;
     this.actions.advance(this.time);
     const weapon = this.stats;
-    // A reload sets the next attack time to its end (the game's reload sequence does the same): a shot queued through
-    // a shell reload is processed on the first server tick after the reload and keeps that schedule.
+    // Magazine completion and an uninterrupted shell outro retain their existing
+    // deadlines. Loaded-shell attacks use the separate reload-start lock.
     const reloading = this.reloadState.active;
     const reloadEnd = this.reloadState.phase === 'finish' || this.reloadState.phase === 'magazine' ? this.reloadState.until : this.time;
     for (const [id, state] of this.ammoStates) state.advance(this.time, id === this.equipped ? this.reloadHeld : undefined);
@@ -389,7 +392,7 @@ export class Simulation {
       this.resumeHeldAt = Math.max(this.resumeHeldAt, reloadEnd);
     // Pop's infinite modes top the reserve (and the magazine) back up every tick, as sv_infinite_ammo does.
     if (this.pop) this.refillPopAmmo();
-    if (this.firing && this.reloadState.active) this.reloadState.interrupt();
+    if (this.firing && this.reloadState.active && this.reloadState.empty) this.reloadState.interrupt();
     for (const [id, until] of this.rechargeTimes) if (this.time + 1e-9 >= until) {
       this.ammoFor(id).ammo = 1; this.rechargeTimes.delete(id);
       this.actionEvents.push({kind: 'zeus-ready', at: this.time, equipment: id});
@@ -456,7 +459,7 @@ export class Simulation {
     if (this.firing && this.actions.isRevolver && !this.actions.alternateFire) this.nextShot = Math.max(this.nextShot, this.actions.chargeTrigger(this.time, true));
     // A shot the weapon becomes ready for while the trigger is held is processed on the next server tick; its
     // schedule (nextShot) keeps accumulating exactly, as the game's demos show (AK sprays alternate 6 and 7 ticks).
-    if (this.firing && !this.reloadState.active && this.time + 1e-9 >= tickAligned(this.nextShot)) this.fire();
+    if (this.firing && this.time + 1e-9 >= tickAligned(this.nextShot)) this.fire();
     // CS2 reloads an empty magazine by itself once the last shot's cycle ends. shotReady alone can
     // lag behind a shot queued through a long shell reload, so time the cycle from the shot itself.
     if (!this.firing && this.loadedAmmo === 0 && this.equipped !== 'knife' && !this.reloadState.active && this.time + 1e-9 >=
@@ -466,7 +469,8 @@ export class Simulation {
   }
   fire() {
     const weapon = this.stats;
-    if (this.reloadState.active || this.time + 1e-9 < (this.shotReady.get(this.equipped) ?? 0)) return;
+    if (this.time + 1e-9 < (this.shotReady.get(this.equipped) ?? 0)) return;
+    if (this.reloadState.active && (this.reloadState.empty || !this.reloadState.interrupt(this.time))) return;
     if (this.equipped === 'knife') {
       const secondary = this.meleeSecondary, ordinal = this.shotOrdinals.get('knife') ?? 0;
       const firstSlash = !secondary && this.time + 1e-9 >= this.firstSlashAfter;
