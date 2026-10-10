@@ -972,11 +972,60 @@ cache inputs within numerical precision. Validation: TypeScript passes, 2,338
 units pass with only the known fallback fixture failure, and both targeted
 Chromium cases pass.
 
+## Loaded-shell reload interruption (twenty-sixth pass, 2026-10-09)
+
+[Pass 26](reaudit-shell-reload.md) traces current server class bindings, primary
+readiness, action switching and the reload-start attack deadline. Nova,
+Sawed-Off and XM1014 may fire a loaded shell after that initial lock while still
+reloading; a valid shot switches directly to the shooting action. The .2/.25 s
+primary-wrapper literals govern empty-fire retry, not a loaded-shell outro.
+
+The actual Range/Duel bench retains 192 before/after cases. Early held fire
+previously occurred at250ms; it now waits until468.75ms for Nova/Sawed-Off and
+609.375ms for XM1014. Ready7.8125ms taps previously vanished; they now fire at
+the press. There are116 changed first-shot outcomes,44 recovered shots and
+zero mismatches across96 paired engine cases. All48 MAG7 controls are unchanged.
+
+The correction applies to reloads that began loaded. Empty-start handling,
+intro/insertion/finish durations and later silent-phase behavior retain their
+explicit limits. Clip markers and ammo callbacks do not by themselves establish
+absolute phase deadlines. The portable proof checks four classes,13 instruction
+ranges and45 assertions; no game was launched for this pass.
+
+## Native motion producers (twenty-seventh pass, 2026-10-09)
+
+[Pass 27](reaudit-motion-history.md) binds velocity history to the current
+`CInterpolatedVar<CNetworkVelocityVector>` implementation. Private native
+execution covers38 bracket cases and six writes: per-ring time offsets,
+offset bypass, wraparound, repeated-tick replacement and rewind truncation.
+The third consecutive identical-vector write returns false but still records
+the new tick. None of these supplied histories activates the three-point path.
+
+The ordinary body-yaw writer is now bound to the movement service's embedded
+animation state. It seeds working yaw from the owner pawn's scene angles on
+each call, combines source aim with aim punch, dispatches named movement states
+and writes that same pawn. Static rules include the70°/69° safety gate,
+speed-dependent Move approach and timed stationary turns. The proof binds28
+code ranges and schema/type/literal assertions. It does not execute the full
+state machine or establish invocation cadence and resets.
+
+Production bob/sway is unchanged. Optional bounded history/body readers extend
+the game-only sampler for the next approved capture; they have not been used
+live. Ring time-offset producers, prediction ordering, body state clocks/reset
+and transform evaluation remain the exact next measurements.
+
+Combined validation: TypeScript passes;2,363 units pass with only the documented
+missing fallback-model fixture failure. All four Chromium cases across
+trigger-continuity and view-punch pass in53.1seconds. Tests ran serially under
+memory/swap/CPU caps, with auto-deploy paused and the repo frozen during browser
+execution. No new R8 investigation or behavior change is included.
+
 ## Re-audit delivery validation
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph
 composition `9b94483`, accuracy/index `fd328d5`, ordinary footsteps `2aba70c`,
-weapon recoil rotation `5132783`, airborne weapon motion `4e999d9`.
+weapon recoil rotation `5132783`, airborne weapon motion `4e999d9`,
+loaded-shell reload interruption `9095bb0`.
 The [consolidated inventory](cs2-reaudit.md) retains one row per audited mechanic
 with rule/evidence, before/after, status and commit, plus corrected claims and
 exact unresolved measurements. Further R8 work is excluded at the user's request.

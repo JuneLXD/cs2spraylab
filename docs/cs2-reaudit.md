@@ -1,10 +1,11 @@
-# CS2 independent re-audit: passes 16–25
+# CS2 independent re-audit: passes 16–27
 
-Seven evidenced corrections follow baseline `c488943`: movement (`79832e6`),
+Eight evidenced corrections follow baseline `c488943`: movement (`79832e6`),
 scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
 ordering (`fd328d5`), ordinary footstep cadence (`2aba70c`), and native weapon
 recoil rotation (`5132783`, [pass 23](reaudit-viewmodel-recoil.md)), and
-[airborne weapon motion](reaudit-viewmodel-air.md) (`4e999d9`, pass 24).
+[airborne weapon motion](reaudit-viewmodel-air.md) (`4e999d9`, pass 24), and
+[loaded-shell reload interruption](reaudit-shell-reload.md) (`9095bb0`, pass 26).
 This report covers the requested inventory and identifies the remaining work;
 it does not certify complete native parity. The follow-up corrects
 [accuracy/index update order](reaudit-accuracy.md) and
@@ -14,6 +15,9 @@ identifies a remaining command-history mismatch without changing camera timing.
 rule; [weapon recoil](reaudit-viewmodel-recoil.md) corrects the separate model transform.
 [Motion-input pass 25](reaudit-motion-inputs.md) identifies the consumed velocity
 cache and changing scene basis without changing production motion.
+[Motion-history pass 27](reaudit-motion-history.md) binds the ordinary body-yaw
+writer and executes velocity-history insertion and bracket selection. Their
+live clocks and reset rules remain open.
 R8-specific follow-up is excluded at the user’s request.
 
 Current binary/config provenance is retained in
@@ -47,9 +51,17 @@ No active Ghidra request is cancelled or restarted.
 - Pass 25 evidence: 3,833 captured bob transitions replay within 7.46e-9 native
   units using the selected velocity cache. Corrected moving turns confirm scene
   yaw differs from aim yaw. Full bob/sway production behavior remains unchanged.
-- TypeScript passes. Pass 24 full unit suite: 2,338 passes and the documented missing
-  `public/models/ak47.json` fallback failure. Both targeted Chromium cases pass,
-  including actual weapon-root rotation, AIR placement and skipped draws. Earlier five-case input/trigger
+- Loaded-shell reloads: early held fire moves from 250 ms to 468.75 ms for
+  Nova/Sawed-Off and 609.375 ms for XM1014. Ready taps fire at their input edge
+  instead of being lost; 192 cases agree across both engines and the bounded
+  rule. Empty-start insertion and finish clocks remain estimates.
+- Pass 27 evidence: 38 native history-bracket cases and six native writer cases
+  establish tick-keyed ring behavior. Static body-yaw ownership and state rules
+  are bound to the current client; no new bob/sway behavior is shipped.
+- TypeScript passes. Passes 26–27 full unit suite: 2,363 passes and the documented missing
+  `public/models/ak47.json` fallback failure. All four targeted Chromium cases pass
+  in 53.1 seconds, including loaded-shell mouse input, actual weapon-root
+  rotation, AIR placement and skipped draws. Earlier five-case input/trigger
   validation remains recorded in the delivery history.
   Numerical and browser commands use memory/swap caps; Chromium is serial,
   CPU-capped and run with repository edits frozen. Auto-deploy was paused for
@@ -115,7 +127,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-combat.md](
 | R8 alternate fire | Current alternate stats; fresh server spread sampler uses `1-r²` | Same alternate cycle/distribution, unchanged | Matched data/distribution branch; native trigger schedule unverified | `c488943` |
 | Reload lock and insertion | Current vdata lock; imported clip insert events; fresh AK capture | Separate insert and attack deadline; unchanged | Matched exported lock, animation event coverage in animation audit | `c488943` |
 | Silent reload | Native gated clock was not independently emulated in this pass | Per-phase windows and half-speed held clock; AK measured lock 4.172391 s; unchanged | Unverified current whole runtime path | `c488943` |
-| Shell loading/interruption | Current data identifies Nova/XM1014/Sawed-Off single shells; MAG-7 uses magazine | Start 0.5 s, finish 0.2 s estimates; Nova first shell at 0.966667 s, empty completion 4.433336 s; unchanged | Approximated; native phase deadlines still needed | `c488943` |
+| Shell loading/interruption | Current native loaded-shell primary path uses the initial attack lock, then switches directly to shooting; [pass 26](reaudit-shell-reload.md) | Early held fire 250 ms → Nova/Sawed-Off468.75 ms, XM609.375 ms; ready taps now fire immediately. Start/insertion/finish estimates and empty-start path retained | Loaded-start interruption corrected; insertion/completion and empty retry ordering remain approximated | `9095bb0` |
 | Recoil pattern seed/parameters | Current vdata seeds/angles/magnitudes; fresh AK native impulse anchors | Parameters identical, AK six-shot impulses verified; unchanged table generator | Matched data and AK sample; current all-weapon table emulation unverified | `c488943` |
 | Recoil suppression/smoothing | AK first six native impulse anchors reproduce trainer table; historical Windows table fixture is another artifact | Four-shot suppression and automatic smoothing retained | Matched AK sample; broad native rule still partial | `c488943` |
 | Aim-punch decay and velocity decay | Fresh native anchor-to-anchor carry in both captures, `PunchRecovery` comparison | Native carry error ≤0.000000478°; unchanged decay math | Matched sampled current native trajectories | `c488943` |
@@ -198,7 +210,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | Eight-way run/walk/crouch | `worldmodel_locomotion.vnmgraph`: eight directional clip sets; standing anchors 136/225 u/s, crouch 96 u/s | Rifle/pistol sets retained; zero missing channels in 90-clip comparison | Matched clip data; approximated blending | `c488943` |
 | Locomotion speed and idle rate | Graph blend-space coordinates and idle multiplier .167 | Same scalar anchors and idle multiplier; directional radial interpolation and phase locking are custom | Approximated graph; matched named constants | `c488943` |
 | Planted-foot reversals | Native graph references start, slow, cross-leg and e2w/w2e states | Two planted clips exist in pack but runtime weights never select them | Not present | `c488943` |
-| Turn in place | Native world graph and locomotion state transitions | Actor root turns; no native turn-in-place state machine selected | Not present | `c488943` |
+| Turn in place | Native world graph plus current movement-service body-yaw writer, state dispatch and timers ([pass 27](reaudit-motion-history.md)) | Actor root turns; no native turn-in-place state machine selected | Not present; ordinary writer bound statically, cadence/reset/full state replay unverified | `c488943`; pass 27 evidence only |
 | Jump, in-air, crouched air | Native authored jump/in-air clips | Retained clips blended with custom takeoff 60% threshold and .12 s blend | Approximated | `c488943` |
 | Additive takeoff and landing | `worldmodel.vnmgraph` references standing/crouched `jump_additive_*` layers for rifle/pistol/knife | No corresponding additive runtime layer | Not present | `c488943` |
 | Aim matrix and IK | Native world graph aim/bone-mask/IK nodes | Estimated pitch weights spine0 .20, spine1 .30, spine2 .35, head .15; clamp ±1.15 rad; .35 share while reloading | Approximated | `c488943` |
@@ -215,7 +227,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | Bolt, slide and pump | Secondary skeleton animation embedded in native fire/reload clips | Included in exported rigged weapon clips; separate clip is not required for AWP/SSG bolt; sampled part errors ≤1.8 mm after R8 fix | Matched sampled parts within conversion error | `c488943` |
 | Shell reload timing | Native segment markers and clip times | View/world reload windows are selected by mechanic phase, then blended | Approximated composition; combat bench owns deadlines | `c488943` |
 | Viewmodel recoil share/view punch | Current-byte caller chain and native .325 world-angle addition; 432 bounded executions | Rotation error 3.29584° → 0.000014502° across 108 supplied states | Isolated rotation corrected; full gun/camera trajectories remain open | `5132783` |
-| Bob/sway and crouch/zoom motion | Native AIR state moves .1/call toward0/2, adds −.4×AIR world vertical and −.2×AIR Source pitch before recoil; 406 executed frames/944 captured transitions | AIR missing before; 812 engine/frame cases now reduce position error20.32mm→.000000889mm and angle error.4000053°→.00001648°; old movement sine retained | Isolated AIR matched; selected velocity cache verified in pass 25, scene writer/look sway/crouch/zoom/rendered landmarks partial | `4e999d9` |
+| Bob/sway and crouch/zoom motion | Native AIR, selected velocity cache, 38 history-bracket/six writer cases and statically bound body-yaw state machine; passes24–27 | AIR missing before; 812 engine/frame cases now reduce position error20.32mm→.000000889mm and angle error.4000053°→.00001648°; old movement sine retained | Isolated AIR matched; history/body ownership established, live production clocks/reset/look sway/crouch/zoom/rendered landmarks partial | `4e999d9`; pass 27 evidence only |
 | Muzzle shape, size, duration | Fresh fire event tracks reference per-weapon particle systems at frame zero | Reduced native texture/particle envelopes grouped into six families; implementation explicitly approximates radius, randomization and materials | Approximated | `c488943` |
 | Shell ejection | AK fire clip includes `weapon_shell_casing_rifle` event at frame zero | No ejected shell/casing simulation/rendering found | Not present | `c488943` |
 | Tracer cadence and shape | Native per-weapon tracer data and particle systems | Native cadence option plus every-shot training option; browser trail/rope approximations | Approximated shape; combat/data bench owns cadence | `c488943` |
@@ -307,6 +319,14 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 31. The first pass25 sequences used W/S, which are inspect/use in the user's
     bindings. Those intervals are excluded from forward/back and moving-turn
     evidence; the corrected T/G recording establishes actual movement.
+32. A loaded-shell attack does not universally wait for a .2-second reload outro.
+    Native initial attack locks come from the named vdata duration; an eligible
+    loaded shot switches directly to firing. The .2/.25-second primary-wrapper
+    literals belong to the empty-fire retry path. Earlier trainer interruption
+    both bypassed the initial lock and lost ready released taps.
+33. A false return from the velocity-history writer does not mean no sample was
+    recorded: the third identical-vector case still appends its new tick.
+    Native fixed 1/64 factors in body yaw also do not establish call cadence.
 
 ## Exact remaining evidence and implementation
 
@@ -315,7 +335,9 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   holster and simultaneous transitions. See the accepted 41,584-tick coverage
   and caller evidence in [reaudit-accuracy.md](reaudit-accuracy.md).
 - Input/fire: native command fractions plus due tick/ratio and fire events for
-  released early taps, bursts and shell interruption.
+  released early taps and bursts. Loaded-start shell interruption is corrected;
+  capture empty-fire retry, ammo-event ordering, absolute insertion/completion
+  deadlines, later silent phases and reload admission during attack cooldown.
   Mouse-to-photon requires synchronized device/display instrumentation.
 - Movement: flat unobstructed trajectories and exact input edges; landing/bhop
   boundary presses; constrained unduck and partial-duck takeoffs; matched
@@ -331,8 +353,10 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   listener-distance, water/ladder and separate jump/landing sound paths.
   Current video/audio process clocks give only approximate cross-stream alignment.
   AIR state/arithmetic is now matched; pass25 identifies the selected velocity
-  cache. Full bob still needs its interpolation-history construction and the
-  scene-angle writer/reset law. Sway needs input/writer/prediction ordering and
+  cache. Pass27 binds the history writer and ordinary body-yaw owner/rules.
+  Full bob still needs live ring offsets, writer tick sources, full body state
+  execution/cadence/reset and evaluated transform phase. The sampler now has
+  bounded history/body readers ready for that capture. Sway needs input/writer/prediction ordering and
   HUD phase beyond the captured exact-endpoint arithmetic.
 - Damage/hitboxes: controlled native victim health/armor deltas, hit groups,
   tagging velocities, knife/Zeus and penetration flags; authoritative server

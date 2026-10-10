@@ -145,3 +145,28 @@ remains unbound. New sway captures confirm exact history arithmetic and distingu
 writer, source-interpolation and HUD clocks. No production feel change is justified
 until those inputs map to trainer simulation/presentation. The first capture
 sequence's incorrect W/S movement assumption is explicitly excluded.
+
+### Loaded-shell attack interruption, pass 26
+
+Current native class/caller evidence separates the reload-start attack lock from
+shell insertion and outro playback. Nova/Sawed-Off use .466667 seconds and XM1014
+.6 seconds. Once ready with an existing shell, primary fire changes directly to
+the shooting action. The paired-engine bench exposes both premature early held
+fire and an unnecessary roughly 200 ms delay on a ready press. The correction
+uses the native initial lock and cancels directly when the attack executes.
+Empty-start reloads, insertion/full-completion clocks and later silent phases
+retain their explicit approximation. MAG-7 remains a magazine reload.
+
+### Native motion producers, pass 27
+
+[Motion history](reaudit-motion-history.md) now binds the body writer to the
+movement service's embedded animation state. Its prepared aim includes the
+aim-punch service result, and every update starts from current absolute scene
+yaw. Idle, movement and turn states have different rules. Static timing factors
+do not establish caller cadence or resets.
+
+The velocity probe executes 38 bracket searches and six native history writes,
+including same-tick replacement and rewind removal. Optional capture readers
+now retain both velocity rings and body state. Production bob/sway remains
+unchanged pending a live comparison of history construction, body transitions
+and their prediction/presentation phases.

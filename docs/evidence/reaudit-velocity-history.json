@@ -1,0 +1,1934 @@
+{
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "method": "Current-client velocity history layout and private-memory bracketing oracle.",
+  "nativeRangeSha256": {
+    "bracket": "befb337474330e3fdad44c4c5058e72bb1876b5e136c2d21470242c3a9aa15af",
+    "cache-prefix": "689871c2bc832f04fb0803c1e24703246be41b6e5b858e853b43151af528ad67",
+    "history-writer": "857198f447171a737c89166d546664a719248ebe3698e7f195dff7e8803b76f8",
+    "current-value-forwarder": "b2ea2a215ab979da39f702a4f7b779439cd685c50b96df327791b29dcbb6b0ab",
+    "interface-construction": "301321e3cdd3b62de50109c680e5595ec3f2655383c050caa450196d96679a09"
+  },
+  "proof": {
+    "instructionAssertions": 18,
+    "typeAssertions": 3,
+    "historyType": "CInterpolatedVar<CNetworkVelocityVector>",
+    "externalShim": "Verified libc memcpy in private emulator memory"
+  },
+  "bracketingCases": [
+    {
+      "name": "head0-time1.5",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 0,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        null
+      ],
+      "selectedTicks": [
+        97,
+        97,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head0-time1.515625",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.515625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        null
+      ],
+      "selectedTicks": [
+        98,
+        97,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head0-time1.5234375",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5234375,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        null
+      ],
+      "selectedTicks": [
+        98,
+        97,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head0-time1.53125",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.53125,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        null
+      ],
+      "selectedTicks": [
+        99,
+        98,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head0-time1.5390625",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5390625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        null
+      ],
+      "selectedTicks": [
+        99,
+        98,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head0-time1.546875",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head0-time1.5546875",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head0-time1.5625",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 1.0,
+      "rawFraction": 1.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head0-time1.578125",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.578125,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 1.0,
+      "rawFraction": 2.0,
+      "threePoint": false,
+      "pastNewest": true
+    },
+    {
+      "name": "head6-time1.5",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 6,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 0,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        null
+      ],
+      "selectedTicks": [
+        97,
+        97,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head6-time1.515625",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.515625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 6,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        null
+      ],
+      "selectedTicks": [
+        98,
+        97,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head6-time1.5234375",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5234375,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 6,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        null
+      ],
+      "selectedTicks": [
+        98,
+        97,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head6-time1.53125",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.53125,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 6,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        null
+      ],
+      "selectedTicks": [
+        99,
+        98,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head6-time1.5390625",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5390625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 6,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        null
+      ],
+      "selectedTicks": [
+        99,
+        98,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head6-time1.546875",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 6,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head6-time1.5546875",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 6,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head6-time1.5625",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 6,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 1.0,
+      "rawFraction": 1.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head6-time1.578125",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.578125,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 6,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 1.0,
+      "rawFraction": 2.0,
+      "threePoint": false,
+      "pastNewest": true
+    },
+    {
+      "name": "head7-time1.5",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 7,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 0,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        null
+      ],
+      "selectedTicks": [
+        97,
+        97,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head7-time1.515625",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.515625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 7,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        null
+      ],
+      "selectedTicks": [
+        98,
+        97,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head7-time1.5234375",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5234375,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 7,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        {
+          "ring": 0,
+          "logical": 3,
+          "tick": 97
+        },
+        null
+      ],
+      "selectedTicks": [
+        98,
+        97,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head7-time1.53125",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.53125,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 7,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        null
+      ],
+      "selectedTicks": [
+        99,
+        98,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head7-time1.5390625",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5390625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 7,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        {
+          "ring": 0,
+          "logical": 2,
+          "tick": 98
+        },
+        null
+      ],
+      "selectedTicks": [
+        99,
+        98,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head7-time1.546875",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 7,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head7-time1.5546875",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 7,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head7-time1.5625",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 7,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 1.0,
+      "rawFraction": 1.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "head7-time1.578125",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.578125,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 7,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 1.0,
+      "rawFraction": 2.0,
+      "threePoint": false,
+      "pastNewest": true
+    },
+    {
+      "name": "empty",
+      "ticks": [],
+      "requested": 1.5625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": false,
+      "completionFlag": 1,
+      "selected": [
+        null,
+        null,
+        null
+      ],
+      "selectedTicks": [
+        0,
+        0,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "single-before",
+      "ticks": [
+        100
+      ],
+      "requested": 1.546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 0,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        100,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "single-equal",
+      "ticks": [
+        100
+      ],
+      "requested": 1.5625,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        100,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "single-after",
+      "ticks": [
+        100
+      ],
+      "requested": 1.578125,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        100,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "offset-applied",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5703125,
+      "offset": 0.015625,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "offset-bypassed",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5703125,
+      "offset": 0.015625,
+      "mode": 1,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 1.0,
+      "rawFraction": 1.5,
+      "threePoint": false,
+      "pastNewest": true
+    },
+    {
+      "name": "third-slot-selection-enabled",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 0,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        }
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        99
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "third-slot-global-disabled",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 0,
+      "cubicGlobal": 0,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        }
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        99
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "secondary-disabled",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 1,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": null,
+      "success": false,
+      "completionFlag": 1,
+      "selected": [
+        null,
+        null,
+        null
+      ],
+      "selectedTicks": [
+        0,
+        0,
+        0
+      ],
+      "fraction": 0.0,
+      "rawFraction": 0.0,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "secondary-enabled",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.7109375,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 1,
+      "flags": 33,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 1,
+      "secondTicks": [
+        110,
+        109,
+        108
+      ],
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 1,
+          "logical": 0,
+          "tick": 110
+        },
+        {
+          "ring": 1,
+          "logical": 1,
+          "tick": 109
+        },
+        null
+      ],
+      "selectedTicks": [
+        110,
+        109,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    },
+    {
+      "name": "component-stride",
+      "ticks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "requested": 1.5546875,
+      "offset": 0.0,
+      "mode": 0,
+      "selector": 0,
+      "flags": 1,
+      "cubicGlobal": 1,
+      "head": 0,
+      "capacity": 8,
+      "components": 3,
+      "secondTicks": null,
+      "success": true,
+      "completionFlag": 1,
+      "selected": [
+        {
+          "ring": 0,
+          "logical": 0,
+          "tick": 100
+        },
+        {
+          "ring": 0,
+          "logical": 1,
+          "tick": 99
+        },
+        null
+      ],
+      "selectedTicks": [
+        100,
+        99,
+        0
+      ],
+      "fraction": 0.5,
+      "rawFraction": 0.5,
+      "threePoint": false,
+      "pastNewest": false
+    }
+  ],
+  "writerCases": [
+    {
+      "name": "new",
+      "tick": 101,
+      "vector": [
+        111,
+        211,
+        311
+      ],
+      "changed": true,
+      "beforeTicks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterTicks": [
+        101,
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterVectors": [
+        [
+          111.0,
+          211.0,
+          311.0
+        ],
+        [
+          100.0,
+          200.0,
+          300.0
+        ],
+        [
+          101.0,
+          201.0,
+          301.0
+        ],
+        [
+          102.0,
+          202.0,
+          302.0
+        ],
+        [
+          103.0,
+          203.0,
+          303.0
+        ]
+      ]
+    },
+    {
+      "name": "same-tick",
+      "tick": 101,
+      "vector": [
+        112,
+        212,
+        312
+      ],
+      "changed": true,
+      "beforeTicks": [
+        101,
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterTicks": [
+        101,
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterVectors": [
+        [
+          112.0,
+          212.0,
+          312.0
+        ],
+        [
+          100.0,
+          200.0,
+          300.0
+        ],
+        [
+          101.0,
+          201.0,
+          301.0
+        ],
+        [
+          102.0,
+          202.0,
+          302.0
+        ],
+        [
+          103.0,
+          203.0,
+          303.0
+        ]
+      ]
+    },
+    {
+      "name": "rewind",
+      "tick": 99,
+      "vector": [
+        113,
+        213,
+        313
+      ],
+      "changed": true,
+      "beforeTicks": [
+        101,
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterTicks": [
+        99,
+        98,
+        97
+      ],
+      "afterVectors": [
+        [
+          113.0,
+          213.0,
+          313.0
+        ],
+        [
+          102.0,
+          202.0,
+          302.0
+        ],
+        [
+          103.0,
+          203.0,
+          303.0
+        ]
+      ]
+    },
+    {
+      "name": "unchanged-one",
+      "tick": 100,
+      "vector": [
+        113,
+        213,
+        313
+      ],
+      "changed": true,
+      "beforeTicks": [
+        99,
+        98,
+        97
+      ],
+      "afterTicks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterVectors": [
+        [
+          113.0,
+          213.0,
+          313.0
+        ],
+        [
+          113.0,
+          213.0,
+          313.0
+        ],
+        [
+          102.0,
+          202.0,
+          302.0
+        ],
+        [
+          103.0,
+          203.0,
+          303.0
+        ]
+      ]
+    },
+    {
+      "name": "unchanged-two",
+      "tick": 101,
+      "vector": [
+        113,
+        213,
+        313
+      ],
+      "changed": false,
+      "beforeTicks": [
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterTicks": [
+        101,
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterVectors": [
+        [
+          113.0,
+          213.0,
+          313.0
+        ],
+        [
+          113.0,
+          213.0,
+          313.0
+        ],
+        [
+          113.0,
+          213.0,
+          313.0
+        ],
+        [
+          102.0,
+          202.0,
+          302.0
+        ],
+        [
+          103.0,
+          203.0,
+          303.0
+        ]
+      ]
+    },
+    {
+      "name": "change-again",
+      "tick": 102,
+      "vector": [
+        114,
+        214,
+        314
+      ],
+      "changed": true,
+      "beforeTicks": [
+        101,
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterTicks": [
+        102,
+        101,
+        100,
+        99,
+        98,
+        97
+      ],
+      "afterVectors": [
+        [
+          114.0,
+          214.0,
+          314.0
+        ],
+        [
+          113.0,
+          213.0,
+          313.0
+        ],
+        [
+          113.0,
+          213.0,
+          313.0
+        ],
+        [
+          113.0,
+          213.0,
+          313.0
+        ],
+        [
+          102.0,
+          202.0,
+          302.0
+        ],
+        [
+          103.0,
+          203.0,
+          303.0
+        ]
+      ]
+    }
+  ],
+  "captureReader": "reaudit-velocity-capture-fields.py decodes the same private histories after every native write.",
+  "limits": [
+    "Layout is bound to current native readers; history producers and live active mode are not inferred from this oracle.",
+    "Supplied rings establish search behavior, not observed live history or a trainer correction.",
+    "None of these supplied rings activates the three-point branch; its live activation and interpolation remain unverified.",
+    "Writer cases use captured ordinary wrapper flags but synthetic preallocated histories, supplied tick keys and vectors; allocation, time-offset producer and prediction caller are not executed."
+  ]
+}

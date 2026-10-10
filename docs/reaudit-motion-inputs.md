@@ -8,6 +8,10 @@ from the trainer's simulation and pointer events.
 
 ## Bob velocity and scene basis
 
+Follow-up: [pass 27](reaudit-motion-history.md) now binds the ordinary body-yaw
+writer to the movement service and executes the native velocity-history writer
+with supplied rings. The runtime phase and lifecycle gaps below remain open.
+
 The current client selects stored velocity or an evaluated interpolation cache
 using its interpolation mode, stage and packed history flags. In all three
 new captures every retained HUD update selects cache zero, whose timestamp
