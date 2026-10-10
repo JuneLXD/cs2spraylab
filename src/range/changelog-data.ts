@@ -341,6 +341,9 @@ export const latestChanges = {
       'When a Nova, XM1014 or Sawed-Off reload starts with shells still loaded, firing now respects the native initial attack lock and cancels the reload directly once ready.',
       'A short tap after readiness fires immediately. A tap released before readiness keeps the reload running in Range and Duel.',
     ]},
+    {id: 'native-ak-reload-clock', title: 'AK reload motion', items: [
+      'AK-47 reload motion now plays at its authored speed, while magazine insertion and firing readiness keep their existing timing.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

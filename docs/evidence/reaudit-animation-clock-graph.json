@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "scope": "Ordinary AK partial/empty first-person reload only",
+  "graph": {
+    "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+ak47.vnmgraph",
+    "sha256": "87908d9b2ff24890dc95503916452c64274f713b5452eda0497038ce1c7b1317",
+    "nodes": 459
+  },
+  "decodedClip": {
+    "path": "research/reaudit-animation/animation/anims/viewmodel/rifle/rifle_ak/reload_ak.vnmclip",
+    "sha256": "2b215e9df130368e007b3c7c707efff8ceba3f50a467da2fece3105722dc9326"
+  },
+  "compiledClipManifest": {
+    "path": "animation/anims/viewmodel/rifle/rifle_ak/reload_ak.vnmclip_c",
+    "crc": "00c67cf7ca",
+    "bytes": 27253,
+    "listingSha256": "cac53a8d185a272f941dec040fcc524d77d1a86f42dced2a5b21e40042458371"
+  },
+  "reloadPaths": [
+    {
+      "name": "partial_mag_reload",
+      "speed": 1,
+      "startSyncEventOffset": 0,
+      "path": [
+        "CNmGraphDocClipNode",
+        "CNmGraphDocClipSelectorNode",
+        "CNmGraphDocPoseResultNode"
+      ]
+    },
+    {
+      "name": "empty_mag_reload",
+      "speed": 1,
+      "startSyncEventOffset": 0,
+      "path": [
+        "CNmGraphDocClipNode",
+        "CNmGraphDocClipSelectorNode",
+        "CNmGraphDocPoseResultNode"
+      ]
+    },
+    {
+      "name": "partial_mag_reload",
+      "speed": 1,
+      "startSyncEventOffset": 0,
+      "path": [
+        "CNmGraphDocClipNode",
+        "CNmGraphDocClipSelectorNode",
+        "CNmGraphDocPoseResultNode"
+      ]
+    },
+    {
+      "name": "empty_mag_reload",
+      "speed": 1,
+      "startSyncEventOffset": 0,
+      "path": [
+        "CNmGraphDocClipNode",
+        "CNmGraphDocClipSelectorNode",
+        "CNmGraphDocPoseResultNode"
+      ]
+    }
+  ],
+  "transition": {
+    "blendSeconds": 0.2,
+    "timeMatchMode": "MatchSyncEventID",
+    "timeOffset": 0,
+    "clampToSource": false,
+    "targetSwitch": {
+      "input": "reload_stage",
+      "equals": "stage_outro",
+      "ifTrue": "WPN_RELOAD_OUTRO",
+      "ifFalse": ""
+    }
+  },
+  "eventTracks": 10,
+  "syncTracks": 0,
+  "insertionFrame": 33,
+  "unsynchronizedLayers": 3,
+  "conclusion": "Reload ClipNode paths have speed 1, no connected dynamic clip inputs, no temporal wrapper between clip and pose result, and no reload sync markers. Ordinary entry selects an empty sync target; outro alone selects WPN_RELOAD_OUTRO.",
+  "limits": [
+    "Graph entry/first-active-sample phase and empty-sync-target fallback are not measured by this resource inspection. Preserve existing trainer onset/blends; no exact native displayed-hand or audio alignment claim.",
+    "Decoded-resource SHA-256s and compiled listing CRC/size have different provenance. This probe validates retained exports/listing, not a new package extraction."
+  ]
+}

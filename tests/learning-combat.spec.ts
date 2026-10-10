@@ -214,16 +214,27 @@ test('native reload moves the hands and magazine, returns to idle, and keeps HUD
     const scene = e.viewRoot.children[0]; scene.updateMatrixWorld(true);
     const hand = scene.getObjectByName('hand_L');
     const position = hand.getWorldPosition(hand.position.clone()).toArray();
-    return {position, loaded: !!e.viewAnimation, ammo: weapon.ammo, reserve: weapon.reserve, reloading: weapon.reload.active, silent: weapon.reload.silent};
+    const reloadAction = e.viewAnimation.actions.get('reload');
+    return {position, loaded: !!e.viewAnimation, ammo: weapon.ammo, reserve: weapon.reserve,
+      reloading: weapon.reload.active, silent: weapon.reload.silent, work: weapon.reload.clock.position,
+      clipTime: reloadAction.time, clipDuration: reloadAction.getClip().duration};
   }, {remaining, held});
   const idle = await sample(0), midway = await sample(1.2);
   expect(idle.loaded).toBe(true);
   expect(midway).toMatchObject({ammo: 30, reserve: 60, reloading: true});
+  // The real Duel caller passes animation work in seconds: the authored AK
+  // clip must not be stretched across its longer mechanical reload lock.
+  expect(midway.clipTime).toBeCloseTo(midway.work, 8);
   expect(Math.hypot(...idle.position.map((v: number, i: number) => v - midway.position[i]))).toBeGreaterThan(.05);
   await page.locator('.duel-view').screenshot({path: `test-results/native-reload-${info.project.name}.png`});
   const held = await sample(1.2, true);
   expect(held).toMatchObject({ammo: 30, reloading: true, silent: true});
+  expect(held.clipTime).toBeCloseTo(held.work, 8);
   held.position.forEach((value: number, i: number) => expect(value).toBeCloseTo(midway.position[i], 5));
+  const tail = await sample(.01);
+  expect(tail).toMatchObject({ammo: 30, reloading: true});
+  expect(tail.clipTime).toBe(tail.clipDuration);
+  expect(tail.work).toBeGreaterThan(tail.clipDuration);
   const restored = await sample(0);
   expect(restored.position).toEqual(idle.position);
   await page.evaluate(() => {
@@ -234,7 +245,8 @@ test('native reload moves the hands and magazine, returns to idle, and keeps HUD
     const boxes = await page.locator('.duel-tools > *').evaluateAll(elements => elements.map(el => {
       const r = el.getBoundingClientRect(); return {x: r.x, y: r.y, w: r.width, h: r.height};
     }));
-    expect(boxes).toHaveLength(4);
+    // Current DuelStage has equipment slots, weapon actions and the pause hint.
+    expect(boxes).toHaveLength(3);
     for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
       const a = boxes[i], b = boxes[j];
       expect(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y).toBe(true);

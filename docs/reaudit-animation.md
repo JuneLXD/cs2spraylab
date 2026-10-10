@@ -204,3 +204,129 @@ Root integration reran both portable copies successfully under the same caps.
 Combined delivery validation: TypeScript passes, 2,363 units pass with only the
 known fallback-model fixture failure, and both targeted Chromium view-punch
 cases pass in 27.3 seconds. Production behavior and assets are unchanged.
+
+## Pass 31: ordinary AK reload clock
+
+The current first-person animation caller closes pass 29's external-rate gap
+for the ordinary AK reload. `ViewAnimation` now samples AK magazine reloads at
+their authored seconds, capped at the imported endpoint. The mechanical
+reload clock, ammo insertion, firing readiness, action onset and existing
+blends are unchanged. The last approximately 33.333 ms of the mechanical lock
+holds the authored endpoint while the existing tail fade continues. Other
+weapons, draw, fire and shell timing are unchanged.
+
+The primary native source is build 2000930 `libclient.so`, SHA-256
+`eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1`.
+`tools/reaudit-animation-clock-native.py` verifies that whole-file digest,
+35 instruction assertions, four RTTI class identities, six virtual targets
+and the tick conversion constant. Both the inline and queued AG2 workers
+obtain the same entity elapsed-time value before updating the graph context
+and evaluating its pose. Their post-evaluation virtual callback resolves to
+`C_CS2HudModelArms::AG2_PushAnimTransformsToSkeletonInstance`; this is the Arms
+graph chain, not an inferred relationship from a similarly named weapon field.
+
+For Arms, the owner-clock override gate returns false. Its graph clock selects
+the entity-domain tick; domain zero applies the game-rules pause adjustment.
+The controller stores that selected tick and advances by
+`max(previousTick == 0 ? 1 : selectedTick - previousTick, 0) / 64` seconds.
+The update context stores that elapsed value unchanged before the graph-root
+update. Neither the mechanical reload lock nor a legacy sequence playback-rate
+value multiplies this path. This establishes the steady **1× graph clock
+against unpaused game ticks**, independently of render cadence.
+
+A bounded private native replay executes tick selection, pause accounting,
+the Arms gate, stored-tick mutation, clamping, conversion and the context delta
+write. All 40 cases match exactly: first update, ordinary advance, repeated
+tick, rewind, missed ticks, zero first tick and two pause-domain cases, each
+with five independent synthetic legacy-rate values. Only controller/owner
+object lookup is shimmed. These are supplied-state native executions, not
+observations of a live reload. The portable result is
+`docs/evidence/reaudit-animation-clock-native.json`.
+
+`tools/reaudit-animation-clock-graph.mjs` independently reparses the retained
+current-build AK graph and decoded reload event resource. It asserts all four
+partial/empty reload paths: ClipNode speed 1, no connected dynamic inputs,
+zero start-sync offset, no looping or variation override, and direct
+ClipNode → ClipSelector → PoseResult output. The reload entry has a 200 ms
+blend and `MatchSyncEventID`, but its target switch selects an empty ID for
+ordinary reload; only `reload_stage == stage_outro` selects
+`WPN_RELOAD_OUTRO`. All ten AK event tracks are non-sync tracks and contain no
+reload-loop/outro markers. The three graph layer settings are unsynchronized.
+The exact graph/resource hashes and compiled clip listing CRC/size are retained
+separately in `docs/evidence/reaudit-animation-clock-graph.json`; a decoded
+resource hash is not a compiled-asset hash. No new extraction was required.
+
+The updated runtime probe finds the event crossing by bisecting actual
+`ViewAnimation` action-time samples, rather than presuming a duration ratio.
+Both before and after runs use `NativeReloadState` and imported GLB durations:
+
+| Measurement | Before | After |
+| --- | ---: | ---: |
+| AK clip time at 1.1 s of ordinary reload work | 1.08513501685 s | 1.10000000000 s |
+| Frame-33 pose crossing from the trainer action clock | 1.115068614703 s | 1.100000000000 s |
+| Crossing minus the 1.1 s gameplay ammo event | 15.068614703 ms | below 0.000001 ms |
+| Mechanical reload lock | 2.466667 s | 2.466667 s |
+| Ammo at the insertion event | 30 | 30 |
+
+The measured crossing bracket is narrower than 1e-10 seconds in each run.
+All 60 other clock-probe rows are identical, including AWP insertion, draw,
+shell phases and 16 fire samples (maximum authored-clock error 2.78e-17 s).
+`docs/evidence/reaudit-ak-reload-clock.json` retains the compact before/after
+rows, both crossing brackets, source hashes, probe hash and checks. The
+unchanged before source hash is
+`d2eca9451940d34fb75014fa20bf34d4a7e460b733ca06349bd6f546d96c5adc`;
+the complete retained before result hash is
+`3d190405cd2a947f9f38d5b730e5dcba2004e8c1b9f5b1e7f07bf8ea87263cbd`.
+Full local runs are under
+`../native-audit/reports/animation-clock-trace/runtime-clock-{before,after}.json`.
+
+Focused regressions evaluate synchronized hand and weapon bone tracks through
+the real mixer and reload controller. Partial and empty reloads reach the
+insertion pose with the ammo update; onset fade, endpoint hold, tail fade,
+readiness and completion remain covered. Other magazine weapons and legacy
+callers retain proportional sampling. Four new test cases and four changelog
+cases pass; integration/browser validation is recorded by the main audit.
+
+**Remaining boundary:** native first-active reload sample, empty-sync-target
+fallback, transition phase and absolute displayed onset are still unmeasured.
+This change removes a proportional clock slowdown; it does not fit or claim
+an exact native hand/display offset. The native Arms clock proof does not
+enumerate every other viewmodel entity's clock branch. Full skeleton blending
+and reload audio alignment are also outside this correction; the audio
+timeline and existing presentation blends are preserved. Native held/silent
+reload mapping is not newly certified by these ordinary-reload comparisons.
+
+Reproduce serially from the repository under the host caps:
+
+```sh
+systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% python3 tools/reaudit-animation-clock-native.py --portable-out docs/evidence/reaudit-animation-clock-native.json
+systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% node tools/reaudit-animation-clock-graph.mjs
+systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% node tools/reaudit-animation-timing-runtime.mjs
+systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% python3 tools/reaudit-ak-reload-clock-report.py --after ../native-audit/reports/animation-timing/runtime-clock-results.json
+systemd-run --user --scope --quiet -p MemoryMax=2G -p MemorySwapMax=0 -p CPUQuota=100% npx vitest run src/range/view-animation-ak-reload.test.ts src/range/changelog.test.ts --maxWorkers=1
+```
+
+The native replay requires the retained native-audit Python dependencies and
+matching local client binary. Resource checks require the retained graph/event
+exports and listing. The timing probe consumes pass 29's metadata output;
+regenerate it with `tools/reaudit-animation-timing-metadata.mjs` if absent.
+The report requires the hash-pinned historical before result and the new after
+result. No game, browser, exporter or native-analysis provider was launched by
+this pass.
+
+
+## Passes 30–31 integration validation
+
+TypeScript passes. The full unit suite has 2,367 passes and only the documented
+missing `public/models/ak47.json` fallback fixture failure. Both Chromium
+camera/viewmodel cases pass. The actual Duel reload case verifies authored
+seconds, endpoint hold during the lock, held-work continuity, return to idle
+and nonoverlapping HUD controls at three viewport sizes. Its initial run
+passed the animation assertions and exposed a stale four-group HUD count;
+`DuelStage` contains three groups. The corrected test passes in 9.3 seconds.
+Production UI behavior was not changed to accommodate the test.
+
+Native/graph/fixture probes pass, and current source/fixture/probe hashes are
+consistent. Heavy jobs ran serially under memory/swap/CPU caps with deploy
+paused and all repository edits frozen during browser runs. Logs use the local
+`reaudit-controller-ak-{typescript,unit,browser,browser-reload}` prefix.

@@ -1,0 +1,270 @@
+{
+  "schema": 1,
+  "scope": "AK magazine reload rate only; actual ViewAnimation clock",
+  "probe": {
+    "path": "tools/reaudit-animation-timing-runtime.mjs",
+    "sha256": "416d9403396be4774c4c4a08a94a81952d87c9f419f1e3985ecf7237b69fb692"
+  },
+  "metadataSha256": "ab0b3056716cbbfcc238fece7cd73787f5c25c374f3a9ec0ad19f81e521fb045",
+  "before": {
+    "resultSha256": "3d190405cd2a947f9f38d5b730e5dcba2004e8c1b9f5b1e7f07bf8ea87263cbd",
+    "sources": [
+      {
+        "path": "src/range/view-animation.ts",
+        "sha256": "d2eca9451940d34fb75014fa20bf34d4a7e460b733ca06349bd6f546d96c5adc"
+      },
+      {
+        "path": "src/range/weapon-actions.ts",
+        "sha256": "b11a027fbc071e594e7e295cffa6ce3a0103c064aaf09e9370379d9aa5beda20"
+      },
+      {
+        "path": "src/range/reload-clock.ts",
+        "sha256": "c8a35cd1d5603db064d86fc22a262917d7274f9dd79c5d4d9b271feccd296188"
+      },
+      {
+        "path": "src/range/native-view-actions.ts",
+        "sha256": "147029abe01236312a1d3b784364b07e6f7e81dce3835be5783be697515be476"
+      },
+      {
+        "path": "src/range/native-reload-presentation.json",
+        "sha256": "55971a004b55f2d765169098224f48acfcb5ea6643eb9ae22a1e726a015d8167"
+      },
+      {
+        "path": "src/range/native-reload-timing.json",
+        "sha256": "87e13cd83fbc6ae67895d0e13152ebf5840c1ec6ca4f57eceab1eea613207a36"
+      },
+      {
+        "path": "src/range/engine.ts",
+        "sha256": "baf6b332c64eb47a3e427230500bcf4f13fe30a923e0f10e705505b6e5b61478"
+      },
+      {
+        "path": "src/range/duel/DuelEngine.ts",
+        "sha256": "88fc8252770c167418db5723b3bd7335d3fe446c077f5aa063d82111437660a1"
+      },
+      {
+        "path": "src/range/sound-model.ts",
+        "sha256": "712620fc194f6c8e87cd8dac7de3d0ae8cc72d48969476f732969f0125a26531"
+      }
+    ],
+    "rows": [
+      {
+        "id": "ak47",
+        "kind": "reload",
+        "phase": "magazine",
+        "time": 0.61666675,
+        "duration": 2.466667,
+        "progress": 0.25,
+        "work": 0.61666675,
+        "ammo": 28,
+        "action": "reload",
+        "clock": 0.6083333492279053,
+        "weight": 1,
+        "pose": 0.6083333492279053
+      },
+      {
+        "id": "ak47",
+        "kind": "reload",
+        "phase": "magazine",
+        "time": 1.2333335,
+        "duration": 2.466667,
+        "progress": 0.5,
+        "work": 1.2333335,
+        "ammo": 30,
+        "action": "reload",
+        "clock": 1.2166666984558105,
+        "weight": 1,
+        "pose": 1.2166666984558105
+      },
+      {
+        "id": "ak47",
+        "kind": "reload",
+        "phase": "magazine",
+        "time": 1.8500002500000001,
+        "duration": 2.466667,
+        "progress": 0.75,
+        "work": 1.8500002500000001,
+        "ammo": 30,
+        "action": "reload",
+        "clock": 1.8250000476837158,
+        "weight": 1,
+        "pose": 1.8250000476837158
+      },
+      {
+        "id": "ak47",
+        "kind": "ammo-event",
+        "gameplayInsert": 1.1,
+        "authoredInsert": 1.1,
+        "action": "reload",
+        "clock": 1.0851350168477476,
+        "weight": 1,
+        "pose": 1.0851350168477476,
+        "ammo": 30,
+        "phaseDuration": 2.466667,
+        "visualInsertWallTime": 1.115068614703043,
+        "crossingBracket": [
+          1.1150686147007995,
+          1.115068614703043
+        ],
+        "clockBefore": 1.0999999999997696,
+        "clockAfter": 1.100000000001983
+      },
+      {
+        "id": "awp",
+        "kind": "ammo-event",
+        "gameplayInsert": 2,
+        "authoredInsert": 2,
+        "action": "reload",
+        "clock": 1.9999998615306636,
+        "weight": 1,
+        "pose": 1.9999998615306636,
+        "ammo": 5,
+        "phaseDuration": 3.666667,
+        "visualInsertWallTime": 2.000000138471316,
+        "crossingBracket": [
+          2.000000138467981,
+          2.000000138471316
+        ],
+        "clockBefore": 1.9999999999986349,
+        "clockAfter": 2.00000000000197
+      }
+    ]
+  },
+  "after": {
+    "resultSha256": "70886aac128087150417132a1955bf112bfffa0c901a19c6814b3b7956d514b0",
+    "sources": [
+      {
+        "path": "src/range/view-animation.ts",
+        "sha256": "e4b65227d605d14fac214c4553a846a78717be5464c0fb88f133cfc99f864c73"
+      },
+      {
+        "path": "src/range/weapon-actions.ts",
+        "sha256": "b11a027fbc071e594e7e295cffa6ce3a0103c064aaf09e9370379d9aa5beda20"
+      },
+      {
+        "path": "src/range/reload-clock.ts",
+        "sha256": "c8a35cd1d5603db064d86fc22a262917d7274f9dd79c5d4d9b271feccd296188"
+      },
+      {
+        "path": "src/range/native-view-actions.ts",
+        "sha256": "147029abe01236312a1d3b784364b07e6f7e81dce3835be5783be697515be476"
+      },
+      {
+        "path": "src/range/native-reload-presentation.json",
+        "sha256": "55971a004b55f2d765169098224f48acfcb5ea6643eb9ae22a1e726a015d8167"
+      },
+      {
+        "path": "src/range/native-reload-timing.json",
+        "sha256": "87e13cd83fbc6ae67895d0e13152ebf5840c1ec6ca4f57eceab1eea613207a36"
+      },
+      {
+        "path": "src/range/engine.ts",
+        "sha256": "baf6b332c64eb47a3e427230500bcf4f13fe30a923e0f10e705505b6e5b61478"
+      },
+      {
+        "path": "src/range/duel/DuelEngine.ts",
+        "sha256": "88fc8252770c167418db5723b3bd7335d3fe446c077f5aa063d82111437660a1"
+      },
+      {
+        "path": "src/range/sound-model.ts",
+        "sha256": "712620fc194f6c8e87cd8dac7de3d0ae8cc72d48969476f732969f0125a26531"
+      }
+    ],
+    "rows": [
+      {
+        "id": "ak47",
+        "kind": "reload",
+        "phase": "magazine",
+        "time": 0.61666675,
+        "duration": 2.466667,
+        "progress": 0.25,
+        "work": 0.61666675,
+        "ammo": 28,
+        "action": "reload",
+        "clock": 0.61666675,
+        "weight": 1,
+        "pose": 0.6166667500000002
+      },
+      {
+        "id": "ak47",
+        "kind": "reload",
+        "phase": "magazine",
+        "time": 1.2333335,
+        "duration": 2.466667,
+        "progress": 0.5,
+        "work": 1.2333335,
+        "ammo": 30,
+        "action": "reload",
+        "clock": 1.2333335,
+        "weight": 1,
+        "pose": 1.2333335000000003
+      },
+      {
+        "id": "ak47",
+        "kind": "reload",
+        "phase": "magazine",
+        "time": 1.8500002500000001,
+        "duration": 2.466667,
+        "progress": 0.75,
+        "work": 1.8500002500000001,
+        "ammo": 30,
+        "action": "reload",
+        "clock": 1.8500002500000001,
+        "weight": 1,
+        "pose": 1.8500002500000001
+      },
+      {
+        "id": "ak47",
+        "kind": "ammo-event",
+        "gameplayInsert": 1.1,
+        "authoredInsert": 1.1,
+        "action": "reload",
+        "clock": 1.1,
+        "weight": 1,
+        "pose": 1.1,
+        "ammo": 30,
+        "phaseDuration": 2.466667,
+        "visualInsertWallTime": 1.1000000000003727,
+        "crossingBracket": [
+          1.0999999999981294,
+          1.1000000000003727
+        ],
+        "clockBefore": 1.0999999999981294,
+        "clockAfter": 1.1
+      },
+      {
+        "id": "awp",
+        "kind": "ammo-event",
+        "gameplayInsert": 2,
+        "authoredInsert": 2,
+        "action": "reload",
+        "clock": 1.9999998615306636,
+        "weight": 1,
+        "pose": 1.9999998615306636,
+        "ammo": 5,
+        "phaseDuration": 3.666667,
+        "visualInsertWallTime": 2.000000138471316,
+        "crossingBracket": [
+          2.000000138467981,
+          2.000000138471316
+        ],
+        "clockBefore": 1.9999999999986349,
+        "clockAfter": 2.00000000000197
+      }
+    ]
+  },
+  "checks": {
+    "unchangedOtherClockRows": 60,
+    "fire": {
+      "fireSamples": 16,
+      "maxFireClockError": 2.7755575615628914e-17,
+      "currentManifestMatches": 20
+    },
+    "beforeInsertionDriftMs": 15.068614703042993,
+    "afterInsertionDriftMs": 3.7259084706420253e-10
+  },
+  "limits": [
+    "Visual event crossing is measured relative to the trainer action clock, not native displayed onset.",
+    "The synthetic tracks measure clock and mixer behavior; this is not a newly captured full native skeleton or audio comparison.",
+    "Native steady rate is supported separately by current-byte graph-clock proof and resource graph assertions."
+  ]
+}

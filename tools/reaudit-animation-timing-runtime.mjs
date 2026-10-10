@@ -21,6 +21,24 @@ function fixture(id) {
  const sample=()=>({action:view.activeAction,clock:view.actions.get(view.activeAction)?.time,weight:view.actions.get(view.activeAction)?.getEffectiveWeight(),pose:target.position.x});
  return {view,durations,sample};
 }
+function reloadAt(id, elapsed) {
+ const state=new NativeReloadState(id);state.ammo=1;state.start(0,false);state.advance(elapsed,false);
+ const f=fixture(id);
+ f.view.update(state.until-elapsed,state.phaseDuration,elapsed,{equipment:id,reloadPhase:state.phase,reloadProgress:state.progress});
+ const result={...f.sample(),ammo:state.ammo,phaseDuration:state.phaseDuration};
+ f.view.dispose();return result;
+}
+function eventCrossing(id, authoredTime, duration) {
+ // Search the clock sampled from actual ViewAnimation evaluations. Do not
+ // assume a duration ratio: an endpoint hold or piecewise retiming invalidates it.
+ let before=0,after=duration-1e-6;
+ assert(reloadAt(id,before).clock<authoredTime && reloadAt(id,after).clock>=authoredTime);
+ for(let i=0;i<40;i++) {
+  const at=(before+after)/2;
+  if(reloadAt(id,at).clock>=authoredTime)after=at;else before=at;
+ }
+ return {visualInsertWallTime:after,crossingBracket:[before,after],clockBefore:reloadAt(id,before).clock,clockAfter:reloadAt(id,after).clock};
+}
 const rows=[];
 for(const id of Object.keys(metadata.weapons)) {
  const w=metadata.weapons[id];
@@ -51,9 +69,8 @@ for(const id of Object.keys(metadata.weapons)) {
  // Measure visual pose's authored insertion instant against controller ammo event.
  if(id==='ak47'||id==='awp') {
   const insert=metadata.weapons[id].events.reload.doc.m_eventTracks.flatMap(t=>t.m_events).find(e=>e.m_ID==='WPN_RELOAD_ADD_AMMO').m_flStartTime/30;
-  const s=new NativeReloadState(id);s.ammo=1;s.start(0,false);s.advance(insert,false);
-  const v=fixture(id);v.view.update(s.until-insert,s.phaseDuration,insert,{equipment:id,reloadPhase:s.phase,reloadProgress:s.progress});
-  rows.push({id,kind:'ammo-event',gameplayInsert:insert,ammo:s.ammo,authoredInsert:insert,...v.sample(),visualInsertWallTime:insert*s.phaseDuration/v.durations.reload});v.view.dispose();
+  const sample=reloadAt(id,insert);
+  rows.push({id,kind:'ammo-event',gameplayInsert:insert,authoredInsert:insert,...sample,...eventCrossing(id,insert,sample.phaseDuration)});
  }
 }
 const files=['src/range/view-animation.ts','src/range/weapon-actions.ts','src/range/reload-clock.ts','src/range/native-view-actions.ts','src/range/native-reload-presentation.json','src/range/native-reload-timing.json','src/range/engine.ts','src/range/duel/DuelEngine.ts','src/range/sound-model.ts'];
@@ -63,6 +80,6 @@ const maxFireClockError=Math.max(...fireRows.map(r=>Math.abs(r.clock-r.expectedO
 assert(maxFireClockError < 1e-12, 'Fire playback no longer preserves the authored clip clock');
 const manifestRows=Object.values(metadata.weapons).flatMap(w=>Object.values(w.clips));
 assert(manifestRows.length===20 && manifestRows.every(c=>c.matchesCurrentManifest), 'Current native clip manifest differs from imported inventory');
-const result={schema:1,checks:{fireSamples:fireRows.length,maxFireClockError,currentManifestMatches:manifestRows.length},method:'Actual ViewAnimation and NativeReloadState with linear clock tracks and measured imported GLB duration. Tests trainer clock only, not native live graph execution or full skeleton poses.',sources,rows};
+const result={schema:2,checks:{fireSamples:fireRows.length,maxFireClockError,currentManifestMatches:manifestRows.length},method:'Actual ViewAnimation and NativeReloadState with linear clock tracks and measured imported GLB duration. Event crossing is bisected from actual action clocks, not a presumed duration ratio. Tests trainer clock only, not native live graph execution or full skeleton poses.',probeSha256:crypto.createHash('sha256').update(fs.readFileSync(import.meta.filename)).digest('hex'),metadataSha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(output,'metadata-results.json'))).digest('hex'),sources,rows};
 fs.writeFileSync(path.join(output,'runtime-clock-results.json'),JSON.stringify(result,null,2)+'\n');
 for(const row of rows)if(row.kind==='ammo-event'||row.kind==='draw'&&row.loadDelay===.25||row.kind==='reload'&&Math.abs(row.progress-.5)<1e-8||row.kind==='fire')console.log(JSON.stringify(row));
