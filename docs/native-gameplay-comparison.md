@@ -951,7 +951,7 @@ no repository files changed during browser execution.
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph
 composition `9b94483`, accuracy/index `fd328d5`, ordinary footsteps `2aba70c`,
-weapon recoil rotation `5132783`.
+weapon recoil rotation `5132783`, airborne weapon motion `4e999d9`.
 The [consolidated inventory](cs2-reaudit.md) retains one row per audited mechanic
 with rule/evidence, before/after, status and commit, plus corrected claims and
 exact unresolved measurements. Further R8 work is excluded at the user's request.
