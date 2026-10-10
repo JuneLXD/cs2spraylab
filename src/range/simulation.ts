@@ -13,7 +13,7 @@ import {TERRAIN_RULES} from './terrain';
 import {resolveDamage} from './duel/damage';
 import {NativeReloadState, WeaponActions, type ReloadActionEvent} from './weapon-actions';
 import {reloadInputAllows, usesNativeReloadInput} from './reload-input';
-import {POP_SPAWN, PopField, popConfig} from './pop';
+import {POP_SPAWN, PopField, popConfig, popSpawn} from './pop';
 
 export {DEG, GRAVITY, JUMP_SPEED, STEP, UNIT, airVelocity, groundVelocity, idleInput, direction};
 export const VERTICAL_FOV = 2 * Math.atan(.75) / DEG;
@@ -183,7 +183,7 @@ export class Simulation {
   configure(s: Settings, measured?: MeasuredProfile) {
     const changedMode = s.mode !== this.settings.mode;
     // Raising or moving the peek wall puts you back behind it: you may be standing where it goes up.
-    const changedWall = s.mode === 'pop' && s.popWall !== this.settings.popWall;
+    const changedWall = s.mode === 'pop' && (s.popWall !== this.settings.popWall || s.popWallWidth !== this.settings.popWallWidth);
     const leavingPositionedDrill = isDrillMode(this.settings.mode) || this.settings.mode === 'pop';
     this.cancel(); this.settings = s; this.measured = measured;
     if (!s.primaryEnabled && this.slot === 1) this.slot = 2;
@@ -207,7 +207,7 @@ export class Simulation {
       // A fresh simulation starts in Pop too (the constructor configures with the mode already set).
       if (changedMode || !this.popPlaced || changedWall) {
         this.popPlaced = true;
-        this.position = {...POP_SPAWN}; this.yaw = this.pitch = this.feet = this.verticalVelocity = this.duckAmount = 0;
+        this.position = popSpawn(popConfig(s), POP_SPAWN); this.yaw = this.pitch = this.feet = this.verticalVelocity = this.duckAmount = 0;
         this.duckFlag = false;
         this.velocity = {x: 0, z: 0}; this.eyeHeight = 64 * UNIT; this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0;
         this.duckViewOffset = this.duckRootOffset = 0;

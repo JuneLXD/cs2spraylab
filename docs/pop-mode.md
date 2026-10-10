@@ -69,3 +69,8 @@ ones every other range drill uses.
   player)` (the simulation passes its position) spawns every waiting ball the moment the player steps onto the pad
   (`POP_PAD.radius` 0.45 m around `POP_SPAWN`), edge-triggered so standing on it does nothing and a session never
   starts by triggering it. The engine draws it as a flat ring (`pop-pad`) that turns yellow while balls are waiting.
+- Wall width and the pad (same day): `popWallWidth` (0.6-8 m, default 3) is the wall's x extent: a one-sided wall keeps
+  its edge 0.35 m past the shoulder of `POP_SPAWN` and runs that wide the other way; the pillar is that wide and centred
+  on `POP_SPAWN` (its 1.6 m fixed width is gone). `popPad()` and `popSpawn()` put the pad and your start position at the
+  wall's centre x (`POP_SPAWN.x` with no wall), so you begin behind cover and step out past the edge; changing the wall
+  or its width re-places you there. The ball field still hangs off the edge (peek line), not the spawn.

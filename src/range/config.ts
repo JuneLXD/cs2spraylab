@@ -84,6 +84,8 @@ export type Settings = {
   popMuteGun: boolean; popHideImpacts: boolean; popHideHud: boolean;
   /** Pop: the backdrop colour behind the balls, bullets a ball takes before it pops, and which side the peek wall opens to. */
   popBackground: string; popHits: number; popWall: PopWallSide;
+  /** Pop: the peek wall's width in metres. */
+  popWallWidth: number;
   /** Pop: how popped balls come back (after `popRespawn` seconds, or when you step on the pad) and ball movement per
    * axis: speed (m/s), range each way from where the ball appeared (m) and sudden direction changes per second. */
   popRespawn: number; popRespawnMode: PopRespawnMode; popMoveX: number; popRangeX: number; popFlipX: number;
@@ -118,7 +120,7 @@ export const defaults: Settings = {
   viewmodel: classicViewmodel,
   tracers: 'native',
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
-  popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0,
+  popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0,
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -177,6 +179,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     popBackground: typeof s.popBackground === 'string' && /^#[\da-f]{6}$/i.test(s.popBackground) ? s.popBackground.toLowerCase() : defaults.popBackground,
     popHits: Math.round(numeric(s.popHits, defaults.popHits, 1, 10)), popWall: s.popWall === 'left' || s.popWall === 'right' || s.popWall === 'both' ? s.popWall : 'off',
     popRespawn: Math.round(numeric(s.popRespawn, defaults.popRespawn, 0, 5) * 10) / 10,
+    popWallWidth: Math.round(numeric(s.popWallWidth, defaults.popWallWidth, .6, 8) * 10) / 10,
     popRespawnMode: s.popRespawnMode === 'pad' ? 'pad' : 'timer',
     popMoveX: Math.round(numeric(s.popMoveX, defaults.popMoveX, 0, 6) * 10) / 10, popRangeX: Math.round(numeric(s.popRangeX, defaults.popRangeX, 0, 5) * 10) / 10,
     popFlipX: Math.round(numeric(s.popFlipX, defaults.popFlipX, 0, 4) * 10) / 10, popMoveY: Math.round(numeric(s.popMoveY, defaults.popMoveY, 0, 4) * 10) / 10,

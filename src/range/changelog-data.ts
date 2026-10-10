@@ -394,6 +394,10 @@ export const latestChanges = {
       'Peek wall "Both sides": a 1.6 m pillar straight ahead with a marked edge on each side, so you can step out left or right; the balls stay centred.',
       'Ball respawn "When you step on the pad behind cover": popped balls wait until you step onto the ring at your spawn point, which lights up while balls are waiting.',
     ]},
+    {id: 'pop-wall-width', title: 'Pop: peek wall width', items: [
+      'Peek wall width (0.6-8 m): a one-sided wall keeps its edge past your shoulder and runs that wide the other way; the pillar is that wide, centred.',
+      'You start, and the respawn pad sits, centred behind the wall instead of at its edge, so every peek starts from cover.',
+    ]},
     {id: 'duel-aggressive-bots', title: 'Aggressive duel bots', items: [
       'Aggressive bots never hold: they peek as soon as they reach an angle, chase the last place they saw you after a burst loses its target, and sweep the forward crates and lane edges within 1.5 s of losing contact instead of waiting at cover.',
     ]},

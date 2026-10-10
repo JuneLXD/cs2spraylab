@@ -503,7 +503,7 @@ export class RangeEngine {
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popRespawn', 'popRespawnMode', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY'];
+      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popRespawn', 'popRespawnMode', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();

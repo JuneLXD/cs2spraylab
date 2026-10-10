@@ -100,7 +100,7 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
     return {shots: sim.pop.shots, hits: sim.pop.hits, pops: sim.pop.pops, ballHits: sim.pop.balls.find((b: {id: number}) => b.id === ball.id)?.hits, caption: engine.hitCaption.textContent};
   });
   expect(walled.hits).toBe(3); expect(walled.respawn).toBe(1.5); expect(walled.moveX).toEqual({speed: 2, range: 1.5, flips: 1}); expect(walled.moving).toBe(true); expect(walled.wall).toBe(true); expect(walled.background).toBe('f0f0ec'); expect(walled.benches).toBe(false);
-  expect(walled.spawn.x).toBe(0); expect(walled.spawn.z).toBe(2);
+  expect(walled.spawn.x).toBeCloseTo(1.15, 5); expect(walled.spawn.z).toBe(2);   // centred behind the 3 m wall
   expect(walled.blocked).toEqual({shots: 1, hits: 0, caption: 'MISS'});
   expect(struck).toEqual({shots: 2, hits: 1, pops: 0, ballHits: 1, caption: 'HIT'});
   // The master volume in the top bar is the same level as the Audio setting.

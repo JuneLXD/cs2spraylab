@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {POP_SPAWN, PopField, popConfig, popRegion, popWall, rayBoxDistance} from './pop';
+import {POP_SPAWN, PopField, popConfig, popPad, popRegion, popSpawn, popWall, rayBoxDistance} from './pop';
 import {defaults, sanitizeSettings} from './config';
 import {Simulation} from './simulation';
 import {drillSetupSummary, rangeDrillDefaults} from './ui/drill-setup';
@@ -84,23 +84,35 @@ describe('pop field', () => {
 describe('pop peek wall and hits to pop', () => {
   const base = {...defaults, popSize: 40, popCount: 3, popSpacing: 1, popDistance: 10, popHits: 1, popWall: 'off' as const};
   it('raises a 3 m wall 1.5 m ahead with its edge past the chosen shoulder, and centres the balls on the peek line', () => {
-    expect(popWall({wall: 'off'}, POP_SPAWN)).toBeUndefined();
-    const left = popWall({wall: 'left'}, POP_SPAWN)!, right = popWall({wall: 'right'}, POP_SPAWN)!;
+    expect(popWall({wall: 'off', wallWidth: 3}, POP_SPAWN)).toBeUndefined();
+    const left = popWall({wall: 'left', wallWidth: 3}, POP_SPAWN)!, right = popWall({wall: 'right', wallWidth: 3}, POP_SPAWN)!;
     expect(left.side).toBe(-1); expect(left.edges).toEqual([-.35]); expect(left.center).toEqual({x: 1.15, y: 1.4, z: .5});
     expect(left.size).toEqual({x: 3, y: 2.8, z: .4});
     expect(right.side).toBe(1); expect(right.edges).toEqual([.35]); expect(right.center.x).toBeCloseTo(-1.15);
     expect(popRegion(popConfig({...base, popWall: 'left'}), POP_SPAWN).x).toBeCloseTo(-1);
     expect(popRegion(popConfig({...base, popWall: 'right'}), POP_SPAWN).x).toBeCloseTo(1);
     expect(popRegion(popConfig(base), POP_SPAWN).x).toBe(0);
-    // Both sides: a pillar centred on you with an edge each way; the balls stay centred.
-    const both = popWall({wall: 'both'}, POP_SPAWN)!;
+    // Both sides: a pillar centred on the spawn with an edge each way; the balls stay centred.
+    const both = popWall({wall: 'both', wallWidth: 1.6}, POP_SPAWN)!;
     expect(both.side).toBe(0); expect(both.edges).toEqual([-.8, .8]); expect(both.center).toEqual({x: 0, y: 1.4, z: .5});
     expect(both.size).toEqual({x: 1.6, y: 2.8, z: .4});
     expect(popRegion(popConfig({...base, popWall: 'both'}), POP_SPAWN).x).toBe(0);
-    const pillar = new PopField(popConfig({...base, popWall: 'both'}), POP_SPAWN, lcg(5)), ahead = {x: 0, y: 0, z: -1};
+    const pillar = new PopField(popConfig({...base, popWall: 'both', popWallWidth: 1.6}), POP_SPAWN, lcg(5)), ahead = {x: 0, y: 0, z: -1};
     expect(pillar.wallHit(POP_SPAWN, ahead)?.distance).toBeCloseTo(1.3, 6);
     expect(pillar.wallHit({x: -1.3, y: POP_SPAWN.y, z: POP_SPAWN.z}, ahead)).toBeUndefined();
     expect(pillar.wallHit({x: 1.3, y: POP_SPAWN.y, z: POP_SPAWN.z}, ahead)).toBeUndefined();
+    // The width slider: a one-sided wall keeps its edge and grows the other way; the pillar grows both ways. You start
+    // and the pad sits centred behind the wall, while the ball field still hangs off the edge.
+    const wide = popWall({wall: 'left', wallWidth: 5}, POP_SPAWN)!;
+    expect(wide.edges).toEqual([-.35]); expect(wide.size.x).toBe(5); expect(wide.center.x).toBeCloseTo(2.15);
+    expect(popWall({wall: 'both', wallWidth: 3}, POP_SPAWN)!.edges).toEqual([-1.5, 1.5]);
+    expect(popPad({wall: 'left', wallWidth: 5}, POP_SPAWN)).toEqual({x: 2.15, z: 2, radius: .45});
+    expect(popPad({wall: 'both', wallWidth: 3}, POP_SPAWN)).toEqual({x: 0, z: 2, radius: .45});
+    expect(popPad({wall: 'off', wallWidth: 3}, POP_SPAWN)).toEqual({x: 0, z: 2, radius: .45});
+    expect(popSpawn({wall: 'right', wallWidth: 3}, POP_SPAWN)).toEqual({x: -1.15, y: POP_SPAWN.y, z: 2});
+    expect(popRegion(popConfig({...base, popWall: 'left', popWallWidth: 5}), POP_SPAWN).x).toBeCloseTo(-1);
+    expect(sanitizeSettings({}).popWallWidth).toBe(3);
+    expect([sanitizeSettings({popWallWidth: 0}).popWallWidth, sanitizeSettings({popWallWidth: 99}).popWallWidth, sanitizeSettings({popWallWidth: 2.26}).popWallWidth]).toEqual([.6, 8, 2.3]);
   });
 
   it('stops bullets at the wall from behind it and lets them through once you have stepped out', () => {
@@ -150,7 +162,7 @@ describe('pop peek wall and hits to pop', () => {
     expect(sanitizeSettings({popRespawnMode: 'later'}).popRespawnMode).toBe('timer');
     expect(rangeDrillDefaults('pop')).toMatchObject({popHits: 1, popWall: 'off', popBackground: '#151a28'});
     const botz = sanitizeBotzConfig({}), duel = sanitizeDuelConfig({});
-    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popHits: 4, popWall: 'left', popRespawn: 1.5, popMoveX: 2, popMoveY: .5}), botz, duel)).toContain('4 hits to pop · peek wall, left · 1.5 s respawn · 2 m/s ±1.5 m left-right · 0.5 m/s ±0.5 m up-down');
+    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popHits: 4, popWall: 'left', popRespawn: 1.5, popMoveX: 2, popMoveY: .5}), botz, duel)).toContain('4 hits to pop · peek wall, left, 3 m · 1.5 s respawn · 2 m/s ±1.5 m left-right · 0.5 m/s ±0.5 m up-down');
     expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popRespawnMode: 'pad', popRespawn: 2, popMoveX: 2, popRangeX: 0}), botz, duel)).toContain(' · respawn on the pad · never reload');
     expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popRespawnMode: 'pad', popRespawn: 2, popMoveX: 2, popRangeX: 0}), botz, duel)).not.toMatch(/2 s respawn|left-right/);
     expect(drillSetupSummary(sanitizeSettings({mode: 'pop'}), botz, duel)).not.toMatch(/hits to pop|peek wall|respawn|m\/s/);
@@ -159,6 +171,10 @@ describe('pop peek wall and hits to pop', () => {
   it('blocks walking through the wall and puts you back behind it when the wall changes', () => {
     const sim = new Simulation({...defaults, mode: 'pop', weapon: 'ak47', popWall: 'left'});
     expect(sim.environment.solids.map(solid => solid.id)).toContain('pop-wall');
+    expect(sim.position).toEqual({x: 1.15, y: POP_SPAWN.y, z: 2});       // centred behind the 3 m wall
+    sim.configure({...sim.settings, popWallWidth: 5});
+    expect(sim.position.x).toBeCloseTo(2.15);
+    sim.configure({...sim.settings, popWallWidth: 3});
     sim.active = true; sim.input = {...sim.input, forward: 1};
     for (let t = 0; t < 2; t += .25) sim.advance(.25);
     // The wall's near face is at z = 0.7; the hull radius keeps you about 0.4 m from it.

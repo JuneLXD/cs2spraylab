@@ -4,14 +4,15 @@ import {DEG, UNIT, type Vec} from './actor-physics';
  * crosses and a new one appears elsewhere. Sizes and distances are metres; the setting stores the size in cm.
  * `hits` is how many bullets a ball takes before it pops (1 = Refrag's one-tap balls; more lets a spray stay on one
  * ball). `wall` adds a peek wall 1.5 m ahead of you that you step out from, to the left or the right, or a pillar you can
- * step out of on either side ('both'). A popped ball's replacement appears after `respawn` seconds (0 = at once), or,
- * with `respawnMode` 'pad', when you step onto the pad on the floor at your spawn point behind the cover. Movement
+ * step out of on either side ('both'); `wallWidth` is how wide it is (m). You start, and the respawn pad sits, centred
+ * behind it. A popped ball's replacement appears after `respawn` seconds (0 = at once), or, with `respawnMode` 'pad',
+ * when you step onto the pad on the floor. Movement
  * per axis: `speed` (m/s), `range` (how far a ball travels each way from where it appeared, m) and `flips` (sudden
  * reversals per second on top of turning back at the ends of its range); a speed or range of 0 keeps that axis still. */
 export type PopWallSide = 'off' | 'left' | 'right' | 'both';
 export type PopRespawnMode = 'timer' | 'pad';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
-export type PopConfig = {size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide;
+export type PopConfig = {size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
   respawn: number; respawnMode: PopRespawnMode; x: PopAxisMotion; y: PopAxisMotion};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
 export type PopBall = {id: number; x: number; y: number; z: number; radius: number; hits: number; vx: number; vy: number};
@@ -26,23 +27,23 @@ export type PopPad = {x: number; z: number; radius: number};
 export const POP_EYE = 64 * UNIT;
 /** Where you stand in Pop: the near end of the range, so 40 m of wall fit in front of you. */
 export const POP_SPAWN: Vec = {x: 0, y: POP_EYE, z: 2};
-export const popLimits = {size: [8, 80], count: [1, 12], spacing: [.2, 5], distance: [3, 40], hits: [1, 10], respawn: [0, 5],
+export const popLimits = {size: [8, 80], count: [1, 12], spacing: [.2, 5], distance: [3, 40], hits: [1, 10], wallWidth: [.6, 8], respawn: [0, 5],
   speedX: [0, 6], rangeX: [0, 5], flipsX: [0, 4], speedY: [0, 4], rangeY: [0, 1.4], flipsY: [0, 4]} as const;
 export const popColors: readonly (readonly [string, string])[] = [['Orange', '#ff6a4d'], ['Yellow', '#ffd23f'], ['Green', '#5dff7f'],
   ['Cyan', '#4df3ff'], ['Pink', '#ff4dd2'], ['White', '#ffffff']];
 export const popBackgrounds: readonly (readonly [string, string])[] = [['Navy', '#151a28'], ['Black', '#000000'], ['Charcoal', '#2b2f36'],
   ['Slate', '#5b6470'], ['White', '#f0f0ec'], ['Forest', '#1d4d33']];
-/** Peek wall: its near edge sits just past your shoulder, 1.5 m ahead, and it reaches 3 m across the other way. The
- * two-sided pillar is 1.6 m wide and centred on you. */
-export const POP_WALL = {edge: .35, width: 3, pillar: 1.6, height: 2.8, thickness: .4, ahead: 1.5, peek: 1} as const;
+/** Peek wall: its near edge sits just past your shoulder, 1.5 m ahead, and it reaches the chosen width across the other
+ * way; the two-sided pillar is centred on where you first stood. */
+export const POP_WALL = {edge: .35, height: 2.8, thickness: .4, ahead: 1.5, peek: 1} as const;
 /** The respawn pad sits on your spawn point; you are on it within this radius (m) of its centre. */
 export const POP_PAD = {radius: .45} as const;
 
 export function popConfig(settings: {popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
-  popRespawn: number; popRespawnMode: PopRespawnMode; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number;
+  popWallWidth: number; popRespawn: number; popRespawnMode: PopRespawnMode; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number;
   popFlipY: number}): PopConfig {
   return {size: settings.popSize / 100, count: settings.popCount, spacing: settings.popSpacing, distance: settings.popDistance,
-    hits: settings.popHits, wall: settings.popWall, respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
+    hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
     x: {speed: settings.popMoveX, range: settings.popRangeX, flips: settings.popFlipX},
     y: {speed: settings.popMoveY, range: settings.popRangeY, flips: settings.popFlipY}};
 }
@@ -50,18 +51,23 @@ export function popConfig(settings: {popSize: number; popCount: number; popSpaci
 export const popWallSide = (wall: PopWallSide): -1 | 0 | 1 => wall === 'left' ? -1 : wall === 'right' ? 1 : 0;
 export const axisMoves = (axis: PopAxisMotion) => axis.speed > 0 && axis.range > 0;
 
-/** The peek wall for the chosen side, or undefined when it is off. */
-export function popWall(config: Pick<PopConfig, 'wall'>, origin: Vec): PopWall | undefined {
+/** The peek wall for the chosen side, or undefined when it is off. `origin` is the Pop spawn point: a one-sided wall's
+ * near edge sits 0.35 m past its shoulder and the wall runs `wallWidth` the other way; the pillar is centred on it. */
+export function popWall(config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: Vec): PopWall | undefined {
   if (config.wall === 'off') return undefined;
-  const z = origin.z - POP_WALL.ahead, y = POP_WALL.height / 2;
-  if (config.wall === 'both') return {id: 'pop-wall', side: 0, edges: [origin.x - POP_WALL.pillar / 2, origin.x + POP_WALL.pillar / 2],
-    center: {x: origin.x, y, z}, size: {x: POP_WALL.pillar, y: POP_WALL.height, z: POP_WALL.thickness}};
+  const z = origin.z - POP_WALL.ahead, y = POP_WALL.height / 2, width = config.wallWidth;
+  if (config.wall === 'both') return {id: 'pop-wall', side: 0, edges: [origin.x - width / 2, origin.x + width / 2],
+    center: {x: origin.x, y, z}, size: {x: width, y: POP_WALL.height, z: POP_WALL.thickness}};
   const side = popWallSide(config.wall) as -1 | 1, edge = origin.x + side * POP_WALL.edge;
-  return {id: 'pop-wall', side, edges: [edge], center: {x: edge - side * POP_WALL.width / 2, y, z},
-    size: {x: POP_WALL.width, y: POP_WALL.height, z: POP_WALL.thickness}};
+  return {id: 'pop-wall', side, edges: [edge], center: {x: edge - side * width / 2, y, z},
+    size: {x: width, y: POP_WALL.height, z: POP_WALL.thickness}};
 }
 
-export const popPad = (origin: Vec): PopPad => ({x: origin.x, z: origin.z, radius: POP_PAD.radius});
+/** The respawn pad: centred behind the peek wall when one is up, else on the Pop spawn point. */
+export const popPad = (config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: Vec): PopPad =>
+  ({x: popWall(config, origin)?.center.x ?? origin.x, z: origin.z, radius: POP_PAD.radius});
+/** Where you start: on the pad, so centred behind the cover. */
+export const popSpawn = (config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: Vec): Vec => ({...origin, x: popPad(config, origin).x});
 
 /** The wall the balls float on: centred ahead at eye height (on your peek line when a one-sided peek wall is up), wide
  * enough for the count at the requested spacing, and capped so every ball stays well inside the 90-degree 4:3 view and
@@ -112,7 +118,7 @@ export class PopField {
   constructor(readonly config: PopConfig, origin: Vec, private readonly random: () => number = Math.random) {
     this.region = popRegion(config, origin);
     this.wall = popWall(config, origin);
-    this.pad = popPad(origin);
+    this.pad = popPad(config, origin);
     for (let i = 0; i < config.count; i++) this.spawn();
   }
   get moving() {return axisMoves(this.config.x) || axisMoves(this.config.y);}
