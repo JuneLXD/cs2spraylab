@@ -53,6 +53,7 @@ def findgame():
   except (FileNotFoundError,PermissionError):pass
  return None
 mem=None;pid=base=0;arms=player=0;lastscan=lastframe=-1;lastkey=None;samples=errors=0
+read_error_counts={}
 start=time.monotonic();laststatus=start;rejectedClock=rejectedFields=0
 with (out/'samples.jsonl').open('w',buffering=1) as stream:
  while child.poll() is None and not (out/'stop-sampling').exists():
@@ -72,7 +73,7 @@ with (out/'samples.jsonl').open('w',buffering=1) as stream:
    def floats(a,n):return list(struct.unpack('<'+str(n)+'f',read(a,n*4)))
    now=time.monotonic()
    if now-laststatus>5:
-    laststatus=now;(out/'status.json').write_text(json.dumps({'pid':pid,'elapsed':now-start,'samples':samples,'errors':errors,'arms':arms,'player':player,'rejectedClock':rejectedClock,'rejectedFields':rejectedFields})+'\n')
+    laststatus=now;(out/'status.json').write_text(json.dumps({'pid':pid,'elapsed':now-start,'samples':samples,'errors':errors,'readErrorCounts':read_error_counts,'arms':arms,'player':player,'rejectedClock':rejectedClock,'rejectedFields':rejectedFields})+'\n')
    if now-lastscan>1:
     lastscan=now;system=u64(base+0x46b7100);foundarms=[];foundplayers=[]
     if system:
@@ -120,12 +121,16 @@ with (out/'samples.jsonl').open('w',buffering=1) as stream:
    if key==lastkey:time.sleep(.002);continue
    stream.write(json.dumps(row,allow_nan=False)+'\n');samples+=1;lastframe=frame;lastkey=key
    if now-laststatus>5:
-    laststatus=now;(out/'status.json').write_text(json.dumps({'pid':pid,'elapsed':now-start,'samples':samples,'errors':errors,'lastFrame':frame,'lastTime':global_time})+'\n')
+    laststatus=now;(out/'status.json').write_text(json.dumps({'pid':pid,'elapsed':now-start,'samples':samples,'errors':errors,'readErrorCounts':read_error_counts,'lastFrame':frame,'lastTime':global_time})+'\n')
   except (OSError,ValueError,struct.error) as err:
    errors+=1
+   reason=type(err).__name__+': '+str(err)
+   read_error_counts[reason]=read_error_counts.get(reason,0)+1
    if errors<=5:print(type(err).__name__,str(err),flush=True)
-   time.sleep(.1)
+   # A rejected concurrent history update is normal snapshot contention. The
+   # old 100 ms lifecycle backoff also hid several subsequent stable ticks.
+   time.sleep(.002 if isinstance(err,ValueError) and 'changed during read' in str(err) else .1)
 if mem is not None:os.close(mem)
-(out/'sampler-finished.json').write_text(json.dumps({'pid':pid,'exitCode':child.poll(),'samples':samples,'errors':errors,'stoppedByFile':(out/'stop-sampling').exists()})+'\n')
+(out/'sampler-finished.json').write_text(json.dumps({'pid':pid,'exitCode':child.poll(),'samples':samples,'errors':errors,'readErrorCounts':read_error_counts,'stoppedByFile':(out/'stop-sampling').exists()})+'\n')
 print('Sampler finished',samples,'samples',errors,'read errors',flush=True)
 if child.poll() is None:child.wait()

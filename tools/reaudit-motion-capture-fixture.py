@@ -54,8 +54,8 @@ def main():
                           sha256=hashlib.sha256(out.read_bytes()).hexdigest())))
 
 
-def load_fixture():
-    path = REPO / 'docs/evidence/reaudit-motion-runtime-fixture.json'
+def load_fixture(path=None):
+    path = Path(path) if path is not None else REPO / 'docs/evidence/reaudit-motion-runtime-fixture.json'
     data = path.read_bytes()
     fixture = json.loads(data)
     rows = []

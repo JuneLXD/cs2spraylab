@@ -5,7 +5,7 @@ accepted game-only snapshots. Native bracket search executes without shims;
 two-point vector arithmetic is a float32 projection of the bound instructions.
 This does not execute cache invalidation, its callers or value metadata helpers.
 """
-import collections, hashlib, importlib.util, json, math, runpy, struct, sys
+import argparse, collections, hashlib, importlib.util, json, math, runpy, struct, sys
 from pathlib import Path
 REPO=Path(__file__).resolve().parents[1]
 ROOT=REPO.parent/'native-audit'
@@ -13,9 +13,6 @@ spec=importlib.util.spec_from_file_location('native_history',REPO/'tools/reaudit
 native=importlib.util.module_from_spec(spec);spec.loader.exec_module(native)
 from unicorn.x86_const import *
 F=native.F
-OUT=ROOT/'reports/reaudit-velocity-runtime';OUT.mkdir(exist_ok=True)
-rows,fixture,fixture_sha=runpy.run_path(str(REPO/'tools/reaudit-motion-capture-fixture.py'))['load_fixture']()
-assert fixture['clientSha256']==native.sha
 u=native.u
 
 def invoke(row,cubic):
@@ -62,6 +59,14 @@ def invoke(row,cubic):
 
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--fixture',type=Path,default=REPO/'docs/evidence/reaudit-motion-runtime-fixture.json')
+    parser.add_argument('--out',type=Path,default=ROOT/'reports/reaudit-velocity-runtime')
+    parser.add_argument('--summary',type=Path,default=REPO/'docs/evidence/reaudit-velocity-runtime.json')
+    args=parser.parse_args()
+    OUT=args.out;OUT.mkdir(parents=True,exist_ok=True)
+    rows,fixture,fixture_sha=runpy.run_path(str(REPO/'tools/reaudit-motion-capture-fixture.py'))['load_fixture'](args.fixture)
+    assert fixture['clientSha256']==native.sha
     assertions={0xdcbc98:'subss xmm1, xmm6',0xdcbc9c:'mulss xmm3, xmm0',
                 0xdcccea:'subps xmm2, xmm4',0xdccd07:'mulps xmm2, xmm3',0xdccd4f:'addps xmm0, xmm3'}
     from capstone import Cs,CS_ARCH_X86,CS_MODE_64
@@ -125,6 +130,6 @@ def main():
                 'Only the observed stage-zero, single-ring cache-selection branch is classified here.']}
     (OUT/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     shared={k:v for k,v in report.items()if k!='worst'}
-    (REPO/'docs/evidence/reaudit-velocity-runtime.json').write_text(json.dumps(shared,indent=2)+'\n')
+    args.summary.write_text(json.dumps(shared,indent=2)+'\n')
     print(json.dumps({k:v for k,v in report.items()if k not in['worst','limits']}))
 if __name__=='__main__':main()

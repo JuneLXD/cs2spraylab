@@ -1069,12 +1069,81 @@ Combined passes28–29 validation: all portable probes and TypeScript pass;
 Both Chromium view-punch cases pass in27.3seconds. Heavy commands ran serially
 under host caps, with deploy paused and edits frozen during browser execution.
 
+## Captured controller clocks and lifecycle (thirtieth pass, 2026-10-09)
+
+The approved `native_reaudit_bob_006` motion window retains 2,589 guarded
+snapshots, 1,406 demo ticks and 1,299 video frames with at most 17 ms PTS spacing.
+Its optional controller reader is now validated on the live target, but only
+one active-controller marker and no active-pawn marker were observed. Numeric
+snapshots still have gaps and are not an invocation trace.
+
+Supplying the captured controller seed, without a fitted offset, matches all
+372 stationary-turn projections within float32 reconstruction precision,
+including 226 unique input/output comparisons. Move 654, Start 25 and air 79 match
+exactly. Nine Idle mismatches are four turn-to-idle boundaries; a separate
+counterfactual using the preceding observed Loop state matches all nine.
+This does not turn sampled post-call state into a consecutive replay.
+
+Current bytes establish constructor initialization and command order:
+conditional tick-base increment/store, scoped clock, body postprocessing,
+processed-command publication, processing-marker cleanup and clock restoration.
+New-instance construction is not a respawn reset policy. A separate registered
+transform-history consumer explains the evaluated-local angle path; its
+selected record and scheduling still need capture.
+
+All 1,427 selected-cache-zero velocity comparisons are exact. Twenty-one other
+cache values match one-frame-earlier evaluations while the selected history
+has changed. Full bob/sway remains unchanged pending producer/phase/reset
+evidence. [Detailed report and portable probes](reaudit-motion-controller.md).
+
+## First-person graph time and AK reload (thirty-first pass, 2026-10-09)
+
+The current client AG2 worker is now bound through the first-person Arms
+callback. Its elapsed-time getter consumes the entity-domain tick, stores it,
+clamps negative differences to zero and converts elapsed ticks at 1/64 second.
+First initialization contributes one tick; repeated ticks contribute zero.
+Forty bounded native cases reproduce this clock with zero error, including
+pause accounting. Object lookup is stubbed; domain selection, tick mutation,
+clamping and the graph-context delta write execute natively.
+
+AK's ordinary reload path selects an empty entry synchronization ID, with
+1× clip nodes and no temporal wrapper. The special outro synchronization ID
+and shell-loop conditions do not justify retiming an ordinary AK reload over
+its mechanical lock. Exact first-active-sample and transition/render phase
+remain unmeasured.
+
+The AK magazine reload now samples authored seconds and holds the clip endpoint
+during the final approximately 33.333 ms of its mechanical lock. Actual
+`ViewAnimation` event-crossing measurements change the frame-33 pose from
+1.1150686147 s to 1.1000000000 s relative to the existing action clock; at the
+1.1 s ammo event its clip time changes 1.0851350168→1.1 s. Ammo insertion,
+readiness, onset and fade rules are preserved. Other weapon, shell and draw
+retimes are not inferred from this correction. [Detailed evidence](reaudit-animation.md).
+
+
+
+## Passes 30–31 integration validation
+
+TypeScript passes. The full unit suite has 2,367 passes and only the documented
+missing `public/models/ak47.json` fallback fixture failure. Both Chromium
+camera/viewmodel cases pass. The actual Duel reload case verifies authored
+seconds, endpoint hold during the lock, held-work continuity, return to idle
+and nonoverlapping HUD controls at three viewport sizes. Its initial run
+passed the animation assertions and exposed a stale four-group HUD count;
+`DuelStage` contains three groups. The corrected test passes in 9.3 seconds.
+Production UI behavior was not changed to accommodate the test.
+
+Native/graph/fixture probes pass, and current source/fixture/probe hashes are
+consistent. Heavy jobs ran serially under memory/swap/CPU caps with deploy
+paused and all repository edits frozen during browser runs. Logs use the local
+`reaudit-controller-ak-{typescript,unit,browser,browser-reload}` prefix.
+
 ## Re-audit delivery validation
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph
 composition `9b94483`, accuracy/index `fd328d5`, ordinary footsteps `2aba70c`,
 weapon recoil rotation `5132783`, airborne weapon motion `4e999d9`,
-loaded-shell reload interruption `9095bb0`.
+loaded-shell reload interruption `9095bb0`, AK reload playback `7597b1c`.
 The [consolidated inventory](cs2-reaudit.md) retains one row per audited mechanic
 with rule/evidence, before/after, status and commit, plus corrected claims and
 exact unresolved measurements. Further R8 work is excluded at the user's request.

@@ -192,3 +192,25 @@ ammo event by 15.069 ms; shell phase and delayed-model draw retimes are measured
 separately. Bind the current first-person graph's external elapsed-time/rate
 caller and transition clock before correcting any native timing claim. A fixed
 node multiplier alone does not prove the wall-clock playback rate.
+
+### Captured controller clocks and lifecycle, pass 30
+
+[The new motion window](reaudit-motion-controller.md) measures controller tick
+base beside body state. All 372 turn-loop projections match that independently
+captured seed, plus all Move/Start/air projections; nine Idle samples require
+a separately labeled transition diagnostic. Processing-marker coverage is too
+sparse to associate each sample with a call. Current bytes now bind constructor
+initialization, tick increment/postprocess/publication order and the separate
+evaluated-transform consumer. Full bob still needs invocation association,
+existing-instance reset ownership and transform-history evaluation inputs.
+The velocity check adds 1,427 exact selected-cache comparisons without tuning.
+
+### First-person graph time and AK reload, pass 31
+
+The current Arms AG2 elapsed-time path is now bound and passes 40 native clock
+cases. Ordinary AK graph wiring has a 1× clip clock and no reload-lock scaling.
+Its magazine reload now advances in authored seconds, holding the endpoint
+through the remaining lock. The measured frame-33 crossing changes from
+1.115069 s to 1.1 s on the existing action clock. Ammo/readiness and existing
+fades are preserved. Exact action onset/display phase, other weapon paths,
+shell transitions and delayed-model draw playback remain separate work.

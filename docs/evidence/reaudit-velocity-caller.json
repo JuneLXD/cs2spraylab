@@ -1,0 +1,60 @@
+{
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "scriptSha256": "5da17961410d7e8df3497a9ea95c978db6ef54605fd2bba05abb25beb18597d0",
+  "method": "Bounded static reads of current-client constructor, registration, tick callback, latch dispatch, writer forwarding and ring-offset setter. No native execution.",
+  "status": "partial: timestamp callback ownership resolved; outer caller phase and runtime ring-offset producer remain unbound",
+  "proof": {
+    "instructionAssertions": 40,
+    "bindingAndConstantAssertions": 7,
+    "velocityTimeClass": 1,
+    "nativeRangeSha256": {
+      "constructor-callback": "da58d5346de043e52c57a8d7c921182c77e91cfc8b82adbb49f357657197d8b7",
+      "constructor-wrapper": "acff7c312480633a598534d8d010f36e46fb100e3e937e49bdd9c9cc7fbfd48e",
+      "registration-copy": "6664920e66133fd2b6205f6bde18d80d3408b9c0e87fcd36a40db83fa3da3542",
+      "tick-callback": "0881a51ded86204b83a507c2c2f653a15ecdd3acd8187666685ffe2a83c44590",
+      "wrapper-writer": "0a706f23d5ff20775ff444f660c27f31ece51c47b36915d6895c8eade6562f96",
+      "registered-writer-job": "2c4cbf9b808a1ec8706219ee522e8019a401469e0a34e5d70b919de10e6105ba",
+      "registered-writer-sequential": "689df4c194de6d677982ebf94f63b19eba3cfdd467633ef3e0bb4ba7d97786a6",
+      "latch-dispatch": "63dfa0647000277c42b3ddd9858e7d2ac033228610fdad66fdf9ccabcd5d523a",
+      "latch-list-prefix": "492e54607c9b87f3835a963b41c8e223e2c0ac835667de426c3ded98166ccdb7",
+      "latch-list-dispatch": "81efca4579ddf0bf04e5311aa8ad0d436bb0ac3a4861ceab8f5a6e966dbf5ddd",
+      "ring-offset-setter": "ecf3d19a692edcf49085dbb0016b7b3c7139343f18be8b5071515248bd871871",
+      "ring-offset-reader": "dd3d9ab23d829e7aa65d21e319aeb7de17ad45788a77347d19d98ea7ebb51cb3"
+    }
+  },
+  "resolved": [
+    "The velocity constructor stores the entity tick callback, zero member adjustment and entity owner; subsequent registration copies these with the wrapper and embedded history into a queued record.",
+    "The record dispatcher extracts the signed three-bit history time class, invokes the registered callback, and forwards its returned integer tick unchanged into the velocity writer. Sequential and job paths agree.",
+    "The velocity constructor selects time class 1. Ring selector zero always uses global currentTime. Either ring also uses global currentTime when both the prediction-state gate and entity prediction gate are set.",
+    "For the remaining nonzero-ring class-1 path, the callback uses the entity class-1 time, replacing exactly zero with global currentTime. The result is trunc(float32(float32(time * 64) + 0.5)); the entity time field schema name has not been rebound here.",
+    "Other time classes are distinct: class 0 uses a different entity time with the same zero fallback; class 2 returns an interface-provided integer tick plus one; remaining classes return global integer tick. The class-2 interface clock domain is not newly claimed.",
+    "The named latch-list dispatcher reaches the registration queue processor. This establishes local dispatch ownership, not its external prediction/network/render call phase.",
+    "The common writer forwards raw current value for ring 1 or a single-ring history. Ring 0 of a dual-ring history first obtains the current interpolation cache value and then writes it with the independently resolved tick.",
+    "The constructor initializes the ring time offset to zero. The virtual setter accepts an explicit float offset and companion integer per selected ring; the bracket reader subtracts that ring offset. These functions do not establish who supplied the captured one-tick offset."
+  ],
+  "boundedNegativeEvidence": {
+    "region": "one explicitly bounded C_BaseEntity code region",
+    "bytes": 458752,
+    "rangeSha256": "31dfe7f7bc365a590b3423560c99e171b57cf10af9355fc7c844c405709e7f76",
+    "method": "Relative call/jump and RIP-relative LEA references to the offset setter and three latch dispatch functions.",
+    "directOffsetSetterReferences": 0,
+    "outerLatchListReferences": 0,
+    "latchSubsetReferences": 0,
+    "knownInnerDispatchReferences": 2,
+    "repeatedThisRun": false,
+    "boundary": "No conclusion about indirect/virtual calls, inline stores, or callers outside this region."
+  },
+  "runtimeInputsStillNeeded": [
+    "At each actual latch: ring selector, history time class, registered callback identity, prediction-state gate, entity prediction gate, global currentTime and global integer tick.",
+    "For nonzero-ring class 1: the entity class-1 time and whether its zero fallback was selected; preserve binary32 arithmetic and the callback result.",
+    "For each write: raw current velocity, selected interpolation context/cache value for the dual-ring special path, and ring metadata before and after replacement/pruning.",
+    "For the ring offset: actual virtual setter caller, float argument, companion integer argument and selected ring; snapshots of the resulting offset alone do not identify its producer.",
+    "External latch-list caller and ordering relative to movement/prediction, network packet application, interpolation restoration/evaluation and HUD sampling."
+  ],
+  "nextSmallestStaticQuestion": "Locate the indirect caller of the already bound ring-offset setter slot, and verify how it computes its float argument and selected ring. A typed history argument plus an indirect call to that slot is required; another generic virtual-slot match is insufficient.",
+  "limits": [
+    "No production correction or fixed-delay approximation follows from this partial proof.",
+    "The supplied-history oracle and captured-cache replay remain separate evidence; neither records every native writer invocation.",
+    "No game, emulator, Node command, browser, export or analysis service was run."
+  ]
+}

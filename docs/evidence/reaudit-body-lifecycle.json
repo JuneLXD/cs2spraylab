@@ -1,0 +1,147 @@
+{
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "wholeArtifactHashVerified": true,
+  "provenance": "Static matching current-client bytes, schema, RTTI, virtual targets and an exact import relocation. No live process or native execution.",
+  "assertions": {
+    "ranges": 18,
+    "summedRangeBytes": 13948,
+    "instructions": 76,
+    "classes": 4,
+    "virtualTargets": 6,
+    "schemaFields": 15,
+    "imports": 1,
+    "ripBindings": 10
+  },
+  "ranges": [
+    {
+      "name": "movement-factory",
+      "bytes": 512,
+      "sha256": "c54619926ac6b911852464889b7dc56ccff19ab77f458b668f31926680a0ebd4"
+    },
+    {
+      "name": "movement-construction",
+      "bytes": 1856,
+      "sha256": "13a8fe199ee9b5bcc9569f316440d5ea9ad290b4c96fe15aaeaf38a739431ae9"
+    },
+    {
+      "name": "explicit-transform-override",
+      "bytes": 256,
+      "sha256": "6e3f6224c2282d287feb9832b90784ae55a1b58932fdefe23e65c05df05d17a5"
+    },
+    {
+      "name": "angle-equivalence",
+      "bytes": 192,
+      "sha256": "a1c9815821c964c90eb44a8a08609cfa24e3e70831808df1ee25cde6502b3034"
+    },
+    {
+      "name": "controller-tick-setter",
+      "bytes": 32,
+      "sha256": "ac0d03c11c85d813e53964ad634ea2a40abb16bd9f8d4df13b379958017cd2ad"
+    },
+    {
+      "name": "cs-command-cleanup",
+      "bytes": 256,
+      "sha256": "3619599618258bd69b858b8247b077939038f5b4488ef647b3ed1310e8cf3dfb"
+    },
+    {
+      "name": "base-command-cleanup",
+      "bytes": 144,
+      "sha256": "3b4d3bda6e7d62db32e1ab6f7244d9c0ff6a12dff6f306419bd172d7b49cb530"
+    },
+    {
+      "name": "cs-body-postprocess",
+      "bytes": 144,
+      "sha256": "195a0596644e68b2d437644bdaec13a222cb99bd7ccbeff260636bdbba555098"
+    },
+    {
+      "name": "yaw-wrapper-complete",
+      "bytes": 304,
+      "sha256": "b1b0202bbd73224344ae024d420672f1759e43efb3ecc68a70e68d1d7f427c54"
+    },
+    {
+      "name": "scene-transform-getter",
+      "bytes": 704,
+      "sha256": "dbbea75f5fff20bf4f4f9e62c57d1793f610e3bcdf86659bd36976245965052e"
+    },
+    {
+      "name": "scene-registration-complete",
+      "bytes": 1888,
+      "sha256": "83d4e792971770e74ec47952343eb5ed36468decc319af52430b8c2f7da9bd63"
+    },
+    {
+      "name": "scene-abs-angles-setter",
+      "bytes": 962,
+      "sha256": "4261ef066414aed91e74e93ecefcf8d425573c2a4cc63a690dcf4bf60bab56dd"
+    },
+    {
+      "name": "scene-evaluated-transform-write",
+      "bytes": 1738,
+      "sha256": "fefc3af5758ed05266ca4e621bb61978708ee24ae52c46f84120ce54425cb1fb"
+    },
+    {
+      "name": "base-explicit-transform-angle-argument",
+      "bytes": 48,
+      "sha256": "7c19fa2f976004025a1fbfe5ceaa99958b10aab7dec291346fe25a96a2f4c367"
+    },
+    {
+      "name": "movement-command-to-post",
+      "bytes": 2976,
+      "sha256": "895b576f792904ac499c88a5d0bc22be0df2a1555b82b3ee22814bd764e34d36"
+    },
+    {
+      "name": "movement-command-clock-tail",
+      "bytes": 624,
+      "sha256": "4db08dd012809391cf3cb9ff8ff28f8395ee61affd8428b0f9de6bd54d80f4d4"
+    },
+    {
+      "name": "processed-command-publish",
+      "bytes": 800,
+      "sha256": "57f8a8b980fde94490a1309313f49af6945b79c08eb0bb86316383eb3722fb15"
+    },
+    {
+      "name": "cs-command-wrapper",
+      "bytes": 512,
+      "sha256": "0a6364d191eac250b6138648312d2a9a81b2c4dc5e19b5639d0ff647ed642176"
+    }
+  ],
+  "findings": [
+    {
+      "id": "BL01",
+      "status": "static-bound",
+      "rule": "The movement-service factory clears a fresh allocation before its actual constructor. The embedded body state starts Idle, with wasOnGround and wasStationary true; named action timers, turn angle, previous aim/speed and produced yaw start zero. Its owner is attached before return. This is construction only."
+    },
+    {
+      "id": "BL02",
+      "status": "static-bound",
+      "rule": "In the visible controller-present normal command branch, the controller activity marker is set before the clock seed. Nonzero incoming frame delta increments and stores controller tick base before reading it to seed scoped currentTime, integer tick and zero fraction. The inner wrapper postprocesses body before publishing the processed-command field, clears the pawn marker and restores globals; outer cleanup clears its controller marker then restores its globals. Zero incoming delta skips the increment. Mode3 and alternative virtual overrides are outside this ordinary path."
+    },
+    {
+      "id": "BL03",
+      "status": "static-bound",
+      "rule": "A changed SetAbsAngles on a parentless node copies supplied angles into absolute, declared-local and evaluated-local angles and updates absolute quaternion. Unchanged absolute angles return early. The body wrapper reads current absolute scene angles at each invocation, so a free-running isolated yaw accumulator is not established."
+    },
+    {
+      "id": "BL04",
+      "status": "static-bound",
+      "rule": "A separately registered TransformHistory procedural interpolation object has a 96-byte current record containing local/world origins and quaternions, scales, parent identity and two small flags. Its consumer selects local or world data for a parentless node using the force-world flag and parent identity, converts quaternion to Euler, and writes evaluated-local angles when any component is not equivalent within float32 0.001 degree. The comparison uses a wrapped difference and a strict less-than tolerance. This consumer does not write declared-local angles."
+    },
+    {
+      "id": "BL05",
+      "status": "partial",
+      "rule": "The current pawn explicit-transform virtual reaches the base supplied-angle scene setter. No existing-instance body-state reset has been bound on this path. This is not proof that teleport/respawn never resets: downstream callbacks and scheduling are incomplete."
+    }
+  ],
+  "evaluatedTransformAngleToleranceDegrees": 0.0010000000474974513,
+  "nextEvidence": [
+    "Before/after identity-bound body state and constructor/reset call ownership across spawn, death/respawn and explicit transform changes.",
+    "Entry/exit association between command, incremented controller seed, body update and processed-command publication; inactive sampled markers alone cannot identify the retained invocation.",
+    "Transform-history current record, selected history endpoints, evaluation clock/context, flags and dirty state beside produced/declared/evaluated/absolute angles, with write identity/order."
+  ],
+  "limits": [
+    "New-object initial values are not an existing-instance respawn/equip/teleport reset policy.",
+    "Unreviewed child-entity callbacks and downstream explicit-transform calls may modify related state.",
+    "The transform interpolation kernel, history producer, caller cadence and reset rules remain unbound; velocity history layout must not be reused for this distinct record.",
+    "The current transform getter can leave world fields retained in one flag branch. Reading a record does not prove its world fields were refreshed for the sampled call.",
+    "Static control flow cannot associate a polled out-of-scope controller with retained body output or count repeated prediction invocations."
+  ]
+}

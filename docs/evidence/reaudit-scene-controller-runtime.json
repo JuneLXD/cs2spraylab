@@ -1,0 +1,396 @@
+{
+  "method": "Compare captured controller/provider clocks through the native yaw dispatch.\n\nInputs remain sampled post-call state with reconstructed pre-dispatch yaw. This\ndoes not identify the clock consumed by an invocation or establish a replay.\nOnly the two independently captured clock candidates are supplied; no offsets\nare searched, fitted or applied.\n",
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "snapshotSha256": "1583fed348b1d62a6c281bacd181b3d6df4eb82df24ffb1524be14c2f545c30a",
+  "rows": 2589,
+  "fixtureSha256": "74a40ffb8e183cfe8b30247d811089fcb9b68ade8165032fe8e82bfb89442a51",
+  "probeSha256": "91e1d8eec5fcfd33e976c07df77117797a8aecd4c07aa0c03167b1126be1dd11",
+  "productionChanged": false,
+  "groups": {
+    "sampled-provider": {
+      "1": {
+        "rows": 1459,
+        "matches": 1450,
+        "maxAbsoluteError": 0.230194091796875,
+        "stateChanges": 0,
+        "mismatchedRows": [
+          1157,
+          1158,
+          1328,
+          1329,
+          1330,
+          1495,
+          1496,
+          1661,
+          1662
+        ]
+      },
+      "3": {
+        "rows": 654,
+        "matches": 654,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "2": {
+        "rows": 25,
+        "matches": 25,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "5": {
+        "rows": 372,
+        "matches": 345,
+        "maxAbsoluteError": 0.38994598388671875,
+        "stateChanges": 2,
+        "mismatchedRows": [
+          1071,
+          1075,
+          1077,
+          1079,
+          1082,
+          1084,
+          1086,
+          1228,
+          1230,
+          1232,
+          1234,
+          1236,
+          1240,
+          1244,
+          1248,
+          1406,
+          1410,
+          1416,
+          1418,
+          1421,
+          1423,
+          1570,
+          1574,
+          1576,
+          1582,
+          1584,
+          1587
+        ]
+      },
+      "air": {
+        "rows": 79,
+        "matches": 79,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      }
+    },
+    "controller-seed": {
+      "1": {
+        "rows": 1459,
+        "matches": 1450,
+        "maxAbsoluteError": 0.230194091796875,
+        "stateChanges": 0,
+        "mismatchedRows": [
+          1157,
+          1158,
+          1328,
+          1329,
+          1330,
+          1495,
+          1496,
+          1661,
+          1662
+        ]
+      },
+      "3": {
+        "rows": 654,
+        "matches": 654,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "2": {
+        "rows": 25,
+        "matches": 25,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "5": {
+        "rows": 372,
+        "matches": 372,
+        "maxAbsoluteError": 3.0517578125e-05,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "air": {
+        "rows": 79,
+        "matches": 79,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      }
+    }
+  },
+  "uniqueComparisons": {
+    "sampled-provider": {
+      "1": {
+        "rows": 861,
+        "matches": 853,
+        "maxAbsoluteError": 0.230194091796875,
+        "stateChanges": 0,
+        "mismatchedRows": [
+          1157,
+          1158,
+          1328,
+          1329,
+          1495,
+          1496,
+          1661,
+          1662
+        ]
+      },
+      "3": {
+        "rows": 480,
+        "matches": 480,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "2": {
+        "rows": 24,
+        "matches": 24,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "5": {
+        "rows": 310,
+        "matches": 283,
+        "maxAbsoluteError": 0.38994598388671875,
+        "stateChanges": 2,
+        "mismatchedRows": [
+          1071,
+          1075,
+          1077,
+          1079,
+          1082,
+          1084,
+          1086,
+          1228,
+          1230,
+          1232,
+          1234,
+          1236,
+          1240,
+          1244,
+          1248,
+          1406,
+          1410,
+          1416,
+          1418,
+          1421,
+          1423,
+          1570,
+          1574,
+          1576,
+          1582,
+          1584,
+          1587
+        ]
+      },
+      "air": {
+        "rows": 48,
+        "matches": 48,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      }
+    },
+    "controller-seed": {
+      "1": {
+        "rows": 814,
+        "matches": 810,
+        "maxAbsoluteError": 0.230194091796875,
+        "stateChanges": 0,
+        "mismatchedRows": [
+          1157,
+          1328,
+          1495,
+          1661
+        ]
+      },
+      "3": {
+        "rows": 365,
+        "matches": 365,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "2": {
+        "rows": 15,
+        "matches": 15,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "5": {
+        "rows": 226,
+        "matches": 226,
+        "maxAbsoluteError": 3.0517578125e-05,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      },
+      "air": {
+        "rows": 48,
+        "matches": 48,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0,
+        "mismatchedRows": []
+      }
+    }
+  },
+  "scopeTuples": {
+    "(False, False, False, False)": 2588,
+    "(False, False, True, True)": 1
+  },
+  "scopeTupleOrder": [
+    "anyPawn",
+    "pawnMatches",
+    "anyController",
+    "controllerMatches"
+  ],
+  "controllerMinusProviderTick": {
+    "1": 1275,
+    "0": 1314
+  },
+  "commandsWithMultipleYaws": 57,
+  "rampDiagnosticSummary": {
+    "rows": 75,
+    "maxIntegerResidual": 8.524531480702535e-07,
+    "controllerSeedMatches": 75,
+    "sampledProviderMatches": 50
+  },
+  "limits": [
+    "The independently captured candidates are supplied inputs, not proven invocation clocks.",
+    "Post-call states/timers and cached pre-dispatch aim/error cannot establish a free-running replay; boundary state transitions can differ.",
+    "The controller can be sampled after increment and before body postprocessing/publication; inactive markers do not prove association.",
+    "The ramp inversion is an output-derived diagnostic only, not an alternative clock source or a fitted rule.",
+    "Float32 yaw reconstruction tolerance derives from spacing, not from observed error.",
+    "Private-memory native oracle retains its entity-interface, movement-preparation, math, IK and auxiliary-work shims."
+  ],
+  "boundaryDiagnostics": {
+    "method": "For remaining Idle mismatches only, substitute preceding observed non-Idle state (Loop), retaining all other captured post-call inputs. This is a counterfactual boundary diagnostic, not an invocation replay.",
+    "rows": 9,
+    "distinctCommands": 4,
+    "matches": 9,
+    "details": [
+      {
+        "row": 1157,
+        "suppliedPriorObservedState": 5,
+        "capturedPostState": 1,
+        "resultState": 1,
+        "expectedYaw": -14.011358261108398,
+        "nativeYaw": -14.011358261108398,
+        "error": 0.0,
+        "tolerance": 3.814697265625e-06,
+        "matchesWithinReconstruction": true,
+        "command": 11115
+      },
+      {
+        "row": 1158,
+        "suppliedPriorObservedState": 5,
+        "capturedPostState": 1,
+        "resultState": 1,
+        "expectedYaw": -14.011358261108398,
+        "nativeYaw": -14.011358261108398,
+        "error": 0.0,
+        "tolerance": 3.814697265625e-06,
+        "matchesWithinReconstruction": true,
+        "command": 11115
+      },
+      {
+        "row": 1328,
+        "suppliedPriorObservedState": 5,
+        "capturedPostState": 1,
+        "resultState": 1,
+        "expectedYaw": 88.38861083984375,
+        "nativeYaw": 88.38861083984375,
+        "error": 0.0,
+        "tolerance": 3.0517578125e-05,
+        "matchesWithinReconstruction": true,
+        "command": 11205
+      },
+      {
+        "row": 1329,
+        "suppliedPriorObservedState": 5,
+        "capturedPostState": 1,
+        "resultState": 1,
+        "expectedYaw": 88.38861083984375,
+        "nativeYaw": 88.38861083984375,
+        "error": 0.0,
+        "tolerance": 3.0517578125e-05,
+        "matchesWithinReconstruction": true,
+        "command": 11205
+      },
+      {
+        "row": 1330,
+        "suppliedPriorObservedState": 5,
+        "capturedPostState": 1,
+        "resultState": 1,
+        "expectedYaw": 88.38861083984375,
+        "nativeYaw": 88.38861083984375,
+        "error": 0.0,
+        "tolerance": 3.0517578125e-05,
+        "matchesWithinReconstruction": true,
+        "command": 11205
+      },
+      {
+        "row": 1495,
+        "suppliedPriorObservedState": 5,
+        "capturedPostState": 1,
+        "resultState": 1,
+        "expectedYaw": -165.9778289794922,
+        "nativeYaw": -165.9778289794922,
+        "error": 0.0,
+        "tolerance": 6.103515625e-05,
+        "matchesWithinReconstruction": true,
+        "command": 11296
+      },
+      {
+        "row": 1496,
+        "suppliedPriorObservedState": 5,
+        "capturedPostState": 1,
+        "resultState": 1,
+        "expectedYaw": -165.9778289794922,
+        "nativeYaw": -165.9778289794922,
+        "error": 0.0,
+        "tolerance": 6.103515625e-05,
+        "matchesWithinReconstruction": true,
+        "command": 11296
+      },
+      {
+        "row": 1661,
+        "suppliedPriorObservedState": 5,
+        "capturedPostState": 1,
+        "resultState": 1,
+        "expectedYaw": 91.55461120605469,
+        "nativeYaw": 91.55461120605469,
+        "error": 0.0,
+        "tolerance": 3.0517578125e-05,
+        "matchesWithinReconstruction": true,
+        "command": 11387
+      },
+      {
+        "row": 1662,
+        "suppliedPriorObservedState": 5,
+        "capturedPostState": 1,
+        "resultState": 1,
+        "expectedYaw": 91.55461120605469,
+        "nativeYaw": 91.55461120605469,
+        "error": 0.0,
+        "tolerance": 3.0517578125e-05,
+        "matchesWithinReconstruction": true,
+        "command": 11387
+      }
+    ]
+  }
+}
