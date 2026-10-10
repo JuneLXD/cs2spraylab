@@ -1,0 +1,5023 @@
+{
+  "method": "Create the small, numeric pistol selector fixture from retained proof/replay.\n\nThe replay's matched table indices are inverse reconstructions, not recorded\nnative command seeds. They are suitable for a conditional recovery test only.\n",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "proofSha256": "21cd51d7c40dcbe7cb81a6a460a5ad116853b4ed3eb66f341b47f76750e788c1",
+  "replaySha256": "03fb8cd3858f6927bbff0fee7032ea522672eee413899a72c8acbfdc896b5c60",
+  "generatorSha256": "0b8e10902043c61b1d74cdf369e779d6efb767c277e7909715851861482e8556",
+  "selectionCases": [
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": -1,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 0,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 25,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 56,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 70,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 127,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": -1,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 0,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 25,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 56,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 70,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 127,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": -1,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 0,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 25,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 56,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 70,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 127,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": -1,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 0,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 25,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 56,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 70,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 127,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    }
+  ],
+  "recordings": [
+    {
+      "demo": "native_audit_ak_002.dem",
+      "sha256": "feadebd8538a044283a42ef2e78fa97db98591d9c2565c6fbce22d684b76835c",
+      "header": {
+        "patch_version": "14189",
+        "map_name": "de_dust2",
+        "demo_version_name": "valve_demo_2"
+      },
+      "samples": [
+        {
+          "weapon": "ak47",
+          "tick": 3474,
+          "elapsed": 0.7037994340062141,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": -0.782058894634247,
+            "yaw": -0.023019375279546,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3499,
+          "elapsed": 0.3905724249780178,
+          "inferredPreShotIndex": 0.27384185791015603,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 23.43567657470703,
+            "yaw": 12.111764907836914,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3525,
+          "elapsed": 0.4062822051346302,
+          "inferredPreShotIndex": 0.324612617492676,
+          "actualAngle": {
+            "pitch": 0.028913073241711,
+            "yaw": 0.014942530542612,
+            "roll": 1.8727e-11
+          },
+          "actualVelocity": {
+            "pitch": 23.75433349609375,
+            "yaw": 12.276450157165527,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 23.43567657470703,
+            "yaw": 12.111764907836914,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 9.5367431640625e-07
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3614,
+          "elapsed": 1.3962747640907764,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 20.03278160095215,
+            "yaw": 10.353118896484375,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.028913073241711,
+            "yaw": 0.014942530542612,
+            "roll": 1.8727e-11
+          },
+          "priorVelocity": {
+            "pitch": 23.75433349609375,
+            "yaw": 12.276450157165527,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 2.88204839440148e-07
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3621,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.098078846931458,
+            "yaw": 0.050688020884991,
+            "roll": 8.761041e-09
+          },
+          "actualVelocity": {
+            "pitch": 33.367191314697266,
+            "yaw": -0.022531509399414,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 20.03278160095215,
+            "yaw": 10.353118896484375,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 1.066240299940009e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3627,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 2,
+          "actualAngle": {
+            "pitch": 0.624965071678162,
+            "yaw": -0.00042201357428,
+            "roll": -2.76038e-10
+          },
+          "actualVelocity": {
+            "pitch": 44.113731384277344,
+            "yaw": 2.305733680725098,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.098078846931458,
+            "yaw": 0.050688020884991,
+            "roll": 8.761041e-09
+          },
+          "priorVelocity": {
+            "pitch": 33.367191314697266,
+            "yaw": -0.022531509399414,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 2,
+          "matchingTableIndices": [
+            2
+          ],
+          "tableMatchError": 1.909853782450345e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3634,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 3,
+          "actualAngle": {
+            "pitch": 1.439817547798157,
+            "yaw": 0.073289908468723,
+            "roll": 7.193479e-09
+          },
+          "actualVelocity": {
+            "pitch": 53.27098083496094,
+            "yaw": 2.188050270080566,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.624965071678162,
+            "yaw": -0.00042201357428,
+            "roll": -2.76038e-10
+          },
+          "priorVelocity": {
+            "pitch": 44.113731384277344,
+            "yaw": 2.305733680725098,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 3,
+          "matchingTableIndices": [
+            3
+          ],
+          "tableMatchError": 1.915712199251165e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3640,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 4,
+          "actualAngle": {
+            "pitch": 2.306018829345703,
+            "yaw": 0.096807837486267,
+            "roll": 3.8384197e-08
+          },
+          "actualVelocity": {
+            "pitch": 60.7691764831543,
+            "yaw": -6.057178497314453,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 1.439817547798157,
+            "yaw": 0.073289908468723,
+            "roll": 7.193479e-09
+          },
+          "priorVelocity": {
+            "pitch": 53.27098083496094,
+            "yaw": 2.188050270080566,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 4,
+          "matchingTableIndices": [
+            4
+          ],
+          "tableMatchError": 1.9110702922202824e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3646,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 5,
+          "actualAngle": {
+            "pitch": 3.100166320800781,
+            "yaw": -0.24232804775238,
+            "roll": 2.12921236e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.3883056640625,
+            "yaw": -8.532766342163086,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 2.306018829345703,
+            "yaw": 0.096807837486267,
+            "roll": 3.8384197e-08
+          },
+          "priorVelocity": {
+            "pitch": 60.7691764831543,
+            "yaw": -6.057178497314453,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 5,
+          "matchingTableIndices": [
+            5
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3653,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 6,
+          "actualAngle": {
+            "pitch": 3.818374872207642,
+            "yaw": -0.447501331567764,
+            "roll": -7.687688e-08
+          },
+          "actualVelocity": {
+            "pitch": 71.07270812988281,
+            "yaw": -14.598149299621582,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.100166320800781,
+            "yaw": -0.24232804775238,
+            "roll": 2.12921236e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.3883056640625,
+            "yaw": -8.532766342163086,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 6,
+          "matchingTableIndices": [
+            6
+          ],
+          "tableMatchError": 2.132480599880018e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3659,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 7,
+          "actualAngle": {
+            "pitch": 4.342186450958252,
+            "yaw": -0.803763210773468,
+            "roll": -2.9432951e-07
+          },
+          "actualVelocity": {
+            "pitch": 74.41239929199219,
+            "yaw": -2.856242656707764,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.818374872207642,
+            "yaw": -0.447501331567764,
+            "roll": -7.687688e-08
+          },
+          "priorVelocity": {
+            "pitch": 71.07270812988281,
+            "yaw": -14.598149299621582,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 7,
+          "matchingTableIndices": [
+            7
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3666,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 8,
+          "actualAngle": {
+            "pitch": 4.744323253631592,
+            "yaw": -0.356624275445938,
+            "roll": -1.976119847e-06
+          },
+          "actualVelocity": {
+            "pitch": 68.96343994140625,
+            "yaw": 18.956256866455078,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.342186450958252,
+            "yaw": -0.803763210773468,
+            "roll": -2.9432951e-07
+          },
+          "priorVelocity": {
+            "pitch": 74.41239929199219,
+            "yaw": -2.856242656707764,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 8,
+          "matchingTableIndices": [
+            8
+          ],
+          "tableMatchError": 3.822140584440565e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3672,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 9,
+          "actualAngle": {
+            "pitch": 4.603719234466553,
+            "yaw": 0.807045698165894,
+            "roll": -3.068142632e-06
+          },
+          "actualVelocity": {
+            "pitch": 71.66582489013672,
+            "yaw": 23.519268035888672,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.744323253631592,
+            "yaw": -0.356624275445938,
+            "roll": -1.976119847e-06
+          },
+          "priorVelocity": {
+            "pitch": 68.96343994140625,
+            "yaw": 18.956256866455078,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 9,
+          "matchingTableIndices": [
+            9
+          ],
+          "tableMatchError": 2.6973983046972182e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3678,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 10,
+          "actualAngle": {
+            "pitch": 4.730397701263428,
+            "yaw": 1.356042623519897,
+            "roll": -1.47243881e-07
+          },
+          "actualVelocity": {
+            "pitch": 75.56484985351562,
+            "yaw": 12.393741607666016,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.603719234466553,
+            "yaw": 0.807045698165894,
+            "roll": -3.068142632e-06
+          },
+          "priorVelocity": {
+            "pitch": 71.66582489013672,
+            "yaw": 23.519268035888672,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 10,
+          "matchingTableIndices": [
+            10
+          ],
+          "tableMatchError": 3.822140584440565e-06
+        }
+      ]
+    },
+    {
+      "demo": "native_phase3_m4a4_002.dem",
+      "sha256": "f53be58ed36519b8b75a0fe233cad7abf3fc2593947f86a4cdc6659f38d4d774",
+      "header": {
+        "patch_version": "14189",
+        "map_name": "de_dust2",
+        "demo_version_name": "valve_demo_2"
+      },
+      "samples": [
+        {
+          "weapon": "m4a4",
+          "tick": 3599,
+          "elapsed": 112.92482790723443,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "priorVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3605,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "actualVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 9.537907246304548e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3610,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 2,
+          "actualAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "actualVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "priorVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 2,
+          "matchingTableIndices": [
+            2
+          ],
+          "tableMatchError": 1.1920928955078125e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3879,
+          "elapsed": 4.197500091046095,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "priorVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3885,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "actualVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 9.537907246304548e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3890,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 2,
+          "actualAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "actualVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "priorVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 2,
+          "matchingTableIndices": [
+            2
+          ],
+          "tableMatchError": 1.1920928955078125e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3896,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 3,
+          "actualAngle": {
+            "pitch": 0.836526215076446,
+            "yaw": 0.099909946322441,
+            "roll": 4.0233367e-08
+          },
+          "actualVelocity": {
+            "pitch": 42.14834976196289,
+            "yaw": -1.743865489959717,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "priorVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 3,
+          "matchingTableIndices": [
+            3
+          ],
+          "tableMatchError": 1.966049969490843e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3902,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 4,
+          "actualAngle": {
+            "pitch": 1.442559361457825,
+            "yaw": -0.047380864620209,
+            "roll": 5.4472427e-08
+          },
+          "actualVelocity": {
+            "pitch": 48.67698669433594,
+            "yaw": 4.489813327789307,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.836526215076446,
+            "yaw": 0.099909946322441,
+            "roll": 4.0233367e-08
+          },
+          "priorVelocity": {
+            "pitch": 42.14834976196289,
+            "yaw": -1.743865489959717,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 4,
+          "matchingTableIndices": [
+            4
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3908,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 5,
+          "actualAngle": {
+            "pitch": 2.0800461769104,
+            "yaw": 0.16237984597683,
+            "roll": -8.7185711e-08
+          },
+          "actualVelocity": {
+            "pitch": 54.522796630859375,
+            "yaw": 5.904604911804199,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 1.442559361457825,
+            "yaw": -0.047380864620209,
+            "roll": 5.4472427e-08
+          },
+          "priorVelocity": {
+            "pitch": 48.67698669433594,
+            "yaw": 4.489813327789307,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 5,
+          "matchingTableIndices": [
+            5
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3914,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 6,
+          "actualAngle": {
+            "pitch": 2.696887969970703,
+            "yaw": 0.278542399406433,
+            "roll": 8.4303466e-08
+          },
+          "actualVelocity": {
+            "pitch": 57.061038970947266,
+            "yaw": -5.293796539306641,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 2.0800461769104,
+            "yaw": 0.16237984597683,
+            "roll": -8.7185711e-08
+          },
+          "priorVelocity": {
+            "pitch": 54.522796630859375,
+            "yaw": 5.904604911804199,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 6,
+          "matchingTableIndices": [
+            6
+          ],
+          "tableMatchError": 2.384185791015625e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3919,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 7,
+          "actualAngle": {
+            "pitch": 3.114021062850952,
+            "yaw": -0.159217372536659,
+            "roll": 1.004082947e-06
+          },
+          "actualVelocity": {
+            "pitch": 60.30199432373047,
+            "yaw": -8.749635696411133,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 2.696887969970703,
+            "yaw": 0.278542399406433,
+            "roll": 8.4303466e-08
+          },
+          "priorVelocity": {
+            "pitch": 57.061038970947266,
+            "yaw": -5.293796539306641,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 7,
+          "matchingTableIndices": [
+            7
+          ],
+          "tableMatchError": 3.844384073399806e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3925,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 8,
+          "actualAngle": {
+            "pitch": 3.488456726074219,
+            "yaw": -0.42871567606926,
+            "roll": 3.83407752e-07
+          },
+          "actualVelocity": {
+            "pitch": 57.811309814453125,
+            "yaw": -20.54625701904297,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.114021062850952,
+            "yaw": -0.159217372536659,
+            "roll": 1.004082947e-06
+          },
+          "priorVelocity": {
+            "pitch": 60.30199432373047,
+            "yaw": -8.749635696411133,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 8,
+          "matchingTableIndices": [
+            8
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3931,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 9,
+          "actualAngle": {
+            "pitch": 3.550971746444702,
+            "yaw": -1.038143038749695,
+            "roll": 3.07415092e-07
+          },
+          "actualVelocity": {
+            "pitch": 61.49922180175781,
+            "yaw": -12.55548095703125,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.488456726074219,
+            "yaw": -0.42871567606926,
+            "roll": 3.83407752e-07
+          },
+          "priorVelocity": {
+            "pitch": 57.811309814453125,
+            "yaw": -20.54625701904297,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 9,
+          "matchingTableIndices": [
+            9
+          ],
+          "tableMatchError": 1.9405866379856713e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3937,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 10,
+          "actualAngle": {
+            "pitch": 3.785146713256836,
+            "yaw": -0.861425042152405,
+            "roll": -2.597001185e-06
+          },
+          "actualVelocity": {
+            "pitch": 63.421932220458984,
+            "yaw": -3.23124361038208,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.550971746444702,
+            "yaw": -1.038143038749695,
+            "roll": 3.07415092e-07
+          },
+          "priorVelocity": {
+            "pitch": 61.49922180175781,
+            "yaw": -12.55548095703125,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 10,
+          "matchingTableIndices": [
+            10
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3942,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 11,
+          "actualAngle": {
+            "pitch": 3.973829507827759,
+            "yaw": -0.394987672567368,
+            "roll": -3.868791282e-06
+          },
+          "actualVelocity": {
+            "pitch": 60.95674133300781,
+            "yaw": 11.286347389221191,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.785146713256836,
+            "yaw": -0.861425042152405,
+            "roll": -2.597001185e-06
+          },
+          "priorVelocity": {
+            "pitch": 63.421932220458984,
+            "yaw": -3.23124361038208,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 11,
+          "matchingTableIndices": [
+            11
+          ],
+          "tableMatchError": 2.037049232797034e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3948,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 12,
+          "actualAngle": {
+            "pitch": 3.913987159729004,
+            "yaw": 0.398725897073746,
+            "roll": -4.202797754e-06
+          },
+          "actualVelocity": {
+            "pitch": 59.50292205810547,
+            "yaw": 20.706951141357422,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.973829507827759,
+            "yaw": -0.394987672567368,
+            "roll": -3.868791282e-06
+          },
+          "priorVelocity": {
+            "pitch": 60.95674133300781,
+            "yaw": 11.286347389221191,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 12,
+          "matchingTableIndices": [
+            12
+          ],
+          "tableMatchError": 2.132480599880018e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3954,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 13,
+          "actualAngle": {
+            "pitch": 3.83357834815979,
+            "yaw": 1.056343078613281,
+            "roll": -1.734774173e-06
+          },
+          "actualVelocity": {
+            "pitch": 55.69770812988281,
+            "yaw": 30.321697235107422,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.913987159729004,
+            "yaw": 0.398725897073746,
+            "roll": -4.202797754e-06
+          },
+          "priorVelocity": {
+            "pitch": 59.50292205810547,
+            "yaw": 20.706951141357422,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 13,
+          "matchingTableIndices": [
+            13
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3960,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 14,
+          "actualAngle": {
+            "pitch": 3.647824048995972,
+            "yaw": 1.687248229980469,
+            "roll": 8.053795e-07
+          },
+          "actualVelocity": {
+            "pitch": 59.40747833251953,
+            "yaw": 26.01502799987793,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.83357834815979,
+            "yaw": 1.056343078613281,
+            "roll": -1.734774173e-06
+          },
+          "priorVelocity": {
+            "pitch": 55.69770812988281,
+            "yaw": 30.321697235107422,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 14,
+          "matchingTableIndices": [
+            14
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3965,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 15,
+          "actualAngle": {
+            "pitch": 3.788224697113037,
+            "yaw": 1.685209393501282,
+            "roll": 4.104413165e-06
+          },
+          "actualVelocity": {
+            "pitch": 62.32563400268555,
+            "yaw": 21.038854598999023,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.647824048995972,
+            "yaw": 1.687248229980469,
+            "roll": 8.053795e-07
+          },
+          "priorVelocity": {
+            "pitch": 59.40747833251953,
+            "yaw": 26.01502799987793,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 15,
+          "matchingTableIndices": [
+            15
+          ],
+          "tableMatchError": 2.037049232797034e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3971,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 16,
+          "actualAngle": {
+            "pitch": 3.989317655563354,
+            "yaw": 1.467144966125488,
+            "roll": 5.619840977e-06
+          },
+          "actualVelocity": {
+            "pitch": 59.434532165527344,
+            "yaw": 28.5184326171875,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.788224697113037,
+            "yaw": 1.685209393501282,
+            "roll": 4.104413165e-06
+          },
+          "priorVelocity": {
+            "pitch": 62.32563400268555,
+            "yaw": 21.038854598999023,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 16,
+          "matchingTableIndices": [
+            16
+          ],
+          "tableMatchError": 2.132480599880018e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3977,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 17,
+          "actualAngle": {
+            "pitch": 3.932606220245361,
+            "yaw": 1.753403067588806,
+            "roll": 4.780381914e-06
+          },
+          "actualVelocity": {
+            "pitch": 56.93026351928711,
+            "yaw": 34.190006256103516,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.989317655563354,
+            "yaw": 1.467144966125488,
+            "roll": 5.619840977e-06
+          },
+          "priorVelocity": {
+            "pitch": 59.434532165527344,
+            "yaw": 28.5184326171875,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 17,
+          "matchingTableIndices": [
+            17
+          ],
+          "tableMatchError": 9.5367431640625e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3983,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 18,
+          "actualAngle": {
+            "pitch": 3.81110954284668,
+            "yaw": 2.106112718582153,
+            "roll": 5.080516075e-06
+          },
+          "actualVelocity": {
+            "pitch": 59.67454528808594,
+            "yaw": 30.417240142822266,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.932606220245361,
+            "yaw": 1.753403067588806,
+            "roll": 4.780381914e-06
+          },
+          "priorVelocity": {
+            "pitch": 56.93026351928711,
+            "yaw": 34.190006256103516,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 18,
+          "matchingTableIndices": [
+            18
+          ],
+          "tableMatchError": 1.966049969490843e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3988,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 19,
+          "actualAngle": {
+            "pitch": 3.914182662963867,
+            "yaw": 2.044510841369629,
+            "roll": 6.658958227e-06
+          },
+          "actualVelocity": {
+            "pitch": 61.137969970703125,
+            "yaw": 11.699458122253418,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.81110954284668,
+            "yaw": 2.106112718582153,
+            "roll": 5.080516075e-06
+          },
+          "priorVelocity": {
+            "pitch": 59.67454528808594,
+            "yaw": 30.417240142822266,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 19,
+          "matchingTableIndices": [
+            19
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3994,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 20,
+          "actualAngle": {
+            "pitch": 3.972859144210815,
+            "yaw": 1.145960688591003,
+            "roll": 9.882163795e-06
+          },
+          "actualVelocity": {
+            "pitch": 63.54261016845703,
+            "yaw": 11.082671165466309,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.914182662963867,
+            "yaw": 2.044510841369629,
+            "roll": 6.658958227e-06
+          },
+          "priorVelocity": {
+            "pitch": 61.137969970703125,
+            "yaw": 11.699458122253418,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 20,
+          "matchingTableIndices": [
+            20
+          ],
+          "tableMatchError": 4.76837158203125e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4000,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 21,
+          "actualAngle": {
+            "pitch": 4.086625576019287,
+            "yaw": 0.846397221088409,
+            "roll": 6.590145404e-06
+          },
+          "actualVelocity": {
+            "pitch": 63.280426025390625,
+            "yaw": -2.211896896362305,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.972859144210815,
+            "yaw": 1.145960688591003,
+            "roll": 9.882163795e-06
+          },
+          "priorVelocity": {
+            "pitch": 63.54261016845703,
+            "yaw": 11.082671165466309,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 21,
+          "matchingTableIndices": [
+            21
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4006,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 22,
+          "actualAngle": {
+            "pitch": 4.097664833068848,
+            "yaw": 0.147609680891037,
+            "roll": 6.112937626e-06
+          },
+          "actualVelocity": {
+            "pitch": 65.17808532714844,
+            "yaw": -2.619727611541748,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.086625576019287,
+            "yaw": 0.846397221088409,
+            "roll": 6.590145404e-06
+          },
+          "priorVelocity": {
+            "pitch": 63.280426025390625,
+            "yaw": -2.211896896362305,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 22,
+          "matchingTableIndices": [
+            22
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4011,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 23,
+          "actualAngle": {
+            "pitch": 4.200284957885742,
+            "yaw": -0.07669223099947,
+            "roll": 2.755066816e-06
+          },
+          "actualVelocity": {
+            "pitch": 65.67942810058594,
+            "yaw": -7.734139442443848,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.097664833068848,
+            "yaw": 0.147609680891037,
+            "roll": 6.112937626e-06
+          },
+          "priorVelocity": {
+            "pitch": 65.17808532714844,
+            "yaw": -2.619727611541748,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 23,
+          "matchingTableIndices": [
+            23
+          ],
+          "tableMatchError": 1.922192036699903e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4017,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 24,
+          "actualAngle": {
+            "pitch": 4.277528762817383,
+            "yaw": -0.379189282655716,
+            "roll": 1.414668077e-06
+          },
+          "actualVelocity": {
+            "pitch": 66.01112365722656,
+            "yaw": 0.838323593139648,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.200284957885742,
+            "yaw": -0.07669223099947,
+            "roll": 2.755066816e-06
+          },
+          "priorVelocity": {
+            "pitch": 65.67942810058594,
+            "yaw": -7.734139442443848,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 24,
+          "matchingTableIndices": [
+            24
+          ],
+          "tableMatchError": 3.844384073399806e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4023,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 25,
+          "actualAngle": {
+            "pitch": 4.329578876495361,
+            "yaw": -0.074970044195652,
+            "roll": -1.444029976e-06
+          },
+          "actualVelocity": {
+            "pitch": 66.48371124267578,
+            "yaw": -4.414385318756104,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.277528762817383,
+            "yaw": -0.379189282655716,
+            "roll": 1.414668077e-06
+          },
+          "priorVelocity": {
+            "pitch": 66.01112365722656,
+            "yaw": 0.838323593139648,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 25,
+          "matchingTableIndices": [
+            25
+          ],
+          "tableMatchError": 1.9157121991268106e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4029,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 26,
+          "actualAngle": {
+            "pitch": 4.379109859466553,
+            "yaw": -0.226765409111977,
+            "roll": -2.1824934e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.20817565917969,
+            "yaw": -5.431839942932129,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.329578876495361,
+            "yaw": -0.074970044195652,
+            "roll": -1.444029976e-06
+          },
+          "priorVelocity": {
+            "pitch": 66.48371124267578,
+            "yaw": -4.414385318756104,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 26,
+          "matchingTableIndices": [
+            26
+          ],
+          "tableMatchError": 3.822140584440565e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4034,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 27,
+          "actualAngle": {
+            "pitch": 4.443234920501709,
+            "yaw": -0.320581167936325,
+            "roll": -4.21483406e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.62772369384766,
+            "yaw": -6.638656616210938,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.379109859466553,
+            "yaw": -0.226765409111977,
+            "roll": -2.1824934e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.20817565917969,
+            "yaw": -5.431839942932129,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 27,
+          "matchingTableIndices": [
+            27
+          ],
+          "tableMatchError": 1.922192036810068e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4040,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 28,
+          "actualAngle": {
+            "pitch": 4.497406005859375,
+            "yaw": -0.406256586313248,
+            "roll": -7.64413358e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.7186279296875,
+            "yaw": -8.631977081298828,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.443234920501709,
+            "yaw": -0.320581167936325,
+            "roll": -4.21483406e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.62772369384766,
+            "yaw": -6.638656616210938,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 28,
+          "matchingTableIndices": [
+            28
+          ],
+          "tableMatchError": 3.844384073399806e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4046,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 29,
+          "actualAngle": {
+            "pitch": 4.529959201812744,
+            "yaw": -0.526283264160156,
+            "roll": -1.013687665e-06
+          },
+          "actualVelocity": {
+            "pitch": 65.81333923339844,
+            "yaw": 4.377681255340576,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.497406005859375,
+            "yaw": -0.406256586313248,
+            "roll": -7.64413358e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.7186279296875,
+            "yaw": -8.631977081298828,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 29,
+          "matchingTableIndices": [
+            29
+          ],
+          "tableMatchError": 3.932099938981686e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4383,
+          "elapsed": 5.2685028873384,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.529959201812744,
+            "yaw": -0.526283264160156,
+            "roll": -1.013687665e-06
+          },
+          "priorVelocity": {
+            "pitch": 65.81333923339844,
+            "yaw": 4.377681255340576,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4389,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "actualVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 9.537907246304548e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4395,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 2,
+          "actualAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "actualVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "priorVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 2,
+          "matchingTableIndices": [
+            2
+          ],
+          "tableMatchError": 1.1920928955078125e-07
+        }
+      ]
+    },
+    {
+      "demo": "native_phase3_m4a1s_001.dem",
+      "sha256": "2783d539fca2df90766626d2b498c184673103260c746d2376dad942708bad76",
+      "header": {
+        "patch_version": "14189",
+        "map_name": "de_dust2",
+        "demo_version_name": "valve_demo_2"
+      },
+      "samples": [
+        {
+          "weapon": "m4a4",
+          "tick": 3812,
+          "elapsed": 102.36737491749227,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "priorVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3818,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "actualVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 9.537907246304548e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 3824,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 2,
+          "actualAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "actualVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "priorVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 2,
+          "matchingTableIndices": [
+            2
+          ],
+          "tableMatchError": 1.1920928955078125e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4091,
+          "elapsed": 4.179372418671846,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "priorVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4097,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "actualVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 16.852466583251953,
+            "yaw": -3.681959629058838,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 9.537907246304548e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4103,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 2,
+          "actualAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "actualVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.086310684680939,
+            "yaw": -0.018857326358557,
+            "roll": -4.383776e-09
+          },
+          "priorVelocity": {
+            "pitch": 27.824562072753906,
+            "yaw": -2.618813276290894,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 2,
+          "matchingTableIndices": [
+            2
+          ],
+          "tableMatchError": 1.1920928955078125e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4108,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 3,
+          "actualAngle": {
+            "pitch": 0.836526215076446,
+            "yaw": 0.099909946322441,
+            "roll": 4.0233367e-08
+          },
+          "actualVelocity": {
+            "pitch": 42.14834976196289,
+            "yaw": -1.743865489959717,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.344839841127396,
+            "yaw": -0.032455895096064,
+            "roll": -9.4568705e-08
+          },
+          "priorVelocity": {
+            "pitch": 35.10609436035156,
+            "yaw": 4.245141506195068,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 3,
+          "matchingTableIndices": [
+            3
+          ],
+          "tableMatchError": 1.966049969490843e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4114,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 4,
+          "actualAngle": {
+            "pitch": 1.442559361457825,
+            "yaw": -0.047380864620209,
+            "roll": 5.4472427e-08
+          },
+          "actualVelocity": {
+            "pitch": 48.67698669433594,
+            "yaw": 4.489813327789307,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.836526215076446,
+            "yaw": 0.099909946322441,
+            "roll": 4.0233367e-08
+          },
+          "priorVelocity": {
+            "pitch": 42.14834976196289,
+            "yaw": -1.743865489959717,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 4,
+          "matchingTableIndices": [
+            4
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4120,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 5,
+          "actualAngle": {
+            "pitch": 2.0800461769104,
+            "yaw": 0.16237984597683,
+            "roll": -8.7185711e-08
+          },
+          "actualVelocity": {
+            "pitch": 54.522796630859375,
+            "yaw": 5.904604911804199,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 1.442559361457825,
+            "yaw": -0.047380864620209,
+            "roll": 5.4472427e-08
+          },
+          "priorVelocity": {
+            "pitch": 48.67698669433594,
+            "yaw": 4.489813327789307,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 5,
+          "matchingTableIndices": [
+            5
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4126,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 6,
+          "actualAngle": {
+            "pitch": 2.696887969970703,
+            "yaw": 0.278542399406433,
+            "roll": 8.4303466e-08
+          },
+          "actualVelocity": {
+            "pitch": 57.061038970947266,
+            "yaw": -5.293796539306641,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 2.0800461769104,
+            "yaw": 0.16237984597683,
+            "roll": -8.7185711e-08
+          },
+          "priorVelocity": {
+            "pitch": 54.522796630859375,
+            "yaw": 5.904604911804199,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 6,
+          "matchingTableIndices": [
+            6
+          ],
+          "tableMatchError": 2.384185791015625e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4132,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 7,
+          "actualAngle": {
+            "pitch": 3.114021062850952,
+            "yaw": -0.159217372536659,
+            "roll": 1.004082947e-06
+          },
+          "actualVelocity": {
+            "pitch": 60.30199432373047,
+            "yaw": -8.749635696411133,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 2.696887969970703,
+            "yaw": 0.278542399406433,
+            "roll": 8.4303466e-08
+          },
+          "priorVelocity": {
+            "pitch": 57.061038970947266,
+            "yaw": -5.293796539306641,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 7,
+          "matchingTableIndices": [
+            7
+          ],
+          "tableMatchError": 3.844384073399806e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4137,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 8,
+          "actualAngle": {
+            "pitch": 3.488456726074219,
+            "yaw": -0.42871567606926,
+            "roll": 3.83407752e-07
+          },
+          "actualVelocity": {
+            "pitch": 57.811309814453125,
+            "yaw": -20.54625701904297,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.114021062850952,
+            "yaw": -0.159217372536659,
+            "roll": 1.004082947e-06
+          },
+          "priorVelocity": {
+            "pitch": 60.30199432373047,
+            "yaw": -8.749635696411133,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 8,
+          "matchingTableIndices": [
+            8
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4143,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 9,
+          "actualAngle": {
+            "pitch": 3.550971746444702,
+            "yaw": -1.038143038749695,
+            "roll": 3.07415092e-07
+          },
+          "actualVelocity": {
+            "pitch": 61.49922180175781,
+            "yaw": -12.55548095703125,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.488456726074219,
+            "yaw": -0.42871567606926,
+            "roll": 3.83407752e-07
+          },
+          "priorVelocity": {
+            "pitch": 57.811309814453125,
+            "yaw": -20.54625701904297,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 9,
+          "matchingTableIndices": [
+            9
+          ],
+          "tableMatchError": 1.9405866379856713e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4149,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 10,
+          "actualAngle": {
+            "pitch": 3.785146713256836,
+            "yaw": -0.861425042152405,
+            "roll": -2.597001185e-06
+          },
+          "actualVelocity": {
+            "pitch": 63.421932220458984,
+            "yaw": -3.23124361038208,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.550971746444702,
+            "yaw": -1.038143038749695,
+            "roll": 3.07415092e-07
+          },
+          "priorVelocity": {
+            "pitch": 61.49922180175781,
+            "yaw": -12.55548095703125,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 10,
+          "matchingTableIndices": [
+            10
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4155,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 11,
+          "actualAngle": {
+            "pitch": 3.973829507827759,
+            "yaw": -0.394987672567368,
+            "roll": -3.868791282e-06
+          },
+          "actualVelocity": {
+            "pitch": 60.95674133300781,
+            "yaw": 11.286347389221191,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.785146713256836,
+            "yaw": -0.861425042152405,
+            "roll": -2.597001185e-06
+          },
+          "priorVelocity": {
+            "pitch": 63.421932220458984,
+            "yaw": -3.23124361038208,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 11,
+          "matchingTableIndices": [
+            11
+          ],
+          "tableMatchError": 2.037049232797034e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4160,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 12,
+          "actualAngle": {
+            "pitch": 3.913987159729004,
+            "yaw": 0.398725897073746,
+            "roll": -4.202797754e-06
+          },
+          "actualVelocity": {
+            "pitch": 59.50292205810547,
+            "yaw": 20.706951141357422,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.973829507827759,
+            "yaw": -0.394987672567368,
+            "roll": -3.868791282e-06
+          },
+          "priorVelocity": {
+            "pitch": 60.95674133300781,
+            "yaw": 11.286347389221191,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 12,
+          "matchingTableIndices": [
+            12
+          ],
+          "tableMatchError": 2.132480599880018e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4166,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 13,
+          "actualAngle": {
+            "pitch": 3.83357834815979,
+            "yaw": 1.056343078613281,
+            "roll": -1.734774173e-06
+          },
+          "actualVelocity": {
+            "pitch": 55.69770812988281,
+            "yaw": 30.321697235107422,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.913987159729004,
+            "yaw": 0.398725897073746,
+            "roll": -4.202797754e-06
+          },
+          "priorVelocity": {
+            "pitch": 59.50292205810547,
+            "yaw": 20.706951141357422,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 13,
+          "matchingTableIndices": [
+            13
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4172,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 14,
+          "actualAngle": {
+            "pitch": 3.647824048995972,
+            "yaw": 1.687248229980469,
+            "roll": 8.053795e-07
+          },
+          "actualVelocity": {
+            "pitch": 59.40747833251953,
+            "yaw": 26.01502799987793,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.83357834815979,
+            "yaw": 1.056343078613281,
+            "roll": -1.734774173e-06
+          },
+          "priorVelocity": {
+            "pitch": 55.69770812988281,
+            "yaw": 30.321697235107422,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 14,
+          "matchingTableIndices": [
+            14
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4178,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 15,
+          "actualAngle": {
+            "pitch": 3.788224697113037,
+            "yaw": 1.685209393501282,
+            "roll": 4.104413165e-06
+          },
+          "actualVelocity": {
+            "pitch": 62.32563400268555,
+            "yaw": 21.038854598999023,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.647824048995972,
+            "yaw": 1.687248229980469,
+            "roll": 8.053795e-07
+          },
+          "priorVelocity": {
+            "pitch": 59.40747833251953,
+            "yaw": 26.01502799987793,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 15,
+          "matchingTableIndices": [
+            15
+          ],
+          "tableMatchError": 2.037049232797034e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4183,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 16,
+          "actualAngle": {
+            "pitch": 3.989317655563354,
+            "yaw": 1.467144966125488,
+            "roll": 5.619840977e-06
+          },
+          "actualVelocity": {
+            "pitch": 59.434532165527344,
+            "yaw": 28.5184326171875,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.788224697113037,
+            "yaw": 1.685209393501282,
+            "roll": 4.104413165e-06
+          },
+          "priorVelocity": {
+            "pitch": 62.32563400268555,
+            "yaw": 21.038854598999023,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 16,
+          "matchingTableIndices": [
+            16
+          ],
+          "tableMatchError": 2.132480599880018e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4189,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 17,
+          "actualAngle": {
+            "pitch": 3.932606220245361,
+            "yaw": 1.753403067588806,
+            "roll": 4.780381914e-06
+          },
+          "actualVelocity": {
+            "pitch": 56.93026351928711,
+            "yaw": 34.190006256103516,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.989317655563354,
+            "yaw": 1.467144966125488,
+            "roll": 5.619840977e-06
+          },
+          "priorVelocity": {
+            "pitch": 59.434532165527344,
+            "yaw": 28.5184326171875,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 17,
+          "matchingTableIndices": [
+            17
+          ],
+          "tableMatchError": 9.5367431640625e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4195,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 18,
+          "actualAngle": {
+            "pitch": 3.81110954284668,
+            "yaw": 2.106112718582153,
+            "roll": 5.080516075e-06
+          },
+          "actualVelocity": {
+            "pitch": 59.67454528808594,
+            "yaw": 30.417240142822266,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.932606220245361,
+            "yaw": 1.753403067588806,
+            "roll": 4.780381914e-06
+          },
+          "priorVelocity": {
+            "pitch": 56.93026351928711,
+            "yaw": 34.190006256103516,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 18,
+          "matchingTableIndices": [
+            18
+          ],
+          "tableMatchError": 1.966049969490843e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4201,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 19,
+          "actualAngle": {
+            "pitch": 3.914182662963867,
+            "yaw": 2.044510841369629,
+            "roll": 6.658958227e-06
+          },
+          "actualVelocity": {
+            "pitch": 61.137969970703125,
+            "yaw": 11.699458122253418,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.81110954284668,
+            "yaw": 2.106112718582153,
+            "roll": 5.080516075e-06
+          },
+          "priorVelocity": {
+            "pitch": 59.67454528808594,
+            "yaw": 30.417240142822266,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 19,
+          "matchingTableIndices": [
+            19
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4206,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 20,
+          "actualAngle": {
+            "pitch": 3.972859144210815,
+            "yaw": 1.145960688591003,
+            "roll": 9.882163795e-06
+          },
+          "actualVelocity": {
+            "pitch": 63.54261016845703,
+            "yaw": 11.082671165466309,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.914182662963867,
+            "yaw": 2.044510841369629,
+            "roll": 6.658958227e-06
+          },
+          "priorVelocity": {
+            "pitch": 61.137969970703125,
+            "yaw": 11.699458122253418,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 20,
+          "matchingTableIndices": [
+            20
+          ],
+          "tableMatchError": 4.76837158203125e-07
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4212,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 21,
+          "actualAngle": {
+            "pitch": 4.086625576019287,
+            "yaw": 0.846397221088409,
+            "roll": 6.590145404e-06
+          },
+          "actualVelocity": {
+            "pitch": 63.280426025390625,
+            "yaw": -2.211896896362305,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.972859144210815,
+            "yaw": 1.145960688591003,
+            "roll": 9.882163795e-06
+          },
+          "priorVelocity": {
+            "pitch": 63.54261016845703,
+            "yaw": 11.082671165466309,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 21,
+          "matchingTableIndices": [
+            21
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4218,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 22,
+          "actualAngle": {
+            "pitch": 4.097664833068848,
+            "yaw": 0.147609680891037,
+            "roll": 6.112937626e-06
+          },
+          "actualVelocity": {
+            "pitch": 65.17808532714844,
+            "yaw": -2.619727611541748,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.086625576019287,
+            "yaw": 0.846397221088409,
+            "roll": 6.590145404e-06
+          },
+          "priorVelocity": {
+            "pitch": 63.280426025390625,
+            "yaw": -2.211896896362305,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 22,
+          "matchingTableIndices": [
+            22
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4224,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 23,
+          "actualAngle": {
+            "pitch": 4.200284957885742,
+            "yaw": -0.07669223099947,
+            "roll": 2.755066816e-06
+          },
+          "actualVelocity": {
+            "pitch": 65.67942810058594,
+            "yaw": -7.734139442443848,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.097664833068848,
+            "yaw": 0.147609680891037,
+            "roll": 6.112937626e-06
+          },
+          "priorVelocity": {
+            "pitch": 65.17808532714844,
+            "yaw": -2.619727611541748,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 23,
+          "matchingTableIndices": [
+            23
+          ],
+          "tableMatchError": 1.922192036699903e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4229,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 24,
+          "actualAngle": {
+            "pitch": 4.277528762817383,
+            "yaw": -0.379189282655716,
+            "roll": 1.414668077e-06
+          },
+          "actualVelocity": {
+            "pitch": 66.01112365722656,
+            "yaw": 0.838323593139648,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.200284957885742,
+            "yaw": -0.07669223099947,
+            "roll": 2.755066816e-06
+          },
+          "priorVelocity": {
+            "pitch": 65.67942810058594,
+            "yaw": -7.734139442443848,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 24,
+          "matchingTableIndices": [
+            24
+          ],
+          "tableMatchError": 3.844384073399806e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4235,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 25,
+          "actualAngle": {
+            "pitch": 4.329578876495361,
+            "yaw": -0.074970044195652,
+            "roll": -1.444029976e-06
+          },
+          "actualVelocity": {
+            "pitch": 66.48371124267578,
+            "yaw": -4.414385318756104,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.277528762817383,
+            "yaw": -0.379189282655716,
+            "roll": 1.414668077e-06
+          },
+          "priorVelocity": {
+            "pitch": 66.01112365722656,
+            "yaw": 0.838323593139648,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 25,
+          "matchingTableIndices": [
+            25
+          ],
+          "tableMatchError": 1.9157121991268106e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4241,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 26,
+          "actualAngle": {
+            "pitch": 4.379109859466553,
+            "yaw": -0.226765409111977,
+            "roll": -2.1824934e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.20817565917969,
+            "yaw": -5.431839942932129,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.329578876495361,
+            "yaw": -0.074970044195652,
+            "roll": -1.444029976e-06
+          },
+          "priorVelocity": {
+            "pitch": 66.48371124267578,
+            "yaw": -4.414385318756104,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 26,
+          "matchingTableIndices": [
+            26
+          ],
+          "tableMatchError": 3.822140584440565e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4247,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 27,
+          "actualAngle": {
+            "pitch": 4.443234920501709,
+            "yaw": -0.320581167936325,
+            "roll": -4.21483406e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.62772369384766,
+            "yaw": -6.638656616210938,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.379109859466553,
+            "yaw": -0.226765409111977,
+            "roll": -2.1824934e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.20817565917969,
+            "yaw": -5.431839942932129,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 27,
+          "matchingTableIndices": [
+            27
+          ],
+          "tableMatchError": 1.922192036810068e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4252,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 28,
+          "actualAngle": {
+            "pitch": 4.497406005859375,
+            "yaw": -0.406256586313248,
+            "roll": -7.64413358e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.7186279296875,
+            "yaw": -8.631977081298828,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.443234920501709,
+            "yaw": -0.320581167936325,
+            "roll": -4.21483406e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.62772369384766,
+            "yaw": -6.638656616210938,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 28,
+          "matchingTableIndices": [
+            28
+          ],
+          "tableMatchError": 3.844384073399806e-06
+        },
+        {
+          "weapon": "m4a4",
+          "tick": 4258,
+          "elapsed": 0.09000000357627869,
+          "inferredPreShotIndex": 29,
+          "actualAngle": {
+            "pitch": 4.529959201812744,
+            "yaw": -0.526283264160156,
+            "roll": -1.013687665e-06
+          },
+          "actualVelocity": {
+            "pitch": 65.81333923339844,
+            "yaw": 4.377681255340576,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.497406005859375,
+            "yaw": -0.406256586313248,
+            "roll": -7.64413358e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.7186279296875,
+            "yaw": -8.631977081298828,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 29,
+          "matchingTableIndices": [
+            29
+          ],
+          "tableMatchError": 3.932099938981686e-06
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_deagle_001.dem",
+      "sha256": "0fdd476a1650f7a58af769d789bdaaebc41469f88b457eaadf97abe2053772be",
+      "header": {
+        "patch_version": "14189",
+        "map_name": "de_dust2",
+        "demo_version_name": "valve_demo_2"
+      },
+      "samples": [
+        {
+          "weapon": "deagle",
+          "tick": 2390,
+          "elapsed": 202.4005269734189,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 34.20981216430664,
+            "yaw": -18.08118438720703,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 56.00458908081055,
+            "yaw": 2.447699308395386,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 25,
+          "matchingTableIndices": [
+            25
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "deagle",
+          "tick": 2413,
+          "elapsed": 0.3594097029417753,
+          "inferredPreShotIndex": 0.6042963266372681,
+          "actualAngle": {
+            "pitch": 0.052116066217422,
+            "yaw": -0.027545321732759,
+            "roll": -6.5952e-11
+          },
+          "actualVelocity": {
+            "pitch": 49.68250274658203,
+            "yaw": -17.341110229492188,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 34.20981216430664,
+            "yaw": -18.08118438720703,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 56,
+          "matchingTableIndices": [
+            56
+          ],
+          "tableMatchError": 1.066240299940009e-06
+        },
+        {
+          "weapon": "deagle",
+          "tick": 2435,
+          "elapsed": 0.3438108917325735,
+          "inferredPreShotIndex": 1.041800498962402,
+          "actualAngle": {
+            "pitch": 0.081191495060921,
+            "yaw": -0.02833897061646,
+            "roll": -1.85643e-10
+          },
+          "actualVelocity": {
+            "pitch": 47.03520965576172,
+            "yaw": 15.683692932128906,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.052116066217422,
+            "yaw": -0.027545321732759,
+            "roll": -6.5952e-11
+          },
+          "priorVelocity": {
+            "pitch": 49.68250274658203,
+            "yaw": -17.341110229492188,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 6,
+          "matchingTableIndices": [
+            6
+          ],
+          "tableMatchError": 2.8709398695927367e-06
+        },
+        {
+          "weapon": "deagle",
+          "tick": 2590,
+          "elapsed": 2.4218089133501053,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 29.23443031311035,
+            "yaw": 46.93027114868164,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.081191495060921,
+            "yaw": -0.02833897061646,
+            "roll": -1.85643e-10
+          },
+          "priorVelocity": {
+            "pitch": 47.03520965576172,
+            "yaw": 15.683692932128906,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 26,
+          "matchingTableIndices": [
+            26
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "deagle",
+          "tick": 2789,
+          "elapsed": 3.109397191554308,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 40.63581085205078,
+            "yaw": -31.645809173583984,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 29.23443031311035,
+            "yaw": 46.93027114868164,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 59,
+          "matchingTableIndices": [
+            59
+          ],
+          "tableMatchError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_recovery_001.dem",
+      "sha256": "9f2616be8f3232651f2b2be130b48dbf3881709f35d302d9b656aded4a659f50",
+      "header": {
+        "patch_version": "14190",
+        "map_name": "de_dust2",
+        "demo_version_name": "valve_demo_2"
+      },
+      "samples": [
+        {
+          "weapon": "ak47",
+          "tick": 331,
+          "elapsed": 5.005022989585996,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": -0.346649348735809,
+            "yaw": -0.034141920506954,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "ak47",
+          "tick": 461,
+          "elapsed": 2.0264736730605364,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "ak47",
+          "tick": 468,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.097861669957638,
+            "yaw": 0.050575785338879,
+            "roll": 8.725215e-09
+          },
+          "actualVelocity": {
+            "pitch": 33.33890914916992,
+            "yaw": -0.037148952484131,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 4.76837158203125e-07
+        },
+        {
+          "weapon": "ak47",
+          "tick": 474,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 2,
+          "actualAngle": {
+            "pitch": 0.623352825641632,
+            "yaw": -0.000694590911735,
+            "roll": -4.5762e-10
+          },
+          "actualVelocity": {
+            "pitch": 44.09569549560547,
+            "yaw": 2.29641318321228,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.097861669957638,
+            "yaw": 0.050575785338879,
+            "roll": 8.725215e-09
+          },
+          "priorVelocity": {
+            "pitch": 33.33890914916992,
+            "yaw": -0.037148952484131,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 2,
+          "matchingTableIndices": [
+            2
+          ],
+          "tableMatchError": 3.815833964635256e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 480,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 3,
+          "actualAngle": {
+            "pitch": 1.43809700012207,
+            "yaw": 0.072929568588734,
+            "roll": 7.089221e-09
+          },
+          "actualVelocity": {
+            "pitch": 53.25947570800781,
+            "yaw": 2.182107448577881,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.623352825641632,
+            "yaw": -0.000694590911735,
+            "roll": -4.5762e-10
+          },
+          "priorVelocity": {
+            "pitch": 44.09569549560547,
+            "yaw": 2.29641318321228,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 3,
+          "matchingTableIndices": [
+            3
+          ],
+          "tableMatchError": 1.9082797281243946e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 487,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 4,
+          "actualAngle": {
+            "pitch": 2.304627895355225,
+            "yaw": 0.096491165459156,
+            "roll": 3.8175546e-08
+          },
+          "actualVelocity": {
+            "pitch": 60.7618408203125,
+            "yaw": -6.060967922210693,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 1.43809700012207,
+            "yaw": 0.072929568588734,
+            "roll": 7.089221e-09
+          },
+          "priorVelocity": {
+            "pitch": 53.25947570800781,
+            "yaw": 2.182107448577881,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 4,
+          "matchingTableIndices": [
+            4
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 493,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 5,
+          "actualAngle": {
+            "pitch": 3.099165678024292,
+            "yaw": -0.242538049817085,
+            "roll": 2.12503551e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.38362121582031,
+            "yaw": -8.53518295288086,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 2.304627895355225,
+            "yaw": 0.096491165459156,
+            "roll": 3.8175546e-08
+          },
+          "priorVelocity": {
+            "pitch": 60.7618408203125,
+            "yaw": -6.060967922210693,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 5,
+          "matchingTableIndices": [
+            5
+          ],
+          "tableMatchError": 3.844384073399806e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 839,
+          "elapsed": 5.4055159613490105,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.099165678024292,
+            "yaw": -0.242538049817085,
+            "roll": 2.12503551e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.38362121582031,
+            "yaw": -8.53518295288086,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_reaudit_shooting_001.dem",
+      "sha256": "37b6f44d6c8ca327d580f9eeb289928eb917d0ec9b7e05e8dfc241eced4b9442",
+      "header": {
+        "patch_version": "14190",
+        "map_name": "de_dust2",
+        "demo_version_name": "valve_demo_2"
+      },
+      "samples": [
+        {
+          "weapon": "ak47",
+          "tick": 283,
+          "elapsed": 3.9622497130185366,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": -0.971712231636047,
+            "yaw": 0.054664433002472,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "ak47",
+          "tick": 289,
+          "elapsed": 0.11577763222157955,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.091153725981712,
+            "yaw": 0.047109059989452,
+            "roll": 7.008831e-09
+          },
+          "actualVelocity": {
+            "pitch": 32.46538543701172,
+            "yaw": -0.488593578338623,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 4.76837158203125e-07
+        },
+        {
+          "weapon": "ak47",
+          "tick": 317,
+          "elapsed": 0.4271015487611294,
+          "inferredPreShotIndex": 0.44134664535522505,
+          "actualAngle": {
+            "pitch": 0.03647618368268,
+            "yaw": -0.000548954762053,
+            "roll": -4.837e-11
+          },
+          "actualVelocity": {
+            "pitch": 24.73876953125,
+            "yaw": 10.258703231811523,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.091153725981712,
+            "yaw": 0.047109059989452,
+            "roll": 7.008831e-09
+          },
+          "priorVelocity": {
+            "pitch": 32.46538543701172,
+            "yaw": -0.488593578338623,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 4.815288970487274e-07
+        },
+        {
+          "weapon": "ak47",
+          "tick": 324,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 1.441346645355225,
+          "actualAngle": {
+            "pitch": 0.230390593409538,
+            "yaw": 0.095538675785065,
+            "roll": 3.56189162e-07
+          },
+          "actualVelocity": {
+            "pitch": 36.367862701416016,
+            "yaw": -0.082733631134033,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.03647618368268,
+            "yaw": -0.000548954762053,
+            "roll": -4.837e-11
+          },
+          "priorVelocity": {
+            "pitch": 24.73876953125,
+            "yaw": 10.258703231811523,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 4.76837158203125e-07
+        },
+        {
+          "weapon": "ak47",
+          "tick": 357,
+          "elapsed": 0.5273649096488953,
+          "inferredPreShotIndex": 0.375949382781982,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 23.377452850341797,
+            "yaw": 10.322484970092773,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.230390593409538,
+            "yaw": 0.095538675785065,
+            "roll": 3.56189162e-07
+          },
+          "priorVelocity": {
+            "pitch": 36.367862701416016,
+            "yaw": -0.082733631134033,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 7.527760022453477e-07
+        },
+        {
+          "weapon": "ak47",
+          "tick": 366,
+          "elapsed": 0.14064572378993034,
+          "inferredPreShotIndex": 1.280420064926147,
+          "actualAngle": {
+            "pitch": 0.095313303172588,
+            "yaw": 0.042086280882359,
+            "roll": 1.13991e-10
+          },
+          "actualVelocity": {
+            "pitch": 33.00823974609375,
+            "yaw": -1.142252445220947,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 23.377452850341797,
+            "yaw": 10.322484970092773,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 1.066240299940009e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 556,
+          "elapsed": 2.9669110774993896,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.095313303172588,
+            "yaw": 0.042086280882359,
+            "roll": 1.13991e-10
+          },
+          "priorVelocity": {
+            "pitch": 33.00823974609375,
+            "yaw": -1.142252445220947,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "ak47",
+          "tick": 563,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.097861669957638,
+            "yaw": 0.050575785338879,
+            "roll": 8.725215e-09
+          },
+          "actualVelocity": {
+            "pitch": 33.33890914916992,
+            "yaw": -0.037148952484131,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 4.76837158203125e-07
+        },
+        {
+          "weapon": "ak47",
+          "tick": 569,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 2,
+          "actualAngle": {
+            "pitch": 0.623352825641632,
+            "yaw": -0.000694590911735,
+            "roll": -4.5762e-10
+          },
+          "actualVelocity": {
+            "pitch": 44.09569549560547,
+            "yaw": 2.29641318321228,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.097861669957638,
+            "yaw": 0.050575785338879,
+            "roll": 8.725215e-09
+          },
+          "priorVelocity": {
+            "pitch": 33.33890914916992,
+            "yaw": -0.037148952484131,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 2,
+          "matchingTableIndices": [
+            2
+          ],
+          "tableMatchError": 3.815833964635256e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 576,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 3,
+          "actualAngle": {
+            "pitch": 1.43809700012207,
+            "yaw": 0.072929568588734,
+            "roll": 7.089221e-09
+          },
+          "actualVelocity": {
+            "pitch": 53.25947570800781,
+            "yaw": 2.182107448577881,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.623352825641632,
+            "yaw": -0.000694590911735,
+            "roll": -4.5762e-10
+          },
+          "priorVelocity": {
+            "pitch": 44.09569549560547,
+            "yaw": 2.29641318321228,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 3,
+          "matchingTableIndices": [
+            3
+          ],
+          "tableMatchError": 1.9082797281243946e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 582,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 4,
+          "actualAngle": {
+            "pitch": 2.304627895355225,
+            "yaw": 0.096491165459156,
+            "roll": 3.8175546e-08
+          },
+          "actualVelocity": {
+            "pitch": 60.7618408203125,
+            "yaw": -6.060967922210693,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 1.43809700012207,
+            "yaw": 0.072929568588734,
+            "roll": 7.089221e-09
+          },
+          "priorVelocity": {
+            "pitch": 53.25947570800781,
+            "yaw": 2.182107448577881,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 4,
+          "matchingTableIndices": [
+            4
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 588,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 5,
+          "actualAngle": {
+            "pitch": 3.099165678024292,
+            "yaw": -0.242538049817085,
+            "roll": 2.12503551e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.38362121582031,
+            "yaw": -8.53518295288086,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 2.304627895355225,
+            "yaw": 0.096491165459156,
+            "roll": 3.8175546e-08
+          },
+          "priorVelocity": {
+            "pitch": 60.7618408203125,
+            "yaw": -6.060967922210693,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 5,
+          "matchingTableIndices": [
+            5
+          ],
+          "tableMatchError": 3.844384073399806e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 595,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 6,
+          "actualAngle": {
+            "pitch": 3.817694425582886,
+            "yaw": -0.447638094425201,
+            "roll": -7.8548055e-08
+          },
+          "actualVelocity": {
+            "pitch": 71.06971740722656,
+            "yaw": -14.599689483642578,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.099165678024292,
+            "yaw": -0.242538049817085,
+            "roll": 2.12503551e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.38362121582031,
+            "yaw": -8.53518295288086,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 6,
+          "matchingTableIndices": [
+            6
+          ],
+          "tableMatchError": 1.966049969490843e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 601,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 7,
+          "actualAngle": {
+            "pitch": 4.341737747192383,
+            "yaw": -0.803850471973419,
+            "roll": -2.90984644e-07
+          },
+          "actualVelocity": {
+            "pitch": 74.41049194335938,
+            "yaw": -2.857224941253662,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.817694425582886,
+            "yaw": -0.447638094425201,
+            "roll": -7.8548055e-08
+          },
+          "priorVelocity": {
+            "pitch": 71.06971740722656,
+            "yaw": -14.599689483642578,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 7,
+          "matchingTableIndices": [
+            7
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 955,
+          "elapsed": 5.5364580526947975,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.341737747192383,
+            "yaw": -0.803850471973419,
+            "roll": -2.90984644e-07
+          },
+          "priorVelocity": {
+            "pitch": 74.41049194335938,
+            "yaw": -2.857224941253662,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "ak47",
+          "tick": 962,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 1,
+          "actualAngle": {
+            "pitch": 0.097861669957638,
+            "yaw": 0.050575785338879,
+            "roll": 8.725215e-09
+          },
+          "actualVelocity": {
+            "pitch": 33.33890914916992,
+            "yaw": -0.037148952484131,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 1,
+          "matchingTableIndices": [
+            1
+          ],
+          "tableMatchError": 4.76837158203125e-07
+        },
+        {
+          "weapon": "ak47",
+          "tick": 968,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 2,
+          "actualAngle": {
+            "pitch": 0.623352825641632,
+            "yaw": -0.000694590911735,
+            "roll": -4.5762e-10
+          },
+          "actualVelocity": {
+            "pitch": 44.09569549560547,
+            "yaw": 2.29641318321228,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.097861669957638,
+            "yaw": 0.050575785338879,
+            "roll": 8.725215e-09
+          },
+          "priorVelocity": {
+            "pitch": 33.33890914916992,
+            "yaw": -0.037148952484131,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 2,
+          "matchingTableIndices": [
+            2
+          ],
+          "tableMatchError": 3.815833964635256e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 975,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 3,
+          "actualAngle": {
+            "pitch": 1.43809700012207,
+            "yaw": 0.072929568588734,
+            "roll": 7.089221e-09
+          },
+          "actualVelocity": {
+            "pitch": 53.25947570800781,
+            "yaw": 2.182107448577881,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.623352825641632,
+            "yaw": -0.000694590911735,
+            "roll": -4.5762e-10
+          },
+          "priorVelocity": {
+            "pitch": 44.09569549560547,
+            "yaw": 2.29641318321228,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 3,
+          "matchingTableIndices": [
+            3
+          ],
+          "tableMatchError": 1.9082797281243946e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 981,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 4,
+          "actualAngle": {
+            "pitch": 2.304627895355225,
+            "yaw": 0.096491165459156,
+            "roll": 3.8175546e-08
+          },
+          "actualVelocity": {
+            "pitch": 60.7618408203125,
+            "yaw": -6.060967922210693,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 1.43809700012207,
+            "yaw": 0.072929568588734,
+            "roll": 7.089221e-09
+          },
+          "priorVelocity": {
+            "pitch": 53.25947570800781,
+            "yaw": 2.182107448577881,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 4,
+          "matchingTableIndices": [
+            4
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 987,
+          "elapsed": 0.09999999403953552,
+          "inferredPreShotIndex": 5,
+          "actualAngle": {
+            "pitch": 3.099165678024292,
+            "yaw": -0.242538049817085,
+            "roll": 2.12503551e-07
+          },
+          "actualVelocity": {
+            "pitch": 67.38362121582031,
+            "yaw": -8.53518295288086,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 2.304627895355225,
+            "yaw": 0.096491165459156,
+            "roll": 3.8175546e-08
+          },
+          "priorVelocity": {
+            "pitch": 60.7618408203125,
+            "yaw": -6.060967922210693,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 5,
+          "matchingTableIndices": [
+            5
+          ],
+          "tableMatchError": 3.844384073399806e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 994,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 6,
+          "actualAngle": {
+            "pitch": 3.817694425582886,
+            "yaw": -0.447638094425201,
+            "roll": -7.8548055e-08
+          },
+          "actualVelocity": {
+            "pitch": 71.06971740722656,
+            "yaw": -14.599689483642578,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.099165678024292,
+            "yaw": -0.242538049817085,
+            "roll": 2.12503551e-07
+          },
+          "priorVelocity": {
+            "pitch": 67.38362121582031,
+            "yaw": -8.53518295288086,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 6,
+          "matchingTableIndices": [
+            6
+          ],
+          "tableMatchError": 1.966049969490843e-06
+        },
+        {
+          "weapon": "ak47",
+          "tick": 1000,
+          "elapsed": 0.10000000149011612,
+          "inferredPreShotIndex": 7,
+          "actualAngle": {
+            "pitch": 4.341737747192383,
+            "yaw": -0.803850471973419,
+            "roll": -2.90984644e-07
+          },
+          "actualVelocity": {
+            "pitch": 74.41049194335938,
+            "yaw": -2.857224941253662,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 3.817694425582886,
+            "yaw": -0.447638094425201,
+            "roll": -7.8548055e-08
+          },
+          "priorVelocity": {
+            "pitch": 71.06971740722656,
+            "yaw": -14.599689483642578,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 7,
+          "matchingTableIndices": [
+            7
+          ],
+          "tableMatchError": 1.9073486328125e-06
+        }
+      ]
+    },
+    {
+      "demo": "native_audit_awp_001.dem",
+      "sha256": "4a3cdbbbdedc39d5c1233fb2e44c467203d5a4105ac571545f8caf46e044886d",
+      "header": {
+        "patch_version": "14189",
+        "map_name": "de_dust2",
+        "demo_version_name": "valve_demo_2"
+      },
+      "samples": [
+        {
+          "weapon": "usp",
+          "tick": 2959,
+          "elapsed": 137.84944678284228,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 23,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 4.730397701263428,
+            "yaw": 1.356042623519897,
+            "roll": -1.47243881e-07
+          },
+          "priorVelocity": {
+            "pitch": 75.56484985351562,
+            "yaw": 12.393741607666016,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "usp",
+          "tick": 3129,
+          "elapsed": 2.6656900998204947,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 23,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 23,
+            "yaw": 0,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "ak47",
+          "tick": 3730,
+          "elapsed": 9.377258808352053,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 19.98842430114746,
+            "yaw": 10.330194473266602,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 23,
+            "yaw": 0,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 0,
+          "matchingTableIndices": [
+            0
+          ],
+          "tableMatchError": 0
+        }
+      ]
+    },
+    {
+      "demo": "native_reload_deagle_empty_002.dem",
+      "sha256": "aa0c7cceda6d3d1afef7113b76c8795d02c5dbf8ecac1ed9c2cd3fffce2313dd",
+      "header": {
+        "patch_version": "14189",
+        "map_name": "de_dust2",
+        "demo_version_name": "valve_demo_2"
+      },
+      "samples": [
+        {
+          "weapon": "deagle",
+          "tick": 204,
+          "elapsed": 179.72629621624947,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 50.71723175048828,
+            "yaw": -11.67814826965332,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 18.38109588623047,
+            "yaw": -4.015937805175781,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 32,
+          "matchingTableIndices": [
+            32
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "deagle",
+          "tick": 240,
+          "elapsed": 0.540039636194706,
+          "inferredPreShotIndex": 0.22067332267761208,
+          "actualAngle": {
+            "pitch": 0.034276410937309,
+            "yaw": -0.007892484776676,
+            "roll": -3.10829e-10
+          },
+          "actualVelocity": {
+            "pitch": 45.099998474121094,
+            "yaw": -32.67373275756836,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 50.71723175048828,
+            "yaw": -11.67814826965332,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 59,
+          "matchingTableIndices": [
+            59
+          ],
+          "tableMatchError": 5.331201499700045e-07
+        },
+        {
+          "weapon": "deagle",
+          "tick": 459,
+          "elapsed": 3.4399582175537944,
+          "inferredPreShotIndex": 0,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 28.20528221130371,
+            "yaw": -27.355979919433594,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.034276410937309,
+            "yaw": -0.007892484776676,
+            "roll": -3.10829e-10
+          },
+          "priorVelocity": {
+            "pitch": 45.099998474121094,
+            "yaw": -32.67373275756836,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 41,
+          "matchingTableIndices": [
+            41
+          ],
+          "tableMatchError": 0
+        },
+        {
+          "weapon": "deagle",
+          "tick": 494,
+          "elapsed": 0.5514892684295774,
+          "inferredPreShotIndex": 0.23713731765747093,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 29.403047561645508,
+            "yaw": -19.33887481689453,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 28.20528221130371,
+            "yaw": -27.355979919433594,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 18,
+          "matchingTableIndices": [
+            18
+          ],
+          "tableMatchError": 9.830249847454215e-07
+        },
+        {
+          "weapon": "deagle",
+          "tick": 529,
+          "elapsed": 0.5468308366835117,
+          "inferredPreShotIndex": 0.293371438980103,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 40.561771392822266,
+            "yaw": -30.253265380859375,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 29.403047561645508,
+            "yaw": -19.33887481689453,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 11,
+          "matchingTableIndices": [
+            11
+          ],
+          "tableMatchError": 4.096708363876244e-06
+        },
+        {
+          "weapon": "deagle",
+          "tick": 564,
+          "elapsed": 0.5483422465622425,
+          "inferredPreShotIndex": 0.3067066669464109,
+          "actualAngle": {
+            "pitch": 0.026408359408379,
+            "yaw": -0.019696852192283,
+            "roll": -8.37427e-10
+          },
+          "actualVelocity": {
+            "pitch": 46.29914855957031,
+            "yaw": -14.408181190490723,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 40.561771392822266,
+            "yaw": -30.253265380859375,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 23,
+          "matchingTableIndices": [
+            23
+          ],
+          "tableMatchError": 7.539457464619588e-07
+        },
+        {
+          "weapon": "deagle",
+          "tick": 599,
+          "elapsed": 0.5534312520176172,
+          "inferredPreShotIndex": 0.30986893177032493,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 43.23048400878906,
+            "yaw": -52.97313690185547,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.026408359408379,
+            "yaw": -0.019696852192283,
+            "roll": -8.37427e-10
+          },
+          "priorVelocity": {
+            "pitch": 46.29914855957031,
+            "yaw": -14.408181190490723,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 12,
+          "matchingTableIndices": [
+            12
+          ],
+          "tableMatchError": 3.0532475649990313e-06
+        },
+        {
+          "weapon": "deagle",
+          "tick": 634,
+          "elapsed": 0.546852745115757,
+          "inferredPreShotIndex": 0.3337934017181401,
+          "actualAngle": {
+            "pitch": 0.02833255007863,
+            "yaw": -0.034717723727226,
+            "roll": -3.094e-11
+          },
+          "actualVelocity": {
+            "pitch": 46.139888763427734,
+            "yaw": -3.367072820663452,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "priorVelocity": {
+            "pitch": 43.23048400878906,
+            "yaw": -52.97313690185547,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 50,
+          "matchingTableIndices": [
+            50
+          ],
+          "tableMatchError": 9.610960183499514e-07
+        },
+        {
+          "weapon": "deagle",
+          "tick": 669,
+          "elapsed": 0.5468789152801037,
+          "inferredPreShotIndex": 0.3398900032043459,
+          "actualAngle": {
+            "pitch": 0,
+            "yaw": 0,
+            "roll": 0
+          },
+          "actualVelocity": {
+            "pitch": 53.33351516723633,
+            "yaw": 8.847572326660156,
+            "roll": 0
+          },
+          "priorAngle": {
+            "pitch": 0.02833255007863,
+            "yaw": -0.034717723727226,
+            "roll": -3.094e-11
+          },
+          "priorVelocity": {
+            "pitch": 46.139888763427734,
+            "yaw": -3.367072820663452,
+            "roll": 0
+          },
+          "reconstructedTableIndex": 57,
+          "matchingTableIndices": [
+            57
+          ],
+          "tableMatchError": 1.7068172768683853e-06
+        }
+      ]
+    }
+  ]
+}

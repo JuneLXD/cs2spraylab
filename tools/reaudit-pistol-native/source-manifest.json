@@ -1,0 +1,405 @@
+{
+  "artifacts": {
+    "client": {
+      "path": "cs2-game/game/csgo/bin/linuxsteamrt64/libclient.so",
+      "sha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1"
+    },
+    "server": {
+      "path": "cs2-game/game/csgo/bin/linuxsteamrt64/libserver.so",
+      "sha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a"
+    }
+  },
+  "ranges": [
+    {
+      "name": "recoil-selector",
+      "side": "server",
+      "address": "0x1498a30",
+      "bytes": 1024,
+      "sha256": "251dedeaa26893aeba74be63125774a00dd23132610929d01df72b355c3860f5",
+      "checks": [
+        "1498a65: mov rax, qword ptr [rdx + 0xbd8]",
+        "1498a93: movzx eax, byte ptr [rax + 0x72d]",
+        "1498a9c: jne 0x1498b50",
+        "1498aa9: mov r15d, dword ptr [rax]",
+        "1498b67: movzx eax, byte ptr [rbx + 0x1274]",
+        "1498b70: jne 0x1498aa2",
+        "1498b76: cvttss2si r15d, dword ptr [rbx + 0x1270]",
+        "1498b7f: jmp 0x1498aac",
+        "1498aca: movzx eax, byte ptr [rax + 0x7f0]",
+        "1498ad3: je 0x1498b05",
+        "1498b0c: mov ecx, r15d",
+        "1498b0f: mov edx, r14d",
+        "1498b12: mov rsi, rbx",
+        "1498b1d: call 0x1477140",
+        "1498b22: movss xmm1, dword ptr [rbp - 0x3c]",
+        "1498b32: movss xmm0, dword ptr [rbp - 0x40]",
+        "1498b37: call 0x151b0f0",
+        "1498c4b: call rax",
+        "1498c52: je 0x1498aa2",
+        "1498c58: cvttss2si r15d, dword ptr [rbx + 0x1270]"
+      ]
+    },
+    {
+      "name": "recoil-lookup",
+      "side": "server",
+      "address": "0x1477140",
+      "bytes": 1024,
+      "sha256": "7d14f242a718a07bdcfc2aa98ff4f63ee8a938678f28bca9ce0b77a3185087fa",
+      "checks": [
+        "1477150: mov r13d, ecx",
+        "147715c: movsxd rbx, edx",
+        "14771d0: and r13d, 0x3f",
+        "14771d4: shl rbx, 6",
+        "14771d8: add rbx, r13",
+        "14771db: movss xmm0, dword ptr [rax + rbx*8 + 4]",
+        "14771e1: movss dword ptr [r15], xmm0",
+        "14771e6: movss xmm0, dword ptr [rax + rbx*8 + 8]",
+        "14771ec: movss dword ptr [r14], xmm0"
+      ]
+    },
+    {
+      "name": "seed-setter-one",
+      "side": "server",
+      "address": "0xd3b570",
+      "bytes": 32,
+      "sha256": "412e792d2176fbbdf04422e167468e1f4fc87c6bb77383efda610534a0fef089",
+      "checks": [
+        "d3b570: mov dword ptr [rip + 0x19f8f16], edi",
+        "d3b576: ret "
+      ]
+    },
+    {
+      "name": "seed-setter-two",
+      "side": "server",
+      "address": "0xd3b580",
+      "bytes": 32,
+      "sha256": "8826844f27585542e0aded3da48c02aaaf933c049fa4ecdb20ce55be0af1d735",
+      "checks": [
+        "d3b580: mov dword ptr [rip + 0x19f8f02], edi",
+        "d3b586: ret "
+      ]
+    },
+    {
+      "name": "seed-command-caller",
+      "side": "server",
+      "address": "0x17b0800",
+      "bytes": 512,
+      "sha256": "1f1b9637688d70529b0e72223176026851ecbae310c2c4e3baa7d77306baeee1",
+      "checks": [
+        "17b0830: mov rax, qword ptr [r12 + 0x40]",
+        "17b083e: mov r12d, dword ptr [rax + 0x6c]",
+        "17b0842: mov edi, r12d",
+        "17b0845: call 0xd3b570",
+        "17b0855: jne 0x17b0878",
+        "17b0857: mov edi, r12d",
+        "17b085a: call 0xd3b580",
+        "17b08f3: mov r12d, dword ptr [rbp - 0x6c]",
+        "17b08f7: jmp 0x17b0857",
+        "17b090c: mov r12d, 0xffffffff",
+        "17b0912: jmp 0x17b0842"
+      ]
+    },
+    {
+      "name": "base-command-factory",
+      "side": "client",
+      "address": "0x10f7010",
+      "bytes": 128,
+      "sha256": "f15ad616d4141b76f246639d1963626d8ee0b9b2721c866fb2c89689031a8731",
+      "checks": [
+        "10f7028: mov esi, 0x88",
+        "10f703e: lea rax, [rip + 0x333c3ab]",
+        "10f7045: mov qword ptr [rdx], rax"
+      ]
+    },
+    {
+      "name": "base-command-parser",
+      "side": "client",
+      "address": "0x10f9a80",
+      "bytes": 2816,
+      "sha256": "9c33ccb76096a1362192700af046a424858acb70fdc7bd8154a5339cb9fbca19",
+      "checks": [
+        "10f9f90: cmp sil, 0x50",
+        "10f9f9e: or r14d, 0x800",
+        "10f9fa7: jns 0x10fa200",
+        "10f9fbe: js 0x10fa1b0",
+        "10f9fc8: mov dword ptr [rbx + 0x6c], esi",
+        "10fa1bb: mov dword ptr [rbx + 0x6c], edx",
+        "10fa204: mov dword ptr [rbx + 0x6c], eax"
+      ]
+    },
+    {
+      "name": "base-command-descriptor-method",
+      "side": "client",
+      "address": "0x10f5610",
+      "bytes": 128,
+      "sha256": "1f0fc3f918e3efc50679c5b8a9e89e4c166176bf4ba3982e7901b3db60904744",
+      "checks": [
+        "10f5610: lea rdx, [rip + 0x36934d9]",
+        "10f5617: lea rsi, [rip + 0x3693486]",
+        "10f561e: lea rdi, [rip - 0x545]",
+        "10f5625: jmp 0x21f9812"
+      ]
+    },
+    {
+      "name": "base-command-descriptor-getter",
+      "side": "client",
+      "address": "0x10f50e0",
+      "bytes": 32,
+      "sha256": "95dc8919a048fa8f5a93fa77d4f422cd9f28a00a03577c00bd7668f0ab3e281e",
+      "checks": [
+        "10f50e0: lea rax, [rip + 0x3559079]",
+        "10f50e7: ret "
+      ]
+    },
+    {
+      "name": "server-base-command-factory",
+      "side": "server",
+      "address": "0x10fb140",
+      "bytes": 128,
+      "sha256": "79cf99f9a17df5baa08679e2e4e378c26ef50c62466cb49aae43f7a3898b426f",
+      "checks": [
+        "10fb16e: lea rax, [rip + 0x14a21ab]",
+        "10fb175: mov qword ptr [rdx], rax"
+      ]
+    },
+    {
+      "name": "server-base-command-parser",
+      "side": "server",
+      "address": "0x10fdbb0",
+      "bytes": 2384,
+      "sha256": "d79d24d3b3c062ba8275c63074ab883c2e5ecd9719a402fd11c1f62eed2a7acc",
+      "checks": [
+        "10fe0c0: cmp sil, 0x50",
+        "10fe0ce: or r14d, 0x800",
+        "10fe0d7: jns 0x10fe330",
+        "10fe0ee: js 0x10fe2e0",
+        "10fe0f8: mov dword ptr [rbx + 0x6c], esi",
+        "10fe2eb: mov dword ptr [rbx + 0x6c], edx",
+        "10fe334: mov dword ptr [rbx + 0x6c], eax"
+      ]
+    },
+    {
+      "name": "gun-primary",
+      "side": "server",
+      "address": "0x14b2ef0",
+      "bytes": 1024,
+      "sha256": "324d4bd2808ae964d51602e2a3d3237bc9258f6dc3eedf47be22f6d07af26ffb",
+      "checks": [
+        "14b3023: call 0x14b22d0"
+      ]
+    },
+    {
+      "name": "gun-fire",
+      "side": "server",
+      "address": "0x14b22d0",
+      "bytes": 3104,
+      "sha256": "b3bb9980f19fd603499e0245e176ba973936811bf088fc884a777697b7639e0f",
+      "checks": [
+        "14b2782: mov rdx, r14",
+        "14b2785: mov esi, r15d",
+        "14b2788: mov rdi, rbx",
+        "14b278b: call 0x1498a30",
+        "14b279c: mov eax, dword ptr [r12 + 0x17b8]",
+        "14b2849: movss xmm0, dword ptr [rbx + 0x1270]",
+        "14b2851: addss xmm1, xmm0"
+      ]
+    },
+    {
+      "name": "full-auto-accessor",
+      "side": "server",
+      "address": "0x1444260",
+      "bytes": 16,
+      "sha256": "ce3a0ea6f98e22f1254b666470a77082af8a7a1352facc2a8c160296941f6e6d",
+      "checks": [
+        "1444267: movzx eax, byte ptr [rax + 0x72d]"
+      ]
+    },
+    {
+      "name": "full-auto-wrapper",
+      "side": "server",
+      "address": "0x1446d60",
+      "bytes": 128,
+      "sha256": "cc90a14b2a1a6e1b99fa086c589f60551dba41adae7cd282b4b4433eae5bf8a7",
+      "checks": [
+        "1446d72: mov rax, qword ptr [rax + 0xbd0]",
+        "1446d85: movzx eax, byte ptr [rax + 0x72d]",
+        "1446d9a: mov rax, qword ptr [rax + 0xd60]",
+        "1446da6: movzx eax, byte ptr [rdi + 0x1274]",
+        "1446dad: xor eax, 1"
+      ]
+    },
+    {
+      "name": "client-outer-parser",
+      "side": "client",
+      "address": "0x1429380",
+      "bytes": 1360,
+      "sha256": "c73c2005759554e9aa84e3795077a47083a372b03dd8c3674804c2cab694b74f",
+      "checks": [
+        "14295c0: cmp sil, 0xa",
+        "14295ca: mov rsi, qword ptr [r12 + 0x30]",
+        "1429788: call 0x10f7010",
+        "1429794: mov qword ptr [r12 + 0x30], rax"
+      ]
+    },
+    {
+      "name": "server-outer-parser",
+      "side": "server",
+      "address": "0x143d6b0",
+      "bytes": 1360,
+      "sha256": "2cbbb368f695c9b71c07dd0be973917afd9dd276e45e68275407b0ebaee21160",
+      "checks": [
+        "143d8f0: cmp sil, 0xa",
+        "143d8fa: mov rsi, qword ptr [r12 + 0x30]",
+        "143dab8: call 0x10fb140",
+        "143dac4: mov qword ptr [r12 + 0x30], rax"
+      ]
+    }
+  ],
+  "data": [
+    {
+      "name": "client-base-table",
+      "side": "client",
+      "address": "0x44333f0",
+      "bytes": 160,
+      "sha256": "95fecca44ae05229ba5960b5cf5e1a60248ae31135ced089c2a147292d007d6f"
+    },
+    {
+      "name": "client-descriptor-table",
+      "side": "client",
+      "address": "0x464e160",
+      "bytes": 104,
+      "sha256": "aa8a03e9fa170515506254fed4dc5a83c07a3f5c0c4976bbdee6ebde65e1c375"
+    },
+    {
+      "name": "usercmd-descriptor",
+      "side": "client",
+      "address": "0xc32fc0",
+      "bytes": 986,
+      "sha256": "9d4da8c8e95462055eb9c7bb2286e9f8769d71e71827269c87efe6218338e912"
+    },
+    {
+      "name": "server-base-parser-slot",
+      "side": "server",
+      "address": "0x259d370",
+      "bytes": 8,
+      "sha256": "e4935458adb7bd3062ebd809cd7f7aed0119f1f3669980886f4452e6d6524a20"
+    },
+    {
+      "name": "selector-global-file-value",
+      "side": "server",
+      "address": "0x273448c",
+      "bytes": 4,
+      "sha256": "ad95131bc0b799c0b1af477fb14fcf26a6a9f76079e48bf090acb7e8367bfd0e"
+    }
+  ],
+  "classes": {
+    "ak47": {
+      "table": "0x25f9218",
+      "slots": {
+        "0xbd0": "0x1444260",
+        "0xbd8": "0x1446d60",
+        "0xd30": "0x14b2ef0",
+        "0xd40": "0x14b4510",
+        "0xc68": "0x133daa0",
+        "0xc70": "0x14444e0"
+      }
+    },
+    "m4a4": {
+      "table": "0x26035b8",
+      "slots": {
+        "0xbd0": "0x1444260",
+        "0xbd8": "0x1446d60",
+        "0xd30": "0x14b2ef0",
+        "0xd40": "0x14b4510",
+        "0xc68": "0x133daa0",
+        "0xc70": "0x14444e0"
+      }
+    },
+    "m4a1s": {
+      "table": "0x2604498",
+      "slots": {
+        "0xbd0": "0x1444260",
+        "0xbd8": "0x1446d60",
+        "0xd30": "0x14b2ef0",
+        "0xd40": "0x14b4510",
+        "0xc68": "0x133daa0",
+        "0xc70": "0x14444e0"
+      }
+    },
+    "awp": {
+      "table": "0x25fafd8",
+      "slots": {
+        "0xbd0": "0x1444260",
+        "0xbd8": "0x1446d60",
+        "0xd30": "0x14b2ef0",
+        "0xd40": "0x14b4510",
+        "0xc68": "0x133daa0",
+        "0xc70": "0x14444e0"
+      }
+    },
+    "glock": {
+      "table": "0x2600918",
+      "slots": {
+        "0xbd0": "0x1444260",
+        "0xbd8": "0x1446d60",
+        "0xd30": "0x14b2ef0",
+        "0xd40": "0x14b4510",
+        "0xc68": "0x133daa0",
+        "0xc70": "0x14444e0"
+      }
+    },
+    "usp": {
+      "table": "0x26026d8",
+      "slots": {
+        "0xbd0": "0x1444260",
+        "0xbd8": "0x1446d60",
+        "0xd30": "0x14b2ef0",
+        "0xd40": "0x14b4510",
+        "0xc68": "0x133daa0",
+        "0xc70": "0x14444e0"
+      }
+    },
+    "deagle": {
+      "table": "0x2618b98",
+      "slots": {
+        "0xbd0": "0x1444260",
+        "0xbd8": "0x1446d60",
+        "0xd30": "0x14b2ef0",
+        "0xd40": "0x14b4510",
+        "0xc68": "0x133daa0",
+        "0xc70": "0x14444e0"
+      }
+    }
+  },
+  "prerequisites": [
+    {
+      "path": "native-audit/reports/core-shooting-next/pistol-recoil/weapon-data.json",
+      "sha256": "4092e057520bcd7317a2638cd370f2013fecb684bab2f9e76e1fc233d5eec04c"
+    },
+    {
+      "path": "native-audit/reports/core-shooting-next/pistol-recoil/read-data.mjs",
+      "sha256": "c1328292e14e88ca4763a4160a87a904733e424267ae97db227f1ca0300ec515"
+    },
+    {
+      "path": "native-audit/core-followup/tools/kv3.mjs",
+      "sha256": "c4d3715b5e419530bd7cd439c9c3ecc4ba3a5ccba309b98c82131d5c3c1612c0"
+    },
+    {
+      "path": "native-audit/reports/common-burst-next/native-data/scripts/weapons.vdata",
+      "sha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b"
+    },
+    {
+      "path": "native-audit/reports/awp-clocks-next/current-awp-data.json",
+      "sha256": "473089f681a3296ec69de31b84dfd137ad3df42e110bd8833f18fbf282c27bfe"
+    }
+  ],
+  "originalEvidence": {
+    "selectorProofSha256": "7ba54fdd1d197b588477044436dad5e53e10602a4cc7ee075e5e9633038997b9",
+    "seedFieldProofSha256": "6509f591c97aadaee5715984f62ce09cbf0b42629a2392c89cc10dfc1b62fa1d"
+  },
+  "boundaries": [
+    "Exact native hashes only; do not reuse locations after an artifact changes.",
+    "Retained parsed weapon data and its native decoded resource are prerequisites; no new export or data extraction is performed.",
+    "No native execution, discovery scan or seed generation."
+  ]
+}

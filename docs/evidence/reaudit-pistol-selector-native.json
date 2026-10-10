@@ -1,0 +1,935 @@
+{
+  "method": "Exact-hash static native byte inspection and text assertions. Derived cases are not executed native commands.",
+  "artifactHashes": {
+    "client": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+    "server": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a"
+  },
+  "readerSha256": "ea5e0b44d688d788d36707651fed3e642353809b75879502bce3271dec1088cd",
+  "checkerSha256": "f4de4e708729ceb3824fe2bf82ae296e42b00c737ed5c6df4b8a54af48796b3d",
+  "sourceManifestSha256": "e7b5e18f47ecc598a871da84c5cdf8d609945a1106cfc7a115fe7567bb4fd4ac",
+  "readManifestSha256": "89a5027ba3c4bd8ed32d583c77281ecb2f504fd6db97f422aeeabd5bbf5896af",
+  "selectedBytesInCombinedRead": 16830,
+  "wholeArtifactHashesVerified": true,
+  "prerequisites": [
+    {
+      "path": "native-audit/reports/core-shooting-next/pistol-recoil/weapon-data.json",
+      "sha256": "4092e057520bcd7317a2638cd370f2013fecb684bab2f9e76e1fc233d5eec04c"
+    },
+    {
+      "path": "native-audit/reports/core-shooting-next/pistol-recoil/read-data.mjs",
+      "sha256": "c1328292e14e88ca4763a4160a87a904733e424267ae97db227f1ca0300ec515"
+    },
+    {
+      "path": "native-audit/core-followup/tools/kv3.mjs",
+      "sha256": "c4d3715b5e419530bd7cd439c9c3ecc4ba3a5ccba309b98c82131d5c3c1612c0"
+    },
+    {
+      "path": "native-audit/reports/common-burst-next/native-data/scripts/weapons.vdata",
+      "sha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b"
+    },
+    {
+      "path": "native-audit/reports/awp-clocks-next/current-awp-data.json",
+      "sha256": "473089f681a3296ec69de31b84dfd137ad3df42e110bd8833f18fbf282c27bfe"
+    }
+  ],
+  "originalEvidence": {
+    "selectorProofSha256": "7ba54fdd1d197b588477044436dad5e53e10602a4cc7ee075e5e9633038997b9",
+    "seedFieldProofSha256": "6509f591c97aadaee5715984f62ce09cbf0b42629a2392c89cc10dfc1b62fa1d"
+  },
+  "evidenceId": "AUDIT-PISTOL-SELECTOR-01",
+  "instructionAssertions": 58,
+  "codeEvidence": [
+    {
+      "source": "recoil-selector",
+      "codeSha256": "251dedeaa26893aeba74be63125774a00dd23132610929d01df72b355c3860f5",
+      "instructionAssertions": 20
+    },
+    {
+      "source": "recoil-lookup",
+      "codeSha256": "7d14f242a718a07bdcfc2aa98ff4f63ee8a938678f28bca9ce0b77a3185087fa",
+      "instructionAssertions": 9
+    },
+    {
+      "source": "seed-setter-one",
+      "codeSha256": "412e792d2176fbbdf04422e167468e1f4fc87c6bb77383efda610534a0fef089",
+      "instructionAssertions": 2
+    },
+    {
+      "source": "seed-setter-two",
+      "codeSha256": "8826844f27585542e0aded3da48c02aaaf933c049fa4ecdb20ce55be0af1d735",
+      "instructionAssertions": 2
+    },
+    {
+      "source": "seed-command-caller",
+      "codeSha256": "1f1b9637688d70529b0e72223176026851ecbae310c2c4e3baa7d77306baeee1",
+      "instructionAssertions": 11
+    },
+    {
+      "source": "gun-primary",
+      "codeSha256": "324d4bd2808ae964d51602e2a3d3237bc9258f6dc3eedf47be22f6d07af26ffb",
+      "instructionAssertions": 1
+    },
+    {
+      "source": "gun-fire",
+      "codeSha256": "b3bb9980f19fd603499e0245e176ba973936811bf088fc884a777697b7639e0f",
+      "instructionAssertions": 7
+    },
+    {
+      "source": "full-auto-accessor",
+      "codeSha256": "ce3a0ea6f98e22f1254b666470a77082af8a7a1352facc2a8c160296941f6e6d",
+      "instructionAssertions": 1
+    },
+    {
+      "source": "full-auto-wrapper",
+      "codeSha256": "cc90a14b2a1a6e1b99fa086c589f60551dba41adae7cd282b4b4433eae5bf8a7",
+      "instructionAssertions": 5
+    }
+  ],
+  "classSlotAssertions": 42,
+  "compiledWeaponDataSha256": "5ca094238e180376646a5cd69250c091ae5a9d937a3446c188ee5117fb6da28b",
+  "decodedWeaponDataSha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b",
+  "weapons": {
+    "ak47": {
+      "fullAuto": true,
+      "hasBurst": false,
+      "unzoomsAfterShot": false,
+      "zoomLevels": 0
+    },
+    "m4a4": {
+      "fullAuto": true,
+      "hasBurst": false,
+      "unzoomsAfterShot": false,
+      "zoomLevels": 0
+    },
+    "m4a1s": {
+      "fullAuto": true,
+      "hasBurst": false,
+      "unzoomsAfterShot": false,
+      "zoomLevels": 0
+    },
+    "awp": {
+      "fullAuto": false,
+      "hasBurst": false,
+      "unzoomsAfterShot": true,
+      "zoomLevels": 2
+    },
+    "glock": {
+      "fullAuto": false,
+      "hasBurst": true,
+      "unzoomsAfterShot": false,
+      "zoomLevels": 0
+    },
+    "usp": {
+      "fullAuto": false,
+      "hasBurst": false,
+      "unzoomsAfterShot": false,
+      "zoomLevels": 0
+    },
+    "deagle": {
+      "fullAuto": false,
+      "hasBurst": false,
+      "unzoomsAfterShot": false,
+      "zoomLevels": 0
+    }
+  },
+  "cases": [
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": false,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": -1,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 0,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 25,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 56,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 70,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 127,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": -1,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 0,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 25,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 56,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 70,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 127,
+      "source": "floating",
+      "tableIndex": 1
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": -1,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 0,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 25,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 56,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 70,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 127,
+      "source": "floating",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": -1,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 0,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 25,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 56,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 70,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": false,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 127,
+      "source": "floating",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 0.0,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 1.99,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 63.5,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": -1,
+      "source": "command-seed",
+      "tableIndex": 63
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 0,
+      "source": "command-seed",
+      "tableIndex": 0
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 25,
+      "source": "command-seed",
+      "tableIndex": 25
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 56,
+      "source": "command-seed",
+      "tableIndex": 56
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 70,
+      "source": "command-seed",
+      "tableIndex": 6
+    },
+    {
+      "fullAuto": true,
+      "burstEnabled": true,
+      "floatingIndex": 64.25,
+      "suppliedSeed": 127,
+      "source": "command-seed",
+      "tableIndex": 63
+    }
+  ],
+  "caseCount": 96,
+  "rules": [
+    {
+      "id": "PS01",
+      "rule": "The common full-auto/non-burst predicate selects the truncated floating recoil index. Otherwise the table selector comes from the external command-seed global."
+    },
+    {
+      "id": "PS02",
+      "rule": "The table lookup masks the chosen integer to six bits, selects the supplied mode block and returns its stored angle and magnitude."
+    },
+    {
+      "id": "PS03",
+      "rule": "Recoil selection precedes the floating recoil-index increment. The floating index remains independent accuracy/recovery state."
+    },
+    {
+      "id": "PS04",
+      "rule": "Deagle, Glock and USP-S share the common path and bypass the scoped magnitude blend. AWP has the separate automatic-unzoom/multiple-zoom-level magnitude path."
+    },
+    {
+      "id": "PS05",
+      "rule": "The incoming command integer is written to the recoil-selector global before an optional custom-seed branch. That branch changes only a different global."
+    }
+  ],
+  "limits": [
+    "No default trainer seed rule or probability distribution is established.",
+    "A supplied selector can validate table choice without reconstructing native command generation.",
+    "Inverse replay table indices inferred from observed recoil impulses are not recorded command seeds.",
+    "This static current-build proof does not establish which binary executed a historical demo.",
+    "The scoped blend is identified but is not generalized into the ordinary pistol-mode implementation."
+  ]
+}

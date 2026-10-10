@@ -1,4 +1,4 @@
-import {recoilTable,type RecoilAngle,type RecoilParameters} from './recoil';
+import {recoilTable,recoilTableIndex,type RecoilAngle,type RecoilParameters,type RecoilSelection} from './recoil';
 import {PunchRecovery} from './punch-recovery';
 import {viewPunchImpulse} from './view-punch';
 
@@ -77,8 +77,10 @@ export class WeaponRecovery {
   private viewImpulses:RecoilAngle[];
   private accuracyClock=0;private nextAccuracyTick=1;
   private accuracyCrouch=false;private accuracyAirborne=false;
+  private readonly capturedPattern: boolean;
   lastViewPunch:RecoilAngle=ZERO();
   constructor(public weapon:AccuracyParameters,capture?:RecoilAngle[],private readonly primaryCycle=weapon.cycle){
+    this.capturedPattern=!!capture;
     this.penalty=f32(weapon.stand);
     this.impulses=capture?captureImpulses(weapon,capture):recoilTable(weapon).map(p=>{
       const radians=Math.fround(p.angle*Math.fround(Math.PI/180));
@@ -152,11 +154,13 @@ export class WeaponRecovery {
   land(landingSpeedUnits:number){
     this.penalty=f32(f32(this.penalty)+f32(f32(this.weapon.land??0)*f32(Math.max(0,landingSpeedUnits))));
   }
-  fire(processingDelay=0){
+  fire(processingDelay=0,selection?:RecoilSelection){
     const shotTime=this.time-Math.max(0,processingDelay),elapsed=shotTime-this.anchorAt;
     const recoil=this.recoilBefore(processingDelay);
-    const impulse=this.impulses[Math.floor(this.index)%this.impulses.length];
-    this.lastViewPunch=this.viewImpulses[Math.floor(this.index)%this.viewImpulses.length];
+    const selected=this.capturedPattern?Math.floor(this.index)%this.impulses.length
+      :recoilTableIndex(this.weapon,this.index,selection);
+    const impulse=this.impulses[selected];
+    this.lastViewPunch=this.viewImpulses[selected];
     // Native 0x1515420 samples the carried angle at command + 1 tick, but
     // velocity and its new anchor at command + half a tick (64 Hz clock).
     const carried=this.punch.sample(elapsed+1/128),velocity=this.punch.velocity(elapsed);
@@ -173,11 +177,11 @@ export class WeaponRecovery {
     }
     return recoil;
   }
-  predict(seconds:number,afterShot=false,processingDelay=0){
+  predict(seconds:number,afterShot=false,processingDelay=0,selection?:RecoilSelection){
     const copy=Object.assign(Object.create(WeaponRecovery.prototype),this) as WeaponRecovery;
     copy.angle={...this.angle};copy.velocity={...this.velocity};
     copy.punch=this.punch.clone();
-    if(afterShot)copy.fire(processingDelay);copy.advance(seconds);return copy.recoil;
+    if(afterShot)copy.fire(processingDelay,selection);copy.advance(seconds);return copy.recoil;
   }
   inaccuracy(speedRatio:number,walking=false,airborne=false,verticalSpeedUnits=0){
     return Math.min(1,this.penalty+movementInaccuracy(this.weapon,speedRatio,walking)+(airborne?airborneInaccuracy(this.weapon,verticalSpeedUnits):0));

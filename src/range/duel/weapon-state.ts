@@ -2,7 +2,7 @@ import {equipmentStats, isPumpShotgun, knifeModel, ZEUS_RECHARGE_SECONDS, type E
 import {DEG, UNIT, type Vec, SERVER_TICK, tickAligned} from '../actor-physics';
 import type {DamagePunch} from '../aim-punch';
 import {WeaponRecovery} from '../ballistics';
-import type {RecoilAngle} from '../recoil';
+import type {RecoilAngle, RecoilSelection} from '../recoil';
 import {direction as aimDirection, shotDirections} from '../shot-model';
 import type {ActorCommand} from './types';
 import {NativeReloadState, WeaponActions, type ReloadActionEvent} from '../weapon-actions';
@@ -16,7 +16,9 @@ export type FiredRound = {
 };
 export type WeaponActionEvent = ReloadActionEvent | {kind: 'zeus-discharge' | 'zeus-ready'; at: number};
 export type WeaponCommand = ActorCommand & {reloadHeld?: boolean; reloadAutomatic?: boolean};
-export type WeaponStateOptions = {spread?: boolean; silentReloadMultiplier?: number};
+export type WeaponStateOptions = {spread?: boolean; silentReloadMultiplier?: number;
+  /** Same pure weapon/ordinal selector contract as the range's guides. */
+  recoilSelection?: (weapon: Equipment, ordinal: number) => RecoilSelection | undefined};
 
 export class DuelWeaponState {
   readonly recovery: WeaponRecovery;
@@ -188,7 +190,8 @@ export class DuelWeaponState {
       recoilIndex: this.recovery.index, seed: this.ordinal + 1,
     }, stats.pellets, this.random);
     const direction = directions[0];
-    if (this.id !== 'zeus') this.recovery.fire(processingDelay);
+    if (this.id !== 'zeus') this.recovery.fire(processingDelay,
+      this.options.recoilSelection?.(this.id,this.ordinal));
     this.actions.afterShot(time, scheduled, this.burstLeft);
     this.recovery.setParameters(this.actions.stats);
     this.ammo--;

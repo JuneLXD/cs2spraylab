@@ -6,7 +6,15 @@ export type RecoilParameters = {
   magazine: number; cycle: number;
 };
 export type RecoilAngle = { yaw: number; pitch: number };
+export type RecoilSelection = {seed: number; burst?: boolean};
 const f = Math.fround;
+
+/** Current native lookup: ordinary automatic fire uses the recovering index;
+ * semiautomatic/burst fire uses the supplied command integer's low six bits.
+ * An omitted selection preserves legacy/captured-pattern callers. */
+export function recoilTableIndex(w: RecoilParameters, index: number, selection?: RecoilSelection) {
+  return (selection && (!w.fullAuto || selection.burst) ? selection.seed : Math.trunc(index)) & 63;
+}
 
 // Park-Miller with the 32-entry shuffle used by tier0's uniform stream.
 // Float conversion is tested against offline emulation of the installed DLL.

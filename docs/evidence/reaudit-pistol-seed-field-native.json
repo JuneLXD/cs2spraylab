@@ -1,0 +1,126 @@
+{
+  "method": "Exact-hash static native byte inspection and text assertions. Derived cases are not executed native commands.",
+  "artifactHashes": {
+    "client": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+    "server": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a"
+  },
+  "readerSha256": "ea5e0b44d688d788d36707651fed3e642353809b75879502bce3271dec1088cd",
+  "checkerSha256": "f4de4e708729ceb3824fe2bf82ae296e42b00c737ed5c6df4b8a54af48796b3d",
+  "sourceManifestSha256": "e7b5e18f47ecc598a871da84c5cdf8d609945a1106cfc7a115fe7567bb4fd4ac",
+  "readManifestSha256": "89a5027ba3c4bd8ed32d583c77281ecb2f504fd6db97f422aeeabd5bbf5896af",
+  "selectedBytesInCombinedRead": 16830,
+  "wholeArtifactHashesVerified": true,
+  "prerequisites": [
+    {
+      "path": "native-audit/reports/core-shooting-next/pistol-recoil/weapon-data.json",
+      "sha256": "4092e057520bcd7317a2638cd370f2013fecb684bab2f9e76e1fc233d5eec04c"
+    },
+    {
+      "path": "native-audit/reports/core-shooting-next/pistol-recoil/read-data.mjs",
+      "sha256": "c1328292e14e88ca4763a4160a87a904733e424267ae97db227f1ca0300ec515"
+    },
+    {
+      "path": "native-audit/core-followup/tools/kv3.mjs",
+      "sha256": "c4d3715b5e419530bd7cd439c9c3ecc4ba3a5ccba309b98c82131d5c3c1612c0"
+    },
+    {
+      "path": "native-audit/reports/common-burst-next/native-data/scripts/weapons.vdata",
+      "sha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b"
+    },
+    {
+      "path": "native-audit/reports/awp-clocks-next/current-awp-data.json",
+      "sha256": "473089f681a3296ec69de31b84dfd137ad3df42e110bd8833f18fbf282c27bfe"
+    }
+  ],
+  "originalEvidence": {
+    "selectorProofSha256": "7ba54fdd1d197b588477044436dad5e53e10602a4cc7ee075e5e9633038997b9",
+    "seedFieldProofSha256": "6509f591c97aadaee5715984f62ce09cbf0b42629a2392c89cc10dfc1b62fa1d"
+  },
+  "evidenceId": "AUDIT-PISTOL-SEED-FIELD-01",
+  "instructionAssertions": 48,
+  "codeEvidence": [
+    {
+      "source": "base-command-factory",
+      "codeSha256": "f15ad616d4141b76f246639d1963626d8ee0b9b2721c866fb2c89689031a8731",
+      "instructionAssertions": 3
+    },
+    {
+      "source": "base-command-parser",
+      "codeSha256": "9c33ccb76096a1362192700af046a424858acb70fdc7bd8154a5339cb9fbca19",
+      "instructionAssertions": 7
+    },
+    {
+      "source": "base-command-descriptor-method",
+      "codeSha256": "1f0fc3f918e3efc50679c5b8a9e89e4c166176bf4ba3982e7901b3db60904744",
+      "instructionAssertions": 4
+    },
+    {
+      "source": "base-command-descriptor-getter",
+      "codeSha256": "95dc8919a048fa8f5a93fa77d4f422cd9f28a00a03577c00bd7668f0ab3e281e",
+      "instructionAssertions": 2
+    },
+    {
+      "source": "server-base-command-factory",
+      "codeSha256": "79cf99f9a17df5baa08679e2e4e378c26ef50c62466cb49aae43f7a3898b426f",
+      "instructionAssertions": 2
+    },
+    {
+      "source": "server-base-command-parser",
+      "codeSha256": "d79d24d3b3c062ba8275c63074ab883c2e5ecd9719a402fd11c1f62eed2a7acc",
+      "instructionAssertions": 7
+    },
+    {
+      "source": "client-outer-parser",
+      "codeSha256": "c73c2005759554e9aa84e3795077a47083a372b03dd8c3674804c2cab694b74f",
+      "instructionAssertions": 4
+    },
+    {
+      "source": "server-outer-parser",
+      "codeSha256": "2cbbb368f695c9b71c07dd0be973917afd9dd276e45e68275407b0ebaee21160",
+      "instructionAssertions": 4
+    },
+    {
+      "source": "seed-command-caller",
+      "codeSha256": "1f1b9637688d70529b0e72223176026851ecbae310c2c4e3baa7d77306baeee1",
+      "instructionAssertions": 11
+    },
+    {
+      "source": "seed-setter-one",
+      "codeSha256": "412e792d2176fbbdf04422e167468e1f4fc87c6bb77383efda610534a0fef089",
+      "instructionAssertions": 2
+    },
+    {
+      "source": "seed-setter-two",
+      "codeSha256": "8826844f27585542e0aded3da48c02aaaf933c049fa4ecdb20ce55be0af1d735",
+      "instructionAssertions": 2
+    }
+  ],
+  "descriptorSha256": "9d4da8c8e95462055eb9c7bb2286e9f8769d71e71827269c87efe6218338e912",
+  "field": {
+    "message": "CBaseUserCmdPB",
+    "name": "random_seed",
+    "number": 10,
+    "type": "int32",
+    "optional": true
+  },
+  "rules": [
+    {
+      "id": "PF01",
+      "rule": "The client CS game command base field allocates the exact base-message class whose parser and embedded descriptor identify random_seed as tag 10."
+    },
+    {
+      "id": "PF02",
+      "rule": "The independently bound server base-message parser stores tag 10 in the exact member consumed by the server recoil-selector seed caller."
+    },
+    {
+      "id": "PF03",
+      "rule": "This closes the field-name boundary only; the upstream client producer, generating algorithm, cadence and distribution remain unproved."
+    }
+  ],
+  "limits": [
+    "No game, native runtime, code discovery scan, RNG execution or seed producer is reconstructed.",
+    "An RNG import name is not evidence that this field is produced by that RNG.",
+    "No authored default gameplay seed follows from identifying this field.",
+    "Inverse replay indices remain inferred table choices, not observed random_seed values."
+  ]
+}

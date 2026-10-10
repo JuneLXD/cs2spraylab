@@ -4,6 +4,7 @@ import {FootstepCadence} from './footsteps';
 import {equipmentForSlot, equipmentStats, isPumpShotgun, knifeModel, ZEUS_RECHARGE_SECONDS, type Equipment, type Slot} from './equipment';
 import {createScenario, DrillCoach, isDrillMode, RANGE_WALLS, REPOSITION_SHOTS, type CoachSample, type DrillMetrics} from './drills';
 import {WeaponRecovery} from './ballistics';
+import type {RecoilSelection} from './recoil';
 import {advanceActor, DEG, GRAVITY, JUMP_SPEED, SERVER_TICK, STEP, UNIT, airVelocity, groundVelocity, idleInput, tickAligned, type ActorEnvironment, type ActorKinematics, type MoveInput, type Vec} from './actor-physics';
 import {direction, shotDirections} from './shot-model';
 import {TERRAIN_RULES} from './terrain';
@@ -141,7 +142,8 @@ export class Simulation {
     state.advance(delay);
     const cadence = this.actions.burst && this.burstLeft !== 1 ? this.actions.burstInterval : this.stats.cycle;
     const following = this.actions.burst && this.burstLeft === 1 ? this.burstEnd : due + cadence;
-    return state.predict(Math.max(0,following-this.time)-delay,true,processingDelay);
+    return state.predict(Math.max(0,following-this.time)-delay,true,processingDelay,
+      this.recoilSelection?.(this.equipped,this.shotOrdinals.get(this.equipped) ?? 0));
   }
   get burstSize() {
     if (this.slot === 3 || this.settings.mode === 'precision') return 1;
@@ -168,7 +170,12 @@ export class Simulation {
   onShot: (shot: Shot) => void = () => {};
   onSound: (landing: boolean) => void = () => {};
   onResult: (result: Result) => void = () => {};
-  constructor(public settings: Settings, private readonly random?: () => number) {this.slot = settings.primaryEnabled ? 1 : 2; this.pattern = recoilPattern(loadoutWeapon(settings)); this.configure(settings);}
+  // A supplied selector must be pure for each weapon/ordinal: guides may query
+  // it before firing. It is separate from the mutable spread/random stream.
+  constructor(public settings: Settings, private readonly random?: () => number,
+    private readonly recoilSelection?: (weapon: Equipment, ordinal: number) => RecoilSelection | undefined) {
+    this.slot = settings.primaryEnabled ? 1 : 2; this.pattern = recoilPattern(loadoutWeapon(settings)); this.configure(settings);
+  }
   configure(s: Settings, measured?: MeasuredProfile) {
     const changedMode = s.mode !== this.settings.mode;
     const leavingPositionedDrill = isDrillMode(this.settings.mode) || this.settings.mode === 'pop';
@@ -526,7 +533,7 @@ export class Simulation {
     this.reloadState.ammo--;
     if (this.pop) this.refillPopAmmo(); this.shotOrdinals.set(this.equipped, ordinal + 1);
     if (this.equipped !== 'zeus') {
-      this.recovery.fire(processingDelay); this.viewPunch.add(this.recovery.lastViewPunch, this.time);
+      this.recovery.fire(processingDelay,this.recoilSelection?.(this.equipped,ordinal)); this.viewPunch.add(this.recovery.lastViewPunch, this.time);
     }
     else {
       this.rechargeTimes.set('zeus', this.time + ZEUS_RECHARGE_SECONDS);
