@@ -1,16 +1,20 @@
-# CS2 independent re-audit: passes 16–19
+# CS2 independent re-audit: passes 16–21
 
-Three evidenced corrections follow baseline `c488943`: movement (`79832e6`),
-scheduled recoil (`e85f59a`), and R8 charge composition (`9b94483`).
+Five evidenced corrections follow baseline `c488943`: movement (`79832e6`),
+scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
+ordering (`fd328d5`) and ordinary footstep cadence (`2aba70c`).
 This report covers the requested inventory and identifies the remaining work;
-it does not certify complete native parity. The next implementation is the
-independently measured [accuracy/index update order](reaudit-accuracy.md).
+it does not certify complete native parity. The follow-up corrects
+[accuracy/index update order](reaudit-accuracy.md) and
+[footstep timing](reaudit-footsteps.md). R8-specific follow-up is excluded at the user’s request.
 
 Current binary/config provenance is retained in
 [evidence/reaudit-runtime-settings.json](evidence/reaudit-runtime-settings.json).
 The game launch and offline captures were approved. After the user rebooted,
-both REA bridge endpoints were restored; server/client re-analysis runs serially
-under resource caps. No active Ghidra request is cancelled or restarted.
+both REA bridge endpoints were restored. A second reboot at 16:30 PDT stopped
+the native sessions again; transports are healthy, and saved current-hash evidence
+remains available. No new full analysis is needed for these two corrections.
+No active Ghidra request is cancelled or restarted.
 
 ## Delivered behavior and validation
 
@@ -22,10 +26,16 @@ under resource caps. No active Ghidra request is cancelled or restarted.
 - R8 charge: native additive motion composed over its firing-start pose.
   Arm/finger error 752.262→.02743 mm across 30 frames; both HD/legacy rebuilt.
   Actual runtime checks cover charge after idle and fire/cancel.
-- TypeScript passes. Full unit suite: 2,227 passes and the documented missing
+- Accuracy/index: production matches all 39,648 native invocation cases and
+  41,584 accepted demo ticks within documented landing-speed precision. Fresh
+  recovery penalty error falls .0013072615→1.49e-8; index error 1→numerical precision.
+- Ordinary running footsteps: AK/AWP intervals now406.25ms, knife312.5ms,
+  replacing the faster distance accumulator in both engines. Mixer unchanged.
+- TypeScript passes. Final full unit suite: 2,325 passes and the documented missing
   `public/models/ak47.json` fallback failure. Five targeted Chromium cases pass.
   Numerical and browser commands use memory/swap caps; Chromium is serial,
-  CPU-capped and run with repository edits frozen.
+  CPU-capped and run with repository edits frozen. Auto-deploy was paused for
+  the final browser run; one batched push avoids overlapping builds.
 - Paired neutral-material strips cover world running, AK reload/full fire and
   R8 idle→charge→fire→cancel. They compare exported clips/runtime animation,
   not native lighting, monitor presentation, or the complete CS2 animation graph.
@@ -46,7 +56,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-movement.md
 | Stand / walk / crouch caps | M1 running weapon cap, walk×0.52, crouch×(1−0.66 amount). | AK215 /111.8 /73.1 u/s; ground speed clamps every step. | Unchanged. | Matched equations. | `c488943` |
 | Weapon speed multipliers | M6 all 35 firearms, both modes; knife250. | Extracted speeds; bench enumerates all 71 supported weapon/mode entries. | Unchanged. | Matched data. | `c488943` |
 | Scoped walk acceleration | M1 second zoom with scaled walk speed<110 retains weapon scaling. | Implemented;100 u/s weapon gives4.296875 u/s gain/128 step from rest. | Unchanged. | Matched static branch. | `c488943` |
-| Silent walking threshold | M4 footsteps serverside; no numeric speed threshold proved by these movement sources. | Sound gate 54% weapon speed; cadence 1.35m. Walk/crouch normally below gate. | Unchanged. | Unverified exact threshold/cadence; do not claim walking/crouching always silent from this gate alone. | `c488943` |
+| Silent walking threshold | Current-server movement wrapper bypasses the timer while walking or below135.2u/s; speed²<10 resets it. See [footstep ledger](reaudit-footsteps.md). | Gate54% weapon speed; distance accumulator. | Native absolute speed/walk gate and rest reset. | Matched bounded ordinary dry-ground cases; special sounds and client delivery remain partial. | `2aba70c` |
 | Air acceleration / wish cap | M1 AirAccelerate/AirMove; M4 12/30. Gain budget12×uncapped wish×dt; capped directional deficit; half budget before movement, remainder after. | AK from rest20.15625 u/s gain/128step; pre-move10.078125. | Unchanged. | Matched arithmetic. | `c488943` |
 | Air-strafe / no-key control | M1 uses wish direction and dot product; zero wish gives no gain. | No-key momentum retained; directional cap 30; orthogonal strafe can add speed. | Unchanged. | Matched isolated arithmetic; full curved runtime path/collision unverified. | `c488943` |
 | Bunny-hop timing | M1 window/restore/clamp branches, M4 7.8125ms full window; velocity restoration gated above weapon cap; launch clamp1.1×weapon unless enabled. | ±3.90625ms; restores only overspeed; AK clamp236.5u/s. | Unchanged. | Static rule matched; runtime boundary presses unverified. | `c488943` |
@@ -59,7 +69,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-movement.md
 | Duck eye-height curve | M3 per-sample DuckViewOffset→−18×amount at 90u/s; DuckRootOffset compensates airborne origin changes and approaches0 at 90u/s. | Smoothstep of duckAmount; ground-unduck sample error up to4.60295u; camera finished164.0625ms. | Both offset states preserved; recorded ground/air sequences match within0.0001u; fully rested camera return203.125ms. | Fixed server eye-offset arithmetic; final client interpolation not yet measured. | `79832e6` |
 | Duck fatigue / cooldown | M1 both edges consume2, recharge3/s, extra6/s after64u, thresholds1.5/0.75; M4 cooldown0.4. | Implemented. | Retained; new camera remains independent of amount completion. | Matched bounded static/replayed state; stationary spam edges need exact native command fractions for complete parity. | `c488943` |
 | Falling / landing slowdown | M1 modern landing-state dependence and gravity; older arithmetic fixture bounds identified separately. | Ballistic gravity800; ground factor clamp(1+v×.0005,.2,1)² then+1.111189t; jump factor base+0.6t. | Unchanged factors; standing relaunch uses corrected impulse. | Approximated complete collision/landing timing; no legacy stamina claim substituted for modern factors. | `c488943` |
-| Post-landing accuracy | Native weapon landing hook is covered by combat re-audit. | Landing-speed×weapon land penalty. | Unchanged. | See combat evidence; no independent runtime accuracy capture claimed here. | `c488943` |
+| Post-landing accuracy | Native hook and12 captured landings add land coefficient×prior fall speed before recovery. | Linear addition with continuous recovery. | Native full-tick recovery; cumulative error≤3.10e-6 from fall-speed precision. | Matched captured paths; shots at simultaneous stance/landing edges remain partial. | `fd328d5` |
 | Landing camera dip | Distinct native view-punch/camera mechanism; M3 carries view-punch state but this worker did not establish rendered dip from it. | Existing landing camera/view-punch response. | Unchanged. | Unverified by this movement pass; see response worker. | `c488943` |
 | Step height / stairs | M4 confirms normals; current trainer step18u derives from older fixture/config evidence, not a fresh stair run. | Swept square hull with18u step-up/down. | Unchanged. | Approximated; exact stair trace and camera behavior unverified. | `c488943` |
 | Slopes / collisions | M4 standable/walkable normal 0.7; M2 standing occupancy trace. | Authored box/wedge solver and voxelized imported map;32u width,72/54u heights; smooth ground-transition hull. | Air changes corrected; geometry solver unchanged. | Approximated. Surface friction, partial-ground-duck hull, multi-plane clipping and map discretization need native geometry traces. | `c488943` |
@@ -92,18 +102,18 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-combat.md](
 | Recoil suppression/smoothing | AK first six native impulse anchors reproduce trainer table; historical Windows table fixture is another artifact | Four-shot suppression and automatic smoothing retained | Matched AK sample; broad native rule still partial | `c488943` |
 | Aim-punch decay and velocity decay | Fresh native anchor-to-anchor carry in both captures, `PunchRecovery` comparison | Native carry error ≤0.000000478°; unchanged decay math | Matched sampled current native trajectories | `c488943` |
 | Recoil time anchor in actual engines | Fresh AK native anchors use exact command schedule | Maximum sampled live error 0.338199° → 0.00000239° | Matched sampled trajectory after fix | `e85f59a` |
-| Between-spray recovery | Fresh isolated shots after two-second rest reset native angle to zero | Same zero angle after long rest; retained velocity/index model | Matched long-rest sample; short-pause index timing approximated | `c488943` |
+| Between-spray recovery | Fresh native index snapshots and native update body; long-rest angle samples | Long rests matched; short-pause index now uses full native decay steps and strict gate | Matched captured recovery; full command histories remain bounded | `fd328d5` |
 | Aim punch versus camera-only punch | Native aim-punch anchors available; separate view-punch field needs its own renderer comparison | Bullet punch ×2, camera view-punch separate; scheduling fix applies aim punch | Partially matched; presentation audit owns camera composition | `c488943` |
 | Recoil-follow settings | Client setting lookup and frame presentation handled in response audit | No combat settings change | See response audit | `c488943` |
-| Stand/crouch/air baseline | Fresh server accuracy-update selects native stand, duck flag, or stand+jump×air scale; current runtime air scale 1 | Same formulas and data; unchanged | Matched static branch; stance transition timing partial | `c488943` |
+| Stand/crouch/air baseline | Current native body and 39,648 independent invocations; air scale 1 | Same baseline choices; native float32 step and parameter changes now preserve accumulated penalty | Matched arithmetic and captured stance rows | `fd328d5` |
 | Running/walking velocity mapping | Fresh GetInaccuracy remaps 34–95% mode speed; run quarter-power, walk linear | Bench samples 0/.34/.52/.75/.95/1; same results | Matched arithmetic structure | `c488943` |
-| Jump/fall/landing accuracy | Fresh GetInaccuracy uses square-root vertical-speed interpolation; landing hook evidence retained from earlier pass | Same jump curve and linear landing addition; unchanged | Jump structure matched; fresh landing hook/runtime recovery unverified | `c488943` |
-| Fire accuracy and tick order | Fresh recovery demo all eight shots fit add-fire-then-full-tick decay within 1.23e-9; exact-boundary shots in shooting capture retain the full increment until next tick | Existing continuous advance-then-fire is up to 0.000726484 high on AK shot ticks; unchanged | Approximated, measured remaining discrepancy | `c488943` |
-| Recoil-index decay | Fresh first decay multiplies by 10^(-2/64); server update uses complete tick after strict readiness threshold | Continuous partial-threshold decay; one-step differences +0.015401/+0.054248/+0.060028 in fresh recovery capture | Approximated; remaining tick-order work | `c488943` |
-| Reload accuracy penalty | Current vdata `m_flInaccuracyReload` is zero for all 35 weapons; native update contains reload addition | No separate reload penalty, unchanged | Matched current zero data; nonzero custom value unsupported | `c488943` |
+| Jump/fall/landing accuracy | Native square-root vertical term; 12 captured landings use land coefficient × prior fall speed before recovery | Continuous recovery → native full-tick recovery; cumulative penalty error within 3.10e-6 landing-speed precision | Matched captured landing penalty/recovery; coincident firing/stance edges still partial | `fd328d5` |
+| Fire accuracy and tick order | Native movement → PostThink → FinishTick caller chain; 160 captured shots | Advance-then-fire continuous decay → fractional shot before native tick update, exact-boundary shot afterward; fresh recovery max error .00130726 → 1.49e-8 | Matched native arithmetic and captured paths in both engines | `fd328d5` |
+| Recoil-index decay | Native strict time > float32(last shot + primary cycle + 1/64); full 10^(-2/64) step and ≤.1 snap | Partial-threshold decay → full tick factor; fresh cumulative index error 1 → numerical precision | Matched grid and cumulative captured paths | `fd328d5` |
+| Reload accuracy penalty / index | Current reload penalty is zero; native explicit reload follows accuracy update and adds +1 index; idle automatic reload adds before update; captured end resets zero | No start increment → explicit/automatic ordering and end reset for magazine reloads | Matched captured magazine cases; shell and cancellation paths still partial | `fd328d5` |
 | Ladder / stacked-player accuracy | Native baseline has ladder and stacking branches; current trainer lacks those accuracy inputs | No ladder/boost accuracy state | Not present | `c488943` |
-| Recovery curves and transition index | Current vdata stand/crouch/final/bullet-transition fields; fresh non-shot stationary decay agrees to numerical noise outside resets | Exponential excess decay and integer index transition, unchanged | Matched captured ordinary decay; full air/duck transitions unverified | `c488943` |
-| Scope / zoom-level inaccuracy | Current mode arrays and zoom FOV/time lists; each current zoom state bench uses alternate stats | Every zoom level uses its weapon alternate baseline, unchanged | Matched data/application; all live zoom timing unverified | `c488943` |
+| Recovery curves and transition index | Native body truncates index for ground interpolation, final -1 disables transition, air uses 4×crouch recovery | Continuous-double steps → complete 64Hz float32 steps; 39,648 invocations have zero error | Matched bounded native body and 41,584 cumulative captured ticks | `fd328d5` |
+| Scope / zoom-level inaccuracy | Current mode arrays; native mode transitions preserve penalty and apply new baseline at next update | Immediate baseline rebasing → preserve penalty; retained AWP transition max error .07100477 → numerical precision | Matched data and captured transitions; all-weapon live zoom timing still partial | `fd328d5` |
 | First-shot spread distribution | Fresh server sampler draws uniform radius, angle, radius, angle | 100k draws mean radius 0.500794, squared radius 0.333824 | Matched structural distribution; command seed and native trig parity unverified | `c488943` |
 | R8/Negev distribution shape | Fresh native radius branches; R8 `1-r²`, Negev early repeated squaring | Means 0.666176; Negev indices 0/1/2/3: 0.888933/0.799892/0.666176/0.500794 | Matched sampled transformed distribution | `c488943` |
 | Shotgun pellet spread | Fresh shared bullet routine redraws inaccuracy per pellet with patterns; shares it without patterns; current session patterns enabled | Same branch structure and 64-entry pattern lookup | Matched structure; current RNG table bytes and command seeds unverified | `c488943` |
@@ -145,8 +155,8 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-response.md
 | Hit sounds / damage indicators | Native hit/hurt event assets and mixer metadata; fresh sound onset alignment not captured | Head/helmet/body/armor and shooter/victim event selection; training indicators and damage camera retained | Native asset selection supported; timing/loudness and UI parity approximated | `c488943` |
 | Kill confirmation | Native event/UI rendering not frame-compared | Trainer kill feed/count and target feedback follow simulated death | Approximated training feedback | `c488943` |
 | Blood / bot flinch | Fresh native flinch clips and flags; animation inventory | Imported bullet-hit deltas plus simplified blood particles; unchanged | Matched sampled clips; approximated effects/blends | `c488943` |
-| Footstep cadence | Approved AK/AWP run/walk/crouch audio, per-tick position and speed; exact native trigger rule still unknown |1.35m travel cadence above54% weapon speed; AK steady intervals242.1875–250ms, AWP265.625–273.4375ms; unchanged | Unverified full native rule; AK candidate run audio is around400ms and warrants further measurement | `c488943` |
-| Footstep loudness / stance | Output-monitor audio captured at known game/sink levels, no calibrated source loudness or listener-distance sweep | Walk/crouch probes emit0steps; loudness uses browser spatial model | Unverified threshold/loudness parity; zero callbacks does not prove every native stance is silent | `c488943` |
+| Footstep cadence | Current native wrapper, countdown override and command producer; [footstep ledger](reaudit-footsteps.md) | 1.35m distance cadence: AK242.1875–250ms, AWP265.625–273.4375ms, knife210.9375–218.75ms → native command timer:406.25/406.25/312.5ms | Matched bounded normal dry-ground timer and speed gates in both engines; special paths remain partial | `2aba70c` |
+| Footstep loudness / stance | Native walking/135.2u/s gate; rest resets; native volume scalars retained in footstep ledger | Walk/slow/rest countdown behavior corrected; ordinary walk/crouch stay silent; existing browser mixer retained | Timer/stance gates matched in bounded cases; loudness, surfaces and listener-distance parity unverified | `2aba70c` |
 | Weapon sound timing / distance layers | Fresh native action timelines/mixer imports and clip event metadata | Imported gun/action events, distant layer and browser spatial gain; unchanged | Matched imported data; runtime spatial mix/occlusion approximated | `c488943` |
 | Bot target locomotion / turning / landing / death | Fresh world clips/graphs, pose/capsule bench | Native clips in custom blends; missing turn/planted/additive states; custom ragdoll | See full animation inventory; overall approximated | `c488943` |
 
@@ -210,8 +220,8 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 6. Correct idealized recoil tests did not verify live-engine scheduling. The
    processing-tick anchor caused a measurable error even with correct cadence.
 7. Matching accuracy formulas did not verify update order, full-tick index
-   decay, mode switching or reload-start increments. The new isolated replay
-   quantifies those differences; production integration remains next work.
+   decay, mode switching or reload-start increments. Independent native replay
+   now verifies the correction in production code and both simulation paths.
 8. Filename-based coverage was wrong: `native_phase3_m4a1s_001` is M4A4,
    `native_audit_aug_scope_001` is USP-S, `native_audit_awp_001` is USP-S/AK,
    and `native_reload_deagle_empty_001` is M4A4. The M4A1-S 0.09 s claim is
@@ -246,23 +256,26 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
     preserve 480 frames over 8 s with separate audio/video processes; this still
     does not establish unique native rendered frames or physical input latency.
 
+21. A fixed 1.35 m stride and weapon-relative audible threshold do not reproduce
+    the native footstep clock. The native wrapper has absolute speed gates,
+    rest resets, walk/slow clock preservation and command-time countdowns.
+
 ## Exact remaining evidence and implementation
 
-- Accuracy/index: integrate the captured 64 Hz ordering into both engines,
-  preserve scheduled aim-punch, and compare pre-shot as well as post-tick state.
-  Native caller-order checks and captures remain for burst/R8/Negev/shell-reload,
-  suppressor, holster and simultaneous transition cases. See the complete
-  rollout and accepted 40,408-tick coverage in [reaudit-accuracy.md](reaudit-accuracy.md).
+- Accuracy/index: common captured paths are corrected in both engines. Native
+  command/state captures remain for bursts, Negev, shell reloads, suppressor,
+  holster and simultaneous transitions. See the accepted 41,584-tick coverage
+  and caller evidence in [reaudit-accuracy.md](reaudit-accuracy.md).
 - Input/fire: native command fractions plus due tick/ratio and fire events for
-  released early taps, all bursts, R8 release/alternate and shell interruption.
+  released early taps, bursts and shell interruption.
   Mouse-to-photon requires synchronized device/display instrumentation.
 - Movement: flat unobstructed trajectories and exact input edges; landing/bhop
   boundary presses; constrained unduck and partial-duck takeoffs; matched
   stairs, slopes, surface friction and ladders; rendered camera frames paired
   with camera-service offsets.
 - Presentation/audio: continuous timestamped native camera and gun landmarks
-  through shots, recovery, crouch, landing and zoom; live R8 charge rate;
-  speed/surface/stance/listener-distance footstep runs plus native trigger logic.
+  through shots, recovery, crouch, landing and zoom; footstep material,
+  listener-distance, water/ladder and separate jump/landing sound paths.
   Current video/audio process clocks give only approximate cross-stream alignment.
 - Damage/hitboxes: controlled native victim health/armor deltas, hit groups,
   tagging velocities, knife/Zeus and penetration flags; authoritative server

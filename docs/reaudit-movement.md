@@ -58,7 +58,7 @@ in the coordinating report.
 | Stand / walk / crouch caps | M1 running weapon cap, walk×0.52, crouch×(1−0.66 amount). | AK215 /111.8 /73.1 u/s; ground speed clamps every step. | Unchanged. | Matched equations. | `c488943` |
 | Weapon speed multipliers | M6 all 35 firearms, both modes; knife250. | Extracted speeds; bench enumerates all 71 supported weapon/mode entries. | Unchanged. | Matched data. | `c488943` |
 | Scoped walk acceleration | M1 second zoom with scaled walk speed<110 retains weapon scaling. | Implemented;100 u/s weapon gives4.296875 u/s gain/128 step from rest. | Unchanged. | Matched static branch. | `c488943` |
-| Silent walking threshold | M4 footsteps serverside; no numeric speed threshold proved by these movement sources. | Sound gate 54% weapon speed; cadence 1.35m. Walk/crouch normally below gate. | Unchanged. | Unverified exact threshold/cadence; do not claim walking/crouching always silent from this gate alone. | `c488943` |
+| Silent walking threshold | Current-server movement wrapper bypasses the timer while walking or below135.2u/s; speed²<10 resets it. See [footstep ledger](reaudit-footsteps.md). | Gate54% weapon speed; distance accumulator. | Native absolute speed/walk gate and rest reset. | Matched bounded ordinary dry-ground cases; special sounds and client delivery remain partial. | `2aba70c` |
 | Air acceleration / wish cap | M1 AirAccelerate/AirMove; M4 12/30. Gain budget12×uncapped wish×dt; capped directional deficit; half budget before movement, remainder after. | AK from rest20.15625 u/s gain/128step; pre-move10.078125. | Unchanged. | Matched arithmetic. | `c488943` |
 | Air-strafe / no-key control | M1 uses wish direction and dot product; zero wish gives no gain. | No-key momentum retained; directional cap 30; orthogonal strafe can add speed. | Unchanged. | Matched isolated arithmetic; full curved runtime path/collision unverified. | `c488943` |
 | Bunny-hop timing | M1 window/restore/clamp branches, M4 7.8125ms full window; velocity restoration gated above weapon cap; launch clamp1.1×weapon unless enabled. | ±3.90625ms; restores only overspeed; AK clamp236.5u/s. | Unchanged. | Static rule matched; runtime boundary presses unverified. | `c488943` |
@@ -103,7 +103,7 @@ Remaining exact evidence: flat isolated native input/position trajectories for
 all stance/weapon transitions; high-frequency jump presses centered on measured
 landing fractions; constrained airborne unduck and partly crouched takeoffs;
 matched stair/ramp/ladder geometry traces; rendered camera frames synchronized
-to duck state; speed-bounded native footstep events/audio. These are explicitly
+to duck state; native footstep delivery/audio beyond the ordinary timer established in pass21. These are explicitly
 open, and no speculative feel tuning was shipped for them.
 
 Pre-commit edge review also reproduced one introduced integration bug: a

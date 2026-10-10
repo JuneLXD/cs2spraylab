@@ -1,5 +1,11 @@
 # Combat re-audit, 2026-10-09
 
+Pass20 (`fd328d5`) supersedes the accuracy/index discrepancies recorded below.
+The [accuracy ledger](reaudit-accuracy.md) now verifies production recovery, mode
+and magazine-reload ordering against current native instructions and cumulative
+demo snapshots. This document retains the earlier combat bench as the before
+measurement; its unverified damage, seed and special-state boundaries remain open.
+
 Baseline: `c488943`. This pass reparsed original demos, freshly exported current
 weapon data and SAS model blocks, and refreshed the server accuracy/spread and
 penetration decompiles before comparing earlier documentation. The installed

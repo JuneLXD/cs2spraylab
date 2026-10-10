@@ -857,21 +857,31 @@ old gapped capture.
 ## Re-audit delivery validation
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph
-composition `9b94483`. The [consolidated inventory](cs2-reaudit.md) retains one
-row per audited mechanic with rule/evidence, before/after, status and commit,
-plus corrected claims and exact unresolved measurements.
+composition `9b94483`, accuracy/index `fd328d5`, ordinary footsteps `2aba70c`.
+The [consolidated inventory](cs2-reaudit.md) retains one row per audited mechanic
+with rule/evidence, before/after, status and commit, plus corrected claims and
+exact unresolved measurements. Further R8 work is excluded at the user's request.
 
-Final TypeScript passes; 2,227 unit cases pass with only the known missing fallback
-model failure. All five Chromium cases across input-timing, trigger-continuity
-and view-punch pass. Four serial paired strips total 77 frames with no browser
-errors. All resource caps and source freezes were respected.
+Final combined validation passes TypeScript and 2,325 unit cases. The only unit
+failure is the documented missing `public/models/ak47.json` fallback fixture.
+All five Chromium cases across input-timing, trigger-continuity and view-punch
+pass, using one worker, memory/swap/CPU caps and a repository freeze. Auto-deploy
+was paused for that browser run. Logs are retained as
+`../native-audit/reports/reaudit-followup-final-{typescript,unit,browser}.log`.
+The previous animation delivery retains four paired strips (77 frames, no
+browser errors); no new native-rendering parity is inferred from them.
 
-A separate [accuracy/index replay](reaudit-accuracy.md) matches 39,648 bounded
-current-server invocations and 40,408 accepted demo ticks (152 shots), including
-ordinary reload, mode and landing transitions within stated precision. This is
-a candidate model, not a shipped runtime correction. Integration and native
-special-state caller ordering remain the next work. Additional mislabeled demo
-filenames are explicitly corrected there; filenames are not weapon evidence.
+Production accuracy replay matches 39,648 bounded current-server invocations
+and 41,584 accepted demo ticks /160shots, within the documented landing-speed
+precision. Both actual engines match the ordinary native footstep timer for
+AK/AWP/knife. Special-state accuracy, footstep delivery/loudness and the wider
+presentation/animation inventory remain incomplete.
+
+All three follow-up commits are batched into one push. After the deploy service
+finishes, `tools/verify-accuracy-release.mjs <short-commit>` verifies the LAN
+release header, served AK model/audio hashes, pointer lock and firing/reload.
+It writes `../native-audit/reports/reaudit-accuracy-live-release.{json,png}`;
+CLAUDE.md and memory retain the resulting release and worktree state.
 
 ## Validation retained from passes 11–15
 

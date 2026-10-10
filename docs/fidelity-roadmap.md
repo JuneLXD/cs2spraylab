@@ -89,12 +89,14 @@ model, animation, damage, collision and input items require their own evidence.
 ### Independently measured corrections, passes 17–19
 
 - Shared movement: recorded standing/crouched launch distinction, immediate ±9u airborne hull changes, and separate 90u/s duck camera offsets. Native fixture replays every sample; rendered-client interpolation and full terrain parity remain open. See [movement inventory](reaudit-movement.md).
-- Held recoil: impulses now belong to exact schedules, with processing-time presentation sampled afterward. Fresh eight-shot AK error falls .338199°→.00000239°. Accuracy penalty/index tick ordering remains a separate measured discrepancy. See [combat inventory](reaudit-combat.md).
+- Held recoil: impulses now belong to exact schedules, with processing-time presentation sampled afterward. Fresh eight-shot AK error falls .338199°→.00000239°. Accuracy penalty/index tick ordering is corrected by the following pass. See [combat inventory](reaudit-combat.md).
 - R8 asset: compose charge deltas over the native graph’s firing-start pose and preserve constant object channels. Both variants rebuilt; arm/finger error752.262mm→.02743mm. The earlier mount-only reference was insufficient and is superseded. Native graph reconstruction, materials, effects and broad runtime presentation remain bounded in the [animation inventory](reaudit-animation.md).
 - Offline native capture permission is granted. Demos and game-output audio are retained; initial video has large presentation-timestamp gaps, so a nominal 60fps header must not be used for frame-accurate claims.
 
 The consolidated [independent inventory](cs2-reaudit.md) covers all requested
-mechanics with implementation commits and exact limits. The next high-priority
-correction is [accuracy/index update order](reaudit-accuracy.md): 39,648 native
-invocations and 40,408 accepted demo ticks support the common captured paths,
-while production integration and special-state ordering remain open.
+mechanics with implementation commits and exact limits. The [accuracy/index correction](reaudit-accuracy.md) now matches 39,648 native
+invocations and 41,584 accepted demo ticks in production replay, with both-engine
+shot/reload ordering tests. The [footstep correction](reaudit-footsteps.md) replaces
+distance-based cadence with the native speed-gated command clock. Special-state
+accuracy, material/ladder/water sound paths and physical presentation remain
+open. R8-specific follow-up is excluded at the user’s request.
