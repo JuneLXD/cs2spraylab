@@ -1,5 +1,11 @@
 # Stopping, counter-strafing and first-shot accuracy — pass 44
 
+Follow-up: [pass 47](reaudit-ground-start-stop.md) confirms these supplied-segment
+arithmetic results but finds remaining differences when the trainer's128Hz
+subdivisions are compared with native full-command curves. It also distinguishes
+movement-accuracy recovery from complete standstill. The broader batch remains
+held; the following historical comparisons do not establish scheduling parity.
+
 The movement correction carries the native friction cache between segments and
 commands, preserves the separately rounded acceleration work, subtracts unused
 friction from counter-strafe acceleration, and applies the native low-speed stop

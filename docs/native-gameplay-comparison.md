@@ -1507,6 +1507,19 @@ application sources remain the tested pass-45 snapshot. The combined batch is
 held locally pending native command/cap association; no arithmetic or phase
 timing is guessed from this observation.
 
+## Ground start/stop curves and command segments (forty-seventh pass)
+
+[The investigation](reaudit-ground-start-stop.md) measures all seven priority
+weapons in standing, walking and fully crouched states. At the first15.625ms
+AK observation, live speed is15.23 versus native18.48u/s. Live and held128Hz
+curves both differ from native full-command results; the held actual actor,
+Range and Duel agree with all84cases/16,128rows when supplied native segments.
+Twelve additional guarded cap cases isolate half-command AWP zero-speed
+sensitivity. The~203ms release figure is movement-accuracy recovery, not full
+standstill. No application source changes or deployment; command/segment
+integration and actual moving-rescope association remain open. Two expanded
+512MiB native runs hit only their own cgroup cap; partial output is excluded.
+
 ## Validation retained from passes 11–15
 
 All three targeted Chromium specs pass: `input-timing`, `trigger-continuity`

@@ -380,6 +380,13 @@ batch is held by the transition issue below; full collision remains partial.
 
 ## Moving AWP rescope and shot accuracy, pass 46
 
+Pass47 [start/stop curves](reaudit-ground-start-stop.md) narrows the required
+work to native command/segment integration. Held arithmetic matches84actual
+actor/Range/Duel cases under native segments, but128Hz subdivisions change
+stopping/reversal. The same native AWP cap change stops only at half-command
+duration in12supplied cases. Keep the broad batch held and validate input-edge,
+prediction, collision, scope and shot integration before release.
+
 The [transition audit](reaudit-awp-movement-phase.md) proves native command-level
 movement/weapon order and measures the actual trainer divergence. A candidate
 half-tick rescope can stop Range motion and remove movement inaccuracy from a

@@ -1,4 +1,12 @@
-# CS2 independent re-audit: passes 16–46
+# CS2 independent re-audit: passes 16–47
+
+[Pass 47](reaudit-ground-start-stop.md) compares full initial acceleration,
+release and reversal curves. Live code has a slower initial speed gain; the
+held correction fixes the start but still diverges when native movement work
+is divided into trainer half-ticks. All 84 completed actor/Range/Duel cases
+match when given the native segments. Twelve native cap-duration cases isolate
+the AWP zero-speed sensitivity. This is evidence only: application sources
+are unchanged and the broader movement batch remains held.
 
 ## Current priority: common weapons and core feel
 
@@ -223,13 +231,13 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-movement.md
 
 | Mechanic | Game rule / evidence | Trainer before | Trainer after | Status | Implementation commit |
 |---|---|---|---|---|---|
-| Ground acceleration | Current guarded native normalization/Accelerate/cap/work replay; [pass 44](reaudit-ground-friction.md). | Omits unused friction in acceleration budget and independently rounded work. | Native overshoot budget and work integration; actual standing replay matches 462 cumulative cases. | Matched supplied dry-ground arithmetic; complete live/collision trajectory remains partial. | `98002af`, local |
-| Ground friction / stop speed | Current native quantizer/cache/Friction, command markers, saved fractions, per-segment wish copy and low-speed gate; [pass 44](reaudit-ground-friction.md). | Recomputes unquantized control speed each 128 Hz step; lacks persistent cache/fraction. | Native state carried across commands/segments; all 10,980 release primitive rows match; 192 cumulative actor cases reach matching accuracy/stop boundaries. | Corrected supplied-state replay; variable surfaces and full lifecycle remain partial. | `98002af`, local |
+| Ground acceleration | Guarded native arithmetic and complete start curves; [pass 47](reaudit-ground-start-stop.md). | Initial AK speed15.23 versus native18.48 u/s at15.625ms; extra half-step friction. | Held cache/work correction matches initial gain; matched native segments agree in84 actual actor/Range/Duel cases. | Arithmetic matched under supplied segments; actual128Hz integration still differs and is held. | `98002af`, local; pass47 evidence |
+| Ground friction / stop speed | Native cache/Friction/work/gate; [pass 44](reaudit-ground-friction.md), expanded [pass 47](reaudit-ground-start-stop.md). | Stateless per-half-step friction; accuracy recovery and complete stopping are distinct. | Native state/arithmetic matched for supplied schedules; full-command comparison reveals remaining stop differences under128Hz subdivisions. | Command/segment integration unresolved; broad batch held. | `98002af`, local; pass47 evidence |
 | Counter-strafe / release | Native combined acceleration plus release through complete stop; native velocity→accuracy normalization; [pass 44](reaudit-ground-friction.md). | Combined maximum error 23.54681 u/s; 164 movement-zero row disagreements. M4/pistol supplied release boundary 210.9375 ms versus native 203.125 ms. | Zero combined trajectory/state/threshold disagreements; seven-weapon Range/Duel shots use corrected boundary. | Corrected under explicit supplied conditions; no accepted clean live release or complete command/collision replay. | `98002af`, local |
 | Stand / walk / crouch caps | M1 cap equations; current guarded cap/work and stance branches with supplied processed caps, [pass 44](reaudit-ground-friction.md). | Ideal decimal caps; reconstructs midpoint from rounded endpoints. | Native independent work/cap/pre/post rounding; 248 supplied stance trajectories match. | Matched supplied cap arithmetic; upstream native modifier pipeline not newly executed. | `c488943`; `98002af`, local |
 | Weapon speed multipliers | M6 all 35 firearms, both modes; knife250. | Extracted speeds; bench enumerates all 71 supported weapon/mode entries. | Unchanged. | Matched data. | `c488943` |
 | Scoped walk acceleration | Current AWP class/getter/schema proof and 844 guarded native rows: positive current zoom, configured count>1 and float32 walking speed<110; [pass 45](reaudit-scoped-awp-movement.md). | First zoom uses faster ordinary walking acceleration; render prediction omits the scope rule at both levels. | Shared condition in all four movement callers; 180 cumulative cases and 3,120 predicted positions match supplied native motion. | Supplied-state correction tested locally; combined release held by pass 46. | `4bb6223` |
-| Movement during AWP rescope | Current native command completes movement before remaining weapon postframes; [pass 46](reaudit-awp-movement-phase.md). | Range and Duel sample opposite scope states at arrival; baseline running endpoints100/200 u/s. | Candidate endpoints0/200 u/s at a supplied half-tick arrival; four fresh Range shots lose movement inaccuracy. | Native command association unresolved; combined movement batch held, no guessed phase fix. | Pass 46 evidence only |
+| Movement during AWP rescope | Native command phase and12 guarded cap-duration cases; [pass 47](reaudit-ground-start-stop.md). | Range and Duel sample opposite scope states at arrival; baseline running endpoints100/200 u/s. | Supplied native200→100 cap stops at half-command but remains~100 at quarter/full durations, both zooms; no ordinary pre-clamp found. | Actual moving-rescope segment/cap association unresolved; combined batch remains held. | Pass46–47 evidence only |
 | Silent walking threshold | Current-server movement wrapper bypasses the timer while walking or below135.2u/s; speed²<10 resets it. See [footstep ledger](reaudit-footsteps.md). | Gate54% weapon speed; distance accumulator. | Native absolute speed/walk gate and rest reset. | Matched bounded ordinary dry-ground cases; special sounds and client delivery remain partial. | `2aba70c` |
 | Air acceleration / wish cap | M1 AirAccelerate/AirMove; M4 12/30. Gain budget12×uncapped wish×dt; capped directional deficit; half budget before movement, remainder after. | AK from rest20.15625 u/s gain/128step; pre-move10.078125. | Unchanged. | Matched arithmetic. | `c488943` |
 | Air-strafe / no-key control | M1 uses wish direction and dot product; zero wish gives no gain. | No-key momentum retained; directional cap 30; orthogonal strafe can add speed. | Unchanged. | Matched isolated arithmetic; full curved runtime path/collision unverified. | `c488943` |
@@ -562,8 +570,10 @@ movement behavior. The detailed historical inventory below preserves deferred
 work; R8, shotguns, uncommon weapons and deep presentation resolvers are not
 requirements for this focused session.
 
-- Ground stopping: supplied native release/counter/work/stop trajectories now
-  match the corrected actor, with native movement-accuracy normalization.
+- Ground starting/stopping: supplied native release/counter/work/stop trajectories
+  match corrected arithmetic when segment schedules match. Pass47 establishes
+  differences under the actual128Hz subdivisions, including complete stopping
+  and reversal; native command/segment integration is the immediate priority.
   Complete physical input/command production, collision/publisher callbacks,
   variable surfaces and full mode-transition parity remain outside that proof.
   No clean retained runtime release window passed the independent eligibility gates.

@@ -1,5 +1,11 @@
 # AWP rescope movement and immediate shots — pass 46
 
+[Pass 47](reaudit-ground-start-stop.md) adds12 actual native cap-duration cases:
+the same supplied speed reduction stops at half-command duration but remains
+moving at quarter/full durations. Matched-segment start/stop curves agree while
+128Hz caller subdivisions still differ. No production timing change follows;
+the moving-rescope command/cap association remains the release boundary.
+
 The prepared stopping batch is held locally. A final actual-engine transition
 check found a new zero-speed state during automatic AWP rescoping, and that
 state removes movement inaccuracy from an immediate Range shot. Fixed-state
