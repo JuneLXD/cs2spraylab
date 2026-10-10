@@ -6,6 +6,7 @@ import type {RecoilAngle} from '../recoil';
 import {direction as aimDirection, shotDirections} from '../shot-model';
 import type {ActorCommand} from './types';
 import {NativeReloadState, WeaponActions, type ReloadActionEvent} from '../weapon-actions';
+import {reloadInputAllows, usesNativeReloadInput} from '../reload-input';
 
 export type FiredRound = {
   origin: Vec; direction: Vec; weapon: Equipment; ordinal: number;
@@ -98,6 +99,11 @@ export class DuelWeaponState {
     punch?: DamagePunch;
   }): FiredRound | undefined {
     this.actions.advance(time);
+    // Capture input priority before a secondary action changes its own deadline.
+    const nativeReloadInput = usesNativeReloadInput(this.id);
+    const reloadAllowed = !nativeReloadInput || reloadInputAllows(time, this.nextShotAt,
+      command.fireHeld || command.firePressed, !!(command.secondaryHeld || command.secondaryPressed),
+      this.actions.secondaryReadyAt, this.burstLeft > 0);
     // Shell attacks have a reload-start lock independent of insertion/outro.
     // Magazine completion retains its existing deadline.
     const reloading = this.reload.active;
@@ -125,7 +131,8 @@ export class DuelWeaponState {
         kind: 'melee', attack: secondary ? 'secondary' : 'primary', firstSlash,
         maxDistance: (secondary ? knifeModel.secondaryRangeUnits : knifeModel.primaryRangeUnits) * UNIT};
     }
-    if (command.reloadPressed && this.reload.start(time, !!command.reloadHeld)) {
+    if ((command.reloadPressed || nativeReloadInput && command.reloadHeld) &&
+      (command.reloadAutomatic || reloadAllowed) && this.reload.start(time, !!command.reloadHeld)) {
       if (!stats.reloadsSingleShells) this.recovery.reloadStarted(!!command.reloadAutomatic);
       this.pendingPress = false;
       this.actions.holster(); this.burstLeft = 0;

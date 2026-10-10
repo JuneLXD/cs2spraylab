@@ -347,6 +347,9 @@ export const latestChanges = {
     {id: 'native-draw-clock', title: 'Weapon draw motion', items: [
       'AK-47, AWP, Nova and XM1014 draw motion now keeps its authored speed when a model finishes loading after the weapon switch.',
     ]},
+    {id: 'native-common-reload-input', title: 'Reload input timing', items: [
+      'AK, M4s, AWP, Glock, USP-S and Desert Eagle reloads now respect the firing cycle: early taps are dropped, while holding reload retries when ready.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

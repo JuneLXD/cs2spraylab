@@ -1,0 +1,277 @@
+{
+  "method": "Actual Range/Duel simulations with browser-equivalent public input/reload calls and 128 Hz steps; synthetic initial inventory only. Eight seconds per case, player-only Duel steps, passive opponent, aim away.",
+  "baselineCommit": "90c756280839740754989183d034c607eda8c10d",
+  "reportSha256": {
+    "before": "4d9005f8886a1e354a53c0ccc892ea365645555d19c5dc2e76113438aaada457",
+    "after": "1bdb00f7990925eca98e2dca431371073b02e8e43999d92e9910bb5ac9a4f5f6"
+  },
+  "harnessSha256": {
+    "before": "080e854cc107e69fb906c6423a16b0103f31317849f543da14dedb64a9139dff",
+    "after": "6bffd5174b175c98207bbc9719a5098caf0b15563b08608fb37350fe90b62770",
+    "normalizedBody": "53547d547e10653af3c9d55c62e7c82d45de8f11482380c8699f5ec16b24bbfd"
+  },
+  "harnessNormalization": "Omit exactly the two const repo/const output default-path declaration lines. All remaining source bytes match. Both measurements passed explicit --output.",
+  "bundleSha256": {
+    "before": "859a7302f75b61477b05630a608d2936904f8e9f0aec2fd30a4d1eccdc333843",
+    "after": "f9014bfa13703e3c27721812030c87027b9d86f9ca8e79ebdff716e31357add5"
+  },
+  "completeSourceManifestSha256": {
+    "before": "4c67e6faadf55154f108114903c8db5bd7721de8e1769535af99b595ea4d5a98",
+    "after": "e7216cbd5f8aa53bc73850daf589725acd7ec55f5519d3d7beb2381a635481ab"
+  },
+  "manifestHashMethod": "SHA-256 of UTF-8 JSON with sorted keys and compact separators.",
+  "changedMeasuredSources": {
+    "src/range/duel/weapon-state.ts": {
+      "before": "72471fe32ed3d34623e79e65c3d74d85573150f8411685b8908ebcf808e94a4e",
+      "after": "4c389866a151da6b1692126df93365b31827795bf502d003722952fab6f08d5e"
+    },
+    "src/range/reload-input.ts": {
+      "before": null,
+      "after": "0c0c062d3e9a8cbfbdc159ac95a8e83688c41278aebb32b58e89f144adde83ed"
+    },
+    "src/range/simulation.ts": {
+      "before": "b0fce263e9a340edbd55182fec0402059dbb0549a73849704bdcdc3df69e8be5",
+      "after": "a9051f0e38bff9ff4c1492781f65e6030f7901496a696a18eb5dca2509da2231"
+    }
+  },
+  "unchangedRelevantSources": {
+    "src/range/equipment-data.json": "003273a675b9b130627bf4c2f253c5b679b433ee9a243e990a5824703262f988",
+    "src/range/equipment.ts": "1cf6d2639c344fd2bcad3cf76ab65e2b2a00d506cf1f7fb2406f9245b8d69960",
+    "src/range/game-data.json": "5903a1deeb1ff4181c7203f4c8b1e9690ee17e5573db558e424388c204ab990e",
+    "src/range/weapon-actions.ts": "b11a027fbc071e594e7e295cffa6ce3a0103c064aaf09e9370379d9aa5beda20",
+    "src/range/reload-clock.ts": "c8a35cd1d5603db064d86fc22a262917d7274f9dd79c5d4d9b271feccd296188"
+  },
+  "nativeGate": {
+    "file": "reaudit-common-reload-native.json",
+    "sha256": "51c8fec5be28a91acb67d58613393f2c933ce0d02c6cb5b18e37943ff4026222",
+    "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+    "evidenceIds": [
+      "COMMON-RELOAD-common-input-dispatch",
+      "COMMON-RELOAD-primary-ready",
+      "COMMON-RELOAD-input-active",
+      "COMMON-RELOAD-ordinary-gun-postframe"
+    ]
+  },
+  "cases": 56,
+  "engines": [
+    "range",
+    "duel"
+  ],
+  "stepHz": 128,
+  "durationSecondsPerCase": 8,
+  "counts": {
+    "earlyTapsRejectedAfter": 14,
+    "earlyHeldDeferredAfter": 14,
+    "readyControlsUnchanged": 28,
+    "pairedEngineRowsAgree": 28
+  },
+  "rows": [
+    {
+      "weapon": "ak47",
+      "configuredCycleSeconds": 0.1,
+      "early-tap": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 0.046875,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": null
+      },
+      "early-held": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 2.03125,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": 0.1015625
+      },
+      "ready-tap": {
+        "requestSeconds": 0.1015625,
+        "releaseSeconds": 0.1171875,
+        "beforeReloadSeconds": 0.1015625,
+        "afterReloadSeconds": 0.1015625
+      },
+      "ready-held": {
+        "requestSeconds": 0.1015625,
+        "releaseSeconds": 2.1015625,
+        "beforeReloadSeconds": 0.1015625,
+        "afterReloadSeconds": 0.1015625
+      }
+    },
+    {
+      "weapon": "m4a4",
+      "configuredCycleSeconds": 0.09,
+      "early-tap": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 0.046875,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": null
+      },
+      "early-held": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 2.03125,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": 0.09375
+      },
+      "ready-tap": {
+        "requestSeconds": 0.09375,
+        "releaseSeconds": 0.109375,
+        "beforeReloadSeconds": 0.09375,
+        "afterReloadSeconds": 0.09375
+      },
+      "ready-held": {
+        "requestSeconds": 0.09375,
+        "releaseSeconds": 2.09375,
+        "beforeReloadSeconds": 0.09375,
+        "afterReloadSeconds": 0.09375
+      }
+    },
+    {
+      "weapon": "m4a1s",
+      "configuredCycleSeconds": 0.1,
+      "early-tap": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 0.046875,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": null
+      },
+      "early-held": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 2.03125,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": 0.1015625
+      },
+      "ready-tap": {
+        "requestSeconds": 0.1015625,
+        "releaseSeconds": 0.1171875,
+        "beforeReloadSeconds": 0.1015625,
+        "afterReloadSeconds": 0.1015625
+      },
+      "ready-held": {
+        "requestSeconds": 0.1015625,
+        "releaseSeconds": 2.1015625,
+        "beforeReloadSeconds": 0.1015625,
+        "afterReloadSeconds": 0.1015625
+      }
+    },
+    {
+      "weapon": "awp",
+      "configuredCycleSeconds": 1.455,
+      "early-tap": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 0.046875,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": null
+      },
+      "early-held": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 2.03125,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": 1.4609375
+      },
+      "ready-tap": {
+        "requestSeconds": 1.4609375,
+        "releaseSeconds": 1.4765625,
+        "beforeReloadSeconds": 1.4609375,
+        "afterReloadSeconds": 1.4609375
+      },
+      "ready-held": {
+        "requestSeconds": 1.4609375,
+        "releaseSeconds": 3.4609375,
+        "beforeReloadSeconds": 1.4609375,
+        "afterReloadSeconds": 1.4609375
+      }
+    },
+    {
+      "weapon": "glock",
+      "configuredCycleSeconds": 0.15,
+      "early-tap": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 0.046875,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": null
+      },
+      "early-held": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 2.03125,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": 0.15625
+      },
+      "ready-tap": {
+        "requestSeconds": 0.15625,
+        "releaseSeconds": 0.171875,
+        "beforeReloadSeconds": 0.15625,
+        "afterReloadSeconds": 0.15625
+      },
+      "ready-held": {
+        "requestSeconds": 0.15625,
+        "releaseSeconds": 2.15625,
+        "beforeReloadSeconds": 0.15625,
+        "afterReloadSeconds": 0.15625
+      }
+    },
+    {
+      "weapon": "usp",
+      "configuredCycleSeconds": 0.17,
+      "early-tap": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 0.046875,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": null
+      },
+      "early-held": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 2.03125,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": 0.171875
+      },
+      "ready-tap": {
+        "requestSeconds": 0.171875,
+        "releaseSeconds": 0.1875,
+        "beforeReloadSeconds": 0.171875,
+        "afterReloadSeconds": 0.171875
+      },
+      "ready-held": {
+        "requestSeconds": 0.171875,
+        "releaseSeconds": 2.171875,
+        "beforeReloadSeconds": 0.171875,
+        "afterReloadSeconds": 0.171875
+      }
+    },
+    {
+      "weapon": "deagle",
+      "configuredCycleSeconds": 0.225,
+      "early-tap": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 0.046875,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": null
+      },
+      "early-held": {
+        "requestSeconds": 0.03125,
+        "releaseSeconds": 2.03125,
+        "beforeReloadSeconds": 0.03125,
+        "afterReloadSeconds": 0.2265625
+      },
+      "ready-tap": {
+        "requestSeconds": 0.2265625,
+        "releaseSeconds": 0.2421875,
+        "beforeReloadSeconds": 0.2265625,
+        "afterReloadSeconds": 0.2265625
+      },
+      "ready-held": {
+        "requestSeconds": 0.2265625,
+        "releaseSeconds": 2.2265625,
+        "beforeReloadSeconds": 0.2265625,
+        "afterReloadSeconds": 0.2265625
+      }
+    }
+  ],
+  "limits": [
+    "These are actual trainer measurements, not new native per-tick/input captures.",
+    "Held starts are first sampled 128 Hz updates at or after configured cycle; native static proof separately establishes inclusive readiness.",
+    "Null afterReloadSeconds means no reload observed within the eight-second case.",
+    "Exact-deadline, input-priority and pending-burst checks live in common-reload-input.test.ts, outside this baseline bench.",
+    "These reload runs predate the separate duck-flag integration; hashes identify the isolated measured source versions, not the final release tree.",
+    "The baseline commit identifies HEAD for both dirty-worktree runs; captured source and bundle hashes identify each measured version.",
+    "No full-suite, browser, deployment or shipped-status claim is made by this report."
+  ],
+  "reproduction": "systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% python3 tools/reaudit-common-reload-compare.py",
+  "comparisonScriptSha256": "022426c954fe1867b6e218309a7f34e0867887339896f347331efa9592c77f5d"
+}

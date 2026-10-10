@@ -106,10 +106,14 @@ describe('duel and range ballistic parity', () => {
     command.fireHeld = true;
     expect(duel.advance(129 * STEP, STEP, command, actor())).toBeDefined();
     expect(duel.nextShotAt).toBeCloseTo(129 * STEP + gameData.weapons.ak47.cycle);
+    command.fireHeld = false;
+    for (let i = 130; i < 144; i++) duel.advance(i * STEP, STEP, command, actor());
     command.reloadPressed = true;
-    duel.advance(130 * STEP, STEP, command, actor());
+    duel.advance(144 * STEP, STEP, command, actor());
+    expect(duel.reload.active).toBe(true);
     command.reloadPressed = false;
-    for (let i = 131; i < 600; i++) {
+    command.fireHeld = true;
+    for (let i = 145; i < 600; i++) {
       if (duel.advance(i * STEP, STEP, command, actor())) {
         expect(duel.nextShotAt).toBeCloseTo(i * STEP + gameData.weapons.ak47.cycle); break;
       }

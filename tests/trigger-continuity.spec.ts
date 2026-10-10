@@ -19,14 +19,14 @@ test('range mouse bind keeps held fire through reload/deploy and drops a release
     const e = (window as any).triggerEngine; cancelAnimationFrame(e.frame);
     e.inputClock.advance = () => {}; e.sim.yaw = Math.PI; e.sim.reloadState.ammo = 5;
   });
-  await page.mouse.down(); await page.keyboard.press('r');
+  await page.keyboard.press('r'); await page.mouse.down();
   const reload = await page.evaluate(() => {
     const s = (window as any).triggerEngine.sim;
     // Key-up changes held state; consume it before reading a forecast deadline.
     s.step(0);
     return {due: s.reloadState.until, ammo: s.loadedAmmo, active: s.reloadState.active};
   });
-  expect(reload).toMatchObject({ammo: 4, active: true});
+  expect(reload).toMatchObject({ammo: 5, active: true});
   const advanceTo = async (until: number) => page.evaluate(until => {
     const e = (window as any).triggerEngine, s = e.sim;
     while (s.time + s.accumulator < until - 1e-9) s.advance(Math.min(.125, until - s.time - s.accumulator));
@@ -39,7 +39,9 @@ test('range mouse bind keeps held fire through reload/deploy and drops a release
   const deploy = await page.evaluate(() => (window as any).triggerEngine.sim.equipReadyAt);
   const deployed = await advanceTo(Math.ceil(deploy * 64) / 64);
   expect(deployed.ammo).toBe(28); expect(deployed.lastShotAt).toBeCloseTo(deploy, 7);
-  await page.mouse.up(); await page.keyboard.press('r');
+  await page.mouse.up();
+  // A reload tap during the preceding shot's cycle is rejected by CS2.
+  await advanceTo(deploy + .11); await page.keyboard.press('r');
   await page.mouse.down(); await page.mouse.up();
   const releasedDue = await page.evaluate(() => {
     const s = (window as any).triggerEngine.sim; s.step(0); return s.reloadState.until;

@@ -221,6 +221,7 @@ describe('reload and lesson continuity', () => {
     expect(sim.reload()).toBe(true); expect(sim.start()).toBe(false);
     for (let n = 0; n < 400; n++) sim.step(STEP);
     expect(sim.primaryReloadAt).toBe(0); expect(sim.start()).toBe(true);
+    sim.release('mouse'); sim.step(.125); // Finish the preceding shot's reload-admission lock.
     expect(sim.reload()).toBe(true); sim.equip(2); expect(sim.primaryReloadAt).toBe(0);
   });
   it('keeps tutorial braking identical to the range instead of freezing at the accuracy threshold', () => {

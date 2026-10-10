@@ -803,7 +803,7 @@ export class RangeEngine {
       const down = event.kind === 'press';
       switch (event.action) {
         case 'attack': if (!down) this.sim.release('mouse'); else if (this.loadedTarget && this.modelCache.has(this.sim.equipped)) this.sim.pressTrigger(); return;
-        case 'attack2': if (down) this.secondary(true); else if (this.sim.actions.isRevolver && this.sim.actions.alternateFire) this.sim.release('mouse'); return;
+        case 'attack2': this.sim.secondaryHeld = down; if (down) this.secondary(true); else if (this.sim.actions.isRevolver && this.sim.actions.alternateFire) this.sim.release('mouse'); return;
         case 'reload': this.sim.reloadHeld = down; if (down) this.sim.reload(true); return;
         case 'inspect': if (down) this.inspect(); return;
         case 'use': return;

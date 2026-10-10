@@ -123,6 +123,7 @@ describe('Aim Botz play', () => {
     sim.command(0, {fireHeld: false});
     expect(sim.botzStats.shots).toBe(5);
     expect(sim.actors[0].weapon.ammo).toBe(ammo);
+    runFor(sim, .125); // Finish the last firing cycle before this ammo-control reload.
     sim.command(0, {reloadPressed: true});
     runFor(sim, 4);
     expect(sim.actors[0].weapon.ammo).toBe(30);

@@ -15,8 +15,9 @@ const runTo = (sim: Simulation, time: number) => {
 describe('physical range trigger across weapon transitions', () => {
   it.each(['before', 'during'] as const)('resumes a trigger pressed %s magazine reload on the ready server tick', press => {
     const {sim, shots} = make(); sim.reloadState.ammo = 5;
-    if (press === 'before') sim.pressTrigger();
-    sim.reload(); const before = shots.length, due = sim.reloadState.until;
+    if (press === 'before') {sim.reloadState.ammo = 1; sim.pressTrigger(); runTo(sim, .125);}
+    else sim.reload();
+    const before = shots.length, due = sim.reloadState.until;
     if (press === 'during') {runTo(sim, .25); expect(sim.pressTrigger()).toBe(false);}
     runTo(sim, tickAligned(due) - 1 / 128); expect(shots).toHaveLength(before);
     runTo(sim, tickAligned(due)); expect(shots).toHaveLength(before + 1);

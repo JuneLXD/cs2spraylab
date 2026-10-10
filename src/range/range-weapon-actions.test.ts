@@ -36,6 +36,7 @@ describe('native range discharge and ammo controller', () => {
   it('does not restock on a new trigger press, switch, or cancelled magazine reload', () => {
     const sim = make('ak47', false); sim.start(); sim.release('mouse');
     const state = sim.reloadState; expect(state.ammo).toBe(29);
+    sim.step(.125); // Reload cancellation starts after the shot's admission lock.
     expect(sim.reload()).toBe(true); sim.step(.1); sim.equip(2); sim.equip(1);
     expect(sim.loadedAmmo).toBe(29); expect(sim.reserveAmmo).toBe(90); expect(sim.reloadPhase).toBe('idle');
     sim.equipReadyAt = sim.time; expect(sim.start()).toBe(true); sim.step(STEP);

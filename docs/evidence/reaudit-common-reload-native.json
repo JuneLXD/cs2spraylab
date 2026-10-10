@@ -1,0 +1,140 @@
+{
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "readerSha256": "dce51222803ecd06d0fbcf9353d6026eb403879f48d985fdf56ea58e0a199d5a",
+  "checkerSha256": "ea1fa5a94bbf4d5b87e92178857c817663892fe2b7193f00ed884e8efe3747c3",
+  "currentReadSha256": "65949208d8a8f32dab3b86896472268e0878469f1d34dbc2d05195666e598825",
+  "wholeArtifactHashVerified": true,
+  "codeBytes": 6502,
+  "metadataWindowBytes": 196608,
+  "virtualSlotAssertions": 63,
+  "instructionAssertions": 102,
+  "weapons": [
+    "ak47",
+    "m4a4",
+    "m4a1s",
+    "awp",
+    "glock",
+    "usp",
+    "deagle"
+  ],
+  "evidence": [
+    {
+      "id": "COMMON-RELOAD-common-input-dispatch",
+      "assertions": 30,
+      "codeSha256": "419bb34dfb203669bd499331edef948925065d6793d416236efccaff88f3ebe4",
+      "listingSha256": "ca07840cf94ef9bc5c7d4f56733e90f122ea7c08fd145ea3c67faeaf2bd77f94"
+    },
+    {
+      "id": "COMMON-RELOAD-ordinary-gun-postframe",
+      "assertions": 14,
+      "codeSha256": "312c231dace22a3669bca43be574941a042106204dcb6cca7d3ee0811b9683e3",
+      "listingSha256": "95b62bd98c996fdda68e8bf6f98e508998ed251b06f542280015ce50a9b88f45"
+    },
+    {
+      "id": "COMMON-RELOAD-primary-dispatch",
+      "assertions": 6,
+      "codeSha256": "d435032a6b5b71674e453a6158b90658c6f4fdd386771a7a1259a299b8c93409",
+      "listingSha256": "0278b0bb904f234f7f1cdf2f666cb5755aece416d5a34709c3985d22c5862fc6"
+    },
+    {
+      "id": "COMMON-RELOAD-primary-ready",
+      "assertions": 8,
+      "codeSha256": "8ca92825d9e18ea6a5ecffdc6d89774674f90b04f10822d25256cf722e3cbc2d",
+      "listingSha256": "1fc7b581e34f190c7bd380186c64330f4304b8954226965182a7c2b194c5590d"
+    },
+    {
+      "id": "COMMON-RELOAD-secondary-ready",
+      "assertions": 6,
+      "codeSha256": "901ae4e929d0ff2f0872d03950d819e16a24d1e24d1742498ab4611662f093a9",
+      "listingSha256": "b568e6f86eb4f8e476bce4999be491b5ad08837b0e9417da451aa3eed738083c"
+    },
+    {
+      "id": "COMMON-RELOAD-current-time-pair",
+      "assertions": 4,
+      "codeSha256": "6c7c3bb4b3ff4a9e310e6921e33bc26126314a72dff38366248ec61732fe8d4a",
+      "listingSha256": "e8a3b908fd5c29bbae9fcb1ec368b0cae12d4b8523cd16f890d470868bbd0bcb"
+    },
+    {
+      "id": "COMMON-RELOAD-input-active",
+      "assertions": 4,
+      "codeSha256": "c434991702f6cfc3740fb0cbc8aa6d95b4585db2bd6cfd030100be2739bb7da2",
+      "listingSha256": "246521935b2429bcc3e1c99a30bf361f01d016f299050946777a18445ae03981"
+    },
+    {
+      "id": "COMMON-RELOAD-input-transition-wrapper",
+      "assertions": 2,
+      "codeSha256": "c12cff772597b213356fe8396b1f27809fc1d02f9ead5c8689f1bf3a77c721e5",
+      "listingSha256": "835a79558c824737ef34d71d9175a79126e2005cf81774ee1223eb04ad565cba"
+    },
+    {
+      "id": "COMMON-RELOAD-input-transition-predicate",
+      "assertions": 6,
+      "codeSha256": "86ed295e998548e3c958686015b9be847e30bb1ab035a0b30956b18652dd276a",
+      "listingSha256": "5f927e8a76a0a8db28a07dfb77c11cade549c3ee67026b377edeb7bfd906169e"
+    },
+    {
+      "id": "COMMON-RELOAD-manual-reload-dispatch",
+      "assertions": 4,
+      "codeSha256": "41afd3a9645ae830330125bfc01f17ba92c4f2b5697c5a37fa4b912659bf4a83",
+      "listingSha256": "9bfda607763fe95b8e6bd57bfa7d1550102d4bd9fa25dd4a9f8265f16470c323"
+    },
+    {
+      "id": "COMMON-RELOAD-magazine-reload",
+      "assertions": 4,
+      "codeSha256": "36619339c918d3d5a773f8e895ac53989f849fc20f6ee75f7b7f7974c72d4c80",
+      "listingSha256": "3736e18e7e0277154138a89691b9a95b79c1575150a6abb18a591917de4d4ed0"
+    },
+    {
+      "id": "COMMON-RELOAD-base-reload-entry",
+      "assertions": 3,
+      "codeSha256": "8e28dd2caca7da1d85aa73f3f8135d2e8623f920610b5672d3872c61f936fbb6",
+      "listingSha256": "051a33417b3ec25c767873a6ab90b46a7e16a0233571623668bc81aa376bb2f3"
+    },
+    {
+      "id": "COMMON-RELOAD-reload-start",
+      "assertions": 6,
+      "codeSha256": "88c8f5d6e91c98f6588049b1510502af7b495fa2cadb31042b041c34b26da736",
+      "listingSha256": "eef99685513cb5f6a97bb16358e26e676fddf9fed6435f470ff246a12fe48b53"
+    },
+    {
+      "id": "COMMON-RELOAD-burst-continuation",
+      "assertions": 5,
+      "codeSha256": "24aedfc1ce874085af97b80bac950204ccae45faeddae2afba804aa07c83cffe",
+      "listingSha256": "c3f38b60c4dcbbf0e27457ecf6d57484e3b3d72aabba2d93833c89431b088b6a"
+    }
+  ],
+  "conclusions": {
+    "classOwnership": "All seven concrete classes bind ordinary gun post-frame, shared primary and magazine reload. AWP has no class-specific post-frame bypass.",
+    "reloadGate": "Explicit reload input first requires no active reload, then current primary readiness before reaching manual reload dispatch. A zero refill-quantity path may run its distinct helper first; the positive-capacity/reserve candidate does not use it.",
+    "comparison": "For finite normalized values, ready iff current (tick,fraction) >= next-primary (tick,fraction), including equality. Both pairs use native tick normalization; the current pair combines the weapon identity time-domain tick accessor and current global fractional tick. This is a scoped simulation/command clock, not wall/video time.",
+    "heldRetry": "A held reload bit directly satisfies the input predicate on each update. An early failed readiness check stores no pending reload in this path and does not consume the button. While still held, a later eligible update can reach Reload without a new edge.",
+    "tapLimit": "With neither held bit nor current transition predicate present, no explicit reload branch is taken. Press/release inside one native command can still satisfy transition masks; the producer/reset lifetime of those masks is not established here.",
+    "primaryPriority": "Active primary plus primary readiness selects primary before reload. Both dispatcher success and failure leave through the common tail. A semiauto prior-shot rejection therefore still prevents reload during the same held-primary update.",
+    "secondaryPriority": "If primary did not win, each native secondary/alternate input is tested with its own secondary deadline. An eligible held or transition input takes priority over R regardless of dispatch result. A secondary input that is not ready falls through and does not independently bar R.",
+    "awpRescope": "The ordinary wrapper handles eligible automatic rescope before the shared dispatcher and then reaches that dispatcher. This is not an exemption from reload readiness.",
+    "burstOrder": "With a positive pending-burst count, enabled burst capability and primary readiness, the wrapper invokes the next primary burst shot before shared input dispatch. The continuation decrements the count, clearing remaining work if the shot counter did not advance. Shared reload readiness is sampled afterward.",
+    "reloadSuccess": "Magazine reload calls the base reload entry, which calls the bound reload-start virtual. Reload-start requires an owner and nonzero refill quantity before entering reload action. Admission alone does not guarantee success."
+  },
+  "implementationBoundary": {
+    "ready": "The ordinary positive-ammo/reserve, same-weapon explicit reload-after-shot gate is justified for these seven common weapons. Retry only while the physical reload input remains active and only after higher-priority eligible attacks/burst continuation are accounted for.",
+    "minimalPrioritySafety": "Primary active at readiness blocks the retry even if it cannot emit a semiauto shot. Eligible secondary blocks retry; unready secondary does not. Pending burst must not be cancelled by admitting reload before its due continuation.",
+    "playerDeploy": "This proof binds the weapon next-primary gate, not all caller/player admission and not deploy deadline producers. Do not add or claim a new independent equip/player-next-attack rule from this result.",
+    "preserve": "Automatic reload, reload playback/silent clock, ammo insertion, invalid reserves/full magazine, and excluded weapons are outside this correction."
+  },
+  "unknown": [
+    "Native transition-mask production/reset for released taps, especially press and release within one command.",
+    "Complete upstream player/deploy admission and next-primary setters for every special state.",
+    "Full pending-burst fire/deadline arithmetic and runtime burst/reload input capture; this proof establishes call order only.",
+    "No new physical-input, command-latency or live gameplay capture was performed."
+  ],
+  "limits": [
+    "No native code emulation; instruction assertions check retained current-byte listings.",
+    "The metadata search is restricted to one 192 KiB weapon neighborhood; no inference outside it.",
+    "Seven concrete classes and their selected slots are bound, not all engine entry points or virtuals."
+  ],
+  "method": "Bounded current-server static instruction and concrete RTTI/virtual binding proof; no native execution.",
+  "reproduction": [
+    "systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% python3 tools/reaudit-common-reload-native.py",
+    "systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% python3 tools/reaudit-common-reload-proof.py --portable-report docs/evidence/reaudit-common-reload-native.json"
+  ]
+}

@@ -9,6 +9,7 @@ import {direction, shotDirections} from './shot-model';
 import {TERRAIN_RULES} from './terrain';
 import {resolveDamage} from './duel/damage';
 import {NativeReloadState, WeaponActions, type ReloadActionEvent} from './weapon-actions';
+import {reloadInputAllows, usesNativeReloadInput} from './reload-input';
 import {POP_SPAWN, PopField, popConfig} from './pop';
 
 export {DEG, GRAVITY, JUMP_SPEED, STEP, UNIT, airVelocity, groundVelocity, idleInput, direction};
@@ -57,7 +58,7 @@ export class Simulation {
   samples: ImpactSample[] = []; attempts = 0;
   lastShotAt = -Infinity;
   slot: Slot = 1; previousSlot: Slot = 2; equipReadyAt = 0;
-  meleeAt = -Infinity; reloadHeld = false;
+  meleeAt = -Infinity; reloadHeld = false; secondaryHeld = false;
   recoveryStates = new Map<Equipment,WeaponRecovery>();
   actionStates = new Map<Equipment, WeaponActions>();
   ammoStates = new Map<Equipment, NativeReloadState>();
@@ -226,6 +227,9 @@ export class Simulation {
     return true;
   }
   reload(silent = this.reloadHeld, automatic = false) {
+    if (!automatic && usesNativeReloadInput(this.equipped) && !reloadInputAllows(this.time,
+      this.shotReady.get(this.equipped) ?? 0, this.triggerHeld, this.secondaryHeld,
+      this.actions.secondaryReadyAt, this.burstLeft > 0)) return false;
     if (!this.reloadState.start(this.time, silent)) return false;
     if (!this.stats.reloadsSingleShells) this.recovery.reloadStarted(automatic);
     this.finish(); this.burstLeft = 0; this.actions.holster(); this.active = true; this.reloadHeld = silent;
@@ -339,7 +343,7 @@ export class Simulation {
     if (this.firing) this.finish();
     this.active = false; this.input = idleInput(); this.velocity = { x: 0, z: 0 };
     this.footsteps.reset();
-    this.reloadHeld = false;
+    this.reloadHeld = this.secondaryHeld = false;
     for (const state of this.ammoStates.values()) state.cancel();
     this.drill?.interruptMovement();
     this.accumulator = 0;
@@ -460,6 +464,8 @@ export class Simulation {
     // A shot the weapon becomes ready for while the trigger is held is processed on the next server tick; its
     // schedule (nextShot) keeps accumulating exactly, as the game's demos show (AK sprays alternate 6 and 7 ticks).
     if (this.firing && this.time + 1e-9 >= tickAligned(this.nextShot)) this.fire();
+    // Held R retries the same admission rule; an early released tap is not queued.
+    if (this.reloadHeld && usesNativeReloadInput(this.equipped)) this.reload(true);
     // CS2 reloads an empty magazine by itself once the last shot's cycle ends. shotReady alone can
     // lag behind a shot queued through a long shell reload, so time the cycle from the shot itself.
     if (!this.firing && this.loadedAmmo === 0 && this.equipped !== 'knife' && !this.reloadState.active && this.time + 1e-9 >=
