@@ -350,6 +350,9 @@ export const latestChanges = {
     {id: 'native-common-reload-input', title: 'Reload input timing', items: [
       'AK, M4s, AWP, Glock, USP-S and Desert Eagle reloads now respect the firing cycle: early taps are dropped, while holding reload retries when ready.',
     ]},
+    {id: 'native-duck-accuracy-flag', title: 'Crouch accuracy', items: [
+      'Accuracy now follows the native crouch stance: it begins at full crouch and remains active through the first part of standing up.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

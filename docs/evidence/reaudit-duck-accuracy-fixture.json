@@ -1,0 +1,916 @@
+{
+  "method": "Retained decoded server samples, flag-versus-amount comparison only.",
+  "demo": "native_reaudit_airduck_003.dem",
+  "demoSha256": "b2e4254179264568f323339cb87b22d1217b9447c88b4a419fb75b9d88e0ceb8",
+  "nativeUpdateSource": {
+    "path": "native-audit/reports/reaudit-accuracy-native.json",
+    "sha256": "2a8a830f1b4130e8376f29ce898fb05a9c4d99efc7f5b2cc59a6d39a8e244298",
+    "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+    "method": "Bounded current-server accuracy-update emulation; no engine or OS execution.\n\nUses private Unicorn memory. Owner/movement/query callbacks return supplied\nstate, setters are no-ops, and host log/exp supply math imports. Every other\ninstruction must remain in the declared update/recovery/helper functions.\nThis establishes arithmetic per invocation, not the engine's invocation order.\n"
+  },
+  "nativeUpdates": [
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20641,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18976318836212158,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20481000000000002,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.184917151927948,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "ak47",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.34717,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.34136292338371277,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "m4a4",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2049,
+      "index": 3,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18689215183258057,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "m4a4",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.2041,
+      "index": 3,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17935146391391754,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "m4a4",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.30217,
+      "index": 3,
+      "time": 0.10562500357627869,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.29487597942352295,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "m4a1s",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2049,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18689215183258057,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "m4a1s",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.2041,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.17935146391391754,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "m4a1s",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.3046,
+      "index": 3,
+      "time": 0.11562500149011612,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2973059415817261,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "deagle",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.20420000000000002,
+      "index": 3,
+      "time": 0.24062499403953552,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.19552354514598846,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "deagle",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20218,
+      "index": 3,
+      "time": 0.24062499403953552,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.1868099421262741,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "deagle",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.24475000000000002,
+      "index": 3,
+      "time": 0.24062499403953552,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.24079149961471558,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2808,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.2610151767730713,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.2606,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.23346079885959625,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "awp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.41463,
+      "index": 3,
+      "time": 1.4706250429153442,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.407469779253006,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "usp",
+      "mode": 0,
+      "stance": "stand",
+      "penalty": 0.2049,
+      "index": 3,
+      "time": 0.18562500178813934,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18533772230148315,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "usp",
+      "mode": 0,
+      "stance": "crouch",
+      "penalty": 0.20368,
+      "index": 3,
+      "time": 0.18562500178813934,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.18044118583202362,
+        "index": 3.0
+      }
+    },
+    {
+      "weapon": "usp",
+      "mode": 0,
+      "stance": "air",
+      "penalty": 0.29938,
+      "index": 3,
+      "time": 0.18562500178813934,
+      "gate": "equal",
+      "actual": {
+        "penalty": 0.29329848289489746,
+        "index": 3.0
+      }
+    }
+  ],
+  "baselineDisagreements": [
+    {
+      "tick": 424,
+      "time": 422.04688,
+      "amount": 0.98428404,
+      "speed": 6.5844727,
+      "onGround": true,
+      "duckFlag": false,
+      "ducked": false,
+      "ducking": true,
+      "desiresDuck": true,
+      "override": false
+    },
+    {
+      "tick": 542,
+      "time": 423.89062,
+      "amount": 0.91146564,
+      "speed": 6.0439453,
+      "onGround": true,
+      "duckFlag": true,
+      "ducked": false,
+      "ducking": true,
+      "desiresDuck": false,
+      "override": false
+    },
+    {
+      "tick": 543,
+      "time": 423.90625,
+      "amount": 0.8162966,
+      "speed": 6.0908203,
+      "onGround": true,
+      "duckFlag": true,
+      "ducked": false,
+      "ducking": true,
+      "desiresDuck": false,
+      "override": false
+    },
+    {
+      "tick": 745,
+      "time": 427.0625,
+      "amount": 0.93816113,
+      "speed": 6.0307617,
+      "onGround": true,
+      "duckFlag": true,
+      "ducked": false,
+      "ducking": true,
+      "desiresDuck": false,
+      "override": false
+    },
+    {
+      "tick": 746,
+      "time": 427.07812,
+      "amount": 0.84319806,
+      "speed": 6.0776367,
+      "onGround": true,
+      "duckFlag": true,
+      "ducked": false,
+      "ducking": true,
+      "desiresDuck": false,
+      "override": false
+    }
+  ],
+  "phases": [
+    {
+      "name": "ground-entry",
+      "rows": [
+        {
+          "tick": 411,
+          "time": 421.84375,
+          "amount": 0.0,
+          "speed": 8.0,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": false,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 412,
+          "time": 421.85938,
+          "amount": 0.035284996,
+          "speed": 6.0219727,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 413,
+          "time": 421.875,
+          "amount": 0.11114559,
+          "speed": 6.0688477,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 414,
+          "time": 421.89062,
+          "amount": 0.18759212,
+          "speed": 6.1157227,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 415,
+          "time": 421.90625,
+          "amount": 0.2646246,
+          "speed": 6.1625977,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 416,
+          "time": 421.92188,
+          "amount": 0.34224302,
+          "speed": 6.2094727,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 417,
+          "time": 421.9375,
+          "amount": 0.42044735,
+          "speed": 6.2563477,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 418,
+          "time": 421.95312,
+          "amount": 0.49923763,
+          "speed": 6.3032227,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 419,
+          "time": 421.96875,
+          "amount": 0.5786139,
+          "speed": 6.3500977,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 420,
+          "time": 421.98438,
+          "amount": 0.658576,
+          "speed": 6.3969727,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 421,
+          "time": 422.0,
+          "amount": 0.7391241,
+          "speed": 6.4438477,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 422,
+          "time": 422.01562,
+          "amount": 0.82025814,
+          "speed": 6.4907227,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 423,
+          "time": 422.03125,
+          "amount": 0.90197814,
+          "speed": 6.5375977,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 424,
+          "time": 422.04688,
+          "amount": 0.98428404,
+          "speed": 6.5844727,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 425,
+          "time": 422.0625,
+          "amount": 1.0,
+          "speed": 6.6313477,
+          "onGround": true,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 426,
+          "time": 422.07812,
+          "amount": 1.0,
+          "speed": 6.6782227,
+          "onGround": true,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        }
+      ]
+    },
+    {
+      "name": "ground-release",
+      "rows": [
+        {
+          "tick": 541,
+          "time": 423.875,
+          "amount": 1.0,
+          "speed": 8.0,
+          "onGround": true,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 542,
+          "time": 423.89062,
+          "amount": 0.91146564,
+          "speed": 6.0439453,
+          "onGround": true,
+          "duckFlag": true,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 543,
+          "time": 423.90625,
+          "amount": 0.8162966,
+          "speed": 6.0908203,
+          "onGround": true,
+          "duckFlag": true,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 544,
+          "time": 423.92188,
+          "amount": 0.7203951,
+          "speed": 6.1376953,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 545,
+          "time": 423.9375,
+          "amount": 0.6237612,
+          "speed": 6.1845703,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 546,
+          "time": 423.95312,
+          "amount": 0.52639484,
+          "speed": 6.2314453,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 547,
+          "time": 423.96875,
+          "amount": 0.4282961,
+          "speed": 6.2783203,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 548,
+          "time": 423.98438,
+          "amount": 0.3294649,
+          "speed": 6.3251953,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 549,
+          "time": 424.0,
+          "amount": 0.22990131,
+          "speed": 6.3720703,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 550,
+          "time": 424.01562,
+          "amount": 0.1296053,
+          "speed": 6.4189453,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 551,
+          "time": 424.03125,
+          "amount": 0.02857685,
+          "speed": 6.4658203,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": true,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 552,
+          "time": 424.04688,
+          "amount": 0.0,
+          "speed": 6.5126953,
+          "onGround": true,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": false,
+          "desiresDuck": false,
+          "override": false
+        }
+      ]
+    },
+    {
+      "name": "air-entry",
+      "rows": [
+        {
+          "tick": 680,
+          "time": 426.04688,
+          "amount": 0.0,
+          "speed": 8.0,
+          "onGround": false,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": false,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 681,
+          "time": 426.0625,
+          "amount": 1.0,
+          "speed": 6.036621,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 682,
+          "time": 426.07812,
+          "amount": 1.0,
+          "speed": 6.083496,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 683,
+          "time": 426.09375,
+          "amount": 1.0,
+          "speed": 6.130371,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        }
+      ]
+    },
+    {
+      "name": "air-entry-and-release",
+      "rows": [
+        {
+          "tick": 881,
+          "time": 429.1875,
+          "amount": 0.0,
+          "speed": 8.0,
+          "onGround": false,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": false,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 882,
+          "time": 429.20312,
+          "amount": 1.0,
+          "speed": 6.006592,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 883,
+          "time": 429.21875,
+          "amount": 1.0,
+          "speed": 6.053467,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 884,
+          "time": 429.23438,
+          "amount": 1.0,
+          "speed": 6.100342,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 885,
+          "time": 429.25,
+          "amount": 1.0,
+          "speed": 6.147217,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 886,
+          "time": 429.26562,
+          "amount": 1.0,
+          "speed": 6.194092,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 887,
+          "time": 429.28125,
+          "amount": 1.0,
+          "speed": 6.240967,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 888,
+          "time": 429.29688,
+          "amount": 1.0,
+          "speed": 6.287842,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 889,
+          "time": 429.3125,
+          "amount": 1.0,
+          "speed": 6.334717,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 890,
+          "time": 429.32812,
+          "amount": 1.0,
+          "speed": 6.381592,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 891,
+          "time": 429.34375,
+          "amount": 1.0,
+          "speed": 6.428467,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 892,
+          "time": 429.35938,
+          "amount": 1.0,
+          "speed": 6.475342,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 893,
+          "time": 429.375,
+          "amount": 1.0,
+          "speed": 6.522217,
+          "onGround": false,
+          "duckFlag": true,
+          "ducked": true,
+          "ducking": false,
+          "desiresDuck": true,
+          "override": false
+        },
+        {
+          "tick": 894,
+          "time": 429.39062,
+          "amount": 0.0,
+          "speed": 4.569092,
+          "onGround": false,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": false,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 895,
+          "time": 429.40625,
+          "amount": 0.0,
+          "speed": 4.615967,
+          "onGround": false,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": false,
+          "desiresDuck": false,
+          "override": false
+        },
+        {
+          "tick": 896,
+          "time": 429.42188,
+          "amount": 0.0,
+          "speed": 4.662842,
+          "onGround": false,
+          "duckFlag": false,
+          "ducked": false,
+          "ducking": false,
+          "desiresDuck": false,
+          "override": false
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "64 Hz sampled states; no exact physical input or invocation timestamp inferred.",
+    "CSV decimal precision retained; no claim of full binary float reconstruction.",
+    "No weapon accuracy penalty or shot was measured by this movement recording.",
+    "The .95 predicate is the inspected pre-fix trainer predicate, not an executed engine result.",
+    "Blocked unduck and fatigue/cooldown boundaries are static-only; not observed here.",
+    "No Ghidra session, native invocation, or production code is run by this extractor."
+  ],
+  "decodedCsvSha256": "d4773ca241b2a3c93b42e71fa5eed8ec74ad1151d49434fed41a3c31b4ad2345"
+}

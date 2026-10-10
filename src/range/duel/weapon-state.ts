@@ -95,7 +95,7 @@ export class DuelWeaponState {
 
   advance(time: number, dt: number, command: WeaponCommand, actor: {
     position: Vec; yaw: number; pitch: number; velocity: {x: number; z: number};
-    feet: number; verticalVelocity: number; duckAmount?: number; grounded?: boolean;
+    feet: number; verticalVelocity: number; duckAmount?: number; duckFlag?: boolean; grounded?: boolean;
     punch?: DamagePunch;
   }): FiredRound | undefined {
     this.actions.advance(time);
@@ -115,7 +115,7 @@ export class DuelWeaponState {
     const stats = this.actions.stats;
     this.recovery.setParameters(stats);
     const airborne = !(actor.grounded ?? actor.feet === 0);
-    this.advancePassive(time, dt, (actor.duckAmount ?? Number(command.crouch)) >= .95, airborne, true);
+    this.advancePassive(time, dt, actor.duckFlag ?? (actor.duckAmount ?? Number(command.crouch)) === 1, airborne, true);
     if (reloading && !this.reload.active && !stats.reloadsSingleShells) this.recovery.reloadFinished();
     try {
     const punch = actor.punch?.shotFor(this.recovery.angle);

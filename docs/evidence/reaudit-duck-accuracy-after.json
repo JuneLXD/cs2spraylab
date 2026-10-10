@@ -1,0 +1,94 @@
+{
+  "method": "Actual range/duel active and inventory consumers with retained native stance snapshots. Each executes one pending accuracy boundary; native per-invocation reference is independently retained.",
+  "demoSha256": "b2e4254179264568f323339cb87b22d1217b9447c88b4a419fb75b9d88e0ceb8",
+  "fixtureSha256": "da8339bcb84683e2ab09cbdabf0e96d2d11a7dfb664be760eaf0feca4d391a73",
+  "nativeUpdateSource": {
+    "path": "native-audit/reports/reaudit-accuracy-native.json",
+    "sha256": "2a8a830f1b4130e8376f29ce898fb05a9c4d99efc7f5b2cc59a6d39a8e244298",
+    "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+    "method": "Bounded current-server accuracy-update emulation; no engine or OS execution.\n\nUses private Unicorn memory. Owner/movement/query callbacks return supplied\nstate, setters are no-ops, and host log/exp supply math imports. Every other\ninstruction must remain in the declared update/recovery/helper functions.\nThis establishes arithmetic per invocation, not the engine's invocation order.\n"
+  },
+  "sourceSha256": {
+    "actor-physics.ts": "4af8a21b90e1e0339aed8a569c6ae743eacf4dbc5a8f74541f1b7e2702f2a87a",
+    "simulation.ts": "08aa57453c68ecd75b4ceb7e75d21d237af9d6521f469fe08ac036a2a01c7c1c",
+    "duel/simulation.ts": "5d7c4243244a4d112a266fe4ae6926e951f98d0e0ebe199da2129b943e47a301",
+    "duel/weapon-state.ts": "86ef2c958d4707cf0ae319703259c2d924d26b0972a535a229a0d9026dfea2f3",
+    "ballistics.ts": "a352376d88df16a5b64e0950b3cc5dca6e3f778b93f48b1ed7fcd813a381ca5f"
+  },
+  "cases": 168,
+  "wrongStance": 0,
+  "penaltyMismatches": 0,
+  "maxPenaltyError": 0,
+  "missingNativeWeapons": [],
+  "limits": [
+    "Supplied pose/flag and initial penalty; not replay of native button input or a measured shot.",
+    "Native movement recording does not itself contain the common-weapon penalty outcomes.",
+    "Reference penalty uses the retained current-server invocation at index3; no new native invocation is executed.",
+    "No blocked-unduck, jump, ladder or fatigue boundary was measured by this consumer bench."
+  ],
+  "byEngine": {
+    "range-active": {
+      "cases": 42,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    },
+    "range-inventory": {
+      "cases": 42,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    },
+    "duel-active": {
+      "cases": 42,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    },
+    "duel-inventory": {
+      "cases": 42,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    }
+  },
+  "byWeapon": {
+    "ak47": {
+      "cases": 28,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    },
+    "m4a4": {
+      "cases": 28,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    },
+    "m4a1s": {
+      "cases": 28,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    },
+    "deagle": {
+      "cases": 28,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    },
+    "awp": {
+      "cases": 28,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    },
+    "usp": {
+      "cases": 28,
+      "wrongStance": 0,
+      "penaltyMismatches": 0,
+      "maxPenaltyError": 0
+    }
+  },
+  "disagreementTicks": []
+}

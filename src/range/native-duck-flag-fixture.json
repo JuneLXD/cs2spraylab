@@ -1,0 +1,18 @@
+{
+  "demo": "native_reaudit_airduck_003.dem",
+  "demoSha256": "b2e4254179264568f323339cb87b22d1217b9447c88b4a419fb75b9d88e0ceb8",
+  "decodedCsvSha256": "d4773ca241b2a3c93b42e71fa5eed8ec74ad1151d49434fed41a3c31b4ad2345",
+  "sourceField": "CCSPlayerPawn.m_fFlags & 2",
+  "limits": [
+    "Native server samples at 64 Hz; not exact input or weapon invocation timing.",
+    "Amount, speed and camera seeds are the matching native-movement-reaudit fixture.",
+    "Blocked-unduck boundaries have static evidence only, not a captured constrained-ceiling trajectory."
+  ],
+  "groundDuck": [[412,false],[413,false],[414,false],[415,false],[416,false],[417,false],[418,false],[419,false],[420,false],[421,false],[422,false],[423,false],[424,false],[425,true]],
+  "groundUnduck": [[542,true],[543,true],[544,false],[545,false],[546,false],[547,false],[548,false],[549,false],[550,false],[551,false],[552,false],[553,false],[554,false]],
+  "airChanges": [
+    {"tick":681,"beforeAmount":0,"beforeFlag":false,"afterAmount":1,"afterFlag":true},
+    {"tick":882,"beforeAmount":0,"beforeFlag":false,"afterAmount":1,"afterFlag":true},
+    {"tick":894,"beforeAmount":1,"beforeFlag":true,"afterAmount":0,"afterFlag":false}
+  ]
+}

@@ -34,7 +34,7 @@ export class Simulation {
   time = 0; accumulator = 0;
   position = { x: 0, y: 64 * UNIT, z: SPAWN_Z };
   velocity = { x: 0, z: 0 }; yaw = 0; pitch = 0;
-  feet = 0; verticalVelocity = 0; eyeHeight = 64 * UNIT; duckAmount = 0; jumpHeld = false;
+  feet = 0; verticalVelocity = 0; eyeHeight = 64 * UNIT; duckAmount = 0; duckFlag = false; jumpHeld = false;
   duckSpeed = 8; crouchHeld = false; duckCooldown = 0; duckRecoveryOrigin?: {x: number; z: number};
   duckViewOffset = 0; duckRootOffset = 0;
   grounded = true;
@@ -184,6 +184,7 @@ export class Simulation {
     if (isDrillMode(s.mode)) this.newDrill(true);
     else { this.drill = undefined; this.drillRevision++; if (changedMode && leavingPositionedDrill) {
       this.position = {x:0,y:64*UNIT,z:SPAWN_Z}; this.yaw = this.pitch = this.feet = this.verticalVelocity = this.duckAmount = 0;
+      this.duckFlag = false;
       this.eyeHeight = 64 * UNIT; this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0; this.duckRecoveryOrigin = undefined;
       this.duckViewOffset = this.duckRootOffset = 0;
       this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
@@ -194,6 +195,7 @@ export class Simulation {
       if (changedMode || !this.popPlaced) {
         this.popPlaced = true;
         this.position = {...POP_SPAWN}; this.yaw = this.pitch = this.feet = this.verticalVelocity = this.duckAmount = 0;
+        this.duckFlag = false;
         this.velocity = {x: 0, z: 0}; this.eyeHeight = 64 * UNIT; this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0;
         this.duckViewOffset = this.duckRootOffset = 0;
         this.duckRecoveryOrigin = undefined; this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
@@ -267,6 +269,7 @@ export class Simulation {
     if (resetPosition || this.settings.mode === 'peek') {
       this.position = {...scenario.spawn}; this.yaw = scenario.yaw; this.pitch = scenario.pitch;
       this.velocity = {x:0,z:0}; this.feet = this.verticalVelocity = this.duckAmount = 0; this.eyeHeight = 64*UNIT;
+      this.duckFlag = false;
       this.grounded = true; this.jumpHeld = false;
       this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0; this.duckRecoveryOrigin = undefined;
       this.duckViewOffset = this.duckRootOffset = 0;
@@ -415,6 +418,7 @@ export class Simulation {
     this.position.x = next.position.x; this.position.y = next.position.y; this.position.z = next.position.z;
     this.feet = next.feet; this.verticalVelocity = next.verticalVelocity;
     this.eyeHeight = next.eyeHeight; this.duckAmount = next.duckAmount ?? 0; this.jumpHeld = next.jumpHeld;
+    this.duckFlag = next.duckFlag ?? false;
     this.duckSpeed = next.duckSpeed ?? 8; this.crouchHeld = next.crouchHeld ?? false;
     this.duckViewOffset = next.duckViewOffset ?? 0; this.duckRootOffset = next.duckRootOffset ?? 0;
     this.duckCooldown = next.duckCooldown ?? 0; this.duckRecoveryOrigin = next.duckRecoveryOrigin;
@@ -424,7 +428,7 @@ export class Simulation {
     this.supportId = next.supportId; this.moveMode = next.moveMode; this.waterLevel = next.waterLevel;
     this.ladderDetached = next.ladderDetached ?? false;
     this.grounded = !!next.grounded;
-    const crouch = this.duckAmount >= .95;
+    const crouch = this.duckFlag;
     const recovery=this.recovery;
     if (!this.measured || this.slot !== 1) recovery.setParameters(weapon);
     for (const [id, state] of this.recoveryStates) {
@@ -500,7 +504,7 @@ export class Simulation {
     const processingDelay = Math.max(0, this.time - this.nextShot);
     this.recovery.beforeShot(processingDelay);
     this.recoil = this.equipped === 'zeus' ? {yaw: 0, pitch: 0} : this.recovery.recoilBefore(processingDelay);
-    if (this.equipped === 'zeus') this.recovery.penalty = !this.grounded ? weapon.stand + weapon.jump : this.duckAmount >= .95 ? weapon.crouch : weapon.stand;
+    if (this.equipped === 'zeus') this.recovery.penalty = !this.grounded ? weapon.stand + weapon.jump : this.duckFlag ? weapon.crouch : weapon.stand;
     const ordinal = this.shotOrdinals.get(this.equipped) ?? 0;
     const directions = shotDirections({yaw:this.yaw,pitch:this.pitch,recoil:this.recoil,weapon,recovery:this.recovery,
       speedRatio:Math.hypot(this.velocity.x,this.velocity.z)/(weapon.speed*UNIT),walking:this.input.walk,

@@ -32,6 +32,8 @@ export type ActorKinematics = {
   verticalVelocity: number;
   eyeHeight: number;
   duckAmount?: number;
+  /** Native FL_DUCKING: set on completed crouch, retained until successful unduck reaches <= .75. */
+  duckFlag?: boolean;
   /** Native camera offsets in metres; root compensates an airborne hull-origin change. */
   duckViewOffset?: number;
   duckRootOffset?: number;
@@ -157,6 +159,7 @@ export function advanceActor(
   }
   const { forward, side, walk, crouch, jump } = input;
   const currentDuck = actor.duckAmount ?? 0;
+  const currentDuckFlag = actor.duckFlag ?? currentDuck === 1;
   // Native CheckParameters consumes 2 on BOTH input edges; Duck recovers 3/s
   // to 8, with an extra 6/s after travelling 64 units outside a transition.
   let duckSpeed = Math.min(8, Math.max(0, (actor.duckSpeed ?? 8) - (crouch !== (actor.crouchHeld ?? false) ? 2 : 0)) + 3 * dt);
@@ -167,7 +170,7 @@ export function advanceActor(
     duckSpeed = Math.min(8, duckSpeed + 6 * dt);
   }
   let duckCooldown = Math.max(0, (actor.duckCooldown ?? 0) - dt);
-  const wantsDuck = crouch && duckSpeed >= 1.5 && (duckCooldown === 0 || currentDuck >= .75);
+  const wantsDuck = crouch && duckSpeed >= 1.5 && (duckCooldown === 0 || currentDuckFlag);
   const previousCurve = stanceCurve(currentDuck);
   const support = vertical(actor.position, actor.feet, actor.feet - CONTACT_EPSILON, (72 - 18 * previousCurve) * UNIT);
   const baseId = support.support?.traversal?.kind === 'actor' ? support.support.traversal.actorId : undefined;
@@ -196,10 +199,15 @@ export function advanceActor(
   // Releasing crouch requires room for the full standing hull, not just the
   // next interpolation step. In air the hull expands downwards.
   const standingFeet = Math.max(floor, actor.feet - (airborne ? previousCurve * 9 * UNIT : 0));
-  if (duckAmount < currentDuck && !canOccupy(actor.position, standingFeet, 72 * UNIT)) {
+  const blockedUnduck = duckAmount < currentDuck && !canOccupy(actor.position, standingFeet, 72 * UNIT);
+  if (blockedUnduck) {
     duckAmount = currentDuck;
     duckCurve = previousCurve; feet = actor.feet;
   }
+  // The pawn accuracy flag differs from both the amount and m_bDucked: the
+  // latter clears at the start of unducking, while this flag stays latched.
+  const duckFlag = blockedUnduck ? currentDuckFlag : duckAmount === 1 ? true
+    : !wantsDuck && duckAmount <= .75 ? false : currentDuckFlag;
   const approach = (value: number, target: number, amount: number) => value + clamp(target - value, -amount, amount);
   const oldRootOffset = actor.duckRootOffset ?? 0;
   // Root compensation belongs to the stance change, never to a floor repair
@@ -349,7 +357,7 @@ export function advanceActor(
   const eyeHeight = 64 * UNIT + duckViewOffset + duckRootOffset;
   return {
     position: { x: resolved.x, y: feet + eyeHeight, z: resolved.z }, velocity,
-    yaw: actor.yaw, feet, verticalVelocity, eyeHeight, duckAmount, jumpHeld: jump, grounded: contact.grounded,
+    yaw: actor.yaw, feet, verticalVelocity, eyeHeight, duckAmount, duckFlag, jumpHeld: jump, grounded: contact.grounded,
     duckSpeed, duckViewOffset, duckRootOffset, crouchHeld: crouch, duckCooldown, duckRecoveryOrigin,
     velocityModifier: actor.velocityModifier,
     movementTime: time + dt, lastJumpPressTime: pressed ? time : actor.lastJumpPressTime, pendingJumpPressTime,

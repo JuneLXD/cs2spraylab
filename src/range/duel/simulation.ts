@@ -68,7 +68,7 @@ const makeActor = (id: number, side: CombatActor['side'], x: number, z: number, 
   health: number, armored: boolean, seed: number): CombatActor => ({
   id, generation: 1, side,
   position: {x, y: 64 * UNIT, z}, velocity: {x: 0, z: 0}, yaw: side === 'player' ? 0 : Math.PI,
-  pitch: 0, feet: 0, verticalVelocity: 0, eyeHeight: 64 * UNIT, duckAmount: 0, jumpHeld: false,
+  pitch: 0, feet: 0, verticalVelocity: 0, eyeHeight: 64 * UNIT, duckAmount: 0, duckFlag: false, jumpHeld: false,
   health, armor: armored ? 100 : 0, helmet: armored, alive: true,
   flinchStack: 1, velocityModifier: 1,
   punch: new DamagePunch(randomStream(seed, `damage-punch:${id}`)),
@@ -474,7 +474,7 @@ export class DuelSimulation {
         if(door && !this.environment.pieces[door.id]?.open && this.time-(this.usedAt.get(actor.id)??-Infinity)>1)
           this.useEnvironment(actor.id);
       }
-      for (const state of actor.inventory.values()) if (state !== actor.weapon) state.advancePassive(this.time,dt, (actor.duckAmount ?? 0) >= .95, !actor.grounded);
+      for (const state of actor.inventory.values()) if (state !== actor.weapon) state.advancePassive(this.time,dt, !!actor.duckFlag, !actor.grounded);
       // CS2 reloads the player's empty magazine by itself once the last shot's cycle ends. Bots reload through their brain.
       const autoReload = actor.id === 0 && actor.weapon.ammo === 0 && !actor.weapon.reload.active &&
         this.time + 1e-9 >= Math.max(actor.weapon.nextShotAt, actor.weapon.actions.readyAt, actor.equipReadyAt);
