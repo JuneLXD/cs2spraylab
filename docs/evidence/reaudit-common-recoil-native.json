@@ -1,0 +1,4522 @@
+{
+  "schemaVersion": 1,
+  "status": "Current Linux arithmetic and bound RNG match the trainer for all supplied common-weapon modes.",
+  "method": "Hash-bound selected native code in isolated Unicorn memory; actual native constructor, RandomFloat and integer RNG execute through current typed PLT/export bindings. Parameters are parsed from the retained native KV3 export.",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "tier0Sha256": "a3d4f81bb46eeca0d1d0a60a0c3bb3661a6398888359d0121ac795c6bd40d5af",
+  "wholeArtifactHashesVerified": true,
+  "decodedWeaponDataSha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b",
+  "compiledWeaponDataSha256": "5ca094238e180376646a5cd69250c091ae5a9d937a3446c188ee5117fb6da28b",
+  "resourceIdentityReportSha256": "473089f681a3296ec69de31b84dfd137ad3df42e110bd8833f18fbf282c27bfe",
+  "kv3ParserSha256": "c4d3715b5e419530bd7cd439c9c3ecc4ba3a5ccba309b98c82131d5c3c1612c0",
+  "packagedToolHashes": {
+    "README.md": "90abf34448e4b52af75495e471319c0b3cff203a461c453748469f12b9a8d59a",
+    "_common.py": "62a51dd9daeab5bebf485720c38dbab9ab014c5be18d71a6d5457b86565fa9a1",
+    "emulate-current.py": "1786a22ab987e8692998ac0101edb95c1529e8580d4f1e3677810984e6e5cf40",
+    "read-cache-builder.py": "1788741f9f5b0a4c3e74c61e14e1c15b3f031bcc798d921fe58a6294148be582",
+    "read-current.py": "9ebec2745e6821d95fa4fb40a6008420505486d66987fce8bbcc862045f0e4bf",
+    "read-inputs.mjs": "7952749c7e9bffc43dd91b700963837eb815fe06d967d431ff491287d910aa28",
+    "read-rng.py": "259a33b1e321b98eb02d559d26e3166c53abfaf5db03253cc970b8c6d9d74c53",
+    "run.py": "167f238eb06d5c9b2d74547225ba134929784b77dba0ebf67078a4f72b59f3b5",
+    "summarize.py": "4e43c8c2b300e4c412d9b0341882fb36d730b160202e63f1cd32cdf822c596d7"
+  },
+  "stages": [
+    {
+      "stage": "read-cache-builder.py",
+      "exitCode": 0,
+      "logSha256": "2c613246d9f8065dff2a554bb83ecfb1d5f848f7f5d76f12c662019ad7c40beb"
+    },
+    {
+      "stage": "read-current.py",
+      "exitCode": 0,
+      "logSha256": "a7290b257e9b6c6d033347d3705871909d559687bea9a0f1031ef849b59c111b"
+    },
+    {
+      "stage": "read-rng.py",
+      "exitCode": 0,
+      "logSha256": "c4cf315fef19ae612751f3bcf33cc7ca54c832711f7184fd1d4d1fc3a1280a2f"
+    },
+    {
+      "stage": "read-inputs.mjs",
+      "exitCode": 0,
+      "logSha256": "ef3b7134f20e86777b2a67d3ea25e89b9185d13ef120a2e2f16dcc6b70c09a0f"
+    },
+    {
+      "stage": "emulate-current.py",
+      "exitCode": 0,
+      "logSha256": "912a12ff3f2de9579dcbb4a2421ca0f64e00a4a5b5b13c83d696140aecce9e11"
+    }
+  ],
+  "packagedNativeReportSha256": "362c4d11c822936183f8034141bb259584e2a1a754437b72ab4b7fcb4af314c2",
+  "originalNativeReportSha256": "78cb88141a756e7fab98891a69a0c65108997d53e3947852de9381b3413327d8",
+  "originalProofUnchanged": true,
+  "originalProofFileHashes": [
+    {
+      "fileOrdinal": 0,
+      "sha256": "013e42c211dca135e0483cdde140f98806039d3916db9ba1c27b46702be6d76a"
+    },
+    {
+      "fileOrdinal": 1,
+      "sha256": "636927e731bbd87dd16fa0769b981b68ea09d652ceca9c531bab61f9d057a092"
+    },
+    {
+      "fileOrdinal": 2,
+      "sha256": "90347b0dbc62868af91367d84fa275a9f49c826c9ea5880e2513203e5c5185b6"
+    },
+    {
+      "fileOrdinal": 3,
+      "sha256": "6831069fc66ceb4894bc839e66279af7f34ce5a28e525fb7e10b3cf626d93ad8"
+    },
+    {
+      "fileOrdinal": 4,
+      "sha256": "5b297524ac79694a7e463c863837f4d89c15ccdf7a88fa6fd3e5500573ddd86e"
+    },
+    {
+      "fileOrdinal": 5,
+      "sha256": "8b437a712d7b2f03ea70930e3ce95a8e86c278d68e399b38542fe1c3d4d41bbe"
+    },
+    {
+      "fileOrdinal": 6,
+      "sha256": "78cb88141a756e7fab98891a69a0c65108997d53e3947852de9381b3413327d8"
+    },
+    {
+      "fileOrdinal": 7,
+      "sha256": "2c701ccdb4b082ce8084b82e528b09916f9fa403cbbec7873023790bcbbbfb17"
+    },
+    {
+      "fileOrdinal": 8,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "fileOrdinal": 9,
+      "sha256": "5b8cd177ee177d753e5c6e1a31102820f2ea8571e2ff1046a37e483eacf96c27"
+    },
+    {
+      "fileOrdinal": 10,
+      "sha256": "9b5840008aad6cd617cde217009c9d38110f8abb8fbbc720405a8b26ed1224f8"
+    },
+    {
+      "fileOrdinal": 11,
+      "sha256": "1c46e85ecd9c9e23ee5ddfc67c82afb297098e6ba86e41bbd3ee3e12c8b5cd59"
+    },
+    {
+      "fileOrdinal": 12,
+      "sha256": "fa9ebe33d120bce03b57a6a7df2529390a2b61b2ed6ff7d2a646f75ad8bf9ab4"
+    },
+    {
+      "fileOrdinal": 13,
+      "sha256": "473663766692cabc3d2a137e9d1ef3873601764f80ff05474710763e79f4f65f"
+    },
+    {
+      "fileOrdinal": 14,
+      "sha256": "851a8f31afd322d3a07cb40fda27f632c530218b05551bf999cce3d2d48cb82f"
+    },
+    {
+      "fileOrdinal": 15,
+      "sha256": "cf1abb816a12b343c09168ca18623946aed38ebb5fef1fe683e4dee893237fc6"
+    },
+    {
+      "fileOrdinal": 16,
+      "sha256": "cdeb464d5b1fb12bc0d674fca481de9df18faa25b3348b782d40fc19f28bf1d8"
+    },
+    {
+      "fileOrdinal": 17,
+      "sha256": "4f3b56db8ae80d547839211aa98012ce424853bbc7f23bb7bab04ede5875d56d"
+    },
+    {
+      "fileOrdinal": 18,
+      "sha256": "670ce47f331be15c7b4457608a6e3daf3fa230c4afa44e13dfaf2be762edaf1f"
+    },
+    {
+      "fileOrdinal": 19,
+      "sha256": "65b9ae59b16c61d0e397fa7c7e319f39765390732415a19bc5e96ff9b80c6128"
+    },
+    {
+      "fileOrdinal": 20,
+      "sha256": "8e5f717e08aeb7ceef95dc3bed40adb6bb360185f4f473a78438fa667c498b1b"
+    },
+    {
+      "fileOrdinal": 21,
+      "sha256": "2318fca968afc5e34f77e3cc292e3438d7d4ccd1fbac9173abb8806f2c54f479"
+    },
+    {
+      "fileOrdinal": 22,
+      "sha256": "b407c4ec6649f903b6444657a6f945159a22702b49114acbb027ececac50cc2a"
+    },
+    {
+      "fileOrdinal": 23,
+      "sha256": "3e8bd9a999b3d4c7f7bcd7f7e5ea4478a21f0d336af7c56f725064932560473f"
+    },
+    {
+      "fileOrdinal": 24,
+      "sha256": "4a388ca302ce072ac8920b80f7c64dc57dccc5a7c4daefe34a8d0803a1afc25b"
+    },
+    {
+      "fileOrdinal": 25,
+      "sha256": "4b9a51c3015a48909c6077ef5a59372be56c1609a3b57811cb3733c7557bc1be"
+    },
+    {
+      "fileOrdinal": 26,
+      "sha256": "73eef79293451d7c33708be51cf7b4e28083744a2ebae5456c38348e1841d4f6"
+    },
+    {
+      "fileOrdinal": 27,
+      "sha256": "70213733685221d0d7991c99b0ab2327f55c4072715b93e8ffd1047e009c5d1f"
+    },
+    {
+      "fileOrdinal": 28,
+      "sha256": "476ba6f2d7d52392ff169ff15e7c09433a0c5fc78f8cb8e6b7bb5e92f0e35dc7"
+    },
+    {
+      "fileOrdinal": 29,
+      "sha256": "43fc954408602032e119e59c16607b0e5b79585b8a74a6e4b65872c05c253088"
+    },
+    {
+      "fileOrdinal": 30,
+      "sha256": "7ead56e22e92bd49a79e358540444ce20d1f391b7e2565ed40951a883791cbe7"
+    },
+    {
+      "fileOrdinal": 31,
+      "sha256": "3431144a05c749f9383e9b052778e42940e88e936ed9b604826bf41fb5ea9fe3"
+    },
+    {
+      "fileOrdinal": 32,
+      "sha256": "2b7a90ff39fcd534890b7dd7263becbde946b43856f0676ab2e8171e1ade7a02"
+    },
+    {
+      "fileOrdinal": 33,
+      "sha256": "c2631d06e3ed2d211a42b415749c1a44c556646c799dc6652549ea5c0b98c59b"
+    },
+    {
+      "fileOrdinal": 34,
+      "sha256": "5e9b05350070b1f186aa533a941a469ed5399482f01962dfa245d4f735ca1989"
+    },
+    {
+      "fileOrdinal": 35,
+      "sha256": "62bbe23212bba83cbcea3fc84a246c755dbcb856680844fa3fbc85005692729d"
+    },
+    {
+      "fileOrdinal": 36,
+      "sha256": "e83b20cfee683b85fb438d565aea5616cb089406281f0d8995661e0c5051c108"
+    },
+    {
+      "fileOrdinal": 37,
+      "sha256": "b744295bc88d0d0aff71498e5d2a1b90ec7a4841e79a495f020193281827fcfa"
+    },
+    {
+      "fileOrdinal": 38,
+      "sha256": "cb05619d6cc56532ad1ad4c49a68b26fd22d2e06e2854f35c1389debbe78e5ee"
+    }
+  ],
+  "packagedReplayMatchesOriginal": {
+    "nativeInputs": true,
+    "tableFloat32Bits": true,
+    "rngFloat32Bits": true,
+    "executionCounts": true
+  },
+  "selectedReads": [
+    {
+      "stage": "current",
+      "selectedBytes": 1000,
+      "reportSha256": "a71580a0b0f9b60aa2381af5677fbfdafa316b33634afee9e6ddc61daf24682d",
+      "rangeCount": 4
+    },
+    {
+      "stage": "arithmetic",
+      "selectedBytes": 1094,
+      "reportSha256": "cf68a7f276c8c6ef361db04c15ce9bb5efacd15759c430f4ee69cfa890b164b7",
+      "rangeCount": 7
+    },
+    {
+      "stage": "rng",
+      "selectedBytes": 732,
+      "reportSha256": "b247cad7a3e348760d53d1f1a028fc401eeb853b0e3dfc95fb8c2a86c6b2802e",
+      "rangeCount": 2
+    }
+  ],
+  "selectedBytes": 2826,
+  "selectedCodeHashes": [
+    {
+      "stage": "current",
+      "range": 0,
+      "bytes": 8,
+      "codeSha256": "9b5840008aad6cd617cde217009c9d38110f8abb8fbbc720405a8b26ed1224f8"
+    },
+    {
+      "stage": "current",
+      "range": 1,
+      "bytes": 960,
+      "codeSha256": "fa9ebe33d120bce03b57a6a7df2529390a2b61b2ed6ff7d2a646f75ad8bf9ab4"
+    },
+    {
+      "stage": "current",
+      "range": 2,
+      "bytes": 16,
+      "codeSha256": "851a8f31afd322d3a07cb40fda27f632c530218b05551bf999cce3d2d48cb82f"
+    },
+    {
+      "stage": "current",
+      "range": 3,
+      "bytes": 16,
+      "codeSha256": "cdeb464d5b1fb12bc0d674fca481de9df18faa25b3348b782d40fc19f28bf1d8"
+    },
+    {
+      "stage": "arithmetic",
+      "range": 0,
+      "bytes": 8,
+      "codeSha256": "8e5f717e08aeb7ceef95dc3bed40adb6bb360185f4f473a78438fa667c498b1b"
+    },
+    {
+      "stage": "arithmetic",
+      "range": 1,
+      "bytes": 848,
+      "codeSha256": "b407c4ec6649f903b6444657a6f945159a22702b49114acbb027ececac50cc2a"
+    },
+    {
+      "stage": "arithmetic",
+      "range": 2,
+      "bytes": 16,
+      "codeSha256": "4a388ca302ce072ac8920b80f7c64dc57dccc5a7c4daefe34a8d0803a1afc25b"
+    },
+    {
+      "stage": "arithmetic",
+      "range": 3,
+      "bytes": 16,
+      "codeSha256": "73eef79293451d7c33708be51cf7b4e28083744a2ebae5456c38348e1841d4f6"
+    },
+    {
+      "stage": "arithmetic",
+      "range": 4,
+      "bytes": 16,
+      "codeSha256": "476ba6f2d7d52392ff169ff15e7c09433a0c5fc78f8cb8e6b7bb5e92f0e35dc7"
+    },
+    {
+      "stage": "arithmetic",
+      "range": 5,
+      "bytes": 75,
+      "codeSha256": "7ead56e22e92bd49a79e358540444ce20d1f391b7e2565ed40951a883791cbe7"
+    },
+    {
+      "stage": "arithmetic",
+      "range": 6,
+      "bytes": 19,
+      "codeSha256": "2b7a90ff39fcd534890b7dd7263becbde946b43856f0676ab2e8171e1ade7a02"
+    },
+    {
+      "stage": "rng",
+      "range": 0,
+      "bytes": 16,
+      "codeSha256": "62bbe23212bba83cbcea3fc84a246c755dbcb856680844fa3fbc85005692729d"
+    },
+    {
+      "stage": "rng",
+      "range": 1,
+      "bytes": 684,
+      "codeSha256": "b744295bc88d0d0aff71498e5d2a1b90ec7a4841e79a495f020193281827fcfa"
+    }
+  ],
+  "metadataBoundary": "Selected byte total excludes streamed full-file hashes and typed ELF relocation/symbol table traversal. No code scan or analysis database.",
+  "nativeParameterFields": {
+    "angle": "m_flRecoilAngle",
+    "variance": "m_flRecoilAngleVariance",
+    "magnitude": "m_flRecoilMagnitude",
+    "magnitudeVariance": "m_flRecoilMagnitudeVariance"
+  },
+  "weapons": {
+    "ak47": {
+      "seed": 223,
+      "fullAuto": true,
+      "angle": [
+        0,
+        0
+      ],
+      "variance": [
+        70,
+        70
+      ],
+      "magnitude": [
+        30,
+        30
+      ],
+      "magnitudeVariance": [
+        0,
+        0
+      ]
+    },
+    "m4a4": {
+      "seed": 38965,
+      "fullAuto": true,
+      "angle": [
+        0,
+        0
+      ],
+      "variance": [
+        70,
+        70
+      ],
+      "magnitude": [
+        23,
+        23
+      ],
+      "magnitudeVariance": [
+        0,
+        0
+      ]
+    },
+    "m4a1s": {
+      "seed": 38965,
+      "fullAuto": true,
+      "angle": [
+        0,
+        0
+      ],
+      "variance": [
+        65,
+        65
+      ],
+      "magnitude": [
+        25,
+        21
+      ],
+      "magnitudeVariance": [
+        3,
+        0
+      ]
+    },
+    "awp": {
+      "seed": 4100,
+      "fullAuto": false,
+      "angle": [
+        0,
+        0
+      ],
+      "variance": [
+        20,
+        20
+      ],
+      "magnitude": [
+        78,
+        25
+      ],
+      "magnitudeVariance": [
+        15,
+        2
+      ]
+    },
+    "glock": {
+      "seed": 4484,
+      "fullAuto": false,
+      "angle": [
+        0,
+        0
+      ],
+      "variance": [
+        20,
+        20
+      ],
+      "magnitude": [
+        18,
+        30
+      ],
+      "magnitudeVariance": [
+        0,
+        5
+      ]
+    },
+    "usp": {
+      "seed": 5426,
+      "fullAuto": false,
+      "angle": [
+        0,
+        0
+      ],
+      "variance": [
+        0,
+        0
+      ],
+      "magnitude": [
+        29,
+        23
+      ],
+      "magnitudeVariance": [
+        0,
+        0
+      ]
+    },
+    "deagle": {
+      "seed": 1454,
+      "fullAuto": false,
+      "angle": [
+        0,
+        0
+      ],
+      "variance": [
+        60,
+        60
+      ],
+      "magnitude": [
+        48.200001,
+        48.200001
+      ],
+      "magnitudeVariance": [
+        18,
+        18
+      ]
+    }
+  },
+  "scalarFields": [
+    {
+      "weapon": "deagle",
+      "field": "m_flRecoilAngle",
+      "value": 0,
+      "modeValues": [
+        0,
+        0
+      ]
+    }
+  ],
+  "rules": {
+    "entriesPerMode": 64,
+    "seedResetPerMode": true,
+    "randomDrawsPerEntry": 2,
+    "automaticInterpolation": 0.55,
+    "automaticSuppression": [
+      0.75,
+      0.8125,
+      0.875,
+      0.9375
+    ],
+    "semiautomaticInterpolationOrSuppression": false,
+    "arithmetic": "Native float32 instruction sequence; constants are not a fitted model."
+  },
+  "tableEntries": 896,
+  "tableScalarValues": 1792,
+  "tableExecutionCounts": {
+    "constructor": 14,
+    "randomFloat": 1792,
+    "integerRng": 1792,
+    "instructions": 138068
+  },
+  "totalExecutionCounts": {
+    "constructor": 28,
+    "randomFloat": 2016,
+    "integerRng": 2016,
+    "instructions": 161367
+  },
+  "tableInvocationCounts": [
+    {
+      "weapon": "ak47",
+      "instructions": 20132,
+      "modes": 2,
+      "randomDraws": 256
+    },
+    {
+      "weapon": "m4a4",
+      "instructions": 20132,
+      "modes": 2,
+      "randomDraws": 256
+    },
+    {
+      "weapon": "m4a1s",
+      "instructions": 20132,
+      "modes": 2,
+      "randomDraws": 256
+    },
+    {
+      "weapon": "awp",
+      "instructions": 19418,
+      "modes": 2,
+      "randomDraws": 256
+    },
+    {
+      "weapon": "glock",
+      "instructions": 19418,
+      "modes": 2,
+      "randomDraws": 256
+    },
+    {
+      "weapon": "usp",
+      "instructions": 19418,
+      "modes": 2,
+      "randomDraws": 256
+    },
+    {
+      "weapon": "deagle",
+      "instructions": 19418,
+      "modes": 2,
+      "randomDraws": 256
+    }
+  ],
+  "mappedPrivatePages": 23,
+  "executionBoundary": {
+    "instructionsPerInvocation": 200000,
+    "nativeParameterBytesReadable": 37,
+    "nativeParameterBytesWritable": 0,
+    "outputBytesReadableWritable": 1024,
+    "standaloneRngStateBytes": 136,
+    "privateStackBytes": 20480,
+    "unknownCodeOrMemoryAccess": "raises assertion",
+    "numericCallSubstitutions": 0
+  },
+  "modeMeaning": {
+    "tables": "Raw native mode 0",
+    "alternateTables": "Raw native mode 1",
+    "trainerPrimaryNativeMode": {
+      "ak47": 0,
+      "m4a4": 0,
+      "m4a1s": 1,
+      "awp": 0,
+      "glock": 0,
+      "usp": 1,
+      "deagle": 0
+    },
+    "trainerAlternateNativeMode": {
+      "ak47": 1,
+      "m4a4": 1,
+      "m4a1s": 1,
+      "awp": 1,
+      "glock": 1,
+      "usp": 1,
+      "deagle": 1
+    },
+    "limit": "Trainer supported mapping is compared separately from raw-mode arithmetic. Default silenced M4A1-S and USP-S use native mode 1."
+  },
+  "tables": {
+    "ak47": [
+      {
+        "angle": 27.330322265625,
+        "magnitude": 22.5
+      },
+      {
+        "angle": -17.830387115478516,
+        "magnitude": 21.6328125
+      },
+      {
+        "angle": 5.800779342651367,
+        "magnitude": 22.955419540405273
+      },
+      {
+        "angle": 1.6354007720947266,
+        "magnitude": 25.15306854248047
+      },
+      {
+        "angle": -15.53862190246582,
+        "magnitude": 27.818880081176758
+      },
+      {
+        "angle": -9.262065887451172,
+        "magnitude": 29.018495559692383
+      },
+      {
+        "angle": -18.047683715820312,
+        "magnitude": 29.55832290649414
+      },
+      {
+        "angle": 12.503501892089844,
+        "magnitude": 29.801244735717773
+      },
+      {
+        "angle": 43.99961853027344,
+        "magnitude": 29.910560607910156
+      },
+      {
+        "angle": 22.43196678161621,
+        "magnitude": 29.959753036499023
+      },
+      {
+        "angle": -4.980262756347656,
+        "magnitude": 29.981889724731445
+      },
+      {
+        "angle": 30.74071502685547,
+        "magnitude": 29.991849899291992
+      },
+      {
+        "angle": 41.1330680847168,
+        "magnitude": 29.9963321685791
+      },
+      {
+        "angle": 19.172504425048828,
+        "magnitude": 29.998350143432617
+      },
+      {
+        "angle": -19.623065948486328,
+        "magnitude": 29.999258041381836
+      },
+      {
+        "angle": -2.3172149658203125,
+        "magnitude": 29.999666213989258
+      },
+      {
+        "angle": -5.197378158569336,
+        "magnitude": 29.999849319458008
+      },
+      {
+        "angle": -22.864282608032227,
+        "magnitude": 29.99993133544922
+      },
+      {
+        "angle": -38.496429443359375,
+        "magnitude": 29.999969482421875
+      },
+      {
+        "angle": 15.16634750366211,
+        "magnitude": 29.99998664855957
+      },
+      {
+        "angle": -18.683059692382812,
+        "magnitude": 29.9999942779541
+      },
+      {
+        "angle": -0.456512451171875,
+        "magnitude": 29.999998092651367
+      },
+      {
+        "angle": -0.7154495716094971,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -28.72681427001953,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -12.476993560791016,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 10.523065567016602,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 25.284801483154297,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 46.52702713012695,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 21.566301345825195,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -7.5123443603515625,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -28.224456787109375,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -51.011749267578125,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -52.516326904296875,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -21.666366577148438,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -32.16056823730469,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -38.93403244018555,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -34.49458694458008,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 15.725494384765625,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -27.699901580810547,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 8.100051879882812,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 25.304319381713867,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 21.25507354736328,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 27.863033294677734,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -22.462024688720703,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -26.212841033935547,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 1.463479995727539,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -33.394554138183594,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -24.961532592773438,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -31.779605865478516,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -1.6959972381591797,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 29.575716018676758,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -18.624414443969727,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 4.625162124633789,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 36.16282653808594,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 7.602895736694336,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -13.746875762939453,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -27.423566818237305,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -46.51564407348633,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 15.443206787109375,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 5.317649841308594,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 36.17626953125,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 2.7439842224121094,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -19.58721160888672,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 20.376995086669922,
+        "magnitude": 30.0
+      }
+    ],
+    "m4a4": [
+      {
+        "angle": -12.32442855834961,
+        "magnitude": 17.25
+      },
+      {
+        "angle": -0.5632247924804688,
+        "magnitude": 16.58515739440918
+      },
+      {
+        "angle": 19.90497398376465,
+        "magnitude": 17.59915542602539
+      },
+      {
+        "angle": -13.724725723266602,
+        "magnitude": 19.284019470214844
+      },
+      {
+        "angle": 15.369911193847656,
+        "magnitude": 21.327808380126953
+      },
+      {
+        "angle": 7.515899181365967,
+        "magnitude": 22.247512817382812
+      },
+      {
+        "angle": -24.041013717651367,
+        "magnitude": 22.661380767822266
+      },
+      {
+        "angle": -13.20391845703125,
+        "magnitude": 22.84762191772461
+      },
+      {
+        "angle": -39.903568267822266,
+        "magnitude": 22.93143081665039
+      },
+      {
+        "angle": 2.8658294677734375,
+        "magnitude": 22.96914291381836
+      },
+      {
+        "angle": 12.928942680358887,
+        "magnitude": 22.986114501953125
+      },
+      {
+        "angle": 35.77278518676758,
+        "magnitude": 22.993751525878906
+      },
+      {
+        "angle": 34.96525192260742,
+        "magnitude": 22.997188568115234
+      },
+      {
+        "angle": 45.880828857421875,
+        "magnitude": 22.998735427856445
+      },
+      {
+        "angle": 14.583799362182617,
+        "magnitude": 22.999431610107422
+      },
+      {
+        "angle": 9.225765228271484,
+        "magnitude": 22.999744415283203
+      },
+      {
+        "angle": 39.03753662109375,
+        "magnitude": 22.99988555908203
+      },
+      {
+        "angle": 41.26309585571289,
+        "magnitude": 22.999948501586914
+      },
+      {
+        "angle": 19.330289840698242,
+        "magnitude": 22.999977111816406
+      },
+      {
+        "angle": -21.925294876098633,
+        "magnitude": 22.999990463256836
+      },
+      {
+        "angle": 8.197330474853516,
+        "magnitude": 22.999996185302734
+      },
+      {
+        "angle": -24.680370330810547,
+        "magnitude": 22.999998092651367
+      },
+      {
+        "angle": -2.8521251678466797,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -15.087713241577148,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 15.113449096679688,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -12.488306045532227,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -6.208925724029541,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -7.534279823303223,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -10.532251358032227,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 26.145524978637695,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 39.62872314453125,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 31.03763198852539,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -7.8775787353515625,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -29.780492782592773,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -16.322118759155273,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 18.07649803161621,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 42.96660614013672,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 46.377052307128906,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 10.062480926513672,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 30.558753967285156,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 23.916351318359375,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 17.381383895874023,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 9.54837417602539,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -0.44121646881103516,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -35.10908889770508,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 18.04543685913086,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -10.926488876342773,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 13.497842788696289,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 39.03321075439453,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 24.583534240722656,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 20.570085525512695,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 21.20842170715332,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 23.28978729248047,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -20.41217803955078,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -15.245009422302246,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.3944664001464844,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -29.04891586303711,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -33.531620025634766,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 2.372203826904297,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 36.47407150268555,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -12.49953842163086,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -43.55542755126953,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -45.37903594970703,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -21.721256256103516,
+        "magnitude": 23.0
+      }
+    ],
+    "m4a1s": [
+      {
+        "angle": -11.444110870361328,
+        "magnitude": 20.41579818725586
+      },
+      {
+        "angle": -0.5229921340942383,
+        "magnitude": 17.560514450073242
+      },
+      {
+        "angle": 18.483192443847656,
+        "magnitude": 19.719648361206055
+      },
+      {
+        "angle": -12.744384765625,
+        "magnitude": 21.069942474365234
+      },
+      {
+        "angle": 14.272062301635742,
+        "magnitude": 23.715883255004883
+      },
+      {
+        "angle": 6.979049205780029,
+        "magnitude": 24.28360366821289
+      },
+      {
+        "angle": -22.32379913330078,
+        "magnitude": 25.161470413208008
+      },
+      {
+        "angle": -12.260782241821289,
+        "magnitude": 26.36919403076172
+      },
+      {
+        "angle": -37.05331039428711,
+        "magnitude": 26.512836456298828
+      },
+      {
+        "angle": 2.6611289978027344,
+        "magnitude": 24.999921798706055
+      },
+      {
+        "angle": 12.005449295043945,
+        "magnitude": 25.857696533203125
+      },
+      {
+        "angle": 33.21759033203125,
+        "magnitude": 24.23040008544922
+      },
+      {
+        "angle": 32.467735290527344,
+        "magnitude": 24.111656188964844
+      },
+      {
+        "angle": 42.6036262512207,
+        "magnitude": 23.341468811035156
+      },
+      {
+        "angle": 13.542097091674805,
+        "magnitude": 22.840938568115234
+      },
+      {
+        "angle": 8.566778182983398,
+        "magnitude": 23.945554733276367
+      },
+      {
+        "angle": 36.24913787841797,
+        "magnitude": 23.89417839050293
+      },
+      {
+        "angle": 38.31572723388672,
+        "magnitude": 23.28999137878418
+      },
+      {
+        "angle": 17.949554443359375,
+        "magnitude": 25.2806339263916
+      },
+      {
+        "angle": -20.359203338623047,
+        "magnitude": 25.568485260009766
+      },
+      {
+        "angle": 7.611806869506836,
+        "magnitude": 26.25086784362793
+      },
+      {
+        "angle": -22.917490005493164,
+        "magnitude": 24.849763870239258
+      },
+      {
+        "angle": -2.648405075073242,
+        "magnitude": 24.407676696777344
+      },
+      {
+        "angle": -14.010019302368164,
+        "magnitude": 26.344514846801758
+      },
+      {
+        "angle": 14.033914566040039,
+        "magnitude": 24.895465850830078
+      },
+      {
+        "angle": -11.59628677368164,
+        "magnitude": 24.889923095703125
+      },
+      {
+        "angle": -5.765429496765137,
+        "magnitude": 24.32062530517578
+      },
+      {
+        "angle": -6.996115684509277,
+        "magnitude": 25.95094871520996
+      },
+      {
+        "angle": -9.779947280883789,
+        "magnitude": 25.865888595581055
+      },
+      {
+        "angle": 24.277986526489258,
+        "magnitude": 26.139490127563477
+      },
+      {
+        "angle": 36.798095703125,
+        "magnitude": 25.389074325561523
+      },
+      {
+        "angle": 28.82065773010254,
+        "magnitude": 26.134828567504883
+      },
+      {
+        "angle": -7.31489372253418,
+        "magnitude": 25.88444709777832
+      },
+      {
+        "angle": -27.65331268310547,
+        "magnitude": 25.169090270996094
+      },
+      {
+        "angle": -15.156251907348633,
+        "magnitude": 24.185272216796875
+      },
+      {
+        "angle": 16.785316467285156,
+        "magnitude": 24.31401824951172
+      },
+      {
+        "angle": 39.897560119628906,
+        "magnitude": 26.00017738342285
+      },
+      {
+        "angle": 43.06440734863281,
+        "magnitude": 25.120948791503906
+      },
+      {
+        "angle": 9.343738555908203,
+        "magnitude": 24.77372932434082
+      },
+      {
+        "angle": 28.375986099243164,
+        "magnitude": 23.984548568725586
+      },
+      {
+        "angle": 22.208038330078125,
+        "magnitude": 26.019840240478516
+      },
+      {
+        "angle": 16.13985252380371,
+        "magnitude": 25.492292404174805
+      },
+      {
+        "angle": 8.866348266601562,
+        "magnitude": 24.345947265625
+      },
+      {
+        "angle": -0.4097003936767578,
+        "magnitude": 23.972543716430664
+      },
+      {
+        "angle": -32.601295471191406,
+        "magnitude": 23.472421646118164
+      },
+      {
+        "angle": 16.756484985351562,
+        "magnitude": 25.56477928161621
+      },
+      {
+        "angle": -10.146020889282227,
+        "magnitude": 25.614137649536133
+      },
+      {
+        "angle": 12.533708572387695,
+        "magnitude": 23.78940773010254
+      },
+      {
+        "angle": 36.24512481689453,
+        "magnitude": 23.32811737060547
+      },
+      {
+        "angle": 22.82756996154785,
+        "magnitude": 25.689767837524414
+      },
+      {
+        "angle": 19.100793838500977,
+        "magnitude": 24.551164627075195
+      },
+      {
+        "angle": 19.69353485107422,
+        "magnitude": 24.227710723876953
+      },
+      {
+        "angle": 21.626230239868164,
+        "magnitude": 24.781116485595703
+      },
+      {
+        "angle": -18.954164505004883,
+        "magnitude": 23.318044662475586
+      },
+      {
+        "angle": -14.156079292297363,
+        "magnitude": 24.81696319580078
+      },
+      {
+        "angle": 0.3662862777709961,
+        "magnitude": 24.93387794494629
+      },
+      {
+        "angle": -26.973995208740234,
+        "magnitude": 24.23465347290039
+      },
+      {
+        "angle": -31.136505126953125,
+        "magnitude": 23.560888290405273
+      },
+      {
+        "angle": 2.2027626037597656,
+        "magnitude": 25.07101058959961
+      },
+      {
+        "angle": 33.86878204345703,
+        "magnitude": 24.922060012817383
+      },
+      {
+        "angle": -11.606712341308594,
+        "magnitude": 25.094528198242188
+      },
+      {
+        "angle": -40.4443244934082,
+        "magnitude": 23.740459442138672
+      },
+      {
+        "angle": -42.13767623901367,
+        "magnitude": 23.902795791625977
+      },
+      {
+        "angle": -20.16973876953125,
+        "magnitude": 25.198623657226562
+      }
+    ],
+    "awp": [
+      {
+        "angle": 4.2850189208984375,
+        "magnitude": 83.77485656738281
+      },
+      {
+        "angle": 2.5025386810302734,
+        "magnitude": 86.04362487792969
+      },
+      {
+        "angle": 10.831707000732422,
+        "magnitude": 69.78469848632812
+      },
+      {
+        "angle": -17.70903968811035,
+        "magnitude": 70.59841918945312
+      },
+      {
+        "angle": -19.52149200439453,
+        "magnitude": 89.65650177001953
+      },
+      {
+        "angle": 14.377239227294922,
+        "magnitude": 91.7375717163086
+      },
+      {
+        "angle": -10.365065574645996,
+        "magnitude": 84.07032775878906
+      },
+      {
+        "angle": 16.305728912353516,
+        "magnitude": 73.75553131103516
+      },
+      {
+        "angle": 3.8945236206054688,
+        "magnitude": 76.6852035522461
+      },
+      {
+        "angle": -3.6804752349853516,
+        "magnitude": 64.68156433105469
+      },
+      {
+        "angle": -8.030914306640625,
+        "magnitude": 72.46215057373047
+      },
+      {
+        "angle": 15.257488250732422,
+        "magnitude": 81.85768127441406
+      },
+      {
+        "angle": -17.873046875,
+        "magnitude": 65.33036041259766
+      },
+      {
+        "angle": -8.680304527282715,
+        "magnitude": 79.31605529785156
+      },
+      {
+        "angle": 12.169425964355469,
+        "magnitude": 68.78111267089844
+      },
+      {
+        "angle": 4.180248260498047,
+        "magnitude": 74.7232437133789
+      },
+      {
+        "angle": -17.290184020996094,
+        "magnitude": 68.7743911743164
+      },
+      {
+        "angle": 15.963546752929688,
+        "magnitude": 64.05176544189453
+      },
+      {
+        "angle": -7.823662757873535,
+        "magnitude": 63.14607238769531
+      },
+      {
+        "angle": -8.529473304748535,
+        "magnitude": 73.32999420166016
+      },
+      {
+        "angle": 8.850812911987305,
+        "magnitude": 84.37423706054688
+      },
+      {
+        "angle": 19.45660400390625,
+        "magnitude": 66.45791625976562
+      },
+      {
+        "angle": 12.725135803222656,
+        "magnitude": 85.36959838867188
+      },
+      {
+        "angle": 19.921600341796875,
+        "magnitude": 83.00204467773438
+      },
+      {
+        "angle": -19.833276748657227,
+        "magnitude": 69.2542495727539
+      },
+      {
+        "angle": 18.572566986083984,
+        "magnitude": 89.25534057617188
+      },
+      {
+        "angle": -10.884708404541016,
+        "magnitude": 66.5413589477539
+      },
+      {
+        "angle": 12.529605865478516,
+        "magnitude": 66.84040069580078
+      },
+      {
+        "angle": 10.4130859375,
+        "magnitude": 63.36360168457031
+      },
+      {
+        "angle": -14.156961441040039,
+        "magnitude": 78.93477630615234
+      },
+      {
+        "angle": 11.585136413574219,
+        "magnitude": 74.1362533569336
+      },
+      {
+        "angle": -17.962759017944336,
+        "magnitude": 63.53432083129883
+      },
+      {
+        "angle": -11.967351913452148,
+        "magnitude": 65.97004699707031
+      },
+      {
+        "angle": 2.627534866333008,
+        "magnitude": 85.7677001953125
+      },
+      {
+        "angle": -12.25512981414795,
+        "magnitude": 86.54173278808594
+      },
+      {
+        "angle": -1.5515670776367188,
+        "magnitude": 85.59650421142578
+      },
+      {
+        "angle": -10.226052284240723,
+        "magnitude": 75.66537475585938
+      },
+      {
+        "angle": -7.450283050537109,
+        "magnitude": 86.91152954101562
+      },
+      {
+        "angle": 19.164634704589844,
+        "magnitude": 68.67581176757812
+      },
+      {
+        "angle": 10.739521026611328,
+        "magnitude": 86.81333923339844
+      },
+      {
+        "angle": -18.126300811767578,
+        "magnitude": 67.30758666992188
+      },
+      {
+        "angle": -15.283045768737793,
+        "magnitude": 88.9044189453125
+      },
+      {
+        "angle": 8.00946044921875,
+        "magnitude": 64.72725677490234
+      },
+      {
+        "angle": 12.456233978271484,
+        "magnitude": 64.81140899658203
+      },
+      {
+        "angle": -4.842900276184082,
+        "magnitude": 64.06143188476562
+      },
+      {
+        "angle": 6.929046630859375,
+        "magnitude": 86.3191146850586
+      },
+      {
+        "angle": 10.07094955444336,
+        "magnitude": 74.21232604980469
+      },
+      {
+        "angle": 2.8289241790771484,
+        "magnitude": 78.61178588867188
+      },
+      {
+        "angle": 17.851993560791016,
+        "magnitude": 90.58522033691406
+      },
+      {
+        "angle": 7.180866241455078,
+        "magnitude": 76.21837615966797
+      },
+      {
+        "angle": 19.9947509765625,
+        "magnitude": 71.43632507324219
+      },
+      {
+        "angle": -15.565450668334961,
+        "magnitude": 81.0713882446289
+      },
+      {
+        "angle": 19.312274932861328,
+        "magnitude": 68.28565216064453
+      },
+      {
+        "angle": 17.429073333740234,
+        "magnitude": 76.95465087890625
+      },
+      {
+        "angle": -2.1879539489746094,
+        "magnitude": 84.54800415039062
+      },
+      {
+        "angle": -9.586771011352539,
+        "magnitude": 68.97505187988281
+      },
+      {
+        "angle": -7.565296173095703,
+        "magnitude": 88.15924835205078
+      },
+      {
+        "angle": 0.9758586883544922,
+        "magnitude": 91.1469955444336
+      },
+      {
+        "angle": 15.412544250488281,
+        "magnitude": 67.8755111694336
+      },
+      {
+        "angle": -1.5574817657470703,
+        "magnitude": 90.28956604003906
+      },
+      {
+        "angle": -16.61636734008789,
+        "magnitude": 82.54536437988281
+      },
+      {
+        "angle": -10.693628311157227,
+        "magnitude": 63.710208892822266
+      },
+      {
+        "angle": -9.923758506774902,
+        "magnitude": 77.70231628417969
+      },
+      {
+        "angle": -8.629956245422363,
+        "magnitude": 63.135520935058594
+      }
+    ],
+    "glock": [
+      {
+        "angle": 3.646820068359375,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -11.506518363952637,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -19.146255493164062,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 8.894521713256836,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -5.177193641662598,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -14.454980850219727,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 8.878860473632812,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 16.93996810913086,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -19.715621948242188,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -13.482183456420898,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 7.840396881103516,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -16.91030502319336,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 7.290876388549805,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 13.56894302368164,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 13.259639739990234,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -18.05552101135254,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -12.777575492858887,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 10.219335556030273,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 2.2963924407958984,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 18.603351593017578,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -17.47950553894043,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 3.0633182525634766,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -13.094922065734863,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 14.749717712402344,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 14.907432556152344,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -15.87078857421875,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 3.003162384033203,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -0.2643318176269531,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 10.995872497558594,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 3.8875045776367188,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -13.969099044799805,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -14.34078598022461,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -5.6877593994140625,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -4.321184158325195,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 19.491195678710938,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 8.823720932006836,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 13.505905151367188,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -8.773598670959473,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 9.945547103881836,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -7.993127822875977,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 17.31097412109375,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 5.178249359130859,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -6.651707649230957,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 4.745950698852539,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -4.097155570983887,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -18.097436904907227,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -9.158943176269531,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 12.968894958496094,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -14.466232299804688,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 10.401945114135742,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -17.873401641845703,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 2.4164657592773438,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 1.8836250305175781,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 13.43368911743164,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 2.4502830505371094,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -9.8698148727417,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 2.765176773071289,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -18.119705200195312,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 5.7158966064453125,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 19.725257873535156,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -15.114627838134766,
+        "magnitude": 18.0
+      },
+      {
+        "angle": 1.5194721221923828,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -4.747379302978516,
+        "magnitude": 18.0
+      },
+      {
+        "angle": -8.784910202026367,
+        "magnitude": 18.0
+      }
+    ],
+    "usp": [
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 29.0
+      }
+    ],
+    "deagle": [
+      {
+        "angle": -58.39164733886719,
+        "magnitude": 37.48738098144531
+      },
+      {
+        "angle": -36.65523910522461,
+        "magnitude": 57.136016845703125
+      },
+      {
+        "angle": 42.14453125,
+        "magnitude": 38.25007629394531
+      },
+      {
+        "angle": 12.798332214355469,
+        "magnitude": 31.085847854614258
+      },
+      {
+        "angle": 15.373931884765625,
+        "magnitude": 36.990081787109375
+      },
+      {
+        "angle": -14.47391128540039,
+        "magnitude": 58.93416213989258
+      },
+      {
+        "angle": 27.986083984375,
+        "magnitude": 41.28827667236328
+      },
+      {
+        "angle": 12.77850341796875,
+        "magnitude": 43.3099365234375
+      },
+      {
+        "angle": 43.567787170410156,
+        "magnitude": 54.86985778808594
+      },
+      {
+        "angle": -1.6372566223144531,
+        "magnitude": 41.959716796875
+      },
+      {
+        "angle": 3.7349166870117188,
+        "magnitude": 60.96788024902344
+      },
+      {
+        "angle": -36.931121826171875,
+        "magnitude": 47.60265350341797
+      },
+      {
+        "angle": -52.73612976074219,
+        "magnitude": 65.0609130859375
+      },
+      {
+        "angle": -54.78351593017578,
+        "magnitude": 38.91559982299805
+      },
+      {
+        "angle": -12.374385833740234,
+        "magnitude": 52.59150695800781
+      },
+      {
+        "angle": -47.82366943359375,
+        "magnitude": 61.033199310302734
+      },
+      {
+        "angle": 22.62181854248047,
+        "magnitude": 37.15386199951172
+      },
+      {
+        "angle": 44.86756896972656,
+        "magnitude": 61.76975631713867
+      },
+      {
+        "angle": -32.23139953613281,
+        "magnitude": 31.971900939941406
+      },
+      {
+        "angle": 51.07550048828125,
+        "magnitude": 52.23274230957031
+      },
+      {
+        "angle": -56.626102447509766,
+        "magnitude": 48.930503845214844
+      },
+      {
+        "angle": 9.154670715332031,
+        "magnitude": 50.630859375
+      },
+      {
+        "angle": -58.31904602050781,
+        "magnitude": 40.32522201538086
+      },
+      {
+        "angle": -15.446407318115234,
+        "magnitude": 44.46589660644531
+      },
+      {
+        "angle": -32.261356353759766,
+        "magnitude": 59.796043395996094
+      },
+      {
+        "angle": -27.858154296875,
+        "magnitude": 38.694190979003906
+      },
+      {
+        "angle": 58.07984161376953,
+        "magnitude": 55.29106903076172
+      },
+      {
+        "angle": 22.867279052734375,
+        "magnitude": 47.449363708496094
+      },
+      {
+        "angle": 9.315704345703125,
+        "magnitude": 45.727867126464844
+      },
+      {
+        "angle": 26.034133911132812,
+        "magnitude": 32.25878143310547
+      },
+      {
+        "angle": -30.991533279418945,
+        "magnitude": 43.74214172363281
+      },
+      {
+        "angle": -34.589271545410156,
+        "magnitude": 39.297576904296875
+      },
+      {
+        "angle": -12.966911315917969,
+        "magnitude": 52.04437255859375
+      },
+      {
+        "angle": 17.562545776367188,
+        "magnitude": 49.71862030029297
+      },
+      {
+        "angle": -15.355354309082031,
+        "magnitude": 57.1656494140625
+      },
+      {
+        "angle": 25.74549102783203,
+        "magnitude": 65.61575317382812
+      },
+      {
+        "angle": -24.004432678222656,
+        "magnitude": 47.13597869873047
+      },
+      {
+        "angle": -40.14715576171875,
+        "magnitude": 39.670166015625
+      },
+      {
+        "angle": 1.0616035461425781,
+        "magnitude": 32.77895736694336
+      },
+      {
+        "angle": 38.5015869140625,
+        "magnitude": 32.55271911621094
+      },
+      {
+        "angle": -37.40483474731445,
+        "magnitude": 40.58533477783203
+      },
+      {
+        "angle": -44.12425231933594,
+        "magnitude": 39.292335510253906
+      },
+      {
+        "angle": -23.762664794921875,
+        "magnitude": 43.21111297607422
+      },
+      {
+        "angle": 34.81116485595703,
+        "magnitude": 56.264957427978516
+      },
+      {
+        "angle": -48.65460205078125,
+        "magnitude": 49.736595153808594
+      },
+      {
+        "angle": -49.19171905517578,
+        "magnitude": 40.99818420410156
+      },
+      {
+        "angle": -50.67743682861328,
+        "magnitude": 33.55986022949219
+      },
+      {
+        "angle": 21.287376403808594,
+        "magnitude": 65.78887939453125
+      },
+      {
+        "angle": -16.210159301757812,
+        "magnitude": 55.496238708496094
+      },
+      {
+        "angle": -57.89826965332031,
+        "magnitude": 43.020668029785156
+      },
+      {
+        "angle": 1.5584220886230469,
+        "magnitude": 42.465293884277344
+      },
+      {
+        "angle": -16.128448486328125,
+        "magnitude": 30.84508514404297
+      },
+      {
+        "angle": -3.9589385986328125,
+        "magnitude": 35.75993347167969
+      },
+      {
+        "angle": -14.111419677734375,
+        "magnitude": 36.89942169189453
+      },
+      {
+        "angle": -20.928409576416016,
+        "magnitude": 53.11347961425781
+      },
+      {
+        "angle": -52.78093719482422,
+        "magnitude": 38.839298248291016
+      },
+      {
+        "angle": -17.777545928955078,
+        "magnitude": 45.045372009277344
+      },
+      {
+        "angle": 10.4776611328125,
+        "magnitude": 50.23291015625
+      },
+      {
+        "angle": 22.13072967529297,
+        "magnitude": 57.295047760009766
+      },
+      {
+        "angle": -37.9102668762207,
+        "magnitude": 51.50462341308594
+      },
+      {
+        "angle": 54.882415771484375,
+        "magnitude": 65.2680892944336
+      },
+      {
+        "angle": 14.815353393554688,
+        "magnitude": 55.325374603271484
+      },
+      {
+        "angle": 32.32201385498047,
+        "magnitude": 61.011451721191406
+      },
+      {
+        "angle": -23.492462158203125,
+        "magnitude": 51.33835983276367
+      }
+    ]
+  },
+  "alternateTables": {
+    "ak47": [
+      {
+        "angle": 27.330322265625,
+        "magnitude": 22.5
+      },
+      {
+        "angle": -17.830387115478516,
+        "magnitude": 21.6328125
+      },
+      {
+        "angle": 5.800779342651367,
+        "magnitude": 22.955419540405273
+      },
+      {
+        "angle": 1.6354007720947266,
+        "magnitude": 25.15306854248047
+      },
+      {
+        "angle": -15.53862190246582,
+        "magnitude": 27.818880081176758
+      },
+      {
+        "angle": -9.262065887451172,
+        "magnitude": 29.018495559692383
+      },
+      {
+        "angle": -18.047683715820312,
+        "magnitude": 29.55832290649414
+      },
+      {
+        "angle": 12.503501892089844,
+        "magnitude": 29.801244735717773
+      },
+      {
+        "angle": 43.99961853027344,
+        "magnitude": 29.910560607910156
+      },
+      {
+        "angle": 22.43196678161621,
+        "magnitude": 29.959753036499023
+      },
+      {
+        "angle": -4.980262756347656,
+        "magnitude": 29.981889724731445
+      },
+      {
+        "angle": 30.74071502685547,
+        "magnitude": 29.991849899291992
+      },
+      {
+        "angle": 41.1330680847168,
+        "magnitude": 29.9963321685791
+      },
+      {
+        "angle": 19.172504425048828,
+        "magnitude": 29.998350143432617
+      },
+      {
+        "angle": -19.623065948486328,
+        "magnitude": 29.999258041381836
+      },
+      {
+        "angle": -2.3172149658203125,
+        "magnitude": 29.999666213989258
+      },
+      {
+        "angle": -5.197378158569336,
+        "magnitude": 29.999849319458008
+      },
+      {
+        "angle": -22.864282608032227,
+        "magnitude": 29.99993133544922
+      },
+      {
+        "angle": -38.496429443359375,
+        "magnitude": 29.999969482421875
+      },
+      {
+        "angle": 15.16634750366211,
+        "magnitude": 29.99998664855957
+      },
+      {
+        "angle": -18.683059692382812,
+        "magnitude": 29.9999942779541
+      },
+      {
+        "angle": -0.456512451171875,
+        "magnitude": 29.999998092651367
+      },
+      {
+        "angle": -0.7154495716094971,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -28.72681427001953,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -12.476993560791016,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 10.523065567016602,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 25.284801483154297,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 46.52702713012695,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 21.566301345825195,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -7.5123443603515625,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -28.224456787109375,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -51.011749267578125,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -52.516326904296875,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -21.666366577148438,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -32.16056823730469,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -38.93403244018555,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -34.49458694458008,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 15.725494384765625,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -27.699901580810547,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 8.100051879882812,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 25.304319381713867,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 21.25507354736328,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 27.863033294677734,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -22.462024688720703,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -26.212841033935547,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 1.463479995727539,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -33.394554138183594,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -24.961532592773438,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -31.779605865478516,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -1.6959972381591797,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 29.575716018676758,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -18.624414443969727,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 4.625162124633789,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 36.16282653808594,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 7.602895736694336,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -13.746875762939453,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -27.423566818237305,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -46.51564407348633,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 15.443206787109375,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 5.317649841308594,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 36.17626953125,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 2.7439842224121094,
+        "magnitude": 30.0
+      },
+      {
+        "angle": -19.58721160888672,
+        "magnitude": 30.0
+      },
+      {
+        "angle": 20.376995086669922,
+        "magnitude": 30.0
+      }
+    ],
+    "m4a4": [
+      {
+        "angle": -12.32442855834961,
+        "magnitude": 17.25
+      },
+      {
+        "angle": -0.5632247924804688,
+        "magnitude": 16.58515739440918
+      },
+      {
+        "angle": 19.90497398376465,
+        "magnitude": 17.59915542602539
+      },
+      {
+        "angle": -13.724725723266602,
+        "magnitude": 19.284019470214844
+      },
+      {
+        "angle": 15.369911193847656,
+        "magnitude": 21.327808380126953
+      },
+      {
+        "angle": 7.515899181365967,
+        "magnitude": 22.247512817382812
+      },
+      {
+        "angle": -24.041013717651367,
+        "magnitude": 22.661380767822266
+      },
+      {
+        "angle": -13.20391845703125,
+        "magnitude": 22.84762191772461
+      },
+      {
+        "angle": -39.903568267822266,
+        "magnitude": 22.93143081665039
+      },
+      {
+        "angle": 2.8658294677734375,
+        "magnitude": 22.96914291381836
+      },
+      {
+        "angle": 12.928942680358887,
+        "magnitude": 22.986114501953125
+      },
+      {
+        "angle": 35.77278518676758,
+        "magnitude": 22.993751525878906
+      },
+      {
+        "angle": 34.96525192260742,
+        "magnitude": 22.997188568115234
+      },
+      {
+        "angle": 45.880828857421875,
+        "magnitude": 22.998735427856445
+      },
+      {
+        "angle": 14.583799362182617,
+        "magnitude": 22.999431610107422
+      },
+      {
+        "angle": 9.225765228271484,
+        "magnitude": 22.999744415283203
+      },
+      {
+        "angle": 39.03753662109375,
+        "magnitude": 22.99988555908203
+      },
+      {
+        "angle": 41.26309585571289,
+        "magnitude": 22.999948501586914
+      },
+      {
+        "angle": 19.330289840698242,
+        "magnitude": 22.999977111816406
+      },
+      {
+        "angle": -21.925294876098633,
+        "magnitude": 22.999990463256836
+      },
+      {
+        "angle": 8.197330474853516,
+        "magnitude": 22.999996185302734
+      },
+      {
+        "angle": -24.680370330810547,
+        "magnitude": 22.999998092651367
+      },
+      {
+        "angle": -2.8521251678466797,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -15.087713241577148,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 15.113449096679688,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -12.488306045532227,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -6.208925724029541,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -7.534279823303223,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -10.532251358032227,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 26.145524978637695,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 39.62872314453125,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 31.03763198852539,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -7.8775787353515625,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -29.780492782592773,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -16.322118759155273,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 18.07649803161621,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 42.96660614013672,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 46.377052307128906,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 10.062480926513672,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 30.558753967285156,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 23.916351318359375,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 17.381383895874023,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 9.54837417602539,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -0.44121646881103516,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -35.10908889770508,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 18.04543685913086,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -10.926488876342773,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 13.497842788696289,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 39.03321075439453,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 24.583534240722656,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 20.570085525512695,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 21.20842170715332,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 23.28978729248047,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -20.41217803955078,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -15.245009422302246,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.3944664001464844,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -29.04891586303711,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -33.531620025634766,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 2.372203826904297,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 36.47407150268555,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -12.49953842163086,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -43.55542755126953,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -45.37903594970703,
+        "magnitude": 23.0
+      },
+      {
+        "angle": -21.721256256103516,
+        "magnitude": 23.0
+      }
+    ],
+    "m4a1s": [
+      {
+        "angle": -11.444110870361328,
+        "magnitude": 15.75
+      },
+      {
+        "angle": -0.5229921340942383,
+        "magnitude": 15.142969131469727
+      },
+      {
+        "angle": 18.483192443847656,
+        "magnitude": 16.06879425048828
+      },
+      {
+        "angle": -12.744384765625,
+        "magnitude": 17.607149124145508
+      },
+      {
+        "angle": 14.272062301635742,
+        "magnitude": 19.473217010498047
+      },
+      {
+        "angle": 6.979049205780029,
+        "magnitude": 20.31294822692871
+      },
+      {
+        "angle": -22.32379913330078,
+        "magnitude": 20.690826416015625
+      },
+      {
+        "angle": -12.260782241821289,
+        "magnitude": 20.860872268676758
+      },
+      {
+        "angle": -37.05331039428711,
+        "magnitude": 20.937393188476562
+      },
+      {
+        "angle": 2.6611289978027344,
+        "magnitude": 20.971826553344727
+      },
+      {
+        "angle": 12.005449295043945,
+        "magnitude": 20.987321853637695
+      },
+      {
+        "angle": 33.21759033203125,
+        "magnitude": 20.994295120239258
+      },
+      {
+        "angle": 32.467735290527344,
+        "magnitude": 20.997432708740234
+      },
+      {
+        "angle": 42.6036262512207,
+        "magnitude": 20.998844146728516
+      },
+      {
+        "angle": 13.542097091674805,
+        "magnitude": 20.999479293823242
+      },
+      {
+        "angle": 8.566778182983398,
+        "magnitude": 20.999765396118164
+      },
+      {
+        "angle": 36.24913787841797,
+        "magnitude": 20.999895095825195
+      },
+      {
+        "angle": 38.31572723388672,
+        "magnitude": 20.99995231628418
+      },
+      {
+        "angle": 17.949554443359375,
+        "magnitude": 20.99997901916504
+      },
+      {
+        "angle": -20.359203338623047,
+        "magnitude": 20.999990463256836
+      },
+      {
+        "angle": 7.611806869506836,
+        "magnitude": 20.999996185302734
+      },
+      {
+        "angle": -22.917490005493164,
+        "magnitude": 20.999998092651367
+      },
+      {
+        "angle": -2.648405075073242,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -14.010019302368164,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 14.033914566040039,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -11.59628677368164,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -5.765429496765137,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -6.996115684509277,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -9.779947280883789,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 24.277986526489258,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 36.798095703125,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 28.82065773010254,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -7.31489372253418,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -27.65331268310547,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -15.156251907348633,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 16.785316467285156,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 39.897560119628906,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 43.06440734863281,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 9.343738555908203,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 28.375986099243164,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 22.208038330078125,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 16.13985252380371,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 8.866348266601562,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -0.4097003936767578,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -32.601295471191406,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 16.756484985351562,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -10.146020889282227,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 12.533708572387695,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 36.24512481689453,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 22.82756996154785,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 19.100793838500977,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 19.69353485107422,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 21.626230239868164,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -18.954164505004883,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -14.156079292297363,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 0.3662862777709961,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -26.973995208740234,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -31.136505126953125,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 2.2027626037597656,
+        "magnitude": 21.0
+      },
+      {
+        "angle": 33.86878204345703,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -11.606712341308594,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -40.4443244934082,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -42.13767623901367,
+        "magnitude": 21.0
+      },
+      {
+        "angle": -20.16973876953125,
+        "magnitude": 21.0
+      }
+    ],
+    "awp": [
+      {
+        "angle": 4.2850189208984375,
+        "magnitude": 25.769981384277344
+      },
+      {
+        "angle": 2.5025386810302734,
+        "magnitude": 26.07248306274414
+      },
+      {
+        "angle": 10.831707000732422,
+        "magnitude": 23.904624938964844
+      },
+      {
+        "angle": -17.70903968811035,
+        "magnitude": 24.01312255859375
+      },
+      {
+        "angle": -19.52149200439453,
+        "magnitude": 26.55419921875
+      },
+      {
+        "angle": 14.377239227294922,
+        "magnitude": 26.831676483154297
+      },
+      {
+        "angle": -10.365065574645996,
+        "magnitude": 25.809377670288086
+      },
+      {
+        "angle": 16.305728912353516,
+        "magnitude": 24.434070587158203
+      },
+      {
+        "angle": 3.8945236206054688,
+        "magnitude": 24.82469367980957
+      },
+      {
+        "angle": -3.6804752349853516,
+        "magnitude": 23.22420883178711
+      },
+      {
+        "angle": -8.030914306640625,
+        "magnitude": 24.261619567871094
+      },
+      {
+        "angle": 15.257488250732422,
+        "magnitude": 25.51435661315918
+      },
+      {
+        "angle": -17.873046875,
+        "magnitude": 23.310714721679688
+      },
+      {
+        "angle": -8.680304527282715,
+        "magnitude": 25.175474166870117
+      },
+      {
+        "angle": 12.169425964355469,
+        "magnitude": 23.770814895629883
+      },
+      {
+        "angle": 4.180248260498047,
+        "magnitude": 24.563098907470703
+      },
+      {
+        "angle": -17.290184020996094,
+        "magnitude": 23.76991844177246
+      },
+      {
+        "angle": 15.963546752929688,
+        "magnitude": 23.140235900878906
+      },
+      {
+        "angle": -7.823662757873535,
+        "magnitude": 23.01947593688965
+      },
+      {
+        "angle": -8.529473304748535,
+        "magnitude": 24.37733268737793
+      },
+      {
+        "angle": 8.850812911987305,
+        "magnitude": 25.849899291992188
+      },
+      {
+        "angle": 19.45660400390625,
+        "magnitude": 23.461055755615234
+      },
+      {
+        "angle": 12.725135803222656,
+        "magnitude": 25.98261260986328
+      },
+      {
+        "angle": 19.921600341796875,
+        "magnitude": 25.66693878173828
+      },
+      {
+        "angle": -19.833276748657227,
+        "magnitude": 23.833900451660156
+      },
+      {
+        "angle": 18.572566986083984,
+        "magnitude": 26.500713348388672
+      },
+      {
+        "angle": -10.884708404541016,
+        "magnitude": 23.47218132019043
+      },
+      {
+        "angle": 12.529605865478516,
+        "magnitude": 23.512054443359375
+      },
+      {
+        "angle": 10.4130859375,
+        "magnitude": 23.048480987548828
+      },
+      {
+        "angle": -14.156961441040039,
+        "magnitude": 25.124637603759766
+      },
+      {
+        "angle": 11.585136413574219,
+        "magnitude": 24.484832763671875
+      },
+      {
+        "angle": -17.962759017944336,
+        "magnitude": 23.071243286132812
+      },
+      {
+        "angle": -11.967351913452148,
+        "magnitude": 23.396005630493164
+      },
+      {
+        "angle": 2.627534866333008,
+        "magnitude": 26.035694122314453
+      },
+      {
+        "angle": -12.25512981414795,
+        "magnitude": 26.138896942138672
+      },
+      {
+        "angle": -1.5515670776367188,
+        "magnitude": 26.012866973876953
+      },
+      {
+        "angle": -10.226052284240723,
+        "magnitude": 24.688716888427734
+      },
+      {
+        "angle": -7.450283050537109,
+        "magnitude": 26.188203811645508
+      },
+      {
+        "angle": 19.164634704589844,
+        "magnitude": 23.75677490234375
+      },
+      {
+        "angle": 10.739521026611328,
+        "magnitude": 26.175111770629883
+      },
+      {
+        "angle": -18.126300811767578,
+        "magnitude": 23.574344635009766
+      },
+      {
+        "angle": -15.283045768737793,
+        "magnitude": 26.453922271728516
+      },
+      {
+        "angle": 8.00946044921875,
+        "magnitude": 23.230300903320312
+      },
+      {
+        "angle": 12.456233978271484,
+        "magnitude": 23.24152183532715
+      },
+      {
+        "angle": -4.842900276184082,
+        "magnitude": 23.141525268554688
+      },
+      {
+        "angle": 6.929046630859375,
+        "magnitude": 26.109214782714844
+      },
+      {
+        "angle": 10.07094955444336,
+        "magnitude": 24.494976043701172
+      },
+      {
+        "angle": 2.8289241790771484,
+        "magnitude": 25.081571578979492
+      },
+      {
+        "angle": 17.851993560791016,
+        "magnitude": 26.678030014038086
+      },
+      {
+        "angle": 7.180866241455078,
+        "magnitude": 24.762449264526367
+      },
+      {
+        "angle": 19.9947509765625,
+        "magnitude": 24.12484359741211
+      },
+      {
+        "angle": -15.565450668334961,
+        "magnitude": 25.40951919555664
+      },
+      {
+        "angle": 19.312274932861328,
+        "magnitude": 23.704753875732422
+      },
+      {
+        "angle": 17.429073333740234,
+        "magnitude": 24.860620498657227
+      },
+      {
+        "angle": -2.1879539489746094,
+        "magnitude": 25.87306785583496
+      },
+      {
+        "angle": -9.586771011352539,
+        "magnitude": 23.796672821044922
+      },
+      {
+        "angle": -7.565296173095703,
+        "magnitude": 26.35456657409668
+      },
+      {
+        "angle": 0.9758586883544922,
+        "magnitude": 26.752933502197266
+      },
+      {
+        "angle": 15.412544250488281,
+        "magnitude": 23.650068283081055
+      },
+      {
+        "angle": -1.5574817657470703,
+        "magnitude": 26.638608932495117
+      },
+      {
+        "angle": -16.61636734008789,
+        "magnitude": 25.606048583984375
+      },
+      {
+        "angle": -10.693628311157227,
+        "magnitude": 23.094694137573242
+      },
+      {
+        "angle": -9.923758506774902,
+        "magnitude": 24.960308074951172
+      },
+      {
+        "angle": -8.629956245422363,
+        "magnitude": 23.018070220947266
+      }
+    ],
+    "glock": [
+      {
+        "angle": 3.646820068359375,
+        "magnitude": 29.8884220123291
+      },
+      {
+        "angle": -11.506518363952637,
+        "magnitude": 33.30879211425781
+      },
+      {
+        "angle": -19.146255493164062,
+        "magnitude": 26.785995483398438
+      },
+      {
+        "angle": 8.894521713256836,
+        "magnitude": 29.338382720947266
+      },
+      {
+        "angle": -5.177193641662598,
+        "magnitude": 28.411161422729492
+      },
+      {
+        "angle": -14.454980850219727,
+        "magnitude": 33.022701263427734
+      },
+      {
+        "angle": 8.878860473632812,
+        "magnitude": 25.26764488220215
+      },
+      {
+        "angle": 16.93996810913086,
+        "magnitude": 31.233154296875
+      },
+      {
+        "angle": -19.715621948242188,
+        "magnitude": 34.441673278808594
+      },
+      {
+        "angle": -13.482183456420898,
+        "magnitude": 27.50075912475586
+      },
+      {
+        "angle": 7.840396881103516,
+        "magnitude": 30.186670303344727
+      },
+      {
+        "angle": -16.91030502319336,
+        "magnitude": 32.446189880371094
+      },
+      {
+        "angle": 7.290876388549805,
+        "magnitude": 27.35778045654297
+      },
+      {
+        "angle": 13.56894302368164,
+        "magnitude": 29.092891693115234
+      },
+      {
+        "angle": 13.259639739990234,
+        "magnitude": 33.46300506591797
+      },
+      {
+        "angle": -18.05552101135254,
+        "magnitude": 33.11636734008789
+      },
+      {
+        "angle": -12.777575492858887,
+        "magnitude": 30.70444679260254
+      },
+      {
+        "angle": 10.219335556030273,
+        "magnitude": 26.756668090820312
+      },
+      {
+        "angle": 2.2963924407958984,
+        "magnitude": 34.71266555786133
+      },
+      {
+        "angle": 18.603351593017578,
+        "magnitude": 33.89127731323242
+      },
+      {
+        "angle": -17.47950553894043,
+        "magnitude": 30.43708038330078
+      },
+      {
+        "angle": 3.0633182525634766,
+        "magnitude": 28.873132705688477
+      },
+      {
+        "angle": -13.094922065734863,
+        "magnitude": 28.54113006591797
+      },
+      {
+        "angle": 14.749717712402344,
+        "magnitude": 26.706130981445312
+      },
+      {
+        "angle": 14.907432556152344,
+        "magnitude": 32.4740104675293
+      },
+      {
+        "angle": -15.87078857421875,
+        "magnitude": 32.51338577270508
+      },
+      {
+        "angle": 3.003162384033203,
+        "magnitude": 25.335704803466797
+      },
+      {
+        "angle": -0.2643318176269531,
+        "magnitude": 29.092370986938477
+      },
+      {
+        "angle": 10.995872497558594,
+        "magnitude": 34.523719787597656
+      },
+      {
+        "angle": 3.8875045776367188,
+        "magnitude": 30.439453125
+      },
+      {
+        "angle": -13.969099044799805,
+        "magnitude": 26.49234390258789
+      },
+      {
+        "angle": -14.34078598022461,
+        "magnitude": 33.60273742675781
+      },
+      {
+        "angle": -5.6877593994140625,
+        "magnitude": 27.307222366333008
+      },
+      {
+        "angle": -4.321184158325195,
+        "magnitude": 27.201387405395508
+      },
+      {
+        "angle": 19.491195678710938,
+        "magnitude": 31.299516677856445
+      },
+      {
+        "angle": 8.823720932006836,
+        "magnitude": 31.458349227905273
+      },
+      {
+        "angle": 13.505905151367188,
+        "magnitude": 31.908531188964844
+      },
+      {
+        "angle": -8.773598670959473,
+        "magnitude": 29.64466094970703
+      },
+      {
+        "angle": 9.945547103881836,
+        "magnitude": 28.442466735839844
+      },
+      {
+        "angle": -7.993127822875977,
+        "magnitude": 33.786041259765625
+      },
+      {
+        "angle": 17.31097412109375,
+        "magnitude": 31.1828670501709
+      },
+      {
+        "angle": 5.178249359130859,
+        "magnitude": 32.539756774902344
+      },
+      {
+        "angle": -6.651707649230957,
+        "magnitude": 34.62583923339844
+      },
+      {
+        "angle": 4.745950698852539,
+        "magnitude": 29.502105712890625
+      },
+      {
+        "angle": -4.097155570983887,
+        "magnitude": 27.130346298217773
+      },
+      {
+        "angle": -18.097436904907227,
+        "magnitude": 30.53304100036621
+      },
+      {
+        "angle": -9.158943176269531,
+        "magnitude": 32.05622482299805
+      },
+      {
+        "angle": 12.968894958496094,
+        "magnitude": 25.668664932250977
+      },
+      {
+        "angle": -14.466232299804688,
+        "magnitude": 31.214244842529297
+      },
+      {
+        "angle": 10.401945114135742,
+        "magnitude": 30.13287925720215
+      },
+      {
+        "angle": -17.873401641845703,
+        "magnitude": 33.31147766113281
+      },
+      {
+        "angle": 2.4164657592773438,
+        "magnitude": 26.024070739746094
+      },
+      {
+        "angle": 1.8836250305175781,
+        "magnitude": 28.116046905517578
+      },
+      {
+        "angle": 13.43368911743164,
+        "magnitude": 32.59285354614258
+      },
+      {
+        "angle": 2.4502830505371094,
+        "magnitude": 34.098541259765625
+      },
+      {
+        "angle": -9.8698148727417,
+        "magnitude": 26.564224243164062
+      },
+      {
+        "angle": 2.765176773071289,
+        "magnitude": 30.192808151245117
+      },
+      {
+        "angle": -18.119705200195312,
+        "magnitude": 25.53177833557129
+      },
+      {
+        "angle": 5.7158966064453125,
+        "magnitude": 31.909927368164062
+      },
+      {
+        "angle": 19.725257873535156,
+        "magnitude": 26.84853744506836
+      },
+      {
+        "angle": -15.114627838134766,
+        "magnitude": 26.40055274963379
+      },
+      {
+        "angle": 1.5194721221923828,
+        "magnitude": 29.99239158630371
+      },
+      {
+        "angle": -4.747379302978516,
+        "magnitude": 33.472816467285156
+      },
+      {
+        "angle": -8.784910202026367,
+        "magnitude": 30.50611114501953
+      }
+    ],
+    "usp": [
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      },
+      {
+        "angle": 0.0,
+        "magnitude": 23.0
+      }
+    ],
+    "deagle": [
+      {
+        "angle": -58.39164733886719,
+        "magnitude": 37.48738098144531
+      },
+      {
+        "angle": -36.65523910522461,
+        "magnitude": 57.136016845703125
+      },
+      {
+        "angle": 42.14453125,
+        "magnitude": 38.25007629394531
+      },
+      {
+        "angle": 12.798332214355469,
+        "magnitude": 31.085847854614258
+      },
+      {
+        "angle": 15.373931884765625,
+        "magnitude": 36.990081787109375
+      },
+      {
+        "angle": -14.47391128540039,
+        "magnitude": 58.93416213989258
+      },
+      {
+        "angle": 27.986083984375,
+        "magnitude": 41.28827667236328
+      },
+      {
+        "angle": 12.77850341796875,
+        "magnitude": 43.3099365234375
+      },
+      {
+        "angle": 43.567787170410156,
+        "magnitude": 54.86985778808594
+      },
+      {
+        "angle": -1.6372566223144531,
+        "magnitude": 41.959716796875
+      },
+      {
+        "angle": 3.7349166870117188,
+        "magnitude": 60.96788024902344
+      },
+      {
+        "angle": -36.931121826171875,
+        "magnitude": 47.60265350341797
+      },
+      {
+        "angle": -52.73612976074219,
+        "magnitude": 65.0609130859375
+      },
+      {
+        "angle": -54.78351593017578,
+        "magnitude": 38.91559982299805
+      },
+      {
+        "angle": -12.374385833740234,
+        "magnitude": 52.59150695800781
+      },
+      {
+        "angle": -47.82366943359375,
+        "magnitude": 61.033199310302734
+      },
+      {
+        "angle": 22.62181854248047,
+        "magnitude": 37.15386199951172
+      },
+      {
+        "angle": 44.86756896972656,
+        "magnitude": 61.76975631713867
+      },
+      {
+        "angle": -32.23139953613281,
+        "magnitude": 31.971900939941406
+      },
+      {
+        "angle": 51.07550048828125,
+        "magnitude": 52.23274230957031
+      },
+      {
+        "angle": -56.626102447509766,
+        "magnitude": 48.930503845214844
+      },
+      {
+        "angle": 9.154670715332031,
+        "magnitude": 50.630859375
+      },
+      {
+        "angle": -58.31904602050781,
+        "magnitude": 40.32522201538086
+      },
+      {
+        "angle": -15.446407318115234,
+        "magnitude": 44.46589660644531
+      },
+      {
+        "angle": -32.261356353759766,
+        "magnitude": 59.796043395996094
+      },
+      {
+        "angle": -27.858154296875,
+        "magnitude": 38.694190979003906
+      },
+      {
+        "angle": 58.07984161376953,
+        "magnitude": 55.29106903076172
+      },
+      {
+        "angle": 22.867279052734375,
+        "magnitude": 47.449363708496094
+      },
+      {
+        "angle": 9.315704345703125,
+        "magnitude": 45.727867126464844
+      },
+      {
+        "angle": 26.034133911132812,
+        "magnitude": 32.25878143310547
+      },
+      {
+        "angle": -30.991533279418945,
+        "magnitude": 43.74214172363281
+      },
+      {
+        "angle": -34.589271545410156,
+        "magnitude": 39.297576904296875
+      },
+      {
+        "angle": -12.966911315917969,
+        "magnitude": 52.04437255859375
+      },
+      {
+        "angle": 17.562545776367188,
+        "magnitude": 49.71862030029297
+      },
+      {
+        "angle": -15.355354309082031,
+        "magnitude": 57.1656494140625
+      },
+      {
+        "angle": 25.74549102783203,
+        "magnitude": 65.61575317382812
+      },
+      {
+        "angle": -24.004432678222656,
+        "magnitude": 47.13597869873047
+      },
+      {
+        "angle": -40.14715576171875,
+        "magnitude": 39.670166015625
+      },
+      {
+        "angle": 1.0616035461425781,
+        "magnitude": 32.77895736694336
+      },
+      {
+        "angle": 38.5015869140625,
+        "magnitude": 32.55271911621094
+      },
+      {
+        "angle": -37.40483474731445,
+        "magnitude": 40.58533477783203
+      },
+      {
+        "angle": -44.12425231933594,
+        "magnitude": 39.292335510253906
+      },
+      {
+        "angle": -23.762664794921875,
+        "magnitude": 43.21111297607422
+      },
+      {
+        "angle": 34.81116485595703,
+        "magnitude": 56.264957427978516
+      },
+      {
+        "angle": -48.65460205078125,
+        "magnitude": 49.736595153808594
+      },
+      {
+        "angle": -49.19171905517578,
+        "magnitude": 40.99818420410156
+      },
+      {
+        "angle": -50.67743682861328,
+        "magnitude": 33.55986022949219
+      },
+      {
+        "angle": 21.287376403808594,
+        "magnitude": 65.78887939453125
+      },
+      {
+        "angle": -16.210159301757812,
+        "magnitude": 55.496238708496094
+      },
+      {
+        "angle": -57.89826965332031,
+        "magnitude": 43.020668029785156
+      },
+      {
+        "angle": 1.5584220886230469,
+        "magnitude": 42.465293884277344
+      },
+      {
+        "angle": -16.128448486328125,
+        "magnitude": 30.84508514404297
+      },
+      {
+        "angle": -3.9589385986328125,
+        "magnitude": 35.75993347167969
+      },
+      {
+        "angle": -14.111419677734375,
+        "magnitude": 36.89942169189453
+      },
+      {
+        "angle": -20.928409576416016,
+        "magnitude": 53.11347961425781
+      },
+      {
+        "angle": -52.78093719482422,
+        "magnitude": 38.839298248291016
+      },
+      {
+        "angle": -17.777545928955078,
+        "magnitude": 45.045372009277344
+      },
+      {
+        "angle": 10.4776611328125,
+        "magnitude": 50.23291015625
+      },
+      {
+        "angle": 22.13072967529297,
+        "magnitude": 57.295047760009766
+      },
+      {
+        "angle": -37.9102668762207,
+        "magnitude": 51.50462341308594
+      },
+      {
+        "angle": 54.882415771484375,
+        "magnitude": 65.2680892944336
+      },
+      {
+        "angle": 14.815353393554688,
+        "magnitude": 55.325374603271484
+      },
+      {
+        "angle": 32.32201385498047,
+        "magnitude": 61.011451721191406
+      },
+      {
+        "angle": -23.492462158203125,
+        "magnitude": 51.33835983276367
+      }
+    ]
+  },
+  "rngRange": {
+    "low": -30,
+    "high": 30,
+    "count": 16
+  },
+  "rngValues": {
+    "-2147483647": [
+      -30.0,
+      -5.0400390625,
+      -24.482105255126953,
+      15.384628295898438,
+      1.782012939453125,
+      25.826190948486328,
+      -6.989875793457031,
+      9.235137939453125,
+      -25.989465713500977,
+      13.359626770019531,
+      10.268962860107422,
+      -6.995061874389648,
+      7.898082733154297,
+      23.082427978515625,
+      1.1649837493896484,
+      9.091114044189453
+    ],
+    "-2147483646": [
+      25.989463806152344,
+      6.989875793457031,
+      4.950843811035156,
+      -11.206361770629883,
+      -12.071435928344727,
+      -24.61924934387207,
+      -15.384628295898438,
+      14.252819061279297,
+      -10.268962860107422,
+      -9.091114044189453,
+      5.0400390625,
+      -15.201350212097168,
+      -23.082427978515625,
+      -7.958314895629883,
+      -15.989686965942383,
+      15.733535766601562
+    ],
+    "-223": [
+      11.712997436523438,
+      13.001731872558594,
+      -23.477170944213867,
+      -25.295961380004883,
+      10.772300720214844,
+      0.10140609741210938,
+      -0.7597007751464844,
+      -24.61971092224121,
+      -12.681468963623047,
+      -29.90728759765625,
+      -1.768585205078125,
+      -12.618619918823242,
+      -10.815393447875977,
+      -8.069845199584961,
+      16.071395874023438,
+      -22.611412048339844
+    ],
+    "-1": [
+      -5.0400390625,
+      -24.482105255126953,
+      15.384628295898438,
+      1.782012939453125,
+      25.826190948486328,
+      -6.989875793457031,
+      9.235137939453125,
+      -25.989465713500977,
+      13.359626770019531,
+      10.268962860107422,
+      -6.995061874389648,
+      7.898082733154297,
+      23.082427978515625,
+      1.1649837493896484,
+      9.091114044189453,
+      -15.73353385925293
+    ],
+    "0": [
+      -5.0400390625,
+      -24.482105255126953,
+      15.384628295898438,
+      1.782012939453125,
+      25.826190948486328,
+      -6.989875793457031,
+      9.235137939453125,
+      -25.989465713500977,
+      13.359626770019531,
+      10.268962860107422,
+      -6.995061874389648,
+      7.898082733154297,
+      23.082427978515625,
+      1.1649837493896484,
+      9.091114044189453,
+      -15.73353385925293
+    ],
+    "1": [
+      -5.0400390625,
+      -24.482105255126953,
+      15.384628295898438,
+      1.782012939453125,
+      25.826190948486328,
+      -6.989875793457031,
+      9.235137939453125,
+      -25.989465713500977,
+      13.359626770019531,
+      10.268962860107422,
+      -6.995061874389648,
+      7.898082733154297,
+      23.082427978515625,
+      1.1649837493896484,
+      9.091114044189453,
+      -15.73353385925293
+    ],
+    "223": [
+      11.712997436523438,
+      13.001731872558594,
+      -23.477170944213867,
+      -25.295961380004883,
+      10.772300720214844,
+      0.10140609741210938,
+      -0.7597007751464844,
+      -24.61971092224121,
+      -12.681468963623047,
+      -29.90728759765625,
+      -1.768585205078125,
+      -12.618619918823242,
+      -10.815393447875977,
+      -8.069845199584961,
+      16.071395874023438,
+      -22.611412048339844
+    ],
+    "1454": [
+      -29.195823669433594,
+      -17.854366302490234,
+      -18.327619552612305,
+      14.893363952636719,
+      21.072265625,
+      -16.583206176757812,
+      6.399166107177734,
+      -28.523588180541992,
+      7.6869659423828125,
+      -18.683198928833008,
+      -7.236955642700195,
+      17.890270233154297,
+      13.9930419921875,
+      -11.519538879394531,
+      6.389251708984375,
+      -8.150102615356445
+    ],
+    "4100": [
+      6.427528381347656,
+      11.54971694946289,
+      3.7538070678710938,
+      16.087242126464844,
+      16.24755859375,
+      -16.43061065673828,
+      -26.56355857849121,
+      -14.803157806396484,
+      -29.282238006591797,
+      23.312999725341797,
+      21.56585693359375,
+      27.475143432617188,
+      -15.547598838806152,
+      12.140655517578125,
+      24.45859146118164,
+      -8.488937377929688
+    ],
+    "4484": [
+      5.4702301025390625,
+      -0.6694660186767578,
+      -17.259777069091797,
+      19.852767944335938,
+      -28.719383239746094,
+      -19.284027099609375,
+      13.341781616210938,
+      -3.9697093963623047,
+      -7.765790939331055,
+      -9.533031463623047,
+      -21.682470321655273,
+      18.136199951171875,
+      13.318290710449219,
+      -28.394128799438477,
+      25.409950256347656,
+      7.39892578125
+    ],
+    "5426": [
+      9.60992431640625,
+      -5.200740814208984,
+      -29.910165786743164,
+      -10.342357635498047,
+      -4.020404815673828,
+      -20.67992401123047,
+      29.93465805053711,
+      21.737884521484375,
+      19.078079223632812,
+      5.296302795410156,
+      -4.275762557983398,
+      -6.383947372436523,
+      -20.142635345458984,
+      28.818344116210938,
+      -4.747220993041992,
+      -19.646583557128906
+    ],
+    "38965": [
+      -5.281896591186523,
+      22.210647583007812,
+      3.8826751708984375,
+      -24.07577133178711,
+      15.707862854003906,
+      16.082000732421875,
+      -17.67425537109375,
+      -2.7134037017822266,
+      16.789119720458984,
+      8.807449340820312,
+      0.46709442138671875,
+      -2.5189743041992188,
+      -21.368701934814453,
+      8.797271728515625,
+      -1.8588027954101562,
+      23.573318481445312
+    ],
+    "2147483646": [
+      25.989463806152344,
+      6.989875793457031,
+      4.950843811035156,
+      -11.206361770629883,
+      -12.071435928344727,
+      -24.61924934387207,
+      -15.384628295898438,
+      14.252819061279297,
+      -10.268962860107422,
+      -9.091114044189453,
+      5.0400390625,
+      -15.201350212097168,
+      -23.082427978515625,
+      -7.958314895629883,
+      -15.989686965942383,
+      15.733535766601562
+    ],
+    "2147483647": [
+      -30.0,
+      -5.0400390625,
+      -24.482105255126953,
+      15.384628295898438,
+      1.782012939453125,
+      25.826190948486328,
+      -6.989875793457031,
+      9.235137939453125,
+      -25.989465713500977,
+      13.359626770019531,
+      10.268962860107422,
+      -6.995061874389648,
+      7.898082733154297,
+      23.082427978515625,
+      1.1649837493896484,
+      9.091114044189453
+    ]
+  },
+  "rngValueCount": 224,
+  "actualSourceComparison": {
+    "commit": "e99fd0520230b0f8ff88c1d11d02c9bf1d96b5e7",
+    "probeSha256": "a08c1e51d6775476f0c932316d4a8132a65d88de4aa79ec5c181b811792a68b8",
+    "nativeReportSha256": "78cb88141a756e7fab98891a69a0c65108997d53e3947852de9381b3413327d8",
+    "sourceHashes": {
+      "src/range/config.ts": "9614e31f18cbe0307d584420449f10fb8cc4efd6708ca8cedd4558de45a4a323",
+      "src/range/game-data.json": "5903a1deeb1ff4181c7203f4c8b1e9690ee17e5573db558e424388c204ab990e",
+      "src/range/keybinds/console.ts": "96789f931baf46e84ccdc685a5f3fe5cf8674e37345c6ec36cba71d90396c996",
+      "src/range/keybinds/crosshair-cvars.ts": "b699fa3d99b4ddb17a798117f5591292f1ffe2cd0d8d04388e8c53c9235b7f01",
+      "src/range/keybinds/cs2-keyboard-page.json": "f98e6b2f26172329d40f4d134362aa6a6bf07916d3c6b3ffd0959fe62bd95cce",
+      "src/range/keybinds/keys.ts": "83af1248f374e3d86835c57ec83366e2c03525bc96bbf4a6d9769e2d8699435b",
+      "src/range/keybinds/profile.ts": "ff86e8ed2a420e1926c2b87fb64af6ad6863644eb0d9915ed32cbea7034958f6",
+      "src/range/punch-recovery.ts": "15f52d055a76eaa452b3095284d900982ec0a76ab18a925f74e20f8dcc2a54dd",
+      "src/range/recoil.ts": "971a48783512ff9cb9449ea7cc7a199d30ca12fddac75ca704b9f5439df0866d"
+    },
+    "weapons": [
+      "ak47",
+      "m4a4",
+      "m4a1s",
+      "awp",
+      "glock",
+      "usp",
+      "deagle"
+    ],
+    "rawModeEntries": 896,
+    "rawModeSummary": {
+      "values": 1792,
+      "bitMismatches": 0,
+      "maxAbsoluteError": 0,
+      "maxUlps": 0
+    },
+    "tableEntries": 896,
+    "tableSummary": {
+      "values": 1792,
+      "bitMismatches": 0,
+      "maxAbsoluteError": 0,
+      "maxUlps": 0
+    },
+    "parameterMismatches": 0,
+    "rngRange": {
+      "low": -30,
+      "high": 30
+    },
+    "rngSummary": {
+      "values": 224,
+      "bitMismatches": 0,
+      "maxAbsoluteError": 0,
+      "maxUlps": 0
+    },
+    "reportSha256": "2c701ccdb4b082ce8084b82e528b09916f9fa403cbbec7873023790bcbbbfb17",
+    "parameterComparisons": 84,
+    "association": "Actual-source comparison used the immutable original native report. This packaged replay independently produced identical float32 table/RNG bits and input values."
+  },
+  "limits": [
+    "Supplied-state entry follows successful resource lookup; cache allocation and live resource construction are not executed.",
+    "Named parameter fields use current paired-load code plus retained schema interpretation; compiled-resource identity is retained from pass39, not a new export.",
+    "The authored scalar zero angle is supplied as zero to both fields; no missing value uses a trainer default.",
+    "Private GOT targets and supplied caller/resource memory are setup. No numeric RNG/table function is stubbed.",
+    "This is offline native instruction execution, not a CS2 session or proof of runtime invocation.",
+    "Per-command seed generation, table index selection, shot scheduling, aim punch and camera behavior remain outside this proof.",
+    "Older Windows oracles and their exact artifact guards are preserved unchanged."
+  ]
+}
