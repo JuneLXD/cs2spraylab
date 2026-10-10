@@ -74,6 +74,7 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
   // Hits to pop, the peek wall and the background colour.
   await page.keyboard.press('Escape');
   await page.getByLabel('Hits to pop').fill('3');
+  await page.getByLabel('Ball respawn delay').fill('1.5');
   await page.getByLabel('Peek wall').selectOption('left');
   await page.getByRole('button', {name: 'White background'}).click();
   await expect(page.getByLabel('Background color', {exact: true})).toHaveValue('#f0f0ec');
@@ -83,7 +84,7 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
     const engine = (window as any).popEngine, sim = engine.sim, backdrop = engine.pop.getObjectByName('pop-backdrop');
     sim.yaw = 0; sim.pitch = 0;   // straight ahead from the spawn: into the wall
     sim.start(); sim.release('mouse');
-    return {blocked: {shots: sim.pop.shots, hits: sim.pop.hits, caption: engine.hitCaption.textContent}, hits: sim.pop.config.hits,
+    return {blocked: {shots: sim.pop.shots, hits: sim.pop.hits, caption: engine.hitCaption.textContent}, hits: sim.pop.config.hits, respawn: sim.pop.config.respawn,
       wall: !!engine.pop.getObjectByName('pop-wall'), spawn: {...sim.position}, background: backdrop.material.color.getHexString(),
       benches: engine.scene.getObjectByName('range-benches').visible};
   });
@@ -96,7 +97,7 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
     sim.start(); sim.release('mouse');
     return {shots: sim.pop.shots, hits: sim.pop.hits, pops: sim.pop.pops, ballHits: sim.pop.balls.find((b: {id: number}) => b.id === ball.id)?.hits, caption: engine.hitCaption.textContent};
   });
-  expect(walled.hits).toBe(3); expect(walled.wall).toBe(true); expect(walled.background).toBe('f0f0ec'); expect(walled.benches).toBe(false);
+  expect(walled.hits).toBe(3); expect(walled.respawn).toBe(1.5); expect(walled.wall).toBe(true); expect(walled.background).toBe('f0f0ec'); expect(walled.benches).toBe(false);
   expect(walled.spawn.x).toBe(0); expect(walled.spawn.z).toBe(2);
   expect(walled.blocked).toEqual({shots: 1, hits: 0, caption: 'MISS'});
   expect(struck).toEqual({shots: 2, hits: 1, pops: 0, ballHits: 1, caption: 'HIT'});

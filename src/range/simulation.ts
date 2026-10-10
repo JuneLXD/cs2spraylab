@@ -423,7 +423,7 @@ export class Simulation {
     if (this.resumeHeldAt !== undefined && reloading && !this.reloadState.active)
       this.resumeHeldAt = Math.max(this.resumeHeldAt, reloadEnd);
     // Pop's infinite modes top the reserve (and the magazine) back up every tick, as sv_infinite_ammo does.
-    if (this.pop) this.refillPopAmmo();
+    if (this.pop) {this.refillPopAmmo(); this.pop.advance(this.time);}
     if (this.firing && this.reloadState.active && this.reloadState.empty) this.reloadState.interrupt();
     for (const [id, until] of this.rechargeTimes) if (this.time + 1e-9 >= until) {
       this.ammoFor(id).ammo = 1; this.rechargeTimes.delete(id);

@@ -3,9 +3,10 @@ import {DEG, UNIT, type Vec} from './actor-physics';
 /** Pop (after Refrag's Pop mode): bright balls float on a dark wall ahead of you; a shot pops the first ball it
  * crosses and a new one appears elsewhere. Sizes and distances are metres; the setting stores the size in cm.
  * `hits` is how many bullets a ball takes before it pops (1 = Refrag's one-tap balls; more lets a spray stay on one
- * ball). `wall` adds a peek wall 1.5 m ahead of you that you step out from, to the left or the right. */
+ * ball). `wall` adds a peek wall 1.5 m ahead of you that you step out from, to the left or the right. `respawn` is the
+ * delay in seconds before a popped ball's replacement appears (0 = at once). */
 export type PopWallSide = 'off' | 'left' | 'right';
-export type PopConfig = {size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide};
+export type PopConfig = {size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; respawn: number};
 export type PopBall = {id: number; x: number; y: number; z: number; radius: number; hits: number};
 export type PopHit = {ball: PopBall; point: Vec; distance: number; popped: boolean};
 export type PopRegion = {x: number; y: number; z: number; halfW: number; halfH: number};
@@ -15,7 +16,7 @@ export type PopWall = {id: string; center: Vec; size: Vec; side: -1 | 1; edge: n
 export const POP_EYE = 64 * UNIT;
 /** Where you stand in Pop: the near end of the range, so 40 m of wall fit in front of you. */
 export const POP_SPAWN: Vec = {x: 0, y: POP_EYE, z: 2};
-export const popLimits = {size: [8, 80], count: [1, 12], spacing: [.2, 5], distance: [3, 40], hits: [1, 10]} as const;
+export const popLimits = {size: [8, 80], count: [1, 12], spacing: [.2, 5], distance: [3, 40], hits: [1, 10], respawn: [0, 5]} as const;
 export const popColors: readonly (readonly [string, string])[] = [['Orange', '#ff6a4d'], ['Yellow', '#ffd23f'], ['Green', '#5dff7f'],
   ['Cyan', '#4df3ff'], ['Pink', '#ff4dd2'], ['White', '#ffffff']];
 export const popBackgrounds: readonly (readonly [string, string])[] = [['Navy', '#151a28'], ['Black', '#000000'], ['Charcoal', '#2b2f36'],
@@ -23,9 +24,10 @@ export const popBackgrounds: readonly (readonly [string, string])[] = [['Navy', 
 /** Peek wall: its near edge sits just past your shoulder, 1.5 m ahead, and it reaches 3 m across the other way. */
 export const POP_WALL = {edge: .35, width: 3, height: 2.8, thickness: .4, ahead: 1.5, peek: 1} as const;
 
-export function popConfig(settings: {popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide}): PopConfig {
+export function popConfig(settings: {popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
+  popRespawn: number}): PopConfig {
   return {size: settings.popSize / 100, count: settings.popCount, spacing: settings.popSpacing, distance: settings.popDistance,
-    hits: settings.popHits, wall: settings.popWall};
+    hits: settings.popHits, wall: settings.popWall, respawn: settings.popRespawn};
 }
 
 export const popWallSide = (wall: PopWallSide): -1 | 0 | 1 => wall === 'left' ? -1 : wall === 'right' ? 1 : 0;
@@ -72,6 +74,9 @@ export class PopField {
   pops = 0; hits = 0; shots = 0;
   /** Balls popped since the renderer last asked, for the burst animation. */
   private popped: PopBall[] = [];
+  /** Replacements waiting for the respawn delay: when each is due, in simulation seconds. */
+  pending: number[] = [];
+  private now = 0;
   private nextId = 1;
   readonly region: PopRegion;
   readonly wall?: PopWall;
@@ -101,9 +106,15 @@ export class PopField {
     if (distance === undefined || distance > maxDistance) return undefined;
     return {distance, point: {x: origin.x + direction.x * distance, y: origin.y + direction.y * distance, z: origin.z + direction.z * distance}};
   }
+  /** Spawns the replacements whose respawn delay has passed by `time`. */
+  advance(time: number) {
+    this.now = time;
+    while (this.pending.length && this.pending[0] <= time + 1e-9) {this.pending.shift(); this.spawn();}
+  }
   /** The nearest ball a unit-direction ray crosses within `maxDistance` and before the peek wall: it takes a hit, and
-   * once it has taken `config.hits` it is popped and replaced. Undefined for a miss. */
-  hit(origin: Vec, direction: Vec, maxDistance = Infinity): PopHit | undefined {
+   * once it has taken `config.hits` it is popped and replaced (after the respawn delay, counted from `time`).
+   * Undefined for a miss. */
+  hit(origin: Vec, direction: Vec, maxDistance = Infinity, time = this.now): PopHit | undefined {
     const limit = Math.min(maxDistance, this.wallHit(origin, direction, maxDistance)?.distance ?? Infinity);
     let nearest: PopHit | undefined;
     for (const ball of this.balls) {
@@ -122,12 +133,13 @@ export class PopField {
     if (nearest.ball.hits < this.config.hits) return nearest;
     nearest.popped = true;
     this.balls = this.balls.filter(ball => ball !== nearest!.ball);
-    this.pops++; this.popped.push(nearest.ball); this.spawn();
+    this.pops++; this.popped.push(nearest.ball);
+    if (this.config.respawn > 0) this.pending.push(time + this.config.respawn); else this.spawn();
     return nearest;
   }
   drainPopped() {const popped = this.popped; this.popped = []; return popped;}
   reset() {
-    this.balls = []; this.popped = []; this.pops = this.hits = this.shots = 0;
+    this.balls = []; this.popped = []; this.pending = []; this.pops = this.hits = this.shots = 0;
     for (let i = 0; i < this.config.count; i++) this.spawn();
   }
 }

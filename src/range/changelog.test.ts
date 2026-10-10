@@ -37,7 +37,7 @@ describe('append-only changelog', () => {
       'native-ground-friction',
       'native-awp-walking',
       'native-ground-timing',
-      'pop-spray-peek', 'duel-aggressive-bots',
+      'pop-spray-peek', 'pop-respawn-delay', 'duel-aggressive-bots',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'reflex')!.items.join(' ')).toContain('come at you through its gaps');
     expect(latestChanges.sections.find(section => section.id === 'aim-redline')!.items.join(' ')).toContain('BOT Reed');

@@ -500,7 +500,7 @@ export class RangeEngine {
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall'];
+      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popRespawn'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = settings.invertY !== this.sim.settings.invertY;
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -678,7 +678,7 @@ export class RangeEngine {
     if (!shot.melee) this.viewFlashes.fire(muzzle, this.sim.equipped, this.elapsed);
     let popped = 0, struck = 0;
     for (const dir of shot.pelletDirections ?? [shot.direction]) {
-      const hit = pop.hit(shot.origin, dir, shot.maxDistance);
+      const hit = pop.hit(shot.origin, dir, shot.maxDistance, shot.at);
       const blocked = hit ? undefined : pop.wallHit(shot.origin, dir, shot.maxDistance);
       const end = hit ? vector(hit.point) : blocked ? vector(blocked.point) : this.popBackdropPoint(shot.origin, dir, shot.maxDistance);
       if (hit) {if (hit.popped) popped++; else struck++;}

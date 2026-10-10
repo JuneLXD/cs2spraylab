@@ -51,3 +51,7 @@ ones every other range drill uses.
   1 m to the peek side, and changing the wall puts you back at `POP_SPAWN`. `popBackground` colours the backdrop
   plane, which is now unlit (`MeshBasicMaterial`) so the picked colour shows as picked; presets in `popBackgrounds`.
   The entrance benches live in `RangeEngine.benches`, outside the static batches, and are hidden in Pop.
+- Ball respawn delay (2026-10-10): `popRespawn` (0-5 s, step 0.1, default 0) is how long a popped ball's
+  replacement waits. `PopField` queues each due time in `pending`; `advance(time)`, called from every
+  `Simulation.step()`, spawns the replacements whose time has come, and `hit()` takes the shot's `at` time
+  (the engine passes `shot.at`). 0 spawns at once as before; `reset()` drops the queue.

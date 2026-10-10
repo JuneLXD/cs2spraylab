@@ -386,6 +386,9 @@ export const latestChanges = {
       'A peek wall (off, peek out to the left or right) stands 1.5 m ahead with its edge just past your shoulder; it stops bullets and movement, and the balls are centred on your peek line.',
       'Background color behind the balls, with presets, shown unlit so it matches the picked color. The entrance benches are hidden in Pop.',
     ]},
+    {id: 'pop-respawn-delay', title: 'Pop: ball respawn delay', items: [
+      'Ball respawn delay (0-5 s): a popped ball\'s replacement waits that long before it appears, so the field thins out while you clear it. 0 keeps the instant respawn.',
+    ]},
     {id: 'duel-aggressive-bots', title: 'Aggressive duel bots', items: [
       'Aggressive bots never hold: they peek as soon as they reach an angle, chase the last place they saw you after a burst loses its target, and sweep the forward crates and lane edges within 1.5 s of losing contact instead of waiting at cover.',
     ]},

@@ -75,6 +75,8 @@ export type Settings = {
   popMuteGun: boolean; popHideImpacts: boolean; popHideHud: boolean;
   /** Pop: the backdrop colour behind the balls, bullets a ball takes before it pops, and which side the peek wall opens to. */
   popBackground: string; popHits: number; popWall: PopWallSide;
+  /** Pop: seconds before a popped ball's replacement appears (0 = at once). */
+  popRespawn: number;
   /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
   cs2Crosshair?: Cs2Crosshair;
 };
@@ -104,7 +106,7 @@ export const defaults: Settings = {
   viewmodel: classicViewmodel,
   tracers: 'native',
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
-  popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off',
+  popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popRespawn: 0,
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -159,6 +161,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     popMuteGun: s.popMuteGun === true, popHideImpacts: s.popHideImpacts === true, popHideHud: s.popHideHud === true,
     popBackground: typeof s.popBackground === 'string' && /^#[\da-f]{6}$/i.test(s.popBackground) ? s.popBackground.toLowerCase() : defaults.popBackground,
     popHits: Math.round(numeric(s.popHits, defaults.popHits, 1, 10)), popWall: s.popWall === 'left' || s.popWall === 'right' ? s.popWall : 'off',
+    popRespawn: Math.round(numeric(s.popRespawn, defaults.popRespawn, 0, 5) * 10) / 10,
     ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }
