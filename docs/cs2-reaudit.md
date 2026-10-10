@@ -1,4 +1,4 @@
-# CS2 independent re-audit: passes 16–40
+# CS2 independent re-audit: passes 16–43
 
 ## Current priority: common weapons and core feel
 
@@ -70,8 +70,30 @@ No active Ghidra request is cancelled or restarted.
 ## Verified behavior and validation
 
 Passes 33–38 were deployed together after explicit user approval, through
-`feb6a50`. The LAN serves `20261010T084128Z-feb6a50`; served assets and live
-firing/reload were verified. Passes 39–40 remain separate local corrections.
+`feb6a50`. The separately approved passes 39–40 are also deployed through
+`e99fd05`, verified as `20261010T091156Z-e99fd05` on the LAN with matching
+served assets, pointer lock and live firing/reload. Passes 41–43 are local
+evidence/replay work; no new default gameplay or deployment is claimed.
+
+[Common primary-input pass 41](reaudit-primary-taps.md) measures 56 scenarios
+across the seven priority weapons and both engines. All expected ordinary
+held/released results and 28 paired shot traces agree. The native idle-counter
+reset is now bound; physical transition-mask lifetime remains unverified.
+[Common-pistol recoil pass 42](reaudit-pistol-recoil.md) confirms an incorrect
+table selector across 14 Deagle shots. Supplying reconstructed entries removes
+the conditional replay error. The consumed field is now bound to the command's
+`random_seed`; its upstream generator still gates any default behavior change.
+[Current Linux recoil tables, pass 43](reaudit-common-recoil-tables.md), match
+all 896 raw-mode entries and 224 supplied-seed RNG samples bit for bit across
+the seven priority weapons. Supported default/alternate parameter mappings also
+match. The older Windows fixture identities remain intact.
+
+Current local validation: TypeScript passes; 2,542 unit cases pass, with only
+the known missing fallback model failing. All four distinct targeted Chromium
+cases pass. The initial combined run hit its 2 GiB scope limit while loading
+Duel; the isolated Duel case passed at the same cap. No application or test
+change followed the full unit run. [The validation record](evidence/reaudit-core-shooting-validation.json)
+keeps both browser attempts, the corrected test filter and checked source hashes.
 
 Passes 37–38 were prepared on `audit/common-pistol-clocks` and are included in
 that approved deployment with the verified Deagle audio manifest. TypeScript passes; 2,509 distinct unit cases
@@ -238,8 +260,8 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-combat.md](
 | Weapon speed and tagging parameters | Same export; 108 large/small/held-speed values across 36 definitions | 0 differences → 0 differences | Matched data | `c488943` |
 | Ready first press | Primary tick/ratio comparator accepts command time at or after deadline; emulated current server | Immediate simulated ready press, unchanged | Matched comparator; physical latency unverified | `c488943` |
 | Held automatic cadence | Fresh AK burst anchors advance by 0.1000000015 s; emitted shot ticks alternate 6/7 | Same tick schedule before/after | Matched AK capture; remaining weapons' cycles matched as data | `c488943` |
-| Released early tap | Fresh shooting capture's X11 timestamps differ from intended timing, and serialized FIRE is stale during part of the capture | Released pending tap is dropped, unchanged | Unverified exact native edge schedule | `c488943` |
-| Early held tap | Fresh AK second sequence fires at original 100 ms due time | Queued held shot uses original schedule, unchanged | Matched captured behavior; exact subframe edge still unverified | `c488943` |
+| Released early tap | Current seven-class primary dispatcher and idle counter reset before readiness; [pass 41](reaudit-primary-taps.md) | Fully released ordinary taps remain dropped; supplied-state bench agrees across both engines | Bounded native input branches matched; physical transition-mask lifetime and same-command edges remain unknown | `c488943`; evidence `0fc433f` |
+| Early held tap | Current held-primary readiness retry and semiautomatic re-arm; retained AK shot anchors; [pass 41](reaudit-primary-taps.md) | Existing schedule retained; all 56 ordinary input scenarios and 28 engine pairs agree | Ordinary supplied-input behavior matched; physical delivery timing remains unverified | `c488943`; evidence `0fc433f` |
 | Held through reload | Fresh AK reload starts at tick 398, next held shot tick 556, scheduled 584.6073 s; vdata lock 2.466667 s | Preserves held trigger and locks until deadline, unchanged | Matched captured trigger continuity | `c488943` |
 | Held through deploy | Fresh AK deploy tick 891; first held shot tick 955, one second later | One-second AK deploy lock, unchanged | Matched captured continuity | `c488943` |
 | Deploy times, all weapons | Current vdata deploy duration | All values equal; unchanged | Matched data; per-weapon live gate unverified | `c488943` |
@@ -250,8 +272,9 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-combat.md](
 | Explicit reload admission / held retry | Current-server dispatcher and seven bound classes; primary deadline inclusive, attacks take priority ([pass 34](reaudit-common-reload.md)) | R at 31.25 ms after a shot always began reload → released early taps dropped, held R retries when ready; 56 paired cases pass | Bounded weapon/input rule corrected; independent player/deploy and within-command edge timing remain partial | `55602f8` |
 | Silent reload | Current Deagle clip ends its normal silent window at frame 50, not 49; [pass 37](reaudit-deagle-reload.md). Whole native gate not newly emulated | Deagle work end 1.633333 → 1.666667 s; existing trainer held exit 3.066667 → 3.133333 s and completion 3.639057 → 3.672054 s | Current static marker corrected; native runtime coefficients/onset remain unverified | `c533887` |
 | Shell loading/interruption | Current native loaded-shell primary path uses the initial attack lock, then switches directly to shooting; [pass 26](reaudit-shell-reload.md) | Early held fire 250 ms → Nova/Sawed-Off468.75 ms, XM609.375 ms; ready taps now fire immediately. Start/insertion/finish estimates and empty-start path retained | Loaded-start interruption corrected; insertion/completion and empty retry ordering remain approximated | `9095bb0` |
-| Recoil pattern seed/parameters | Current vdata seeds/angles/magnitudes; fresh AK native impulse anchors | Parameters identical, AK six-shot impulses verified; unchanged table generator | Matched data and AK sample; current all-weapon table emulation unverified | `c488943` |
-| Recoil suppression/smoothing | AK first six native impulse anchors reproduce trainer table; historical Windows table fixture is another artifact | Four-shot suppression and automatic smoothing retained | Matched AK sample; broad native rule still partial | `c488943` |
+| Recoil pattern seed/parameters | Current Linux native table/RNG execution for seven priority weapons; [pass 43](reaudit-common-recoil-tables.md) | 896 raw-mode table entries and 224 numeric RNG samples match bit for bit; supported imported modes also match | Common table arithmetic/data matched; command seed generation and complete firing remain separate | `c488943`; evidence `049c278` |
+| Recoil suppression/smoothing | Current Linux native loops across both modes of seven common weapons; [pass 43](reaudit-common-recoil-tables.md) | Four-shot automatic suppression and .55 smoothing retained with zero numeric difference | Matched supplied native table execution; uncommon weapons retain older fixture coverage | `c488943`; evidence `049c278` |
+| Common-pistol recoil selection | Current native command-seed selector and 14 original Deagle impulses; [pass 42](reaudit-pistol-recoil.md) | Default float-index selection unchanged; optional supplied-index replay reduces 4.75292° trajectory error to 0.000001674° | Conditional replay corrected; native seed generator/distribution still gates a gameplay change | `5a1a10e`; no default fix |
 | Aim-punch decay and velocity decay | Fresh native anchor-to-anchor carry in both captures, `PunchRecovery` comparison | Native carry error ≤0.000000478°; unchanged decay math | Matched sampled current native trajectories | `c488943` |
 | Recoil time anchor in actual engines | Fresh AK native anchors use exact command schedule | Maximum sampled live error 0.338199° → 0.00000239° | Matched sampled trajectory after fix | `e85f59a` |
 | Between-spray recovery | Fresh native index snapshots and native update body; long-rest angle samples | Long rests matched; short-pause index now uses full native decay steps and strict gate | Matched captured recovery; full command histories remain bounded | `fd328d5` |
@@ -513,6 +536,14 @@ Earlier findings remain:
 
 ## Exact remaining evidence and implementation
 
+The active follow-up prioritizes the seven common weapons and stopping/first-shot
+movement behavior. The detailed historical inventory below preserves deferred
+work; R8, shotguns, uncommon weapons and deep presentation resolvers are not
+requirements for this focused session.
+
+- Pistol recoil: the table and selector branch are established, including the
+  consumed command field. Native seed generation and its distribution remain
+  unproved. The 14 reconstructed Deagle indices are not recorded seeds.
 - Accuracy/index: common captured paths are corrected in both engines. Native
   command/state captures remain for bursts, Negev, shell reloads, suppressor,
   holster and simultaneous transitions. See the accepted 41,584-tick coverage
@@ -569,23 +600,31 @@ Earlier findings remain:
 Every unresolved row is retained without speculative feel tuning. The subsystem
 reports provide the finer boundaries and local artifact names needed to resume.
 
-## Delivery and validation checkpoint for pass 39
+## Delivery checkpoint
 
 The approved nine-commit batch through `feb6a50` is live as
 `20261010T084128Z-feb6a50` on the LAN. Its normal asset gate/build passed in 83 s;
 served AK/audio hashes, pointer lock, firing 30→29 and reload→30 passed, with
 no page/network errors. Main, fork/main and ui-cs2 were aligned at that commit.
 
-The separate AWP correction is `81f9c27` and is not yet deployed. TypeScript
-passes; 2,517 units pass with only the known missing fallback-model fixture; all
+The separate AWP correction is `81f9c27`. Its preparation checks passed TypeScript;
+2,517 units passed with only the known missing fallback-model fixture; all
 three targeted Chromium specs pass. [Validation](evidence/reaudit-awp-validation.json)
 retains source/log hashes, the corrected working-directory invocation, native
-proof rerun and trainer comparison boundaries. The inventory still has 136
-mechanic rows; the scoped AWP correction does not establish full native parity.
+proof rerun and trainer comparison boundaries. The scoped AWP correction does
+not establish full native parity.
 
 Pass 40 adds ready-primary priority to two AWP guards. TypeScript passes;
 2,523 units pass and the same missing fallback fixture fails. All four targeted
 Chromium cases pass. [Validation](evidence/reaudit-awp-input-validation.json)
 records 23 actual-engine before/after cases, unchanged shot times and 14 complete
-controls. No assets changed; the pass 39 approval payload remains frozen. Both
-AWP corrections are local pending explicit batch approval.
+controls. No assets changed. The user approved all three AWP commits through
+`e99fd05`; the normal asset gate/build passed in 102 seconds and LAN release
+`20261010T091156Z-e99fd05` was verified. Main, fork/main and ui-cs2 were aligned
+and clean. The earlier nine-commit and AWP approvals are fulfilled.
+
+Passes 41–43 (`0fc433f`, `5a1a10e`, `049c278`) remain local pending a new delivery batch. They add evidence and an
+optional supplied-selector replay interface, with default gameplay unchanged.
+The inventory has 137 mechanic rows, including the newly separated pistol
+selector gap. Current validation and its memory-limited browser retry are
+recorded above; a passed conditional replay is not a shipped pistol feel fix.

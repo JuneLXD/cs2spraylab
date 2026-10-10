@@ -1,0 +1,108 @@
+{
+  "baseline": "e99fd0520230b0f8ff88c1d11d02c9bf1d96b5e7",
+  "scope": "Passes41\u201343: common primary retry, optional supplied pistol selector, current Linux common recoil tables. Default gameplay unchanged.",
+  "typescript": {
+    "exit": 0
+  },
+  "units": {
+    "passed": 2542,
+    "failed": 1,
+    "total": 2543,
+    "filesPassed": 157,
+    "filesFailed": 1,
+    "durationSeconds": 93.05,
+    "knownFailure": "Missing public/models/ak47.json fallback fixture"
+  },
+  "browser": {
+    "distinctCasesPassed": 4,
+    "remainingFailures": 0,
+    "specs": [
+      "view-punch (Range and Duel)",
+      "trigger-continuity (ordinary Range only)",
+      "glock-timing"
+    ],
+    "initial": {
+      "passed": 3,
+      "failed": 1,
+      "exit": 1,
+      "durationSeconds": 47.4,
+      "failure": "Duel target crashed during loading: kernel CONSTRAINT_MEMCG in the 2GiB test scope. No gameplay assertion ran in that case; no host-wide OOM or earlyoom intervention."
+    },
+    "isolated": {
+      "passed": 1,
+      "failed": 0,
+      "exit": 0,
+      "durationSeconds": 9.6,
+      "case": "duel: native camera kick responds on the first rendered frame and decays between ticks",
+      "change": "Fresh one-case process at the SAME memory/swap/CPU cap; no source changes."
+    },
+    "filterCorrection": "First isolated invocation used an anchored grep that matched no tests (exit1). Its separate log is retained; corrected grep ran the one case."
+  },
+  "caps": {
+    "probes": "512M",
+    "typescriptUnitsBrowser": "2G",
+    "swap": 0,
+    "cpu": "100%",
+    "unitWorkers": 1,
+    "browserWorkers": 1
+  },
+  "native": {
+    "primaryInstructionAssertions": 59,
+    "primaryStaticCases": 24,
+    "pistolSelectorAssertions": 58,
+    "pistolFieldAssertions": 48,
+    "pistolStaticCases": 96,
+    "pistolBoundary": "Static checks/derived cases; historical matched indices are inverse reconstruction, not recorded command seeds.",
+    "commonTableEntries": 896,
+    "commonRngValues": 224,
+    "commonFloatBitMismatches": 0,
+    "commonPackagedStagesPassed": 5
+  },
+  "sourceVerification": {
+    "currentBundleHashesVerified": {
+      "pistol-selector-final-after.json": 11,
+      "common-recoil-table/trainer-comparison.json": 9
+    },
+    "pistolBeforeAfterChangedBundledSources": [
+      "src/range/ballistics.ts",
+      "src/range/recoil.ts"
+    ],
+    "identicalPistolInputsAndProbe": true,
+    "compressedReportsMatchOriginalBytes": true
+  },
+  "policy": "One heavy job total; auto-deploy paused and service inactive, at least12GiB MemAvailable before each. Repository frozen during browser runs. No app/test changes after full units. No game or full native analysis.",
+  "validatedSourceHashes": {
+    "src/range/recoil.ts": "971a48783512ff9cb9449ea7cc7a199d30ca12fddac75ca704b9f5439df0866d",
+    "src/range/ballistics.ts": "8ef2d44eea3c56b2296547a236de504ed11000e71848c1ce6b03c97064ee9b9c",
+    "src/range/simulation.ts": "b0e5e62fe9acbc5885df4aaff0b53763cb390e15599faee611ac6320ca452ef1",
+    "src/range/duel/weapon-state.ts": "a1933c9f8744100a0b2a06977fef738ab7435dbf52380d1a89584217721b1d2c",
+    "src/range/pistol-recoil.test.ts": "b3f9d04d203dbe22cef546fcdb6c2a34fda53fe36701295078cfea8f1ea26b98",
+    "src/range/native-pistol-selector-fixture.json": "0d63de87180d5bf6d1f1563351d02495baacc2289fd333ec5ab8d989e2d0cf8f",
+    "tests/view-punch.spec.ts": "0931d15ff1d6ddd4c0c8a2919255a057495f3ed6998b29fa94f5b82916658e22",
+    "tests/trigger-continuity.spec.ts": "1132664849e3adf39c6e27a2fda617a2399f5965859114ae71fff29b9a97aba1",
+    "tests/glock-timing.spec.ts": "af8b66fd17cc000abe3915d49590aa8585cbed4e37a0bd6f8d5b06cff5057391"
+  },
+  "logHashes": {
+    "tsc-core-initial.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "unit-core-initial.log": "9769c7f5718a95367689d736d6cf6878e6606350b6c163a3ee3320167115d8a1",
+    "browser-core-initial.log": "c96f8fbcc5a7a79fd4f648d4fe20102faa23264aad2b97893b9982ef5de98a21",
+    "browser-core-cgroup-oom.log": "99b6b4140767c8d082ba47e24db19f9c208398a94e1de549e9e37fadf4ecc006",
+    "browser-core-duel-isolated.log": "89c5e732806f163087982fc58057ccf330ffec68744d26949580f2abbe2cd999",
+    "browser-core-duel-isolated-selected.log": "44c107c1d09def1b0e9e3eef437ea5fb3d5ca17871d980d0dfcf87bbe5b150a8"
+  },
+  "evidenceHashes": {
+    "reaudit-primary-taps-native.json": "a2e24835411bcdb65856b34fbfbab97aa4a0871a16280473ceeab5914d0543f8",
+    "reaudit-primary-taps-trainer.json.gz": "9dd0e8561e08d03e79bf02e2bc58b4111ef560ab08cb15d42c62e8f42c6e78ff",
+    "reaudit-pistol-selector-native.json": "21cd51d7c40dcbe7cb81a6a460a5ad116853b4ed3eb66f341b47f76750e788c1",
+    "reaudit-pistol-seed-field-native.json": "a7625ed21ea90276cebde8c55ecab80ce722bdc354a671e391fc5ed91d5b427b",
+    "reaudit-pistol-selector-before.json.gz": "69e9c45df121c4c05a49f160872778b8ac693185ecc3a15078f46a24cc6a7e9d",
+    "reaudit-pistol-selector-after.json.gz": "6b65b9d9426f2c41a90a91e5052caf0b139f861359f165943d84680994913f4b",
+    "reaudit-common-recoil-native.json": "7931e459823b43259364d3397d47ce7637ced9dbc8cfa67245e97de088ac131b",
+    "reaudit-common-recoil-trainer.json.gz": "28ee893748d55d61b67695a71e759299898cfa9bb4efc069e3328500cf3c8e42"
+  },
+  "preparedCommits": {
+    "primary": "0fc433f",
+    "pistolReplay": "5a1a10e",
+    "commonTables": "049c278"
+  }
+}

@@ -319,3 +319,37 @@ runtime input-mask behavior. Four targeted browser cases pass. Remaining work is
 native command aggregation, input-state producer/reset lifetime, client prediction
 and live timing; the measured 8.333 ms Range/Duel repeat-release difference is
 retained rather than assigned an invented native delay.
+
+## Common-weapon primary retry, pass 41
+
+The [ordinary primary-input check](reaudit-primary-taps.md) independently binds
+the semiautomatic counter reset before readiness. All 56 actual Range/Duel
+scenarios and 28 paired shot traces agree with the supplied native-state
+branches. No input timing change is justified. Physical press/release aggregation
+and native transition-mask lifetime remain separate measurements.
+
+## Common-pistol recoil selection, pass 42
+
+The [pistol recoil comparison](reaudit-pistol-recoil.md) finds a large Deagle
+selector mismatch across 14 shots in two retained recordings. Ordinary native
+semiautomatic fire selects with `CBaseUserCmdPB.random_seed & 63`, independently
+of the recovering accuracy index. A conditional replay with reconstructed
+entries removes up to 4.75292 degrees of trajectory error; 114 rifle controls
+and two USP-S shots already match. This does not predict native seeds.
+
+An optional supplied-selector port supports the replay and paired-engine tests.
+Default gameplay remains unchanged: the native seed generator and distribution
+are still unproved. No authored random distribution is substituted. M4A1-S
+runtime coverage remains absent because the earlier similarly named recording
+contains M4A4.
+
+## Current Linux common recoil tables, pass 43
+
+The [current table comparison](reaudit-common-recoil-tables.md) executes native
+Linux table and RNG instructions and compares the actual trainer functions.
+All 896 raw-mode entries and 224 numeric RNG samples match bit for bit. Default
+silenced M4A1-S/USP-S mode mapping is checked separately and also matches.
+No recoil magnitude, smoothing or first-shot suppression change is needed.
+This supplements the old Windows fixtures only for the seven priority weapons;
+command seed generation, selection and full shot/presentation timing remain
+separate. It does not resolve the Deagle default selector boundary in pass 42.

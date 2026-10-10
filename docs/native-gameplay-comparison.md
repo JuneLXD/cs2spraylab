@@ -1326,7 +1326,8 @@ coefficients, graph onset and event-consumer ordering remain separately bounded.
 
 The two tracked metadata files and the private deploy audio manifest are updated;
 no model, motion or sound sample was rebuilt. Asset hashes and reproduction tools
-are retained with the report. The correction is committed locally as `c533887`, pending delivery.
+are retained with the report. The correction is `c533887`, delivered in the
+approved batch through `feb6a50`.
 
 ## Glock firing and secondary clocks (thirty-eighth pass)
 
@@ -1353,8 +1354,8 @@ retry. The paired probes execute actual engines from the same baseline with
 identical inputs. Their timestamps measure trainer behavior; native float32
 tick/fraction normalization, input-mask production and upstream player/equip
 gates remain outside this bounded static correction. Other weapon families
-retain their existing behavior. The correction is committed locally as `ae2f6cf`,
-pending delivery.
+retain their existing behavior. The correction is `ae2f6cf`, delivered in the
+approved batch through `feb6a50`.
 
 ## AWP scope and attack clocks (thirty-ninth pass)
 
@@ -1409,6 +1410,57 @@ source and log hashes. No new game session, full analysis or asset rebuild occur
 Native command aggregation, history/reset selection and client prediction remain
 partial. The pass 39 priority gap is narrowed by this evidence, not fully replaced
 by a native command scheduler.
+
+## Common-weapon early primary taps (forty-first pass)
+
+The [focused primary-input recheck](reaudit-primary-taps.md) adds the missing
+semiautomatic re-arm evidence. Current native idle clears the shot counter
+before testing readiness, so ordinary release can re-arm during cooldown.
+Ready active primary still owns dispatch even when the semiautomatic latch
+prevents another held shot. The native active predicate also accepts transition
+state; physical click-buffer lifetime remains unproved.
+
+Seven common classes, 59 instruction assertions, 28 fresh virtual slots and
+2,896 selected bytes bind the rule. Eight mask cases and sixteen dispatch
+cases are static implications, not native execution. Actual Range/Duel benches
+cover released early taps, held early requests, release/repress during cooldown
+and ready taps: 56 cases match all expected outcomes, and all 28 engine pairs
+agree on exact shot schedules and processing times. Every 128 Hz step is
+retained. No production timing change or guessed buffer delay follows.
+
+## Common-pistol recoil selection (forty-second pass)
+
+The [pistol selector report](reaudit-pistol-recoil.md) finds a concrete Deagle
+error while retaining normal gameplay until the missing native input is known.
+Current server code selects ordinary semiautomatic recoil from a supplied
+integer masked to six bits, while ordinary automatic fire uses the truncated
+floating recoil index. That floating index separately drives accuracy recovery.
+Current client/server metadata and parsers bind the integer to the base
+command's `random_seed`; the upstream generator remains unproved.
+
+All 14 Deagle impulses in two original demos uniquely match the existing native
+table. The trainer instead chooses different entries. Conditional replay of
+the actual recovery class with the reconstructed entry removes maximum velocity
+error 79.4370 and sampled trajectory error 4.75292 degrees to floating-point
+precision. All 114 rifle controls and two USP-S shots already match; USP-S's
+identical entries cannot distinguish selectors. This supplies prior native
+state and inversely reconstructed indices, not recorded seeds or cumulative
+input replay. The optional replay port has no default gameplay provider.
+
+## Current Linux common-weapon recoil tables (forty-third pass)
+
+The [current table/RNG audit](reaudit-common-recoil-tables.md) executes the
+current Linux server table loop and its actual tier0 random stream in isolated
+memory. Its parameters come from the hash-bound native export. The trainer's
+actual functions match all 896 raw-mode table entries and 224 RNG samples bit
+for bit, including automatic smoothing and the first-four-shot suppression.
+Supported import mappings also match, with M4A1-S/USP-S defaulting to native
+silenced mode 1. No table constant or generated pattern needs changing.
+
+The seven-weapon check supplements rather than relabels older Windows fixtures.
+Resource lookup/allocation, command seed generation, table selection, firing
+and presentation are outside this numeric oracle. In particular, it confirms
+the Deagle table while leaving the separate pass-42 seed-generation gap open.
 
 ## Validation retained from passes 11–15
 
