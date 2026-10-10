@@ -31,6 +31,7 @@ import {fullyOccluded} from './visibility';
 import {muzzleAnchor, viewMuzzleToWorld} from './tracers';
 import type {SpatialSound} from '../spatial-audio';
 import {applyViewmodelRecoil, recoilView} from '../view-recoil';
+import {ViewmodelAir} from '../viewmodel-air';
 import {followCrosshairDirection, followCrosshairOffset} from '../crosshair-follow';
 import {RoundFlow, deathView, deathFeet} from './round-flow';
 import {type Equipment, type Slot} from '../equipment';
@@ -95,6 +96,7 @@ export class DuelEngine {
   readonly viewCamera = new THREE.PerspectiveCamera(VIEWMODEL_FOV, 1, .01, 10);
   private viewOffset = VIEWMODEL_OFFSET;
   readonly viewRoot = new THREE.Group();
+  private readonly viewAir = new ViewmodelAir();
   readonly actors = new THREE.Group();
   readonly covers = new THREE.Group();
   private readonly dynamicCovers = new THREE.Group();
@@ -749,7 +751,7 @@ export class DuelEngine {
       this.releaseShortcuts();
       if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
     }
-    this.sim = this.createSimulation(); this.inputClock.reset(performance.now()); this.kills = this.damage = 0;
+    this.sim = this.createSimulation(); this.viewAir.reset(); this.inputClock.reset(performance.now()); this.kills = this.damage = 0;
     this.shell.scale.set(this.config.arenaScale, 1, this.config.arenaScale);
     this.damageFeedback.clear(); this.wasReloading = false;
     this.roundFlow.reset(); this.deaths.clear(); this.playerGeneration = 1;
@@ -1215,6 +1217,7 @@ export class DuelEngine {
     if (player.generation !== this.playerGeneration) {
       // A deathmatch respawn: leave the death camera, forget the hit arcs and re-apply any keys still held.
       this.playerGeneration = player.generation;
+      this.viewAir.reset();
       this.deaths.delete(0); this.damageFeedback.clear(); this.updateMovement();
     }
     if(timestamp-this.shadowAt>=50){this.shadowAt=timestamp;this.actorShadows.update(actorShadows(snapshots,this.sim.arena));}
@@ -1260,7 +1263,8 @@ export class DuelEngine {
     this.viewRoot.position.set(offset.x,
       offset.y + Math.sin(this.sim.time * 12) * Math.min(speed, 1) * .002 - (player.alive ? 0 : death.weaponDrop * .5), offset.z + modelKick * .018);
     this.viewRoot.visible = !scoped && (player.alive || deathAge < .25);
-    applyViewmodelRecoil(this.viewRoot.quaternion, view);
+    if (player.alive) this.viewAir.apply(this.viewRoot, view, player.grounded ?? player.feet === 0);
+    else applyViewmodelRecoil(this.viewRoot.quaternion, view);
     if (modelKick && player.equipment !== 'knife') this.viewRoot.rotation.x += modelKick * .035;
     this.audio.updateListener(this.camera.position, view.yaw, view.pitch);
     for(const actor of snapshots) {

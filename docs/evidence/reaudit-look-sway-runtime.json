@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "scope": "Read-only native bob001 numeric capture, local first-person pawn and HUD sway",
+  "productionChange": false,
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "analysisSha256": "19ff16f0d3ddcce0bbc40ab43a9e48ea0198f349ab33356f2d595a2121fc7568",
+  "summaryProbeSha256": "e9f4a945193fbfec01a18d44dc54ee3153c8c4623a861bcb8499921d2c83d2d8",
+  "source": "native-audit/reports/reaudit-motion-runtime/samples.jsonl",
+  "sourcePrefixBytes": 19568555,
+  "sourcePrefixSha256": "08827a5dbacd7bc2cd6006c8dd4d4eba5f3ad70ac53f0b8b5daa1a27000d7901",
+  "inputSha256": "79e86f72d9a7b81c61b34e2450e454815a9405c25b0d9f1fb7e0374226815c95",
+  "snapshotSha256": "64f31a4116cbd6e349d205832dfe0bcf46251021edfb708032653daab623cb76",
+  "window": {
+    "start": 7181.234111489,
+    "end": 7198.645417486,
+    "rows": 2209,
+    "firstMonotonic": 7181.244666102,
+    "lastMonotonic": 7198.638699856,
+    "frames": 1106
+  },
+  "history": {
+    "singleSlotChanges": 1092,
+    "multipleSlotChanges": 11,
+    "angleOrRateOnlyChanges": 0,
+    "sameFrameChanges": 1058,
+    "kinds": {
+      "exact": 1092
+    },
+    "oldestReplacementFailures": 0,
+    "tickQuantizationErrorMax": 0.0,
+    "writerStepSeconds": {
+      "count": 1091,
+      "min": 0.015625,
+      "median": 0.015625,
+      "max": 0.046875,
+      "mean": 0.015940077910174152
+    },
+    "observedSourceVsWrittenMax": 0.00014495849609375,
+    "ratePredictionError": {
+      "count": 1092,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "exactRateMatches": 1092,
+    "rateMismatchCount": 0,
+    "nonzeroRateRows": 71,
+    "nonzeroRateStart": 7192.858915381,
+    "nonzeroRateEnd": 7195.019161557,
+    "predictionInterpolationValues": {
+      "True": 2209
+    }
+  },
+  "hud": {
+    "updates": 1106,
+    "predictionError": {
+      "count": 1106,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 0.0,
+      "mean": 0.0
+    },
+    "exactMatches": 1106,
+    "mismatchAbove1e5": 0
+  },
+  "clocks": {
+    "rowsPerFrame": {
+      "2": 1103,
+      "1": 3
+    },
+    "globalStep": {
+      "count": 2208,
+      "min": -0.01556396484375,
+      "median": 0.0095062255859375,
+      "max": 0.03399658203125,
+      "mean": 0.007890252099520918
+    },
+    "negativeGlobalSteps": 929,
+    "sameFrameStep": {
+      "count": 1103,
+      "min": 0.0032958984375,
+      "median": 0.0257415771484375,
+      "max": 0.03399658203125,
+      "mean": 0.025666514420012183
+    },
+    "negativeSameFrameSteps": 0,
+    "globalMinusSwayTime": {
+      "count": 2209,
+      "min": -0.01556396484375,
+      "median": 0.0,
+      "max": 0.014923095703125,
+      "mean": -0.004956453944180766
+    },
+    "globalMinusNewestHistory": {
+      "count": 2209,
+      "min": -0.015625,
+      "median": 0.010101318359375,
+      "max": 0.015625,
+      "mean": 0.006802159555900577
+    }
+  },
+  "phaseGroups": [
+    {
+      "historyChanged": true,
+      "hudTimeChanged": true,
+      "sameFrame": true,
+      "count": 1069,
+      "globalMinusNewestHistorySeconds": {
+        "count": 1069,
+        "min": 0.000152587890625,
+        "median": 0.0101470947265625,
+        "max": 0.01556396484375
+      },
+      "globalMinusHudTimeSeconds": {
+        "count": 1069,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "historyChanged": false,
+      "hudTimeChanged": false,
+      "sameFrame": false,
+      "count": 1068,
+      "globalMinusNewestHistorySeconds": {
+        "count": 1068,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.015625
+      },
+      "globalMinusHudTimeSeconds": {
+        "count": 1068,
+        "min": -0.01556396484375,
+        "median": -0.0101318359375,
+        "max": 0.0141448974609375
+      }
+    },
+    {
+      "historyChanged": true,
+      "hudTimeChanged": false,
+      "sameFrame": false,
+      "count": 34,
+      "globalMinusNewestHistorySeconds": {
+        "count": 34,
+        "min": -0.015625,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "globalMinusHudTimeSeconds": {
+        "count": 34,
+        "min": -0.0101470947265625,
+        "median": 0.0054931640625,
+        "max": 0.014923095703125
+      }
+    },
+    {
+      "historyChanged": false,
+      "hudTimeChanged": true,
+      "sameFrame": true,
+      "count": 34,
+      "globalMinusNewestHistorySeconds": {
+        "count": 34,
+        "min": 0.0032958984375,
+        "median": 0.010101318359375,
+        "max": 0.0155029296875
+      },
+      "globalMinusHudTimeSeconds": {
+        "count": 34,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "historyChanged": false,
+      "hudTimeChanged": true,
+      "sameFrame": false,
+      "count": 3,
+      "globalMinusNewestHistorySeconds": {
+        "count": 3,
+        "min": 0.01544189453125,
+        "median": 0.0154571533203125,
+        "max": 0.015472412109375
+      },
+      "globalMinusHudTimeSeconds": {
+        "count": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    }
+  ],
+  "nonzeroHistoryUpdates": 35,
+  "hudTargetEqualsSampledPawnRateCount": 1106,
+  "hudTimeEqualsGlobalTimeCount": 1106,
+  "frameDeltaSubstitutionError": {
+    "count": 1106,
+    "min": 0.0,
+    "median": 0.0,
+    "max": 0.0031576156616210938
+  },
+  "observations": [
+    "All reconstructable single-slot history writes select an exact existing endpoint at new sample time minus 1/16 second. No bracket selection occurs in this window.",
+    "All history timestamps are exact multiples of 1/64 second. Every reconstructable write replaces the oldest timestamp.",
+    "Every reconstructed cached rate matches float32 wrapped difference between newly written and selected history angles, multiplied by 16. The prediction interpolation flag is true throughout the captured window.",
+    "Every observed HUD update matches float32 elapsed-global-time smoothing: alpha=clamp(15*(new timestamp-old timestamp),0,1), then smooth+=(target-smooth)*alpha.",
+    "All observed HUD updates share the sampled global current time and copy the sampled pawn rate as their target.",
+    "Global current time changes between frame phases, including backward transitions. It is not one monotonically advancing render clock."
+  ],
+  "inferences": [
+    "The normal captured history path writes at a 64 Hz time grid and reads the exact endpoint four ticks earlier. Polling cannot determine the count of duplicate native invocations between state changes.",
+    "Early-frame observations commonly expose an integer history time, while the HUD-updated observation exposes a fractional global time. This corroborates phase-dependent global clocks without identifying every call site.",
+    "The unusual quaternion interpolation quotient is real in the separate native oracle but unused in this captured sequence; do not replace it with conventional interpolation or claim all runtime inputs avoid it."
+  ],
+  "remainingRuntimeMetadata": [
+    "Invocation trace or equivalent coherent samples of player-time accessor, source-angle interpolation inputs and history before/after each writer call.",
+    "Different render cadence and special-state samples before claiming the observed endpoint path is universal.",
+    "For camera kick: selected input-history entry and attack index, resolver path/cache, exact sampler current time, command anchor, and presented-frame identity at each shot. The current motion stream does not include them."
+  ],
+  "limits": [
+    "Read-only polling can miss native calls. A observed history transition is not proof that exactly one invocation occurred.",
+    "Sampler verifies frame/HUD state stability, but pawn source/history/rate fields are separate reads. Mismatches may be mixed phases or missed transitions.",
+    "The player-time accessor branch is not sampled directly; a newly written sample time is an observed writer output.",
+    "Reconstructing a previous four-slot state is justified only for the single-slot changes included; multiple-slot changes are separately counted.",
+    "This stream has no firing command-history indices, camera punch anchor or presented-frame ring payload. It cannot alone close earlier shot-anchor clock mapping.",
+    "A sampler records only changes to frame counter or HUD motion state; unrelated pawn-only transitions can be skipped.",
+    "A native state match is not a rendered placement/handedness comparison and does not establish screen-space parity.",
+    "The initial observation does not expose construction, equip, respawn or teleport reset behavior."
+  ]
+}

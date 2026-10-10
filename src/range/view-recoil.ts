@@ -22,8 +22,8 @@ const angles = new Euler(0, 0, 0, 'YXZ'), inverseCamera = new Quaternion();
 // The weapon scene has a stationary camera. Convert native world-angle addition
 // to that scene's camera-relative rotation; subtracting Euler angles loses the
 // pitch/yaw coupling and roll when looking up/down. Scratch objects allocate once.
-export function applyViewmodelRecoil(target: Quaternion, view: ReturnType<typeof recoilView>) {
+export function applyViewmodelRecoil(target: Quaternion, view: ReturnType<typeof recoilView>, modelPitch = view.pitch) {
   inverseCamera.setFromEuler(angles.set(view.pitch, view.yaw, view.roll)).invert();
-  target.setFromEuler(angles.set(view.pitch + view.weaponPitch,
+  target.setFromEuler(angles.set(modelPitch + view.weaponPitch,
     view.yaw + view.weaponYaw, view.roll + view.weaponRoll)).premultiply(inverseCamera);
 }

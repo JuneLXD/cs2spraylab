@@ -1,8 +1,10 @@
 import {expect, test} from '@playwright/test';
 import nativeModel from '../docs/evidence/reaudit-viewmodel-native.json' with {type: 'json'};
+import nativeAir from '../docs/evidence/reaudit-viewmodel-air-native.json' with {type: 'json'};
 
 for (const mode of ['duel', 'guided'] as const) {
   test(`${mode}: native camera kick responds on the first rendered frame and decays between ticks`, async ({page}, info) => {
+    test.setTimeout(180000);
     test.skip(info.project.name !== 'chromium');
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -140,6 +142,51 @@ for (const mode of ['duel', 'guided'] as const) {
       }, {mode, row});
       expect(angleError).toBeLessThan(.00005);
     }
+    const airSequence = nativeAir.sequences.find(sequence => sequence.name === `${mode === 'guided' ? 'range' : 'duel'}_wiring`)!;
+    const airResult = await page.evaluate(({mode, sequence}) => {
+      const e = (window as any).punchEngine, actor = mode === 'duel' ? e.sim.actors[0] : e.sim;
+      const recovery = mode === 'duel' ? actor.weapon.recovery : actor.recovery;
+      const radians = Math.PI / 180;
+      // The supplied camera includes the physical-punch camera share.
+      actor.yaw = (sequence.camera[1] - sequence.punch[1] * .45) * radians;
+      actor.pitch = (-sequence.camera[0] + sequence.punch[0] * .45) * radians;
+      recovery.predict = () => ({pitch: -sequence.punch[0], yaw: -sequence.punch[1]});
+      if (mode === 'duel') actor.punch.predict = () => ({pitch: 0, yaw: 0, roll: -sequence.punch[2]});
+      actor.viewPunch.sample = () => ({pitch: 0, yaw: 0});
+      e.sim.accumulator = 0; e.kick = 0; e.viewAir.reset();
+      if (mode === 'duel') { e.paused = false; e.sim.phase = 'fighting'; }
+      else e.sim.active = true;
+      actor.velocity.x = actor.velocity.z = 0;
+      let timestamp = Math.max(e.last ?? e.previous, performance.now()) + 100;
+      const samples: any[] = [];
+      for (const row of sequence.rows) {
+        actor.grounded = row.grounded;
+        // Ground flag controls motion even if velocity suggests the opposite.
+        actor.verticalVelocity = row.grounded ? 5 : 0;
+        timestamp += 1000 / 60; e.tick(timestamp); cancelAnimationFrame(e.frame);
+        const model = mode === 'duel' ? e.viewRoot : e.weaponRoot;
+        const offset = e.viewOffset ?? {x: 2.5 * .0254, y: -1.5 * .0254, z: 0};
+        const actualWorld = model.position.clone().sub(offset).applyQuaternion(e.camera.quaternion);
+        const sourceQuaternion = ([x, y, z, w]: number[]) => e.camera.quaternion.clone().set(-y, z, -x, w).normalize();
+        const expected = sourceQuaternion(sequence.cameraQuaternion).invert().multiply(sourceQuaternion(row.modelQuaternion));
+        samples.push({air: e.viewAir.amount, world: actualWorld.toArray(), camera: e.camera.quaternion.toArray(),
+          modelErrorDegrees: model.quaternion.angleTo(expected) / radians});
+      }
+      const savedReady = e.pacer.ready;
+      actor.grounded = false; e.pacer.ready = () => false;
+      e.tick(timestamp + 1); cancelAnimationFrame(e.frame);
+      const skippedAmount = e.viewAir.amount; e.pacer.ready = savedReady;
+      return {samples, skippedAmount};
+    }, {mode, sequence: airSequence});
+    for (let i = 0; i < airResult.samples.length; i++) {
+      const actual = airResult.samples[i], expected = airSequence.rows[i];
+      expect(actual.air).toBe(expected.air);
+      expect(actual.world[0]).toBeCloseTo(0, 8); expect(actual.world[2]).toBeCloseTo(0, 8);
+      expect(actual.world[1]).toBeCloseTo(expected.origin[2] * .0254, 8);
+      expect(actual.modelErrorDegrees).toBeLessThan(.00005);
+      if (i) expect(actual.camera).toEqual(airResult.samples[0].camera);
+    }
+    expect(airResult.skippedAmount).toBe(0);
     expect(errors).toEqual([]);
   });
 }

@@ -333,6 +333,10 @@ export const latestChanges = {
       'Weapon recoil now uses the measured native rotation in range and duel, including its change in direction when aiming up or down.',
       'Damage punch also moves the first-person weapon in Duel. Bullet directions and weapon accuracy remain separate from this visual motion.',
     ]},
+    {id: 'native-viewmodel-air', title: 'Airborne weapon motion', items: [
+      'Weapons now ease downward and tilt on takeoff, then recover on landing using the native per-frame air transition.',
+      'Range and Duel share the measured world-space motion, including steep aim and recoil.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

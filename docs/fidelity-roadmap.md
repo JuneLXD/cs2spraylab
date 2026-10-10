@@ -124,3 +124,14 @@ rotation with the native .325 world-angle term converted into weapon-camera
 space, including damage punch. Native executed fixtures cover 108 orientations.
 Procedural bob/sway outside the graph is now confirmed; complete movement,
 landing/zoom, animation and rendering parity remain open.
+
+### Airborne weapon motion, pass 24
+
+[AIR motion](reaudit-viewmodel-air.md) now matches native per-invocation state,
+world drop and pitch/clamp/recoil ordering in Range and Duel. Nine native
+sequences and 944 live state pairs support the correction; the 812-case engine
+bench removes 20.32 mm/.4° of missing airborne motion. Existing movement sine
+bob, prediction-phase mapping, pause/lifecycle and rendered landmarks remain
+partial. Full bob needs the evaluated native velocity cache and body-rotation
+writer; look sway needs its history/caller clocks mapped to trainer input.
+The approved capture and read-only sampler are retained. No R8 work resumed.

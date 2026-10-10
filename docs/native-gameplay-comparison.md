@@ -919,6 +919,34 @@ states. Serial checks used memory/swap/CPU caps; auto-deploy was paused and no
 repository edits occurred during the browser run. Logs are retained under
 `native-audit/reports/reaudit-viewmodel-*`.
 
+## Airborne weapon motion (twenty-fourth pass, 2026-10-09)
+
+[Pass 24](reaudit-viewmodel-air.md) isolates the native HUD AIR transition:
+float32 0.1 per eligible invocation toward 0/2, world vertical −0.4×AIR units
+and Source pitch −0.2×AIR degrees. Pitch clamps before physical recoil; original
+camera angles remain the inverse/offset basis. Nine native sequences contain
+406 frames; the approved new recording independently matches all 944 observed
+AIR state transitions. Its video decodes 1,065 frames with maximum 17 ms PTS gap.
+
+Both engines now apply this term in world coordinates. The exact production
+transform bench compares 812 engine/frame cases: maximum missing drop falls
+20.3200003 mm→0.000000889 mm and orientation error .4000053°→.00001648°.
+Native prediction-phase mapping, pause/reset behavior and total rendered
+landmarks remain bounded. The existing movement sine and missing-clip kick are
+still approximations; this does not certify full bob/sway or animation parity.
+
+Native velocity interpolation and a body orientation distinct from eye angles
+prevent a justified whole-bob port yet. Sway capture confirms 1,092 history and
+1,106 HUD updates, but phase/caller mapping remains open. No fitted clock or
+velocity delay is introduced. The sampler/probes and portable native/live
+fixtures are retained for the next audit; R8 remains excluded.
+
+Pass 24 validation: TypeScript passes; 2,338 unit cases pass with only the known
+missing fallback-model fixture failure. Both targeted Chromium cases pass,
+including 48 AIR frame transitions per engine, world-space placement, recoil
+ordering and skipped draws. Serial capped checks ran with auto-deploy paused;
+no repository files changed during browser execution.
+
 ## Re-audit delivery validation
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph

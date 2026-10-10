@@ -1,0 +1,34 @@
+{
+  "before": {
+    "cases": 812,
+    "maxPositionErrorMm": 20.320000302791595,
+    "maxAngleErrorDegrees": 0.4000053232843465,
+    "byMode": {
+      "range": {
+        "maxPositionErrorMm": 20.320000302791595,
+        "maxAngleErrorDegrees": 0.4000053232843465
+      },
+      "duel": {
+        "maxPositionErrorMm": 20.320000302791595,
+        "maxAngleErrorDegrees": 0.4000053232843465
+      }
+    }
+  },
+  "after": {
+    "cases": 812,
+    "maxPositionErrorMm": 8.88451795795645e-07,
+    "maxAngleErrorDegrees": 1.647312374421381e-05,
+    "byMode": {
+      "range": {
+        "maxPositionErrorMm": 8.88451795795645e-07,
+        "maxAngleErrorDegrees": 1.647312374421381e-05
+      },
+      "duel": {
+        "maxPositionErrorMm": 8.88451795795645e-07,
+        "maxAngleErrorDegrees": 1.647312374421381e-05
+      }
+    }
+  },
+  "baseline": "252a1e7",
+  "method": "Exact production engine transform statements replayed against independently executed native AIR/recoil/quaternion fixtures, zero velocity and no clip kick."
+}

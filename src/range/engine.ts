@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import {applyViewmodelRecoil, recoilView} from './view-recoil';
+import {recoilView} from './view-recoil';
+import {ViewmodelAir} from './viewmodel-air';
 import {followCrosshairDirection, followCrosshairOffset} from './crosshair-follow';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -71,6 +72,7 @@ export class RangeEngine {
   mouseDemonstration = new SprayDemonstration('mouse');
   drillScenery = new DrillScenery(); drillRevision = -1;
   weaponRoot = new THREE.Group();
+  private readonly viewAir = new ViewmodelAir();
   targets = [new THREE.Group(), new THREE.Group()];
   /** Pop mode: the balls by id, their burst animations, the dark wall behind them, and the lights it dims. */
   pop = new THREE.Group();
@@ -967,7 +969,7 @@ export class RangeEngine {
     const offset = this.viewOffset ?? VIEWMODEL_OFFSET;
     const modelKick=this.viewAnimations.get(this.sim.equipped)?.hasFireMotion?0:this.kick;
     this.weaponRoot.position.set(offset.x, offset.y + Math.sin(this.elapsed * 12) * Math.min(moving, 1) * .002, offset.z + modelKick * .015);
-    applyViewmodelRecoil(this.weaponRoot.quaternion, view);
+    this.viewAir.apply(this.weaponRoot, view, this.sim.grounded);
     if (modelKick && this.sim.slot !== 3) this.weaponRoot.rotation.x += modelKick * .02;
     const point = vector(followCrosshairDirection(this.sim.yaw, this.sim.pitch, visualRecoil))
       .multiplyScalar(10).add(this.camera.position).project(this.camera);
