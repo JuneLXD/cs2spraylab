@@ -947,6 +947,31 @@ including 48 AIR frame transitions per engine, world-space placement, recoil
 ordering and skipped draws. Serial capped checks ran with auto-deploy paused;
 no repository files changed during browser execution.
 
+## Procedural motion inputs (twenty-fifth pass, 2026-10-09)
+
+[Pass 25](reaudit-motion-inputs.md) captures the evaluated velocity caches, scene
+orientation and sway clock inputs in the current client. Supplying the selected
+velocity cache reproduces captured bob state within native/host trig precision;
+raw velocity leaves measurable residuals. The portable numeric fixture and
+bounded native replay preserve the comparison. This is native input verification,
+not a trainer before/after correction.
+
+Large stationary turns show changing scene yaw with up to35.62460° separation
+from aim yaw. Clean evaluated/absolute angles agree, while dirty transitions expose
+cache invalidation and refresh. Constant scene yaw in the earlier small-turn
+recording did not establish a fixed basis. The scene writer and update law remain
+unbound. Sway history/rate and adjacent-frame HUD smoothing replay exactly;
+source-angle writer ordering remains unresolved.
+
+The first sequence incorrectly used W/S where the user's movement bindings are
+T/G. Its strafing and stationary turns remain valid; forward/back and moving-turn
+claims are excluded. Requested frame caps are separate from observed HUD cadence.
+Production is unchanged and R8 follow-up remains excluded. Corrected T/G moving
+turns are retained separately; all 3,833 native bob comparisons match selected
+cache inputs within numerical precision. Validation: TypeScript passes, 2,338
+units pass with only the known fallback fixture failure, and both targeted
+Chromium cases pass.
+
 ## Re-audit delivery validation
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph

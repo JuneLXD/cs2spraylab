@@ -1,0 +1,1371 @@
+{
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "captureDirectory": "native-audit/reports/reaudit-motion-runtime-005",
+  "terminalStatus": {
+    "samplerExitCode": 1,
+    "gameProcessAbsent": true,
+    "recordingCompleted": true,
+    "sourceSha256": "3f5fec6fff7a5795ebcc4146b0e22a5f6811754b39f18a95e92c20709a2d735e",
+    "rows": 17698,
+    "lastMonotonic": 10621.467015316,
+    "cleanupStarted": 10618.667063456,
+    "reason": "Sampler asserted when scene-node pointer became null during requested game quit. All recording input edges precede final row. Sampler service terminated; actual game exit code was not retained."
+  },
+  "bindingEvidence": {
+    "path": "/home/junel/Desktop/cs2/native-audit/reports/reaudit-20261009/keys-before.vcfg",
+    "sha256": "ba979156ac95ba63b4895047d8ee19676eabf61d5da0a101990f4312125d9c45",
+    "bindings": {
+      "t": "+forward",
+      "w": "+lookatweapon",
+      "g": "+back",
+      "s": "+use",
+      "f": "+left",
+      "h": "+right"
+    }
+  },
+  "method": "Streaming JSONL; hashes and row counts checked against retained manifest. Angle differences use shortest wrapped degrees. Quaternion distance normalizes operands and treats q/-q as identical. Input windows extend 30ms before and 350ms after logged actions; logs mark command dispatch, not exact in-game application. Speed subsets contain disconnected intervals; their change counters must not be interpreted as a continuous trace.",
+  "limitations": [
+    "Scene dirtiness can concern translation or scale; a dirty flag alone does not show orientation is stale.",
+    "These observations do not identify the writer or prove spawn-only, teleport, respawn, equip or universal body-follow behavior.",
+    "Repeated sample rows within a captured client frame are retained and unique-frame counts reported separately; these counters do not establish presentation cadence.",
+    "The two fps_max settings are requested caps only. A distinct lower HUD update cadence is not established by this comparison.",
+    "The source angle is the captured native source field, not a claim that it equals every downstream rendered view transform."
+  ],
+  "findings": [
+    {
+      "id": "SOR01",
+      "status": "observed",
+      "finding": "Scene local, evaluated and absolute yaw and the scene quaternion change during the logged stationary source-yaw sweeps. A fixed scene-yaw implementation is contradicted in these captures. Captured scene parent pointers remain null."
+    },
+    {
+      "id": "SOR02",
+      "status": "observed",
+      "finding": "Source yaw and scene yaw are distinct values during turning, including clean-cache samples. Scene yaw also continues changing during some holds of an exactly constant source-angle field. This is observed lag/convergence, not identification of an animation writer or a smoothing formula."
+    },
+    {
+      "id": "SOR03",
+      "status": "observed",
+      "finding": "For every clean absolute-cache sample, evaluated scene angles equal absolute scene angles exactly, and the scene quaternion matches those absolute angles within 0.00001 degree. Local versus evaluated angles can still differ when the absolute cache is clean."
+    },
+    {
+      "id": "SOR04",
+      "status": "observed",
+      "finding": "Dirty samples include cases where the evaluated angle has advanced but the absolute angle/quaternion still contain the earlier value. Retained orientationDirtyTransitionExamples show both invalidation and refresh. Dirty flags also occur without angle changes, so dirtiness alone is not orientation staleness."
+    },
+    {
+      "id": "SOR05",
+      "status": "observed",
+      "finding": "The corrected T/G input window includes source-angle changes while measured horizontal speed exceeds 1 unit/second. See the T-held mouse-sweep segments and measuredMovingSamples for the actual moving-turn observations."
+    },
+    {
+      "id": "SOR06",
+      "status": "unverified",
+      "finding": "The capture does not identify who writes scene yaw, establish reset rules, or distinguish a general animation/body-follow law from other update mechanisms. Requested fps_max 60/30 settings are not proof of different HUD/presentation cadence."
+    }
+  ],
+  "captures": [
+    {
+      "stem": "native_reaudit_bob_004",
+      "snapshotSha256": "13757f5fb4661bb0de119277f06eeed92ea22fa60efccd53f92428ad7aec2bfc",
+      "inputSha256": "8a40b1a8c6108a5f3f4b3fdd88f6c558b4b00b414b6cd71bb360bbd26eaa9544",
+      "allSamples": {
+        "rows": 4014,
+        "uniqueFrames": 1248,
+        "uniqueTicks": 1291,
+        "durationSeconds": 20.21925431099953,
+        "dirtyCounts": {
+          "0": 2968,
+          "1": 1046
+        },
+        "unique": {
+          "sceneLocalAngles": {
+            "count": 451
+          },
+          "sceneAbsUpdateSourceAngles": {
+            "count": 692
+          },
+          "sceneAbsoluteAngles": {
+            "count": 628
+          },
+          "quaternion": {
+            "count": 628
+          },
+          "sourceAngles": {
+            "count": 65
+          },
+          "parent": {
+            "count": 1,
+            "values": [
+              0
+            ]
+          },
+          "pawnEntity": {
+            "count": 1
+          }
+        },
+        "ranges": {
+          "sceneLocalAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              -180.73251342773438,
+              180.0742645263672
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "sceneAbsUpdateSourceAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              -180.73251342773438,
+              180.0742645263672
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "sceneAbsoluteAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              -180.73251342773438,
+              179.2677001953125
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "sourceAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              -173.19996643066406,
+              178.00015258789062
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "storedVelocityUnitsPerSecond": [
+            [
+              -215.0,
+              215.0
+            ],
+            [
+              -215.0,
+              215.0
+            ],
+            [
+              -281.9909973144531,
+              293.0090026855469
+            ]
+          ],
+          "horizontalSpeedUnitsPerSecond": [
+            [
+              0.0,
+              215.0000004811304
+            ]
+          ],
+          "absoluteOriginUnits": [
+            [
+              -1171.22802734375,
+              -891.4790649414062
+            ],
+            [
+              -806.1127319335938,
+              -638.03369140625
+            ],
+            [
+              115.98291778564453,
+              184.421875
+            ]
+          ],
+          "frameDeltaSeconds": [
+            [
+              0.014406123198568821,
+              0.031345635652542114
+            ]
+          ],
+          "quaternionNorm": [
+            [
+              0.9999999626339353,
+              1.0000000408580005
+            ]
+          ],
+          "sourceYawUnwrappedDegrees": [
+            [
+              -15.60000228881836,
+              195.60003662109375
+            ]
+          ]
+        },
+        "changes": {
+          "sceneAbsTransformDirty": 2002,
+          "sourceAngles": 165,
+          "sourceAnglesWhileMoving": 48,
+          "sceneLocalAngles": 470,
+          "sceneLocalAnglesWhileMoving": 127,
+          "sceneAbsUpdateSourceAngles": 827,
+          "sceneAbsUpdateSourceAnglesWhileMoving": 210,
+          "sceneAbsoluteAngles": 655,
+          "sceneAbsoluteAnglesWhileMoving": 165,
+          "quaternion": 655
+        },
+        "counts": {
+          "horizontalSpeedAbove1": 1077,
+          "localDiffersFromEvaluated": 264,
+          "sourceDiffersFromLocalAbove0.0001Degree": 1375,
+          "evaluatedDiffersFromAbsolute_dirty0": 0,
+          "sourceSceneSeparationAbove1Degree_dirty0": 992,
+          "evaluatedDiffersFromAbsolute_dirty1": 185,
+          "sourceSceneSeparationAbove1Degree_dirty1": 314
+        },
+        "maxima": {
+          "sourceVsSceneWrappedAngleDegrees": 33.591896057128906,
+          "sourceVsLocalAnglesDegrees": 33.591896057128906,
+          "sourceVsEvaluatedAnglesDegrees": 33.591896057128906,
+          "sourceVsSceneQuaternionDegrees": 33.591901472991175,
+          "localVsEvaluatedAnglesDegrees": 1.8424606323242188,
+          "evaluatedVsAbsoluteAnglesDegrees": 1.8424606323242188,
+          "absoluteAnglesVsQuaternionDegrees": 9.035490975690204e-06,
+          "pawnVsSceneQuaternionDegrees": 2.4148365394514667e-06,
+          "evaluatedVsAbsoluteOriginUnits_dirty0": 0.0,
+          "sceneNodeVsAbsoluteOriginUnits": 0.0,
+          "sourceFieldVsNestedSourceDegrees": 0.0,
+          "evaluatedVsAbsoluteOriginUnits_dirty1": 3.3592529296875
+        }
+      },
+      "cleanAbsoluteCacheSamples": {
+        "rows": 2968,
+        "uniqueFrames": 1248,
+        "uniqueTicks": 1289,
+        "durationSeconds": 20.21925431099953,
+        "dirtyCounts": {
+          "0": 2968
+        },
+        "unique": {
+          "sceneLocalAngles": {
+            "count": 451
+          },
+          "sceneAbsUpdateSourceAngles": {
+            "count": 627
+          },
+          "sceneAbsoluteAngles": {
+            "count": 627
+          },
+          "quaternion": {
+            "count": 627
+          },
+          "sourceAngles": {
+            "count": 65
+          },
+          "parent": {
+            "count": 1,
+            "values": [
+              0
+            ]
+          },
+          "pawnEntity": {
+            "count": 1
+          }
+        },
+        "ranges": {
+          "sceneLocalAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              -180.73251342773438,
+              180.0742645263672
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "sceneAbsUpdateSourceAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              -180.73251342773438,
+              179.2677001953125
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "sceneAbsoluteAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              -180.73251342773438,
+              179.2677001953125
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "sourceAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              -173.19996643066406,
+              178.00015258789062
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "storedVelocityUnitsPerSecond": [
+            [
+              -215.0,
+              215.0
+            ],
+            [
+              -215.0,
+              215.0
+            ],
+            [
+              -281.9909973144531,
+              293.0090026855469
+            ]
+          ],
+          "horizontalSpeedUnitsPerSecond": [
+            [
+              0.0,
+              215.0000004811304
+            ]
+          ],
+          "absoluteOriginUnits": [
+            [
+              -1171.22802734375,
+              -891.4790649414062
+            ],
+            [
+              -806.1127319335938,
+              -638.03369140625
+            ],
+            [
+              115.98291778564453,
+              184.421875
+            ]
+          ],
+          "frameDeltaSeconds": [
+            [
+              0.014406123198568821,
+              0.031345635652542114
+            ]
+          ],
+          "quaternionNorm": [
+            [
+              0.9999999626339353,
+              1.0000000408580005
+            ]
+          ],
+          "sourceYawUnwrappedDegrees": [
+            [
+              -15.60000228881836,
+              195.60003662109375
+            ]
+          ]
+        },
+        "changes": {
+          "sourceAngles": 165,
+          "sourceAnglesWhileMoving": 48,
+          "sceneLocalAngles": 470,
+          "sceneLocalAnglesWhileMoving": 127,
+          "sceneAbsUpdateSourceAngles": 651,
+          "sceneAbsUpdateSourceAnglesWhileMoving": 165,
+          "sceneAbsoluteAngles": 651,
+          "sceneAbsoluteAnglesWhileMoving": 165,
+          "quaternion": 651
+        },
+        "counts": {
+          "horizontalSpeedAbove1": 809,
+          "localDiffersFromEvaluated": 263,
+          "sourceDiffersFromLocalAbove0.0001Degree": 1047,
+          "evaluatedDiffersFromAbsolute_dirty0": 0,
+          "sourceSceneSeparationAbove1Degree_dirty0": 992
+        },
+        "maxima": {
+          "sourceVsSceneWrappedAngleDegrees": 33.591896057128906,
+          "sourceVsLocalAnglesDegrees": 33.591896057128906,
+          "sourceVsEvaluatedAnglesDegrees": 33.591896057128906,
+          "sourceVsSceneQuaternionDegrees": 33.591901472991175,
+          "localVsEvaluatedAnglesDegrees": 1.8424606323242188,
+          "evaluatedVsAbsoluteAnglesDegrees": 0.0,
+          "absoluteAnglesVsQuaternionDegrees": 9.035490975690204e-06,
+          "pawnVsSceneQuaternionDegrees": 2.4148365394514667e-06,
+          "evaluatedVsAbsoluteOriginUnits_dirty0": 0.0,
+          "sceneNodeVsAbsoluteOriginUnits": 0.0,
+          "sourceFieldVsNestedSourceDegrees": 0.0
+        }
+      },
+      "measuredMovingSamples": {
+        "rows": 1077,
+        "uniqueFrames": 337,
+        "uniqueTicks": 358,
+        "durationSeconds": 13.42522210899915,
+        "dirtyCounts": {
+          "0": 809,
+          "1": 268
+        },
+        "unique": {
+          "sceneLocalAngles": {
+            "count": 108
+          },
+          "sceneAbsUpdateSourceAngles": {
+            "count": 165
+          },
+          "sceneAbsoluteAngles": {
+            "count": 148
+          },
+          "quaternion": {
+            "count": 148
+          },
+          "sourceAngles": {
+            "count": 25
+          },
+          "parent": {
+            "count": 1,
+            "values": [
+              0
+            ]
+          },
+          "pawnEntity": {
+            "count": 1
+          }
+        },
+        "ranges": {
+          "sceneLocalAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              37.199981689453125,
+              91.4969482421875
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "sceneAbsUpdateSourceAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              37.199981689453125,
+              91.5264663696289
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "sceneAbsoluteAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              37.199981689453125,
+              91.5264663696289
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "sourceAnglesDegrees": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              37.199981689453125,
+              90.0
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "storedVelocityUnitsPerSecond": [
+            [
+              -215.0,
+              215.0
+            ],
+            [
+              -215.0,
+              215.0
+            ],
+            [
+              0.0,
+              0.0
+            ]
+          ],
+          "horizontalSpeedUnitsPerSecond": [
+            [
+              1.985087336122336,
+              215.0000004811304
+            ]
+          ],
+          "absoluteOriginUnits": [
+            [
+              -1171.22802734375,
+              -891.4873046875
+            ],
+            [
+              -806.0961303710938,
+              -638.03369140625
+            ],
+            [
+              115.98310852050781,
+              129.03125
+            ]
+          ],
+          "frameDeltaSeconds": [
+            [
+              0.014555320143699646,
+              0.03125
+            ]
+          ],
+          "quaternionNorm": [
+            [
+              0.9999999633426964,
+              1.0000000408580005
+            ]
+          ],
+          "sourceYawUnwrappedDegrees": [
+            [
+              37.199981689453125,
+              90.0
+            ]
+          ]
+        },
+        "changes": {
+          "sceneAbsTransformDirty": 519,
+          "sceneLocalAngles": 127,
+          "sceneLocalAnglesWhileMoving": 127,
+          "sceneAbsUpdateSourceAngles": 210,
+          "sceneAbsUpdateSourceAnglesWhileMoving": 210,
+          "sceneAbsoluteAngles": 165,
+          "sceneAbsoluteAnglesWhileMoving": 165,
+          "quaternion": 165,
+          "sourceAngles": 48,
+          "sourceAnglesWhileMoving": 48
+        },
+        "counts": {
+          "horizontalSpeedAbove1": 1077,
+          "localDiffersFromEvaluated": 62,
+          "sourceDiffersFromLocalAbove0.0001Degree": 210,
+          "evaluatedDiffersFromAbsolute_dirty0": 0,
+          "sourceSceneSeparationAbove1Degree_dirty0": 106,
+          "evaluatedDiffersFromAbsolute_dirty1": 51,
+          "sourceSceneSeparationAbove1Degree_dirty1": 35
+        },
+        "maxima": {
+          "sourceVsSceneWrappedAngleDegrees": 7.657379150390625,
+          "sourceVsLocalAnglesDegrees": 7.657379150390625,
+          "sourceVsEvaluatedAnglesDegrees": 7.657379150390625,
+          "sourceVsSceneQuaternionDegrees": 7.657378050042262,
+          "localVsEvaluatedAnglesDegrees": 0.9936370849609375,
+          "evaluatedVsAbsoluteAnglesDegrees": 0.9936370849609375,
+          "absoluteAnglesVsQuaternionDegrees": 7.636383641665691e-06,
+          "pawnVsSceneQuaternionDegrees": 2.4148365394514667e-06,
+          "evaluatedVsAbsoluteOriginUnits_dirty0": 0.0,
+          "sceneNodeVsAbsoluteOriginUnits": 0.0,
+          "sourceFieldVsNestedSourceDegrees": 0.0,
+          "evaluatedVsAbsoluteOriginUnits_dirty1": 3.3592529296875
+        }
+      },
+      "inputSegments": [
+        {
+          "kind": "key-hold",
+          "key": "f",
+          "start": 10575.897459742,
+          "end": 10576.699945389,
+          "observationStart": 10575.867459742,
+          "observationEnd": 10577.049945389,
+          "summary": {
+            "rows": 201,
+            "changes": {
+              "sceneAbsTransformDirty": 83
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                215.00000047952562
+              ]
+            ],
+            "maxSourceSceneDegrees": 0.0
+          }
+        },
+        {
+          "kind": "key-hold",
+          "key": "h",
+          "start": 10577.502587138,
+          "end": 10578.316051294,
+          "observationStart": 10577.472587138,
+          "observationEnd": 10578.666051294,
+          "summary": {
+            "rows": 208,
+            "changes": {
+              "sceneAbsTransformDirty": 82
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                215.00000048109302
+              ]
+            ],
+            "maxSourceSceneDegrees": 0.0
+          }
+        },
+        {
+          "kind": "key-hold",
+          "key": "t",
+          "start": 10579.119908021,
+          "end": 10579.922278782,
+          "observationStart": 10579.089908021,
+          "observationEnd": 10580.272278782,
+          "summary": {
+            "rows": 256,
+            "changes": {
+              "sceneAbsTransformDirty": 142
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                215.00000048102922
+              ]
+            ],
+            "maxSourceSceneDegrees": 0.0
+          }
+        },
+        {
+          "kind": "key-hold",
+          "key": "g",
+          "start": 10580.728559679,
+          "end": 10581.529131521,
+          "observationStart": 10580.698559679,
+          "observationEnd": 10581.879131521,
+          "summary": {
+            "rows": 244,
+            "changes": {
+              "sceneAbsTransformDirty": 143
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                215.0000004811304
+              ]
+            ],
+            "maxSourceSceneDegrees": 0.0
+          }
+        },
+        {
+          "kind": "mouse-sweep",
+          "motion": [
+            400,
+            0
+          ],
+          "start": 10582.330180364,
+          "end": 10582.917319307,
+          "heldKeys": [],
+          "count": 12,
+          "observationStart": 10582.300180364,
+          "observationEnd": 10583.267319307,
+          "summary": {
+            "rows": 207,
+            "changes": {
+              "sceneAbsTransformDirty": 77,
+              "sourceAngles": 30,
+              "sourceAnglesWhileMoving": 0,
+              "sceneLocalAngles": 91,
+              "sceneLocalAnglesWhileMoving": 0,
+              "sceneAbsUpdateSourceAngles": 158,
+              "sceneAbsUpdateSourceAnglesWhileMoving": 0,
+              "sceneAbsoluteAngles": 128,
+              "sceneAbsoluteAnglesWhileMoving": 0,
+              "quaternion": 128
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                0.0
+              ]
+            ],
+            "maxSourceSceneDegrees": 32.1848030090332
+          }
+        },
+        {
+          "kind": "mouse-sweep",
+          "motion": [
+            -400,
+            0
+          ],
+          "start": 10583.768145141,
+          "end": 10584.333954064,
+          "heldKeys": [],
+          "count": 12,
+          "observationStart": 10583.738145141,
+          "observationEnd": 10584.683954064001,
+          "summary": {
+            "rows": 202,
+            "changes": {
+              "sceneAbsTransformDirty": 85,
+              "sourceAngles": 23,
+              "sourceAnglesWhileMoving": 0,
+              "sceneLocalAngles": 86,
+              "sceneLocalAnglesWhileMoving": 0,
+              "sceneAbsUpdateSourceAngles": 157,
+              "sceneAbsUpdateSourceAnglesWhileMoving": 0,
+              "sceneAbsoluteAngles": 126,
+              "sceneAbsoluteAnglesWhileMoving": 0,
+              "quaternion": 126
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                0.0
+              ]
+            ],
+            "maxSourceSceneDegrees": 33.35412406921387
+          }
+        },
+        {
+          "kind": "mouse-sweep",
+          "motion": [
+            -400,
+            0
+          ],
+          "start": 10585.18514467,
+          "end": 10585.752014783,
+          "heldKeys": [],
+          "count": 12,
+          "observationStart": 10585.15514467,
+          "observationEnd": 10586.102014783,
+          "summary": {
+            "rows": 188,
+            "changes": {
+              "sceneAbsTransformDirty": 82,
+              "sourceAngles": 30,
+              "sourceAnglesWhileMoving": 0,
+              "sceneLocalAngles": 86,
+              "sceneLocalAnglesWhileMoving": 0,
+              "sceneAbsUpdateSourceAngles": 152,
+              "sceneAbsUpdateSourceAnglesWhileMoving": 0,
+              "sceneAbsoluteAngles": 120,
+              "sceneAbsoluteAnglesWhileMoving": 0,
+              "quaternion": 120
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                0.0
+              ]
+            ],
+            "maxSourceSceneDegrees": 33.591896057128906
+          }
+        },
+        {
+          "kind": "mouse-sweep",
+          "motion": [
+            400,
+            0
+          ],
+          "start": 10586.603253432,
+          "end": 10587.167798824,
+          "heldKeys": [],
+          "count": 12,
+          "observationStart": 10586.573253432,
+          "observationEnd": 10587.517798824001,
+          "summary": {
+            "rows": 188,
+            "changes": {
+              "sceneAbsTransformDirty": 85,
+              "sourceAngles": 24,
+              "sourceAnglesWhileMoving": 0,
+              "sceneLocalAngles": 80,
+              "sceneLocalAnglesWhileMoving": 0,
+              "sceneAbsUpdateSourceAngles": 150,
+              "sceneAbsUpdateSourceAnglesWhileMoving": 0,
+              "sceneAbsoluteAngles": 116,
+              "sceneAbsoluteAnglesWhileMoving": 0,
+              "quaternion": 116
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                0.0
+              ]
+            ],
+            "maxSourceSceneDegrees": 33.30506896972656
+          }
+        },
+        {
+          "kind": "mouse-sweep",
+          "motion": [
+            200,
+            0
+          ],
+          "start": 10588.018998223,
+          "end": 10588.583198696,
+          "heldKeys": [
+            "t"
+          ],
+          "count": 12,
+          "observationStart": 10587.988998223,
+          "observationEnd": 10588.933198696,
+          "summary": {
+            "rows": 207,
+            "changes": {
+              "sceneAbsTransformDirty": 85,
+              "sceneLocalAngles": 99,
+              "sceneLocalAnglesWhileMoving": 99,
+              "sceneAbsUpdateSourceAngles": 168,
+              "sceneAbsUpdateSourceAnglesWhileMoving": 168,
+              "sceneAbsoluteAngles": 134,
+              "sceneAbsoluteAnglesWhileMoving": 134,
+              "quaternion": 134,
+              "sourceAngles": 37,
+              "sourceAnglesWhileMoving": 37
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                213.1663489262394
+              ]
+            ],
+            "maxSourceSceneDegrees": 7.657379150390625
+          }
+        },
+        {
+          "kind": "mouse-sweep",
+          "motion": [
+            -200,
+            0
+          ],
+          "start": 10588.633619353,
+          "end": 10589.195425686,
+          "heldKeys": [
+            "t"
+          ],
+          "count": 12,
+          "observationStart": 10588.603619353,
+          "observationEnd": 10589.545425686001,
+          "summary": {
+            "rows": 169,
+            "changes": {
+              "sceneAbsUpdateSourceAngles": 96,
+              "sceneAbsUpdateSourceAnglesWhileMoving": 96,
+              "sceneAbsoluteAngles": 75,
+              "sceneAbsoluteAnglesWhileMoving": 75,
+              "quaternion": 75,
+              "sceneAbsTransformDirty": 90,
+              "sourceAngles": 25,
+              "sourceAnglesWhileMoving": 25,
+              "sceneLocalAngles": 65,
+              "sceneLocalAnglesWhileMoving": 65
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                213.1663489262394
+              ]
+            ],
+            "maxSourceSceneDegrees": 3.5579071044921875
+          }
+        },
+        {
+          "kind": "key-hold",
+          "key": "t",
+          "start": 10588.018616542,
+          "end": 10589.245720118,
+          "observationStart": 10587.988616542,
+          "observationEnd": 10589.595720118,
+          "summary": {
+            "rows": 314,
+            "changes": {
+              "sceneAbsTransformDirty": 151,
+              "sceneLocalAngles": 127,
+              "sceneLocalAnglesWhileMoving": 127,
+              "sceneAbsUpdateSourceAngles": 210,
+              "sceneAbsUpdateSourceAnglesWhileMoving": 210,
+              "sceneAbsoluteAngles": 165,
+              "sceneAbsoluteAnglesWhileMoving": 165,
+              "quaternion": 165,
+              "sourceAngles": 48,
+              "sourceAnglesWhileMoving": 48
+            },
+            "horizontalSpeedRange": [
+              [
+                0.0,
+                213.1663489262394
+              ]
+            ],
+            "maxSourceSceneDegrees": 7.657379150390625
+          }
+        }
+      ],
+      "sourceAngleHoldsAtLeast250ms": [
+        {
+          "start": 10573.907547707,
+          "end": 10582.355909704,
+          "rows": 1677,
+          "sourceAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "initial": {
+            "monotonic": 10573.907547707,
+            "frame": 12037,
+            "tick": 12529,
+            "sourceAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "absoluteAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              0.7071067690849304,
+              0.7071067690849304
+            ],
+            "dirty": 0,
+            "storedVelocity": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "final": {
+            "monotonic": 10582.355909704,
+            "frame": 12548,
+            "tick": 13070,
+            "sourceAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "absoluteAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              0.7071067690849304,
+              0.7071067690849304
+            ],
+            "dirty": 0,
+            "storedVelocity": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "maxHorizontalSpeed": 215.0000004811304
+        },
+        {
+          "start": 10583.445628377,
+          "end": 10583.762476679,
+          "rows": 60,
+          "sourceAngles": [
+            0.0,
+            -15.599899291992188,
+            0.0
+          ],
+          "initial": {
+            "monotonic": 10583.445628377,
+            "frame": 12618,
+            "tick": 13139,
+            "sourceAngles": [
+              0.0,
+              -15.599899291992188,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              -14.06353759765625,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              -14.06353759765625,
+              0.0
+            ],
+            "absoluteAngles": [
+              0.0,
+              -14.06353759765625,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              -0.12241965532302856,
+              0.9924784302711487
+            ],
+            "dirty": 1,
+            "storedVelocity": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "final": {
+            "monotonic": 10583.762476679,
+            "frame": 12638,
+            "tick": 13160,
+            "sourceAngles": [
+              0.0,
+              -15.599899291992188,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              -14.06353759765625,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              -14.06353759765625,
+              0.0
+            ],
+            "absoluteAngles": [
+              0.0,
+              -14.06353759765625,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              -0.12241965532302856,
+              0.9924784302711487
+            ],
+            "dirty": 0,
+            "storedVelocity": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "maxHorizontalSpeed": 0
+        },
+        {
+          "start": 10584.350695127,
+          "end": 10585.183181893,
+          "rows": 171,
+          "sourceAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "initial": {
+            "monotonic": 10584.350695127,
+            "frame": 12676,
+            "tick": 13196,
+            "sourceAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              68.52418518066406,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              68.52418518066406,
+              0.0
+            ],
+            "absoluteAngles": [
+              0.0,
+              68.52418518066406,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              0.5629794001579285,
+              0.8264709115028381
+            ],
+            "dirty": 0,
+            "storedVelocity": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "final": {
+            "monotonic": 10585.183181893,
+            "frame": 12729,
+            "tick": 13251,
+            "sourceAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              88.30123901367188,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              88.30123901367188,
+              0.0
+            ],
+            "absoluteAngles": [
+              0.0,
+              88.30123901367188,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              0.6965469717979431,
+              0.7175111770629883
+            ],
+            "dirty": 0,
+            "storedVelocity": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "maxHorizontalSpeed": 0
+        },
+        {
+          "start": 10587.178731655,
+          "end": 10588.037603911,
+          "rows": 177,
+          "sourceAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "initial": {
+            "monotonic": 10587.178731655,
+            "frame": 12857,
+            "tick": 13377,
+            "sourceAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              112.52604675292969,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              112.52604675292969,
+              0.0
+            ],
+            "absoluteAngles": [
+              0.0,
+              112.52604675292969,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              0.8315958976745605,
+              0.5553812384605408
+            ],
+            "dirty": 0,
+            "storedVelocity": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "final": {
+            "monotonic": 10588.037603911,
+            "frame": 12912,
+            "tick": 13432,
+            "sourceAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              91.4969482421875,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              91.4969482421875,
+              0.0
+            ],
+            "absoluteAngles": [
+              -0.0,
+              91.5264663696289,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              0.7164630889892578,
+              0.6976249814033508
+            ],
+            "dirty": 1,
+            "storedVelocity": [
+              0.6644558906555176,
+              8.635363578796387,
+              0.0
+            ]
+          },
+          "maxHorizontalSpeed": 8.66088943288332
+        },
+        {
+          "start": 10589.210281005,
+          "end": 10594.126802018,
+          "rows": 932,
+          "sourceAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "initial": {
+            "monotonic": 10589.210281005,
+            "frame": 12987,
+            "tick": 13507,
+            "sourceAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              86.77298736572266,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              86.77298736572266,
+              0.0
+            ],
+            "absoluteAngles": [
+              0.0,
+              86.77298736572266,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              0.686916172504425,
+              0.7267366647720337
+            ],
+            "dirty": 0,
+            "storedVelocity": [
+              53.784549713134766,
+              4.172088623046875,
+              0.0
+            ]
+          },
+          "final": {
+            "monotonic": 10594.126802018,
+            "frame": 13284,
+            "tick": 13823,
+            "sourceAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "localAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "evaluatedAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "absoluteAngles": [
+              0.0,
+              90.0,
+              0.0
+            ],
+            "quaternion": [
+              0.0,
+              0.0,
+              0.7071067690849304,
+              0.7071067690849304
+            ],
+            "dirty": 0,
+            "storedVelocity": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "maxHorizontalSpeed": 53.95844390177681
+        }
+      ]
+    }
+  ],
+  "fullReport": "native-audit/reports/reaudit-scene-orientation/runtime-analysis-corrected-movement.json",
+  "fullReportSha256": "1af9b93b0fe434bcca2b2f1caac2380c09af71251087df812d41ebc2997d2be1",
+  "exportNote": "Repeated per-sample traces remain in the hash-bound full report; this summary preserves numerical findings."
+}

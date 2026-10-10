@@ -135,3 +135,13 @@ bob, prediction-phase mapping, pause/lifecycle and rendered landmarks remain
 partial. Full bob needs the evaluated native velocity cache and body-rotation
 writer; look sway needs its history/caller clocks mapped to trainer input.
 The approved capture and read-only sampler are retained. No R8 work resumed.
+
+### Procedural motion inputs, pass 25
+
+[Motion inputs](reaudit-motion-inputs.md) reproduces native bob from the actual
+selected velocity cache. Raw velocity does not reproduce it. Large stationary
+turns prove scene yaw changes and differs from aim yaw; its writer/update law
+remains unbound. New sway captures confirm exact history arithmetic and distinguish
+writer, source-interpolation and HUD clocks. No production feel change is justified
+until those inputs map to trainer simulation/presentation. The first capture
+sequence's incorrect W/S movement assumption is explicitly excluded.

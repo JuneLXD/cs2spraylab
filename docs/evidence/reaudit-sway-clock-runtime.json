@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "productionChange": false,
+  "scope": "Offline replay of two fixed owned numeric capture windows; no native execution",
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "sourceSha256": "d4e3f1591d4cd12632c8964dfba3ebfa56255efe227376a928921a8d845ba98b",
+  "manifestSha256": "7f65d4fe4ac4d3ea19377a938df1eb45bacd4253cd476b7889c57c8234840d80",
+  "scriptSha256": "2260d8ba3f12b28e137c7fecbc361903ccfdf259bcc6fb5a04aa43c07443a759",
+  "analysisSha256": "f1602e53c2d0157cd6e6b65508e317a839d79854e8d80f3cebc65f563973053b",
+  "evidence": [
+    "SC01-SC07 in findings.json",
+    "SH native history oracle, 37 cases retained separately",
+    "snapshot-manifest.json and SHA-bound runtime windows"
+  ],
+  "observations": [
+    "All accepted single-slot writes replace the oldest entry, advance exactly 1/64 second, lie on the 64 Hz grid and select the exact four-tick-old endpoint. Wrapped angle difference times16 reproduces every accepted rate exactly.",
+    "All captured controller states use domain0, offset0, ceiling disabled and the default converter. Therefore the statically proved writer accessor returns global current time at the call. Later observed phases can expose different clocks.",
+    "Every clock-exact new-write observation selects raw source angles. Both source-angle caches retain invalid time -1 in every row; their stale stored angles cannot replay a fresh lazy-cache evaluation.",
+    "HUD target equals the sampled pawn rate and its timestamp equals sampled global current time in every accepted HUD update. Every smoothing comparison across adjacent captured HUD frames is exact.",
+    "The only nonzero smoothing residual crosses a missing frame. No intermediate timestamp/state was captured, so the two-invocation result is not replayable from these endpoints alone.",
+    "Both requested-cap windows have median HUD elapsed time 1/64 second. Distinct 30 and 60 Hz rendering is not established."
+  ],
+  "windows": [
+    {
+      "name": "native_reaudit_bob_002",
+      "requestedCap": 60,
+      "rows": 4082,
+      "snapshotSha256": "565e10f9dc989208d1f2d3519327e55f0410828df75342eb858bf44f8d0500e1",
+      "inputSha256": "20e3f14e86b00e23388c0a537c0affb58e6e53597889731bd1728c0d361bb331",
+      "incoherentRows": 1,
+      "coherentSingleWrites": 1300,
+      "multipleSlotTransitions": 7,
+      "exactWriterRates": 1300,
+      "writerRateMaxError": 0.0,
+      "snapshotClockExactWrites": 623,
+      "availableRawSourceWrites": 965,
+      "rawSourceAngleMaxError": 0.0001678466796875,
+      "staleCacheNewWriteObservations": 335,
+      "hudUpdates": 1304,
+      "exactHudUpdates": 1304,
+      "adjacentFrameHudComparisons": 1302,
+      "adjacentFrameHudMaxError": 0.0,
+      "hudMaxError": 0.0,
+      "hudMedianElapsed": 0.015625,
+      "globalClockBackwardTransitions": 1882,
+      "missedFrameNumbers": 0
+    },
+    {
+      "name": "native_reaudit_bob_003",
+      "requestedCap": 30,
+      "rows": 4085,
+      "snapshotSha256": "6fa57f03e7e81d4b8089652064aef71ddb9d75ccbbf4ca846ec4babde2b19ed4",
+      "inputSha256": "e42178f38c47aa09306aabd41a8be29251774ed70bffd38ee8c22c0e0d60752e",
+      "incoherentRows": 0,
+      "coherentSingleWrites": 1273,
+      "multipleSlotTransitions": 15,
+      "exactWriterRates": 1273,
+      "writerRateMaxError": 0.0,
+      "snapshotClockExactWrites": 625,
+      "availableRawSourceWrites": 1000,
+      "rawSourceAngleMaxError": 0.0001678466796875,
+      "staleCacheNewWriteObservations": 273,
+      "hudUpdates": 1283,
+      "exactHudUpdates": 1282,
+      "adjacentFrameHudComparisons": 1281,
+      "adjacentFrameHudMaxError": 0.0,
+      "hudMaxError": 0.00011777365580201149,
+      "hudMedianElapsed": 0.015625,
+      "globalClockBackwardTransitions": 1907,
+      "missedFrameNumbers": 1
+    }
+  ],
+  "remainingMetadata": [
+    "Caller and prediction-phase identity at each source-angle/history write, including same-state duplicate calls and any writes missed by polling.",
+    "Unrounded source-angle input before the observed raw QAngle update; the remaining at most 0.000167847 degree difference is retained rather than fitted.",
+    "The source getter global alternate-path gates and related entity/transform state when selected.",
+    "If cache selection is live in another state: source interpolation-ring payload and evaluated endpoint/time pair; these windows never contain a valid cache timestamp.",
+    "Input event/prediction/presentation ordering mapping trainer128Hz inputs to native64Hz history writes. A 64Hz grid alone does not identify the source phase.",
+    "Nonzero controller offset, ceiling, nondefault converter and alternative domains were not observed; no runtime parity claim extends to them."
+  ],
+  "limits": [
+    "Coherence means captured duplicated fields agree and the producer guarded its blocks; no read-only polling scheme proves atomic observation of every native call.",
+    "Only single-slot timestamp changes with coherent endpoints are used for direct writer replay; multi-slot and angle-only changes remain counted separately.",
+    "A sample observed after a writer call can expose a later clock/cache phase. Nonzero clock/angle comparisons are retained and cannot alone refute the native call rule.",
+    "Cache output is available only when its stored time equals the selected requested time. A stale lazy cache is recorded but excluded from available-source comparisons; the interpolation ring needed to evaluate it was not captured.",
+    "Requested caps of 60 and 30 are capture labels only. Observed HUD cadence must be read from elapsed time and frame advances; this capture does not establish distinct 60 Hz and 30 Hz rendering.",
+    "A HUD replay spanning a missing frame applies one smoothing step across multiple possible invocations, so its residual is a coverage limit, not a refutation.",
+    "Interpolation history payload and alternate virtual getter gates were not captured; selecting a cache output is not a replay of its complete construction.",
+    "No native instructions or production source are executed by this analysis."
+  ],
+  "reproduce": "systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% python3 native-audit/reaudit-sway-clock-replay.py"
+}

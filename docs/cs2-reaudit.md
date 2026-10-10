@@ -1,4 +1,4 @@
-# CS2 independent re-audit: passes 16–24
+# CS2 independent re-audit: passes 16–25
 
 Seven evidenced corrections follow baseline `c488943`: movement (`79832e6`),
 scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
@@ -12,6 +12,8 @@ it does not certify complete native parity. The follow-up corrects
 identifies a remaining command-history mismatch without changing camera timing.
 [Client history](reaudit-client-history.md) now establishes the frame-selection
 rule; [weapon recoil](reaudit-viewmodel-recoil.md) corrects the separate model transform.
+[Motion-input pass 25](reaudit-motion-inputs.md) identifies the consumed velocity
+cache and changing scene basis without changing production motion.
 R8-specific follow-up is excluded at the user’s request.
 
 Current binary/config provenance is retained in
@@ -42,6 +44,9 @@ No active Ghidra request is cancelled or restarted.
   conversion, including Duel damage punch.
 - AIR weapon motion: 944 captured transitions match exactly; 812 isolated engine
   cases reduce missing position20.32mm→.000000889mm and orientation.4000053°→.00001648°.
+- Pass 25 evidence: 3,833 captured bob transitions replay within 7.46e-9 native
+  units using the selected velocity cache. Corrected moving turns confirm scene
+  yaw differs from aim yaw. Full bob/sway production behavior remains unchanged.
 - TypeScript passes. Pass 24 full unit suite: 2,338 passes and the documented missing
   `public/models/ak47.json` fallback failure. Both targeted Chromium cases pass,
   including actual weapon-root rotation, AIR placement and skipped draws. Earlier five-case input/trigger
@@ -164,7 +169,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-response.md
 | FOV / stretched view | Native configured viewmodel FOV65 | Vertical projection51.077193°; world4:3 and16:9 flow to model aspect; unchanged | Trainer arithmetic measured; matched native image comparison unverified | `c488943` |
 | Crouch camera | Fresh native view/root offset samples, movement inventory | Smoothstep replaced by independently approaching90u/s offsets | Matched recorded server state; rendered interpolation unverified | `79832e6` |
 | Landing camera / weapon dip | Native demo state available; complete rendered trajectory not recovered from gapped video | Existing view-punch response and model landing adjustment retained | Unverified rendered amplitude and duration | `c488943` |
-| Head bob / sway | Current HUD-model procedure contains velocity/air-state bob and smoothed angle sway outside the graph; pass 24 captures 944 exact AIR transitions | Native airborne world drop/pitch added; existing 2 mm sine movement bob retained | AIR matched in isolated bench; head motion/full bob/sway parity unverified | `4e999d9` |
+| Head bob / sway | Current HUD-model procedure contains velocity/air-state bob and smoothed angle sway outside the graph; pass 24 captures 944 exact AIR transitions | Native airborne world drop/pitch added; existing 2 mm sine movement bob retained | AIR matched in isolated bench; pass 25 matches captured bob inputs, full head/bob/sway parity unverified | `4e999d9` |
 | Hit sounds / damage indicators | Native hit/hurt event assets and mixer metadata; fresh sound onset alignment not captured | Head/helmet/body/armor and shooter/victim event selection; training indicators and damage camera retained | Native asset selection supported; timing/loudness and UI parity approximated | `c488943` |
 | Kill confirmation | Native event/UI rendering not frame-compared | Trainer kill feed/count and target feedback follow simulated death | Approximated training feedback | `c488943` |
 | Blood / bot flinch | Fresh native flinch clips and flags; animation inventory | Imported bullet-hit deltas plus simplified blood particles; unchanged | Matched sampled clips; approximated effects/blends | `c488943` |
@@ -210,7 +215,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | Bolt, slide and pump | Secondary skeleton animation embedded in native fire/reload clips | Included in exported rigged weapon clips; separate clip is not required for AWP/SSG bolt; sampled part errors ≤1.8 mm after R8 fix | Matched sampled parts within conversion error | `c488943` |
 | Shell reload timing | Native segment markers and clip times | View/world reload windows are selected by mechanic phase, then blended | Approximated composition; combat bench owns deadlines | `c488943` |
 | Viewmodel recoil share/view punch | Current-byte caller chain and native .325 world-angle addition; 432 bounded executions | Rotation error 3.29584° → 0.000014502° across 108 supplied states | Isolated rotation corrected; full gun/camera trajectories remain open | `5132783` |
-| Bob/sway and crouch/zoom motion | Native AIR state moves .1/call toward0/2, adds −.4×AIR world vertical and −.2×AIR Source pitch before recoil; 406 executed frames/944 captured transitions | AIR missing before; 812 engine/frame cases now reduce position error20.32mm→.000000889mm and angle error.4000053°→.00001648°; old movement sine retained | Isolated AIR matched; velocity/body basis, look sway, crouch/zoom and rendered landmarks partial | `4e999d9` |
+| Bob/sway and crouch/zoom motion | Native AIR state moves .1/call toward0/2, adds −.4×AIR world vertical and −.2×AIR Source pitch before recoil; 406 executed frames/944 captured transitions | AIR missing before; 812 engine/frame cases now reduce position error20.32mm→.000000889mm and angle error.4000053°→.00001648°; old movement sine retained | Isolated AIR matched; selected velocity cache verified in pass 25, scene writer/look sway/crouch/zoom/rendered landmarks partial | `4e999d9` |
 | Muzzle shape, size, duration | Fresh fire event tracks reference per-weapon particle systems at frame zero | Reduced native texture/particle envelopes grouped into six families; implementation explicitly approximates radius, randomization and materials | Approximated | `c488943` |
 | Shell ejection | AK fire clip includes `weapon_shell_casing_rifle` event at frame zero | No ejected shell/casing simulation/rendering found | Not present | `c488943` |
 | Tracer cadence and shape | Native per-weapon tracer data and particle systems | Native cadence option plus every-shot training option; browser trail/rope approximations | Approximated shape; combat/data bench owns cadence | `c488943` |
@@ -291,9 +296,17 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
     player clock. Input event time and firing deadline do not replace that record.
 27. The weapon air transition is per eligible HUD invocation, including zero
     delta. A time-scaled easing would not reproduce the measured native rule.
-28. Stored velocity and look yaw are insufficient for native movement bob:
-    evaluated velocity can differ by10.02936u/s in this capture, and pawn body
-    yaw remains fixed while eye yaw moves3.52°. No interpolation delay was fitted.
+28. Stored velocity and look yaw are insufficient for native movement bob.
+    Pass 25 directly identifies the selected velocity cache and reproduces
+    3,833 captured bob transitions; no interpolation delay was fitted.
+29. Fixed scene yaw in pass 24's 3.52° look sweep was limited coverage. Larger
+    stationary turns show up to35.62460° aim/scene separation; corrected moving
+    turns also show a clean local-angle difference. A fixed-yaw model is invalid.
+30. Requested FPS caps do not establish HUD or presentation cadence. Both
+    requested60/30 windows expose approximately64Hz HUD state updates.
+31. The first pass25 sequences used W/S, which are inspect/use in the user's
+    bindings. Those intervals are excluded from forward/back and moving-turn
+    evidence; the corrected T/G recording establishes actual movement.
 
 ## Exact remaining evidence and implementation
 
@@ -317,9 +330,10 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   through shots, recovery, crouch, landing and zoom; footstep material,
   listener-distance, water/ladder and separate jump/landing sound paths.
   Current video/audio process clocks give only approximate cross-stream alignment.
-  AIR state/arithmetic is now matched; full bob requires the evaluated native
-  velocity cache/context and body-rotation writer. Sway needs history-writer
-  cadence/input and HUD phase, beyond the captured exact-endpoint path.
+  AIR state/arithmetic is now matched; pass25 identifies the selected velocity
+  cache. Full bob still needs its interpolation-history construction and the
+  scene-angle writer/reset law. Sway needs input/writer/prediction ordering and
+  HUD phase beyond the captured exact-endpoint arithmetic.
 - Damage/hitboxes: controlled native victim health/armor deltas, hit groups,
   tagging velocities, knife/Zeus and penetration flags; authoritative server
   posed skeletons against the displayed poses in every stance and death transition.

@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "baseline": "f70dfbb",
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "productionChange": false,
+  "scope": "Sway writer current-angle input and player-time ownership; bounded static evidence",
+  "helper": "native-audit/reaudit-sway-clock-inputs.py:read_sway_fields",
+  "helperSha256": "107f771638c907643c279adb8ee1da34d649ee870cbb6418c7bb96e5afdde1a2",
+  "reportProbeSha256": "cf9e1ba7737c4b5b906e4f98302f7ed3c61d7d2f9560b8f0043e3f38285d8c4a",
+  "rangeDigests": [
+    {
+      "name": "writer-time-accessor",
+      "bytes": 48,
+      "sha256": "5c4f7aac79f6011b1467996bb7572f68b3720c35e9e40dda50bdc626c2ea4f00"
+    },
+    {
+      "name": "time-controller",
+      "bytes": 704,
+      "sha256": "8ffbfc7f40c119730c6cac27b27d4af0501698c582be0222534d09c3057aa63a"
+    },
+    {
+      "name": "prediction-player-pair",
+      "bytes": 144,
+      "sha256": "39a6facc6ae3c8dfed4577a475b83e789b6ab072abe65f14240387100d608024"
+    },
+    {
+      "name": "source-angle-getter",
+      "bytes": 1120,
+      "sha256": "40e4b4b5c0d51ff5d91f563746a69c247bd3ae5b20494fada19a87b799cadf07"
+    },
+    {
+      "name": "writer-cache-selection",
+      "bytes": 275,
+      "sha256": "3f14b02c02ca91c7588b4b4c3949a2e734eb4bd3b70301fdeaac62bed24e91d3"
+    },
+    {
+      "name": "writer-cache-alternate-selection",
+      "bytes": 48,
+      "sha256": "594e9bcdb2d513408242a6026a3c894b2a1a22aeb9d72a76f6be95aae73bc628"
+    },
+    {
+      "name": "writer-cache-slot-selection",
+      "bytes": 54,
+      "sha256": "33e58dacf1608de2d5e878c0cab622ee38c28fdc2f8a49c85c4eb82de94c7bd8"
+    },
+    {
+      "name": "source-update-caller",
+      "bytes": 320,
+      "sha256": "770156171cb2abef71743ea7c39251fc5c5a91ecf46674e08a97c80368b2565e"
+    },
+    {
+      "name": "pawn-update-caller",
+      "bytes": 278,
+      "sha256": "4101d54143edf9df22d1195236124f0a574a388f353cfc0b8230be10a9c05630"
+    },
+    {
+      "name": "sway-clock-owner",
+      "bytes": 576,
+      "sha256": "bb751fd4a0969ba2b409cba82104e5bc207da7af8049f194471a236d388998ba"
+    },
+    {
+      "name": "sway-cache-gates",
+      "bytes": 192,
+      "sha256": "f7b92ccf3af360bf8902cbc2916aaddd6b7ed1aedba465f098eda44cc6bfa0b3"
+    },
+    {
+      "name": "sway-writer-cache-tail",
+      "bytes": 464,
+      "sha256": "1b37998b209301a8e2d7b519b57b39c5b06d3f7d4f71f83b040c849c9a3b68d9"
+    },
+    {
+      "name": "sway-source-cache-update",
+      "bytes": 1216,
+      "sha256": "22a1d10e62fb69aeb593861970b5a096476b06ea25cf1f1720d6185f8f2e4176"
+    },
+    {
+      "name": "sway-cache-evaluator",
+      "bytes": 2336,
+      "sha256": "d54aed75fe15a7b793ac6837145477756b86bf7b13ad13824c21c44a79a74134"
+    },
+    {
+      "name": "sway-time-context",
+      "bytes": 352,
+      "sha256": "9c214ce69c4d6fb4e3b59e0f3143f20b2cd74867a12c415c80ea459d31699037"
+    },
+    {
+      "name": "sway-current-angle-resolver",
+      "bytes": 960,
+      "sha256": "caf5e55c3e40006699b97520084ad2aaca5c1a2c7c931c24fe586c73b2c8e9a4"
+    },
+    {
+      "name": "sway-source-angle-alternative",
+      "bytes": 256,
+      "sha256": "9727e4b46946f1fc82e45d89fabe76455118b285ba2c1ff45126c245442dbab1"
+    },
+    {
+      "name": "sway-time-control-methods",
+      "bytes": 592,
+      "sha256": "cf85c219a933415c6ce79d8f966d175378dd510fdad96e8eb73a185c651fc5cf"
+    }
+  ],
+  "observations": [
+    {
+      "id": "SC01",
+      "rule": "The sway writer passes an entity-identity integer selector to the player-time accessor. Nonzero selector, or no active controller on the zero-selector path, returns global current time directly.",
+      "evidence": [
+        "writer-time-accessor",
+        "writer-cache-selection"
+      ]
+    },
+    {
+      "id": "SC02",
+      "rule": "For the ordinary active controller, current global time is reduced by an integer tick offset. If ceiling mode is enabled, its tick is positive, and global time reaches that tick, the result instead uses ceiling tick minus offset, converted to seconds. A different converter virtual method is a distinct unmodeled branch.",
+      "evidence": [
+        "time-controller"
+      ]
+    },
+    {
+      "id": "SC03",
+      "rule": "The presented-frame player pair is a separate prediction-interface getter. Positive cached predicted tick uses global fraction only when requested and global frame delta is nonzero; nonpositive cached predicted tick falls back to global integer tick with fraction zero. The sway writer does not directly call this getter.",
+      "evidence": [
+        "prediction-player-pair",
+        "writer-time-accessor"
+      ]
+    },
+    {
+      "id": "SC04",
+      "rule": "Sway current-angle input selects raw QAngles or one of two interpolation caches from the interpolation-enabled byte, shared mode/state and packed pawn flags. The requested source-cache time comes from one of two shared time slots; it need not equal the history writer time.",
+      "evidence": [
+        "writer-cache-selection",
+        "writer-cache-alternate-selection",
+        "writer-cache-slot-selection",
+        "sway-current-angle-resolver"
+      ]
+    },
+    {
+      "id": "SC05",
+      "rule": "The source-cache resolver returns an already cached QAngle when the requested time exactly matches its cached time. A changed requested time can invoke interpolation-history evaluation, update the cache, and clear the selected dirty flag after successful evaluation. Source-angle cache histories are distinct from the four samples used for look sway.",
+      "evidence": [
+        "sway-current-angle-resolver",
+        "sway-cache-evaluator"
+      ]
+    },
+    {
+      "id": "SC06",
+      "rule": "The source-update caller requests the virtual current angle, updates raw/cache state when needed, and calls the sway history writer even if the returned angle compares equal. A separate pawn-update caller reaches the writer only when its recorded gate byte is zero. These are caller conditions, not a proof that there is exactly one writer invocation per tick.",
+      "evidence": [
+        "source-update-caller",
+        "pawn-update-caller"
+      ]
+    },
+    {
+      "id": "SC07",
+      "rule": "The virtual source-angle getter has additional global and pawn gates that can delegate to an alternate angle getter. That alternate getter can resolve an associated entity and its angle virtual method, or follow transform/orientation paths. Their runtime branch selection is not established by the ordinary four-sample history replay.",
+      "evidence": [
+        "source-angle-getter",
+        "sway-source-angle-alternative"
+      ]
+    }
+  ],
+  "controllerClock": {
+    "symbols": {
+      "G": "global current-time float",
+      "O": "controller signed integer offset ticks",
+      "C": "controller signed integer ceiling tick",
+      "E": "controller ceiling-enabled byte"
+    },
+    "noControllerOrNonzeroDomain": "G",
+    "ordinaryUnclamped": "f32(G - f32(f32(O) * f32(1/64)))",
+    "ordinaryCeilingCondition": "E and C > 0 and G >= f32(f32(C) * f32(1/64))",
+    "ordinaryClamped": "f32(f32(C - O) * f32(1/64))",
+    "limits": "Finite ordinary states only. Nondefault converter and integer overflow are not modeled."
+  },
+  "currentAngleSelector": [
+    {
+      "condition": "interpolation disabled",
+      "source": "raw"
+    },
+    {
+      "condition": "interpolation enabled, mode -1",
+      "source": "cache0"
+    },
+    {
+      "condition": "interpolation enabled, mode 0, context state 1",
+      "source": "cache0"
+    },
+    {
+      "condition": "interpolation enabled, mode 0, other context state, alternate-cache flag set",
+      "source": "cache1"
+    },
+    {
+      "condition": "interpolation enabled, mode 0, other context state, alternate-cache flag clear",
+      "source": "raw"
+    },
+    {
+      "condition": "interpolation enabled, mode 1, context state 1",
+      "source": "cache1 if alternate-cache flag set, otherwise cache0"
+    },
+    {
+      "condition": "interpolation enabled, mode 1, other context state",
+      "source": "raw"
+    },
+    {
+      "condition": "other mode",
+      "source": "raw"
+    }
+  ],
+  "captureFieldsAdded": [
+    "Clock-domain selector, time-controller presence/default-converter binding, tick offset, ceiling and enable flag",
+    "Global current time, frame delta, integer/fractional clocks, frame number, prediction cached tick",
+    "Shared interpolation mode/state, both source-cache times, helper-mode byte",
+    "Raw source angle, both angle-cache QAngles, both cached times, packed state/dirty flags",
+    "Interpolation enable, source-getter and pawn-update gate bytes, existing sway history/angles/rate"
+  ],
+  "captureGuarantee": "The helper only uses the parent sampler's approved read callback; all reads are bounded to 128 bytes and every block is returned for a second coherence read. It owns no process handles, target lifetime, writes or retries.",
+  "remainingRuntimeMetadata": [
+    "Observed clock-controller and interpolation branches during the new capture, checked against newly written sample times/angles.",
+    "Prediction/interpolation source histories and evaluated endpoint pairs when requested source time changes; current cache outputs alone identify results but not the complete reconstruction path.",
+    "The global alternative-getter gates and any related entity/transform state when that branch is relevant.",
+    "Caller/invocation identity or equivalent coherent state transitions sufficient to distinguish duplicate writer invocations and missed writes.",
+    "Presentation/input/prediction ordering that maps a trainer input event to native source-angle history; a 128 Hz trainer step alone does not identify it."
+  ],
+  "trainerBoundary": [
+    "Do not sample every second trainer tick and call it native history parity. Native history time, interpolated current angle and HUD smoothing time have distinct owners.",
+    "A faithful model needs a selected source-angle state with its time, four previous sway entries and the HUD global timestamp, preserving native duplicate/history behavior.",
+    "The old capture proved exact endpoint/rate and HUD arithmetic, but did not prove the timestamp ownership or cache branch because the necessary fields were absent."
+  ],
+  "limits": [
+    "Static findings do not establish current runtime values or default settings.",
+    "No new emulation or target execution was performed by these clock probes.",
+    "The current helper omits interpolation-ring payload and the source getter's global alternate-path gates; no claim closes those branches.",
+    "The new runtime capture is parent-owned and is not analyzed by this static report.",
+    "R8 is excluded; production source is unchanged."
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "method": "Replay bounded native bob using raw versus selected evaluated velocity.\n\nThis compares native input hypotheses, not trainer before/after behavior.\nReads immutable capture windows; never opens a running process.\n",
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "probeSha256": "7b80c22c7c9a0f55247647ae9871001d3d32e11fa158d52a06e650e41dab6aab",
+  "nativeOracleSha256": "adc47eaecd5c88ef339610f396b028572a13ee792c41e3a72b974703008b915f",
+  "fixtureSha256": "dd7e092b886090b2069f0158e098ef612499d0313cac28cfff6b0be1f62fc484",
+  "productionChanged": false,
+  "captures": [
+    {
+      "capture": "native_reaudit_bob_002",
+      "snapshotSha256": "565e10f9dc989208d1f2d3519327e55f0410828df75342eb858bf44f8d0500e1",
+      "rawRows": 4082,
+      "hudStates": 1305,
+      "all": {
+        "pairs": 1304,
+        "branches": {
+          "cache0": 1304
+        },
+        "maxStoredVsSelectedUnitsPerSecond": 133.4308624267578,
+        "storedErrors": {
+          "maxError": {
+            "cycle": 0.0028700828552246094,
+            "smoothVelocity": 0.018712222576141357,
+            "bob": 0.0053462982177734375,
+            "animationBob": 0.0013907253742218018,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1183,
+          "allFieldsExact": 1180
+        },
+        "selectedErrors": {
+          "maxError": {
+            "cycle": 0.0,
+            "smoothVelocity": 0.0,
+            "bob": 3.725290298461914e-09,
+            "animationBob": 3.725290298461914e-09,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1304,
+          "allFieldsExact": 1302
+        }
+      },
+      "consecutiveFrames": {
+        "pairs": 1260,
+        "branches": {
+          "cache0": 1260
+        },
+        "maxStoredVsSelectedUnitsPerSecond": 133.4308624267578,
+        "storedErrors": {
+          "maxError": {
+            "cycle": 0.0028700828552246094,
+            "smoothVelocity": 0.018712222576141357,
+            "bob": 0.0053462982177734375,
+            "animationBob": 0.0013907253742218018,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1141,
+          "allFieldsExact": 1138
+        },
+        "selectedErrors": {
+          "maxError": {
+            "cycle": 0.0,
+            "smoothVelocity": 0.0,
+            "bob": 3.725290298461914e-09,
+            "animationBob": 3.725290298461914e-09,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1260,
+          "allFieldsExact": 1258
+        }
+      },
+      "frameGaps": {
+        "1": 1260,
+        "2": 22,
+        "0": 22
+      }
+    },
+    {
+      "capture": "native_reaudit_bob_003",
+      "snapshotSha256": "6fa57f03e7e81d4b8089652064aef71ddb9d75ccbbf4ca846ec4babde2b19ed4",
+      "rawRows": 4085,
+      "hudStates": 1283,
+      "all": {
+        "pairs": 1282,
+        "branches": {
+          "cache0": 1282
+        },
+        "maxStoredVsSelectedUnitsPerSecond": 147.4522247314453,
+        "storedErrors": {
+          "maxError": {
+            "cycle": 0.000885009765625,
+            "smoothVelocity": 0.00577067956328392,
+            "bob": 0.001585591584444046,
+            "animationBob": 0.000421673059463501,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1162,
+          "allFieldsExact": 1158
+        },
+        "selectedErrors": {
+          "maxError": {
+            "cycle": 0.0,
+            "smoothVelocity": 0.0,
+            "bob": 9.313225746154785e-10,
+            "animationBob": 7.450580596923828e-09,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1282,
+          "allFieldsExact": 1278
+        }
+      },
+      "consecutiveFrames": {
+        "pairs": 1231,
+        "branches": {
+          "cache0": 1231
+        },
+        "maxStoredVsSelectedUnitsPerSecond": 147.4522247314453,
+        "storedErrors": {
+          "maxError": {
+            "cycle": 0.000885009765625,
+            "smoothVelocity": 0.00577067956328392,
+            "bob": 0.001585591584444046,
+            "animationBob": 0.000421673059463501,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1116,
+          "allFieldsExact": 1113
+        },
+        "selectedErrors": {
+          "maxError": {
+            "cycle": 0.0,
+            "smoothVelocity": 0.0,
+            "bob": 9.313225746154785e-10,
+            "animationBob": 7.450580596923828e-09,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1231,
+          "allFieldsExact": 1228
+        }
+      },
+      "frameGaps": {
+        "2": 26,
+        "0": 25,
+        "1": 1231
+      }
+    },
+    {
+      "capture": "native_reaudit_bob_004",
+      "snapshotSha256": "13757f5fb4661bb0de119277f06eeed92ea22fa60efccd53f92428ad7aec2bfc",
+      "rawRows": 4014,
+      "hudStates": 1248,
+      "all": {
+        "pairs": 1247,
+        "branches": {
+          "cache0": 1247
+        },
+        "maxStoredVsSelectedUnitsPerSecond": 139.63710021972656,
+        "storedErrors": {
+          "maxError": {
+            "cycle": 0.03801727294921875,
+            "smoothVelocity": 0.24725955724716187,
+            "bob": 0.2688009738922119,
+            "animationBob": 0.0152827687561512,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 963,
+          "allFieldsExact": 957
+        },
+        "selectedErrors": {
+          "maxError": {
+            "cycle": 0.0,
+            "smoothVelocity": 0.0,
+            "bob": 3.725290298461914e-09,
+            "animationBob": 3.725290298461914e-09,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1247,
+          "allFieldsExact": 1238
+        }
+      },
+      "consecutiveFrames": {
+        "pairs": 1201,
+        "branches": {
+          "cache0": 1201
+        },
+        "maxStoredVsSelectedUnitsPerSecond": 139.63710021972656,
+        "storedErrors": {
+          "maxError": {
+            "cycle": 0.03801727294921875,
+            "smoothVelocity": 0.24725955724716187,
+            "bob": 0.2688009738922119,
+            "animationBob": 0.0152827687561512,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 920,
+          "allFieldsExact": 914
+        },
+        "selectedErrors": {
+          "maxError": {
+            "cycle": 0.0,
+            "smoothVelocity": 0.0,
+            "bob": 3.725290298461914e-09,
+            "animationBob": 3.725290298461914e-09,
+            "air": 0.0
+          },
+          "allFieldsWithin1e4": 1201,
+          "allFieldsExact": 1192
+        }
+      },
+      "frameGaps": {
+        "1": 1201,
+        "2": 23,
+        "0": 23
+      }
+    }
+  ],
+  "limits": [
+    "After-update polling is not an invocation trace; frame gaps are explicit.",
+    "Previous native state is seeded for each comparison. This is not a free-running trainer replay.",
+    "Both windows have similar observed HUD cadence despite different requested FPS caps.",
+    "Only ordinary unscoped AK, captured scene transform, cache-hit path and finite values tested.",
+    "Correct consumed cache does not reconstruct its interpolation history or the scene-angle writer."
+  ]
+}

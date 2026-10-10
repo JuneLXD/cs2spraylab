@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "productionChange": false,
+  "scope": "Offline replay of fixed owned numeric capture windows; no native execution",
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "sourceSha256": "3f5fec6fff7a5795ebcc4146b0e22a5f6811754b39f18a95e92c20709a2d735e",
+  "manifestSha256": "2df1e3191e76810a763f5e233bfeddffeac15e3bc5e4b3bb91b86e57a669f8ba",
+  "scriptSha256": "d350b3090e9c69c2608dd7872792eb2bc3c790d4cb615dd44702208921f9b719",
+  "analysisSha256": "29fa90e9751facb62cfe58fd3c9f20c5b5b6b09c855b68fc048dcd72053df2f7",
+  "evidence": [
+    "SC01-SC07 in findings.json",
+    "SH native history oracle, 37 cases retained separately",
+    "snapshot-manifest.json and SHA-bound runtime windows"
+  ],
+  "observations": [
+    "Wrapped angle difference times16 reproduces 1214/1214 accepted rates exactly. Per-window counts retain oldest-entry replacement and clock-grid coverage.",
+    "All captured controller states use domain0, offset0, ceiling disabled and the default converter. Therefore the statically proved writer accessor returns global current time at the call. Later observed phases can expose different clocks.",
+    "Every clock-exact new-write observation selects raw source angles. Both source-angle caches retain invalid time -1 in every row; their stale stored angles cannot replay a fresh lazy-cache evaluation.",
+    "HUD smoothing matches 1248/1248 accepted updates, including 1247/1247 adjacent-frame comparisons. Target/rate and timestamp/current-time comparisons are reported separately.",
+    "0 nonzero smoothing residuals cross missing frames. Uncaptured intermediate timestamps/states prevent exact multi-invocation replay from endpoints alone.",
+    "Requested caps label configuration only; measured HUD elapsed times and frame advances establish observed cadence."
+  ],
+  "windows": [
+    {
+      "name": "native_reaudit_bob_004",
+      "requestedCap": 30,
+      "rows": 4014,
+      "snapshotSha256": "13757f5fb4661bb0de119277f06eeed92ea22fa60efccd53f92428ad7aec2bfc",
+      "inputSha256": "8a40b1a8c6108a5f3f4b3fdd88f6c558b4b00b414b6cd71bb360bbd26eaa9544",
+      "incoherentRows": 0,
+      "coherentSingleWrites": 1214,
+      "multipleSlotTransitions": 40,
+      "exactWriterRates": 1214,
+      "writerRateMaxError": 0.0,
+      "snapshotClockExactWrites": 663,
+      "availableRawSourceWrites": 990,
+      "rawSourceAngleMaxError": 0.0001678466796875,
+      "staleCacheNewWriteObservations": 224,
+      "hudUpdates": 1248,
+      "exactHudUpdates": 1248,
+      "adjacentFrameHudComparisons": 1247,
+      "adjacentFrameHudMaxError": 0.0,
+      "hudMaxError": 0.0,
+      "hudMedianElapsed": 0.0156402587890625,
+      "globalClockBackwardTransitions": 1836,
+      "missedFrameNumbers": 0
+    }
+  ],
+  "remainingMetadata": [
+    "Caller and prediction-phase identity at each source-angle/history write, including same-state duplicate calls and any writes missed by polling.",
+    "Unrounded source-angle input before the observed raw QAngle update; the remaining at most 0.000167847 degree difference is retained rather than fitted.",
+    "The source getter global alternate-path gates and related entity/transform state when selected.",
+    "If cache selection is live in another state: source interpolation-ring payload and evaluated endpoint/time pair; these windows never contain a valid cache timestamp.",
+    "Input event/prediction/presentation ordering mapping trainer128Hz inputs to native64Hz history writes. A 64Hz grid alone does not identify the source phase.",
+    "Nonzero controller offset, ceiling, nondefault converter and alternative domains were not observed; no runtime parity claim extends to them."
+  ],
+  "limits": [
+    "Coherence means captured duplicated fields agree and the producer guarded its blocks; no read-only polling scheme proves atomic observation of every native call.",
+    "Only single-slot timestamp changes with coherent endpoints are used for direct writer replay; multi-slot and angle-only changes remain counted separately.",
+    "A sample observed after a writer call can expose a later clock/cache phase. Nonzero clock/angle comparisons are retained and cannot alone refute the native call rule.",
+    "Cache output is available only when its stored time equals the selected requested time. A stale lazy cache is recorded but excluded from available-source comparisons; the interpolation ring needed to evaluate it was not captured.",
+    "Requested caps of 60 and 30 are capture labels only. Observed HUD cadence must be read from elapsed time and frame advances; this capture does not establish distinct 60 Hz and 30 Hz rendering.",
+    "A HUD replay spanning a missing frame applies one smoothing step across multiple possible invocations, so its residual is a coverage limit, not a refutation.",
+    "Interpolation history payload and alternate virtual getter gates were not captured; selecting a cache output is not a replay of its complete construction.",
+    "No native instructions or production source are executed by this analysis."
+  ],
+  "reproduce": "systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% python3 /home/junel/Desktop/cs2/native-audit/reaudit-sway-clock-replay.py --capture /home/junel/Desktop/cs2/native-audit/reports/reaudit-motion-runtime-005 --out /home/junel/Desktop/cs2/native-audit/reports/reaudit-sway-clock-inputs --label runtime-005 --requested-cap 30"
+}

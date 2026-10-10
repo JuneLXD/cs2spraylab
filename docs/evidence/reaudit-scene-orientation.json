@@ -1,0 +1,95 @@
+{
+  "scope": "Read-only bounded current-client investigation of the pawn scene basis used by HUD bob. No production changes, tests, game control, or bridge queries.",
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "currentByteProof": "proof-current-ranges.json",
+  "findings": [
+    {
+      "id": "SO01",
+      "status": "verified",
+      "rule": "Pawn GetAbsTransform returns its scene node world transform, updating the dirty cache first. This is a scene transform, not the pawn eye-angle getter.",
+      "evidence": [
+        "proof-current-ranges.json:pawn-abs-transform-accessor",
+        "runtime-body-fields.json",
+        "scene-schema.json"
+      ]
+    },
+    {
+      "id": "SO02",
+      "status": "verified",
+      "rule": "Without a parent, dirty absolute-transform evaluation copies evaluated local angles to absolute Euler angles and converts them to the world quaternion. With a parent, a separate composition path supplies the world transform. No eye-angle read or yaw-follow integration occurs in this generic cache rebuild.",
+      "evidence": [
+        "proof-current-ranges.json:scene-abs-transform-update",
+        "update-abs-transform.txt",
+        "compose-parent-transform.txt"
+      ]
+    },
+    {
+      "id": "SO03",
+      "status": "verified",
+      "rule": "SetLocalAngles compares both declared local and evaluated local angles, copies changed local angles to the evaluated values, and notifies scene invalidation. The absolute setter converts the requested absolute rotation back to local form when parented. A separate small copy routine copies declared local angles to evaluated angles and marks a change bit.",
+      "evidence": [
+        "proof-current-ranges.json:scene-local-angles-setter",
+        "proof-current-ranges.json:scene-abs-angles-setter",
+        "proof-current-ranges.json:scene-local-angle-copy"
+      ]
+    },
+    {
+      "id": "SO04",
+      "status": "verified-bounded",
+      "rule": "The current RTTI-bound pawn explicit-transform virtual delegates to a generic entity routine. That routine writes the root entity scene angles only when its externally supplied angle argument is nonnull. The pawn override additionally forwards that supplied angle argument through its player-view path. This is not evidence of an automatic eye-angle-to-scene chase.",
+      "evidence": [
+        "proof-current-ranges.json:vtableBindings",
+        "proof-current-ranges.json:pawn-explicit-transform-override",
+        "proof-current-ranges.json:base-explicit-transform-angle-argument",
+        "pawn-vtable-angle-setter-calls.json"
+      ],
+      "limit": "Semantic name of the virtual was not recovered; describe its actual provided-transform behavior, not a guessed method name."
+    },
+    {
+      "id": "SO05",
+      "status": "verified-bounded",
+      "rule": "A pawn virtual invokes a nearby transform writer while iterating a pawn-owned entity-pointer array. The writer receiver is each array element, not the pawn, so this observed call is not an ordinary pawn body-yaw writer.",
+      "evidence": [
+        "proof-current-ranges.json:vtableBindings",
+        "proof-current-ranges.json:pawn-owned-entity-array-angle-update",
+        "pawn-region-secondary-writer-callers.json",
+        "bounded-angle-writer-callers.json"
+      ],
+      "limit": "Purpose and class of the referenced entities remain unnamed."
+    },
+    {
+      "id": "SO06",
+      "status": "verified-input-binding-incomplete",
+      "rule": "A separate scene routine consumes a supplied structure containing local/world quaternion transforms, accounts for parenting, converts the selected/composed quaternion to Euler angles, and writes the evaluated-angle cache.",
+      "evidence": [
+        "proof-current-ranges.json:scene-evaluated-transform-write",
+        "angle-evaluate-candidate.txt"
+      ],
+      "limit": "The caller and ownership of this supplied transform structure have not been bound. Calling this ordinary pawn animation or a specific interpolation history remains unverified."
+    }
+  ],
+  "notEstablished": [
+    "Whether ordinary first-person pawn scene rotation remains at spawn/teleport rotation, follows animation body yaw, or changes under additional state gates.",
+    "A per-frame or per-tick rule connecting eye yaw to the scene quaternion.",
+    "The production source and callback of the evaluated-transform input structure.",
+    "Equip, respawn, teleport, map-transition, and parent-change reset behavior of the existing scene basis.",
+    "Any faithful mapping from the trainer eye-yaw basis to this native scene basis."
+  ],
+  "searchLimits": {
+    "pawnVtableFunctions": "First 4096 bytes of 443 distinct base/player/pawn vtable function addresses were searched for specific direct angle/transform setters. Candidates after an int3 were excluded. This does not exhaust indirect calls, helper chains, direct field stores, or long functions.",
+    "regionSearch": "Small explicit player/entity/scene regions only; no full-binary Ghidra or exhaustive xrefs.",
+    "candidateBoundaries": "Nearest standard prologue in candidate artifacts is a heuristic, not a verified function boundary."
+  },
+  "discardedClaims": [
+    {
+      "claim": "Metadata-following function pointers were angle network callbacks.",
+      "reason": "Neighborhood inspection showed unrelated function pointer tables after the field-name list. Files renamed discarded-metadata-tail-function-a/b; do not use them as callback evidence."
+    },
+    {
+      "claim": "The previous fixed scene yaw proves spawn-only basis.",
+      "reason": "One retained runtime segment cannot prove writer ownership or reset behavior."
+    }
+  ],
+  "runtimeEvidenceNeeded": "Capture local, evaluated and absolute scene angles/quaternion, parent, dirty flag and eye angles through large stationary turns, moving turns, changes of spawn/teleport yaw and direction. Existing read-body-fields.py supplies current-byte/schema-bound fields. Compare only coherent samples; dirty absolute cache may be stale.",
+  "validation": "Bounded proof command reread 4381 current code bytes across 9 ranges and checked 6 current vtable words. No automated unit/browser tests were appropriate for this read-only evidence task."
+}
