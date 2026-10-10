@@ -12,11 +12,13 @@ const hash = b => createHash('sha256').update(b).digest('hex'), bytes = fs.readF
 assert.equal(hash(bytes), arg('--native-sha'));
 const native = JSON.parse(bytes);
 const halfSteps = args.includes('--trainer-half-steps');
+const commandMovement = args.includes('--command-movement');
 assert.equal(native.schema, 'cs2.ground-start-stop-native.v1');
 assert.equal(native.guardedNativeExecution, true); assert.equal(native.memoryGuard.unexpectedAccesses, 0);
 const require = createRequire(path.join(repo, 'package.json'));
 const built = require('esbuild').buildSync({stdin: {contents: `
-export {advanceActor, idleInput, UNIT} from './src/range/actor-physics';
+export {idleInput, UNIT} from './src/range/actor-physics';
+${commandMovement ? "export {advanceActorCommand as advanceActor} from './src/range/actor-command';" : "export {advanceActor} from './src/range/actor-physics';"}
 export {defaults} from './src/range/config';
 export {Simulation} from './src/range/simulation';
 export {DuelSimulation} from './src/range/duel/simulation';
@@ -96,7 +98,7 @@ const summary = {cases: cases.length, rows: cases.reduce((n,c) => n + c.rows.len
   maxVelocityError: Math.max(...cases.map(c => c.maxVelocityError)), maxPositionError: Math.max(...cases.map(c => c.maxPositionError)),
   mismatchingCases: cases.filter(c => c.maxVelocityError > .00025 || c.maxPositionError > .00004).length};
 const result = {schema: 'spraylab.ground-start-stop-trainer.v1', probeSha256: hash(fs.readFileSync(import.meta.filename)),
-  nativeSha256: hash(bytes), halfSteps, repo, sourceHashes: Object.fromEntries(Object.keys(built.metafile.inputs).filter(p => p !== '<stdin>').sort()
+  nativeSha256: hash(bytes), halfSteps, commandMovement, repo, sourceHashes: Object.fromEntries(Object.keys(built.metafile.inputs).filter(p => p !== '<stdin>').sort()
     .map(p => [p, hash(fs.readFileSync(path.resolve(repo,p)))])), summary,
   limits: native.limits.concat(['Accuracy boundaries use the previously verified float32(.34)*weapon speed threshold, not full shot simulation.',
     'The first sample follows a supplied input boundary; no DOM, OS or physical key-to-screen latency is measured.']), cases};

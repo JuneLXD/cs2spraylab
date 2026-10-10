@@ -6,6 +6,7 @@ import {acceptedJumpPress, isBhopPress, jumpLandingFactor, groundLandingFactor, 
 import {groundFrictionAt, groundFrictionFraction, nextGroundFrictionBoundary, finishActorFriction,
   selectGroundFriction, groundFrictionStep, accelerateGroundMotion, capGroundMotion, prepareGroundMotion,
   type ActorFriction} from './ground-friction';
+import type {GroundCommand} from './actor-command';
 
 export const UNIT = .0254;
 export const DEG = Math.PI / 180;
@@ -49,6 +50,7 @@ export type ActorKinematics = {
   velocityModifier?: number;
   movementTime?: number;
   friction?: ActorFriction;
+  groundCommand?: GroundCommand;
   lastJumpPressTime?: number;
   pendingJumpPressTime?: number;
   landedAt?: number;
@@ -142,6 +144,8 @@ export function advanceActor(
   canOccupy: CanOccupy = () => true,
   vertical: ResolveVertical = (_position, _from, to) => ({feet: Math.max(0, to), grounded: to <= 0, ceiling: false}),
   environment?: ActorEnvironment,
+  // A partial command predicts motion without applying the final stop branch.
+  finalizeGround = true,
 ): ActorKinematics {
   if (dt < 0 || !Number.isFinite(dt)) return {...actor, position: {...actor.position}, velocity: {...actor.velocity}};
   const time = environment?.time ?? actor.movementTime ?? 0;
@@ -338,7 +342,7 @@ export function advanceActor(
       ? groundLandingFactor(actor.landingVelocity, time + dt - actor.landedAt) : 1);
     if (groundWork) {
       const capped = capGroundMotion({x: Math.fround(velocity.x / UNIT), z: Math.fround(velocity.z / UNIT)}, groundWork, cap / UNIT, dt);
-      const prepared = prepareGroundMotion(capped.velocity, capped.acceleration, dt);
+      const prepared = prepareGroundMotion(capped.velocity, capped.acceleration, dt, finalizeGround);
       deferredVelocity = {x: prepared.deferred.x * UNIT, z: prepared.deferred.z * UNIT};
       velocity = {x: prepared.movement.x * UNIT, z: prepared.movement.z * UNIT};
     } else {
@@ -442,7 +446,7 @@ export function swimVelocity(velocity: Vec, wish: Vec, speed: number, dt: number
 }
 
 export function resetActorMovementHistory(actor: ActorKinematics): ActorKinematics {
-  return {...actor, movementTime: undefined, friction: undefined, lastJumpPressTime: undefined, pendingJumpPressTime: undefined,
+  return {...actor, movementTime: undefined, friction: undefined, groundCommand: undefined, lastJumpPressTime: undefined, pendingJumpPressTime: undefined,
     landedAt: undefined, landingVelocity: undefined, landingVelocityXY: undefined, supportId: undefined,
     moveMode: actor.grounded ? 'ground' : 'air', waterLevel: 0, ladderDetached: false};
 }

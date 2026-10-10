@@ -1,5 +1,17 @@
 # Native CS2 gameplay comparison
 
+## Pass 48 — player acceleration and stopping command timing
+
+The [movement timing correction](reaudit-ground-command-timing.md) retains native
+ground segments across 128 Hz player updates. The saved native startup, release,
+restart and counter-strafe trajectories now provide permanent cumulative tests
+for the actor, Range and Duel. Both AWP scopes have a new command-duration replay;
+the earlier half-segment arithmetic tests remain intact. Cap sampling and zero-time
+movement no longer create the held batch's false moving-rescope standstill.
+Native command endpoints are verified under supplied input/state; intermediate
+positions, collision and the full native rescope dispatcher retain their stated
+limits. See that report and its validation ledger for delivery status.
+
 Recorded on October 8, 2026 against client 2000927, Steam build 25738536
 (patch 1.41.8.9). Native CS2 ran on the local Linux/Radeon 760M host in an
 offline Dust II session, with no bots and normal finite ammunition. Steam

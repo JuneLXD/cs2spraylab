@@ -144,11 +144,11 @@ export function groundStopGate(midpoint: MotionVector, acceleration: MotionVecto
 
 /** Native pre-move helper and stop gate, with zero external/base velocity.
  * The post-move helper adds deferred velocity after collision. */
-export function prepareGroundMotion(endpoint: HorizontalVelocity, acceleration: HorizontalVelocity, dt: number) {
+export function prepareGroundMotion(endpoint: HorizontalVelocity, acceleration: HorizontalVelocity, dt: number, finalize = true) {
   const deferred = {x: f32(f32(acceleration.x * f32(dt)) * .5),
     z: f32(f32(acceleration.z * f32(dt)) * .5)};
   const movement = {x: f32(f32(endpoint.x) - deferred.x), z: f32(f32(endpoint.z) - deferred.z)};
-  const stopped = groundStopGate({...movement, y: 0}, {...acceleration, y: 0}, dt);
+  const stopped = finalize && groundStopGate({...movement, y: 0}, {...acceleration, y: 0}, dt);
   return stopped ? {movement: {x: 0, z: 0}, deferred: {x: 0, z: 0}, stopped}
     : {movement, deferred, stopped};
 }

@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import native from '../src/range/native-scoped-awp-fixture.json' with {type: 'json'};
+import native from '../src/range/native-scoped-command-fixture.json' with {type: 'json'};
 
 const start = native.cases.find(c => c.zoomLevel === 1 && c.stance === 'walk' &&
   c.initial.velocity.every(v => v === 0) && c.rows[0].side === 1 && c.rows[0].forward === 0)!;

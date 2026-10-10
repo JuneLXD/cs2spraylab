@@ -1,4 +1,5 @@
 import {advanceActor, DEG, STEP, UNIT, type ActorKinematics, type Vec} from '../actor-physics';
+import {advanceActorCommand} from '../actor-command';
 import {gameData, pistolIds, type Weapon, type Pistol} from '../config';
 import {botConfig, rosterBehaviors, sanitizeDuelConfig, type DuelConfig} from './config';
 import {BotBrain, type BotNavigator} from './brain';
@@ -447,7 +448,10 @@ export class DuelSimulation {
         actor.weapon.actions.secondary(this.time);
       }
       if (actor.footsteps.update(this.time, dt, actor, command)) this.emitSound(actor, 'footstep', actor.position);
-      const next = advanceActor(actor, {...command, scopedSlow: actor.weapon.actions.scopedSlowMovement}, actor.weapon.actions.stats.speed * UNIT, dt,
+      // A generated bot steering command is a new segment on every AI update.
+      // Human/controlled input persists across the intervening weapon updates.
+      const move = actor.id === 0 || this.controlledBots.has(actor.id) ? advanceActorCommand : advanceActor;
+      const next = move(actor, {...command, scopedSlow: actor.weapon.actions.scopedSlowMovement}, actor.weapon.actions.stats.speed * UNIT, dt,
         (from, desired, feet, height) => {
           const staticPosition = moveInArena(from, desired, feet, height, this.arena);
           const clear = (position: Vec) => this.actors.every(other => other === actor || !other.alive ||
@@ -941,7 +945,7 @@ export class DuelSimulation {
     const actor = this.actors[0], command = actor.command;
     const yaw = actor.yaw + command.yawDelta;
     const pitch = Math.max(-89 * DEG, Math.min(89 * DEG, actor.pitch + command.pitchDelta));
-    const predicted = actor.alive && this.accumulator > 1e-10 ? advanceActor({...actor, yaw},
+    const predicted = actor.alive && this.accumulator > 1e-10 ? advanceActorCommand({...actor, yaw},
       {...command, scopedSlow: actor.weapon.actions.scopedSlowMovement},
       actor.weapon.actions.stats.speed * UNIT, this.accumulator, undefined, undefined, undefined,
       arenaMovementEnvironment(this.arena, this.actors, actor.id, this.time, pitch, actor.position)) : actor;

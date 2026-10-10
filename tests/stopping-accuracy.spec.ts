@@ -1,4 +1,7 @@
 import {expect, test} from '@playwright/test';
+import native from '../src/range/native-ground-command-fixture.json' with {type: 'json'};
+
+const reference = native.cases.find(c => c.id === 'm4a4-stand-0-axis')!;
 
 test('M4 keyboard release and mouse shot use the native stopping accuracy boundary', async ({page}, info) => {
   test.skip(info.project.name !== 'chromium');
@@ -24,10 +27,15 @@ test('M4 keyboard release and mouse shot use the native stopping accuracy bounda
   await page.keyboard.down('d');
   const moving = await page.evaluate(() => {
     const s = (window as any).stoppingEngine.sim;
-    for (let i = 0; i < 128; i++) s.step(1 / 128);
-    return {side: s.input.side, speed: Math.hypot(s.velocity.x, s.velocity.z) / .0254};
+    const origin = s.position.x;
+    s.step(1 / 128); s.step(1 / 128);
+    const first = {speed: s.velocity.x / .0254, distance: (s.position.x - origin) / .0254};
+    for (let i = 2; i < 128; i++) s.step(1 / 128);
+    return {side: s.input.side, speed: Math.hypot(s.velocity.x, s.velocity.z) / .0254, first};
   });
   expect(moving.side).toBe(1); expect(moving.speed).toBeCloseTo(225, 3);
+  expect(moving.first.speed).toBeCloseTo(reference.rows[0][3], 7);
+  expect(moving.first.distance).toBeCloseTo(reference.rows[0][5], 7);
   await page.keyboard.up('d');
   const boundary = await page.evaluate(() => {
     const s = (window as any).stoppingEngine.sim;
@@ -60,5 +68,14 @@ test('M4 keyboard release and mouse shot use the native stopping accuracy bounda
   expect(shot.calls).toHaveLength(1);
   expect(shot.calls[0].ratio).toBe(boundary.after.ratio);
   expect(shot.calls[0].cone).toBe(shot.calls[0].penalty);
+  const stoppedAt = await page.evaluate(() => {
+    const s = (window as any).stoppingEngine.sim;
+    for (let half = 27; half <= 64; half++) {
+      s.step(1 / 128);
+      if (half % 2 === 0 && Math.hypot(s.velocity.x, s.velocity.z) === 0) return half / 128;
+    }
+    return null;
+  });
+  expect(stoppedAt).toBe(reference.rows.find(row => row[0] > 1 && row[3] === 0 && row[4] === 0)![0] - 1);
   expect(errors).toEqual([]);
 });

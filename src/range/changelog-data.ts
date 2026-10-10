@@ -377,6 +377,10 @@ export const latestChanges = {
     {id: 'native-awp-walking', title: 'AWP scoped movement', items: [
       'AWP walking uses the native acceleration at both zoom levels, including movement displayed between simulation updates.',
     ]},
+    {id: 'native-ground-timing', title: 'Acceleration and stopping', items: [
+      'Player acceleration, release braking and counter-strafing now keep CS2 movement timing across simulation and display updates.',
+      'AWP scope recovery preserves movement already in progress; the movement lessons use the same timing as the range.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

@@ -1,5 +1,17 @@
 # Native feel follow-up
 
+## Acceleration and stopping correction, pass 48
+
+The [command timing fix](reaudit-ground-command-timing.md) now addresses the
+pass47 discrepancy: player movement keeps native segments across the trainer's
+128 Hz updates, with real input edges, immutable prediction, bounded state and
+invalidation for changed nearby contacts. Generated AI steering remains on its
+existing explicit segments. The pass46 false rescope stop has a permanent
+actual-shot regression test across both modes, both zooms and two event phases.
+Validation and delivery are tracked in the new report; earlier held-batch
+warnings below describe the pre-fix state. Physical key latency, native collision
+parity and end-to-end native moving-rescope execution remain separate limits.
+
 ## Current priority: common weapons and core feel
 
 The user narrowed follow-up work on October 10 to movement and the weapons that

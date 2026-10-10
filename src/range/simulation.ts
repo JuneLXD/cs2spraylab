@@ -1,11 +1,12 @@
 import { Angle, clamp, gameData, loadoutWeapon, MeasuredProfile, recoilPattern, Settings } from './config';
 import {ViewPunch} from './view-punch';
 import {FootstepCadence} from './footsteps';
+import {advanceActorCommand} from './actor-command';
 import {equipmentForSlot, equipmentStats, isPumpShotgun, knifeModel, ZEUS_RECHARGE_SECONDS, type Equipment, type Slot} from './equipment';
 import {createScenario, DrillCoach, isDrillMode, RANGE_WALLS, REPOSITION_SHOTS, type CoachSample, type DrillMetrics} from './drills';
 import {WeaponRecovery} from './ballistics';
 import type {RecoilSelection} from './recoil';
-import {advanceActor, DEG, GRAVITY, JUMP_SPEED, SERVER_TICK, STEP, UNIT, airVelocity, groundVelocity, idleInput, tickAligned, type ActorEnvironment, type ActorKinematics, type MoveInput, type Vec} from './actor-physics';
+import {DEG, GRAVITY, JUMP_SPEED, SERVER_TICK, STEP, UNIT, airVelocity, groundVelocity, idleInput, tickAligned, type ActorEnvironment, type ActorKinematics, type MoveInput, type Vec} from './actor-physics';
 import {direction, shotDirections} from './shot-model';
 import {TERRAIN_RULES} from './terrain';
 import {resolveDamage} from './duel/damage';
@@ -41,12 +42,13 @@ export class Simulation {
   grounded = true;
   velocityModifier = 1; movementTime = 0;
   friction?: ActorKinematics['friction'];
+  groundCommand?: ActorKinematics['groundCommand'];
   lastJumpPressTime?: number; pendingJumpPressTime?: number; landedAt?: number; landingVelocity?: number;
   landingVelocityXY?: {x: number; z: number}; supportId?: ActorKinematics['supportId'];
   moveMode: ActorKinematics['moveMode'] = 'ground'; waterLevel: ActorKinematics['waterLevel'] = 0; ladderDetached = false;
   renderPosition() {
     if (!this.active || this.accumulator <= 1e-10) return this.position;
-    return advanceActor(this, {...this.input, scopedSlow: this.actions.scopedSlowMovement}, this.stats.speed * UNIT, this.accumulator,
+    return advanceActorCommand(this, {...this.input, scopedSlow: this.actions.scopedSlowMovement}, this.stats.speed * UNIT, this.accumulator,
       undefined, undefined, undefined, this.environment).position;
   }
   targetX = 0; targetVelocity = 0; targetSign = 1;
@@ -254,7 +256,7 @@ export class Simulation {
   private resetMovementHistory() {
     this.footsteps.reset();
     this.velocityModifier = 1; this.movementTime = this.time;
-    this.friction = undefined;
+    this.friction = undefined; this.groundCommand = undefined;
     this.lastJumpPressTime = this.pendingJumpPressTime = this.landedAt = this.landingVelocity = undefined;
     this.landingVelocityXY = undefined; this.supportId = undefined;
     this.moveMode = this.grounded ? 'ground' : 'air'; this.waterLevel = 0; this.ladderDetached = false;
@@ -363,7 +365,7 @@ export class Simulation {
     this.burstLeft = 0;
     if (this.firing) this.finish();
     this.active = false; this.input = idleInput(); this.velocity = { x: 0, z: 0 };
-    this.friction = undefined;
+    this.friction = undefined; this.groundCommand = undefined;
     this.footsteps.reset();
     this.reloadHeld = this.secondaryHeld = false;
     for (const state of this.ammoStates.values()) state.cancel();
@@ -405,6 +407,8 @@ export class Simulation {
     const duration = this.accumulator; this.accumulator = 0; this.step(duration);
   }
   step(dt: number) {
+    // Movement samples the weapon before remaining weapon events in this update.
+    const movementSpeed = this.stats.speed * UNIT, movementScoped = this.actions.scopedSlowMovement;
     this.time += dt;
     this.actions.advance(this.time, this.shotReady.get(this.equipped) ?? 0, this.loadedAmmo);
     const weapon = this.stats;
@@ -424,7 +428,7 @@ export class Simulation {
       this.actionEvents.push({kind: 'zeus-ready', at: this.time, equipment: id});
     }
     if (this.footsteps.update(this.time, dt, this, this.input)) this.onSound(false);
-    const next = advanceActor(this, {...this.input, scopedSlow: this.actions.scopedSlowMovement}, weapon.speed * UNIT, dt, undefined, undefined, undefined,
+    const next = advanceActorCommand(this, {...this.input, scopedSlow: movementScoped}, movementSpeed, dt, undefined, undefined, undefined,
       {...this.environment, time: this.time - dt});
     this.input.jumpPressed = false; this.input.jumpPressOffset = 0;
     if (next.landedAt !== undefined && next.landedAt !== this.landedAt && next.landingVelocity !== undefined &&
@@ -443,6 +447,7 @@ export class Simulation {
     this.duckCooldown = next.duckCooldown ?? 0; this.duckRecoveryOrigin = next.duckRecoveryOrigin;
     this.velocityModifier = next.velocityModifier ?? 1; this.movementTime = next.movementTime ?? this.time;
     this.friction = next.friction;
+    this.groundCommand = next.groundCommand;
     this.lastJumpPressTime = next.lastJumpPressTime; this.pendingJumpPressTime = next.pendingJumpPressTime;
     this.landedAt = next.landedAt; this.landingVelocity = next.landingVelocity; this.landingVelocityXY = next.landingVelocityXY;
     this.supportId = next.supportId; this.moveMode = next.moveMode; this.waterLevel = next.waterLevel;

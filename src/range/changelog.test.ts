@@ -36,6 +36,7 @@ describe('append-only changelog', () => {
       'native-awp-input-priority',
       'native-ground-friction',
       'native-awp-walking',
+      'native-ground-timing',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'reflex')!.items.join(' ')).toContain('come at you through its gaps');
     expect(latestChanges.sections.find(section => section.id === 'aim-redline')!.items.join(' ')).toContain('BOT Reed');
