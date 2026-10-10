@@ -1,0 +1,201 @@
+{
+  "method": "Decode retained runtime008 serialization metadata and bind its native path.\n\nStreaming JSON arithmetic and retained current-hash disassembly only. No game,\nnative execution, demo parsing, bridge, binary scan, repository edit or network.\nRaw member locations remain in this local probe/layout artifact.\n",
+  "probeSha256": "2547fc4d24c170831d7de74864fa4a537eb32ecc1a9a7bdef36de82263b9c82d",
+  "nativeBinding": {
+    "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+    "sourceReportSha256": "c525ad38220616ca248d70b1525731c024f5f359a1ecebb08783a4cf3f366480",
+    "checkedSavedInstructions": 52,
+    "files": [
+      {
+        "name": "client-read-frame-input.txt",
+        "sha256": "84bcb78967f82c8c31bf26563a16fbad4083bf81aa5f7311e50d6f8b05152e22",
+        "checkedInstructions": 7
+      },
+      {
+        "name": "client-create-move.txt",
+        "sha256": "578bfcb29c75dec453992656a3126eb5b636dac930af467e02b372654fde9684",
+        "checkedInstructions": 36
+      },
+      {
+        "name": "client-frame-serialization.txt",
+        "sha256": "c495df655af22a1a2a73937463dd97bd29e18f7f3319fcf6b0faaef6ae3b4d1b",
+        "checkedInstructions": 9
+      }
+    ],
+    "boundedRangeBindings": [
+      {
+        "side": "client",
+        "name": "read-frame-input",
+        "bytes": 2128,
+        "sha256": "572bd53bbe8293f9fe6bf8524f54db07be23e275e4859cd33f79bbc2f9aa0de8",
+        "file": "client-read-frame-input.txt"
+      },
+      {
+        "side": "client",
+        "name": "frame-serialization",
+        "bytes": 1888,
+        "sha256": "18a66c487116d8171d782be4c11470cedd9ab47dee0d1b563f95489b4d47a120",
+        "file": "client-frame-serialization.txt"
+      },
+      {
+        "side": "client",
+        "name": "create-move",
+        "bytes": 5120,
+        "sha256": "a5f7309c91a711c95e5a03a1593dab806da5a2937ec430fa292a8a8073b2bf13",
+        "file": "client-create-move.txt"
+      }
+    ],
+    "limit": "Current-hash retained ranges and instructions; no fresh binary read or native execution in this probe."
+  },
+  "cases": [
+    {
+      "name": "native_reaudit_history_001-snapshot",
+      "snapshotSha256": "f5f38ce5bf65ef21339e674a18d742d5c2b6ab2a0e085a7974d9c7ec702f3084",
+      "rows": 1934,
+      "inputCountRows": {
+        "0": 308,
+        "1": 1626
+      },
+      "inputEntries": 1626,
+      "uniqueInputEntries": 1059,
+      "observedMetadata": [
+        {
+          "serializedOutputIndex": 0,
+          "retentionMarker": -1,
+          "reductionBucket": -1,
+          "rows": 1626
+        }
+      ],
+      "serializationAndEarlyReturnGate": [
+        {
+          "inputReadDisabled": false,
+          "appendCompleted": true,
+          "rows": 1619
+        },
+        {
+          "inputReadDisabled": true,
+          "appendCompleted": true,
+          "rows": 7
+        }
+      ],
+      "selectedPrimaryRecords": [
+        {
+          "monotonic": 19115.914374189,
+          "inputReadDisabled": true,
+          "inputCount": 1,
+          "frame": 6925,
+          "sourceIndex": 0,
+          "serializedOutputIndex": 0,
+          "retentionMarker": -1,
+          "reductionBucket": -1,
+          "player": {
+            "tick": 7243,
+            "fraction": 0.037031423300504684
+          },
+          "render": {
+            "tick": 7242,
+            "fraction": 0.037031423300504684
+          }
+        },
+        {
+          "monotonic": 19117.942475146,
+          "inputReadDisabled": true,
+          "inputCount": 1,
+          "frame": 7017,
+          "sourceIndex": 0,
+          "serializedOutputIndex": 0,
+          "retentionMarker": -1,
+          "reductionBucket": -1,
+          "player": {
+            "tick": 7372,
+            "fraction": 0.912937581539154
+          },
+          "render": {
+            "tick": 7371,
+            "fraction": 0.912937581539154
+          }
+        },
+        {
+          "monotonic": 19123.848966137,
+          "inputReadDisabled": true,
+          "inputCount": 1,
+          "frame": 7393,
+          "sourceIndex": 0,
+          "serializedOutputIndex": 0,
+          "retentionMarker": -1,
+          "reductionBucket": -1,
+          "player": {
+            "tick": 7750,
+            "fraction": 0.8343089818954468
+          },
+          "render": {
+            "tick": 7749,
+            "fraction": 0.8343089818954468
+          }
+        }
+      ],
+      "observedCameraChangesWithSerializedInput": 8
+    },
+    {
+      "name": "native_reaudit_bob_007-snapshot",
+      "snapshotSha256": "265234fce791b3a7da542017677b3001db265338eafc5d7c12ab2dc130ed4113",
+      "rows": 2927,
+      "inputCountRows": {
+        "0": 465,
+        "1": 2462
+      },
+      "inputEntries": 2462,
+      "uniqueInputEntries": 1399,
+      "observedMetadata": [
+        {
+          "serializedOutputIndex": 0,
+          "retentionMarker": -1,
+          "reductionBucket": -1,
+          "rows": 2462
+        }
+      ],
+      "serializationAndEarlyReturnGate": [
+        {
+          "inputReadDisabled": false,
+          "appendCompleted": true,
+          "rows": 2462
+        }
+      ],
+      "selectedPrimaryRecords": [],
+      "observedCameraChangesWithSerializedInput": 1
+    }
+  ],
+  "resolved": [
+    "Every nonempty observed source history has exactly one entry, with serialized output index zero and untouched retention/bucket markers.",
+    "Input-record initialization sets the serialized index to minus one. The observed zero is written by CreateMove only after that source record has passed through the serializer and an output entry has been appended.",
+    "Count at most four bypasses reduction regardless of its control setting. The ordinary path serializes each source record and forwards a valid selected attack index without remapping.",
+    "All three observed primary records are source zero and serialized zero. The reduction setting therefore cannot explain or alter the first-press phase in this capture.",
+    "In the reduced path, selected attack records are explicitly marked for retention and copied through the same serializer; their output indices are then read from per-source mapping fields.",
+    "The serializer copies render tick/fraction directly. Its prediction-state gate controls copying player tick/fraction; no time normalization or averaging is performed by these direct stores."
+  ],
+  "branches": {
+    "ordinary": "Input count <=4 or reduction control false: append every input record and forward the selected source attack index.",
+    "reduced": "More than four and control true: retain marked primary/secondary entries, choose representatives for other temporal buckets, and use the selected entry output-index mapping.",
+    "regressedPlayerTicks": "Before reduction, if the last input player integer tick is less than the first, copy the last record to the first, collapse source count to one, and turn any set attack indices into zero.",
+    "invalidIndex": "Indices beyond source/output count are reset to minus one; malformed negative values other than the sentinel are outside this inspection.",
+    "playerPairGate": "Prediction flag true copies player fields and sets their protobuf presence bits; the flag value and final outgoing protobuf were not captured.",
+    "cleanup": "The retained cleanup function clears the input early-return flag, selected indices and source count. Its external caller and the flag-setting site remain outside this proof."
+  },
+  "readiness": {
+    "closed": "Ordinary one-entry serialization/reduction can be removed as the blocker for the three captured first presses.",
+    "stillConditional": "The final player-pair presence gate is not sampled; selected anchors equal the source player pair, but this is not a final serialized-command or resolver callback trace.",
+    "nextNarrowQuestion": "Bind the held resolver entry current pair and the timing-cache update to the native time-control caller; this changes two-clock camera implementation readiness more than modeling unused reduction buckets.",
+    "trainer": "A trainer still needs a separately retained presented player clock and camera sampling clock, with an evidence-backed input/render phase mapping and delayed/no-history boundaries."
+  },
+  "deferredCaptureFields": [
+    "Prediction player-history serialization-enabled byte (bound local layout in reaudit-history-serialization-layout.json).",
+    "Final command history count, selected attack index and selected player-pair presence/value, only after a typed command pointer/caller is proved.",
+    "Resolver current pair, pre/post cached timing difference and exact/interpolated/last/no-history status at the shot boundary."
+  ],
+  "limits": [
+    "Stable read-only polling, not an atomic cross-object or native invocation trace. A disabled input-reader flag does not establish exact CreateMove phase without its setter/caller lifetime.",
+    "Serialized source metadata proves a completed append for that retained record, not all later validation or transport of the final command.",
+    "Runtime008 does not exercise source count >1, reduction, backwards player ticks or invalid attack indices.",
+    "Selected-entry retention is statically bounded; the complete unselected-record representative algorithm is not implemented or emulated."
+  ]
+}

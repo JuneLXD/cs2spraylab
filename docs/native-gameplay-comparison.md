@@ -1166,6 +1166,43 @@ only the known missing fallback-model fixture failure. Both Chromium camera
 cases pass in 27.1 seconds. Runs were serialized under host caps, with deploy
 paused and repository files frozen during browser execution.
 
+## Thirty-third pass: authored draw rate and accepted transform histories
+
+[Detailed report](reaudit-draw-and-transform.md). Ordinary AK/AWP/Nova/XM draw
+playback now keeps authored elapsed seconds after late model attachment. The
+current immediate Arms caller passes unscaled frame delta under explicit mode/
+selector gates; 72 instruction checks, two classes and three virtual targets
+bind the path. Four native graphs contain 16 unit-rate draw nodes. A 250 ms
+attachment delay changes AK/Nova/XM 1.333333×→1× and AWP 1.245901×→1×. Existing
+onset, lifetime, fades and gameplay deadlines are retained; those lifetime and
+first-display choices remain independent fidelity limits.
+
+The identical portable before/after probe runs exact historical/current source:
+724 lifetime/weight samples agree, with 576 unchanged equipment/pickup controls,
+48 interruption controls and 16 pauses. No other action clock is changed.
+
+Approved runtime009 validates 2,602 transform snapshots beside 1,408 AK demo ticks
+and 1,325 video frames (maximum video gap 34 ms, numeric gap 109.194113 ms).
+Seven-entry histories and selected local records are retained in a 1.87 MB
+portable fixture; all rehydrated rows equal raw numeric data. Shared current
+records usually differ from complete ring values, so invocation arguments and
+writer provenance remain necessary. Runtime008's rejected reads stay invalid.
+
+Retained runtime008 input metadata proves one-entry reduction bypass for all
+three selected presses. Current-server held-clock evidence adds a typed deadline
+producer and scoped active-weapon callback for ordinary interior deadlines.
+Final command presence and live resolver branch/cache remain unobserved; camera
+sample and anchor clocks remain separate. R8 follow-up is excluded.
+
+Validation: native/graph/portable probes and TypeScript pass. Full units have
+2,373 passes and only the known missing fallback-model fixture failure. Both
+Chromium draw cases pass in 15.1 seconds, verifying actual-engine clip time,
+hand pose, idle return and preserved ammo/readiness; both existing camera cases
+also pass. The initial draw pose check measured fixed bone-local translation;
+correcting it to world position required no production change. All heavy jobs
+ran serially under host caps with deploy paused and repository edits frozen
+during browser runs. Logs use `reaudit-draw-transform-` locally.
+
 ## Passes 30–31 integration validation
 
 TypeScript passes. The full unit suite has 2,367 passes and only the documented

@@ -1,0 +1,1732 @@
+{
+  "captureName": "native_reaudit_bob_008-snapshot.jsonl",
+  "captureSha256": "e8448b45439d437cbfc5a525f1143ce1ff91f8149936d10d31172c036a789471",
+  "inputSha256": "6c6a4e4f6443f1db29600a2a8ed2bb2c3a456e22314ea343a32c179bb55465f0",
+  "fixtureSha256": null,
+  "compactSha256": null,
+  "captureProvenance": {
+    "format": "spraylab-transform-history-numeric-v1",
+    "sourceSnapshotName": "native_reaudit_bob_008-snapshot.jsonl",
+    "sourceSnapshotSha256": "e8448b45439d437cbfc5a525f1143ce1ff91f8149936d10d31172c036a789471",
+    "sourceLaunchSha256": "3a136a6fc9716cdf61761443c76606a8f191a142afed86bfefff5c276fcafaaa",
+    "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+    "samplerSha256": "b1d191834db781aa2144518f981aa75e4a59ee34a82d895191c85fc0191f999a",
+    "helperHashes": {
+      "reaudit-sway-capture-fields.py": "f018a6b89a51468d6dbe2a8dc5f5512d4d387042134b04ef3a55cc9e031507a6",
+      "reaudit-body-capture-fields.py": "37d4c7d80109d3e650aa58e545e7b14c20c3afbee9e493e0d4c94625bb5f1941",
+      "reaudit-velocity-capture-fields.py": "7589c811d92d272e1d7a008c94e76d644ccede37429fd055a887895bdca2ed44",
+      "reaudit-scene-writer-capture-fields.py": "6b97e98959022a5f3630c78b91b04bb055fa120a17c77b19acd40e769a7051b2",
+      "reaudit-body-clock-capture-fields.py": "4dfa89ed7b7c3aefe4c31526a3254d8dc03e16b224af2989d6ba8f345fea3f95",
+      "reaudit-transform-history-capture-fields.py": "1b1d12dcc28974766a87e6da86467a0af96a32529860063bd323064970063cdb",
+      "reaudit-velocity-offset-capture-fields.py": "c6aa5cea25f91297eac2e554f30cdd6b15a58bac872fac5b19b61afc6ee80b3c",
+      "reaudit-frame-history-capture-fields.py": "9f435ba63cdc8d314577ca158acf601f50208c0c3fe953e5aae8b7dfc7e086b9",
+      "reaudit-sway-clock-inputs.py": "c031104e1e9eca9525dbe1c1a28973ed9df2a6977249aae84e952cad36e434ed"
+    },
+    "identityPolicy": "Stable equality-preserving ordinals replace raw pawn/node, parent-identity and attachment tokens.",
+    "clocksAreLabelsOnly": true,
+    "invocationArgumentsCaptured": false
+  },
+  "analysisSha256": "08d704b0bfa42593b1fa0d506190ae86e22b5255af656f64ec8bab5d8c3dbd36",
+  "provenance": "Streaming numeric comparison of a retained, owner-digest-bound snapshot. No live read or native code invocation.",
+  "comparison": {
+    "totalRows": 2602,
+    "acceptedTransformRows": 2602,
+    "invalidReasons": {},
+    "distinctFrames": 1411,
+    "acceptedSpanSeconds": 22.26288929599832,
+    "parentlessConsumerChoicesIfInvokedNow": {
+      "local": 2602
+    },
+    "counts": {
+      "parented": 0,
+      "sceneDirty": 143,
+      "forceWorld": 0,
+      "flag55": 2602,
+      "currentParentIdentityMatchesNode": 2602,
+      "currentAttachmentMatchesNode": 2602,
+      "wrapperAllowsThirdPoint": 0,
+      "sampledCubicGlobalEnabled": 2602,
+      "sampledPastNewestGateEnabled": 0,
+      "ringsWithAtLeastTwoEntries": 2602,
+      "multiEntryRingsStrictlyDescendingTicks": 2602,
+      "ringsWithDuplicateTicks": 0,
+      "currentMatchesNewestLocalPosition_context0": 1847,
+      "currentMatchesNewestWorldPosition_context0": 1838,
+      "matchesAnyRecordedSemanticValue": 179,
+      "matchesMoreThanOneRecordedSemanticValue": 140,
+      "currentLocalPositionEqualsEvaluatedScene": 2546,
+      "currentWorldPositionEqualsAbsoluteScene": 2594,
+      "currentLocalScaleEqualsDeclaredSceneScale": 2602,
+      "parentlessChosenQuaternionExactlyEqualsNodeCache": 406,
+      "parentlessChosenPositionExactlyEqualsNodeCache": 2600,
+      "chosenPositionDiffersFromEvaluated_dirtyFalse": 2,
+      "chosenPositionDiffersFromNodeCache_dirtyFalse": 2,
+      "chosenPositionDiffersFromEvaluated_dirtyTrue": 54,
+      "chosenPositionDiffersFromNodeCache_dirtyTrue": 0
+    },
+    "wrapperFlags": [
+      {
+        "flags": [
+          129,
+          1,
+          200,
+          252
+        ],
+        "rows": 54
+      },
+      {
+        "flags": [
+          129,
+          1,
+          207,
+          252
+        ],
+        "rows": 1179
+      },
+      {
+        "flags": [
+          129,
+          65,
+          200,
+          252
+        ],
+        "rows": 100
+      },
+      {
+        "flags": [
+          129,
+          65,
+          207,
+          252
+        ],
+        "rows": 1269
+      }
+    ],
+    "ringShapes": [
+      {
+        "context": 0,
+        "count": 7,
+        "capacity": 8,
+        "offsetTicks": 1,
+        "timeOffset": 0.015625,
+        "rows": 2602
+      }
+    ],
+    "exactRecordedValueMatchCounts": {
+      "0": 2423,
+      "1": 39,
+      "2": 32,
+      "3": 30,
+      "4": 20,
+      "5": 33,
+      "6": 13,
+      "7": 12
+    },
+    "metrics": {
+      "localPositionVsEvaluatedSceneMaxComponentUnits": {
+        "samples": 2602,
+        "minimum": 0.0,
+        "maximum": 3.12408447265625,
+        "maximumExample": {
+          "monotonic": 20804.17294853,
+          "frame": 6071,
+          "tick": 6294,
+          "parentless": true,
+          "dirty": true,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -886.7559204101562,
+              -722.089599609375,
+              149.48529052734375
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -886.7559204101562,
+              -722.089599609375,
+              149.48529052734375
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -886.7559204101562,
+            -722.089599609375,
+            152.609375
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -886.7559204101562,
+            -722.089599609375,
+            149.48529052734375
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "mean": 0.021867363568363878
+      },
+      "worldPositionVsAbsoluteSceneMaxComponentUnits": {
+        "samples": 2602,
+        "minimum": 0.0,
+        "maximum": 7.9200439453125,
+        "maximumExample": {
+          "monotonic": 20792.035843186,
+          "frame": 5299,
+          "tick": 5515,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -999.8279418945312,
+              -719.8356323242188,
+              129.03125
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071067690849304,
+              0.7071067690849304
+            ],
+            "worldOrigin": [
+              -999.8285522460938,
+              -727.7556762695312,
+              126.33138275146484
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -999.8279418945312,
+            -719.8356323242188,
+            129.03125
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -999.8279418945312,
+            -719.8356323242188,
+            129.03125
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "mean": 0.008279927962564854
+      },
+      "localQuaternionVsEvaluatedEulerDiagnosticDegrees": {
+        "samples": 2602,
+        "minimum": 0.0,
+        "maximum": 3.448637142969101,
+        "maximumExample": {
+          "monotonic": 20797.844697287,
+          "frame": 5666,
+          "tick": 5889,
+          "parentless": true,
+          "dirty": true,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -999.8035278320312,
+              -806.057861328125,
+              115.95552062988281
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.8261244893074036,
+              0.563487708568573
+            ],
+            "worldOrigin": [
+              -999.8035278320312,
+              -806.057861328125,
+              115.95552062988281
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.8261244893074036,
+              0.563487708568573
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -999.8035278320312,
+            -806.057861328125,
+            115.95552062988281
+          ],
+          "evaluatedAngles": [
+            0.0,
+            114.85395812988281,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -999.8035278320312,
+            -806.057861328125,
+            115.95552062988281
+          ],
+          "absoluteAngles": [
+            -0.0,
+            111.40531158447266,
+            0.0
+          ]
+        },
+        "mean": 0.012325186585254805
+      },
+      "worldQuaternionVsAbsoluteEulerDiagnosticDegrees": {
+        "samples": 2602,
+        "minimum": 0.0,
+        "maximum": 3.054680000725835,
+        "maximumExample": {
+          "monotonic": 20796.610569922,
+          "frame": 5587,
+          "tick": 5810,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -999.8035278320312,
+              -806.057861328125,
+              115.95552062988281
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.41321828961372375,
+              0.9106320142745972
+            ],
+            "worldOrigin": [
+              -999.8035278320312,
+              -806.057861328125,
+              115.95552062988281
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.3887995481491089,
+              0.9213224053382874
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -999.8035278320312,
+            -806.057861328125,
+            115.95552062988281
+          ],
+          "evaluatedAngles": [
+            0.0,
+            48.814327239990234,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -999.8035278320312,
+            -806.057861328125,
+            115.95552062988281
+          ],
+          "absoluteAngles": [
+            0.0,
+            48.814327239990234,
+            0.0
+          ]
+        },
+        "mean": 0.0033085994178263895
+      },
+      "worldQuaternionVsNodeCachedQuaternionDegrees": {
+        "samples": 2602,
+        "minimum": 0.0,
+        "maximum": 3.0546796459951597,
+        "maximumExample": {
+          "monotonic": 20796.610569922,
+          "frame": 5587,
+          "tick": 5810,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -999.8035278320312,
+              -806.057861328125,
+              115.95552062988281
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.41321828961372375,
+              0.9106320142745972
+            ],
+            "worldOrigin": [
+              -999.8035278320312,
+              -806.057861328125,
+              115.95552062988281
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.3887995481491089,
+              0.9213224053382874
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -999.8035278320312,
+            -806.057861328125,
+            115.95552062988281
+          ],
+          "evaluatedAngles": [
+            0.0,
+            48.814327239990234,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -999.8035278320312,
+            -806.057861328125,
+            115.95552062988281
+          ],
+          "absoluteAngles": [
+            0.0,
+            48.814327239990234,
+            0.0
+          ]
+        },
+        "mean": 0.0033086372960358214
+      },
+      "parentlessChosenQuaternionVsNodeCachedQuaternionDegrees": {
+        "samples": 2602,
+        "minimum": 0.0,
+        "maximum": 0.00029482276375508633,
+        "maximumExample": {
+          "monotonic": 20799.060081056,
+          "frame": 5743,
+          "tick": 5967,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -999.8035278320312,
+              -806.057861328125,
+              115.95552062988281
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              -0.9927704930305481,
+              0.12002811580896378
+            ],
+            "worldOrigin": [
+              -999.8035278320312,
+              -806.057861328125,
+              115.95552062988281
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              -0.9927704930305481,
+              0.12002811580896378
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -999.8035278320312,
+            -806.057861328125,
+            115.95552062988281
+          ],
+          "evaluatedAngles": [
+            0.0,
+            -166.2128448486328,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -999.8035278320312,
+            -806.057861328125,
+            115.95552062988281
+          ],
+          "absoluteAngles": [
+            0.0,
+            -166.2128448486328,
+            0.0
+          ]
+        },
+        "mean": 2.2439758422536977e-06
+      },
+      "parentlessChosenPositionVsNodeCacheMaxComponentUnits": {
+        "samples": 2602,
+        "minimum": 0.0,
+        "maximum": 0.03173828125,
+        "maximumExample": {
+          "monotonic": 20788.30823684,
+          "frame": 5062,
+          "tick": 5279,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.03173828125,
+            -800.0,
+            116.03168487548828
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.03173828125,
+            -800.0,
+            116.03168487548828
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "mean": 1.3276671190430439e-05
+      },
+      "currentLocalQuaternionNorm": {
+        "samples": 2602,
+        "minimum": 0.9999999448718049,
+        "maximum": 1.0000000935481355,
+        "maximumExample": {
+          "monotonic": 20801.509108372,
+          "frame": 5900,
+          "tick": 6124,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -898.7979125976562,
+              -722.0628662109375,
+              128.60850524902344
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.6211478114128113,
+              0.7836935520172119
+            ],
+            "worldOrigin": [
+              -898.7979125976562,
+              -722.0628662109375,
+              128.60850524902344
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.6211478114128113,
+              0.7836935520172119
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -898.7979125976562,
+            -722.0628662109375,
+            128.60850524902344
+          ],
+          "evaluatedAngles": [
+            0.0,
+            76.79999542236328,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -898.7979125976562,
+            -722.0628662109375,
+            128.60850524902344
+          ],
+          "absoluteAngles": [
+            0.0,
+            76.79999542236328,
+            0.0
+          ]
+        },
+        "mean": 1.0000000466042072
+      },
+      "currentWorldQuaternionNorm": {
+        "samples": 2602,
+        "minimum": 0.9999999448718049,
+        "maximum": 1.0000000935481355,
+        "maximumExample": {
+          "monotonic": 20801.509108372,
+          "frame": 5900,
+          "tick": 6124,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -898.7979125976562,
+              -722.0628662109375,
+              128.60850524902344
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.6211478114128113,
+              0.7836935520172119
+            ],
+            "worldOrigin": [
+              -898.7979125976562,
+              -722.0628662109375,
+              128.60850524902344
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.6211478114128113,
+              0.7836935520172119
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -898.7979125976562,
+            -722.0628662109375,
+            128.60850524902344
+          ],
+          "evaluatedAngles": [
+            0.0,
+            76.79999542236328,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -898.7979125976562,
+            -722.0628662109375,
+            128.60850524902344
+          ],
+          "absoluteAngles": [
+            0.0,
+            76.79999542236328,
+            0.0
+          ]
+        },
+        "mean": 1.000000046767111
+      },
+      "parentlessChosenPositionVsEvaluatedSceneMaxComponentUnits": {
+        "samples": 2602,
+        "minimum": 0.0,
+        "maximum": 3.12408447265625,
+        "maximumExample": {
+          "monotonic": 20804.17294853,
+          "frame": 6071,
+          "tick": 6294,
+          "parentless": true,
+          "dirty": true,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -886.7559204101562,
+              -722.089599609375,
+              149.48529052734375
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -886.7559204101562,
+              -722.089599609375,
+              149.48529052734375
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -886.7559204101562,
+            -722.089599609375,
+            152.609375
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -886.7559204101562,
+            -722.089599609375,
+            149.48529052734375
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "mean": 0.021867363568363878
+      },
+      "acceptedRowSpacingSeconds": {
+        "samples": 2601,
+        "minimum": 0.0015737399990030099,
+        "maximum": 0.1091941129998304,
+        "maximumExample": {
+          "monotonic": 20786.527508478,
+          "frame": 4949,
+          "tick": 5166,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "mean": 0.008559357668588358
+      }
+    },
+    "observedChangePatterns": {
+      "(False, False, False, False)": 1159,
+      "(False, True, False, False)": 652,
+      "(True, True, False, False)": 471,
+      "(True, False, False, False)": 3,
+      "(True, True, True, True)": 292,
+      "(False, False, True, False)": 23,
+      "(True, True, False, True)": 1
+    },
+    "transitionExamples": [
+      {
+        "previousMonotonic": 20785.865905779,
+        "deltaSeconds": 0.0031374099999084137,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20785.869043189,
+          "frame": 4907,
+          "tick": 5124,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20785.874139478,
+        "deltaSeconds": 0.011182796999491984,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20785.885322275,
+          "frame": 4908,
+          "tick": 5125,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20785.888486575,
+        "deltaSeconds": 0.012194987997645512,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20785.900681563,
+          "frame": 4909,
+          "tick": 5126,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20785.904205385,
+        "deltaSeconds": 0.013434262000373565,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20785.917639647,
+          "frame": 4910,
+          "tick": 5127,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20785.919491356,
+        "deltaSeconds": 0.0122094250000373,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20785.931700781,
+          "frame": 4911,
+          "tick": 5128,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20785.936683016,
+        "deltaSeconds": 0.011972934000368696,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20785.94865595,
+          "frame": 4912,
+          "tick": 5129,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20785.950454379,
+        "deltaSeconds": 0.012256772999535315,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20785.962711152,
+          "frame": 4913,
+          "tick": 5130,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20785.968231242,
+        "deltaSeconds": 0.0107898030000797,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20785.979021045,
+          "frame": 4914,
+          "tick": 5131,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20785.982619847,
+        "deltaSeconds": 0.012949287000083132,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20785.995569134,
+          "frame": 4915,
+          "tick": 5132,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20785.997881623,
+        "deltaSeconds": 0.014242641998862382,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20786.012124265,
+          "frame": 4916,
+          "tick": 5133,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20786.015205891,
+        "deltaSeconds": 0.011446430002251873,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20786.026652321,
+          "frame": 4917,
+          "tick": 5134,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      },
+      {
+        "previousMonotonic": 20786.032256809,
+        "deltaSeconds": 0.009802098000363912,
+        "changed": {
+          "currentSemanticRecord": false,
+          "completeRingValues": true,
+          "evaluatedAngles": false,
+          "nodeQuaternion": false
+        },
+        "sample": {
+          "monotonic": 20786.042058907,
+          "frame": 4918,
+          "tick": 5135,
+          "parentless": true,
+          "dirty": false,
+          "choiceIfInvokedNow": "local",
+          "current": {
+            "localOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "localOriginW": 1.0,
+            "localQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "worldOrigin": [
+              -1000.0,
+              -800.0,
+              116.03140258789062
+            ],
+            "worldOriginW": 1.0,
+            "worldQuaternion": [
+              0.0,
+              0.0,
+              0.7071068286895752,
+              0.7071068286895752
+            ],
+            "localScale": 1.0,
+            "worldScale": 1.0,
+            "parentIdentityOrdinal": 0,
+            "attachmentOrdinal": 0,
+            "forceWorld": false,
+            "flag55": true
+          },
+          "evaluatedOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "evaluatedAngles": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "absoluteOrigin": [
+            -1000.0,
+            -800.0,
+            116.03140258789062
+          ],
+          "absoluteAngles": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        },
+        "exactHistoryMatches": []
+      }
+    ]
+  },
+  "limits": [
+    "Current-record equality with one or many history values is compatibility, not last-writer or selected-endpoint identification.",
+    "Current record can be written by recording/getter, interpolation and fallback paths; matching scene state does not distinguish them.",
+    "Parentless consumer choice is the static choice if invoked on the sampled state, not evidence that the consumer ran at that moment.",
+    "Euler-derived quaternion comparisons use Python double math, not the native float32 conversion helper or its strict tolerance gate.",
+    "World-getter scale compatibility is unavailable: this capture reader omits the separate divisor used by the native getter.",
+    "Sampled global clocks, velocity interpolation context and tick numbers are not TransformHistory invocation arguments.",
+    "No clock fitting, bracket selection, kernel replay or native invocation count is inferred from current-record/ring agreement.",
+    "Polling and double-read guards do not establish atomicity, transient writer identity or entry/exit order."
+  ],
+  "nextReplayInputs": [
+    "Identity-bound wrapper/scene owner and input/output current records at an actual recording/evaluation/consumer call.",
+    "Actual requested time, context selector, bracket mode and apply options with selected endpoints and globals read in that invocation.",
+    "The getter world-scale divisor alongside scene absolute scale; full parent/attachment transform dependencies for parented cases."
+  ]
+}

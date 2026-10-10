@@ -145,3 +145,11 @@ TypeScript passes; 2,367 unit cases pass, with only the known missing
 27.1 seconds. Checks ran serially under memory/swap/CPU caps; auto-deploy was
 paused and repository files were frozen during browser execution. Local logs
 use the `reaudit-history-{typescript,unit,browser}` prefix.
+
+## Pass 33 follow-up
+
+[Pass 33](reaudit-draw-and-transform.md) validates the corrected transform reader
+in 2,602 fresh snapshots; runtime008 remains rejected. It also decodes retained
+serialization mappings and binds the ordinary interior held-deadline caller
+clock. Final command presence, live resolver branch/cache and transform invocation
+arguments remain open. The new pass separately corrects four ordinary draw rates.

@@ -1,12 +1,13 @@
-# CS2 independent re-audit: passes 16–32
+# CS2 independent re-audit: passes 16–33
 
-Nine evidenced corrections follow baseline `c488943`: movement (`79832e6`),
+Ten evidenced corrections follow baseline `c488943`: movement (`79832e6`),
 scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
 ordering (`fd328d5`), ordinary footstep cadence (`2aba70c`), and native weapon
 recoil rotation (`5132783`, [pass 23](reaudit-viewmodel-recoil.md)), and
 [airborne weapon motion](reaudit-viewmodel-air.md) (`4e999d9`, pass 24), and
 [loaded-shell reload interruption](reaudit-shell-reload.md) (`9095bb0`, pass 26),
-and [AK reload playback](reaudit-animation.md) (`7597b1c`, pass 31).
+and [AK reload playback](reaudit-animation.md) (`7597b1c`, pass 31), and
+[ordinary draw playback](reaudit-draw-and-transform.md) (`64bbe25`, pass 33).
 This report covers the requested inventory and identifies the remaining work;
 it does not certify complete native parity. The follow-up corrects
 [accuracy/index update order](reaudit-accuracy.md) and
@@ -28,6 +29,9 @@ binds the current first-person graph clock and corrects that narrow retime.
 [Pass 32](reaudit-presentation-history.md) captures published/input frame clocks,
 first-press camera anchors and velocity-offset producer fields. It also records
 the rejected transform reader and its narrowly corrected class gate.
+[Pass 33](reaudit-draw-and-transform.md) validates that gate with 2,602 new rows,
+binds the concrete immediate Arms caller, corrects four ordinary draw rates,
+and establishes one-entry serialization and the ordinary interior held clock.
 R8-specific follow-up is excluded at the user’s request.
 
 Current binary/config provenance is retained in
@@ -86,7 +90,24 @@ No active Ghidra request is cancelled or restarted.
   three fresh-press anchors and eight demo/live camera pairs match exactly.
   Five held follow-ups match a conditional float32 cache replay. All 4,861
   velocity rows have the bound one-tick offset; transform reads were rejected
-  and their corrected class gate still needs live validation. Production is unchanged.
+  and their corrected class gate awaited the pass 33 live validation below.
+  Pass 32 changed no production behavior.
+- Ordinary AK/AWP/Nova/XM draws now preserve authored seconds after late model
+  attachment. A 250 ms delay changes AK/Nova/XM 1.333333×→1× and AWP 1.245901×→1×.
+  All 724 action-lifetime/fade samples remain unchanged; 576 equipment/pickup
+  controls, 48 interruption controls and 16 pause checks pass.
+- Pass 33 evidence: all 2,602 fresh transform snapshots pass their exact class/
+  owner/callback gates. Complete current values match ring values in only 179
+  rows; polling still does not establish writer identity or call arguments.
+  Count-one source/output metadata closes reduction for the three sampled first
+  presses. Native movement scopes bind ordinary interior held deadlines to the
+  weapon callback clock; live resolver branch/cache remains unobserved.
+- Pass 33 validation: native/graph/portable probes and TypeScript pass;
+  2,373 unit cases pass with only the known missing fallback fixture failure.
+  Both Chromium draw cases pass in 15.1 seconds, verifying actual-engine
+  authored time, hand motion, idle return and unchanged ammo/readiness.
+  Both existing camera cases also pass. Heavy work was serialized under caps
+  with deploy paused and repository files frozen during browser runs.
 - Pass 32 validation: native/decoder/portable probes and TypeScript pass;
   2,367 unit cases pass with only the known missing fallback fixture failure.
   Both Chromium camera cases pass in 27.1 seconds, with serialized capped
@@ -261,7 +282,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | Hit flinch by group and side | 90 VPK flinch entries = 45 base + 45 non-additive variants | 42 bullet-hit family clips imported; three molotov family clips omitted; four freshly sampled retained sets match to .03189° | Matched sampled clip deltas; approximated blending | `c488943` |
 | Death and ragdoll behavior | Native world graph hands death to native physics | Custom joint spheres, distance constraints, damping .98/friction .45, 10 iterations; baked fallback | Approximated | `c488943` |
 | Distance-based animation throttling | Needs native client runtime measurement | Trainer uses visibility and global quality/adaptive rate; no distance input in `animationRate` | Native rule unverified; distance-specific policy not present | `c488943` |
-| View draw, idle, fire, reload, empty reload, inspect | Current package: 20 selected entries; Arms AG2 elapsed clock: 40 native cases and ordinary AK graph path; pass31 | AK insertion pose crossing 1.115069→1.1s; clip endpoint held through remaining lock; delayed draw still compresses playback | AK relative clip rate corrected; exact onset/blends/display phase and other action timing partial | `7597b1c` |
+| View draw, idle, fire, reload, empty reload, inspect | Current package: 20 selected entries; worker and immediate Arms clock paths; four unit-rate draw graphs | AK insertion pose 1.115069→1.1s; ordinary AK/AWP/Nova/XM delayed draws now use authored seconds; 724 lifetime/fade samples unchanged | Bounded relative rates corrected; exact onset/blends/display phase, pickup routing and other action clocks partial | `7597b1c`; `64bbe25` |
 | Last-shot/scoped/left/right/alternate variants | Fresh view graphs; selector inventories | Supported dedicated last/scoped/Dualies/R8 variants; generic fire paths use selected native shoot1 clips | Matched selection for implemented variants; full graph not reproduced | `c488943` |
 | View action coverage | Referenced resources in fresh graphs | Unselected referenced actions include AK inspect variants/fixups, AUG/SG fidgets, CZ second reload/draw, MG bullet-hide layers, R8 chamber-position layers and knife hit/backstab variants | Not present for named layers/actions | `c488943` |
 | Settle and action interruption | Native graph transition durations, sync events and inspect fixups | Trainer fades transient end over up to .08 s; inspect onset .06 s; fire resets transient; reload/switch cancels it | Approximated; exact event gating unverified | `c488943` |
@@ -269,7 +290,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | Bolt, slide and pump | Secondary parts embedded in native fire/reload clips; pass29 AWP bolt and Nova pump markers retained | AWP1.6s and Nova.8s fire clips play1×, independently of attack cycle; sampled part errors≤1.8mm | Matched sampled parts/authored clock; native runtime event delivery unresolved | `c488943`; pass29 evidence only |
 | Shell reload timing | Native segment/sync markers and conditional loop transition; pass29 | Nova intro/loop/outro rates.733333/.928571/4.166667×; XM1.4/1/2.166667× relative to authored segments | Approximated; native active-phase durations, shell transitions and action onset unresolved | `c488943`; pass29 evidence only |
 | Viewmodel recoil share/view punch | Current-byte caller chain and native .325 world-angle addition; 432 bounded executions | Rotation error 3.29584° → 0.000014502° across 108 supplied states | Isolated rotation corrected; full gun/camera trajectories remain open | `5132783` |
-| Bob/sway and crouch/zoom motion | Native AIR; pass30 adds 1,427 exact selected-cache projections, captured controller clock, constructor and evaluated-transform consumer | AIR missing before;812 engine/frame cases now reduce position error20.32mm→.000000889mm and angle error.4000053°→.00001648°; old movement sine retained | Isolated AIR matched; call-associated body clock/reset, ring offset/latch producers, look sway/crouch/zoom/rendered landmarks partial | `4e999d9`; pass30 evidence only |
+| Bob/sway and crouch/zoom motion | Native AIR; pass30 controller/cache evidence; pass32 offset producer; pass33 accepts 2,602 transform snapshots | AIR error20.32mm→.000000889mm and angle.4000053°→.00001648°; old movement sine retained | Isolated AIR matched; body clock/reset, latch ordering, transform invocation/writer identity, look sway/crouch/zoom landmarks partial | `4e999d9`; passes30–33 evidence |
 | Muzzle shape, size, duration | Fresh fire event tracks reference per-weapon particle systems at frame zero | Reduced native texture/particle envelopes grouped into six families; implementation explicitly approximates radius, randomization and materials | Approximated | `c488943` |
 | Shell ejection | AK fire clip includes `weapon_shell_casing_rifle` event at frame zero | No ejected shell/casing simulation/rendering found | Not present | `c488943` |
 | Tracer cadence and shape | Native per-weapon tracer data and particle systems | Native cadence option plus every-shot training option; browser trail/rope approximations | Approximated shape; combat/data bench owns cadence | `c488943` |
@@ -394,6 +415,17 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
     reader rejected the actual pawn subclass; fixing its class gate does not
     retroactively validate those samples.
 
+40. The worker clock is not the sole displayed-Arms update path. The ordinary
+    HUD caller reaches a concrete immediate Arms evaluator under explicit mode
+    and interpolation-selector gates, forwarding unscaled frame delta.
+41. Late model attachment previously sped up ordinary draws to fill the remaining
+    deploy lock. Four audited graphs now use authored seconds; native first-display
+    onset and readiness/idle ordering remain separate from that rate correction.
+42. A single input history entry bypasses reduction and preserves index zero.
+    Its completed append mapping does not prove the final command's player-pair
+    presence. Ordinary interior held deadlines also have an actual native clock
+    scope; that does not identify every live resolver branch or cache value.
+
 ## Exact remaining evidence and implementation
 
 - Accuracy/index: common captured paths are corrected in both engines. Native
@@ -410,9 +442,11 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   stairs, slopes, surface friction and ladders; rendered camera frames paired
   with camera-service offsets.
 - Camera clocks: [pass32](reaudit-presentation-history.md) observes selected
-  player/render pairs and first-press camera anchors. Still needed: serialized
-  history after reduction, resolver branch/cache and entry/domain state per
-  shot, exact sampler phase, and the trainer's corresponding saved frame clock.
+  player/render pairs and first-press camera anchors. Pass33 binds count-one
+  serialization and the ordinary interior held-deadline scope. Still needed:
+  final player-pair presence/command association, higher-count reduction cases,
+  live resolver branch/cache and entry/domain state, exact sampler phase, and
+  the trainer's corresponding saved frame clock.
   Both older and new recordings rule out a fitted universal schedule offset.
 - Presentation/audio: continuous timestamped native camera and gun landmarks
   through shots, recovery, crouch, landing and zoom; footstep material,
@@ -425,7 +459,8 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   has a bound ring-offset producer in pass32 but still needs latch ordering,
   call-associated entry/exit clocks,
   consecutive body transitions, existing-instance resets and selected transform
-  history beside its evaluation context. Sway needs input/writer/prediction ordering and
+  history beside its evaluation context. Pass33 accepts that history but does not
+  establish invocation arguments or writer identity. Sway needs input/writer/prediction ordering and
   HUD phase beyond the captured exact-endpoint arithmetic.
 - Damage/hitboxes: controlled native victim health/armor deltas, hit groups,
   tagging velocities, knife/Zeus and penetration flags; authoritative server
@@ -435,8 +470,10 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   finish skin/material comparisons; client animation-rate and effect event readers.
   Static exports alone cannot settle active runtime branches or renderer parity.
   Pass31 binds the current Arms NmGraph elapsed-time caller and corrects the
-  ordinary AK clip rate. Exact first-active-sample/transition timing, other weapon
-  clock branches, shell phase gates and delayed-model draw mapping remain open.
+  ordinary AK clip rate. Pass33 binds the immediate Arms path and corrects four
+  ordinary draw rates. Exact first-active-sample/transition timing, other weapon
+  clock branches, shell phase gates, pickup routing and delayed-model onset
+  remain open.
   The legacy demo playback-rate field still is not the Arms graph clock.
 
 Every unresolved row is retained without speculative feel tuning. The subsystem

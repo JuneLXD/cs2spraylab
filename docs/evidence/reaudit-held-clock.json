@@ -1,0 +1,284 @@
+{
+  "method": "Verify retained held-fire caller/time-control evidence with a full current server hash check.\n\nThis is static evidence checking and small JSON arithmetic. It does not execute\nnative code, infer a live branch from a fit, or edit the application repository.\nRaw instruction locations remain in this local script and evidence directory.\n",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "probeSha256": "d8e35fa53ee5e5f4b4d9b9ffea868b6b1fa22eea166aa3dfd8991f4d6453971f",
+  "wholeArtifactHashRecomputedThisPass": true,
+  "freshlyReadCodeBytes": 12000,
+  "currentByteRanges": [
+    {
+      "name": "button-dispatch",
+      "bytes": 256,
+      "sha256": "588b7ac6de7428411b758bdcbbe5e78ff2b1f88cdf2962cde630f806317664b7",
+      "listingSha256": "9863ddc5ea1cb8f174c08e39f922f769ce46e7ae944ece40fcf88c8f4b618393"
+    },
+    {
+      "name": "command-pre-movement",
+      "bytes": 1376,
+      "sha256": "380cd07b0099398cb4a7b0a0bfb8cf68ae588e945f40722c3f3a04c495449c48",
+      "listingSha256": "d8e72653250950db0e30dcc6c89a8a9cddb0862ad8c49479d6fe5751e85aa9f1"
+    },
+    {
+      "name": "domain-convert",
+      "bytes": 128,
+      "sha256": "80b3727e925771abe8d2c76d01aa26a7e706ea26aecf5faa32596df2f1bf3a24",
+      "listingSha256": "fbaa87ff88779e78d07a2dedac76641186edf677a07abffbbcc6af01543d9d20"
+    },
+    {
+      "name": "domain-tick",
+      "bytes": 320,
+      "sha256": "d9aa51cc96639276947e46dcca4f981f1bf62aacc157cfc9ef420110f0e32770",
+      "listingSha256": "4c9b76f486e0f2b713becb51437d4c4d1023479a83f23d6cdc31ffd217ac86f3"
+    },
+    {
+      "name": "domain-time-tail",
+      "bytes": 96,
+      "sha256": "e0619d23348caada32082c09e1f65bd214cd38044d07cf891bb338e60ad43e13",
+      "listingSha256": "954bf786c7b625337bc44abd5075d3cb5abd9336149790866cd283b921dc3ba5"
+    },
+    {
+      "name": "domain-time",
+      "bytes": 256,
+      "sha256": "cf5eee74abe38a48da9a53f0cce0463199be66ac574706bb7c725f88c0cae897",
+      "listingSha256": "ab0244c78fb650d1880e235d3b7bb6014656026d50ad544c2899c8365a923666"
+    },
+    {
+      "name": "insert-movement",
+      "bytes": 640,
+      "sha256": "fe55c2699e14cc1b82b218702cde98ca318c0caf375bc24a09d597a017f8dca2",
+      "listingSha256": "aef080c679f807e8cbd9690ce0886321b1058679d521c5ca8eb80f5fca9898d0"
+    },
+    {
+      "name": "insert-remaining",
+      "bytes": 736,
+      "sha256": "6d8b97aebfa1d0da4806b95fbbe9eaa821a0c3175c661c3a7da2097317839723",
+      "listingSha256": "0581ebb843d05eed5cdb3ae926f750d911ccddd992c40530e74c55f5c5bdb642"
+    },
+    {
+      "name": "move-data-init",
+      "bytes": 384,
+      "sha256": "29766876d1951f5d926928cd06ad92944c34667396dd7f4a82cd7645891beccf",
+      "listingSha256": "7115ce1b5b8beaee00b9f2e9f8fc1e23b06ca1b28ddfa4d79e517ad6883d194e"
+    },
+    {
+      "name": "movement-class",
+      "bytes": 256,
+      "sha256": "5703e8405674e2ade0b8b53c5743599f0dc03a7320b6dde7afb3309d1e8117a2",
+      "listingSha256": "89c7b037f76182033a164038d6160a26dfaf99cadefa3b5a41db8310dc639a62"
+    },
+    {
+      "name": "movement-deadline-producer",
+      "bytes": 1200,
+      "sha256": "fa15763f37fbbf365983b5183e697ff0487c771d3b74f4638ba35e5b3f715477",
+      "listingSha256": "fe6258e80e4742ec1ca7c8e815f86178d3b755c49eb54c2ce9c15c4971095447"
+    },
+    {
+      "name": "movement-destroy",
+      "bytes": 160,
+      "sha256": "e8d8754ab2b607110f800fd4f1a15f673eb42d00348e480c87d054e39f9e5bc9",
+      "listingSha256": "7e27bc8211ca67aa8d82abaae63ce0e20fa269d06f41b9dfd572033b8bc7c061"
+    },
+    {
+      "name": "post-movement",
+      "bytes": 672,
+      "sha256": "f655116abfa66fa508b90c516dd634689688ae937694aea6c3354939691c90b6",
+      "listingSha256": "3b870056b3499150e1d8b25838ee2483b7804a25846944edde9a43bf523c8f39"
+    },
+    {
+      "name": "pre-command-base",
+      "bytes": 1536,
+      "sha256": "7fdea330ff2863e5ecff89de537c263984ea570715a8369f086f0614986fbe5d",
+      "listingSha256": "9e270a82cbcf219edd334476f85bb9daee1e93b8ef55591feb99c06be673c898"
+    },
+    {
+      "name": "preprocessing-base",
+      "bytes": 256,
+      "sha256": "bd7872db303e5dd8831bc8e56710b907260dbb3f0e5ba0ea9a45c7502b2455e4",
+      "listingSha256": "68ea05047c3acc64376883e96de5bf544ace0e5c30ac1d9a1431b24e6f47bc15"
+    },
+    {
+      "name": "remaining-callback",
+      "bytes": 256,
+      "sha256": "5bc296ae301bef69dd041fcb178022680c774e3e12be0f508afbaf6858930904",
+      "listingSha256": "cdf7f270c361310a39500f8683febd7218ed1a88aeff1c326e03a8c8be5e9328"
+    },
+    {
+      "name": "remaining-clock-scope",
+      "bytes": 656,
+      "sha256": "a1ac6797eb5017280a78af853e9dc784f58c953f8a095343e3f102a6a1b8eab4",
+      "listingSha256": "93d77170857df7c06e046e15c5a7af5d7fd815480999c308934123ad3a212e80"
+    },
+    {
+      "name": "remaining-list-prepare",
+      "bytes": 1536,
+      "sha256": "49239165351a7e982dc3dc249dd0c321197c706cbd7841be4e15e786a1e7735f",
+      "listingSha256": "0450c6357acf2ddc326e0f88f542eddc3a7c5b065774675bc25f607a8c180ee4"
+    },
+    {
+      "name": "remaining-weapon-dispatch",
+      "bytes": 1280,
+      "sha256": "1849d7f162383d1ff7dd1c53efda8c509fbf8a3381e78296c0164025fcd1ef69",
+      "listingSha256": "188ffe987b8f466955f6455693a7a670cdbcb9c9cd410d0d3d4f21deba5ffd45"
+    }
+  ],
+  "currentMovementClassBinding": {
+    "name": "26CCSPlayer_MovementServices",
+    "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+    "typedSlots": [
+      "preMovement",
+      "deadlineProducer",
+      "postMovement",
+      "remainingCallback"
+    ]
+  },
+  "checkedInstructions": 80,
+  "retainedInstructions": [
+    {
+      "path": "reports/reaudit-held-clock/move-data-init.txt",
+      "sha256": "7115ce1b5b8beaee00b9f2e9f8fc1e23b06ca1b28ddfa4d79e517ad6883d194e",
+      "checkedInstructions": 3
+    },
+    {
+      "path": "reports/reaudit-held-clock/command-pre-movement.txt",
+      "sha256": "d8e72653250950db0e30dcc6c89a8a9cddb0862ad8c49479d6fe5751e85aa9f1",
+      "checkedInstructions": 1
+    },
+    {
+      "path": "reports/reaudit-held-clock/pre-command-base.txt",
+      "sha256": "9e270a82cbcf219edd334476f85bb9daee1e93b8ef55591feb99c06be673c898",
+      "checkedInstructions": 1
+    },
+    {
+      "path": "reports/reaudit-held-clock/movement-deadline-producer.txt",
+      "sha256": "fe6258e80e4742ec1ca7c8e815f86178d3b755c49eb54c2ce9c15c4971095447",
+      "checkedInstructions": 16
+    },
+    {
+      "path": "reports/reaudit-held-clock/insert-remaining.txt",
+      "sha256": "0581ebb843d05eed5cdb3ae926f750d911ccddd992c40530e74c55f5c5bdb642",
+      "checkedInstructions": 9
+    },
+    {
+      "path": "reports/reaudit-held-clock/remaining-clock-scope.txt",
+      "sha256": "93d77170857df7c06e046e15c5a7af5d7fd815480999c308934123ad3a212e80",
+      "checkedInstructions": 14
+    },
+    {
+      "path": "reports/reaudit-held-clock/remaining-callback.txt",
+      "sha256": "cdf7f270c361310a39500f8683febd7218ed1a88aeff1c326e03a8c8be5e9328",
+      "checkedInstructions": 3
+    },
+    {
+      "path": "reports/reaudit-held-clock/remaining-weapon-dispatch.txt",
+      "sha256": "188ffe987b8f466955f6455693a7a670cdbcb9c9cd410d0d3d4f21deba5ffd45",
+      "checkedInstructions": 3
+    },
+    {
+      "path": "reports/reaudit-held-clock/domain-tick.txt",
+      "sha256": "4c9b76f486e0f2b713becb51437d4c4d1023479a83f23d6cdc31ffd217ac86f3",
+      "checkedInstructions": 6
+    },
+    {
+      "path": "reports/reaudit-held-clock/domain-convert.txt",
+      "sha256": "fbaa87ff88779e78d07a2dedac76641186edf677a07abffbbcc6af01543d9d20",
+      "checkedInstructions": 2
+    },
+    {
+      "path": "reports/reaudit-footsteps-prepare-segments-raw.txt",
+      "sha256": "e40343bf8c4cfa9d24f991659ec1acc7cda9e17d7271689b0e677e45d1a95cb3",
+      "checkedInstructions": 7
+    },
+    {
+      "path": "reports/reaudit-attack-history-current-time-pair.txt",
+      "sha256": "9407b80a1e72ada1d10da3e827a932c786729ad05c9537f8da0053ea2dcf5995",
+      "checkedInstructions": 3
+    },
+    {
+      "path": "reports/reaudit-attack-history-next-attacks.txt",
+      "sha256": "3ae529ee076709c032fee959ff5df1bb9a9d76ddc8c4709ead5f1cbbfaff1de8",
+      "checkedInstructions": 2
+    },
+    {
+      "path": "reports/reaudit-attack-history-resolver.txt",
+      "sha256": "b3a43502ed18ff51dfce211e47eccb9173aa511a0ab0384f7ae3145f12622b8b",
+      "checkedInstructions": 7
+    },
+    {
+      "path": "reports/reaudit-shell-reload/generic-post-frame.txt",
+      "sha256": "0b8a46edd32934a1c66538d646806b12bb4343ed549fb7dfda819a7e6305d6b3",
+      "checkedInstructions": 1
+    },
+    {
+      "path": "reports/reaudit-shell-reload/proof-shell-post-frame.txt",
+      "sha256": "d4a347158b9259d6ece57aa942196fa34f5f991d4dfd1f66ea620d62e38950c0",
+      "checkedInstructions": 2
+    }
+  ],
+  "retainedReaIdentities": [
+    {
+      "path": "rea/out/reaudit-accuracy-remaining-movement.json",
+      "sha256": "02db7c150cd371594a546e13ce579b7af023c605db8ae2edebec7c4e950a5c4e",
+      "evidenceId": "ev_cf1fbeceb9f98cffb836862eb1499ab1569ef878cb47a93135675a8d4fe30a61"
+    },
+    {
+      "path": "rea/out/reaudit-accuracy-finish-pawn-caller.json",
+      "sha256": "31d826ac9da61c8ac089c5fa9bda6b72ab21c7b09536d8cf34e1ff485a21c48d",
+      "evidenceId": "ev_0aeffd6bfa128383d042e0a525acd1c127809212079e062a942876736613aaca"
+    },
+    {
+      "path": "rea/out/reaudit-accuracy-gun-fire.json",
+      "sha256": "851911e56ada9dcea4cbbfc55421c42432f43ef8dc84e7c22f6da6a8120a86df",
+      "evidenceId": "ev_cbaad7b48d33c3bc5c4af281d6ac98d0f5d542edbe79b5dca98a106e6b3316be"
+    },
+    {
+      "path": "rea/out/reaudit-accuracy-primary-dispatch.json",
+      "sha256": "58ed141714910536aa2b4cacff2539b68473043699f32532f10b6afc169896cd",
+      "evidenceId": "ev_171755c445447471cd7382dcdf818d609c97351c171bcd47e441ba93b45f9120"
+    },
+    {
+      "path": "rea/out/reaudit-accuracy-gun-primary.json",
+      "sha256": "6676c14e72e224d1f88271c6cf8b932a36cfe084f9aff77eee60292abbfcb06b",
+      "evidenceId": "ev_c28890979a53b74881fd7bc97a4b9058c1f7c2532409f9e204dfa55acc27eca9"
+    }
+  ],
+  "priorCommandOracle": {
+    "path": "reports/reaudit-footsteps/native-command-segments.json",
+    "sha256": "5b466ca92054e07e971c743fbda14356249524c8717204c49118eb5c66c43ede"
+  },
+  "heldCaptureRelation": {
+    "path": "reports/reaudit-held-anchor-replay.json",
+    "sha256": "99fa62c5bf291f6271b4b6d1c99ba7bfe1f086799ee7b3f2b25f001c6e7235fe",
+    "interiorHeldShots": 5,
+    "deadlineFractions": [
+      0.32187509536743164,
+      0.7218751907348633,
+      0.12187528610229492,
+      0.5218753814697266,
+      0.9218754768371582
+    ],
+    "limitation": "Static ordinary-path applicability; this does not observe which branch each live invocation took."
+  },
+  "rule": {
+    "ordinaryCommandWindow": "The unflagged command initializer uses global end tick G and start tick G-1, with a full-tick interval.",
+    "deadlineProducer": "Preprocessing clears both lists, sets its interval limit to one, and calls the typed CS movement override. That override gets the active weapon next-primary pair and inserts its fraction if start < deadline <= end in the movement time domain.",
+    "insertion": "The remaining list has ordered 24-byte records. Fraction-only deadline insertion zeroes button/action payload, preserves the supplied float fraction, and skips an exact duplicate.",
+    "clockScope": "For each remaining record, normalize startTick+fraction, install global currentTime, delta, tick and fraction, apply any button edge, then invoke the typed per-fraction callback once at the final record of each distinct fraction. Restore all saved globals afterward.",
+    "typedCall": "The per-fraction callback gets the owner pawn weapon services, obtains the active weapon, and tail-calls weapon post-frame. The ordinary gun wrapper reaches common attack readiness, primary attack and GunFire, which captures the resolver current pair before resolving history.",
+    "resolverCurrent": "The current pair reads global fraction plus the weapon identity time-domain tick. Nonzero domains or missing domain object use the global tick. Default domain-zero conversion subtracts its stored integer adjustment, with a separate gated clamp branch.",
+    "interiorDeadlineConclusion": "For ordinary one-tick processing, matching movement/weapon time domains and an eligible interior next-primary deadline, the resolver current pair is the next-primary pair. This is a caller/time-control result, not a fitted offset.",
+    "cache": "Candidate = Normalize(nextPrimary + oneTick + FromTickFloat(cache)). Cache after resolution = FloatTicks(Normalize(resolvedAnchor - (entryCurrentPair + oneTick))). Recompute each shot; do not hard-code the observed cache or phase."
+  },
+  "readiness": {
+    "closed": "The ordinary interior held-deadline clock has a native producer, typed caller and scoped-time consumer chain. It can replace the earlier unsupported assumption for that bounded path.",
+    "notAProductionPatch": "The final serialized-command player-pair presence flag, actual live resolver status, and pre/post cache were not sampled. First-press trainer clock mapping and delayed/no-history cases remain separate.",
+    "nextUsefulEvidence": "A callback-bound trace of resolver entry current pair, next-primary pair, selected history status and pre/post cache would establish live branch applicability. It should retain command identity and final selected protobuf player-pair presence rather than infer them from polling."
+  },
+  "limits": [
+    "The current full server hash is verified. The retained inspection read 12,000 bounded bytes plus movement RTTI/table words; its ranges and current-hash REA identities are reported separately.",
+    "The preprocessing virtual call is retained in the earlier footstep disassembly and was exercised by its current-hash supplied-command oracle. This pass reread the initializer prefix and typed override, not that virtual instruction itself.",
+    "No native execution or live invocation trace was performed here. The prior oracle had no weapon and stubbed time-domain helpers; it supports caller reachability, not held-shot runtime branches.",
+    "Interior deadline fractions are covered by the clock conclusion. Exact zero/end-boundary, overdue or newly reset deadlines, special command flags, domain disagreement and active clamp states are not generalized.",
+    "The camera sampler reads its own current-time accessor while the recoil anchor comes from command history. A proved held deadline clock does not collapse these two clocks or justify a constant camera delay.",
+    "Source mapping/count<=4 proves ordinary reduction cannot drop the sole captured entry. It does not prove final command association or the unobserved player-field presence gate.",
+    "R8 is excluded. This clock proof does not change production behavior."
+  ]
+}

@@ -231,3 +231,17 @@ separate layout and shared current record. Its first live reader rejected the
 actual skeleton subclass; the corrected, narrowly bound gate remains awaiting
 live validation. Full motion still needs invocation inputs, latch/consumer
 ordering and existing-instance resets. Production remains unchanged.
+
+## Pass 33: draw rate and accepted transform history
+
+[Report](reaudit-draw-and-transform.md). The concrete immediate Arms caller and
+four native graphs justify authored-rate ordinary AK/AWP/Nova/XM draws. Late
+attachment no longer compresses the clip into the remaining lock; native onset,
+idle/readiness ordering, fades and pickup routing remain separate work. The
+new capture accepts 2,602 transform rows and retains an exactly reproducible
+numeric fixture, with invocation arguments and writer ordering still open.
+Serialization metadata closes one-entry reduction for the sampled first presses;
+typed movement callbacks establish the ordinary interior held-deadline clock.
+The full mechanic inventory remains active, including model/graph/renderer work.
+R8 remains excluded. No camera-only or bob/sway tuning is inferred from these
+new motion and command observations.
