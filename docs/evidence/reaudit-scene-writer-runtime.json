@@ -1,0 +1,394 @@
+{
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "snapshotSha256": "698040d5947f90eff1ef26aa9539ddf09958bc67659eced15c287876cd880a27",
+  "fixtureSha256": "6b0fadc8cf1827ac68cf4a489b7c51a52f98e0182368bec74fcd9b101316f8b8",
+  "captureName": "native_reaudit_bob_005",
+  "productionChanged": false,
+  "method": "Native wrapper/state cases in private emulator memory, plus captured-input dispatch projections. Supplied interfaces and post-call-state limitations remain explicit.",
+  "synthetic": {
+    "cases": 80,
+    "assertions": 178,
+    "binaryPagesMapped": 21,
+    "imports": [
+      "V_acosf",
+      "V_atan2f",
+      "V_cosf",
+      "V_fmodf"
+    ],
+    "nativeRanges": {
+      "yaw-wrapper-complete": "b1b0202bbd73224344ae024d420672f1759e43efb3ecc68a70e68d1d7f427c54",
+      "yaw-producer-step": "47da1e9c83f098c06b29b6ec13eb69d3d485438987d8899d9e78a5a0666c5c22",
+      "yaw-state-handler-a": "6080c363c35d9c2e76577520670f179492b60e314824fd954663bcade35f7130",
+      "yaw-state-handler-b": "83f1d5a9f4ed73b4b48a6a1f6b205fc8cc564719caeacff6d2a968fffa29b06b",
+      "yaw-state-handler-c": "431442e7ad04a5364f1b14f755ee9a9ff19e6aa798a2e7073422d17b3e6556f7",
+      "yaw-state-handler-d": "c7265d6bc1c76c198e1b594b7d63dfbbc9401f5e2fece24dfaa980c8c3601da9",
+      "yaw-state-handler-e": "e797f154b5b7d7a10a4816dc0de6d0f099f91d1f4212089874461cd12e5ed817",
+      "yaw-state-handler-f": "5afdcb6bbc77ed41076e7a31bbd120b9b88f60bd4eee513e255e9b970e301b70",
+      "yaw-dispatch": "2a4845e34dfd81b21b8293a3f455cdd9949098c93981dae1e61bfecfc8547361",
+      "yaw-angle-diff": "6c8942127713dc797744499ac93bd27bef93a8e4831c799d460ca86dd75a5d7c"
+    }
+  },
+  "capture": {
+    "rows": 1614,
+    "validBodyOwners": 1614,
+    "processedCommands": 740,
+    "commandsWithMultipleProducedYaws": 28,
+    "requestedFrameCounters": 812
+  },
+  "projections": {
+    "normalized-raw-global": {
+      "1": {
+        "rows": 1091,
+        "matches": 1090,
+        "maxAbsoluteError": 0.24315643310546875,
+        "stateChanges": 0
+      },
+      "3": {
+        "rows": 246,
+        "matches": 246,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0
+      },
+      "2": {
+        "rows": 20,
+        "matches": 20,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0
+      },
+      "5": {
+        "rows": 212,
+        "matches": 187,
+        "maxAbsoluteError": 0.40068817138671875,
+        "stateChanges": 1
+      },
+      "air": {
+        "rows": 45,
+        "matches": 45,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0
+      }
+    },
+    "normalized-raw-global-plus-one": {
+      "1": {
+        "rows": 1091,
+        "matches": 1090,
+        "maxAbsoluteError": 0.24315643310546875,
+        "stateChanges": 0
+      },
+      "3": {
+        "rows": 246,
+        "matches": 246,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0
+      },
+      "2": {
+        "rows": 20,
+        "matches": 20,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 1
+      },
+      "5": {
+        "rows": 212,
+        "matches": 188,
+        "maxAbsoluteError": 0.40069580078125,
+        "stateChanges": 0
+      },
+      "air": {
+        "rows": 45,
+        "matches": 45,
+        "maxAbsoluteError": 0.0,
+        "stateChanges": 0
+      }
+    }
+  },
+  "groups": {
+    "1": {
+      "rows": 1091,
+      "commands": 499,
+      "nativeYawSignatures": 16,
+      "matchesUnderAtLeastOneExplicitClock": 1090
+    },
+    "3": {
+      "rows": 246,
+      "commands": 113,
+      "nativeYawSignatures": 39,
+      "matchesUnderAtLeastOneExplicitClock": 246
+    },
+    "2": {
+      "rows": 20,
+      "commands": 9,
+      "nativeYawSignatures": 1,
+      "matchesUnderAtLeastOneExplicitClock": 20
+    },
+    "5": {
+      "rows": 212,
+      "commands": 98,
+      "nativeYawSignatures": 112,
+      "matchesUnderAtLeastOneExplicitClock": 212
+    },
+    "air": {
+      "rows": 45,
+      "commands": 23,
+      "nativeYawSignatures": 1,
+      "matchesUnderAtLeastOneExplicitClock": 45
+    }
+  },
+  "rampClockDiagnostic": {
+    "rows": 47,
+    "maxIntegerResidual": 7.942098925184382e-07,
+    "inferredMinusRawGlobal": {
+      "1": 23,
+      "0": 24
+    },
+    "inferredMinusProcessedCommand": {
+      "149": 47
+    },
+    "warning": "The integer ramp inversion is diagnostic only. The observed command offset is not a proven caller rule and must not be copied into production."
+  },
+  "sceneAngleComparison": {
+    "sceneLocalAngles": {
+      "exactMatches": 1585,
+      "maxAbsoluteDegrees": 0.03002166748046875
+    },
+    "sceneAbsoluteAngles": {
+      "exactMatches": 1394,
+      "maxAbsoluteDegrees": 2.3928279876708984
+    },
+    "sceneAbsUpdateSourceAngles": {
+      "exactMatches": 1468,
+      "maxAbsoluteDegrees": 2.3928279876708984
+    }
+  },
+  "stateTransitions": [
+    {
+      "row": 260,
+      "previousObservedState": 1,
+      "currentState": 3,
+      "commandDelta": 1,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 313,
+      "previousObservedState": 3,
+      "currentState": 1,
+      "commandDelta": 7,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 344,
+      "previousObservedState": 1,
+      "currentState": 2,
+      "commandDelta": 6,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 348,
+      "previousObservedState": 2,
+      "currentState": 3,
+      "commandDelta": 6,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 394,
+      "previousObservedState": 3,
+      "currentState": 1,
+      "commandDelta": 7,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 422,
+      "previousObservedState": 1,
+      "currentState": 2,
+      "commandDelta": 7,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 424,
+      "previousObservedState": 2,
+      "currentState": 3,
+      "commandDelta": 7,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 455,
+      "previousObservedState": 3,
+      "currentState": 1,
+      "commandDelta": 1,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 508,
+      "previousObservedState": 1,
+      "currentState": 2,
+      "commandDelta": 7,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 522,
+      "previousObservedState": 2,
+      "currentState": 3,
+      "commandDelta": 1,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 568,
+      "previousObservedState": 3,
+      "currentState": 1,
+      "commandDelta": 7,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": 0.0,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 596,
+      "previousObservedState": 1,
+      "currentState": 5,
+      "commandDelta": 1,
+      "yaw": 88.91514587402344,
+      "cachedError": -25.853771209716797,
+      "cachedRate": -34.47169494628906,
+      "rawProjectionMatched": false
+    },
+    {
+      "row": 636,
+      "previousObservedState": 5,
+      "currentState": 1,
+      "commandDelta": 7,
+      "yaw": -13.87744140625,
+      "cachedError": -1.7225608825683594,
+      "cachedRate": -15.749725341796875,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 696,
+      "previousObservedState": 1,
+      "currentState": 5,
+      "commandDelta": 0,
+      "yaw": -13.384615898132324,
+      "cachedError": 24.439189910888672,
+      "cachedRate": 16.29279327392578,
+      "rawProjectionMatched": false
+    },
+    {
+      "row": 746,
+      "previousObservedState": 5,
+      "currentState": 1,
+      "commandDelta": 7,
+      "yaw": 88.35720825195312,
+      "cachedError": 1.642791748046875,
+      "cachedRate": 15.02099609375,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 801,
+      "previousObservedState": 1,
+      "currentState": 5,
+      "commandDelta": 7,
+      "yaw": 90.36569213867188,
+      "cachedError": 26.874130249023438,
+      "cachedRate": 53.748260498046875,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 861,
+      "previousObservedState": 5,
+      "currentState": 1,
+      "commandDelta": 7,
+      "yaw": -165.96290588378906,
+      "cachedError": 1.5629425048828125,
+      "cachedRate": 14.29150390625,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 925,
+      "previousObservedState": 1,
+      "currentState": 5,
+      "commandDelta": 7,
+      "yaw": -170.28517150878906,
+      "cachedError": -30.925506591796875,
+      "cachedRate": -103.08502197265625,
+      "rawProjectionMatched": false
+    },
+    {
+      "row": 987,
+      "previousObservedState": 5,
+      "currentState": 1,
+      "commandDelta": 1,
+      "yaw": 91.70209503173828,
+      "cachedError": -1.94525146484375,
+      "cachedRate": -15.56201171875,
+      "rawProjectionMatched": false
+    },
+    {
+      "row": 1037,
+      "previousObservedState": 1,
+      "currentState": 3,
+      "commandDelta": 6,
+      "yaw": 90.77532958984375,
+      "cachedError": -6.101844787597656,
+      "cachedRate": -15.56201171875,
+      "rawProjectionMatched": true
+    },
+    {
+      "row": 1107,
+      "previousObservedState": 3,
+      "currentState": 1,
+      "commandDelta": 7,
+      "yaw": 90.0,
+      "cachedError": 0.0,
+      "cachedRate": -15.56201171875,
+      "rawProjectionMatched": true
+    }
+  ],
+  "conclusions": [
+    "All retained Move, Start and airborne produced-yaw samples match the native dispatch projection exactly.",
+    "Every retained TurnOnSpotLoop sample matches under at least one of the two explicit supplied clocks, but neither single raw-clock hypothesis explains every sample.",
+    "One projected Idle mismatch follows an observed TurnOnSpotLoop-to-Idle transition; the cached turn rate records the final step before the state changed.",
+    "Repeated processed-command values can accompany different produced yaws. These snapshots do not prove invocation count or update ownership within prediction.",
+    "The constructor/reset and caller-clock requirements remain open; this pass does not justify a production body-yaw update."
+  ],
+  "limits": [
+    "Prepared movement, absolute input angle, current tick and aim-punch result are supplied interfaces.",
+    "Weapon-drop, foot IK and air auxiliary routines are skipped; only yaw and related dispatch state are asserted.",
+    "Float libm shims round host mathematical results to float32; they do not establish exact native transcendental-library parity.",
+    "These cases do not establish live call cadence, prediction context, state initialization or lifecycle resets.",
+    "No live runtime comparison is performed by this synthetic bench.",
+    "Ordinary AK item definition is supplied; special-weapon stationary gates are not tested.",
+    "This projects captured post-call state/timers with cached pre-dispatch error; it is not a consecutive-command replay.",
+    "Working input yaw is reconstructed from a float32 aim/error pair. The documented tolerance derives from float32 spacing, not a fitted margin.",
+    "Both clocks are explicit diagnostics. The scoped movement clock is not established by either sampled raw global field.",
+    "Skipped IK, air auxiliary and mathematical shims retain the synthetic oracle limitations.",
+    "Mismatches cannot be used to tune body yaw or select a production update phase."
+  ]
+}

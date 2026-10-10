@@ -1,0 +1,519 @@
+{
+  "schema": 1,
+  "pass": 29,
+  "baseline": "448729a",
+  "nativeBuild": "2000930",
+  "scope": [
+    "ak47",
+    "awp",
+    "nova",
+    "xm1014"
+  ],
+  "status": "evidence-only; no production correction",
+  "provenance": {
+    "path": "research/reaudit-animation/provenance.json",
+    "sha256": "0fd062a71037ffb664aed5fd3f2472845dde21e99171187b345f636509e31670"
+  },
+  "listingSha256": "cac53a8d185a272f941dec040fcc524d77d1a86f42dced2a5b21e40042458371",
+  "checks": {
+    "currentManifestMatches": 20,
+    "fireSamples": 16,
+    "maxFireClockErrorSeconds": 2.7755575615628914e-17
+  },
+  "weapons": {
+    "ak47": {
+      "importBuildLabel": "2000922",
+      "graph": {
+        "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+ak47.vnmgraph",
+        "sha256": "87908d9b2ff24890dc95503916452c64274f713b5452eda0497038ce1c7b1317",
+        "nodes": 459
+      },
+      "importedGlbJson": {
+        "path": "public/revamp/models/view-ak47.glb",
+        "sha256": "c9e9a3321c6201f401000a29a1a3715f95a6e64c110d2a76a599ed6826fbe1fb"
+      },
+      "durations": {
+        "idle": 0.03333333507180214,
+        "draw": 1,
+        "inspect": 4.566666603088379,
+        "reload": 2.433333396911621,
+        "fire": 0.7666666507720947
+      },
+      "mechanical": {
+        "deploy": 1,
+        "cycle": 0.1,
+        "reload": 2.466667
+      },
+      "manifest": {
+        "idle": {
+          "path": "animation/anims/viewmodel/rifle/rifle_ak/idle_ak.vnmclip_c",
+          "crc": "00fcda5e0b",
+          "bytes": 4342,
+          "matchesCurrentManifest": true
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/rifle/rifle_ak/draw_ak.vnmclip_c",
+          "crc": "0023b19c40",
+          "bytes": 14726,
+          "matchesCurrentManifest": true
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/rifle/rifle_ak/lookat01_ak.vnmclip_c",
+          "crc": "009a3ed40a",
+          "bytes": 29029,
+          "matchesCurrentManifest": true
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/rifle/rifle_ak/reload_ak.vnmclip_c",
+          "crc": "00c67cf7ca",
+          "bytes": 27253,
+          "matchesCurrentManifest": true
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/rifle/rifle_ak/shoot1_ak.vnmclip_c",
+          "crc": "00becc091d",
+          "bytes": 8253,
+          "matchesCurrentManifest": true
+        }
+      },
+      "clockSamples": [
+        {
+          "id": "ak47",
+          "kind": "draw",
+          "loadDelay": 0.25,
+          "remaining": 0.75,
+          "elapsedSinceAttach": 0.375,
+          "action": "draw",
+          "clock": 0.5,
+          "weight": 1,
+          "pose": 0.5,
+          "rate": 1.3333333333333333,
+          "authoredOneRateReferenceAtSameEquipAge": 0.625
+        },
+        {
+          "id": "ak47",
+          "kind": "reload",
+          "phase": "magazine",
+          "time": 1.2333335,
+          "duration": 2.466667,
+          "progress": 0.5,
+          "work": 1.2333335,
+          "ammo": 30,
+          "action": "reload",
+          "clock": 1.2166666984558105,
+          "weight": 1,
+          "pose": 1.2166666984558105
+        },
+        {
+          "id": "ak47",
+          "kind": "ammo-event",
+          "gameplayInsert": 1.1,
+          "ammo": 30,
+          "authoredInsert": 1.1,
+          "action": "reload",
+          "clock": 1.0851350168477476,
+          "weight": 1,
+          "pose": 1.0851350168477476,
+          "visualInsertWallTime": 1.115068614701033
+        }
+      ]
+    },
+    "awp": {
+      "importBuildLabel": "2000922",
+      "graph": {
+        "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+awp.vnmgraph",
+        "sha256": "c19204ab30e42d5ca5b69d4bbc5ed38ef09b1d6bd1737c31867eb2f79b537ab2",
+        "nodes": 459
+      },
+      "importedGlbJson": {
+        "path": "public/revamp/models/view-awp.glb",
+        "sha256": "d117f3a81ce1ee09a490db632471b76bab8e03f9d5bfdee5989a5bebab804f9a"
+      },
+      "durations": {
+        "idle": 0.03333333507180214,
+        "draw": 1.2666666507720947,
+        "inspect": 5,
+        "reload": 3.6666667461395264,
+        "fire": 1.600000023841858
+      },
+      "mechanical": {
+        "deploy": 1.266667,
+        "cycle": 1.455,
+        "reload": 3.666667
+      },
+      "manifest": {
+        "idle": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/idle_awp.vnmclip_c",
+          "crc": "00e569b4de",
+          "bytes": 4370,
+          "matchesCurrentManifest": true
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/draw_awp.vnmclip_c",
+          "crc": "00a2f78d17",
+          "bytes": 13824,
+          "matchesCurrentManifest": true
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/lookat01_awp.vnmclip_c",
+          "crc": "00e4a9be1d",
+          "bytes": 27412,
+          "matchesCurrentManifest": true
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/reload_awp.vnmclip_c",
+          "crc": "0080de5cc3",
+          "bytes": 37694,
+          "matchesCurrentManifest": true
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/rifle/rifle_awp/shoot1_awp.vnmclip_c",
+          "crc": "000186d631",
+          "bytes": 15636,
+          "matchesCurrentManifest": true
+        }
+      },
+      "clockSamples": [
+        {
+          "id": "awp",
+          "kind": "draw",
+          "loadDelay": 0.25,
+          "remaining": 1.016667,
+          "elapsedSinceAttach": 0.5083335,
+          "action": "draw",
+          "clock": 0.6333333253860474,
+          "weight": 1,
+          "pose": 0.6333333253860474,
+          "rate": 1.2459012152180553,
+          "authoredOneRateReferenceAtSameEquipAge": 0.7583335
+        },
+        {
+          "id": "awp",
+          "kind": "reload",
+          "phase": "magazine",
+          "time": 1.8333335,
+          "duration": 3.666667,
+          "progress": 0.5,
+          "work": 1.8333335,
+          "ammo": 3,
+          "action": "reload",
+          "clock": 1.8333333730697632,
+          "weight": 1,
+          "pose": 1.8333333730697632
+        },
+        {
+          "id": "awp",
+          "kind": "ammo-event",
+          "gameplayInsert": 2,
+          "ammo": 5,
+          "authoredInsert": 2,
+          "action": "reload",
+          "clock": 1.9999998615306636,
+          "weight": 1,
+          "pose": 1.9999998615306636,
+          "visualInsertWallTime": 2.000000138469346
+        }
+      ]
+    },
+    "nova": {
+      "importBuildLabel": "2000924",
+      "graph": {
+        "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+nova.vnmgraph",
+        "sha256": "18f0da4fb222d339b2581cd24616ecdecfe0d8d2c30f43c6468a71a5e25ceacf",
+        "nodes": 459
+      },
+      "importedGlbJson": {
+        "path": "public/revamp/models/view-nova.glb",
+        "sha256": "6876ce7e246f21cfce9c8421afce3e98067bca0581e105523cc67a37581716c4"
+      },
+      "durations": {
+        "idle": 0.03333333507180214,
+        "draw": 1,
+        "inspect": 5.599999904632568,
+        "reload": 1.6333333253860474,
+        "fire": 0.800000011920929
+      },
+      "mechanical": {
+        "deploy": 1,
+        "cycle": 0.88,
+        "reload": 0.466667
+      },
+      "manifest": {
+        "idle": {
+          "path": "animation/anims/viewmodel/rifle/rifle_nova/idle_nova.vnmclip_c",
+          "crc": "00638a6d56",
+          "bytes": 4409,
+          "matchesCurrentManifest": true
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/rifle/rifle_nova/draw_nova.vnmclip_c",
+          "crc": "00fbef174e",
+          "bytes": 12199,
+          "matchesCurrentManifest": true
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/rifle/rifle_nova/lookat01_nova.vnmclip_c",
+          "crc": "006d0dd968",
+          "bytes": 51448,
+          "matchesCurrentManifest": true
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/rifle/rifle_nova/reload_nova.vnmclip_c",
+          "crc": "006cd754b6",
+          "bytes": 19870,
+          "matchesCurrentManifest": true
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/rifle/rifle_nova/shoot1_nova.vnmclip_c",
+          "crc": "005eaf008c",
+          "bytes": 9616,
+          "matchesCurrentManifest": true
+        }
+      },
+      "clockSamples": [
+        {
+          "id": "nova",
+          "kind": "draw",
+          "loadDelay": 0.25,
+          "remaining": 0.75,
+          "elapsedSinceAttach": 0.375,
+          "action": "draw",
+          "clock": 0.5,
+          "weight": 1,
+          "pose": 0.5,
+          "rate": 1.3333333333333333,
+          "authoredOneRateReferenceAtSameEquipAge": 0.625
+        },
+        {
+          "id": "nova",
+          "kind": "reload",
+          "phase": "start",
+          "time": 0.25,
+          "duration": 0.5,
+          "progress": 0.5,
+          "work": 0.25,
+          "ammo": 6,
+          "action": "reload",
+          "clock": 0.18333333333333332,
+          "weight": 1,
+          "pose": 0.18333333333333332
+        },
+        {
+          "id": "nova",
+          "kind": "reload",
+          "phase": "shell",
+          "time": 0.7333335,
+          "duration": 0.466667,
+          "progress": 0.49999999999999994,
+          "work": 0.23333349999999997,
+          "ammo": 6,
+          "action": "reload",
+          "clock": 0.5833333333333333,
+          "weight": 1,
+          "pose": 0.5833333333333333
+        },
+        {
+          "id": "nova",
+          "kind": "reload",
+          "phase": "shell",
+          "time": 1.2000005,
+          "duration": 0.466667,
+          "progress": 0.5000000000000002,
+          "work": 0.23333350000000008,
+          "ammo": 7,
+          "action": "reload",
+          "clock": 0.5833333333333334,
+          "weight": 1,
+          "pose": 0.5833333333333334
+        },
+        {
+          "id": "nova",
+          "kind": "reload",
+          "phase": "finish",
+          "time": 1.533334,
+          "duration": 0.2,
+          "progress": 0.5000000000000004,
+          "work": 0.10000000000000009,
+          "ammo": 8,
+          "action": "reload",
+          "clock": 1.2166666666666672,
+          "weight": 1,
+          "pose": 1.2166666666666672
+        }
+      ]
+    },
+    "xm1014": {
+      "importBuildLabel": "2000924",
+      "graph": {
+        "path": "research/reaudit-animation/animation/graphs/viewmodel/viewmodel_gun.vnmgraph+xm1014.vnmgraph",
+        "sha256": "1be1052157a59ca2f8c7fe6132276000b840ea625b78d79086142439b11eddbb",
+        "nodes": 459
+      },
+      "importedGlbJson": {
+        "path": "public/revamp/models/view-xm1014.glb",
+        "sha256": "a8386e9e150bf6f0a716a00d63d5d025b541a18d38b446b7a2a8aa1409af49ec"
+      },
+      "durations": {
+        "idle": 0.03333333507180214,
+        "draw": 1,
+        "inspect": 4.599999904632568,
+        "reload": 1.7333333492279053,
+        "fire": 0.8666666746139526
+      },
+      "mechanical": {
+        "deploy": 1,
+        "cycle": 0.35,
+        "reload": 0.6
+      },
+      "manifest": {
+        "idle": {
+          "path": "animation/anims/viewmodel/rifle/rifle_xm1014/idle_xm1014.vnmclip_c",
+          "crc": "00d456f9d2",
+          "bytes": 4337,
+          "matchesCurrentManifest": true
+        },
+        "draw": {
+          "path": "animation/anims/viewmodel/rifle/rifle_xm1014/draw_xm1014.vnmclip_c",
+          "crc": "00a3c9121f",
+          "bytes": 10096,
+          "matchesCurrentManifest": true
+        },
+        "inspect": {
+          "path": "animation/anims/viewmodel/rifle/rifle_xm1014/lookat01_xm1014.vnmclip_c",
+          "crc": "001b3b87aa",
+          "bytes": 29282,
+          "matchesCurrentManifest": true
+        },
+        "reload": {
+          "path": "animation/anims/viewmodel/rifle/rifle_xm1014/reload_xm1014.vnmclip_c",
+          "crc": "006a197a52",
+          "bytes": 16529,
+          "matchesCurrentManifest": true
+        },
+        "fire": {
+          "path": "animation/anims/viewmodel/rifle/rifle_xm1014/shoot1_xm1014.vnmclip_c",
+          "crc": "00620a65c1",
+          "bytes": 7664,
+          "matchesCurrentManifest": true
+        }
+      },
+      "clockSamples": [
+        {
+          "id": "xm1014",
+          "kind": "draw",
+          "loadDelay": 0.25,
+          "remaining": 0.75,
+          "elapsedSinceAttach": 0.375,
+          "action": "draw",
+          "clock": 0.5,
+          "weight": 1,
+          "pose": 0.5,
+          "rate": 1.3333333333333333,
+          "authoredOneRateReferenceAtSameEquipAge": 0.625
+        },
+        {
+          "id": "xm1014",
+          "kind": "reload",
+          "phase": "start",
+          "time": 0.25,
+          "duration": 0.5,
+          "progress": 0.5,
+          "work": 0.25,
+          "ammo": 5,
+          "action": "reload",
+          "clock": 0.35,
+          "weight": 1,
+          "pose": 0.35
+        },
+        {
+          "id": "xm1014",
+          "kind": "reload",
+          "phase": "shell",
+          "time": 0.8,
+          "duration": 0.6,
+          "progress": 0.5000000000000001,
+          "work": 0.30000000000000004,
+          "ammo": 5,
+          "action": "reload",
+          "clock": 1,
+          "weight": 1,
+          "pose": 1
+        },
+        {
+          "id": "xm1014",
+          "kind": "reload",
+          "phase": "shell",
+          "time": 1.4000000000000001,
+          "duration": 0.6,
+          "progress": 0.5000000000000001,
+          "work": 0.30000000000000004,
+          "ammo": 6,
+          "action": "reload",
+          "clock": 1,
+          "weight": 1,
+          "pose": 1
+        },
+        {
+          "id": "xm1014",
+          "kind": "reload",
+          "phase": "finish",
+          "time": 1.8000000000000003,
+          "duration": 0.2,
+          "progress": 0.5000000000000004,
+          "work": 0.10000000000000009,
+          "ammo": 7,
+          "action": "reload",
+          "clock": 1.5166666666666668,
+          "weight": 1,
+          "pose": 1.5166666666666668
+        }
+      ]
+    }
+  },
+  "runtimeSources": [
+    {
+      "path": "src/range/view-animation.ts",
+      "sha256": "d2eca9451940d34fb75014fa20bf34d4a7e460b733ca06349bd6f546d96c5adc"
+    },
+    {
+      "path": "src/range/weapon-actions.ts",
+      "sha256": "b11a027fbc071e594e7e295cffa6ce3a0103c064aaf09e9370379d9aa5beda20"
+    },
+    {
+      "path": "src/range/reload-clock.ts",
+      "sha256": "c8a35cd1d5603db064d86fc22a262917d7274f9dd79c5d4d9b271feccd296188"
+    },
+    {
+      "path": "src/range/native-view-actions.ts",
+      "sha256": "147029abe01236312a1d3b784364b07e6f7e81dce3835be5783be697515be476"
+    },
+    {
+      "path": "src/range/native-reload-presentation.json",
+      "sha256": "55971a004b55f2d765169098224f48acfcb5ea6643eb9ae22a1e726a015d8167"
+    },
+    {
+      "path": "src/range/native-reload-timing.json",
+      "sha256": "87e13cd83fbc6ae67895d0e13152ebf5840c1ec6ca4f57eceab1eea613207a36"
+    },
+    {
+      "path": "src/range/engine.ts",
+      "sha256": "baf6b332c64eb47a3e427230500bcf4f13fe30a923e0f10e705505b6e5b61478"
+    },
+    {
+      "path": "src/range/duel/DuelEngine.ts",
+      "sha256": "88fc8252770c167418db5723b3bd7335d3fe446c077f5aa063d82111437660a1"
+    },
+    {
+      "path": "src/range/sound-model.ts",
+      "sha256": "712620fc194f6c8e87cd8dac7de3d0ae8cc72d48969476f732969f0125a26531"
+    }
+  ],
+  "limitations": [
+    "Synthetic linear tracks measure actual trainer action clock and weight, not native live execution or complete skeleton poses.",
+    "Native graph speed multiplier1 is established; external current-build first-person graph update delta is not bound.",
+    "XM clip metadata is a retained older decode, corroborated by current compiled-resource CRC and byte count, not a fresh decode.",
+    "GLB JSON hashes cover headers/accessor metadata only, not complete binary assets.",
+    "Draw load delay is injected; live loading frequency was not measured."
+  ],
+  "rawArtifacts": "../native-audit/reports/animation-timing/{metadata-results.json,runtime-clock-results.json,*-graph.json}"
+}

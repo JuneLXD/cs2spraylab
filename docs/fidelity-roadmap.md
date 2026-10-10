@@ -170,3 +170,25 @@ including same-tick replacement and rewind removal. Optional capture readers
 now retain both velocity rings and body state. Production bob/sway remains
 unchanged pending a live comparison of history construction, body transitions
 and their prediction/presentation phases.
+
+### Live motion state and scoped clocks, pass 28
+
+[Motion runtime](reaudit-motion-runtime.md) now compares actual velocity rings:
+711 selected-cache snapshots match exactly. Eleven other retained cache values
+belong to an earlier frame/history phase. Native body dispatch matches captured
+Move/Start/air yaw; stationary turn clocks still require the active movement
+scope. Static callers temporarily use controller tick-base time, restore global
+clocks afterward and publish the last-command field after yaw postprocessing.
+Capture controller tick base and active processing identity before mapping this
+state machine or its evaluated scene transform to SprayLab. No bob/sway tuning
+is supported by selecting a different diagnostic clock for each sample.
+
+### View action clocks, pass 29
+
+[Animation timing](reaudit-animation.md#pass-29-action-clocks-evidence-only)
+confirms current resource identity for 20 AK/AWP/Nova/XM clip entries and
+unscaled fire playback. The trainer's AK reload insertion pose trails its own
+ammo event by 15.069 ms; shell phase and delayed-model draw retimes are measured
+separately. Bind the current first-person graph's external elapsed-time/rate
+caller and transition clock before correcting any native timing claim. A fixed
+node multiplier alone does not prove the wall-clock playback rate.

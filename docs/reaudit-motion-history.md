@@ -1,5 +1,10 @@
 # Native motion producers — pass 27
 
+Follow-up: [pass 28](reaudit-motion-runtime.md) validates the optional readers
+live and executes body-yaw cases. The pending-capture statements below describe
+the evidence available at pass 27; controller clock and reset boundaries remain
+open after that follow-up.
+
 This pass follows the inputs identified in pass 25 back toward their producers.
 It does not change production bob or sway. Supplying a captured velocity cache
 reproduces native bob, but constructing the equivalent cache from the trainer's

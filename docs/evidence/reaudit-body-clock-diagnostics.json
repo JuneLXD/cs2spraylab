@@ -1,0 +1,451 @@
+{
+  "snapshotSha256": "698040d5947f90eff1ef26aa9539ddf09958bc67659eced15c287876cd880a27",
+  "fixtureSha256": "6b0fadc8cf1827ac68cf4a489b7c51a52f98e0182368bec74fcd9b101316f8b8",
+  "rows": 1614,
+  "provenance": "Captured numeric clock diagnostics plus identical-input reuse of the retained native dispatch projection; no new native run.",
+  "formula": "trunc(float32(float32(sampledCurrentTime * 64) + 0.5))",
+  "roundedSampledTimeMinusRawTick": {
+    "0": 1614
+  },
+  "gameRulesFields": [
+    {
+      "totalPausedTicks": 0,
+      "pauseStartTick": 0,
+      "gamePaused": false,
+      "defaultTimeConverter": true,
+      "rows": 1614
+    }
+  ],
+  "reusedNativeProjectionSha256": "ba66649d477daef02d3ae43656964603e74a18cba8459b820937968ac1801f93",
+  "reusedNativeProjectionGroups": {
+    "1": {
+      "rows": 1091,
+      "matches": 1090,
+      "maxAbsoluteError": 0.24315643310546875,
+      "stateChanges": 0
+    },
+    "3": {
+      "rows": 246,
+      "matches": 246,
+      "maxAbsoluteError": 0.0,
+      "stateChanges": 0
+    },
+    "2": {
+      "rows": 20,
+      "matches": 20,
+      "maxAbsoluteError": 0.0,
+      "stateChanges": 0
+    },
+    "5": {
+      "rows": 212,
+      "matches": 187,
+      "maxAbsoluteError": 0.40068817138671875,
+      "stateChanges": 1
+    },
+    "air": {
+      "rows": 45,
+      "matches": 45,
+      "maxAbsoluteError": 0.0,
+      "stateChanges": 0
+    }
+  },
+  "rampDiagnostics": {
+    "rows": 47,
+    "maxIntegerResidual": 7.942098925184382e-07,
+    "inferredMinusRoundedSampledTime": {
+      "1": 23,
+      "0": 24
+    },
+    "positiveCachedPredictionRows": 41,
+    "positiveCachedPredictionMatches": 41,
+    "zeroCachedPredictionRows": 6,
+    "details": [
+      {
+        "row": 596,
+        "inferredTick": 15481,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15480,
+        "rawGlobalTick": 15480,
+        "cachedPredictedTick": 15481
+      },
+      {
+        "row": 597,
+        "inferredTick": 15482,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15481,
+        "rawGlobalTick": 15481,
+        "cachedPredictedTick": 15482
+      },
+      {
+        "row": 598,
+        "inferredTick": 15482,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15481,
+        "rawGlobalTick": 15481,
+        "cachedPredictedTick": 15482
+      },
+      {
+        "row": 599,
+        "inferredTick": 15482,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15482,
+        "rawGlobalTick": 15482,
+        "cachedPredictedTick": 15482
+      },
+      {
+        "row": 600,
+        "inferredTick": 15483,
+        "elapsedIntegerResidual": 1.5554898524783312e-07,
+        "roundedSampledTimeTick": 15483,
+        "rawGlobalTick": 15483,
+        "cachedPredictedTick": 0
+      },
+      {
+        "row": 601,
+        "inferredTick": 15489,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15489,
+        "rawGlobalTick": 15489,
+        "cachedPredictedTick": 15489
+      },
+      {
+        "row": 602,
+        "inferredTick": 15490,
+        "elapsedIntegerResidual": 4.379781337604527e-07,
+        "roundedSampledTimeTick": 15490,
+        "rawGlobalTick": 15490,
+        "cachedPredictedTick": 15490
+      },
+      {
+        "row": 696,
+        "inferredTick": 15571,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15570,
+        "rawGlobalTick": 15570,
+        "cachedPredictedTick": 15571
+      },
+      {
+        "row": 697,
+        "inferredTick": 15571,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15571,
+        "rawGlobalTick": 15571,
+        "cachedPredictedTick": 15571
+      },
+      {
+        "row": 698,
+        "inferredTick": 15572,
+        "elapsedIntegerResidual": 7.886680375435162e-08,
+        "roundedSampledTimeTick": 15572,
+        "rawGlobalTick": 15572,
+        "cachedPredictedTick": 0
+      },
+      {
+        "row": 699,
+        "inferredTick": 15572,
+        "elapsedIntegerResidual": 7.886680375435162e-08,
+        "roundedSampledTimeTick": 15571,
+        "rawGlobalTick": 15571,
+        "cachedPredictedTick": 15572
+      },
+      {
+        "row": 700,
+        "inferredTick": 15573,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15572,
+        "rawGlobalTick": 15572,
+        "cachedPredictedTick": 15573
+      },
+      {
+        "row": 701,
+        "inferredTick": 15573,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15572,
+        "rawGlobalTick": 15572,
+        "cachedPredictedTick": 15573
+      },
+      {
+        "row": 702,
+        "inferredTick": 15580,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15580,
+        "rawGlobalTick": 15580,
+        "cachedPredictedTick": 15580
+      },
+      {
+        "row": 703,
+        "inferredTick": 15580,
+        "elapsedIntegerResidual": 2.5758626875926893e-07,
+        "roundedSampledTimeTick": 15579,
+        "rawGlobalTick": 15579,
+        "cachedPredictedTick": 15580
+      },
+      {
+        "row": 801,
+        "inferredTick": 15666,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15666,
+        "rawGlobalTick": 15666,
+        "cachedPredictedTick": 15666
+      },
+      {
+        "row": 802,
+        "inferredTick": 15666,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15665,
+        "rawGlobalTick": 15665,
+        "cachedPredictedTick": 15666
+      },
+      {
+        "row": 803,
+        "inferredTick": 15667,
+        "elapsedIntegerResidual": 1.4652538471437992e-07,
+        "roundedSampledTimeTick": 15667,
+        "rawGlobalTick": 15667,
+        "cachedPredictedTick": 15667
+      },
+      {
+        "row": 804,
+        "inferredTick": 15667,
+        "elapsedIntegerResidual": 1.0950954631994136e-07,
+        "roundedSampledTimeTick": 15666,
+        "rawGlobalTick": 15666,
+        "cachedPredictedTick": 15667
+      },
+      {
+        "row": 805,
+        "inferredTick": 15668,
+        "elapsedIntegerResidual": 1.1427129642527234e-07,
+        "roundedSampledTimeTick": 15668,
+        "rawGlobalTick": 15668,
+        "cachedPredictedTick": 15668
+      },
+      {
+        "row": 806,
+        "inferredTick": 15668,
+        "elapsedIntegerResidual": 1.1427129642527234e-07,
+        "roundedSampledTimeTick": 15667,
+        "rawGlobalTick": 15667,
+        "cachedPredictedTick": 15668
+      },
+      {
+        "row": 807,
+        "inferredTick": 15668,
+        "elapsedIntegerResidual": 1.1427129642527234e-07,
+        "roundedSampledTimeTick": 15668,
+        "rawGlobalTick": 15668,
+        "cachedPredictedTick": 15668
+      },
+      {
+        "row": 808,
+        "inferredTick": 15669,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15669,
+        "rawGlobalTick": 15669,
+        "cachedPredictedTick": 0
+      },
+      {
+        "row": 809,
+        "inferredTick": 15669,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15669,
+        "rawGlobalTick": 15669,
+        "cachedPredictedTick": 15669
+      },
+      {
+        "row": 810,
+        "inferredTick": 15669,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15669,
+        "rawGlobalTick": 15669,
+        "cachedPredictedTick": 15669
+      },
+      {
+        "row": 811,
+        "inferredTick": 15670,
+        "elapsedIntegerResidual": 2.571736006373726e-07,
+        "roundedSampledTimeTick": 15670,
+        "rawGlobalTick": 15670,
+        "cachedPredictedTick": 0
+      },
+      {
+        "row": 812,
+        "inferredTick": 15670,
+        "elapsedIntegerResidual": 2.571736006373726e-07,
+        "roundedSampledTimeTick": 15670,
+        "rawGlobalTick": 15670,
+        "cachedPredictedTick": 15670
+      },
+      {
+        "row": 813,
+        "inferredTick": 15670,
+        "elapsedIntegerResidual": 1.983395803151211e-07,
+        "roundedSampledTimeTick": 15670,
+        "rawGlobalTick": 15670,
+        "cachedPredictedTick": 0
+      },
+      {
+        "row": 814,
+        "inferredTick": 15670,
+        "elapsedIntegerResidual": 1.983395803151211e-07,
+        "roundedSampledTimeTick": 15669,
+        "rawGlobalTick": 15669,
+        "cachedPredictedTick": 15670
+      },
+      {
+        "row": 815,
+        "inferredTick": 15671,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15671,
+        "rawGlobalTick": 15671,
+        "cachedPredictedTick": 0
+      },
+      {
+        "row": 816,
+        "inferredTick": 15671,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15671,
+        "rawGlobalTick": 15671,
+        "cachedPredictedTick": 15671
+      },
+      {
+        "row": 817,
+        "inferredTick": 15671,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15670,
+        "rawGlobalTick": 15670,
+        "cachedPredictedTick": 15671
+      },
+      {
+        "row": 818,
+        "inferredTick": 15672,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15672,
+        "rawGlobalTick": 15672,
+        "cachedPredictedTick": 15672
+      },
+      {
+        "row": 819,
+        "inferredTick": 15672,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15671,
+        "rawGlobalTick": 15671,
+        "cachedPredictedTick": 15672
+      },
+      {
+        "row": 820,
+        "inferredTick": 15673,
+        "elapsedIntegerResidual": 2.575316422337437e-07,
+        "roundedSampledTimeTick": 15673,
+        "rawGlobalTick": 15673,
+        "cachedPredictedTick": 15673
+      },
+      {
+        "row": 821,
+        "inferredTick": 15673,
+        "elapsedIntegerResidual": 7.942098925184382e-07,
+        "roundedSampledTimeTick": 15672,
+        "rawGlobalTick": 15672,
+        "cachedPredictedTick": 15673
+      },
+      {
+        "row": 822,
+        "inferredTick": 15673,
+        "elapsedIntegerResidual": 7.942098925184382e-07,
+        "roundedSampledTimeTick": 15673,
+        "rawGlobalTick": 15673,
+        "cachedPredictedTick": 15673
+      },
+      {
+        "row": 823,
+        "inferredTick": 15674,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15674,
+        "rawGlobalTick": 15674,
+        "cachedPredictedTick": 15674
+      },
+      {
+        "row": 824,
+        "inferredTick": 15674,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15673,
+        "rawGlobalTick": 15673,
+        "cachedPredictedTick": 15674
+      },
+      {
+        "row": 925,
+        "inferredTick": 15758,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15757,
+        "rawGlobalTick": 15757,
+        "cachedPredictedTick": 15758
+      },
+      {
+        "row": 926,
+        "inferredTick": 15759,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15758,
+        "rawGlobalTick": 15758,
+        "cachedPredictedTick": 15759
+      },
+      {
+        "row": 927,
+        "inferredTick": 15759,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15758,
+        "rawGlobalTick": 15758,
+        "cachedPredictedTick": 15759
+      },
+      {
+        "row": 928,
+        "inferredTick": 15759,
+        "elapsedIntegerResidual": 0.0,
+        "roundedSampledTimeTick": 15759,
+        "rawGlobalTick": 15759,
+        "cachedPredictedTick": 15759
+      },
+      {
+        "row": 929,
+        "inferredTick": 15760,
+        "elapsedIntegerResidual": 2.776109031543683e-07,
+        "roundedSampledTimeTick": 15759,
+        "rawGlobalTick": 15759,
+        "cachedPredictedTick": 15760
+      },
+      {
+        "row": 930,
+        "inferredTick": 15760,
+        "elapsedIntegerResidual": 2.776109031543683e-07,
+        "roundedSampledTimeTick": 15759,
+        "rawGlobalTick": 15759,
+        "cachedPredictedTick": 15760
+      },
+      {
+        "row": 931,
+        "inferredTick": 15761,
+        "elapsedIntegerResidual": 2.994420800206399e-07,
+        "roundedSampledTimeTick": 15760,
+        "rawGlobalTick": 15760,
+        "cachedPredictedTick": 15761
+      },
+      {
+        "row": 932,
+        "inferredTick": 15761,
+        "elapsedIntegerResidual": 4.4513925701039625e-07,
+        "roundedSampledTimeTick": 15760,
+        "rawGlobalTick": 15760,
+        "cachedPredictedTick": 15761
+      }
+    ]
+  },
+  "findings": [
+    "Sampled current time gives the same tick as the raw global field in all rows, so it does not recover the scoped command clock.",
+    "The game-rules pause values are already present in the sway capture and are all zero/disabled here; they cannot explain the one-tick differences.",
+    "The positive prediction-cache diagnostic agrees in its observed ramp rows, but that cache is not the bound body timer input and is zero in other ramp rows."
+  ],
+  "limits": [
+    "The controller tick base and active command-phase markers were not captured.",
+    "Observed prediction-cache agreement does not establish a production mapping or justify command-number offsets.",
+    "The retained post-call state projection still has the documented final-loop-step/Idle transition ambiguity."
+  ]
+}

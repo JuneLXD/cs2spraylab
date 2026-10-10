@@ -129,3 +129,78 @@ release verifier checks their served hashes against these rebuilt files.
 Pass 23 supersedes the former unmeasured model-share and no-bob rows: see
 [the current native procedural recoil report](reaudit-viewmodel-recoil.md).
 Full motion/graph/render parity remains open.
+
+## Pass 29: action clocks, evidence only
+
+The bounded AK/AWP/Nova/XM comparison uses existing build 2000930 package
+listing, freshly decoded variation graphs and AK/AWP/Nova view clips. All 20
+selected imported clip entries (idle/draw/inspect/reload/fire) still match the
+current listing's CRC and byte count. XM's retained clip metadata and assembly
+are older exports; matching compiled-resource CRC/size corroborates their
+identity, but this pass did not perform a fresh XM decode. SHA-256s identify
+each decoded graph/event file and the imported GLB JSON chunks; JSON-chunk
+hashes are not whole-asset hashes.
+
+The reproducible probes are `tools/reaudit-animation-timing-metadata.mjs` and
+`tools/reaudit-animation-timing-runtime.mjs`. The latter executes the actual
+`ViewAnimation` and `NativeReloadState` with linear clock tracks and measured
+imported clip durations. It measures action time and weight without a renderer
+or mesh load. Full outputs, graph connections and source hashes are retained in
+`../native-audit/reports/animation-timing`; the compact snapshot is
+`tools/reaudit-animation-timing-results.json`.
+
+| Case | Authored/imported range | Actual trainer clock | Evidence boundary |
+| --- | --- | --- | --- |
+| AK fire | 0.766667 s | 1× | Four clock samples agree; final 80 ms fade remains a trainer choice |
+| AWP fire/bolt | 1.600000 s; bolt sound markers 0.600000/0.866667 s | 1× | Bolt is included in fire, not compressed to the 1.455 s attack cycle |
+| Nova fire/pump | 0.800000 s; pump sound marker 0.233333 s | 1× | Pump is included in fire; its 0.880 s attack cycle is separate |
+| XM fire | 0.866667 s | 1× | Repeated shots restart the clip; no compression to the 0.350 s cycle |
+| AK magazine reload | 2.433333 s clip; 2.466667 s attack lock | 0.986486× ordinary animation clock | Gameplay adds ammo at 1.100000 s; frame-33 animation time arrives at 1.115069 s |
+| AWP magazine reload | 3.666667 s clip and attack lock | Approximately 1× | Ammo/animation marker clock difference below 0.001 ms |
+| Nova intro/loop/outro | 0.366667/0.433333/0.833333 s | Mapped into 0.500000/0.466667/0.200000 s phases | Rates 0.733333/0.928571/4.166667×; native active-phase duration unresolved |
+| XM intro/loop/outro | 0.700000/0.600000/0.433333 s | Mapped into 0.500000/0.600000/0.200000 s phases | Rates 1.400000/1.000000/2.166667×; native active-phase duration unresolved |
+| Draw after simulated 250 ms model delay | AK/Nova/XM 1 s; AWP 1.266667 s | 1.333333× or AWP 1.245901× | Actual callers restart clip zero over remaining deploy time; injected delay is not a measured live loading frequency |
+
+Sixteen fire samples have maximum clock error 2.78e-17 seconds. The reload
+15.069 ms result is a measured trainer time mismatch with its own ammo event,
+not a measured native rendered-hand delay. Sound reload timelines also map
+to phase progress; no independent native audio timing claim follows from this
+clock-only probe.
+
+The AK graph resolves both partial/empty reloads directly through ClipNode
+→ ClipSelector → PoseResult. Each ClipNode specifies speed multiplier 1;
+its only input pins are reverse and reset. No temporal rate/duration wrapper
+was found in the graph's 459 nodes. Shell graphs use real sync-track boundaries:
+while `reload_stage != stage_outro`, the zero-duration transition jumps from
+`WPN_RELOAD_OUTRO` to `WPN_RELOAD_LOOP`. Their 200 ms reload-entry and idle-exit
+values are transition blends, not proof of an entire native phase's duration.
+
+No production timing change is justified by this pass alone. The remaining AK
+boundary is the **current client caller that supplies elapsed time/playback rate
+to the first-person NmGraph update**, including ordinary reload initialization,
+any outer rate multiplication and action-complete/idle transition timing.
+The older build 2000927 silent-gate emulation selected rate 1 for a reload that
+never slowed, with helpers shimmed; it does not bind the complete current-build
+viewmodel update. The retained demo catalog exposes
+`Weapon.CBodyComponentBaseAnimGraph.m_flPlaybackRate`, but its connection to the
+first-person NmGraph clock is unproved. A field name alone cannot close that
+gap. Only after that caller/field relationship is established should the AK
+15.069 ms discrepancy be used as before/after evidence for a narrow correction.
+
+Reproduce from the repository, serially under the host caps:
+
+```sh
+systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% node tools/reaudit-animation-timing-metadata.mjs
+systemd-run --user --scope --quiet -p MemoryMax=512M -p MemorySwapMax=0 -p CPUQuota=100% node tools/reaudit-animation-timing-runtime.mjs
+```
+
+Both tools accept `--out <directory>`. The metadata probe must run first into
+that same directory. It requires the retained local research exports and
+imported assets; the runtime probe uses the project's existing esbuild/Three
+dependencies. Original probes completed in 0.43/0.66 seconds under the stated
+caps. This pass launched no game, browser, native-analysis provider or exporter.
+
+Root integration reran both portable copies successfully under the same caps.
+Combined delivery validation: TypeScript passes, 2,363 units pass with only the
+known fallback-model fixture failure, and both targeted Chromium view-punch
+cases pass in 27.3 seconds. Production behavior and assets are unchanged.

@@ -1020,6 +1020,55 @@ trigger-continuity and view-punch pass in53.1seconds. Tests ran serially under
 memory/swap/CPU caps, with auto-deploy paused and the repo frozen during browser
 execution. No new R8 investigation or behavior change is included.
 
+## Live motion histories and body clocks (twenty-eighth pass, 2026-10-09)
+
+[Pass 28](reaudit-motion-runtime.md) uses the approved AK movement/turn/crouch/
+jump capture to replay actual velocity-ring metadata and body state. All 711
+samples in the context selecting cache zero match exactly. Eleven apparent
+full-window cache mismatches retain a value evaluated one frame earlier while
+the ring has changed; their sampled context does not select that cache. This
+does not justify fitting a delay or interpolation coefficient.
+
+The isolated native body wrapper/dispatch passes 80 cases and 178 assertions.
+All captured Move, Start and airborne yaw projections match exactly. Turn-loop
+clock diagnostics remain mixed: raw tick explains some samples and raw tick
+plus one explains others. The native caller temporarily supplies controller
+tick-base time and later restores globals; last-command publication occurs
+after yaw postprocessing. Sampled global time and command numbers therefore
+cannot substitute for the writer's active clock or invocation count.
+
+The portable numeric fixture retains 1,614 guarded snapshots without process
+addresses. Video has 1,239 decoded frames and no timestamp interval above33ms;
+this is recording continuity only. Game/sampler exited zero and owned Steam
+stopped. Production bob/sway and body orientation are unchanged pending actual
+scoped-clock capture, transition/reset and evaluated-transform comparisons.
+
+## Authored and simulated action clocks (twenty-ninth pass, 2026-10-09)
+
+[Pass 29](reaudit-animation.md#pass-29-action-clocks-evidence-only) compares
+AK/AWP/Nova/XM imported clip identity, native graph wiring and actual trainer
+action time. All 20 selected clip entries match the current package listing;
+older import build labels alone did not prove stale assets. Sixteen fire
+samples preserve authored time within 2.78e-17 seconds. Bolt/pump animation
+remains part of its native fire clip rather than being compressed to shot cycle.
+
+The trainer maps AK's 2.433333-second reload clip over a 2.466667-second lock:
+ammo inserts at 1.100 seconds, while the authored insertion pose arrives
+15.069 ms later. Shell phases have larger measured retimes, but native active
+phase durations are still unresolved. An injected 250 ms model-loading delay
+also compresses draw playback into the remaining deploy time.
+
+These are measured trainer behaviors, not complete native rendered comparisons.
+The native reload node has a fixed 1× multiplier, but its current client external
+update clock and transition timing are unbound. No production retiming ships
+from this pass. The retained probes separate graph constants, imported ranges,
+mechanical deadlines and actual trainer animation clocks.
+
+Combined passes28–29 validation: all portable probes and TypeScript pass;
+2,363 unit cases pass with only the known missing fallback fixture failure.
+Both Chromium view-punch cases pass in27.3seconds. Heavy commands ran serially
+under host caps, with deploy paused and edits frozen during browser execution.
+
 ## Re-audit delivery validation
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph

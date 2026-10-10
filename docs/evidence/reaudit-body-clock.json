@@ -1,0 +1,77 @@
+{
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "wholeArtifactHashVerified": true,
+  "provenance": "Static current-client bytes, RTTI, vtables and schema; no invocation count or live capture.",
+  "ranges": [
+    {
+      "name": "body-context-tick",
+      "bytes": 144,
+      "sha256": "cb73524306111e4c278c68b26fb31a4eaf547bc27c06c31db4cf26114c0ff739"
+    },
+    {
+      "name": "body-tick-provider",
+      "bytes": 192,
+      "sha256": "fd8f3b3bef56d916715f2c08076d17d91d91cbe410a9d13e4becc9290eee7a94"
+    },
+    {
+      "name": "game-rules-tick",
+      "bytes": 576,
+      "sha256": "fcc1b80308f693123fe113cdd624cb24a270ac5a583b00a1ae29c1eedb383553"
+    },
+    {
+      "name": "game-rules-default-tick",
+      "bytes": 144,
+      "sha256": "4645e6f7f4523622a40799f6366969b2c35b1e2ae07e49acee251314d2a3917c"
+    },
+    {
+      "name": "movement-command-to-post",
+      "bytes": 2976,
+      "sha256": "895b576f792904ac499c88a5d0bc22be0df2a1555b82b3ee22814bd764e34d36"
+    },
+    {
+      "name": "movement-command-clock-tail",
+      "bytes": 624,
+      "sha256": "4db08dd012809391cf3cb9ff8ff28f8395ee61affd8428b0f9de6bd54d80f4d4"
+    },
+    {
+      "name": "movement-controller-getter",
+      "bytes": 256,
+      "sha256": "4d96b78308e9cea6ad95025dc0ca0b6aaaf897fbe2b8f854adadd1b0c1bbcb49"
+    },
+    {
+      "name": "controller-tick-getter",
+      "bytes": 272,
+      "sha256": "f9eb9598dcbb410ecaa80871edc610cca43c6ae22a21f276ab7578a9bfdb9e10"
+    },
+    {
+      "name": "processed-command-publish",
+      "bytes": 800,
+      "sha256": "57f8a8b980fde94490a1309313f49af6945b79c08eb0bb86316383eb3722fb15"
+    },
+    {
+      "name": "cs-command-wrapper",
+      "bytes": 512,
+      "sha256": "0a6364d191eac250b6138648312d2a9a81b2c4dc5e19b5639d0ff647ed642176"
+    }
+  ],
+  "assertions": {
+    "instructions": 43,
+    "classes": 3,
+    "virtualTargets": 4,
+    "schemaFields": 6,
+    "constants": 3
+  },
+  "findings": [
+    "The context-zero body timer uses C_CSGameRules pause accounting, not a CPrediction tick override.",
+    "The ordinary command wrapper seeds time from the owner controller tick base, clears fractional time, invokes the inner movement wrapper, then restores globals.",
+    "The inner wrapper recomputes tick as trunc(float32(float32(currentTime*64)+0.5)), clears fraction, invokes postprocessing, then restores globals.",
+    "The visible normal branch invokes the body postprocess once after its subtick movement routine; mode3 bypasses that branch.",
+    "The processed-command field is published after the body postprocess. Polling that field cannot count body calls."
+  ],
+  "limits": [
+    "No claim that a sampled restored clock is the clock consumed by retained body state.",
+    "Controller tick base and scoped activity markers have not yet been captured beside body state.",
+    "Upstream scheduling, repeated prediction passes, mode meanings and resets remain unbound.",
+    "Only normalized finite fractions and controller tick bases below 2^23 are reconstructed by the prepared capture helper."
+  ]
+}

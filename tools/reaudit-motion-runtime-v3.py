@@ -16,6 +16,7 @@ parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output',required=True,help='New directory name under native-audit/reports; never overwrites a capture')
 parser.add_argument('--velocity-history',action='store_true',help='Include bounded native velocity ring entries and metadata')
 parser.add_argument('--scene-writer',action='store_true',help='Include native body state, prepared inputs and command clocks')
+parser.add_argument('--body-clock',action='store_true',help='Include controller tick base and active movement-clock markers')
 args=parser.parse_args()
 assert Path(args.output).name==args.output
 out=ROOT/'reports'/args.output;out.mkdir(exist_ok=True)
@@ -24,12 +25,19 @@ extra_readers=[]
 reader_specs=[('reaudit-sway-capture-fields.py','read_sway_fields'),('reaudit-body-capture-fields.py','read_body_fields')]
 if args.velocity_history:reader_specs.append(('reaudit-velocity-capture-fields.py','read_velocity_fields'))
 if args.scene_writer:reader_specs.append(('reaudit-scene-writer-capture-fields.py','read_scene_writer_fields'))
+if args.body_clock:reader_specs.append(('reaudit-body-clock-capture-fields.py','read_body_clock_fields'))
 for name,function in reader_specs:
  path=Path(__file__).resolve().parent/name
  assert path.exists(), str(path)
- extra_readers.append(runpy.run_path(str(path))[function])
+ reader=runpy.run_path(str(path))[function]
+ # Keep this helper's named fields/guards separate from other readers. Its
+ # guards are included in the complete second read and equality check below.
+ if name=='reaudit-body-clock-capture-fields.py':
+  def body_clock_reader(read,base,player,node,reader=reader):return {'bodyClock':reader(read,base,player,node)}
+  extra_readers.append(body_clock_reader)
+ else:extra_readers.append(reader)
 child=subprocess.Popen(['bash',str(ROOT/'cs2-portable.sh'),'+exec','native_audit_bob_002_boot','+map','de_dust2'],start_new_session=True,stdout=(out/'game.log').open('w'),stderr=subprocess.STDOUT)
-(out/'launch.json').write_text(json.dumps({'launcherPid':child.pid,'startedAt':time.time(),'clientSha256':digest.hexdigest(),'method':__doc__,'velocityHistory':args.velocity_history,'sceneWriter':args.scene_writer,'samplerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'helperHashes':{name:hashlib.sha256((Path(__file__).resolve().parent/name).read_bytes()).hexdigest()for name in [x[0]for x in reader_specs]+['reaudit-sway-clock-inputs.py']}},indent=2)+'\n')
+(out/'launch.json').write_text(json.dumps({'launcherPid':child.pid,'startedAt':time.time(),'clientSha256':digest.hexdigest(),'method':__doc__,'velocityHistory':args.velocity_history,'sceneWriter':args.scene_writer,'bodyClock':args.body_clock,'samplerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'helperHashes':{name:hashlib.sha256((Path(__file__).resolve().parent/name).read_bytes()).hexdigest()for name in [x[0]for x in reader_specs]+['reaudit-sway-clock-inputs.py']}},indent=2)+'\n')
 def descendants(pid):
  try:children=[int(v)for v in Path(f'/proc/{pid}/task/{pid}/children').read_text().split()]
  except (FileNotFoundError,PermissionError):return []

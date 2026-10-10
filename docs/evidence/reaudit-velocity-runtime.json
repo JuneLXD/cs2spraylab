@@ -1,0 +1,72 @@
+{
+  "clientSha256": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+  "snapshotSha256": "698040d5947f90eff1ef26aa9539ddf09958bc67659eced15c287876cd880a27",
+  "fixtureSha256": "6b0fadc8cf1827ac68cf4a489b7c51a52f98e0182368bec74fcd9b101316f8b8",
+  "probeSha256": "82d404788bf9681a5f298d41627960aa42ee6330a926854d2915c9ca9078a9bd",
+  "ranges": [
+    {
+      "name": "bracket",
+      "bytes": 1323,
+      "sha256": "befb337474330e3fdad44c4c5058e72bb1876b5e136c2d21470242c3a9aa15af"
+    },
+    {
+      "name": "cache-evaluator",
+      "bytes": 2326,
+      "sha256": "d40145bb1db0aebe3158311c342a988e03110cc47b3eff9d0e13ec1a559427b4"
+    },
+    {
+      "name": "pawn-getter",
+      "bytes": 716,
+      "sha256": "ccd51fc74f965e28d03dcd07d96c653e02b843fd5107366cedd4a093b711395f"
+    },
+    {
+      "name": "two-point-value",
+      "bytes": 2592,
+      "sha256": "95baca47582affd0321562a2f4c37aad3774a9a26ce9f4efbe109526ea748e1e"
+    }
+  ],
+  "rows": 1614,
+  "nativeInvocations": 3228,
+  "arithmeticInstructionAssertions": 5,
+  "modes": [
+    {
+      "success": true,
+      "threePoint": false,
+      "pastNewest": true,
+      "rows": 1302
+    },
+    {
+      "success": true,
+      "threePoint": false,
+      "pastNewest": false,
+      "rows": 312
+    }
+  ],
+  "globalCubicFlagChangesResult": 0,
+  "projectedRows": 1614,
+  "exactRows": 1603,
+  "within1e5": 1603,
+  "maxError": 0.5135078430175781,
+  "selectedCacheZero": {
+    "rows": 711,
+    "exactRows": 711,
+    "requestedTimeMatches": true,
+    "maxError": 0.0,
+    "nonzeroRows": 134
+  },
+  "retainedCacheMismatches": {
+    "rows": 11,
+    "allHaveEarlierExactCache": true,
+    "allOneFrameEarlier": true,
+    "allSelectedHistoryChanged": true,
+    "allCurrentSelectorZero": true
+  },
+  "productionChanged": false,
+  "limits": [
+    "Replay captured velocity-ring brackets with the current native search.\n\nThe ring metadata/value words and last-evaluated cache time are supplied from\naccepted game-only snapshots. Native bracket search executes without shims;\ntwo-point vector arithmetic is a float32 projection of the bound instructions.\nThis does not execute cache invalidation, its callers or value metadata helpers.\n",
+    "All retained histories have one ring with a 1/64 second offset; its producer is not established.",
+    "Cache time and numeric vector can outlive the history that produced them; polling is not a call trace.",
+    "The cubic global flag was not captured. Both supplied values give the same result for every retained row.",
+    "Only the observed stage-zero, single-ring cache-selection branch is classified here."
+  ]
+}
