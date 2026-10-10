@@ -1,0 +1,89 @@
+{
+  "baseline": "feb6a50392c6ced7484befa2d7d4da4efdda44c0",
+  "typescript": {
+    "exit": 0,
+    "log": "typescript.log"
+  },
+  "focusedUnits": {
+    "passed": 48,
+    "failed": 0
+  },
+  "units": {
+    "passed": 2517,
+    "failed": 1,
+    "total": 2518,
+    "knownFailure": "Missing public/models/ak47.json fallback model",
+    "firstInvocation": {
+      "passed": 2458,
+      "failed": 52,
+      "total": 2510,
+      "reason": "Invoked with --root from parent cwd; tests using process.cwd()/relative asset paths could not load fixtures. Final run uses the worktree as cwd. No source or asset changes between these full runs."
+    }
+  },
+  "browser": {
+    "passed": 3,
+    "failed": 0,
+    "specs": [
+      "awp-rescope",
+      "common-reload",
+      "glock-timing"
+    ],
+    "durationSeconds": 34.9
+  },
+  "native": {
+    "packagedToolsExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "instructionAssertions": 137,
+    "literalAssertions": 5,
+    "bindings": 16,
+    "schemaFields": 8,
+    "identicalCodeRanges": 36
+  },
+  "trainer": {
+    "cases": 20,
+    "enginePairs": 10,
+    "pairMismatches": 0,
+    "shotScheduleChanges": 0,
+    "unchangedCases": 10
+  },
+  "glockErratum": {
+    "historicalEnginePairsStillPassing": 12,
+    "unchangedNormalControls": 6,
+    "newTraceCasesUnchanged": 24,
+    "rangeShots": 25,
+    "delayedScheduledTimes": 12
+  },
+  "caps": {
+    "nativeAndNodeProbeMemory": "512M",
+    "testAndBrowserMemory": "4G",
+    "swap": 0,
+    "unitCpu": "200%",
+    "browserCpu": "400%",
+    "unitWorkers": 2,
+    "browserWorkers": 1
+  },
+  "policy": "Heavy work serialized with deploy inactive/timer paused; repo frozen during browser runs. No source changes after full final unit run. No game launched or full analysis restarted.",
+  "logHashes": {
+    "focused-tests.log": "efc9246642399e68bc77d253648cce156463d84b95d06516705b01d0736a54b4",
+    "typescript.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "unit-full.log": "35dad99d485cf024a70d24e91e5867df67e6521df8e171019b4f98b170a1bf1f",
+    "unit-workdir.log": "527fc9bd2ffd3ce22424fdba77d731b3c07162aa100e1289b9b3dfc138985353",
+    "browser.log": "b3c72823f3e2b7aaa4fb387e7a46ce74a40bf00c8f9da1dabd9e569122760fbd"
+  },
+  "validatedSourceHashes": {
+    "src/range/weapon-actions.ts": "0dee51f4575b050378e3b7c56e5a56d5ca11fc13135aee9b276cb7fbc97c2cac",
+    "src/range/simulation.ts": "7efd1c654c3eb7c79c1a6015884dd77fa5a4ce23d612b37a0ff59edc2f63c086",
+    "src/range/duel/weapon-state.ts": "c99ae8d32862c5ad231de67f465ef4f1cc01ac6128d70c8650a44ee7850c8ed7",
+    "src/range/scope-transition.test.ts": "331f4b3ced774ad5dfa017a8474f7d8f5ce743f1a162a2bfd7aaf9f3f7f7bad1",
+    "src/range/awp-rescope.test.ts": "9d00195b974d8657bf5c375dc49073c0156fc4d57279f3ff241b408e19a52714",
+    "src/range/changelog-data.ts": "d9e220d300d2371d023e3b38b5d141889202152f4a5195b6076ce5c7679f55c0",
+    "src/range/changelog.test.ts": "74f31e893a175e995e76b2766541c3c57fc38ca5cb746b80a51e4ed3bcfb375b",
+    "tests/awp-rescope.spec.ts": "08a2077389402957b07b1278c80260fb59a831e23383a4b85e44f3d7c59f4684"
+  },
+  "nativeReproductionSha256": "425882e46be27e77be59817ee454a0aaa5bdd6ac4152b67a4b96e0d3d6cd1024"
+}

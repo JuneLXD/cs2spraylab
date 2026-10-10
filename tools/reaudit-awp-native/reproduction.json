@@ -1,0 +1,46 @@
+{
+  "method": "Serialized capped execution of the five adapted tools into a fresh directory, followed by bounded comparison with original evidence and source manifest.",
+  "memoryMax": "512M",
+  "memorySwapMax": 0,
+  "cpuQuota": "100%",
+  "readerAndCheckerExitCodes": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "originalFiveSourcesUnchanged": true,
+  "originalSixEvidenceFilesUnchanged": true,
+  "copiedSourceHashesMatchManifest": true,
+  "identicalCodeRangesAndListings": 36,
+  "sameRulesInvariantsDataAndInstructionAssertions": true,
+  "instructionAssertions": 137,
+  "literalAssertions": 5,
+  "virtualBindingAssertions": 16,
+  "schemaFields": 8,
+  "boundedBytesRead": 37267,
+  "rerunOutputs": [
+    {
+      "name": "current-read.json",
+      "sha256": "2cc6bda278261c03bd915f5b6a5f787bff908dd4de5cb2b55b91118119e96b26"
+    },
+    {
+      "name": "next-read.json",
+      "sha256": "366dbd9373efea94a968b8ca5b4585ebdab5da1d8d05feae1a414994bfaee25f"
+    },
+    {
+      "name": "metadata-read.json",
+      "sha256": "25a39409afe9939991c4b3e290b6c06bd61680914c41de561318c089783e4b74"
+    },
+    {
+      "name": "current-awp-data.json",
+      "sha256": "1a8260a95e11339d13482ca66f75437779b9f01a74d9796666e506a22d9435bc"
+    },
+    {
+      "name": "portable-proof.json",
+      "sha256": "e407555f59f112a522a45f37f0169190a304d7d6cd118057ff8d663bc0a4207f"
+    }
+  ],
+  "boundary": "Static evidence reproduction only. Adapter source hashes and report provenance differ intentionally; native code/listing hashes, data identity and semantic findings match. No fresh export or game/native execution."
+}

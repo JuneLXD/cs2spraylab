@@ -48,9 +48,13 @@ export class WeaponActions {
     if (!held) {this.chargedAt = undefined; return Infinity;}
     return this.chargedAt ??= time + REVOLVER_WINDUP;
   }
-  advance(time: number) {
-    if (this.resumeZoom && time + 1e-9 >= this.resumeAt) {
-      this.setZoom(this.resumeZoom, this.resumeAt, .1); this.resumeZoom = 0;
+  advance(time: number, primaryReadyAt = this.resumeAt, ammo = 1) {
+    // AWP postframe checks the current primary deadline before dispatching input.
+    // The camera transition starts at that call, even when readiness passed earlier.
+    const readyAt = this.id === 'awp' ? primaryReadyAt : this.resumeAt;
+    if (this.resumeZoom && time + 1e-9 >= readyAt) {
+      if (this.id !== 'awp' || ammo > 0) this.setZoom(this.resumeZoom, this.id === 'awp' ? time : this.resumeAt, .1);
+      this.resumeZoom = 0;
     }
   }
   afterShot(time: number, scheduledAt = time, burstShotsLeft = 0) {
@@ -66,10 +70,14 @@ export class WeaponActions {
     // Native firing advances both attack clocks by the firing cycle. A recent
     // zoom can leave the secondary clock ahead of the primary one.
     if (this.id !== 'knife' && gameData.weapons[this.id].zoomLevels) {
-      this.secondaryReadyAt = Math.max(time, this.secondaryReadyAt) + this.stats.cycle;
+      // The AWP callers already select now for fresh/stale shots and the retained
+      // schedule for queued shots. This integrates their existing scheduler;
+      // it does not emulate the native command-history context selector.
+      const clock = this.id === 'awp' ? scheduledAt : time;
+      this.secondaryReadyAt = Math.max(clock, this.secondaryReadyAt) + this.stats.cycle;
     }
     if (this.zoom && this.id !== 'knife' && gameData.weapons[this.id].unzoomsAfterShot) {
-      this.resumeZoom = this.zoom; this.resumeAt = time + this.stats.cycle;
+      this.resumeZoom = this.zoom; this.resumeAt = (this.id === 'awp' ? scheduledAt : time) + this.stats.cycle;
       this.setZoom(0, time, gameData.weapons[this.id].zoomTime[0]);
     }
   }

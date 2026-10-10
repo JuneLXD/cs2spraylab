@@ -1,0 +1,545 @@
+{
+  "method": "Compare actual AWP trainer traces; never substitutes a native execution model.",
+  "beforeCommit": "feb6a50392c6ced7484befa2d7d4da4efdda44c0",
+  "afterBaseCommit": "feb6a50392c6ced7484befa2d7d4da4efdda44c0",
+  "cases": 20,
+  "enginePairs": 10,
+  "pairMismatches": 0,
+  "shotScheduleChanges": 0,
+  "unchangedCases": 10,
+  "rows": [
+    {
+      "engine": "range",
+      "scenario": "unscoped-single",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.458
+      ],
+      "secondaryAfter": [
+        2.458
+      ],
+      "resumeBefore": [
+        null
+      ],
+      "resumeAfter": [
+        null
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "unscoped-single",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.458
+      ],
+      "secondaryAfter": [
+        2.458
+      ],
+      "resumeBefore": [
+        null
+      ],
+      "resumeAfter": [
+        null
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "settled-single",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.458
+      ],
+      "secondaryAfter": [
+        2.458
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "settled-single",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.458
+      ],
+      "secondaryAfter": [
+        2.458
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "quick-scope-single",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.755
+      ],
+      "secondaryAfter": [
+        2.755
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "quick-scope-single",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.755
+      ],
+      "secondaryAfter": [
+        2.755
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "second-level-single",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.605
+      ],
+      "secondaryAfter": [
+        2.605
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "second-level-single",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.605
+      ],
+      "secondaryAfter": [
+        2.605
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "level-1-early-held",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ],
+        [
+          2.46875,
+          2.458
+        ]
+      ],
+      "secondaryBefore": [
+        2.458,
+        3.92375
+      ],
+      "secondaryAfter": [
+        2.458,
+        3.9130000000000003
+      ],
+      "resumeBefore": [
+        2.458,
+        3.92375
+      ],
+      "resumeAfter": [
+        2.458,
+        3.9130000000000003
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "level-1-early-held",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ],
+        [
+          2.46875,
+          2.458
+        ]
+      ],
+      "secondaryBefore": [
+        2.458,
+        3.92375
+      ],
+      "secondaryAfter": [
+        2.458,
+        3.9130000000000003
+      ],
+      "resumeBefore": [
+        2.458,
+        3.92375
+      ],
+      "resumeAfter": [
+        2.458,
+        3.9130000000000003
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "level-2-early-held",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ],
+        [
+          2.46875,
+          2.458
+        ]
+      ],
+      "secondaryBefore": [
+        2.605,
+        4.0600000000000005
+      ],
+      "secondaryAfter": [
+        2.605,
+        4.0600000000000005
+      ],
+      "resumeBefore": [
+        2.458,
+        3.92375
+      ],
+      "resumeAfter": [
+        2.458,
+        3.9130000000000003
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "level-2-early-held",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ],
+        [
+          2.46875,
+          2.458
+        ]
+      ],
+      "secondaryBefore": [
+        2.605,
+        4.0600000000000005
+      ],
+      "secondaryAfter": [
+        2.605,
+        4.0600000000000005
+      ],
+      "resumeBefore": [
+        2.458,
+        3.92375
+      ],
+      "resumeAfter": [
+        2.458,
+        3.9130000000000003
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "late-rescope-update",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.458
+      ],
+      "secondaryAfter": [
+        2.458
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "late-rescope-update",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.458
+      ],
+      "secondaryAfter": [
+        2.458
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "last-round-no-reserve",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.458
+      ],
+      "secondaryAfter": [
+        2.458
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "last-round-no-reserve",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ]
+      ],
+      "secondaryBefore": [
+        2.458
+      ],
+      "secondaryAfter": [
+        2.458
+      ],
+      "resumeBefore": [
+        2.458
+      ],
+      "resumeAfter": [
+        2.458
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "exact-ready-tap",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ],
+        [
+          2.458,
+          2.458
+        ]
+      ],
+      "secondaryBefore": [
+        2.458,
+        3.9130000000000003
+      ],
+      "secondaryAfter": [
+        2.458,
+        3.9130000000000003
+      ],
+      "resumeBefore": [
+        2.458,
+        3.9130000000000003
+      ],
+      "resumeAfter": [
+        2.458,
+        3.9130000000000003
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "exact-ready-tap",
+      "unchanged": true,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ],
+        [
+          2.458,
+          2.458
+        ]
+      ],
+      "secondaryBefore": [
+        2.458,
+        3.9130000000000003
+      ],
+      "secondaryAfter": [
+        2.458,
+        3.9130000000000003
+      ],
+      "resumeBefore": [
+        2.458,
+        3.9130000000000003
+      ],
+      "resumeAfter": [
+        2.458,
+        3.9130000000000003
+      ]
+    },
+    {
+      "engine": "range",
+      "scenario": "late-held-update",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ],
+        [
+          2.5,
+          2.5
+        ]
+      ],
+      "secondaryBefore": [
+        2.458,
+        3.955
+      ],
+      "secondaryAfter": [
+        2.458,
+        3.955
+      ],
+      "resumeBefore": [
+        2.458,
+        3.955
+      ],
+      "resumeAfter": [
+        2.458,
+        3.955
+      ]
+    },
+    {
+      "engine": "duel",
+      "scenario": "late-held-update",
+      "unchanged": false,
+      "shotTimes": [
+        [
+          1.003,
+          1.003
+        ],
+        [
+          2.5,
+          2.5
+        ]
+      ],
+      "secondaryBefore": [
+        2.458,
+        3.955
+      ],
+      "secondaryAfter": [
+        2.458,
+        3.955
+      ],
+      "resumeBefore": [
+        2.458,
+        3.955
+      ],
+      "resumeAfter": [
+        2.458,
+        3.955
+      ]
+    }
+  ],
+  "files": {
+    "native-audit/reports/awp-clocks-next/trainer-before-final.json": "199af0ccc154d14482ad70d957eeb60897c454d241aee78cbee7a807df359c3b",
+    "native-audit/reports/awp-clocks-next/trainer-after-final.json": "91ae28d970e94bd9f538a0b7209f750cc3d1e016de0117e1c86dbcf599277f1b"
+  },
+  "probeSha256": "1a7c2d601670f1402ddf6d6750976134862a9c125980fa62c9552560e2ad4108",
+  "comparatorSha256": "e98dfd82af3a25f154253758530fa3c2b853ad8d578c5e2adfbe81ad37534da6",
+  "comparisonTolerance": "Floating point values rounded to 9 decimal places for whole traces; shot times compared exactly.",
+  "pairScope": "All completed trace fields including ammo; inside afterShot compare clock/FOV fields, excluding ammo because Range decrements before the hook and Duel after it. Raw hook ammo retained.",
+  "boundary": "Trainer measurements only. No claim of native context/history selection or exact postframe cadence."
+}

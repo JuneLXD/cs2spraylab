@@ -1,0 +1,238 @@
+{
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "method": "Validate retained bounded current-byte AWP evidence and emit address-free findings.\n\nStatic instruction assertions, not a native execution test. Each current read\nverified the whole server identity; this checker verifies reader/listing hashes.\n",
+  "checkerSha256": "1de67001efc8bc00af32ae8dccec4b1f66c7d710265e3f3c47ea13bbdc991938",
+  "sources": [
+    {
+      "report": "current-read.json",
+      "reportSha256": "78bc6b31b20fd4461905f8f5f21c6fa166c31e474ccd17f06d58b3a5ed20595d",
+      "reader": "read-current.py",
+      "readerSha256": "532e7f3c9ed03042a6577901580b3dc9bcfc73e4a61fbe9b44c544379d258d62",
+      "bytesRead": 23803
+    },
+    {
+      "report": "next-read.json",
+      "reportSha256": "34c3e8578e79573104d2306d1a596f5a3f64b31a91e069aee5685f8d2172d4af",
+      "reader": "read-next.py",
+      "readerSha256": "1cbdd722bd67c4b1cdc3fbfae34ac930aaa39335de4068fc23e3268356be3681",
+      "bytesRead": 5500
+    },
+    {
+      "report": "metadata-read.json",
+      "reportSha256": "84af5cdc9daf546d8de43f0ecc7b11647ae955e46b798c0be45cbe84ce93544d",
+      "reader": "read-metadata.py",
+      "readerSha256": "538d84088f5ba134856d472a9b8c7f8cfe08767f480aed5ece1ec4723720a2aa",
+      "bytesRead": 7964
+    }
+  ],
+  "dataProofSha256": "473089f681a3296ec69de31b84dfd137ad3df42e110bd8833f18fbf282c27bfe",
+  "class": "CWeaponAWP",
+  "virtualBindingAssertions": 16,
+  "schemaFields": [
+    {
+      "field": "m_bLinkedCooldowns",
+      "descriptorSha256": "d0715e6bab68f40f890ddea58bf16729549d5d198a0ff58bb2b8650faff8b74e"
+    },
+    {
+      "field": "m_iFlags",
+      "descriptorSha256": "125cae604edbe719efe93e19feb5e6b2153f01c4ff36ebb1efe67c9b80f42620"
+    },
+    {
+      "field": "m_bIsFullAuto",
+      "descriptorSha256": "cbf5427ee4ebbaa1010d2ce9b4b7a7e35570d3113b81cc29cc3690a0e1c1bbe7"
+    },
+    {
+      "field": "m_flCycleTime",
+      "descriptorSha256": "82decf26f5403069f75a2248a6f1fe466e179e74cec1b9580f358594b5bc3d04"
+    },
+    {
+      "field": "m_bUnzoomsAfterShot",
+      "descriptorSha256": "dec4c5ff90ab2fdab37e07aa1ce7bee6b4bb65f65aa82bea92e403f5b46d9f58"
+    },
+    {
+      "field": "m_nZoomLevels",
+      "descriptorSha256": "a5dfb8b3e0e336a2d68abd7db7967f112f570aecabd40842fb8e9aa01c0b082f"
+    },
+    {
+      "field": "m_nZoomFOV1",
+      "descriptorSha256": "9bb8d1f2aafd2dddee4e89af6471ec7956731f76ee9600439b73cfacfe7d8f2c"
+    },
+    {
+      "field": "m_nZoomFOV2",
+      "descriptorSha256": "c27a90a704c2a4721b361373e8b495ee4cd80f97a2ad204cb1cc20e78e66c831"
+    }
+  ],
+  "instructionAssertions": 137,
+  "literalAssertions": 5,
+  "codeRangesRetained": 36,
+  "boundedBytesRead": 37267,
+  "evidence": [
+    {
+      "name": "gun-primary",
+      "assertions": 16,
+      "codeSha256": "d3e6ca6d2050b04ccb1c164b7be1d393120f2b8a43a13711def980aaf35aeac7",
+      "listingSha256": "295de2709ed56da18a957412db2b9dbecc4ba56e21c853d53df446b6ad80549a"
+    },
+    {
+      "name": "gun-fire-entry",
+      "assertions": 3,
+      "codeSha256": "92b80cc4cf1c0b08755b487f9b6d528fc6c4d1980f5a15c63a644f9be917047b",
+      "listingSha256": "d7eb537d188527d4ff62f09c221a88872a3f41bfa019e18e9675d89dec4eec1c"
+    },
+    {
+      "name": "attack-clock-compute",
+      "assertions": 26,
+      "codeSha256": "42a57c99ce4228d5bb0ee675421ad9754980267c7b5813f2be96766b74cfc81f",
+      "listingSha256": "d385e106c1a5b09fd732024a279e8504b9f277ab4a2befe81e653260ac1fe5d0"
+    },
+    {
+      "name": "attack-context",
+      "assertions": 24,
+      "codeSha256": "bad7576a347cfada5e2310aabe45bf8a69bea1c48b3d39939be4ade760486fe2",
+      "listingSha256": "2bee84633bab2249b6f8e5a7d1e894c104108b32111fe80dd743500de8c3eccf"
+    },
+    {
+      "name": "context-time-seconds",
+      "assertions": 4,
+      "codeSha256": "7789af46681441521558db343bdf30bf6b9f85c3d91cf72b0662db32e620f9af",
+      "listingSha256": "b88b7543257a8e2abf3a0bb2c460cd74491d53f00c72e837b6d22a0f2dc44975"
+    },
+    {
+      "name": "primary-setter",
+      "assertions": 5,
+      "codeSha256": "0f8a5e1e62eac94abddcfd81c95611c3398079525f8ceb5b645335c5ee1c8101",
+      "listingSha256": "afe183fccb83c5083c0f9864550a38519ca39c307304f23b3cf922644c8533b1"
+    },
+    {
+      "name": "secondary-setter",
+      "assertions": 6,
+      "codeSha256": "8598cb9bcd61179e3fc8205791a4ea0b97bd1af79267ea6a91472167e28d67b2",
+      "listingSha256": "79efa263f7eabec08176f8dc9633dc6eb933c2e94c0a03d49a57334fa82156c3"
+    },
+    {
+      "name": "ordinary-postframe",
+      "assertions": 16,
+      "codeSha256": "312c231dace22a3669bca43be574941a042106204dcb6cca7d3ee0811b9683e3",
+      "listingSha256": "95b62bd98c996fdda68e8bf6f98e508998ed251b06f542280015ce50a9b88f45"
+    },
+    {
+      "name": "common-input-dispatch",
+      "assertions": 10,
+      "codeSha256": "419bb34dfb203669bd499331edef948925065d6793d416236efccaff88f3ebe4",
+      "listingSha256": "ca07840cf94ef9bc5c7d4f56733e90f122ea7c08fd145ea3c67faeaf2bd77f94"
+    },
+    {
+      "name": "primary-dispatch",
+      "assertions": 4,
+      "codeSha256": "d435032a6b5b71674e453a6158b90658c6f4fdd386771a7a1259a299b8c93409",
+      "listingSha256": "ff794aa2914f2e59240b48e5176afb7e86c279a48efab0e1671ce822f52248f1"
+    },
+    {
+      "name": "input-active",
+      "assertions": 3,
+      "codeSha256": "c434991702f6cfc3740fb0cbc8aa6d95b4585db2bd6cfd030100be2739bb7da2",
+      "listingSha256": "246521935b2429bcc3e1c99a30bf361f01d016f299050946777a18445ae03981"
+    },
+    {
+      "name": "secondary-dispatch",
+      "assertions": 6,
+      "codeSha256": "d450a90d93c95f5ec3101c63ff112fafb3df523669c5ce6cf4c37b6689e4e1bc",
+      "listingSha256": "03d60e21ee51ec602a1a75925fe750b7ed56fecf7962da269947eb42b487cbe0"
+    },
+    {
+      "name": "camera-fov-setter",
+      "assertions": 3,
+      "codeSha256": "88b6902578e70bba65058557aba8b01e8f77353dc44a51c94c81edc2986fd667",
+      "listingSha256": "1bea93016f917e84faa3cd1cfe9c75496cd0f1809e498fb5aa5a7e6586b5c467"
+    },
+    {
+      "name": "camera-fov-setter-tail",
+      "assertions": 2,
+      "codeSha256": "9f422f698312af5399de3406c0b6eba76f0b703bb36dce1494a7028d2dc38af9",
+      "listingSha256": "545f106954c9cf01e4d383046a0b6c6f6f32e2b33e6e0fa053817ad7a4d42b31"
+    },
+    {
+      "name": "camera-time-domain",
+      "assertions": 2,
+      "codeSha256": "69e7159bcf474317c9a93681c34ebb1d4937c5aa9f8e3d32c925209d74984d4a",
+      "listingSha256": "8fbd469f2ec3b872d34a9a8bd00e0882e6584b3607744115c33cfdcfa16b3ab5"
+    },
+    {
+      "name": "weapon-flags",
+      "assertions": 2,
+      "codeSha256": "ab699245a7a33667381bf0d039560bfac4630551db250416d2e088d4b5cb9507",
+      "listingSha256": "ca27f3205ef6e18720b43d315728b8b7b0f171e273b8f53add3505a33cbc26e5"
+    },
+    {
+      "name": "vdata-source",
+      "assertions": 2,
+      "codeSha256": "c33da0f3e10143956f93296a42badaf3d8f9d1d76e07241085c45f7be95a5c09",
+      "listingSha256": "a154340196a638b40a03336212e0a524ecea78af9291870477bd806c48524407"
+    },
+    {
+      "name": "cs-vdata-constructor",
+      "assertions": 1,
+      "codeSha256": "c4fb41cf1601f0cedbed0af4c72ec8b6e646f0e903e05584c0bfda96c575973c",
+      "listingSha256": "6ad6a835b8c780c32b2a569fc7022800dc056fe52e9d0abaca1ae7702d8eaea5"
+    },
+    {
+      "name": "base-vdata-default-flags",
+      "assertions": 1,
+      "codeSha256": "f4b71eadff943bee5f2d81e77de492e076c63e4ef6889c8e58a0d06df84b51c2",
+      "listingSha256": "bb08f439b6b2ab2796ee9a479a7e8c8bef516e31c4ef6c97d62afe95e9243b35"
+    },
+    {
+      "name": "base-placement-default-flags",
+      "assertions": 1,
+      "codeSha256": "1c6f7c7bcd1d158df1eaa1b8ca14aba4eec08732de2f1f44277c71336bfa750b",
+      "listingSha256": "67d71153c66500f7d90494a064e5609d4b92e5ce159b55232bc456409e1def7d"
+    }
+  ],
+  "rules": {
+    "clockDefinition": "Let P,S be existing primary/secondary normalized tick-fraction clocks, C the current command clock captured before context construction, D the authored cycle, R the constructed rebase flag. For unlinked AWP clocks: R=0 gives P+=D,S+=D; R=1 gives P=max(P,C)+D,S=max(S,C)+D. Float32 tick normalization remains native.",
+    "context": "A selected explicit command attack record writes R=1. Historical context paths retain initial R=0. The fallback that selects current command context writes R=1; a retained candidate can leave it0. The exact command/history producer state is not measured by trainer probes.",
+    "futureSecondary": "Both branches preserve a secondary clock already ahead of C before adding D. A recent manual zoom can therefore leave secondary readiness later than primary.",
+    "scopeAfterShot": "Only a successful shot with a positive saved zoom level and UnzoomsAfterShot enabled enters the automatic unzoom path. With auto-rezoom enabled it sets the pending flag and retains the level; otherwise it clears the level. It requests the default FOV with a 0.05-second transition at current camera-domain time.",
+    "rescopeGate": "Ordinary postframe first tests primary readiness. If pending and saved zoom positive, normal AWP requires nonzero ammo (flags default0, no override). It restores the saved level with a 0.1-second FOV transition when ammo exists, then clears pending. With empty ammo it clears pending without rescoping. No secondary-ready check or independent shotTime+cycle rescope timer is present in this path.",
+    "order": "The auto-rescope path precedes shared primary/secondary input dispatch. Eligible held primary wins even on semiauto rejection; otherwise eligible held secondary uses its own secondary deadline and can advance the saved zoom level after auto-rescope in the same command.",
+    "fovClock": "The camera setter stores current seconds in the camera owner time domain as the transition start. Unzoom starts when the successful-shot path calls it; rescope starts when ready postframe calls it. Neither path backdates that transition to an earlier scheduled shot/readiness timestamp."
+  },
+  "invariant": {
+    "preservation": "Given S>=P initially, an ordinary loaded shoot/zoom-only sequence preserves it. Same D additions and max(C,clock) preserve ordering. Accepted zoom requires C>=S and writes S=C+0.3, which remains >=P. Automatic unzoom/rescope writes neither clock.",
+    "boundary": "The audit does not establish S>=P after every deploy/reload/holster/special state. With S<P and R=0, native increments S directly; max(S,scheduled=P)+D would differ. No naturally reachable counterexample within the stated invariant was found."
+  },
+  "derivedExamplesNotRuntime": [
+    {
+      "current": 2.46875,
+      "primaryBefore": 2.458,
+      "secondaryBefore": 2.458,
+      "rebase": false,
+      "primaryAfter": 3.913,
+      "secondaryAfter": 3.913
+    },
+    {
+      "current": 2.46875,
+      "primaryBefore": 2.458,
+      "secondaryBefore": 2.458,
+      "rebase": true,
+      "primaryAfter": 3.92375,
+      "secondaryAfter": 3.92375
+    },
+    {
+      "current": 2.46875,
+      "primaryBefore": 2.458,
+      "secondaryBefore": 2.605,
+      "rebase": false,
+      "primaryAfter": 3.913,
+      "secondaryAfter": 4.06
+    }
+  ],
+  "implementationBoundary": "A bounded AWP change may integrate with the trainer existing shot scheduler and primary-ready gate; it must not claim to port native command/history context selection. Preserve future secondary clocks, use actual processing time for FOV transition start, and account for ammo at rescope. Do not generalize to other scoped weapons or upstream gates.",
+  "unknown": [
+    "Native runtime context flag for the specific queued trainer input sequence.",
+    "Full native command/history production, input-mask lifetime and scheduling/subtick delivery.",
+    "Global clock-order invariant through deploy/reload/holster and special flags/states.",
+    "Client rendering/prediction of these transitions; no new client or game capture performed.",
+    "Every float32 normalization boundary and dynamic auto-rezoom preference change."
+  ]
+}

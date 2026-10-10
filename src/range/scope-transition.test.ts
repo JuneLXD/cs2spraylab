@@ -79,9 +79,11 @@ describe('native scope transitions', () => {
     expect(action.nextEventAt).toBe(resume);
     action.advance(resume + .025);
     expect(action.zoom).toBe(1);
-    // A delayed simulation update keeps the original deadline as the start.
-    expect(action.fovAt(resume + .025)).toBeCloseTo(90 + (target - 90) * .15625);
-    expect(action.fovAt(resume + .1)).toBeCloseTo(target);
+    // The verified AWP camera setter starts at the processing call. The SSG's
+    // existing approximation is outside this focused correction.
+    const start = id === 'awp' ? resume + .025 : resume;
+    expect(action.fovAt(start + .025)).toBeCloseTo(90 + (target - 90) * .15625);
+    expect(action.fovAt(start + .1)).toBeCloseTo(target);
     action.holster(); action.advance(resume + 1);
     expect(action.nextEventAt).toBe(Infinity); expect(action.fovAt(resume + 1)).toBe(90);
   });

@@ -1,0 +1,63 @@
+{
+  "method": "Path/argument adapters copied from the original local investigation. Originals and original proof outputs are unchanged; copied reruns will deliberately carry their own reader/checker hashes.",
+  "originalSourceRoot": "native-audit/reports/awp-clocks-next",
+  "sourceCopies": [
+    {
+      "name": "read-current.py",
+      "originalSha256": "532e7f3c9ed03042a6577901580b3dc9bcfc73e4a61fbe9b44c544379d258d62",
+      "copiedSha256": "83df39ee9bc7907472deb1538f49bdcd7ec14c2d0e88995be61e9176f4f196a1"
+    },
+    {
+      "name": "read-next.py",
+      "originalSha256": "1cbdd722bd67c4b1cdc3fbfae34ac930aaa39335de4068fc23e3268356be3681",
+      "copiedSha256": "73ea51fdbe1241cce32e3acd74a87d9110cb531dfbfe89a46b3fb0db1fa76f60"
+    },
+    {
+      "name": "read-metadata.py",
+      "originalSha256": "538d84088f5ba134856d472a9b8c7f8cfe08767f480aed5ece1ec4723720a2aa",
+      "copiedSha256": "ece19000bf3886a3ec9c6a05e7aff733ae75772784dc7a797843ff11db3a30bc"
+    },
+    {
+      "name": "read-data.mjs",
+      "originalSha256": "d7d354c4dab76f4ae3eebaac2c9186675eac22db4fc5e830b2156cd30a4488b7",
+      "copiedSha256": "4db5a77bc19433514589b997b8aa977177e6ce9b9317f91b5cde6a68cd050e36"
+    },
+    {
+      "name": "check-proof.py",
+      "originalSha256": "1de67001efc8bc00af32ae8dccec4b1f66c7d710265e3f3c47ea13bbdc991938",
+      "copiedSha256": "4d1c6ee83f53ad370d2a761c28191a3be016600e47bac9f2823f6d5cfac3f832"
+    }
+  ],
+  "originalEvidence": [
+    {
+      "name": "current-read.json",
+      "sha256": "78bc6b31b20fd4461905f8f5f21c6fa166c31e474ccd17f06d58b3a5ed20595d"
+    },
+    {
+      "name": "next-read.json",
+      "sha256": "34c3e8578e79573104d2306d1a596f5a3f64b31a91e069aee5685f8d2172d4af"
+    },
+    {
+      "name": "metadata-read.json",
+      "sha256": "84af5cdc9daf546d8de43f0ecc7b11647ae955e46b798c0be45cbe84ce93544d"
+    },
+    {
+      "name": "current-awp-data.json",
+      "sha256": "473089f681a3296ec69de31b84dfd137ad3df42e110bd8833f18fbf282c27bfe"
+    },
+    {
+      "name": "portable-proof.json",
+      "sha256": "3f173fd620bbc81e3fb2de173817561296b759d13af21f32896c3ee30a8994b7"
+    },
+    {
+      "name": "findings.md",
+      "sha256": "e32682b572ec8b92b7c99ee82045c403a4454f66b5fc5115d137ebb440771d5c"
+    }
+  ],
+  "adaptations": [
+    "Explicit --root workspace and --output new evidence directory instead of machine-specific source/output paths.",
+    "Read-only refusal to overwrite each existing evidence report.",
+    "Data decoder and retained proof imports resolve within the containing repo; source data remains an explicitly hash-verified retained export.",
+    "Checker verifies the copied readers in its tool directory against newly produced local evidence."
+  ]
+}

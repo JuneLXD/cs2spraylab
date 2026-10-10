@@ -1,0 +1,81 @@
+{
+  "method": "Current compiled weapons entry identity paired with the hash-verified retained pass38 decoded export, plus parsed AWP inheritance and override checks. No new export.",
+  "scriptSha256": "d7d354c4dab76f4ae3eebaac2c9186675eac22db4fc5e830b2156cd30a4488b7",
+  "parserSha256": "c4d3715b5e419530bd7cd439c9c3ecc4ba3a5ccba309b98c82131d5c3c1612c0",
+  "packageDirectorySha256": "48018be3f8da306ce9b48bf746bce08ceff19fe4dff15c9d5e2e53b3c3e9bbad",
+  "compiled": {
+    "resource": "scripts/weapons.vdata_c",
+    "crc32": "b6efe34a",
+    "bytes": 32731,
+    "sha256": "5ca094238e180376646a5cd69250c091ae5a9d937a3446c188ee5117fb6da28b"
+  },
+  "decoded": {
+    "resource": "scripts/weapons.vdata",
+    "bytes": 523498,
+    "sha256": "46e7a84b46c620e8daf11c403ee9152a5faa1a033407748b527862aa3147236b"
+  },
+  "exporterSha256": "1c43b87e0bda995c0e1f2df8828c64510e3dd6fed32038ea9870aafa9801a5a4",
+  "export": {
+    "exit": 0,
+    "command": "Source2Viewer-CLI -i <csgo>/pak01_dir.vpk -f scripts/weapons.vdata_c -d -o <local-output>",
+    "provenance": "This audit ran the selected export before this identity/parser check. This checker does not rerun the exporter."
+  },
+  "inheritanceChain": [
+    "weapon_awp",
+    "weapon_awp_prefab",
+    "sniper_rifle",
+    "primary",
+    "weapon_base",
+    "statted_item_base"
+  ],
+  "relevantOverridesInEntireDecodedResource": [],
+  "awp": {
+    "cycle": 1.455,
+    "fullAuto": false,
+    "hasBurst": false,
+    "unzoomsAfterShot": true,
+    "zoomLevels": 2,
+    "zoomFov": [
+      40,
+      10
+    ],
+    "zoomTime": [
+      0.05,
+      0.05,
+      0.05
+    ]
+  },
+  "inheritedDefaults": [
+    {
+      "name": "weapon_awp",
+      "linked": null,
+      "flags": null
+    },
+    {
+      "name": "weapon_awp_prefab",
+      "linked": null,
+      "flags": null
+    },
+    {
+      "name": "sniper_rifle",
+      "linked": null,
+      "flags": null
+    },
+    {
+      "name": "primary",
+      "linked": null,
+      "flags": null
+    },
+    {
+      "name": "weapon_base",
+      "linked": null,
+      "flags": null
+    },
+    {
+      "name": "statted_item_base",
+      "linked": null,
+      "flags": null
+    }
+  ],
+  "boundary": "Reuses the pass38 decoded export only after matching its text hash and current compiled-resource SHA. No new export or native execution. Constructor/schema evidence establishes LinkedCooldowns=false and flags=0; absent overrides alone do not."
+}

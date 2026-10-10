@@ -98,7 +98,7 @@ export class DuelWeaponState {
     feet: number; verticalVelocity: number; duckAmount?: number; duckFlag?: boolean; grounded?: boolean;
     punch?: DamagePunch;
   }): FiredRound | undefined {
-    this.actions.advance(time);
+    this.actions.advance(time, this.nextShotAt, this.ammo);
     // Capture input priority before a secondary action changes its own deadline.
     const nativeReloadInput = usesNativeReloadInput(this.id);
     const reloadAllowed = !nativeReloadInput || reloadInputAllows(time, this.nextShotAt,

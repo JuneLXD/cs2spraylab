@@ -396,7 +396,7 @@ export class Simulation {
   }
   step(dt: number) {
     this.time += dt;
-    this.actions.advance(this.time);
+    this.actions.advance(this.time, this.shotReady.get(this.equipped) ?? 0, this.loadedAmmo);
     const weapon = this.stats;
     // Magazine completion and an uninterrupted shell outro retain their existing
     // deadlines. Loaded-shell attacks use the separate reload-start lock.

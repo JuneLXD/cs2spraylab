@@ -362,6 +362,10 @@ export const latestChanges = {
     {id: 'native-glock-attack-clocks', title: 'Glock firing and mode switching', items: [
       'Switching Glock fire mode allows an immediate shot. Firing and pending burst rounds delay the next mode switch consistently in Range and Duel.',
     ]},
+    {id: 'native-awp-rescope-clock', title: 'AWP scope recovery', items: [
+      'Queued AWP shots keep scope recovery aligned with their firing schedule.',
+      'Automatic rescoping checks firing readiness and remaining ammo, and starts its camera transition when processed.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
