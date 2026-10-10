@@ -1,5 +1,5 @@
 import {gameData} from './config';
-import {equipmentStats, weaponModeStats, SILENT_RELOAD_MULTIPLIER, SHELL_RELOAD_START, SHELL_RELOAD_FINISH, type Equipment} from './equipment';
+import {equipmentStats, weaponModeStats, zoomLevels, SILENT_RELOAD_MULTIPLIER, SHELL_RELOAD_START, SHELL_RELOAD_FINISH, type Equipment} from './equipment';
 import {ScopeTransition, scopeSensitivity} from './scope-transition';
 import {ReloadClock, reloadClip, reloadSilentWindows} from './reload-clock';
 
@@ -28,6 +28,11 @@ export class WeaponActions {
     this.idleRevolver = {...this.base, speed:this.alternate.speed};
   }
   get stats() {return this.zoom > 0 || this.burst || this.alternateFire ? this.alternate : this.isRevolver && !this.charging ? this.idleRevolver : this.base;}
+  /** Native Accelerate tests active zoom separately from the configured zoom count. */
+  get scopedSlowMovement() {
+    return this.zoom > 0 && zoomLevels(this.id) > 1 &&
+      Math.fround(Math.fround(this.stats.speed) * Math.fround(.52)) < 110;
+  }
   get charging() {return this.chargedAt !== undefined && !this.alternateFire;}
   get chargeReadyAt() {return this.chargedAt ?? 0;}
   get horizontalFov() {return this.zoom && this.id !== 'knife' ? gameData.weapons[this.id].zoomFov[this.zoom - 1] : 90;}

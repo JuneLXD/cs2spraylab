@@ -1,0 +1,135 @@
+{
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "wholeArtifactHashVerified": true,
+  "readerSha256": "532e7f3c9ed03042a6577901580b3dc9bcfc73e4a61fbe9b44c544379d258d62",
+  "class": "CWeaponAWP",
+  "table": "0x25fafd8",
+  "slots": {
+    "0xaa8": "0x162ba80",
+    "0xb00": "0xacb2c0",
+    "0xbc8": "0xacb310",
+    "0xbd0": "0x1444260",
+    "0xbd8": "0x1446d60",
+    "0xbf0": "0x1444270",
+    "0xc70": "0x14444e0",
+    "0xcb0": "0x1483b10",
+    "0xcd0": "0x1483fc0",
+    "0xd30": "0x14b2ef0",
+    "0xd38": "0x14bfa70",
+    "0xd40": "0x14b4510",
+    "0xd60": "0x14445d0"
+  },
+  "ranges": [
+    {
+      "name": "gun-primary",
+      "address": "0x14b2ef0",
+      "bytes": 1010,
+      "codeSha256": "d3e6ca6d2050b04ccb1c164b7be1d393120f2b8a43a13711def980aaf35aeac7",
+      "listingSha256": "295de2709ed56da18a957412db2b9dbecc4ba56e21c853d53df446b6ad80549a"
+    },
+    {
+      "name": "gun-fire-entry",
+      "address": "0x14b22d0",
+      "bytes": 560,
+      "codeSha256": "92b80cc4cf1c0b08755b487f9b6d528fc6c4d1980f5a15c63a644f9be917047b",
+      "listingSha256": "d7eb537d188527d4ff62f09c221a88872a3f41bfa019e18e9675d89dec4eec1c"
+    },
+    {
+      "name": "attack-clock-compute",
+      "address": "0x14ac0a0",
+      "bytes": 1155,
+      "codeSha256": "42a57c99ce4228d5bb0ee675421ad9754980267c7b5813f2be96766b74cfc81f",
+      "listingSha256": "d385e106c1a5b09fd732024a279e8504b9f277ab4a2befe81e653260ac1fe5d0"
+    },
+    {
+      "name": "attack-context",
+      "address": "0x1496e60",
+      "bytes": 4704,
+      "codeSha256": "bad7576a347cfada5e2310aabe45bf8a69bea1c48b3d39939be4ade760486fe2",
+      "listingSha256": "2bee84633bab2249b6f8e5a7d1e894c104108b32111fe80dd743500de8c3eccf"
+    },
+    {
+      "name": "primary-setter",
+      "address": "0x1653800",
+      "bytes": 736,
+      "codeSha256": "0f8a5e1e62eac94abddcfd81c95611c3398079525f8ceb5b645335c5ee1c8101",
+      "listingSha256": "afe183fccb83c5083c0f9864550a38519ca39c307304f23b3cf922644c8533b1"
+    },
+    {
+      "name": "secondary-setter",
+      "address": "0x1653ae0",
+      "bytes": 928,
+      "codeSha256": "8598cb9bcd61179e3fc8205791a4ea0b97bd1af79267ea6a91472167e28d67b2",
+      "listingSha256": "79efa263f7eabec08176f8dc9633dc6eb933c2e94c0a03d49a57334fa82156c3"
+    },
+    {
+      "name": "ordinary-postframe",
+      "address": "0x14b4510",
+      "bytes": 590,
+      "codeSha256": "312c231dace22a3669bca43be574941a042106204dcb6cca7d3ee0811b9683e3",
+      "listingSha256": "95b62bd98c996fdda68e8bf6f98e508998ed251b06f542280015ce50a9b88f45"
+    },
+    {
+      "name": "common-input-dispatch",
+      "address": "0x14b3fd0",
+      "bytes": 672,
+      "codeSha256": "419bb34dfb203669bd499331edef948925065d6793d416236efccaff88f3ebe4",
+      "listingSha256": "ca07840cf94ef9bc5c7d4f56733e90f122ea7c08fd145ea3c67faeaf2bd77f94"
+    },
+    {
+      "name": "primary-dispatch",
+      "address": "0x14b0360",
+      "bytes": 1424,
+      "codeSha256": "d435032a6b5b71674e453a6158b90658c6f4fdd386771a7a1259a299b8c93409",
+      "listingSha256": "ff794aa2914f2e59240b48e5176afb7e86c279a48efab0e1671ce822f52248f1"
+    },
+    {
+      "name": "secondary-dispatch",
+      "address": "0x14bfa70",
+      "bytes": 2304,
+      "codeSha256": "d450a90d93c95f5ec3101c63ff112fafb3df523669c5ce6cf4c37b6689e4e1bc",
+      "listingSha256": "03d60e21ee51ec602a1a75925fe750b7ed56fecf7962da269947eb42b487cbe0"
+    },
+    {
+      "name": "primary-ready",
+      "address": "0x1641710",
+      "bytes": 144,
+      "codeSha256": "8ca92825d9e18ea6a5ecffdc6d89774674f90b04f10822d25256cf722e3cbc2d",
+      "listingSha256": "1fc7b581e34f190c7bd380186c64330f4304b8954226965182a7c2b194c5590d"
+    },
+    {
+      "name": "secondary-ready",
+      "address": "0x16417a0",
+      "bytes": 144,
+      "codeSha256": "901ae4e929d0ff2f0872d03950d819e16a24d1e24d1742498ab4611662f093a9",
+      "listingSha256": "b568e6f86eb4f8e476bce4999be491b5ad08837b0e9417da451aa3eed738083c"
+    },
+    {
+      "name": "input-active",
+      "address": "0x16412f0",
+      "bytes": 192,
+      "codeSha256": "c434991702f6cfc3740fb0cbc8aa6d95b4585db2bd6cfd030100be2739bb7da2",
+      "listingSha256": "246521935b2429bcc3e1c99a30bf361f01d016f299050946777a18445ae03981"
+    },
+    {
+      "name": "current-time-pair",
+      "address": "0x17fd290",
+      "bytes": 80,
+      "codeSha256": "6c7c3bb4b3ff4a9e310e6921e33bc26126314a72dff38366248ec61732fe8d4a",
+      "listingSha256": "e8a3b908fd5c29bbae9fcb1ec368b0cae12d4b8523cd16f890d470868bbd0bcb"
+    },
+    {
+      "name": "camera-fov-setter",
+      "address": "0x1543eb0",
+      "bytes": 1088,
+      "codeSha256": "88b6902578e70bba65058557aba8b01e8f77353dc44a51c94c81edc2986fd667",
+      "listingSha256": "1bea93016f917e84faa3cd1cfe9c75496cd0f1809e498fb5aa5a7e6586b5c467"
+    }
+  ],
+  "bytesRead": 23803,
+  "method": "Bounded current server AWP clock, scope, and concrete-class read. Static only.",
+  "limits": [
+    "Explicit instruction windows derived from matching-hash retained evidence, not complete callees/call graph.",
+    "No game/runtime/native execution. Current-byte inspection only."
+  ]
+}

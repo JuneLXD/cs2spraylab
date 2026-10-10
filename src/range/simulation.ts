@@ -46,7 +46,7 @@ export class Simulation {
   moveMode: ActorKinematics['moveMode'] = 'ground'; waterLevel: ActorKinematics['waterLevel'] = 0; ladderDetached = false;
   renderPosition() {
     if (!this.active || this.accumulator <= 1e-10) return this.position;
-    return advanceActor(this, this.input, this.stats.speed * UNIT, this.accumulator,
+    return advanceActor(this, {...this.input, scopedSlow: this.actions.scopedSlowMovement}, this.stats.speed * UNIT, this.accumulator,
       undefined, undefined, undefined, this.environment).position;
   }
   targetX = 0; targetVelocity = 0; targetSign = 1;
@@ -424,7 +424,7 @@ export class Simulation {
       this.actionEvents.push({kind: 'zeus-ready', at: this.time, equipment: id});
     }
     if (this.footsteps.update(this.time, dt, this, this.input)) this.onSound(false);
-    const next = advanceActor(this, {...this.input, scopedSlow: this.actions.zoom >= 2 && weapon.speed * .52 < 110}, weapon.speed * UNIT, dt, undefined, undefined, undefined,
+    const next = advanceActor(this, {...this.input, scopedSlow: this.actions.scopedSlowMovement}, weapon.speed * UNIT, dt, undefined, undefined, undefined,
       {...this.environment, time: this.time - dt});
     this.input.jumpPressed = false; this.input.jumpPressOffset = 0;
     if (next.landedAt !== undefined && next.landedAt !== this.landedAt && next.landingVelocity !== undefined &&

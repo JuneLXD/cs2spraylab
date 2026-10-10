@@ -1,0 +1,94 @@
+{
+  "schema": "cs2.scoped-awp-native-evidence.v1",
+  "status": "bounded-native-replay-passed",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "staticProof": {
+    "selectedBytes": 3640,
+    "selectedByteCeiling": 3640,
+    "wholeArtifactHashVerified": true,
+    "proofSha256": "0674ee146cdc4c9b6a91a53e7aacf466ac5eec62ae7c194ac9c74e58aa01613f",
+    "planSha256": "c56df1dff658f729e1a22a94e102de9122872a8bd1635a891d14ed2fec1cb23e",
+    "originalReaderSha256": "993e281acfb1c33d261748d9135af612dad7c8a35b9e9b60934a22bbc4b71e08",
+    "portableReaderSha256": "77ea3016d7328e9829c03d071e582c057adc277b9f4b2d62752df3d305eb7ab3",
+    "joins": [
+      "The actual AWP movement accessor reads the same weapon-instance integer advanced and bounded by the retained AWP secondary scope dispatch.",
+      "The standard AWP data accessor reads the integer named m_nZoomLevels in the fixed current-server schema records.",
+      "Native Accelerate tests current zoom greater than zero, configured zoom count greater than one, and mode speed times the native walking multiplier strictly below 110."
+    ],
+    "retainedScopeReportSha256": "78bc6b31b20fd4461905f8f5f21c6fa166c31e474ccd17f06d58b3a5ed20595d",
+    "retainedScopeListingSha256": "03d60e21ee51ec602a1a75925fe750b7ed56fecf7962da269947eb42b487cbe0",
+    "weaponDataProofSha256": "473089f681a3296ec69de31b84dfd137ad3df42e110bd8833f18fbf282c27bfe"
+  },
+  "nativeReplay": {
+    "schema": "cs2.native-scoped-awp-oracle.v1",
+    "sourceNativeSha256": "80e4e96571a9663ae442f2d7e90c93fdb65bacbc1f1608cd8a43e4f5cd1c837f",
+    "readerSha256": "3ef80ff86342ddc0d0f07eb13388f89160eb96fa868fba148ebf6e223d86eacb",
+    "fixtureDefinitionSha256": "169c9a00bb8d8d31befe9fb966b1c9f4faae6bcacbd3eca292668d6a76398999",
+    "fixtureFileSha256": "9b5a3ae0693206ed0d536ae219b288b7ada299a43a31863c8608a6aab8beeb4d",
+    "executionContentSha256": "be38d9c1ab4430ffcef202125806061ef226fe951e15011453101f89a0802880",
+    "selectedNativeCodeBytes": 7192,
+    "newNativeCodeBytes": 0,
+    "newPrivateBytesBeyondStance": 12,
+    "newAccessorHooks": 0,
+    "guardedNativeExecution": true,
+    "unexpectedAccesses": 0,
+    "guardCounts": {"reads": 122145, "writes": 71693},
+    "fixtures": 30,
+    "sequences": 32,
+    "rows": 844,
+    "identicalZoomPairs": 15,
+    "scopeBranchCounts": {
+      "zoom1:standard-data-count-read": 326,
+      "zoom1:retained-scoped-scale": 326,
+      "zoom2:standard-data-count-read": 326,
+      "zoom2:retained-scoped-scale": 326
+    },
+    "suppliedInputs": {
+      "weaponSpeed": 100,
+      "zoomLevels": [1, 2],
+      "configuredZoomCount": 2,
+      "stances": ["stand", "walk", "crouch"],
+      "processedCapFormula": "float32(100 * supplied stance multiplier)",
+      "stanceMultipliers": {"stand": 1, "walk": 0.52, "crouch": 0.34},
+      "externalOwnerVelocity": [0, 0, 0],
+      "walkingServiceHandle": -1,
+      "dryGround": true,
+      "surfaceFactor": 1,
+      "ownerFactor": 1
+    }
+  },
+  "comparisonExport": {
+    "schema": "cs2.native-scoped-awp-comparison-input.v1",
+    "sha256": "5e908e813f902d790c643eb33e90ac9066f34913fa3821827527f333a955a03a",
+    "bytes": 3951735,
+    "exporterSha256": "5be3680f3b569c0c06005c9f6fd6609ac4d604126582b0523992e6339d7a6995",
+    "semanticRowsPreserved": true,
+    "pointerAndRawByteLedgersOmitted": true
+  },
+  "portableValidation": {
+    "status": "passed",
+    "staticProofSha256": "509f4bb84b32ac5c4b4dfad7682b5e93ce55fa47fe3bd6ecb05d0d683c9f93da",
+    "staticReadLedgerExactlyMatchesRetained": true,
+    "nativeReportExactlyMatchesOriginalSha256": true,
+    "comparisonExportExactlyMatchesOriginalSha256": true,
+    "executionContentExactlyMatches": true,
+    "jobs": 3,
+    "terminalExitCodes": [0, 0, 0],
+    "memoryMaxMiB": 512,
+    "swapMaxBytes": 0,
+    "cpuQuotaPercent": 100,
+    "executionSerialized": true,
+    "deployInactiveAtEachPreflight": true,
+    "minimumAvailableGiBObserved": 18
+  },
+  "limits": [
+    "Static class/field association and supplied native accessor returns; no live scope transition or getter invocation in this replay.",
+    "Upstream stance, tag, mode and processed-cap production are not newly executed.",
+    "Only the existing invalid-handle walking branch is replayed; valid entity-handle cases remain outside scope.",
+    "No collision, complete native command dispatcher, physical input replay or new native position publishing.",
+    "Uncollided displacement is derived from native midpoint state with the existing supplied harness.",
+    "Command boundaries, marker lifecycle, floating-point environment and zero external velocity are declared inputs.",
+    "Taper controls specify pre-friction initial speeds, not exact post-friction taper thresholds.",
+    "The original release, combined and stance modules, manifests and canonical digests remain unchanged."
+  ]
+}

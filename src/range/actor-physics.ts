@@ -24,7 +24,7 @@ export const UNDUCK_SECONDS = 1 / 8;
 
 export type Vec = { x: number; y: number; z: number };
 export type MoveInput = { forward: number; side: number; walk: boolean; crouch: boolean; jump: boolean;
-  /** Scoped at the second zoom level with a walking speed under 110 u/s: the server keeps the weapon's scale on the walking acceleration speed. */
+  /** Scoped weapon with multiple zoom levels and walking speed under 110 u/s: retain weapon scaling on walking acceleration. */
   scopedSlow?: boolean;
   jumpPressed?: boolean; jumpPressOffset?: number };
 export type ActorKinematics = {

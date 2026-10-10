@@ -1,0 +1,39 @@
+{
+  "schema": "cs2.scoped-awp-static-plan.v1",
+  "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+  "fixedReads": [
+    {"name": "awp-speed-and-data-count-slots", "address": "0x25fbc38", "bytes": 16, "expectedPointers": ["0x141a9e0", "0x133daa0"]},
+    {"name": "awp-current-zoom-slot", "address": "0x25fbcc8", "bytes": 8, "expectedPointer": "0x1483c00"},
+    {"name": "retained-gun-current-zoom-getter", "address": "0x1483c00", "bytes": 16, "decodeStop": "First return; abort if no return or outgoing control flow before it"},
+    {"name": "standard-data-count-getter", "address": "0x133daa0", "bytes": 16, "decodeStop": "First return; abort if no return or outgoing control flow before it"},
+    {"name": "weapon-vdata-schema-record-window", "address": "0x277acc0", "bytes": 1024, "recordBytes": 32}
+  ],
+  "fixedBytes": 1080,
+  "boundedPointerReads": {
+    "source": "First pointer of each of the 32 fixed schema records",
+    "maximumPointers": 32,
+    "maximumBytesPerPointer": 80,
+    "maximumBytes": 2560,
+    "require": "Each pointer must resolve entirely within a file-backed ELF load; field name must be NUL-terminated ASCII within 80 bytes"
+  },
+  "totalSelectedReadBudgetBytes": 3640,
+  "schemaAssertions": [
+    "The first fixed record must name m_flMaxSpeed and declare member offset 0x748, matching the retained server schema log.",
+    "Exactly one record in the fixed window must name m_nZoomLevels and declare member offset 0x7f4.",
+    "Record layout is a name pointer at +0 and uint32 member offset at +16, matching previously bound schema records."
+  ],
+  "sources": [
+    "native-audit/reports/core-shooting-next/movement/movement-inaccuracy/native/proof.json",
+    "native-audit/reports/core-shooting-next/pistol-recoil/seed-binding-read.json",
+    "native-audit/rea/out/16CCSWeaponBaseGun-vtable.json",
+    "native-audit/reports/reaudit-footsteps-all-schema-raw.log",
+    "native-audit/reports/core-shooting-next/movement/ground-accelerate-proof/accelerate.txt"
+  ],
+  "limits": [
+    "No native execution, code scan, arbitrary target following or bridge use in this static step.",
+    "Whole binary SHA is streamed before fixed reads.",
+    "If the current AWP slot differs from the retained gun target, stop; do not automatically read its target.",
+    "If the named field is absent or any fixed assertion fails, retain the failure and stop rather than widen.",
+    "This fixed schema window binds named field records; a separate owner descriptor is not inferred from proximity."
+  ]
+}

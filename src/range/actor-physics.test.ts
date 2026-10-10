@@ -51,7 +51,7 @@ describe('shared actor crouch stance', () => {
 });
 
 describe('server Accelerate corner case (build 2000930)', () => {
-  it('walking at a slow second zoom level keeps the weapon scale on the acceleration speed instead of 0.52', () => {
+  it('walking with the scoped slow flag keeps the weapon scale on the acceleration speed instead of 0.52', () => {
     const dt = STEP, scoped = 100 * UNIT, wish = scoped * .52;
     const stance = {weaponSpeed: scoped, ducking: false, walking: true};
     const normal = accelerateGround(0, 0, 0, -1, wish, dt, stance);

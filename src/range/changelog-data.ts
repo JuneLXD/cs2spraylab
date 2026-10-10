@@ -374,6 +374,9 @@ export const latestChanges = {
       'Ground stopping carries CS2’s friction state across movement segments, correcting the last movement-accuracy step after releasing a strafe.',
       'Counter-strafing accounts for unused braking and the native stop rule. Range, Duel and movement lessons share the same calculation.',
     ]},
+    {id: 'native-awp-walking', title: 'AWP scoped movement', items: [
+      'AWP walking uses the native acceleration at both zoom levels, including movement displayed between simulation updates.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
