@@ -86,6 +86,9 @@ export class RangeEngine {
   private popWall?: THREE.Mesh;
   private popWallMaterial?: THREE.MeshStandardMaterial;
   private popWallEdgeMaterial = new THREE.MeshBasicMaterial({color: '#ffd23f'});
+  /** The respawn pad on the floor at the spawn point; lit while popped balls wait for you to step on it. */
+  private popPad?: THREE.Mesh;
+  private popPadMaterial = new THREE.MeshBasicMaterial({color: '#4df3ff', transparent: true, opacity: .4, side: THREE.DoubleSide, depthWrite: false});
   /** Dimmer copies of popMaterial for balls that have taken hits, by damage step. */
   private popDamaged = new Map<number, THREE.MeshStandardMaterial>();
   /** The benches by the entrance: hidden in Pop, so they live outside the static batches. */
@@ -500,7 +503,7 @@ export class RangeEngine {
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popRespawn'];
+      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popRespawn', 'popRespawnMode', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = settings.invertY !== this.sim.settings.invertY;
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -742,11 +745,23 @@ export class RangeEngine {
       this.popWall = new THREE.Mesh(new THREE.BoxGeometry(wall.size.x, wall.size.y, wall.size.z), this.popWallMaterial);
       this.popWall.position.set(wall.center.x, wall.center.y, wall.center.z);
       this.popWall.castShadow = this.popWall.receiveShadow = true; this.popWall.name = 'pop-wall';
-      // A bright strip marks the edge you peek around.
-      const strip = new THREE.Mesh(new THREE.BoxGeometry(.04, wall.size.y * .96, wall.size.z + .03), this.popWallEdgeMaterial);
-      strip.position.x = wall.side * wall.size.x / 2; strip.name = 'pop-wall-edge'; this.popWall.add(strip);
+      // A bright strip marks each edge you peek around.
+      for (const edge of wall.edges) {
+        const strip = new THREE.Mesh(new THREE.BoxGeometry(.04, wall.size.y * .96, wall.size.z + .03), this.popWallEdgeMaterial);
+        strip.position.x = edge - wall.center.x; strip.name = 'pop-wall-edge'; this.popWall.add(strip);
+      }
       this.pop.add(this.popWall);
       this.renderer.shadowMap.needsUpdate = true;
+    }
+    if (config.respawnMode === 'pad' && !this.popPad) {
+      this.popPad = new THREE.Mesh(new THREE.RingGeometry(pop.pad.radius * .62, pop.pad.radius, 48), this.popPadMaterial);
+      this.popPad.rotation.x = -Math.PI / 2; this.popPad.position.set(pop.pad.x, .012, pop.pad.z); this.popPad.name = 'pop-pad';
+      this.pop.add(this.popPad);
+    }
+    if (this.popPad) {
+      // Waiting balls light the pad up: step onto it to bring them back.
+      const armed = pop.pending.length > 0;
+      this.popPadMaterial.color.set(armed ? '#ffd23f' : '#4df3ff'); this.popPadMaterial.opacity = armed ? .9 : .4;
     }
     for (const ball of pop.drainPopped()) {
       const mesh = this.popMeshes.get(ball.id); if (!mesh) continue;
@@ -786,6 +801,7 @@ export class RangeEngine {
     this.pop.clear(); this.popMeshes.clear(); this.popBursts = [];
     this.popBackdrop?.geometry.dispose(); (this.popBackdrop?.material as THREE.Material | undefined)?.dispose(); this.popBackdrop = undefined;
     this.popWall?.geometry.dispose(); this.popWall?.children.forEach(child => (child as THREE.Mesh).geometry.dispose()); this.popWall = undefined;
+    this.popPad?.geometry.dispose(); this.popPad = undefined;
   }
   /** Pop darkens the range: black sky and near fog, dim lights, so the glowing balls stand out. */
   private setPopAtmosphere(on: boolean) {
@@ -1104,7 +1120,7 @@ export class RangeEngine {
     this.viewAnimations.forEach(animation => animation.dispose());
     this.scope.dispose();
     this.popGeometry.dispose(); this.popMaterial.dispose(); this.clearPopScene();
-    this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
+    this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popPadMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
     this.markerGeometry.dispose(); this.missMaterial.dispose(); this.hitMaterial.dispose(); this.bodyMaterial.dispose();
     this.cues.forEach(c => c.remove()); this.hitCaption.remove();
     this.environment?.dispose(); this.renderer.dispose(); this.renderer.domElement.remove();
