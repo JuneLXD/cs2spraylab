@@ -1,13 +1,16 @@
-# CS2 independent re-audit: passes 16–22
+# CS2 independent re-audit: passes 16–23
 
-Five evidenced corrections follow baseline `c488943`: movement (`79832e6`),
+Six evidenced corrections follow baseline `c488943`: movement (`79832e6`),
 scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
-ordering (`fd328d5`) and ordinary footstep cadence (`2aba70c`).
+ordering (`fd328d5`), ordinary footstep cadence (`2aba70c`), and native weapon
+recoil rotation (`5132783`, [pass 23](reaudit-viewmodel-recoil.md)).
 This report covers the requested inventory and identifies the remaining work;
 it does not certify complete native parity. The follow-up corrects
 [accuracy/index update order](reaudit-accuracy.md) and
 [footstep timing](reaudit-footsteps.md). [Camera-clock pass 22](reaudit-camera-clocks.md) confirms native arithmetic and
-identifies a remaining command-history mismatch without changing production feel.
+identifies a remaining command-history mismatch without changing camera timing.
+[Client history](reaudit-client-history.md) now establishes the frame-selection
+rule; [weapon recoil](reaudit-viewmodel-recoil.md) corrects the separate model transform.
 R8-specific follow-up is excluded at the user’s request.
 
 Current binary/config provenance is retained in
@@ -15,7 +18,7 @@ Current binary/config provenance is retained in
 The game launch and offline captures were approved. After the user rebooted,
 both REA bridge endpoints were restored. A second reboot at 16:30 PDT stopped
 the native sessions again; transports are healthy, and saved current-hash evidence
-remains available. No new full analysis is needed for these two corrections.
+remains available. Bounded current-byte probes continue without new full analysis.
 No active Ghidra request is cancelled or restarted.
 
 ## Delivered behavior and validation
@@ -33,8 +36,13 @@ No active Ghidra request is cancelled or restarted.
   recovery penalty error falls .0013072615→1.49e-8; index error 1→numerical precision.
 - Ordinary running footsteps: AK/AWP intervals now406.25ms, knife312.5ms,
   replacing the faster distance accumulator in both engines. Mixer unchanged.
-- TypeScript passes. Final full unit suite: 2,325 passes and the documented missing
-  `public/models/ak47.json` fallback failure. Five targeted Chromium cases pass.
+- Weapon recoil: 108 independently executed native cases reduce maximum isolated
+  orientation error 3.29583651°→0.000014502°; Range and Duel use the same world-angle
+  conversion, including Duel damage punch.
+- TypeScript passes. Pass 23 full unit suite: 2,327 passes and the documented missing
+  `public/models/ak47.json` fallback failure. Both targeted Chromium cases pass,
+  including actual weapon-root rotation checks. Earlier five-case input/trigger
+  validation remains recorded in the delivery history.
   Numerical and browser commands use memory/swap caps; Chromium is serial,
   CPU-capped and run with repository edits frozen. Auto-deploy was paused for
   the final browser run; one batched push avoids overlapping builds.
@@ -145,15 +153,15 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-response.md
 | Input→simulation→render | Native video lacks synchronized device edge/presentation instrumentation | Browser tests record DOM dispatch, shot and renderer submission; no production delay tuned | CPU/browser response measured; native and physical mouse-to-photon unverified | `c488943` |
 | Frame pacing | Native engine presentation is outside demo sampling | Synthetic60/144/240Hz clocks, limits0/60/120; uncapped renders every supplied frame; unchanged | Trainer measured, native comparison unverified | `c488943` |
 | Low-latency canvas | No native presentation equivalence established | Requests desynchronized WebGL2 when enabled, rejects software-renderer path, falls back to regular context; unchanged | Browser implementation only; actual scanout benefit unverified | `c488943` |
-| Shot camera / aim punch | Current client/server: 512 sampler cases, 72 impulses, 4 explicit anchors; 52 AK shots and 386 scene frames ([pass 22](reaudit-camera-clocks.md)) | .45 physical punch share plus camera kick; processing-clock class replay differs up to 0.499441°; no speculative change | Arithmetic matched; native command-history mapping missing; continuous video comparison remains partial | `e85f59a`; evidence only in pass 22 |
+| Shot camera / aim punch | Current client/server: 512 sampler cases, 72 impulses, 4 explicit anchors; 52 AK shots and 386 scene frames ([pass 22](reaudit-camera-clocks.md)) | .45 physical punch share plus camera kick; processing-clock class replay differs up to 0.499441°; no speculative change | Arithmetic matched; presented-frame selection established in pass 23; runtime phase and continuous video comparison remain partial | `e85f59a`; evidence only in pass 22 |
 | Crosshair on shot | Current-client saved pixel conversion and recoil-follow evidence; earlier bounded arithmetic retained | Render-time sample and pixel snapping retained; unchanged in this pass | Bounded prior arithmetic independently traced; new video parity unverified | `c488943` |
-| Viewmodel on shot | Fresh native clips independently compared; procedural share requires rendered landmarks | Clip timing retained; .22 procedural recoil share remains; R8 mount corrected in pass19 | Matched sampled clip data; procedural movement unverified | `9b94483` |
+| Viewmodel on shot | Current native camera/HUD caller chain, 0.325 combined physical share and 108 executed orientation cases ([pass 23](reaudit-viewmodel-recoil.md)) | .22 local Euler rotation replaced by native world-angle share converted to weapon camera space; damage punch included | Isolated recoil rotation matched; full animated landmarks and timing remain open | `5132783` |
 | Muzzle flash / tracer onset | Native clip event tracks and tracer data; see animation/combat inventories | Simulated shot triggers pooled flash/tracer; native cadence option retained | Approximated particles and renderer timing | `c488943` |
 | Viewmodel offsets / presets | Fresh configured native FOV65, offsets−.5/1/−2 | Source-unit conversion gives metres−.0127/−.0508/−.0254; presets unchanged | Matched coordinate arithmetic; complete placement unverified | `c488943` |
 | FOV / stretched view | Native configured viewmodel FOV65 | Vertical projection51.077193°; world4:3 and16:9 flow to model aspect; unchanged | Trainer arithmetic measured; matched native image comparison unverified | `c488943` |
 | Crouch camera | Fresh native view/root offset samples, movement inventory | Smoothstep replaced by independently approaching90u/s offsets | Matched recorded server state; rendered interpolation unverified | `79832e6` |
 | Landing camera / weapon dip | Native demo state available; complete rendered trajectory not recovered from gapped video | Existing view-punch response and model landing adjustment retained | Unverified rendered amplitude and duration | `c488943` |
-| Head bob / sway | Fresh view graphs contain no movement-driven nodes in searched selection | No deliberate locomotion bob; unchanged | Complete native absence unverified; code outside graph may move the model | `c488943` |
+| Head bob / sway | Current HUD-model procedure contains velocity/air-state bob and smoothed angle sway outside the graph | Existing 2 mm sine weapon bob retained | Native procedural motion confirmed; trainer parity unverified | Evidence in pass 23 |
 | Hit sounds / damage indicators | Native hit/hurt event assets and mixer metadata; fresh sound onset alignment not captured | Head/helmet/body/armor and shooter/victim event selection; training indicators and damage camera retained | Native asset selection supported; timing/loudness and UI parity approximated | `c488943` |
 | Kill confirmation | Native event/UI rendering not frame-compared | Trainer kill feed/count and target feedback follow simulated death | Approximated training feedback | `c488943` |
 | Blood / bot flinch | Fresh native flinch clips and flags; animation inventory | Imported bullet-hit deltas plus simplified blood particles; unchanged | Matched sampled clips; approximated effects/blends | `c488943` |
@@ -198,8 +206,8 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | R8 charge/dry fire | Fixed `shoot1` frame-zero graph base plus additive `prepare_shoot`; independent DMX delta reference | Arm/finger error 752.262 mm → 0.02743 mm; HD/legacy rebuilt; regression checks hands and weapon after idle/fire/cancel | Matched sampled graph-composed pose; charge playback rate and chamber layers unverified | `9b94483` |
 | Bolt, slide and pump | Secondary skeleton animation embedded in native fire/reload clips | Included in exported rigged weapon clips; separate clip is not required for AWP/SSG bolt; sampled part errors ≤1.8 mm after R8 fix | Matched sampled parts within conversion error | `c488943` |
 | Shell reload timing | Native segment markers and clip times | View/world reload windows are selected by mechanic phase, then blended | Approximated composition; combat bench owns deadlines | `c488943` |
-| Viewmodel recoil share/view punch | Live gun/camera trajectories required | Existing .22 model recoil share and landing adjustment remain | Unverified | `c488943` |
-| Bob/sway and crouch/zoom motion | No movement-driven nodes found in fresh view graphs; absence in graph alone does not exclude client transforms | No deliberate movement bob; camera/model adjustments handled outside clip | Unverified complete runtime absence/parity | `c488943` |
+| Viewmodel recoil share/view punch | Current-byte caller chain and native .325 world-angle addition; 432 bounded executions | Rotation error 3.29584° → 0.000014502° across 108 supplied states | Isolated rotation corrected; full gun/camera trajectories remain open | `5132783` |
+| Bob/sway and crouch/zoom motion | Native HUD-model procedure contains motion outside the graph | Existing 2 mm sine bob and other approximations retained | Native absence claim overturned; full procedural parity unverified | Evidence in pass 23 |
 | Muzzle shape, size, duration | Fresh fire event tracks reference per-weapon particle systems at frame zero | Reduced native texture/particle envelopes grouped into six families; implementation explicitly approximates radius, randomization and materials | Approximated | `c488943` |
 | Shell ejection | AK fire clip includes `weapon_shell_casing_rifle` event at frame zero | No ejected shell/casing simulation/rendering found | Not present | `c488943` |
 | Tracer cadence and shape | Native per-weapon tracer data and particle systems | Native cadence option plus every-shot training option; browser trail/rope approximations | Approximated shape; combat/data bench owns cadence | `c488943` |
@@ -270,6 +278,15 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
     Recovery002 retains continuous video but selected displayed GameTime offsets
     vary by about 49.7 ms. A single-offset fit cannot certify rendered recoil.
 
+24. Weapon recoil is not an unmeasured 0.22 local rotation: the current native
+    HUD path adds 0.325 of combined physical punch to camera-based world angles.
+    Converting that orientation into the separate weapon scene also matters.
+25. The trainer already has a 2 mm sine bob. Native procedural bob and sway
+    exist outside the searched animation graphs; neither can be dismissed from
+    graph-node absence.
+26. The first attack-down selects a published-frame record and its captured
+    player clock. Input event time and firing deadline do not replace that record.
+
 ## Exact remaining evidence and implementation
 
 - Accuracy/index: common captured paths are corrected in both engines. Native
@@ -284,8 +301,9 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
   stairs, slopes, surface friction and ladders; rendered camera frames paired
   with camera-service offsets.
 - Camera clocks: selected attack-history index and player/render pairs, resolver
-  branch/cache and current-time/domain state per shot; native client history
-  construction and actual captured frame clocks. [Pass 22](reaudit-camera-clocks.md)
+  branch/cache and current-time/domain state per shot; actual presented-frame
+  clocks and prediction phase. [Client construction](reaudit-client-history.md)
+  is now traced statically. [Pass 22](reaudit-camera-clocks.md)
   records the exact remaining metadata and rules out a fitted schedule offset.
 - Presentation/audio: continuous timestamped native camera and gun landmarks
   through shots, recovery, crouch, landing and zoom; footstep material,

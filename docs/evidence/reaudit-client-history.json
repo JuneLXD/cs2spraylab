@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 1,
+  "reviewedBaseline": "9391437687f5939e9ea9844323daca21ee603506",
+  "productionChange": false,
+  "scope": "Ordinary client input history construction and presented-frame player clock; bounded static evidence only.",
+  "method": "Read-only ELF hashing, bounded Capstone inspection, embedded protobuf parsing, and interface/vtable binding checks. No runtime call or captured branch state.",
+  "probe": "tools/reaudit-client-history.py",
+  "probeSha256": "1a5b3150a2925de8cb6f3446752ca843d28a176d6d2997f7a98baa39e9f952b2",
+  "binarySha256": {
+    "client": "eba5345cb05eb4a72cc2942f6c25c89a44c0f9d8913b6de0af41c6e5e4bebcd1",
+    "engine2": "f5745c46cb38b1d120c3c7c5f0f19590f46c3d1bd136ee527b276cce8bfaba14"
+  },
+  "descriptor": {
+    "name": "cs_usercmd.proto",
+    "sha256": "bae5f2466f7174a42246a2d51bcb1dc7acd28bb5dc3f47b631739d48909c8a8c",
+    "bytes": 1167,
+    "relevantFields": {
+      "CSGOInputHistoryEntryPB": [
+        "render_tick_count",
+        "render_tick_fraction",
+        "player_tick_count",
+        "player_tick_fraction"
+      ],
+      "CSGOUserCmdPB": [
+        "input_history",
+        "attack1_start_history_index",
+        "attack2_start_history_index"
+      ]
+    }
+  },
+  "verification": {
+    "instructionAssertions": 24,
+    "bindingAssertions": 11,
+    "boundedRanges": 27,
+    "bytesDisassembled": 16775,
+    "largestRangeBytes": 5120,
+    "maximumAllowedRangeBytes": 8192,
+    "embeddedDescriptorBytes": 1167,
+    "passed": true
+  },
+  "rangeDigests": [
+    {
+      "side": "client",
+      "name": "entry-parser",
+      "bytes": 1712,
+      "sha256": "14306a267e85792738983c603471ad13c178be643502a547a239bf9921ccecc6"
+    },
+    {
+      "side": "client",
+      "name": "command-parser",
+      "bytes": 1360,
+      "sha256": "c73c2005759554e9aa84e3795077a47083a372b03dd8c3674804c2cab694b74f"
+    },
+    {
+      "side": "client",
+      "name": "engine-binding",
+      "bytes": 192,
+      "sha256": "648bf172ae0bf192d5a4c83ba49a363d6ca7d9c3dee274fe66257d79fcba905d"
+    },
+    {
+      "side": "client",
+      "name": "read-frame-input",
+      "bytes": 2128,
+      "sha256": "572bd53bbe8293f9fe6bf8524f54db07be23e275e4859cd33f79bbc2f9aa0de8"
+    },
+    {
+      "side": "client",
+      "name": "frame-serialization",
+      "bytes": 1888,
+      "sha256": "18a66c487116d8171d782be4c11470cedd9ab47dee0d1b563f95489b4d47a120"
+    },
+    {
+      "side": "client",
+      "name": "create-move",
+      "bytes": 5120,
+      "sha256": "a5f7309c91a711c95e5a03a1593dab806da5a2937ec430fa292a8a8073b2bf13"
+    },
+    {
+      "side": "client",
+      "name": "interface-registration",
+      "bytes": 104,
+      "sha256": "a3c995d501afe5c3f1969ddd80aa1642dfe222d2d08b5160e0c3356a7f9bec59"
+    },
+    {
+      "side": "client",
+      "name": "interface-instance",
+      "bytes": 8,
+      "sha256": "3c66c1d40ebef4b803fd7c7942c4fbf4e69b5c1074365ed2700464934ab29d05"
+    },
+    {
+      "side": "client",
+      "name": "interface-constructor",
+      "bytes": 126,
+      "sha256": "76b58bb01e566851573e5a6a19dde1d8300dc2b1d78a07508c4b874b910bb240"
+    },
+    {
+      "side": "client",
+      "name": "player-frame-clock",
+      "bytes": 20,
+      "sha256": "13176310cdece7ef9b84af58eec370d1b5f8bc4ea65a80d38f140b11bd948ad4"
+    },
+    {
+      "side": "client",
+      "name": "prediction-frame-clock",
+      "bytes": 144,
+      "sha256": "39a6facc6ae3c8dfed4577a475b83e789b6ab072abe65f14240387100d608024"
+    },
+    {
+      "side": "client",
+      "name": "prediction-seconds",
+      "bytes": 160,
+      "sha256": "fbf1f470aa481bf6a2397f794ecef7389f1afd088dde8ec9bcae12c2adfa82ea"
+    },
+    {
+      "side": "client",
+      "name": "pair-normalization",
+      "bytes": 1024,
+      "sha256": "d62f0ba8e0f0cacaec2c2d6217c12c3e9794e435589342a50e733ca555474ad0"
+    },
+    {
+      "side": "client",
+      "name": "pair-seconds",
+      "bytes": 30,
+      "sha256": "49b8ba005534ba6241a1324f9b53bfced6e07b04941f142373098eca5a43935d"
+    },
+    {
+      "side": "client",
+      "name": "prediction-registration",
+      "bytes": 60,
+      "sha256": "f9aced5529e8985c036fbce053eeae7a6d8f544c9a95a5468cc15c74ce7efde8"
+    },
+    {
+      "side": "client",
+      "name": "prediction-update-prefix",
+      "bytes": 768,
+      "sha256": "9bd3c72677dbd132cdd3adadc429fc97a443b5b45e1436caecf76461a2f54635"
+    },
+    {
+      "side": "client",
+      "name": "prediction-update-cache",
+      "bytes": 116,
+      "sha256": "5948a016995aed6192c4b62a3fc1965d0f764e5c4b435e54a8349cec1aeae496"
+    },
+    {
+      "side": "engine",
+      "name": "interface-registration",
+      "bytes": 170,
+      "sha256": "7623cd4aa7fd56334b3e7e0cca9551b92060e2f34482b9a58b399f2934c27cb9"
+    },
+    {
+      "side": "engine",
+      "name": "interface-instance",
+      "bytes": 8,
+      "sha256": "93b26fb9a06f7e055459e2c0d2d0de4090b7c5e2e8400afb8300302c0a9cd27d"
+    },
+    {
+      "side": "engine",
+      "name": "presented-getter",
+      "bytes": 26,
+      "sha256": "75c8c3148a9f405f861f454dccb68d2369b23f06831e1712e0fd885ae52d3c1b"
+    },
+    {
+      "side": "engine",
+      "name": "presented-copy",
+      "bytes": 80,
+      "sha256": "060cd663754f970f26c2972abfd1e663405db10e0abb276c6b10b39622636105"
+    },
+    {
+      "side": "engine",
+      "name": "snapshot-publish",
+      "bytes": 158,
+      "sha256": "49fd253ffff0e242d899bd18e8090dd583e7a261743fff8bc5e8ca0047152fa1"
+    },
+    {
+      "side": "engine",
+      "name": "snapshot-construction",
+      "bytes": 149,
+      "sha256": "26dc8f4c23f84d03e88367e7082642bad78646c677dc6f2dfcb1565c231b4a24"
+    },
+    {
+      "side": "engine",
+      "name": "present-handoff",
+      "bytes": 172,
+      "sha256": "805c1559fe9c5b42c4bd3b4f8b79cda764dd9566fc4855a74a70c75d37ac6d64"
+    },
+    {
+      "side": "engine",
+      "name": "render-fraction",
+      "bytes": 9,
+      "sha256": "b30af2fa1c3e724cff6da84929fe29237e325a0be22b06158b19a7e2d891b613"
+    },
+    {
+      "side": "engine",
+      "name": "render-pair-normalization",
+      "bytes": 1024,
+      "sha256": "cea87ae7cd8130bbf033a70dc39012d7114d4fdfa71897177e8576747ffe1a48"
+    },
+    {
+      "side": "engine",
+      "name": "player-pair-forwarder",
+      "bytes": 19,
+      "sha256": "f19c0c97badf41b4a5065f4b7674984b326ccd417eac96add4d495c74fa2b506"
+    }
+  ],
+  "observations": [
+    {
+      "id": "CH01",
+      "rule": "Current generated protobuf parsers identify the player and render tick/fraction fields and both attack-start index fields.",
+      "evidence": [
+        "client-entry-parser",
+        "client-command-parser"
+      ]
+    },
+    {
+      "id": "CH02",
+      "rule": "ReadFrameInput processes newly received primary/secondary button transitions. A down transition sets its attack-start index only while that index is unset.",
+      "evidence": [
+        "client-read-frame-input"
+      ]
+    },
+    {
+      "id": "CH03",
+      "rule": "ReadFrameInput requests the presented-frame snapshot. It avoids adding a new record for the same last frame and associates the press with the reused/appended record. Stored frame records carry separate render and player clock pairs.",
+      "evidence": [
+        "client-read-frame-input"
+      ]
+    },
+    {
+      "id": "CH04",
+      "rule": "The source of that snapshot is the factory-bound Source2EngineToClient001 method. RTTI and registration connect it to CEngineClient.",
+      "evidence": [
+        "client-engine-binding",
+        "engine-interface-registration",
+        "engine-interface-instance",
+        "engine-presented-getter"
+      ]
+    },
+    {
+      "id": "CH05",
+      "rule": "The engine getter copies the latest successfully published snapshot from a ten-slot ring. CRenderDevicePresentCallbackClientServer publishes a frame payload and a callback-time stamp; a contended publisher can skip publication.",
+      "evidence": [
+        "engine-presented-copy",
+        "engine-snapshot-publish"
+      ]
+    },
+    {
+      "id": "CH06",
+      "rule": "Snapshot construction stores a frame identifier, normalized network-client render tick/fraction, and a distinct player pair. The callback is passed to the render-device Present path.",
+      "evidence": [
+        "engine-snapshot-construction",
+        "engine-present-handoff",
+        "engine-render-fraction",
+        "engine-render-pair-normalization"
+      ]
+    },
+    {
+      "id": "CH07",
+      "rule": "The player pair is supplied through Source2Client002 by Source2ClientPrediction001. With a positive cached predicted tick, it uses that tick plus the global fractional clock if the global frame-time scalar is nonzero; otherwise fraction zero. With a nonpositive cached predicted tick, it uses the global integer tick and zero fraction.",
+      "evidence": [
+        "engine-player-pair-forwarder",
+        "client-interface-registration",
+        "client-interface-instance",
+        "client-interface-constructor",
+        "client-player-frame-clock",
+        "client-prediction-frame-clock",
+        "client-prediction-registration"
+      ]
+    },
+    {
+      "id": "CH08",
+      "rule": "CreateMove serializes the frame pairs. The render pair is copied unconditionally in this helper; a prediction-state flag gates copying the player pair. Optional history reduction for more than four records remaps attack indices. Invalid indices are replaced by minus one.",
+      "evidence": [
+        "client-frame-serialization",
+        "client-create-move"
+      ]
+    },
+    {
+      "id": "CH09",
+      "rule": "The paired time converts to seconds as float32(tick)*1/64 + float32(fraction)*1/64. Its fractional value is normalized as a tick fraction.",
+      "evidence": [
+        "client-pair-seconds",
+        "client-pair-normalization"
+      ]
+    }
+  ],
+  "concreteMapping": [
+    "The first primary down transition handled for a command selects the latest presented-frame record, reusing it if already collected.",
+    "That record stores the player clock captured in the frame payload, not a time recomputed from the input transition timestamp or weapon schedule.",
+    "CreateMove copies or remaps the selected record into command input_history. Server exact-history resolution then converts/clamps its player pair; subsequent calculated shots may preserve the resulting schedule difference through the already-proved timing cache."
+  ],
+  "playerClock": {
+    "symbols": {
+      "P": "Cached predicted integer tick",
+      "G": "Global integer tick",
+      "F": "Global fractional clock",
+      "D": "Global frame-time scalar"
+    },
+    "positivePrediction": "P > 0: normalize(P, F) if D != 0; otherwise normalize(P, 0)",
+    "fallback": "P <= 0: (G, 0)",
+    "fractionEnabled": "The presented-frame getter requests fractional time.",
+    "seconds": "float32(float32(float32(tick) * (1/64)) + float32(float32(fraction) * (1/64)))",
+    "ordinaryFraction": "A fraction in [0,1) remains unchanged by normalization."
+  },
+  "relatedServerEvidence": {
+    "report": "docs/reaudit-camera-clocks.md",
+    "probe": "tools/reaudit-attack-history-fields.py",
+    "serverSha256": "c7741272b76f16e936d6224dc121105e8051e1bc4d834be016c35ee3c63cac5a",
+    "verifiedByThisProbe": false,
+    "rule": "For a valid attack index, the server uses the selected player pair, converts tick domain, and clamps it to current time minus three ticks through current time plus one tick. Fallback/cache paths are separate."
+  },
+  "conditionalInference": [
+    "A trainer analogue would need the simulation/prediction clock of its last presented frame at the input edge, separately from its shot schedule and current camera sampling time.",
+    "A DOM event timestamp alone cannot identify native presented-frame identity or player clock. These static paths do not prove that a particular retained demo shot used the exact-history branch."
+  ],
+  "remainingRuntimeMetadata": [
+    "For each relevant present: frame identifier, render pair, player pair, callback publication stamp/order and whether publication succeeded.",
+    "At each input read: newly consumed button-down transitions, last processed input index, selected presented frame and first-press history index.",
+    "At frame construction: cached predicted tick, global integer/fractional clocks, frame-time scalar, prediction enabled flag and prediction phase.",
+    "At CreateMove: history list before/after optional reduction, history-reduction setting, and final attack1 index.",
+    "At shot resolution: exact/fallback status, tick-domain conversion, clamp result, cached timing difference and sampler current clock.",
+    "For a trainer implementation: a validated relation between native frame construction/presentation and trainer renderSnapshot/presentation. Browser rAF delivery is not proof of scanout or native present completion."
+  ],
+  "limits": [
+    "Static inspection observes no runtime values or branch selection. Current default settings are not inferred from registration or file names.",
+    "The core ordinary first-press mapping is resolved. Prediction scheduling, render-backend completion/scanout, history reduction details and special malformed/nonfinite inputs are not exhaustively modeled.",
+    "The probe reads only installed client and engine artifacts. It performs no target execution or behavioral/emulation test; reviewed semantic observations are supported by the retained disassembly ranges.",
+    "Related server resolver findings are prior evidence, not a server inspection performed by this probe."
+  ],
+  "decision": "Preserve production behavior. Do not fit a constant millisecond offset. A presented-frame history model now has a native structural basis, but retained recordings lack the runtime metadata needed to validate its phase in the trainer."
+}

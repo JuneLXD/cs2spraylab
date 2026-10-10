@@ -113,3 +113,14 @@ to trainer input. 386 continuous scene frames now have measured rotations, but
 variable game-frame timing still prevents a complete rendered comparison.
 Next capture/trace must retain per-shot history/resolver metadata and per-frame
 game/prediction clocks; fitting a constant millisecond offset is excluded.
+
+### Presented-frame history and weapon model, pass 23
+
+[Client history](reaudit-client-history.md) now traces first attack-down to the
+last published frame and its predicted player clock. Runtime phase/publication
+and resolver metadata remain necessary for a camera-clock correction.
+[Weapon recoil](reaudit-viewmodel-recoil.md) replaces the unmeasured .22 local
+rotation with the native .325 world-angle term converted into weapon-camera
+space, including damage punch. Native executed fixtures cover 108 orientations.
+Procedural bob/sway outside the graph is now confirmed; complete movement,
+landing/zoom, animation and rendering parity remain open.

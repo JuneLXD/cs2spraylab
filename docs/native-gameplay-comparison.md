@@ -885,15 +885,50 @@ GameTime/container offsets vary by 49.7 ms. This is partial native presentation
 evidence, not a rendered parity claim. No new game launch or Ghidra analysis
 was needed; bounded probes and saved matching-hash evidence survived reboot.
 
+## Presented-frame history and weapon recoil (twenty-third pass, 2026-10-09)
+
+The current client/engine [history trace](reaudit-client-history.md) resolves
+first-press construction: the first attack-down selects the last successfully
+published frame and its captured player clock, which is copied/remapped into
+command history. Twenty-four instruction assertions and eleven cross-module
+bindings pass across 27 bounded ranges. Prediction phase, publication order and
+per-shot resolver branch/cache remain runtime evidence needs. No fitted clock
+offset or camera-anchor change is shipped.
+
+The independent [model recoil trace](reaudit-viewmodel-recoil.md) establishes
+that the ordinary local HUD uses published camera angles, then adds 0.325 of
+the same combined physical punch. Both model entities store world angles.
+The trainer replaces .22 local Euler motion with the native world-angle term
+converted into its stationary weapon-camera scene; Duel includes damage punch.
+108 supplied-state cases / 432 native executions reduce maximum orientation
+error 3.29583651° → 0.000014502°. This is isolated recoil orientation, not a full
+rendered comparison or correction of the known camera-clock discrepancy.
+
+Current procedural code also contains velocity/air-state bob and smoothed
+angle sway. Earlier graph searches did not establish their absence, and the
+trainer already contained a 2 mm sine bob. Full bob/sway, crouch/zoom/landing,
+projection, clip blending and landmark trajectories remain open. The new probe
+retains these boundaries and changes only the evidenced recoil transform
+(implementation `5132783`).
+
+Pass 23 validation: TypeScript passes; the full unit suite has 2,327 passes and
+only the documented missing fallback-model fixture failure. Both targeted
+Chromium cases pass, including actual Range/Duel weapon-root rotations and
+Duel damage punch. Native probes and production replay pass all 108 supplied
+states. Serial checks used memory/swap/CPU caps; auto-deploy was paused and no
+repository edits occurred during the browser run. Logs are retained under
+`native-audit/reports/reaudit-viewmodel-*`.
+
 ## Re-audit delivery validation
 
 Implementation commits: movement `79832e6`, scheduled recoil `e85f59a`, R8 graph
-composition `9b94483`, accuracy/index `fd328d5`, ordinary footsteps `2aba70c`.
+composition `9b94483`, accuracy/index `fd328d5`, ordinary footsteps `2aba70c`,
+weapon recoil rotation `5132783`.
 The [consolidated inventory](cs2-reaudit.md) retains one row per audited mechanic
 with rule/evidence, before/after, status and commit, plus corrected claims and
 exact unresolved measurements. Further R8 work is excluded at the user's request.
 
-Final combined validation passes TypeScript and 2,325 unit cases. The only unit
+Passes 20–21 combined validation passed TypeScript and 2,325 unit cases. The only unit
 failure is the documented missing `public/models/ak47.json` fallback fixture.
 All five Chromium cases across input-timing, trigger-continuity and view-punch
 pass, using one worker, memory/swap/CPU caps and a repository freeze. Auto-deploy
@@ -943,7 +978,8 @@ punch values. The native camera multiplies the doubled punch returned by its
 sampler by 0.45, confirming the existing camera fraction. Camera kick now has
 native arithmetic and demo-anchor evidence, plus a limited spray-video check.
 Full camera and weapon-model trajectories remain partly verified; the weapon
-fraction is an estimate.
+fraction and coordinate conversion are corrected in pass 23; other procedural motion
+and complete rendered trajectories remain open.
 Native hitboxes now follow the imported animation in the rendered Duel modes.
 Full native animation reconstruction and the range's mesh-height hitgroup
 classification remain separate work; neither recording a 60 Hz video nor decoding a

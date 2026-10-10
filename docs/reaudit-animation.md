@@ -73,8 +73,8 @@ Before and after are identical except for the R8 charge composition and mount pr
 | R8 charge/dry fire | Fixed `shoot1` frame-zero graph base plus additive `prepare_shoot`; independent DMX delta reference | Arm/finger error 752.262 mm → 0.02743 mm; HD/legacy rebuilt; regression checks hands and weapon after idle/fire/cancel | Matched sampled graph-composed pose; charge playback rate and chamber layers unverified | `9b94483` |
 | Bolt, slide and pump | Secondary skeleton animation embedded in native fire/reload clips | Included in exported rigged weapon clips; separate clip is not required for AWP/SSG bolt; sampled part errors ≤1.8 mm after R8 fix | Matched sampled parts within conversion error | `c488943` |
 | Shell reload timing | Native segment markers and clip times | View/world reload windows are selected by mechanic phase, then blended | Approximated composition; combat bench owns deadlines | `c488943` |
-| Viewmodel recoil share/view punch | Live gun/camera trajectories required | Existing .22 model recoil share and landing adjustment remain | Unverified | `c488943` |
-| Bob/sway and crouch/zoom motion | No movement-driven nodes found in fresh view graphs; absence in graph alone does not exclude client transforms | No deliberate movement bob; camera/model adjustments handled outside clip | Unverified complete runtime absence/parity | `c488943` |
+| Viewmodel recoil share/view punch | Current-byte caller chain and native .325 world-angle addition; 432 bounded executions | Rotation error 3.29584° → 0.000014502° across 108 supplied states | Isolated rotation corrected; full gun/camera trajectories remain open | Pass 23 |
+| Bob/sway and crouch/zoom motion | Native HUD-model procedure contains motion outside the graph | Existing 2 mm sine bob and other approximations retained | Native absence claim overturned; full procedural parity unverified | Evidence in pass 23 |
 | Muzzle shape, size, duration | Fresh fire event tracks reference per-weapon particle systems at frame zero | Reduced native texture/particle envelopes grouped into six families; implementation explicitly approximates radius, randomization and materials | Approximated | `c488943` |
 | Shell ejection | AK fire clip includes `weapon_shell_casing_rifle` event at frame zero | No ejected shell/casing simulation/rendering found | Not present | `c488943` |
 | Tracer cadence and shape | Native per-weapon tracer data and particle systems | Native cadence option plus every-shot training option; browser trail/rope approximations | Approximated shape; combat/data bench owns cadence | `c488943` |
@@ -125,3 +125,7 @@ Final integrated checks: TypeScript passes; 2,227 units pass with only the known
 missing fallback-model failure; all 5 Chromium input/trigger/view-punch cases pass.
 The deploy mirrors the two gitignored R8 GLBs from `public/revamp/models`; the
 release verifier checks their served hashes against these rebuilt files.
+
+Pass 23 supersedes the former unmeasured model-share and no-bob rows: see
+[the current native procedural recoil report](reaudit-viewmodel-recoil.md).
+Full motion/graph/render parity remains open.
