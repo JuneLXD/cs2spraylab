@@ -270,6 +270,26 @@ replaces the 95% amount approximation with the native stance flag in both engine
 The [common draw correction](reaudit-common-draw.md) preserves authored playback
 for M4s and common pistols after delayed model loading. Numerical controls and
 limits are retained in each report; these do not establish complete rendering
-or physical input parity. Further priority stays with common-weapon behavior,
-including the identified Deagle reload resource mismatch; shell/revolver work
-and deeper transform/resolver investigation remain deferred.
+or physical input parity. Further priority stays with common-weapon behavior;
+shell/revolver work and deeper transform/resolver investigation remain deferred.
+
+## Current Deagle reload events, pass 37
+
+The [Deagle resource comparison](reaudit-deagle-reload.md) establishes that its
+normal-reload mismatch consists of two event markers. Magazine-removal audio
+moves 133.333 → 333.333 ms, and the silent window gains one authored frame.
+All decoded motion data and the empty reload remain unchanged. The actual
+hearing/browser consumers agree across 42 pairs; 78 of 84 cases are unchanged
+controls. Current native runtime silence coefficients, action onset and event
+delivery still need independent evidence. This local correction includes a
+private deploy audio manifest whose hash must be checked when delivery proceeds.
+
+## Glock attack clocks, pass 38
+
+The [Glock correction](reaudit-glock-timing.md) removes the shared firing delay
+after a mode switch and adds the native secondary cooldown to actual shots.
+Pending burst rounds and eligible primary input retain priority; held secondary
+retries when ready in both engines. All 12 paired input scenarios agree on shot
+and mode-transition times, with six unchanged normal shot/mode controls. Current
+code and vdata support the bounded rule. Native live command timing, float32
+clock normalization and upstream player/equip gates remain separately unverified.

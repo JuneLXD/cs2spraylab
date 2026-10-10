@@ -1306,6 +1306,56 @@ remain separately bounded. The current Deagle reload resource differs from its
 import manifest; no reload asset or timing was changed on the strength of draw
 provenance. The draw report retains that exact limit.
 
+## Current Deagle reload events (thirty-seventh pass)
+
+[The Deagle report](reaudit-deagle-reload.md) resolves the resource mismatch
+identified in pass 36. Fresh package bytes, decoded clips and four unit-rate
+graph nodes show two changed normal-reload markers: magazine-removal audio moves
+from frame 4 to 10, and the silent-window end moves from frame 49 to 50, at 30 Hz.
+All 520 decoded motion elements, 128 channels and 8,688 keys remain identical
+after excluding generated UUIDs. Empty-reload data is unchanged.
+
+The actual reload and sound consumers agree across 42 hearing/browser pairs.
+Of 84 before/after cases, 78 controls remain identical. Ordinary magazine-removal
+audio changes 133.333 → 333.333 ms; holding R now suppresses that cue inside the
+silent window. In the existing trainer clock, held silent exit changes
+3.066667 → 3.133333 s and completion 3.639057 → 3.672054 s. Those last values
+are trainer predictions, not newly measured native runtime timings. Ordinary
+insertion and completion remain 0.766667 and 2.2 s. Current native gate
+coefficients, graph onset and event-consumer ordering remain separately bounded.
+
+The two tracked metadata files and the private deploy audio manifest are updated;
+no model, motion or sound sample was rebuilt. Asset hashes and reproduction tools
+are retained with the report. The correction is committed locally as `c533887`, pending delivery.
+
+## Glock firing and secondary clocks (thirty-eighth pass)
+
+[The Glock report](reaudit-glock-timing.md) binds the current weapon class,
+dispatchers, clock setters and constructors with 141 instruction assertions,
+21 code ranges and six concrete virtual bindings. Fresh weapon data has no
+override of the constructor's unlinked-cooldown default or two continuation
+rounds. An accepted mode switch sets only the secondary deadline to +300 ms.
+Each shot advances both clocks; a future secondary deadline is retained before
+adding that shot's duration. Pending rounds and eligible primary input precede
+secondary input. Holding secondary retries when its deadline permits it.
+
+The trainer previously shared the switch deadline with firing and never advanced
+the Glock secondary clock on a shot. A tap immediately after switching was lost
+in both engines. The corrected tap fires at its input edge; in the fixed-step
+bench, an early held press at 1.03125 s moves from 1.3125 to 1.03125 s. A secondary
+tap during a burst no longer delays Duel's remaining rounds from
+1.0625/1.109375 s to 1.34375/1.390625 s. All 12 paired scenarios now agree on shot
+and mode-transition times. Six normal controls retain their shots and modes.
+
+Thirteen regressions pin independent clocks, future-secondary accumulation,
+pending-round priority, semiautomatic input and same-command primary-release
+retry. The paired probes execute actual engines from the same baseline with
+identical inputs. Their timestamps measure trainer behavior; native float32
+tick/fraction normalization, input-mask production and upstream player/equip
+gates remain outside this bounded static correction. Other weapon families
+retain their existing behavior. The correction is committed locally as `ae2f6cf`,
+pending delivery.
+
 ## Validation retained from passes 11–15
 
 All three targeted Chromium specs pass: `input-timing`, `trigger-continuity`

@@ -1,0 +1,66 @@
+{
+  "baseline": "bfebff89319f90d7451b1dbe4e6cb9f4c9b38b79",
+  "typescript": {
+    "exit": 0,
+    "log": "integrated-tsc-delivery.log"
+  },
+  "units": {
+    "fullPassed": 2472,
+    "fullFailed": 38,
+    "total": 2510,
+    "assetRecheckPassed": 91,
+    "assetFixtureFailuresResolved": 37,
+    "uniquePassed": 2509,
+    "remainingFailure": "Known missing public/models/ak47.json fallback fixture",
+    "repair": "Linked 205 existing main model entries into isolated public/revamp/models; no model or test source changed."
+  },
+  "browser": {
+    "specs": [
+      "common-reload",
+      "deagle-reload-events",
+      "glock-timing"
+    ],
+    "firstPassed": 3,
+    "firstFailed": 1,
+    "diagnosticNormalPassed": 1,
+    "finalDeagleRecheckPassed": 2,
+    "uniquePassed": 4,
+    "fixtureCorrection": "The performance preset defaults to 60 FPS. Original forced frames were 7 ms apart, so the cue observation could occur without rendering. Final fixture advances render timestamp from previous+1000 and asserts that the frame ran. Playback code unchanged."
+  },
+  "caps": {
+    "memory": "4G",
+    "swap": "0",
+    "unitAndTypeCpu": "200%",
+    "browserCpu": "400%",
+    "workers": 1
+  },
+  "policy": "Heavy commands serialized with deploy paused; all repo edits frozen during browser runs. No live CS2 or full native analysis launched.",
+  "logHashes": {
+    "integrated-tsc-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "integrated-tsc-delivery.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "integrated-unit.log": "6467fd6ef8777be2967d23c5aa18725ff8de8282b4f39feb96d617aa6f483e71",
+    "integrated-unit-assets-recheck.log": "b11093ceff4d989db09497bed2f70f194b8b3d42f742845666410784f970f377",
+    "integrated-browser.log": "59b1f615198ba071c464ab16fa527fa38b930681b3147463349c1dfba99e2be9",
+    "browser-normal-diagnostic.log": "2998b11a19c3919d71f5d2e502b3c9882a525b56ac11f628f163090e9161a219",
+    "integrated-browser-recheck.log": "6dea9a50abc030e2d05a71b40fcb2159ea82730c6704aa48133bf52f4f6c474b"
+  },
+  "checkedSourceHashes": {
+    "src/range/weapon-actions.ts": "bc2c6491c3d906fe17a2cc905032070a49cbf1f7d47b60ea6c4235da6b1e14ae",
+    "src/range/simulation.ts": "2b485edb10f1999cdf45e82a84c808730d1733ce6b9bb4cc86fa1b54a50b6d5c",
+    "src/range/engine.ts": "9bdb6aac2f5b97be2bc27b685183f6c76539fb760044b524b139d92a4eab7116",
+    "src/range/duel/weapon-state.ts": "381cbe84f28273909a6af2330ac4d8c9408a3a6ad239c6f17692fd6279f70f66",
+    "src/range/native-reload-timing.json": "c1303c82e1a51f216f3c74dd2fd5c85c930823004259253746d59d25dfeb54ee",
+    "src/range/sound-events-data.json": "d12eb56d308937ce27b086d9e9e9edea4a93aa65eddb15ba2d82efad0c2f5f67",
+    "src/range/changelog-data.ts": "41681ee269a1ec153081ef415b97de4205bf6515b10ef6ef96240fd98d8b5fa9",
+    "src/range/changelog.test.ts": "ad667a56437bc7dcc03ad1274310d86841a6a904423b7580894ebd18998148d5",
+    "src/range/glock-timing.test.ts": "c08de341989cd0a53c7f3372b06b57e4c0f6e091678bc319ffc27bc5745b4cad",
+    "src/range/native-deagle-reload.test.ts": "737f7036b26ddcdcdbe2c32bb40ec8bc165c531e0274fd7893eea21f84cb1b68",
+    "tests/glock-timing.spec.ts": "af8b66fd17cc000abe3915d49590aa8585cbed4e37a0bd6f8d5b06cff5057391",
+    "tests/deagle-reload-events.spec.ts": "1cde4cc39750edac3c50d89a9b27fd5fbe271c7e7e61a7cbdc949aedb7539f7d",
+    "tests/common-reload.spec.ts": "b9f55bf1dc9223589d44c870f3a2496b01326c7b451bc59bf16143a4e00a9644"
+  },
+  "implementationCommits": {
+    "deagle": "c533887",
+    "glock": "ae2f6cf"
+  }
+}

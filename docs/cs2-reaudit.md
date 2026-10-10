@@ -1,4 +1,4 @@
-# CS2 independent re-audit: passes 16–36
+# CS2 independent re-audit: passes 16–38
 
 ## Current priority: common weapons and core feel
 
@@ -15,7 +15,7 @@ and hashes. It is absent from the active app and has not been committed or
 shipped. Detailed transform/resolver investigation is also lower priority than
 measurable input, movement and common-weapon behavior.
 
-Thirteen evidenced corrections follow baseline `c488943`: movement (`79832e6`),
+Fifteen evidenced corrections follow baseline `c488943`: movement (`79832e6`),
 scheduled recoil (`e85f59a`), R8 charge composition (`9b94483`), accuracy/index
 ordering (`fd328d5`), ordinary footstep cadence (`2aba70c`), and native weapon
 recoil rotation (`5132783`, [pass 23](reaudit-viewmodel-recoil.md)), and
@@ -26,7 +26,9 @@ and [AK reload playback](reaudit-animation.md) (`7597b1c`, pass 31), and
 The focused follow-up adds [common-weapon reload admission](reaudit-common-reload.md)
 (`55602f8`, pass 34), [crouch accuracy stance](reaudit-duck-accuracy.md)
 (`02cc418`, pass 35), and [M4/pistol draw playback](reaudit-common-draw.md)
-(`95788ca`, pass 36).
+(`95788ca`, pass 36). Two further local corrections cover
+[Deagle reload events](reaudit-deagle-reload.md) (`c533887`, pass 37) and
+[Glock attack clocks](reaudit-glock-timing.md) (`ae2f6cf`, pass 38).
 This report covers the requested inventory and identifies the remaining work;
 it does not certify complete native parity. The follow-up corrects
 [accuracy/index update order](reaudit-accuracy.md) and
@@ -66,6 +68,13 @@ No active Ghidra request is cancelled or restarted.
 Passes 33–36 are committed locally and await push approval. The LAN still serves
 `f0f70ee`; the changes below must not be treated as deployed.
 
+Passes 37–38 are committed on local `audit/common-pistol-clocks`, preserving the six-commit
+payload and its asset manifest. TypeScript passes; 2,509 distinct unit cases
+pass, with only the known fallback-model fixture absent. All four targeted
+Chromium cases pass. [The combined validation record](evidence/reaudit-common-pistol-validation.json)
+retains the initial missing-asset failures, corrected render-clock fixture,
+focused rechecks and log hashes. No production changes followed the full unit run.
+
 Passes 34–36: TypeScript passes; 2,488 distinct unit cases pass after correcting
 three older reload fixtures, with only the known missing fallback model left.
 All four targeted Chromium cases pass. [Counts and log hashes](evidence/reaudit-core-validation.json)
@@ -78,6 +87,12 @@ retain the full run and focused rechecks; no exact native input latency is infer
 - Crouch accuracy: the native stance flag replaces the 95% amount predicate.
   Across 168 supplied native state/accuracy cases, 120 mismatches fall to zero;
   maximum penalty error 0.0100954175 → 0. Both active and carried weapons use it.
+- Deagle reload: magazine-removal audio moves 133.333 → 333.333 ms and the silent
+  window gains one authored frame. All 42 hearing/browser pairs agree; 78 of
+  84 cases are unchanged. Decoded motion and empty reloads are identical.
+- Glock: immediate taps after switching now fire; an early held press moves
+  281.25 ms earlier in the fixed-step bench. All 12 engine pairs agree on shot
+  and mode-transition times; six normal shot/mode controls remain unchanged.
 - Common draws: with 250 ms attachment delay, M4 rate 1.283019343× → 1× and
   Glock/USP/Deagle rate 1.333333333× → 1×. All 1,086 action-lifetime/weight samples,
   901 unaffected controls, 72 interruptions and 24 pauses remain unchanged.
@@ -223,12 +238,12 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-combat.md](
 | Held through reload | Fresh AK reload starts at tick 398, next held shot tick 556, scheduled 584.6073 s; vdata lock 2.466667 s | Preserves held trigger and locks until deadline, unchanged | Matched captured trigger continuity | `c488943` |
 | Held through deploy | Fresh AK deploy tick 891; first held shot tick 955, one second later | One-second AK deploy lock, unchanged | Matched captured continuity | `c488943` |
 | Deploy times, all weapons | Current vdata deploy duration | All values equal; unchanged | Matched data; per-weapon live gate unverified | `c488943` |
-| Glock/FAMAS bursts | Current vdata burst flag/cycle/interval; current action bench exercises mode transition and emissions | Three-round autonomous burst model; unchanged | Matched data, native burst execution unverified | `c488943` |
+| Glock/FAMAS bursts | Current Glock class/dispatcher/setter/constructor bytes and fresh vdata: unlinked attack clocks, secondary-only 300 ms mode-switch delay, pending rounds before inputs ([pass 38](reaudit-glock-timing.md)) | Shared mode-switch fire lock and missing firing secondary cooldown → separate Glock clocks and held-secondary retries in both engines | Bounded Glock rule corrected; native input producer/live scheduling remain partial. FAMAS follow-up deferred | `ae2f6cf` |
 | R8 primary windup | Current server bounded initialization preserves command fraction and adds 13 ticks | 203.125 ms, unchanged; 20 native emulation cases pass | Matched arithmetic; complete charge/animation chain unverified | `c488943` |
 | R8 alternate fire | Current alternate stats; fresh server spread sampler uses `1-r²` | Same alternate cycle/distribution, unchanged | Matched data/distribution branch; native trigger schedule unverified | `c488943` |
 | Reload lock and insertion | Current vdata lock; imported clip insert events; fresh AK capture | Separate insert and attack deadline; unchanged | Matched exported lock, animation event coverage in animation audit | `c488943` |
 | Explicit reload admission / held retry | Current-server dispatcher and seven bound classes; primary deadline inclusive, attacks take priority ([pass 34](reaudit-common-reload.md)) | R at 31.25 ms after a shot always began reload → released early taps dropped, held R retries when ready; 56 paired cases pass | Bounded weapon/input rule corrected; independent player/deploy and within-command edge timing remain partial | `55602f8` |
-| Silent reload | Native gated clock was not independently emulated in this pass | Per-phase windows and half-speed held clock; AK measured lock 4.172391 s; unchanged | Unverified current whole runtime path | `c488943` |
+| Silent reload | Current Deagle clip ends its normal silent window at frame 50, not 49; [pass 37](reaudit-deagle-reload.md). Whole native gate not newly emulated | Deagle work end 1.633333 → 1.666667 s; existing trainer held exit 3.066667 → 3.133333 s and completion 3.639057 → 3.672054 s | Current static marker corrected; native runtime coefficients/onset remain unverified | `c533887` |
 | Shell loading/interruption | Current native loaded-shell primary path uses the initial attack lock, then switches directly to shooting; [pass 26](reaudit-shell-reload.md) | Early held fire 250 ms → Nova/Sawed-Off468.75 ms, XM609.375 ms; ready taps now fire immediately. Start/insertion/finish estimates and empty-start path retained | Loaded-start interruption corrected; insertion/completion and empty retry ordering remain approximated | `9095bb0` |
 | Recoil pattern seed/parameters | Current vdata seeds/angles/magnitudes; fresh AK native impulse anchors | Parameters identical, AK six-shot impulses verified; unchanged table generator | Matched data and AK sample; current all-weapon table emulation unverified | `c488943` |
 | Recoil suppression/smoothing | AK first six native impulse anchors reproduce trainer table; historical Windows table fixture is another artifact | Four-shot suppression and automatic smoothing retained | Matched AK sample; broad native rule still partial | `c488943` |
@@ -321,7 +336,7 @@ Evidence labels, reproduction commands and detailed limits: [reaudit-animation.m
 | Hit flinch by group and side | 90 VPK flinch entries = 45 base + 45 non-additive variants | 42 bullet-hit family clips imported; three molotov family clips omitted; four freshly sampled retained sets match to .03189° | Matched sampled clip deltas; approximated blending | `c488943` |
 | Death and ragdoll behavior | Native world graph hands death to native physics | Custom joint spheres, distance constraints, damping .98/friction .45, 10 iterations; baked fallback | Approximated | `c488943` |
 | Distance-based animation throttling | Needs native client runtime measurement | Trainer uses visibility and global quality/adaptive rate; no distance input in `animationRate` | Native rule unverified; distance-specific policy not present | `c488943` |
-| View draw, idle, fire, reload, empty reload, inspect | Current package, bound Arms clock, ordinary draw graphs; common draws add six graphs/24 unit-rate nodes ([pass 36](reaudit-common-draw.md)) | AK reload and initial four draws corrected; M4/pistol delayed draw rates now 1×, 1,086 lifetime/weight samples unchanged | Bounded relative rates corrected; onset/blends/display/pickup remain partial; Deagle reload resource provenance differs | `7597b1c`; `64bbe25`; `95788ca` |
+| View draw, idle, fire, reload, empty reload, inspect | Current package, bound Arms clock, ordinary draw graphs; common draws add six graphs/24 unit-rate nodes ([pass 36](reaudit-common-draw.md)) | AK reload and initial four draws corrected; M4/pistol delayed draw rates now 1×, 1,086 lifetime/weight samples unchanged | Bounded relative rates corrected; onset/blends/display/pickup remain partial; pass 37 independently confirms Deagle motion data unchanged and corrects two event markers | `7597b1c`; `64bbe25`; `95788ca`; `c533887` |
 | Last-shot/scoped/left/right/alternate variants | Fresh view graphs; selector inventories | Supported dedicated last/scoped/Dualies/R8 variants; generic fire paths use selected native shoot1 clips | Matched selection for implemented variants; full graph not reproduced | `c488943` |
 | View action coverage | Referenced resources in fresh graphs | Unselected referenced actions include AK inspect variants/fixups, AUG/SG fidgets, CZ second reload/draw, MG bullet-hide layers, R8 chamber-position layers and knife hit/backstab variants | Not present for named layers/actions | `c488943` |
 | Settle and action interruption | Native graph transition durations, sync events and inspect fixups | Trainer fades transient end over up to .08 s; inspect onset .06 s; fire resets transient; reload/switch cancels it | Approximated; exact event gating unverified | `c488943` |
@@ -351,7 +366,12 @@ The focused follow-up adds three corrections to the earlier claims:
   recorded states. The new flag and consumer checks close that specific gap.
 - The authored draw-rate correction covered four selected weapons. M4s and
   common pistols still retimed delayed attachment until pass 36. Draw resource
-  identity does not validate the separately mismatched Deagle reload resource.
+  identity did not validate the separately mismatched Deagle reload resource.
+  Pass 37 independently resolves its two event-marker differences while
+  preserving all decoded motion data.
+- Extracted burst intervals did not validate Glock mode-switch readiness or
+  attack priority. Current code/data show that the switch leaves primary ready,
+  while firing advances both clocks and due primary input precedes secondary.
 
 Earlier findings remain:
 
