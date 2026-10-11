@@ -105,6 +105,8 @@ export type BotTraits = {
   brakeErrorMs: number;
   lowAimTendency: number;
   stopTendency: number;
+  /** Blitz .repeekreaction: recognition time (ms) once the same enemy is seen again; the median applies when unset. */
+  repeekRecognitionMs?: number;
 };
 
 // All skill curves are training heuristics, not measured FACEIT population statistics.

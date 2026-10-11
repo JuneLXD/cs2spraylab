@@ -5,10 +5,10 @@ import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybi
 import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
 
 export type Weapon = keyof typeof data.weapons;
-export type Mode = 'duel' | 'deathmatch' | 'botz' | 'reflex' | 'redline' | 'pop' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
-export const modeNames: Record<Mode, string> = { duel: 'AI Duel', deathmatch: 'Deathmatch: aim_redline', botz: 'Aim Botz', reflex: 'Fast Aim / Reflex', redline: 'aim_redline', pop: 'Pop', guided: 'Guided spray', spray: 'Free spray', transfer: 'Spray transfer', peek: 'Peeking practice', precision: 'Counterstrafing practice', burst: 'Burst & reposition', hearing: 'Hearing practice' };
+export type Mode = 'duel' | 'deathmatch' | 'blitz' | 'botz' | 'reflex' | 'redline' | 'pop' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
+export const modeNames: Record<Mode, string> = { duel: 'AI Duel', deathmatch: 'Deathmatch: aim_redline', blitz: 'Blitz: Ancient', botz: 'Aim Botz', reflex: 'Fast Aim / Reflex', redline: 'aim_redline', pop: 'Pop', guided: 'Guided spray', spray: 'Free spray', transfer: 'Spray transfer', peek: 'Peeking practice', precision: 'Counterstrafing practice', burst: 'Burst & reposition', hearing: 'Hearing practice' };
 /** Modes that run on the duel engine rather than the static range. */
-export const isDuelEngineMode = (mode: Mode) => mode === 'duel' || mode === 'deathmatch' || mode === 'botz' || mode === 'reflex' || mode === 'redline';
+export const isDuelEngineMode = (mode: Mode) => mode === 'duel' || mode === 'deathmatch' || mode === 'blitz' || mode === 'botz' || mode === 'reflex' || mode === 'redline';
 export const historyModeNames = { ...modeNames, tracking: 'Target tracking (retired)' };
 export function migrateMode(mode: unknown): Mode {
   if(typeof mode==='string'&&['weak','ghost','trace','fade','tracking'].includes(mode))return 'guided';

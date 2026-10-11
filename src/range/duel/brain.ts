@@ -28,6 +28,8 @@ export class BotBrain {
   private observation: BotObservation | null = null;
   private readonly motor: AimMotor = {yawRate: 0, pitchRate: 0};
   private heard?: {point: Vec; time: number};
+  /** How often each enemy has been sighted afresh: a repeek can use its own recognition time. */
+  private readonly sightings = new Map<number, number>();
   private roamGoal?: {point: Vec; since: number};
   private path: {goal: Vec; waypoints: Vec[]; at: number} | null = null;
 
@@ -75,7 +77,10 @@ export class BotBrain {
     }
     if (this.firstSeen < 0 || previousEnemy !== observation.visible.id) {
       this.firstSeen = observation.time;
-      this.readyAt = observation.time + this.traits.recognitionMedianMs / 1000 * Math.exp(.2 * normal(this.random));
+      const seen = this.sightings.get(observation.visible.id) ?? 0;
+      this.sightings.set(observation.visible.id, seen + 1);
+      const median = seen > 0 && this.traits.repeekRecognitionMs !== undefined ? this.traits.repeekRecognitionMs : this.traits.recognitionMedianMs;
+      this.readyAt = observation.time + median / 1000 * Math.exp(.2 * normal(this.random));
       this.aimYawError = normal(this.random) * this.traits.endpointErrorDegrees / this.accuracy * DEG;
       this.aimPitchError = normal(this.random) * this.traits.endpointErrorDegrees / this.accuracy * DEG;
       this.willStop = this.random() < this.traits.stopTendency;

@@ -60,6 +60,9 @@ import {actorShadows,ActorShadowRenderer} from './shadow-scene';
 import {BOTZ_PLAYER_SPAWN, botzArena, botzDuelConfig, botzSummary, loadBotzHistory, sanitizeBotzConfig, saveBotzHistory,
   type BotzConfig, type BotzHistory, type BotzSummary} from './botz';
 import {REFLEX_ISLAND, REFLEX_ISLAND_HALF, REFLEX_REACH, reflexArena} from './reflex';
+import {arenaFloor} from './traversal';
+import {blitzDuelConfig, blitzLevel, loadBlitzHistory, nextArena, saveBlitzHistory, smartStep, type BlitzArenaSet, type BlitzConfig, type BlitzHistory} from './blitz';
+import type {SkillLevel} from './config';
 
 export type DuelStatus = {
   killFeed?: readonly KillEntry[]; reloadRemaining?: number; reloadProgress?: number;
@@ -81,6 +84,8 @@ export type DuelStatus = {
   arenaDesign?: string;
   /** Aim Botz session: kills, accuracy and pace. */
   botz?: BotzSummary; botzHistory?: BotzHistory[];
+  /** Blitz: the arena in play, the bots' level, deaths and clears there, swingers that have set off, and past arenas. */
+  blitz?: {arena: number; arenas: number; name: string; level: SkillLevel; deaths: number; clears: number; swung: number; history: BlitzHistory[]};
 };
 
 const v3 = (point: Vec) => new THREE.Vector3(point.x, point.y, point.z);
@@ -200,6 +205,13 @@ export class DuelEngine {
   /** Set in Aim Botz: passive respawning bots instead of duel rounds. */
   private botz?: BotzConfig;
   private botzHistory: BotzHistory[] = [];
+  /** Blitz: its setup, the map's arenas, the arena in play with its clears and deaths, Smart mode's level, and past arenas. */
+  private blitz?: BlitzConfig;
+  private blitzArenas: BlitzArenaSet['arenas'] = [];
+  private blitzRun = {index: 0, clears: 0, deaths: 0};
+  private blitzLevel?: SkillLevel;
+  private blitzHistory: BlitzHistory[] = [];
+  private blitzRecorded = false;
   private botzRecorded = false;
   /** Reflex arrivals already shown as a caption. */
   private arrivalsShown = 0;
@@ -212,8 +224,14 @@ export class DuelEngine {
     private readonly onError: (message: string) => void, private settings: Settings, private config: DuelConfig,
     private readonly progression?: ProgressionController, botz?: BotzConfig,
     /** An imported map (workshop.ts) for Aim Botz: drawn from its model instead of the hall. */
-    private readonly workshop?: Arena) {
+    private readonly workshop?: Arena,
+    /** Blitz on the imported map: its setup and the map's arenas. */
+    blitz?: {config: BlitzConfig; arenas: BlitzArenaSet['arenas']}) {
     if (botz) {this.botz = sanitizeBotzConfig(botz); this.config = botzDuelConfig(this.botz); this.botzHistory = loadBotzHistory(this.botz.map);}
+    if (blitz) {
+      this.blitz = blitz.config; this.blitzArenas = blitz.arenas; this.blitzLevel = blitzLevel(blitz.config);
+      this.config = blitzDuelConfig(blitz.config, this.blitzLevel); this.blitzHistory = loadBlitzHistory(); this.blitzRun = this.blitzStart();
+    }
     this.cosmeticKey = JSON.stringify(progression?.getSnapshot().profile.equipped);
     this.sim = this.createSimulation();
     this.radar = new DuelRadar(host);
@@ -229,7 +247,7 @@ export class DuelEngine {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.08;
     this.renderer.domElement.dataset.duel = 'true';
-    this.renderer.domElement.setAttribute('aria-label', this.workshop?.workshop && (this.botz || this.config.respawnSeconds > 0) ? this.workshop.workshop.name
+    this.renderer.domElement.setAttribute('aria-label', this.workshop?.workshop && (this.botz || this.blitz || this.config.respawnSeconds > 0) ? this.workshop.workshop.name
       : !this.botz ? 'AI Duel arena' : this.botz.map === 'island' ? 'Reflex island' : 'Aim Botz yard');
     this.renderer.domElement.tabIndex = 0;
     host.prepend(this.renderer.domElement);
@@ -328,6 +346,14 @@ export class DuelEngine {
 
   private createSimulation() {
     const seed = seedForDesign(this.seed++, this.config.mapDesign);
+    if (this.blitz && this.workshop && this.blitzArenas.length) {
+      const arena = this.blitzArenas[this.blitzRun.index % this.blitzArenas.length];
+      const simulation = new DuelSimulation(this.config, seed, this.workshop, this.settings.weapon, this.settings.sidearm,
+        this.settings.primaryEnabled && !this.blitz.noPrimary, undefined, {config: this.blitz, arena, level: this.blitzLevel ?? this.config.skill});
+      this.botzRecorded = false; this.arrivalsShown = 0; this.blitzRecorded = false;
+      simulation.playerAspect = this.camera.aspect;
+      return simulation;
+    }
     // Deathmatch plays AI Duel bots on the imported map; round-based duels keep their authored arenas.
     const arena = !this.botz ? (this.workshop && this.config.respawnSeconds > 0 ? this.workshop : duelArena(seed, this.config.arenaScale))
       : this.botz.map === 'island' ? reflexArena(this.botz) : this.workshop ?? botzArena();
@@ -360,7 +386,7 @@ export class DuelEngine {
     this.environmentRevision=this.sim.environment.revision;
     syncEnvironmentRenderMap(this.environmentModels,this.sim.environment);
     this.acoustics.setBoxes(acousticSolids(this.sim.arena));
-    for(const [id,animator] of this.animators)animator.setDeathWorld({floor:0,boxes:this.deathBoxes(this.sim.actors[id]?.position)});
+    for(const [id,animator] of this.animators)animator.setDeathWorld({floor:arenaFloor(this.sim.arena),boxes:this.deathBoxes(this.sim.actors[id]?.position)});
   }
 
   private decorateShell() {
@@ -507,7 +533,7 @@ export class DuelEngine {
     const animator=new DuelAnimator(model, this.targetClips, (actor.id * .317) % 1, actor.equipment);
     animator.addGestureClips(this.gestureClips.get(actor.equipment)??[]);
     animator.addFlinchClips(this.flinchClips);
-    animator.setDeathWorld({floor:0,boxes:this.deathBoxes(actor.position)});
+    animator.setDeathWorld({floor:arenaFloor(this.sim.arena),boxes:this.deathBoxes(actor.position)});
     this.animators.set(actor.id,animator);
     this.generations.set(actor.id, actor.generation);
   }
@@ -682,7 +708,7 @@ export class DuelEngine {
 
   private beginProgression() {
     // Passive Aim Botz rounds and endless deathmatch sessions do not count toward duel achievements.
-    if (this.botz || this.sim.deathmatch) return;
+    if (this.botz || this.blitz || this.sim.deathmatch) return;
     this.attemptDamage.clear();
     this.attemptId = this.progression?.beginDuel(this.attemptSetup(), String(this.attemptRevision)) ?? null;
   }
@@ -709,8 +735,43 @@ export class DuelEngine {
     if (this.viewCamera.fov !== fov) {this.viewCamera.fov = fov; this.viewCamera.updateProjectionMatrix();}
   }
 
+  /** Blitz: a new setup starts its arena again (or the chosen one); Smart mode keeps its running level. */
+  setBlitz(config: BlitzConfig) {
+    if (!this.blitz) return;
+    if (JSON.stringify(config) === JSON.stringify(this.blitz)) return;
+    this.blitzLevel = config.smart && this.blitz.smart && this.blitzLevel ? this.blitzLevel : blitzLevel(config);
+    this.blitz = config; this.config = blitzDuelConfig(config, this.blitzLevel); this.blitzRun = this.blitzStart();
+    this.restart();
+  }
+  /** Where a Blitz session starts: the chosen arena, or any of them. */
+  private blitzStart() {
+    const count = this.blitzArenas.length;
+    const index = !count ? 0 : this.blitz?.arena ? Math.min(this.blitz.arena, count) - 1 : this.blitz?.order === 'sequence' ? 0 : Math.floor(Math.random() * count);
+    return {index, clears: 0, deaths: 0};
+  }
+  /** After an arena: Smart mode steps the level, and the next arena follows the outcome and the repeat/autoskip rules. */
+  private advanceBlitz() {
+    const outcome = this.sim.outcome;
+    if (!this.blitz || !outcome) return;
+    const diedHere = !this.sim.actors[0].alive;
+    if (this.blitz.smart) {
+      this.blitzLevel = smartStep(this.blitzLevel ?? blitzLevel(this.blitz), outcome, diedHere);
+      this.config = blitzDuelConfig(this.blitz, this.blitzLevel);
+    }
+    this.blitzRun = nextArena(this.blitzRun, outcome, this.blitz, this.blitzArenas.length, Math.random);
+  }
+  /** Saves a finished Blitz arena once. */
+  private recordBlitz() {
+    if (!this.blitz || this.blitzRecorded || this.sim.phase !== 'result' || !this.sim.outcome) return;
+    this.blitzRecorded = true;
+    const arena = this.blitzArenas[this.blitzRun.index % this.blitzArenas.length];
+    this.blitzHistory = [{date: new Date().toISOString(), map: this.blitz.map, arena: arena?.name ?? '', outcome: this.sim.outcome,
+      seconds: this.sim.time, kills: this.kills, level: this.blitzLevel ?? this.config.skill}, ...this.blitzHistory].slice(0, 100);
+    saveBlitzHistory(this.blitzHistory);
+  }
+
   setConfig(config: DuelConfig) {
-    if (config === this.config || this.botz) return;
+    if (config === this.config || this.botz || this.blitz) return;
     // Radar display settings apply live; everything else starts a new round.
     const round = (value: DuelConfig) => JSON.stringify({...value, radarEnabled: 0, radarRotate: 0, radarScale: 0});
     const radarOnly = round(config) === round(this.config);
@@ -740,7 +801,8 @@ export class DuelEngine {
   }
 
   restart(continuous = false) {
-    this.recordBotz();
+    this.recordBotz(); this.recordBlitz();
+    if (continuous) this.advanceBlitz();
     if (this.attemptId) this.progression?.cancelAttempt(this.attemptId);
     this.attemptId = null; this.attemptRevision++;
     this.paused = false; this.pointer = null; this.pickupDrawing = false; this.viewAnimation?.cancel();
@@ -1048,7 +1110,7 @@ export class DuelEngine {
           event.victim === 0 ? undefined : this.soundLocation(event.point));
       } else if (event.kind === 'round' && this.botz) {
         // A timed session is over: free the mouse so New session can be clicked.
-        this.recordBotz();
+        this.recordBotz(); this.recordBlitz();
         this.binds.releaseAll(); this.bindHandle?.reset(); this.updateMovement(); this.releaseShortcuts();
         this.sim.command(0, {fireHeld: false});
         if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
@@ -1189,7 +1251,9 @@ export class DuelEngine {
       ...(this.sim.deathmatch ? {deathmatch: true, deaths: this.sim.deathmatchStats.deaths, respawnIn: this.sim.respawnIn(0)} : {}),
       equipped: player.equipment, review: this.sim.coach.review(), history: this.history,
       loadout: this.sim.loadout, pickup: this.sim.nearestPickup()?.equipment, interaction:this.sim.nearestDoor()?.open?'Close door':this.sim.nearestDoor()?'Open door':undefined, arenaDesign: this.sim.arena.design,
-      ...(this.botz ? {botz: botzSummary(this.sim.botzStats, this.sim.time, this.botz.sessionSeconds), botzHistory: this.botzHistory} : {})});
+      ...(this.botz ? {botz: botzSummary(this.sim.botzStats, this.sim.time, this.botz.sessionSeconds), botzHistory: this.botzHistory} : {}),
+      ...(this.blitz ? {blitz: {arena: this.blitzRun.index + 1, arenas: this.blitzArenas.length, name: this.blitzArenas[this.blitzRun.index % Math.max(1, this.blitzArenas.length)]?.name ?? '',
+        level: this.blitzLevel ?? this.config.skill, deaths: this.blitzRun.deaths, clears: this.blitzRun.clears, swung: this.sim.blitzSwung(), history: this.blitzHistory}} : {})});
   }
 
   private tick(timestamp: number) {
@@ -1317,7 +1381,7 @@ export class DuelEngine {
   }
 
   dispose() {
-    this.recordBotz();
+    this.recordBotz(); this.recordBlitz();
     if (this.attemptId) this.progression?.cancelAttempt(this.attemptId);
     this.disposed = true; cancelAnimationFrame(this.frame); this.pause(); this.releaseShortcuts(); this.observer.disconnect();
     this.cleanup.forEach(fn => fn()); this.clearEffects(); this.audio.dispose(); this.damageFeedback.dispose();

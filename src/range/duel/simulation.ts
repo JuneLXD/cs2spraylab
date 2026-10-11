@@ -1,7 +1,8 @@
 import {advanceActor, DEG, STEP, UNIT, type ActorKinematics, type Vec} from '../actor-physics';
 import {advanceActorCommand} from '../actor-command';
 import {gameData, pistolIds, type Weapon, type Pistol} from '../config';
-import {botConfig, rosterBehaviors, sanitizeDuelConfig, type DuelConfig} from './config';
+import {botConfig, rosterBehaviors, sanitizeDuelConfig, type DuelConfig, type SkillLevel} from './config';
+import {chooseSwingers, swingSchedule, type BlitzArena, type BlitzConfig} from './blitz';
 import {BotBrain, type BotNavigator} from './brain';
 import {TacticalBrain} from './tactics';
 import {TeamSpawner} from './team-spawns';
@@ -31,7 +32,7 @@ import {resolveBulletRay} from './penetration';
 import {traceMelee} from './melee';
 import {advanceEnvironment,createEnvironmentState,damageEnvironmentPiece,environmentPieceId,environmentSolids,solidsOfKind,
   useEnvironmentPiece,arenaBoostPOIs,type EnvironmentState,type EnvironmentResult} from './environment';
-import {actorBody,arenaMovementEnvironment,arenaTerrainNear,canWalkTo} from './traversal';
+import {actorBody,arenaMovementEnvironment,arenaTerrainNear,canWalkTo, arenaFloor} from './traversal';
 import {TeamTacticsPlanner,BoostPlanner,type TacticalPeer,type TeamContact,type BoostPlan,type BoostPOI} from './coordination';
 import {TerrainTactics} from './terrain-tactics';
 import {actorShadows} from './shadow-scene';
@@ -84,7 +85,7 @@ const makeActor = (id: number, side: CombatActor['side'], x: number, z: number, 
  * sideways nudges are preferred over standing on the lip. */
 export function freeSpawnPose<T extends {x: number; y: number; z: number}>(spawn: T, arena: Arena): T {
   const height = 72 * UNIT, eye = 64 * UNIT;
-  const world = {solids: arenaTerrainNear(arena, {x: spawn.x, y: spawn.y + eye, z: spawn.z}), floor: 0, bounds: arena};
+  const world = {solids: arenaTerrainNear(arena, {x: spawn.x, y: spawn.y + eye, z: spawn.z}), floor: arenaFloor(arena), bounds: arena};
   const fits = (x: number, feet: number, z: number) => fitsTerrain({x, y: feet + eye, z}, feet, height, world);
   if (fits(spawn.x, spawn.y, spawn.z)) return spawn;
   const nudges: {dx: number; dy: number; dz: number}[] = [];
@@ -161,8 +162,12 @@ export class DuelSimulation {
   private teamSpawner?: TeamSpawner;
   private initialLoadout = {hasPrimary: true, hasSidearm: true};
   private floorSpots: readonly (readonly [number, number, number])[] = [];
+  /** Blitz: the arena's swingers wait at their hold spots until their swing time, then set off for you. */
+  readonly blitz?: {config: BlitzConfig; arena: BlitzArena; level: SkillLevel};
+  private blitzLives = new Map<number, {swingAt: number; swung: boolean}>();
 
-  constructor(config: DuelConfig = sanitizeDuelConfig({}), private seed = 1, arena: Arena = testArena(), private playerWeapon: Weapon = 'ak47', private sidearm: Pistol = 'usp', private hasPrimary = true, botz?: BotzConfig) {
+  constructor(config: DuelConfig = sanitizeDuelConfig({}), private seed = 1, arena: Arena = testArena(), private playerWeapon: Weapon = 'ak47', private sidearm: Pistol = 'usp', private hasPrimary = true, botz?: BotzConfig,
+    blitz?: {config: BlitzConfig; arena: BlitzArena; level: SkillLevel}) {
     this.config = sanitizeDuelConfig(config);
     this.botz = botz && sanitizeBotzConfig(botz);
     this.terrainTactics=new TerrainTactics(seed);
@@ -184,6 +189,28 @@ export class DuelSimulation {
       for (let index = 0; index < this.config.botCount; index++) this.actors.push(this.spawnDuelBot(index + 1, 1, behaviors[index]));
       // Spawn protection is yours only: bots can be shot the moment they appear.
       if (this.deathmatch) this.actors[0].immuneUntil = this.time + this.config.spawnImmunitySeconds;
+      return;
+    }
+    if (blitz && this.arena.workshop) {
+      // Blitz: you at the arena's spot, the swingers hidden at their hold spots facing you, each with its swing time.
+      this.blitz = blitz;
+      const scene = blitz.arena;
+      placeAt(this.actors[0], freeSpawnPose({x: scene.player.x, y: scene.player.y, z: scene.player.z, yaw: scene.player.yaw}, this.arena));
+      const random = randomStream(seed, 'blitz:swingers');
+      const swingers = chooseSwingers(scene, this.config.botCount, random), swingAt = swingSchedule(swingers.length, blitz.config, random);
+      swingers.forEach((swinger, index) => {
+        const id = index + 1, bot = botConfig(this.config, index);
+        const actor = makeActor(id, 'enemy', swinger.hold.x, swinger.hold.z, bot.weapon, bot.health, bot.armor, seed + id * 7919);
+        actor.armor = bot.armor ? bot.armorPoints : 0; actor.helmet = bot.armor && bot.helmet;
+        const facing = Math.atan2(-(scene.player.x - swinger.hold.x), -(scene.player.z - swinger.hold.z));
+        placeAt(actor, freeSpawnPose({x: swinger.hold.x, y: swinger.hold.y, z: swinger.hold.z, yaw: facing}, this.arena));
+        const traits = createBotTraits(bot.skill, seed, id);
+        if (blitz.config.reactionMs > 0) traits.recognitionMedianMs = blitz.config.reactionMs;
+        if (blitz.config.repeekReactionMs > 0) traits.repeekRecognitionMs = blitz.config.repeekReactionMs;
+        this.brains.set(id, new BotBrain(traits, 'holder', bot.accuracy, randomStream(seed, `brain:${id}`), this.blitzNavigator(swinger.peek)));
+        this.blitzLives.set(id, {swingAt: swingAt[index], swung: false});
+        this.actors.push(actor);
+      });
       return;
     }
     if (this.botz?.map === 'island') {
@@ -420,6 +447,15 @@ export class DuelSimulation {
       if (!actor.alive || this.controlledBots.has(actor.id)) continue;
       if (this.botz) {this.commandBotz(actor); continue;}
       const brain = this.brains.get(actor.id);
+      if (this.blitz) {
+        const life = this.blitzLives.get(actor.id);
+        if (life && !life.swung) {
+          if (this.time < life.swingAt) {this.commandBot(actor, idleCommand()); continue;}
+          // Its swing: it heads for where you are and sees you as it rounds the corner.
+          life.swung = true;
+          if (brain instanceof BotBrain) brain.hear({...this.actors[0].position}, this.time);
+        }
+      }
       const patch = brain instanceof TacticalBrain
         ? brain.command(actorView[actor.id], this.time, actor.weapon.recovery.recoil, actorView.slice(1))
         : brain?.command(actorView[actor.id], this.time);
@@ -524,7 +560,7 @@ export class DuelSimulation {
     for (const {victim, weapon, direction, event} of combined) {
       if (!victim.alive) continue;
       // mp_damage_headshot_only: body hits still register, without damage.
-      if (this.botz?.headshotOnly && victim.side === 'enemy' && event.group !== 'head') event.healthDamage = event.armorDamage = 0;
+      if ((this.botz?.headshotOnly || this.blitz?.config.headshotOnly) && victim.side === 'enemy' && event.group !== 'head') event.healthDamage = event.armorDamage = 0;
       // Spawn protection: the hit still registers, but costs nothing.
       if ((victim.immuneUntil ?? 0) > this.time) {event.healthDamage = event.armorDamage = 0; event.immune = true;}
       const rawDamage = event.healthDamage + event.armorDamage * 2, armorBeforeHit = victim.armor;
@@ -644,6 +680,11 @@ export class DuelSimulation {
     }
   }
 
+  /** Blitz: how many swingers have set off so far. */
+  blitzSwung() {let swung = 0; for (const life of this.blitzLives.values()) if (life.swung) swung++; return swung;}
+  /** Blitz: when each swinger sets off, by actor id. */
+  blitzSchedule() {return [...this.blitzLives].map(([id, life]) => ({id, swingAt: life.swingAt, swung: life.swung}));}
+
   /** Seconds until a dead actor returns in deathmatch; 0 when alive or not scheduled. */
   respawnIn(id: number) {
     const at = this.respawnAt.get(id);
@@ -678,6 +719,20 @@ export class DuelSimulation {
     placeAt(actor, freeSpawnPose(this.teamSpawner!.next('t', living, living), this.arena));
     actor.equipReadyAt = this.time + equipmentStats(actor.weapon.id).deploy;
     return actor;
+  }
+
+  /** A swinger's route: first its peek spot, a step or two out of its hold, then straight at its goal. The grid
+   * router is a flat-world tool (obstacles between 0 and 1.8 m) and cannot be trusted on a multi-level map; the
+   * peek spot is adjacent to the hold and in your sight, so from there the swinger engages or walks at you. */
+  private blitzNavigator(peek: Vec): BotNavigator {
+    let swung = false;
+    return {
+      route: (from, to) => {
+        if (!swung && Math.hypot(from.x - peek.x, from.z - peek.z) < .4) swung = true;
+        return swung ? [to] : [{...peek}, to];
+      },
+      roam: () => ({...peek}),
+    };
   }
 
   private navigator(): BotNavigator {

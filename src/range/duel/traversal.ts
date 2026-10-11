@@ -7,6 +7,10 @@ import {actorHeight} from '../actor-contact';
 import {moveOnTerrain} from '../actor-collision';
 import type {Vec} from '../actor-physics';
 
+/** The ground plane: the duel hall floors at y = 0; an imported map's collision has its own floors, so its plane sits
+ * under the whole grid and only catches a fall through a gap. */
+export const arenaFloor=(arena:Arena)=>arena.workshop?.floor??0;
+
 const terrainCache=new WeakMap<Arena,{source:Arena['solids'];volumes:Arena['traversalVolumes'];solids:TerrainSolid[]}>();
 
 export function arenaTerrain(arena:Arena):TerrainSolid[] {
@@ -57,7 +61,7 @@ export function arenaTerrainNear(arena:Arena,near:Vec,reach=TERRAIN_REACH):reado
 
 /** `near`: where the actor is, so a large arena only hands over the terrain within reach of it. */
 export function arenaMovementEnvironment(arena:Arena,actors:readonly ContactActor[],selfId:number,time:number,pitch:number,near?:Vec):ActorEnvironment {
-  return {solids:near?arenaTerrainNear(arena,near):arenaTerrain(arena),bounds:arena,floor:0,actors,selfId,time,pitch,
+  return {solids:near?arenaTerrainNear(arena,near):arenaTerrain(arena),bounds:arena,floor:arenaFloor(arena),actors,selfId,time,pitch,
     jumpRules:{bhopWindow:1/128,spamTime:1/64,autoBhop:false,enableBunnyhopping:false}};
 }
 
@@ -67,7 +71,7 @@ export const actorBody=(actor:ContactActor)=>({center:{x:actor.position.x,y:acto
 export function canWalkTo(from:Vec,to:Vec,arena:Arena) {
   const length=Math.hypot(to.x-from.x,to.z-from.z);
   if(length>12)return false;
-  const world={solids:arenaTerrain(arena),floor:0,bounds:arena};
+  const world={solids:arenaTerrain(arena),floor:arenaFloor(arena),bounds:arena};
   let at={...from};const steps=Math.max(1,Math.ceil(length/.12));
   for(let step=1;step<=steps;step++) {
     const moved=moveOnTerrain(at,{x:from.x+(to.x-from.x)*step/steps,y:at.y,z:from.z+(to.z-from.z)*step/steps},72*UNIT,world,true);

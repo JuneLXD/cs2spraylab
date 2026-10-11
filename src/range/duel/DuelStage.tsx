@@ -15,7 +15,9 @@ import {DuelSetup} from './DuelSetup';
 import {keyHint} from '../keybinds/profile';
 import {type BotzConfig} from './botz';
 import type {Arena} from './geometry';
-import {loadWorkshopArena} from './workshop';
+import {loadWorkshopArena, type WorkshopMapId} from './workshop';
+import {loadBlitzArenas, type BlitzArenaSet, type BlitzConfig} from './blitz';
+import {BlitzScorecard, BlitzSetup} from './BlitzSetup';
 import {BotzScorecard, BotzSetup, clock} from './BotzPanel';
 import {cvarAssignment} from '../keybinds/console';
 
@@ -33,17 +35,20 @@ function loadHint() {
 
 /** AI Duel, Aim Botz (variant 'botz': passive respawning bots), Fast Aim / Reflex (variant 'reflex': bots rush your
  * island) or Aim Botz on the imported aim_redline map (variant 'redline'), all on the same engine. */
-export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel', onConsole, config, update, botz, updateBotz, engineRef, controlsTarget, onMenuStatus, resetSetup}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'deathmatch' | 'botz' | 'reflex' | 'redline';
+export function DuelStage({settings, openSettings, onEnter, suspended, progression, cosmeticRevision, variant = 'duel', onConsole, config, update, botz, updateBotz, blitz, updateBlitz, engineRef, controlsTarget, onMenuStatus, resetSetup}: {settings: Settings; openSettings: () => void; onEnter: () => void; suspended: boolean; progression?: ProgressionController; cosmeticRevision?: Readonly<Record<string,string>>; variant?: 'duel' | 'deathmatch' | 'botz' | 'reflex' | 'redline' | 'blitz';
   resetSetup: () => void; config: DuelConfig; update: (patch: Partial<DuelConfig>) => void; botz: BotzConfig; updateBotz: (patch: Partial<BotzConfig>) => void;
+  /** Blitz on an imported competitive map. */
+  blitz?: BlitzConfig; updateBlitz?: (patch: Partial<BlitzConfig>) => void;
   engineRef: Ref<DuelHandle>; controlsTarget: HTMLElement | null; onMenuStatus: (value: DuelMenuStatus) => void;
   /** Console commands from binds that change app settings, such as crosshair convars. */
   onConsole?: (args: string[]) => void}) {
   const botzMode = variant === 'botz' || variant === 'reflex' || variant === 'redline', reflexMode = variant === 'reflex', redlineMode = variant === 'redline';
-  const deathmatchMode = variant === 'deathmatch';
+  const deathmatchMode = variant === 'deathmatch', blitzMode = variant === 'blitz';
   const drill = reflexMode ? 'reflex training' : redlineMode ? 'aim_redline' : 'Aim Botz';
   const title = reflexMode ? 'Fast Aim / Reflex' : redlineMode ? 'aim_redline' : 'Aim Botz';
   // aim_redline's collision and spawns load as a separate chunk before the engine can start.
   const [workshop, setWorkshop] = useState<Arena>();
+  const [arenas, setArenas] = useState<BlitzArenaSet>();
   const [status, setStatus] = useState<DuelStatus>(initialStatus);
   const statusRef = useRef(status);
   const reportStatus = useCallback((value: DuelStatus) => {statusRef.current = value; setStatus(value);}, []);
@@ -57,16 +62,21 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   const engine = useRef<DuelEngine>();
 
   useEffect(() => {
-    if (!redlineMode && !deathmatchMode) return;
+    if (!redlineMode && !deathmatchMode && !blitzMode) return;
     let live = true;
-    loadWorkshopArena('aim_redline').then(arena => {if (live) setWorkshop(arena);},
-      () => {if (live) setError('The aim_redline map data could not be loaded. Reload to try again.');});
+    const map: WorkshopMapId = blitzMode ? blitz?.map ?? 'de_ancient' : 'aim_redline';
+    // Blitz also needs the map's arenas; both are separate chunks.
+    Promise.all([loadWorkshopArena(map), blitzMode ? loadBlitzArenas(blitz?.map ?? 'de_ancient') : Promise.resolve(undefined)]).then(([arena, set]) => {
+      if (!live) return;
+      setWorkshop(arena); if (set) setArenas(set);
+    }, () => {if (live) setError(`The ${map} map data could not be loaded. Reload to try again.`);});
     return () => {live = false;};
   }, []);
   useEffect(() => {
-    if (!canvasHost.current || (redlineMode || deathmatchMode) && !workshop) return;
+    if (!canvasHost.current || (redlineMode || deathmatchMode || blitzMode) && !workshop || blitzMode && !arenas) return;
     try {
-      engine.current = new DuelEngine(canvasHost.current, crosshair.current!, reportStatus, setError, settings, config, progression, botzMode ? botz : undefined, workshop);
+      engine.current = new DuelEngine(canvasHost.current, crosshair.current!, reportStatus, setError, settings, config, progression, botzMode ? botz : undefined, workshop,
+        blitzMode && blitz && arenas ? {config: blitz, arenas: arenas.arenas} : undefined);
       engine.current.onConsole = args => {
         // cl_radar_scale (e.g. `toggle cl_radar_scale 0.3 1`) zooms the Duel radar; the rest goes to the app.
         const radar = cvarAssignment(args, name => name === 'cl_radar_scale' ? String(latest.current.config.radarScale) : undefined);
@@ -75,11 +85,12 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
       };
     } catch {setError('WebGL could not start. Enable hardware acceleration and reload.');}
     return () => {engine.current?.dispose(); engine.current = undefined;};
-  }, [workshop]);
+  }, [workshop, arenas]);
   useEffect(() => {engine.current?.setSettings(settings);}, [settings]);
   useEffect(() => {void engine.current?.refreshCosmetics();}, [cosmeticRevision]);
   useEffect(() => {if (suspended) engine.current?.pause();}, [suspended]);
-  useEffect(() => {if (!botzMode) engine.current?.setConfig(config);}, [config]);
+  useEffect(() => {if (!botzMode && !blitzMode) engine.current?.setConfig(config);}, [config]);
+  useEffect(() => {if (blitzMode && blitz) engine.current?.setBlitz(blitz);}, [blitz]);
   useEffect(() => {if (botzMode) engine.current?.setBotz(botz);}, [botz]);
   const updateBot = useCallback((index: number, patch: BotOverride) => {
     const overrides = [...config.overrides]; overrides[index] = {...overrides[index], ...patch}; update({overrides});
@@ -92,7 +103,7 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
     newSession: async () => {engine.current?.restart(); await engine.current?.enter();},
     restart: () => engine.current?.restart(), pause: () => engine.current?.pause(), snapshot: () => statusRef.current,
   }), [status, onEnter]);
-  const ready = !!engine.current && !error && (!(redlineMode || deathmatchMode) || !!workshop && !status.mapLoading);
+  const ready = !!engine.current && !error && (!(redlineMode || deathmatchMode || blitzMode) || !!workshop && !status.mapLoading);
   useEffect(() => onMenuStatus({ready, playing: status.phase !== 'ready' && !status.paused, paused: status.paused,
     result: botzMode && status.phase === 'result', input: status.input, error}), [ready, status.phase, status.paused, status.input, error, onMenuStatus]);
   const dismissHint = () => {
@@ -112,13 +123,13 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
   return <div className="duel-layout">
     <div className={`duel-view sl-game-view ${botzMode ? 'sl-botz-view' : 'sl-duel-view'}`}>
       <div className="duel-canvas" ref={canvasHost} />
-      <div className="duel-topline"><span className="range-badge"><i />{botzMode ? title.toUpperCase() : deathmatchMode ? 'DEATHMATCH' : 'AI DUEL'}</span><span>{botzMode ? `${status.enemies} ${status.enemies === 1 ? 'BOT' : 'BOTS'} UP` : `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} LEFT`}</span></div>
+      <div className="duel-topline"><span className="range-badge"><i />{botzMode ? title.toUpperCase() : deathmatchMode ? 'DEATHMATCH' : blitzMode ? 'BLITZ · ANCIENT' : 'AI DUEL'}</span><span>{botzMode ? `${status.enemies} ${status.enemies === 1 ? 'BOT' : 'BOTS'} UP` : blitzMode ? `${status.enemies} ${status.enemies === 1 ? 'SWINGER' : 'SWINGERS'} LEFT` : `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} LEFT`}</span></div>
       <KillFeed entries={status.killFeed ?? []}/>
       <div className="duel-tools">
       <WeaponSlotList settings={settings} equipped={equipped} profile={profile} loadout={status.loadout} label="Duel equipment" equip={slot => engine.current?.equip(slot)}/>
       <div className="weapon-action-tools"><button className="icon-button" aria-label="Inspect weapon" title={`Inspect weapon (${keyHint(settings.keyboard, '+lookatweapon')})`} onClick={()=>engine.current?.inspect()}><Eye size={16}/></button>
         {equipped !== 'knife' && (gameData.weapons[equipped].zoomLevels > 0 || gameData.weapons[equipped].hasBurst || gameData.weapons[equipped].isRevolver) && <button className="icon-button" aria-label="Secondary weapon mode" title={`${equipped === 'revolver' ? 'Quick alternate shot' : 'Scope / burst mode'} (${keyHint(settings.keyboard, '+attack2')})`} onClick={()=>engine.current?.secondary()}><ScanLine size={16}/></button>}</div>
-      {playing && <EscHint className="duel-exit" label={botzMode ? `Pause ${drill}` : deathmatchMode ? 'Pause deathmatch' : 'Pause duel'} pause={() => engine.current?.pause()}/>}
+      {playing && <EscHint className="duel-exit" label={botzMode ? `Pause ${drill}` : deathmatchMode ? 'Pause deathmatch' : blitzMode ? 'Pause blitz' : 'Pause duel'} pause={() => engine.current?.pause()}/>}
       </div>
       <div className="follow-origin" ref={crosshair} aria-hidden="true"><div className={`crosshair ${settings.crosshair.t ? 't-style' : ''} ${settings.crosshair.size === 0 ? 'dot-only' : ''}`} style={crosshairStyle}>
         <i className="arm top"/><i className="arm right"/><i className="arm bottom"/><i className="arm left"/>{settings.crosshair.dot&&<i className="dot"/>}
@@ -128,8 +139,9 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
       {alive && status.interaction && !status.pickup && <button className="pickup-prompt" title={`${status.interaction} (${useKey})`} onClick={()=>engine.current?.sim.command(0,{usePressed:true})}><Hand size={15}/>{useKey} <span>{status.interaction}</span></button>}
       {deathmatchMode && status.phase === 'fighting' && !status.paused && status.respawnIn !== undefined && status.respawnIn > 0 && <div className="duel-result lost" role="status"><strong>You died</strong>
         <span>Respawning in {status.respawnIn.toFixed(1)}s</span></div>}
-      {status.phase === 'result' && !botzMode && <div className={`duel-result ${status.outcome}`} role="status"><strong>{status.outcome === 'won' ? 'Round won' : status.outcome === 'lost' ? 'Round lost' : 'Draw'}</strong>
-        <span>{status.paused ? 'Paused' : `Next round in ${status.nextRoundIn.toFixed(1)}s`}</span>
+      {status.phase === 'result' && !botzMode && <div className={`duel-result ${status.outcome}`} role="status"><strong>{blitzMode ? status.outcome === 'won' ? 'Arena cleared' : status.outcome === 'lost' ? 'You died' : 'Time up' : status.outcome === 'won' ? 'Round won' : status.outcome === 'lost' ? 'Round lost' : 'Draw'}</strong>
+        <span>{status.paused ? 'Paused' : blitzMode ? `${status.outcome === 'won' ? 'Next arena' : 'Again'} in ${status.nextRoundIn.toFixed(1)}s` : `Next round in ${status.nextRoundIn.toFixed(1)}s`}</span>
+        {blitzMode && status.blitz && <b>{status.blitz.name} · {status.outcome === 'won' ? `cleared in ${status.seconds.toFixed(1)} s` : `${status.kills} of ${blitz?.swingers ?? status.kills} swingers down`}</b>}
         {status.review && <><b>{status.review.message}</b><p>{status.review.tip}</p></>}</div>}
       {status.phase === 'result' && botzMode && status.botz && <div className="duel-result won" role="status"><strong>Session complete</strong>
         <span>{status.botz.kills} kills / {reflexMode ? `${status.botz.leaks} reached you` : `${status.botz.headshotRate.toFixed(0)}% headshots`} / {status.botz.accuracy.toFixed(0)}% accuracy</span>
@@ -153,7 +165,12 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
             <StatBlock value={Math.ceil(status.health)} icon={Plus} bar={status.health / config.playerHealth * 100} label="HEALTH"/>
             <StatBlock value={Math.ceil(status.armor)} icon={Shield} bar={status.armor} label={config.playerHelmet ? 'ARMOR · HELMET' : 'ARMOR'}/>
           </div>
-          {deathmatchMode ? <ScoreBar className="duel-round" bots={{alive: status.enemies, total: config.botCount, label: `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} UP`}}>
+          {blitzMode ? <ScoreBar className="duel-round" bots={{alive: status.enemies, total: blitz?.swingers ?? config.botCount, label: `${status.enemies} ${status.enemies === 1 ? 'SWINGER' : 'SWINGERS'} LEFT`}}>
+            <ScoreCell value={status.kills} label="KILLS" tone="blue"/>
+            <ScoreCell value={status.blitz ? `${status.blitz.arena}/${status.blitz.arenas}` : '–'} label="ARENA"/>
+            <ScoreCell value={clock(status.seconds)} label="TIME"/>
+            <ScoreCell value={status.blitz?.deaths ?? 0} label="DEATHS HERE" tone="gold"/>
+          </ScoreBar> : deathmatchMode ? <ScoreBar className="duel-round" bots={{alive: status.enemies, total: config.botCount, label: `${status.enemies} ${status.enemies === 1 ? 'ENEMY' : 'ENEMIES'} UP`}}>
             <ScoreCell value={status.kills} label="KILLS" tone="blue"/>
             <ScoreCell value={status.deaths ?? 0} label="DEATHS" tone="gold"/>
             {(status.immuneFor ?? 0) > 0 && <ScoreCell value={`${status.immuneFor!.toFixed(1)}s`} label="IMMUNE" tone="gold"/>}
@@ -177,6 +194,11 @@ export function DuelStage({settings, openSettings, onEnter, suspended, progressi
       <div className="tabs" role="tablist" aria-label={reflexMode ? 'Reflex panel' : `${title} panel`}><button role="tab" aria-selected={panel === 'setup'} onClick={() => setPanel('setup')}>Setup</button><button role="tab" aria-selected={panel === 'review'} onClick={() => setPanel('review')}>Stats</button></div>
       {panel === 'review' ? <div className="duel-controls-body"><BotzScorecard island={reflexMode} name={reflexMode ? 'Reflex' : title} summary={status.botz} history={status.botzHistory ?? []}/></div> : <BotzSetup config={botz} update={updateBotz}/>}
       <div className="duel-controls-foot"><button onClick={openSettings}><Settings2 size={15}/>Mouse & crosshair</button><span><Target size={13}/>Changes start a new session</span></div>
+    </aside> : blitzMode && blitz && updateBlitz ? <aside className="duel-controls" aria-label="Blitz settings">
+      <div className="duel-controls-head"><div><small>BLITZ / VALVE MAP · ANCIENT</small><h2>Blitz</h2></div><button className="icon-button" title="Restore drill defaults" aria-label="Restore drill defaults" onClick={resetSetup}><RotateCcw size={17}/></button></div>
+      <div className="tabs" role="tablist" aria-label="Blitz panel"><button role="tab" aria-selected={panel === 'setup'} onClick={() => setPanel('setup')}>Setup</button><button role="tab" aria-selected={panel === 'review'} onClick={() => setPanel('review')}>Arenas</button></div>
+      {panel === 'review' ? <div className="duel-controls-body"><BlitzScorecard history={status.blitz?.history ?? []}/></div> : <BlitzSetup config={blitz} update={updateBlitz} arenas={arenas?.arenas.length ?? 0} status={status.blitz}/>}
+      <div className="duel-controls-foot"><button onClick={openSettings}><Settings2 size={15}/>Mouse & crosshair</button><span><Target size={13}/>Changes start the arena again</span></div>
     </aside> : <aside className="duel-controls" aria-label="Duel settings">
       <div className="duel-controls-head"><div><small>{deathmatchMode ? 'AI DUEL / MAP BY BOT REED' : 'DRILL SETUP'}</small><h2>{deathmatchMode ? 'Deathmatch' : 'AI Duel'}</h2></div><button className="icon-button" title="Restore drill defaults" aria-label="Restore drill defaults" onClick={resetSetup}><RotateCcw size={17}/></button></div>
       <div className="tabs" role="tablist" aria-label="Duel panel"><button role="tab" aria-selected={panel === 'setup'} onClick={() => setPanel('setup')}>Setup</button><button role="tab" aria-selected={panel === 'review'} onClick={() => setPanel('review')}>Scorecard</button></div>

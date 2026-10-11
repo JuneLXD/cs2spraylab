@@ -56,17 +56,18 @@ export function prepareMapPresentation(doc, {lightmap = true} = {}) {
   return {mapped, overlays, ...projectFloorDecals(doc)};
 }
 
-/** The adapted glTF color images lose the alpha channel on some Source 2 materials. */
+/** The adapted glTF color images lose the alpha channel on some Source 2 materials. A texture that cannot be extracted
+ * (a stock map's shared props sometimes resolve only through other packages) keeps the adapted image. */
 export async function restoreMapTextureAlpha(doc, extract) {
   const textures = new Map();
-  let restored = 0;
+  let restored = 0, missing = 0;
   for (const material of doc.getRoot().listMaterials()) {
     const native = material.getExtras().vmat;
     const source = native?.TextureParams?.g_tColor;
     if (!source || !(native.IntParams?.F_ALPHA_TEST || native.IntParams?.F_TRANSLUCENT || material.getExtras().nativeOverlay)) continue;
     if (!textures.has(source)) {
       const file = extract(source);
-      if (!file) throw new Error(`Missing original alpha texture: ${source}`);
+      if (!file) {missing++; textures.set(source, null); continue;}
       const image = fs.readFileSync(file);
       textures.set(source, (await sharp(image).metadata()).hasAlpha
         ? doc.createTexture(source).setMimeType('image/png').setImage(image) : null);
@@ -74,7 +75,7 @@ export async function restoreMapTextureAlpha(doc, extract) {
     const texture = textures.get(source);
     if (texture) {material.setBaseColorTexture(texture); restored++;}
   }
-  return {restoredAlphaMaterials: restored};
+  return {restoredAlphaMaterials: restored, missingAlphaTextures: missing};
 }
 
 /** 12-bit UV quantization shifts small baked charts into neighbouring charts. */

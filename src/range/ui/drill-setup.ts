@@ -1,6 +1,7 @@
 import {defaults, type Mode, type Settings} from '../config';
 import type {BotzConfig} from '../duel/botz';
 import type {DuelConfig} from '../duel/config';
+import {blitzSummary, type BlitzConfig} from '../duel/blitz';
 
 /** Restore practice controls without changing input, video, cosmetics or the chosen drill. */
 export function rangeDrillDefaults(mode: Mode): Partial<Settings> {
@@ -13,7 +14,8 @@ export function rangeDrillDefaults(mode: Mode): Partial<Settings> {
     popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud,
     popBackground, popHits, popWall, popWallWidth, popRespawn, popRespawnMode, popMoveX, popRangeX, popFlipX, popMoveY, popRangeY, popFlipY, popMoveChance};
 }
-export function drillSetupSummary(settings: Settings, botz: BotzConfig, duel: DuelConfig): string {
+export function drillSetupSummary(settings: Settings, botz: BotzConfig, duel: DuelConfig, blitz?: BlitzConfig): string {
+  if (settings.mode === 'blitz' && blitz) return blitzSummary(blitz);
   if (['botz', 'reflex', 'redline'].includes(settings.mode)) {
     const movement = botz.movement === 'close' ? 'strafe and close in' : botz.movement === 'strafe' ? 'strafe A-D' : botz.map === 'island' ? 'run straight' : 'stand still';
     return `${botz.botCount} ${botz.botCount === 1 ? 'bot' : 'bots'} · ${movement} · ${botz.sessionSeconds ? `${botz.sessionSeconds}s` : 'endless'} · ${botz.infiniteAmmo === 'magazine' ? 'never reload' : botz.infiniteAmmo === 'reserve' ? 'infinite reserve' : 'normal ammo'}`;

@@ -2,6 +2,11 @@
 //  - src/range/duel/maps/<name>.json: collision boxes, spawns and bot spots (committed; see tools/map-collision.mjs);
 //  - public/revamp/maps/<name>.glb: the rendered world (a local asset like the other game assets).
 // Usage: node tools/import-map.mjs <workshop.vpk> [--game <CS2 install folder>] [--python <python with OpenEXR/numpy/Pillow>] [--keep]
+//   [--resume <work folder kept by --keep>]: skip the package merge, the Source 2 Viewer exports and the collision build when
+//   that folder already holds them (a big map's render export takes most of the time).
+//   [--voxel <metres>]: collision voxel size (0.1 by default; a large competitive map may want 0.2).
+//   [--headroom <metres>] [--below <metres>]: how far the collision grid reaches above the highest spawn (4) and under the
+//   lowest (1.5); a competitive map with sites above and below its spawns needs more, e.g. 16 and 8.
 // Workshop maps lean on stock CS2 materials and props. Without --game those are missing, and surfaces get flat colours
 // chosen from their names (a grey-box); with it they come with their textures.
 import fs from 'node:fs';
@@ -16,6 +21,8 @@ import {prepareMapPresentation, restoreMapTextureAlpha, optimizeMapPresentation}
 
 const args = process.argv.slice(2), option = name => {const i = args.indexOf(name); return i < 0 ? undefined : args.splice(i, 2)[1];};
 const game = option('--game'), python = option('--python') ?? 'python3', keep = args.includes('--keep');
+const resume = option('--resume'), voxel = Number(option('--voxel') ?? .1);
+const headroom = Number(option('--headroom') ?? 4), below = Number(option('--below') ?? 1.5);
 const source = args.find(arg => !arg.startsWith('--'));
 if (!source) throw new Error('Usage: node tools/import-map.mjs <workshop.vpk> [--game <CS2 install folder>] [--python <python with OpenEXR/numpy/Pillow>] [--keep]');
 const vrf = path.resolve(process.platform === 'win32' ? '.local-tools/vrf/Source2Viewer-CLI.exe' : '.local-tools/vrf-linux/Source2Viewer-CLI');
@@ -24,11 +31,15 @@ const gameinfo = game && path.join(game, 'game/csgo/gameinfo.gi');
 if (gameinfo && !fs.existsSync(gameinfo)) throw new Error(`No CS2 install at ${game}: ${gameinfo} is missing`);
 
 // A workshop package holds the map's own .vpk next to its custom materials; merge both so every file resolves.
-const work = fs.mkdtempSync(path.join(os.tmpdir(), 'spraylab-map-'));
+const work = resume ?? fs.mkdtempSync(path.join(os.tmpdir(), 'spraylab-map-'));
 const outer = listVpk(source), nested = outer.find(entry => /^maps\/[^/]+\.vpk$/.test(entry.path) && !/skybox/.test(entry.path));
 const files = new Map();
 let name;
-if (nested) {
+if (resume) {
+  name = nested ? path.basename(nested.path, '.vpk') : outer.find(entry => /^maps\/[^/]+\/world\.vwrld_c$/.test(entry.path))?.path.split('/')[1];
+  if (!name || !fs.existsSync(path.join(work, `render/maps/${name}/world.glb`))) throw new Error(`${work} holds no exported render for ${name}`);
+  console.log(`${name}: resuming from ${work}`);
+} else if (nested) {
   name = path.basename(nested.path, '.vpk');
   const inner = path.join(work, 'inner.vpk');
   fs.writeFileSync(inner, readVpkEntry(source, nested));
@@ -38,10 +49,12 @@ if (nested) {
   for (const entry of outer) files.set(entry.path, readVpkEntry(source, entry));
   name = [...files.keys()].find(file => /^maps\/[^/]+\/world\.vwrld_c$/.test(file))?.split('/')[1];
 }
-if (!name || !files.has(`maps/${name}/world.vwrld_c`)) throw new Error(`${source} holds no compiled map world`);
+if (!resume && (!name || !files.has(`maps/${name}/world.vwrld_c`))) throw new Error(`${source} holds no compiled map world`);
 const merged = path.join(work, 'merged.vpk');
-writeVpk(merged, files);
-console.log(`${name}: ${files.size} files${gameinfo ? '' : ' (no --game: stock CS2 materials will be grey-boxed)'}`);
+if (!resume) {
+  writeVpk(merged, files);
+  console.log(`${name}: ${files.size} files${gameinfo ? '' : ' (no --game: stock CS2 materials will be grey-boxed)'}`);
+}
 
 // Source 2 Viewer reports missing dependencies on stderr and still exports what it can.
 const run = (...extra) => {
@@ -56,19 +69,24 @@ const exported = (filter, out, ...extra) => {
   const log = run('-f', filter, '-d', '-o', path.join(work, out), ...extra, ...(gameinfo ? ['--game', gameinfo] : []));
   for (const match of log.matchAll(/Failed to load "([^"]+)"/g)) missing.add(match[1].replace(/\\/g, '/'));
 };
-exported(`maps/${name}/world.vwrld_c`, 'render', '--gltf_export_format', 'glb', '--gltf_export_materials', '--gltf_textures_adapt');
-exported(`maps/${name}/world_physics.vmdl_c`, 'physics', '--gltf_export_format', 'glb');
-exported(`maps/${name}/entities/default_ents.vents_c`, 'entities');
-if (missing.size) console.log(`${missing.size} referenced files are not in the package${gameinfo ? ' or the game' : ''}, e.g. ${[...missing].slice(0, 3).join(', ')}`);
+if (!resume) {
+  exported(`maps/${name}/world.vwrld_c`, 'render', '--gltf_export_format', 'glb', '--gltf_export_materials', '--gltf_textures_adapt');
+  exported(`maps/${name}/world_physics.vmdl_c`, 'physics', '--gltf_export_format', 'glb');
+  exported(`maps/${name}/entities/default_ents.vents_c`, 'entities');
+  if (missing.size) console.log(`${missing.size} referenced files are not in the package${gameinfo ? ' or the game' : ''}, e.g. ${[...missing].slice(0, 3).join(', ')}`);
+}
 
-// Collision, spawns and spots.
-const data = await buildMapCollision({
-  physics: path.join(work, `physics/maps/${name}/world_physics_physics.glb`),
-  entities: fs.readFileSync(path.join(work, `entities/maps/${name}/entities/default_ents.vents`), 'utf8'),
-});
-fs.mkdirSync('src/range/duel/maps', {recursive: true});
-writeMapCollision(`src/range/duel/maps/${name}.json`, {name, ...data});
-console.log(`collision: ${data.stats.boxes} boxes from ${data.stats.triangles} triangles, ${data.spawns.length} spawns, ${data.stats.spots} spots`);
+// Collision, spawns and spots (kept when resuming with the same voxel size).
+const collisionFile = `src/range/duel/maps/${name}.json`;
+if (!resume || !fs.existsSync(collisionFile) || JSON.parse(fs.readFileSync(collisionFile, 'utf8')).voxel !== voxel) {
+  const data = await buildMapCollision({
+    physics: path.join(work, `physics/maps/${name}/world_physics_physics.glb`),
+    entities: fs.readFileSync(path.join(work, `entities/maps/${name}/entities/default_ents.vents`), 'utf8'), voxel, headroom, below,
+  });
+  fs.mkdirSync('src/range/duel/maps', {recursive: true});
+  writeMapCollision(collisionFile, {name, ...data});
+  console.log(`collision: ${data.stats.boxes} boxes from ${data.stats.triangles} triangles, ${data.spawns.length} spawns, ${data.stats.spots} spots`);
+} else console.log(`collision: keeping ${collisionFile}`);
 
 // The rendered world: shadow-only casters dropped, visible native overlays retained, the map's own lights dropped (the engine lights the
 // dynamic actors), and any surface without a material grey-boxed by its name.
@@ -149,4 +167,4 @@ await io.write(staged, doc);
 fs.mkdirSync(path.dirname(output), {recursive: true});
 await optimizeMapPresentation(doc, output);
 console.log(`render: ${output} ${(fs.statSync(output).size / 1e6).toFixed(1)} MB`);
-if (keep) console.log(`work files kept in ${work}`); else fs.rmSync(work, {recursive: true, force: true});
+if (keep || resume) console.log(`work files kept in ${work}`); else fs.rmSync(work, {recursive: true, force: true});
