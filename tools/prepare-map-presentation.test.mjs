@@ -9,6 +9,7 @@ import {MeshoptDecoder} from 'meshoptimizer';
 import sharp from 'sharp';
 import {prepareMapPresentation, optimizeMapPresentation, restoreMapTextureAlpha} from './prepare-map-presentation.mjs';
 import {projectFloorDecals} from './project-map-decals.mjs';
+import {readMapLighting} from './map-lighting.mjs';
 
 function fixture(forceUv2 = false) {
   const doc = new Document(), buffer = doc.createBuffer();
@@ -31,6 +32,75 @@ test('UV2 crate surfaces retain the separate third-channel lightmap', () => {
   assert.equal(primitive.getAttribute('TEXCOORD_1'), lightUv);
   assert.equal(primitive.getAttribute('TEXCOORD_2'), null);
   assert.equal(primitive.getMaterial().getExtras().nativeLightmap, true);
+});
+
+test('Ancient world surfaces retain both authored UV sets and use the third channel for lighting', () => {
+  const {doc, primitive, lightUv} = fixture(true);
+  doc.getRoot().listNodes()[0].setName('n0_lr0_c33_s_cb_mesh_nsh.meshset_0');
+  const secondary = primitive.getAttribute('TEXCOORD_1');
+  primitive.getMaterial().setExtras({vmat: {ShaderName: 'csgo_environment_blend.vfx',
+    IntParams: {g_nUVSet1: 2}, VectorParams: {g_vTexCoordScale1: [2, 3, 0, 0], g_vTexCoordOffset1: [.25, 0, 0, 0]}}});
+  prepareMapPresentation(doc);
+  assert.equal(primitive.getAttribute('TEXCOORD_1'), secondary);
+  assert.equal(primitive.getAttribute('TEXCOORD_2'), lightUv);
+  assert.deepEqual(primitive.getAttribute('TEXCOORD_0').getElement(0, []), [-.25, -1]);
+  assert.equal(primitive.getMaterial().getExtras().nativeLightmapUv, 2);
+  const restored = primitive.getAttribute('TEXCOORD_0'); prepareMapPresentation(doc);
+  assert.equal(primitive.getAttribute('TEXCOORD_0'), restored, 'the material transform is applied only once');
+});
+
+test('environment props with a secondary surface channel are not assigned a false lightmap', () => {
+  const {doc, primitive} = fixture();
+  doc.getRoot().listNodes()[0].setName('n0_lr0_agg_merge_ancient_roof_trim_01_grey_wet_0');
+  primitive.getMaterial().setExtras({vmat: {ShaderName: 'csgo_environment.vfx'}});
+  prepareMapPresentation(doc);
+  assert.equal(primitive.getMaterial().getExtras().nativeLightmap, undefined);
+});
+
+test('a shared source material keeps separate lighting samplers for restored and original UV layouts', () => {
+  const {doc, primitive, lightUv} = fixture(true);
+  primitive.getMaterial().setExtras({vmat: {ShaderName: 'csgo_complex.vfx', IntParams: {F_SECONDARY_UV: 1}}});
+  const restored = primitive.clone().setAttribute('TEXCOORD_1', lightUv).setAttribute('TEXCOORD_2', null)
+    .setExtras({nativeUvRestored: true});
+  doc.getRoot().listMeshes()[0].addPrimitive(restored);
+  prepareMapPresentation(doc);
+  assert.notEqual(primitive.getMaterial(), restored.getMaterial());
+  assert.equal(primitive.getMaterial().getExtras().nativeLightmapUv, 2);
+  assert.equal(restored.getMaterial().getExtras().nativeLightmapUv, 1);
+});
+
+test('native black backing surfaces remain unlit black instead of grey-box geometry', () => {
+  const {doc, primitive} = fixture();
+  primitive.getMaterial().setExtras({vmat: {ShaderName: 'csgo_black_unlit.vfx'}});
+  prepareMapPresentation(doc);
+  assert.deepEqual(primitive.getMaterial().getBaseColorFactor(), [0, 0, 0, 1]);
+  assert.ok(primitive.getMaterial().getExtension('KHR_materials_unlit'));
+});
+
+test('foliage wind weights do not tint leaves; environment paint strength does not become opacity', () => {
+  for (const shader of ['csgo_foliage.vfx', 'csgo_environment.vfx']) {
+    const {doc, primitive} = fixture();
+    const color = doc.createAccessor().setBuffer(doc.getRoot().listBuffers()[0]).setType('VEC4')
+      .setArray(new Float32Array([.5, 0, .5, .5, 1, 1, 1, 1, 0, 0, 0, 0]));
+    primitive.setAttribute('COLOR_0', color);
+    primitive.getMaterial().setExtras({vmat: {ShaderName: shader}});
+    prepareMapPresentation(doc);
+    if (shader === 'csgo_foliage.vfx') assert.equal(primitive.getAttribute('COLOR_0'), null);
+    else {
+      assert.deepEqual(primitive.getAttribute('COLOR_0').getElement(0, []), [.75, .5, .75, 1]);
+      assert.deepEqual(primitive.getAttribute('COLOR_0').getElement(2, []), [1, 1, 1, 1]);
+    }
+    assert.deepEqual(color.getElement(0, []), [.5, 0, .5, .5], 'shared source accessor is untouched');
+  }
+});
+
+test('reads the map sun in glTF coordinates with linear intensity and the authored shadow channel', () => {
+  const lighting = readMapLighting('====168====\nclassname "light_environment"\nangles [ 90, 0, 0 ]\ncolor [ 255, 0, 0 ]\nbrightness 3.8\nbakedshadowindex "2"');
+  assert.ok(Math.abs(lighting.sunDirection[1] - 1) < 1e-6);
+  assert.deepEqual(lighting.sunColor, [3.8, 0, 0]);
+  assert.equal(lighting.sunShadowChannel, 2);
+  assert.deepEqual(lighting.sunShadowMask, [1, 0, 0, 0]);
+  assert.equal(readMapLighting('classname "info_player_terrorist"'), null);
 });
 
 test('recovers the compiled linear roof-beam tint from the adapted material', () => {

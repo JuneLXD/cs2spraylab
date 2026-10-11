@@ -7,6 +7,7 @@
 //   [--voxel <metres>]: collision voxel size (0.1 by default; a large competitive map may want 0.2).
 //   [--headroom <metres>] [--below <metres>]: how far the collision grid reaches above the highest spawn (4) and under the
 //   lowest (1.5); a competitive map with sites above and below its spawns needs more, e.g. 16 and 8.
+//   [--output-dir <folder>]: stage the render and lighting assets for review before replacing the served map.
 // Workshop maps lean on stock CS2 materials and props. Without --game those are missing, and surfaces get flat colours
 // chosen from their names (a grey-box); with it they come with their textures.
 import fs from 'node:fs';
@@ -17,12 +18,15 @@ import {NodeIO} from '@gltf-transform/core';
 import {ALL_EXTENSIONS} from '@gltf-transform/extensions';
 import {listVpk, readVpkEntry, writeVpk} from './vpk.mjs';
 import {buildMapCollision, writeMapCollision} from './map-collision.mjs';
+import {refineMapCollision} from './refine-map-collision.mjs';
 import {prepareMapPresentation, restoreMapTextureAlpha, optimizeMapPresentation} from './prepare-map-presentation.mjs';
+import {readMapLighting} from './map-lighting.mjs';
 
 const args = process.argv.slice(2), option = name => {const i = args.indexOf(name); return i < 0 ? undefined : args.splice(i, 2)[1];};
 const game = option('--game'), python = option('--python') ?? 'python3', keep = args.includes('--keep');
 const resume = option('--resume'), voxel = Number(option('--voxel') ?? .1);
 const headroom = Number(option('--headroom') ?? 4), below = Number(option('--below') ?? 1.5);
+const outputDir = option('--output-dir') ?? 'public/revamp/maps';
 const source = args.find(arg => !arg.startsWith('--'));
 if (!source) throw new Error('Usage: node tools/import-map.mjs <workshop.vpk> [--game <CS2 install folder>] [--python <python with OpenEXR/numpy/Pillow>] [--keep]');
 const vrf = path.resolve(process.platform === 'win32' ? '.local-tools/vrf/Source2Viewer-CLI.exe' : '.local-tools/vrf-linux/Source2Viewer-CLI');
@@ -83,6 +87,13 @@ if (!resume || !fs.existsSync(collisionFile) || JSON.parse(fs.readFileSync(colli
     physics: path.join(work, `physics/maps/${name}/world_physics_physics.glb`),
     entities: fs.readFileSync(path.join(work, `entities/maps/${name}/entities/default_ents.vents`), 'utf8'), voxel, headroom, below,
   });
+  const detailRecipe = new URL(`./${name}-collision-regions.json`, import.meta.url);
+  if (fs.existsSync(detailRecipe)) {
+    const regions = await refineMapCollision(path.join(work, `physics/maps/${name}/world_physics_physics.glb`), data,
+      JSON.parse(fs.readFileSync(detailRecipe, 'utf8')));
+    data.detailRegions = regions.map(({stats, ...region}) => region);
+    console.log(`collision: ${regions.length} native detail regions, ${regions.reduce((n, region) => n + region.boxes.length, 0)} precision boxes`);
+  }
   fs.mkdirSync('src/range/duel/maps', {recursive: true});
   writeMapCollision(collisionFile, {name, ...data});
   console.log(`collision: ${data.stats.boxes} boxes from ${data.stats.triangles} triangles, ${data.spawns.length} spawns, ${data.stats.spots} spots`);
@@ -112,7 +123,14 @@ const greyBox = [
   [/./, '#9a9587'],
 ];
 const root = doc.getRoot(), materials = new Map();
-const lightmap = name === 'aim_redline' && !!gameinfo;
+const lightmap = !!gameinfo && listVpk(merged).some(entry => entry.path === `maps/${name}/lightmaps/irradiance.vtex_c`);
+let lighting;
+if (lightmap) {
+  lighting = readMapLighting(fs.readFileSync(path.join(work, `entities/maps/${name}/entities/default_ents.vents`), 'utf8'));
+  for (const scene of root.listScenes()) scene.setExtras({...scene.getExtras(), nativeMapLighting: lighting ?? {
+    version: 1, sunDirection: [0, 1, 0], sunColor: [0, 0, 0], sunShadowMask: [0, 0, 0, 0],
+  }});
+}
 console.log(prepareMapPresentation(doc, {lightmap}));
 if (gameinfo) {
   const textureRoot = path.join(work, 'original-textures');
@@ -127,12 +145,15 @@ if (gameinfo) {
   }));
 }
 if (lightmap) {
-  exported(`maps/${name}/lightmaps/irradiance.vtex_c,maps/${name}/lightmaps/direct_light_shadows.vtex_c`, 'lighting');
-  fs.mkdirSync('public/revamp/maps', {recursive: true});
+  const needed = [['irradiance', 'exr'], ['direct_light_shadows', 'png']]
+    .filter(([texture, extension]) => !resume || !fs.existsSync(path.join(work, `lighting/maps/${name}/lightmaps/${texture}.${extension}`)))
+    .map(([texture]) => `maps/${name}/lightmaps/${texture}.vtex_c`);
+  if (needed.length) exported(needed.join(','), 'lighting');
+  fs.mkdirSync(outputDir, {recursive: true});
   execFileSync(python, ['tools/encode-map-lightmap.py',
     path.join(work, `lighting/maps/${name}/lightmaps/irradiance.exr`),
     path.join(work, `lighting/maps/${name}/lightmaps/direct_light_shadows.png`),
-    `public/revamp/maps/${name}`], {stdio: 'inherit'});
+    path.join(outputDir, name), '--shadow-channel', String(Math.max(0, lighting?.sunShadowChannel ?? 0))], {stdio: 'inherit'});
 }
 // The exporter flattens this layered tint shader into a dark multiplicative
 // factor, omitting its color-replacement/contrast layers. Keep the authored
@@ -150,7 +171,7 @@ for (const node of root.listNodes()) {
   const [, color, metalness = 0, opacity = 1, emissive = false] = greyBox.find(([pattern]) => pattern.test(label));
   if (!color) {node.dispose(); continue;}
   for (const primitive of mesh?.listPrimitives() ?? []) {
-    if (primitive.getMaterial()?.getBaseColorTexture()) continue;
+    if (primitive.getMaterial()?.getBaseColorTexture() || primitive.getMaterial()?.getExtension('KHR_materials_unlit')) continue;
     const key = `${color}:${metalness}:${opacity}:${emissive}`;
     if (!materials.has(key)) {
       const [r, g, b] = [1, 3, 5].map(i => (parseInt(color.slice(i, i + 2), 16) / 255) ** 2.2);
@@ -162,7 +183,7 @@ for (const node of root.listNodes()) {
     primitive.setMaterial(materials.get(key));
   }
 }
-const staged = path.join(work, 'staged.glb'), output = `public/revamp/maps/${name}.glb`;
+const staged = path.join(work, 'staged.glb'), output = path.join(outputDir, `${name}.glb`);
 await io.write(staged, doc);
 fs.mkdirSync(path.dirname(output), {recursive: true});
 await optimizeMapPresentation(doc, output);

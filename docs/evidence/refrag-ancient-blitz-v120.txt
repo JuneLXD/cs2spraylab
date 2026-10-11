@@ -1,0 +1,4300 @@
+Capture Date: 2026-10-11
+Arena Count: 38
+Set ID: 4530
+Set Title: BLITZ 2.0 - Ancient
+Active live: version 120
+
+Arena Index: 0
+Arena Name: A Site
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -959.784485 1054.403931 65.659019; setang_exact 0.666491 -153.115051 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -2040.980225 397.516113 75.031250; setang_exact -0.112419 27.029984 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1768.496338 380.062622 191.854385; setang_exact 5.918116 51.818439 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1299.649536 762.258240 54.031250; setang_exact -0.995718 34.505718 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1848.224487 843.904602 52.324577; setang_exact -1.742512 19.642206 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -2119.322510 791.994934 54.536098; setang_exact -0.144543 16.020666 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Widest Swing Pos     setpos_exact -959.784485 1054.403931 137.659027
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 1
+Arena Name: A Site #2
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1131.375122 990.554382 56.876957; setang_exact 0.232875 -160.243347 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1768.592163 380.047546 191.702301; setang_exact 3.693804 38.378761 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -2059.549561 364.668213 88.031250; setang_exact -1.316913 25.329988 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1952.748169 828.482666 52.031246; setang_exact -0.505986 14.521381 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1635.112915 1048.363892 52.013901; setang_exact -0.746885 4.588265 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1935.205688 1107.777466 52.031246; setang_exact -0.425685 4.082378 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Widest Swing Pos     setpos_exact -1131.375122 990.554382 128.876953
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 2
+Arena Name: A Site #3
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1066.729980 849.631470 68.031250; setang_exact 1.212549 168.781967 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1955.885132 1227.926025 116.031250; setang_exact 2.304629 -41.578972 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1066.729980 849.631470 140.031250
+ ------> Widest Swing Pos     setpos_exact -1066.729980 849.631470 140.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1891.196167 938.003296 52.667049; setang_exact -0.867154 -9.161679 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1074.821655 858.502197 114.031250
+ ------> Widest Swing Pos     setpos_exact -1074.821655 858.502197 114.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1906.202271 873.128174 52.031254; setang_exact -0.963514 3.373152 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1066.729980 849.631470 140.031250
+ ------> Widest Swing Pos     setpos_exact -1066.729980 849.631470 140.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1629.119629 1067.976196 52.011837; setang_exact -2.786322 -12.349583 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1066.729980 849.631470 140.031250
+ ------> Widest Swing Pos     setpos_exact -1066.729980 849.631470 140.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -2107.834473 894.174500 57.407623; setang_exact 1.027923 -0.410206 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1066.729980 849.631470 140.031250
+ ------> Widest Swing Pos     setpos_exact -1066.729980 849.631470 140.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 3
+Arena Name: A Site #4
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1125.213867 720.227356 53.980701; setang_exact 0.289071 -177.100510 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1792.769653 409.961334 177.005554; setang_exact 9.531609 41.620590 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1874.838989 879.850342 54.388798; setang_exact -0.778903 -7.338330 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -2074.626221 941.597839 60.141708; setang_exact -0.168624 -8.783742 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1974.674561 453.423859 75.031250; setang_exact -0.529973 13.627994 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -2086.794922 423.926849 75.031250; setang_exact 0.385446 11.443816 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Widest Swing Pos     setpos_exact -1125.213867 720.227356 125.980698
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 4
+Arena Name: A Site #5
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -993.081116 1083.029663 65.024780; setang_exact 1.477527 -130.840240 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1769.644653 380.078522 190.055923; setang_exact 5.131179 33.975525 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1296.892944 355.303589 88.662056; setang_exact 2.312639 56.435463 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1380.518066 97.033699 106.031242; setang_exact 2.513384 61.606743 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1304.612793 766.796387 54.031250; setang_exact -0.072271 37.942383 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1265.026855 708.975525 56.031250; setang_exact -0.481801 59.599258 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Widest Swing Pos     setpos_exact -993.081116 1083.029663 137.024780
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 5
+Arena Name: A Site #6
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1555.087646 1171.744751 98.799950; setang_exact 5.645090 -121.605690 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1464.945190 638.979248 70.342682; setang_exact -0.899359 91.903618 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1538.627686 1173.791138 162.172638
+ ------> Widest Swing Pos     setpos_exact -1538.627686 1173.791138 162.172638
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1944.402100 395.352509 76.832176; setang_exact -1.437347 59.904804 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1555.087646 1171.744751 170.799957
+ ------> Widest Swing Pos     setpos_exact -1555.087646 1171.744751 170.799957
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -2249.053955 115.821709 74.332344; setang_exact -0.658438 60.747948 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1555.087646 1171.744751 170.799957
+ ------> Widest Swing Pos     setpos_exact -1555.087646 1171.744751 170.799957
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1819.453979 789.864929 52.419292; setang_exact -2.360797 62.787510 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1555.087646 1171.744751 170.799957
+ ------> Widest Swing Pos     setpos_exact -1555.087646 1171.744751 170.799957
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1892.272217 833.439636 52.030727; setang_exact -2.722142 38.480686 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1555.087646 1171.744751 170.799957
+ ------> Widest Swing Pos     setpos_exact -1555.087646 1171.744751 170.799957
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 6
+Arena Name: A Site #7
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1879.886841 -386.146118 80.031250; setang_exact 6.520368 -75.047478 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1399.945679 -1093.807495 -7.195435; setang_exact -4.528912 113.906342 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1397.230713 -1360.832764 -20.331543; setang_exact -5.757496 107.939919 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1276.306274 -1603.358154 -19.968750; setang_exact -3.806211 117.022125 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1971.235352 -909.186096 -19.968750; setang_exact -10.077637 92.049103 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -2007.004395 -998.916748 -19.968750; setang_exact -7.259123 80.871185 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Widest Swing Pos     setpos_exact -1879.886841 -386.146118 152.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 7
+Arena Name: A Site #8
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1342.181030 385.255157 93.031258; setang_exact 3.131698 122.970673 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1599.047363 1160.869141 51.921391; setang_exact -1.606003 -60.346241 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1866.750732 998.132874 52.031254; setang_exact -3.484922 -53.567863 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1865.435669 939.987305 55.384361; setang_exact -2.682022 -38.183460 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1834.801758 612.059814 52.175869; setang_exact -2.649908 -34.650188 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1960.954956 1186.627930 60.106804; setang_exact 0.008120 -50.171108 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Widest Swing Pos     setpos_exact -1342.181030 385.255157 165.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 8
+Arena Name: Mid
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1190.073364 -88.645386 103.879120; setang_exact 3.203965 -16.461927 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -268.071655 -605.264404 164.031250; setang_exact 4.031052 -173.584091 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -362.409302 -554.203674 35.084335; setang_exact -1.670244 149.285248 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -637.560791 -397.348145 58.287506; setang_exact -3.316389 153.533310 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -601.844421 -63.603149 86.875763; setang_exact -1.059960 179.807358 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -454.975220 19.254658 111.109024; setang_exact 0.746790 -177.582840 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Widest Swing Pos     setpos_exact -1190.073364 -88.645386 175.879120
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 9
+Arena Name: Mid #2
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -787.615662 -163.647034 71.600700; setang_exact 3.878485 -60.031494 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -295.177002 -838.678711 34.872265; setang_exact -1.903118 121.695419 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -723.366943 -634.034973 35.291103; setang_exact -2.947017 110.854790 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -746.484863 -833.081543 33.742046; setang_exact -0.594227 106.743507 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -152.498413 -686.138672 158.976242; setang_exact 2.682016 131.989929 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 13.719202 -813.802734 153.031250; setang_exact 3.950754 135.884705 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Widest Swing Pos     setpos_exact -787.615662 -163.647034 143.600708
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 10
+Arena Name: Mid #3
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -500.511963 626.191284 161.242691; setang_exact 5.524647 -92.152443 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -695.039673 -209.523987 58.646915; setang_exact -7.548192 86.217064 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -362.587341 -228.822876 61.229679; setang_exact -7.427745 89.814438 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -308.063354 -837.011902 33.195728; setang_exact -5.620991 94.455986 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -803.431641 -712.051331 38.220081; setang_exact -3.115534 86.016357 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -813.804504 -827.662415 37.633785; setang_exact -3.886415 84.394463 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Widest Swing Pos     setpos_exact -500.511963 626.191284 233.242691
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 11
+Arena Name: Mid #4
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -476.014160 374.239777 160.144333; setang_exact 7.090450 -99.475342 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -356.068359 -130.476624 62.186863; setang_exact -9.057878 92.498077 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -304.445557 -832.962830 33.006397; setang_exact -2.417070 95.404961 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -724.898132 -213.709106 63.375904; setang_exact -3.605510 75.409920 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -770.087952 -653.899841 38.834438; setang_exact -5.990443 79.666016 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -821.833923 -817.162415 37.324677; setang_exact -5.982417 76.140984 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Widest Swing Pos     setpos_exact -476.014160 374.239777 232.144333
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 12
+Arena Name: Mid #5
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -564.158875 370.845154 160.115433; setang_exact 6.520328 -84.210052 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -310.062744 -808.523743 32.577740; setang_exact -2.898857 104.414581 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -130.050415 -818.549133 153.339951; setang_exact 3.501066 117.439499 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -786.239990 -793.113281 36.643311; setang_exact -0.538027 84.838280 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -693.851562 -197.447388 58.901043; setang_exact -6.994145 89.913383 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -280.019897 -226.812012 68.031158; setang_exact -5.083002 102.038933 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Widest Swing Pos     setpos_exact -564.158875 370.845154 232.115433
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 13
+Arena Name: B Site
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 570.884399 804.706421 114.932243; setang_exact -1.276767 -76.814270 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 609.098755 -299.374512 137.978180; setang_exact 0.040157 94.802910 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 570.884399 804.706421 186.932251
+ ------> Widest Swing Pos     setpos_exact 570.884399 804.706421 186.932251
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 812.398071 -52.315063 130.901108; setang_exact 0.056217 101.596611 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 570.884399 804.706421 186.932251
+ ------> Widest Swing Pos     setpos_exact 570.884399 804.706421 186.932251
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 880.189636 33.402332 130.901108; setang_exact 0.827097 116.974136 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 577.557434 806.719360 178.507965
+ ------> Widest Swing Pos     setpos_exact 577.557434 806.719360 178.507965
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 860.423889 368.012543 127.762878; setang_exact -0.513913 110.960152 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 570.884399 804.706421 186.932251
+ ------> Widest Swing Pos     setpos_exact 570.884399 804.706421 186.932251
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 596.723206 180.609116 152.603577; setang_exact 0.240908 104.495911 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 570.884399 804.706421 186.932251
+ ------> Widest Swing Pos     setpos_exact 570.884399 804.706421 186.932251
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 14
+Arena Name: B Site #2
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 754.439575 785.708130 117.661812; setang_exact -0.385449 -96.159492 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 594.072937 -299.264282 138.116013; setang_exact 0.056205 85.205254 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 754.439575 785.708130 189.661804
+ ------> Widest Swing Pos     setpos_exact 754.439575 785.708130 189.661804
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 789.321899 -83.145264 134.031250; setang_exact -0.088333 89.156082 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 754.439575 785.708130 189.661804
+ ------> Widest Swing Pos     setpos_exact 754.439575 785.708130 189.661804
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 594.235718 219.943237 154.412659; setang_exact -0.361351 82.860291 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 754.439575 785.708130 189.661804
+ ------> Widest Swing Pos     setpos_exact 754.439575 785.708130 189.661804
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 519.860535 151.870880 152.654755; setang_exact 0.160599 82.354515 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 754.439575 785.708130 189.661804
+ ------> Widest Swing Pos     setpos_exact 754.439575 785.708130 189.661804
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 842.862793 205.638000 134.031250; setang_exact 5.500435 128.655441 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 741.206116 786.557922 179.624237
+ ------> Widest Swing Pos     setpos_exact 741.206116 786.557922 179.624237
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 15
+Arena Name: B Site #3
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 1367.567139 528.914429 133.093918; setang_exact 0.088333 -136.517242 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 763.475586 -11.599670 130.031250; setang_exact -0.770879 43.626793 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 697.069885 44.888206 130.901108; setang_exact 0.224840 32.834404 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 1161.002808 15.930609 148.031250; setang_exact 2.336631 58.113964 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 524.504822 221.708801 152.654755; setang_exact 2.738122 37.813122 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 1055.349731 -210.015503 122.824890; setang_exact -0.136613 61.326195 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Widest Swing Pos     setpos_exact 1367.567139 528.914429 205.093918
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 16
+Arena Name: B Site #4
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 1198.534424 418.323914 124.753609; setang_exact -0.377380 -158.632996 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 320.106689 260.011078 158.040222; setang_exact 1.156348 14.749877 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 485.517548 27.656382 152.654755; setang_exact 0.000028 16.516451 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 659.211548 449.913940 124.421722; setang_exact 0.297138 12.983254 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 699.278442 60.653286 130.901108; setang_exact -0.473741 22.081223 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 743.203491 -24.574585 130.031250; setang_exact 0.248959 51.085609 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Widest Swing Pos     setpos_exact 1198.534424 418.323914 196.753601
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 17
+Arena Name: B Site #5
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 1258.391235 -707.950989 8.959257; setang_exact -6.062664 -175.013107 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 696.860962 -549.100525 124.675842; setang_exact 5.934142 -0.907618 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 170.642380 -724.787537 153.049011; setang_exact 5.596895 9.451074 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 503.967712 -903.968750 131.140854; setang_exact 3.950746 4.849883 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -207.176147 -758.114563 164.031250; setang_exact 5.757508 6.632536 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 28.302168 -752.915710 153.031250; setang_exact 5.163293 7.483716 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Widest Swing Pos     setpos_exact 1258.391235 -707.950989 80.959259
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 18
+Arena Name: B Site #6
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 170.703400 -789.397156 153.031250; setang_exact 10.896739 -2.184339 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 1057.726440 -928.173767 6.388103; setang_exact -10.270328 173.535141 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 170.703400 -789.397156 225.031250
+ ------> Widest Swing Pos     setpos_exact 170.703400 -789.397156 225.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 1091.048828 -982.625610 8.903472; setang_exact -9.459304 174.619110 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 170.703400 -789.397156 225.031250
+ ------> Widest Swing Pos     setpos_exact 170.703400 -789.397156 225.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 658.957397 -681.811584 92.828415; setang_exact -10.559436 -176.692505 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 170.703400 -789.397156 225.031250
+ ------> Widest Swing Pos     setpos_exact 170.703400 -789.397156 225.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 1221.662598 -636.821899 21.597866; setang_exact -3.854390 -174.805679 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 165.501724 -781.745850 217.031250
+ ------> Widest Swing Pos     setpos_exact 165.501724 -781.745850 217.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 1383.927124 -540.345581 40.609512; setang_exact -2.023550 -169.546387 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 165.501724 -781.745850 217.031250
+ ------> Widest Swing Pos     setpos_exact 165.501724 -781.745850 217.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 19
+Arena Name: B Site #7
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -11.738708 -804.140503 153.031250; setang_exact 7.299296 0.666380 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 169.249588 -702.723083 153.308426; setang_exact 3.766099 -128.866287 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -12.308960 -820.682251 217.031250
+ ------> Widest Swing Pos     setpos_exact -12.308960 -820.682251 217.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 628.287964 -713.203003 103.069237; setang_exact -8.335112 -176.355591 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -11.738708 -804.140503 225.031250
+ ------> Widest Swing Pos     setpos_exact -11.738708 -804.140503 225.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 1057.724243 -928.824890 6.109047; setang_exact -1.670207 -175.778030 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -11.738708 -804.140503 225.031250
+ ------> Widest Swing Pos     setpos_exact -11.738708 -804.140503 225.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 1282.975830 -638.711792 20.298565; setang_exact -5.187350 -177.359818 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -11.738708 -804.140503 225.031250
+ ------> Widest Swing Pos     setpos_exact -11.738708 -804.140503 225.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 1104.981812 -982.455566 8.844608; setang_exact -1.670207 -175.778030 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -11.738708 -804.140503 225.031250
+ ------> Widest Swing Pos     setpos_exact -11.738708 -804.140503 225.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 20
+Arena Name: A Site #9
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -2107.683594 -167.919983 74.184982; setang_exact 0.778910 78.060257 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1999.119141 1112.658691 76.524055; setang_exact 1.196471 -96.912392 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2107.683594 -167.919983 146.184982
+ ------> Widest Swing Pos     setpos_exact -2107.683594 -167.919983 146.184982
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1793.772095 989.562927 52.018986; setang_exact -0.361350 -99.112541 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2095.672607 -165.913696 137.068420
+ ------> Widest Swing Pos     setpos_exact -2095.672607 -165.913696 137.068420
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -2143.933838 375.698944 84.966827; setang_exact -0.168624 -95.771400 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2107.683594 -167.919983 146.184982
+ ------> Widest Swing Pos     setpos_exact -2107.683594 -167.919983 146.184982
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1835.182739 643.965149 52.080265; setang_exact -1.758489 -98.471375 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2107.683594 -167.919983 146.184982
+ ------> Widest Swing Pos     setpos_exact -2107.683594 -167.919983 146.184982
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1727.378296 1138.840576 52.012966; setang_exact 1.043979 -136.525253 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2107.683594 -167.919983 146.184982
+ ------> Widest Swing Pos     setpos_exact -2107.683594 -167.919983 146.184982
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 21
+Arena Name: A Site #10
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -2133.930664 170.395691 73.327950; setang_exact 1.605998 63.637615 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1452.544312 1124.186401 99.106606; setang_exact 1.718418 -136.525253 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2133.930664 170.395691 145.327942
+ ------> Widest Swing Pos     setpos_exact -2133.930664 170.395691 145.327942
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1709.083130 995.359436 52.070557; setang_exact -0.915361 -120.215622 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2125.632080 165.846603 136.631409
+ ------> Widest Swing Pos     setpos_exact -2125.632080 165.846603 136.631409
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1710.982300 1165.144165 52.275764; setang_exact -0.963538 -110.732918 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2133.930664 170.395691 145.327942
+ ------> Widest Swing Pos     setpos_exact -2133.930664 170.395691 145.327942
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1761.476440 685.858826 54.332100; setang_exact -1.662149 -118.954308 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2133.930664 170.395691 145.327942
+ ------> Widest Swing Pos     setpos_exact -2133.930664 170.395691 145.327942
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1999.282471 1112.670410 76.551544; setang_exact 2.489362 -104.678284 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2133.930664 170.395691 145.327942
+ ------> Widest Swing Pos     setpos_exact -2133.930664 170.395691 145.327942
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 22
+Arena Name: A Site #11
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1987.724365 498.930695 73.513504; setang_exact 0.297075 35.901630 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -907.149231 1029.867676 67.385216; setang_exact -1.132264 -147.343109 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1030.506226 868.457764 75.170982; setang_exact -0.650574 -155.789490 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1160.101807 801.071472 54.684456; setang_exact -1.782805 -167.208054 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1653.488159 1085.316040 51.985023; setang_exact 0.264842 -121.075333 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1462.072388 1148.032837 99.379517; setang_exact 3.709717 -132.478043 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Widest Swing Pos     setpos_exact -1987.724365 498.930695 145.513504
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 23
+Arena Name: A Site #12
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -2012.066162 510.456818 67.528786; setang_exact 0.899361 18.083530 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -921.284485 1019.018555 69.318634; setang_exact -0.666489 -148.033264 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1157.869385 1066.564575 54.156948; setang_exact -2.168100 -154.866714 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1026.102051 839.870544 75.476906; setang_exact -0.377408 -159.291183 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1164.211670 784.010132 54.186306; setang_exact -0.192718 -164.318161 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1328.612549 510.185760 73.031250; setang_exact 0.819059 -165.884064 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Widest Swing Pos     setpos_exact -2012.066162 510.456818 139.528778
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 24
+Arena Name: A Site #13
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1880.718506 800.545654 52.030247; setang_exact -0.080306 6.319430 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1059.790527 789.394226 68.031250; setang_exact 0.208771 -178.176590 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1149.104248 781.197815 56.017448; setang_exact 0.538001 178.643341 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1135.365967 1060.015625 56.752243; setang_exact -0.192730 -171.214676 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -554.759888 1040.794800 67.031250; setang_exact -1.341021 -163.915329 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -169.268921 1364.388062 25.236471; setang_exact -0.786975 -166.149048 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Widest Swing Pos     setpos_exact -1880.718506 800.545654 124.030243
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 25
+Arena Name: A Site #14
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1738.096436 507.003510 168.031250; setang_exact 11.169765 29.638178 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1153.497681 798.257935 55.484932; setang_exact -9.579757 -159.852676 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1113.195801 843.916870 59.973240; setang_exact -8.134459 -146.506958 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1124.431396 1150.433594 58.315598; setang_exact -4.223846 -140.685211 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -784.107666 1111.513428 68.670029; setang_exact -3.485090 -144.933136 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1338.731689 496.362854 73.031250; setang_exact -5.693336 -153.461258 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Widest Swing Pos     setpos_exact -1738.096436 507.003510 240.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 26
+Arena Name: A Site #15
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1291.619141 -12.976196 105.523033; setang_exact 2.866696 99.491737 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -1736.244141 1157.244141 51.996044; setang_exact -2.328712 -73.650925 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1585.909058 697.724426 56.031250; setang_exact -2.914902 -71.627205 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1219.796997 572.148010 73.031250; setang_exact 0.024124 -86.274529 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1222.630859 942.900208 56.031250; setang_exact -2.481286 -87.365646 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1193.161377 682.433472 55.476219; setang_exact -2.770314 -86.426796 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Widest Swing Pos     setpos_exact -1291.619141 -12.976196 177.523041
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 27
+Arena Name: A Site #16
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1428.755615 20.246620 103.467369; setang_exact 3.107587 78.059853 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -969.328796 1112.444824 67.137192; setang_exact -1.806775 -107.985878 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1428.755615 20.246620 167.437103
+ ------> Widest Swing Pos     setpos_exact -1428.755615 20.246620 167.437103
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -1165.184448 614.624756 73.031250; setang_exact -2.344786 -108.411064 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1501.959473 431.432159 148.748535
+ ------> Widest Swing Pos     setpos_exact -1501.959473 431.432159 148.748535
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -1213.207886 903.931946 60.962444; setang_exact -1.830861 -99.481743 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1428.755615 20.246620 175.467377
+ ------> Widest Swing Pos     setpos_exact -1428.755615 20.246620 175.467377
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -1499.707642 584.302002 73.031250; setang_exact -3.268231 -93.185715 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1428.755615 20.246620 175.467377
+ ------> Widest Swing Pos     setpos_exact -1428.755615 20.246620 175.467377
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1559.507324 941.672241 56.031250; setang_exact -2.609773 -90.141960 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1428.755615 20.246620 175.467377
+ ------> Widest Swing Pos     setpos_exact -1428.755615 20.246620 175.467377
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 28
+Arena Name: Mid #6
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -1116.888428 -871.516479 34.900894; setang_exact 0.610272 17.087400 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -144.560669 -291.735229 69.330917; setang_exact -1.782667 -144.090912 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -495.199951 -348.899658 58.214596; setang_exact -1.124207 -145.648682 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -667.663452 -484.268433 45.578484; setang_exact -1.092087 -145.608505 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 149.784576 -717.340820 153.135056; setang_exact 2.328705 -176.677063 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 64.031250 -903.919189 156.683273; setang_exact 2.521421 -176.845947 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Widest Swing Pos     setpos_exact -1116.888428 -871.516479 106.900894
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 29
+Arena Name: Mid #7
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -703.950928 -673.527710 32.124672; setang_exact -3.019287 79.745506 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -399.177368 328.737823 175.031250; setang_exact 3.613500 -104.229843 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -704.649597 -674.810608 92.976135
+ ------> Widest Swing Pos     setpos_exact -704.649597 -674.810608 92.976135
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -468.740417 738.413330 113.662186; setang_exact 4.223783 -99.596428 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -704.981689 -668.938599 92.072006
+ ------> Widest Swing Pos     setpos_exact -704.981689 -668.938599 92.072006
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Forward [4]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -624.877747 403.460083 175.031250; setang_exact 2.665964 -99.323029 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -703.950928 -673.527710 104.124672
+ ------> Widest Swing Pos     setpos_exact -703.950928 -673.527710 104.124672
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -764.409302 -256.459961 69.897667; setang_exact 2.521427 -91.733994 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -703.950928 -673.527710 104.124672
+ ------> Widest Swing Pos     setpos_exact -703.950928 -673.527710 104.124672
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -803.970154 -116.132446 74.967224; setang_exact 3.003226 -91.541283 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -703.950928 -673.527710 104.124672
+ ------> Widest Swing Pos     setpos_exact -703.950928 -673.527710 104.124672
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 30
+Arena Name: Mid #8
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -369.376831 -838.798645 32.037315; setang_exact -2.673994 99.411499 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -224.055481 -228.447754 68.031212; setang_exact -0.128483 -89.060730 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -353.918823 -841.462158 96.031906
+ ------> Widest Swing Pos     setpos_exact -353.918823 -841.462158 96.031906
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -867.001709 -187.242126 80.821617; setang_exact 0.289073 -71.611595 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -369.376831 -838.798645 104.037315
+ ------> Widest Swing Pos     setpos_exact -369.376831 -838.798645 104.037315
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -651.683105 336.719849 175.031250; setang_exact 1.196465 -82.772209 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -369.376831 -838.798645 104.037315
+ ------> Widest Swing Pos     setpos_exact -369.376831 -838.798645 104.037315
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -413.408569 478.837891 175.031250; setang_exact 2.304609 -85.678970 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -369.376831 -838.798645 104.037315
+ ------> Widest Swing Pos     setpos_exact -369.376831 -838.798645 104.037315
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -580.494141 768.204956 103.656212; setang_exact 2.706107 -83.567101 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -368.771729 -843.689636 88.132751
+ ------> Widest Swing Pos     setpos_exact -368.771729 -843.689636 88.132751
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Forward [4]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 31
+Arena Name: Mid #9
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact -226.619751 -717.246826 164.031250; setang_exact 8.768760 116.981819 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact -522.892151 789.748047 103.538177; setang_exact -1.967347 -75.552261 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact -881.704529 -237.445984 86.294632; setang_exact -2.963063 -51.245609 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact -260.495117 -255.699646 67.947273; setang_exact -3.910575 -73.490028 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact -652.880432 311.959991 175.031250; setang_exact 2.882808 -75.287766 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact -1012.456116 -141.677002 106.031250; setang_exact -3.645578 -39.819084 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Widest Swing Pos     setpos_exact -226.619751 -717.246826 236.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 32
+Arena Name: B Site #8
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 1217.535767 -331.624634 96.524490; setang_exact -3.195940 131.033554 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 699.528625 106.879211 130.031250; setang_exact 1.027840 -35.059025 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 788.795898 168.914719 130.031250; setang_exact 0.642401 -54.130299 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 740.305908 556.187195 129.766266; setang_exact -0.256959 -55.463268 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 694.885925 -311.571533 139.013672; setang_exact 1.589944 -28.145329 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 654.967163 735.150757 119.025406; setang_exact 0.538015 -59.518677 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Widest Swing Pos     setpos_exact 1217.535767 -331.624634 168.524490
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 33
+Arena Name: B Site #9
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 1330.143433 -449.524780 54.507820; setang_exact -5.267703 116.081917 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 735.882751 565.012817 128.989639; setang_exact 3.107583 -55.519131 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 806.224976 170.005005 130.901108; setang_exact 1.156294 -60.433468 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 774.037292 -131.036377 130.531250; setang_exact 7.122662 -43.771023 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 1189.409912 262.946960 130.531250; setang_exact 4.416550 -66.206703 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 1172.264648 395.940399 129.265717; setang_exact 4.577149 -71.538849 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Widest Swing Pos     setpos_exact 1330.143433 -449.524780 126.507820
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 34
+Arena Name: B Site #10
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 823.547546 -53.830688 130.901108; setang_exact 0.594192 49.617203 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 1395.944214 516.031250 133.716797; setang_exact -2.216307 -131.162292 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 1306.717041 251.978149 130.531250; setang_exact -1.830867 -133.081451 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 1291.187134 770.873962 120.871178; setang_exact -0.682577 -122.826813 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 854.006592 185.228729 130.649307; setang_exact -1.750566 -113.431183 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 876.656189 373.248596 128.646851; setang_exact -0.706665 -109.503441 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Widest Swing Pos     setpos_exact 823.547546 -53.830688 202.901108
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 35
+Arena Name: B Site #11
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 733.324280 -45.825073 130.031250; setang_exact 1.453424 95.854027 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 538.141235 782.068176 115.712387; setang_exact -1.437378 -85.863487 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 491.347076 934.080627 110.728180; setang_exact -0.714678 -85.124710 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 828.859680 898.384216 105.266045; setang_exact -1.180415 -86.939903 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 558.588074 151.910995 156.031250; setang_exact -0.120454 -74.019333 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 544.208008 181.864670 156.031250; setang_exact 6.745055 -48.878635 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Widest Swing Pos     setpos_exact 733.324280 -45.825073 202.031250
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 36
+Arena Name: B Site #12
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 447.671112 113.291931 152.654755; setang_exact 2.055644 15.746566 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 1357.404297 595.893555 131.104721; setang_exact -1.806789 -157.861969 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 1213.519531 500.760284 121.654938; setang_exact -1.806789 -157.861969 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 1026.421875 60.930210 130.901108; setang_exact -2.449188 -173.424255 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             Yes
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 656.002930 345.239899 121.200180; setang_exact -3.950788 -151.188980 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 714.937134 51.406570 130.901108; setang_exact -2.617814 -176.636063 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Widest Swing Pos     setpos_exact 447.671112 113.291931 224.654755
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+Arena Index: 37
+Arena Name: B Site #13
+Max Spawns: 0
+Swingers: 0
+Swing Order: Random
+Bot Group Count: 1
+Spawnpoint Count: 1
+Arena Type: Any Weapon [0]
+Has Replay: No
+Utility Mode: Normal
+Always Spawn First Bot: No
+Always Spawn Last Bot: No
+Take Damage Reset: No
+Fail Zone Message: 
+Completion Type: Complete
+Completion Value: 10
+Competitive: Yes
+KZ Props: 0
+Bomb Positions: 0
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+0 [SPAWN]
+ ---> Pos/Ang              setpos_exact 331.059570 234.271637 154.545715; setang_exact 2.537471 -7.853064 0.000000
+ ---> Spawn Bounds Start   setpos_exact 0.000000 0.000000 0.000000
+ ---> Spawn Bounds End     setpos_exact 0.000000 0.000000 0.000000
+ ---> Zone Type            Roam [2]
+ ---> Util Goal Size       45.000
+ ---> Util Goal Accuracy Requirement 50.000%
+0 [BOT GROUP] DEFAULT (Bot Count: 5)
+---> 0 [BOT]
+ ------> setpos_exact 704.448486 38.747936 130.901108; setang_exact 1.316942 154.072388 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 333.559387 251.832687 217.683411
+ ------> Widest Swing Pos     setpos_exact 333.559387 251.832687 217.683411
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 1 [BOT]
+ ------> setpos_exact 670.059509 54.577988 134.031250; setang_exact -2.810506 179.003754 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 320.076660 185.998703 217.246582
+ ------> Widest Swing Pos     setpos_exact 320.076660 185.998703 217.246582
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             Yes
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 2 [BOT]
+ ------> setpos_exact 1047.208740 45.655602 130.901108; setang_exact 1.421335 177.606750 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 331.059570 234.271637 226.545715
+ ------> Widest Swing Pos     setpos_exact 331.059570 234.271637 226.545715
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Right [2]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 3 [BOT]
+ ------> setpos_exact 777.493286 344.053833 126.544357; setang_exact -1.597945 -179.237152 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 331.059570 234.271637 226.545715
+ ------> Widest Swing Pos     setpos_exact 331.059570 234.271637 226.545715
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           Yes
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0
+---> 4 [BOT]
+ ------> setpos_exact 1256.415527 420.244019 123.523781; setang_exact -2.248374 -177.253265 0.000000
+ ------> Displacement         0.000
+ ------> Widest Swing Pos     setpos_exact 331.059570 234.271637 226.545715
+ ------> Widest Swing Pos     setpos_exact 331.059570 234.271637 226.545715
+ ------> Min Swing Delay      0.000
+ ------> Max Swing Delay      0.000
+ ------> Can Jump             No
+ ------> Can Jiggle           No
+ ------> Can Duck             No
+ ------> Always Wide Duck     No
+ ------> Always Ducked        No
+ ------> Always Peek Before Util No
+ ------> Rush After Swing     No
+ ------> Swing Direction      Left [1]
+ ------> Activation Zone      Default [-1]
+ ------> Peek Group           0

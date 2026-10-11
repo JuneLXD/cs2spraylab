@@ -2,7 +2,7 @@ import {advanceActor, DEG, STEP, UNIT, type ActorKinematics, type Vec} from '../
 import {advanceActorCommand} from '../actor-command';
 import {gameData, pistolIds, type Weapon, type Pistol} from '../config';
 import {botConfig, rosterBehaviors, sanitizeDuelConfig, type DuelConfig, type SkillLevel} from './config';
-import {chooseSwingers, swingSchedule, type BlitzArena, type BlitzConfig} from './blitz';
+import {chooseSwingers, swingSchedule, type BlitzArena, type BlitzConfig, type BlitzSwinger} from './blitz';
 import {BotBrain, type BotNavigator} from './brain';
 import {TacticalBrain} from './tactics';
 import {TeamSpawner} from './team-spawns';
@@ -95,6 +95,14 @@ export function freeSpawnPose<T extends {x: number; y: number; z: number}>(spawn
   nudges.sort((a, b) => Math.hypot(a.dx, 2 * a.dy, a.dz) - Math.hypot(b.dx, 2 * b.dy, b.dz));
   for (const {dx, dy, dz} of nudges) if (fits(spawn.x + dx, spawn.y + dy, spawn.z + dz))
     return {...spawn, x: spawn.x + dx, y: spawn.y + dy, z: spawn.z + dz};
+  // At a native corner, voxel rounding can overlap both the floor and wall.
+  // Neither a pure lift nor a pure sideways nudge can clear that combination.
+  const combined: typeof nudges = [];
+  for (const {dx, dz} of nudges.filter(nudge => nudge.dy === 0))
+    for (let dy = .05; dy <= TERRAIN_RULES.stepHeight + 1e-9; dy += .05) if (Math.hypot(dx, dy, dz) <= .5 + 1e-9) combined.push({dx, dy, dz});
+  combined.sort((a, b) => Math.hypot(a.dx, 2 * a.dy, a.dz) - Math.hypot(b.dx, 2 * b.dy, b.dz));
+  for (const {dx, dy, dz} of combined) if (fits(spawn.x + dx, spawn.y + dy, spawn.z + dz))
+    return {...spawn, x: spawn.x + dx, y: spawn.y + dy, z: spawn.z + dz};
   return spawn;
 }
 
@@ -164,7 +172,7 @@ export class DuelSimulation {
   private floorSpots: readonly (readonly [number, number, number])[] = [];
   /** Blitz: the arena's swingers wait at their hold spots until their swing time, then set off for you. */
   readonly blitz?: {config: BlitzConfig; arena: BlitzArena; level: SkillLevel};
-  private blitzLives = new Map<number, {swingAt: number; swung: boolean}>();
+  private blitzLives = new Map<number, {swingAt: number; swung: boolean; stopped: boolean; swinger: BlitzSwinger}>();
 
   constructor(config: DuelConfig = sanitizeDuelConfig({}), private seed = 1, arena: Arena = testArena(), private playerWeapon: Weapon = 'ak47', private sidearm: Pistol = 'usp', private hasPrimary = true, botz?: BotzConfig,
     blitz?: {config: BlitzConfig; arena: BlitzArena; level: SkillLevel}) {
@@ -196,6 +204,7 @@ export class DuelSimulation {
       this.blitz = blitz;
       const scene = blitz.arena;
       placeAt(this.actors[0], freeSpawnPose({x: scene.player.x, y: scene.player.y, z: scene.player.z, yaw: scene.player.yaw}, this.arena));
+      this.actors[0].pitch = scene.player.pitch ?? 0;
       const random = randomStream(seed, 'blitz:swingers');
       const swingers = chooseSwingers(scene, this.config.botCount, random), swingAt = swingSchedule(swingers.length, blitz.config, random);
       swingers.forEach((swinger, index) => {
@@ -203,12 +212,13 @@ export class DuelSimulation {
         const actor = makeActor(id, 'enemy', swinger.hold.x, swinger.hold.z, bot.weapon, bot.health, bot.armor, seed + id * 7919);
         actor.armor = bot.armor ? bot.armorPoints : 0; actor.helmet = bot.armor && bot.helmet;
         const facing = Math.atan2(-(scene.player.x - swinger.hold.x), -(scene.player.z - swinger.hold.z));
-        placeAt(actor, freeSpawnPose({x: swinger.hold.x, y: swinger.hold.y, z: swinger.hold.z, yaw: facing}, this.arena));
+        placeAt(actor, freeSpawnPose({x: swinger.hold.x, y: swinger.hold.y, z: swinger.hold.z, yaw: swinger.yaw ?? facing}, this.arena));
+        actor.pitch = swinger.pitch ?? 0;
         const traits = createBotTraits(bot.skill, seed, id);
         if (blitz.config.reactionMs > 0) traits.recognitionMedianMs = blitz.config.reactionMs;
         if (blitz.config.repeekReactionMs > 0) traits.repeekRecognitionMs = blitz.config.repeekReactionMs;
-        this.brains.set(id, new BotBrain(traits, 'holder', bot.accuracy, randomStream(seed, `brain:${id}`), this.blitzNavigator(swinger.peek)));
-        this.blitzLives.set(id, {swingAt: swingAt[index], swung: false});
+        this.brains.set(id, new BotBrain(traits, 'holder', bot.accuracy, randomStream(seed, `brain:${id}`), this.blitzNavigator(swinger.peek ?? swinger.hold)));
+        this.blitzLives.set(id, {swingAt: swingAt[index], swung: false, stopped: false, swinger});
         this.actors.push(actor);
       });
       return;
@@ -459,6 +469,22 @@ export class DuelSimulation {
       const patch = brain instanceof TacticalBrain
         ? brain.command(actorView[actor.id], this.time, actor.weapon.recovery.recoil, actorView.slice(1))
         : brain?.command(actorView[actor.id], this.time);
+      const blitzLife = this.blitzLives.get(actor.id);
+      if (patch && blitzLife?.swung && blitzLife.swinger.swing && blitzLife.swinger.widest) {
+        const {swing, widest} = blitzLife.swinger;
+        if (!blitzLife.stopped) {
+          const delta = {x: widest.x - actor.position.x, y: widest.y - actor.position.y, z: widest.z - actor.position.z};
+          const distance = Math.hypot(delta.x, delta.y, delta.z);
+          blitzLife.stopped = distance < .05 || !Number.isFinite(traceSolid(actor.position,
+            {x: delta.x / distance, y: delta.y / distance, z: delta.z / distance}, this.arena, distance).distance);
+        }
+        // Refrag's direction is fixed in the authored bot's frame, independent of the bot's aim.
+        // Stop when the widest-swing target is visible, including when the player has moved away.
+        if (!this.lastContactAt.has(actor.id)) {patch.yawDelta = 0; patch.pitchDelta = 0;}
+        const moveYaw = actor.yaw + (patch.yawDelta ?? 0);
+        patch.forward = blitzLife.stopped ? 0 : -swing.x * Math.sin(moveYaw) - swing.z * Math.cos(moveYaw);
+        patch.side = blitzLife.stopped ? 0 : swing.x * Math.cos(moveYaw) - swing.z * Math.sin(moveYaw);
+      }
       if (patch) this.commandBot(actor,{...patch,...(this.terrainCommand?.actorId===actor.id?this.terrainCommand.command:{}),
         ...this.boostPlan?.commands.find(command=>command.actorId===actor.id)?.command});
     }
@@ -856,9 +882,12 @@ export class DuelSimulation {
       crouch: run.crouchAlways || run.leg === 2 && !!run.crouch?.crouched(this.time)});
   }
 
-  /** Reflex bots pass through each other until they reach their gap's mouth: out of sight, nobody can block anyone. */
+  /** Authored Blitz holds can overlap; their independently scheduled swings must not block one another.
+   * Reflex bots pass through each other until they reach their gap's mouth. Player contact stays solid. */
   private passesThrough(actor: CombatActor, other: CombatActor) {
-    if (actor === other || actor.side !== 'enemy' || other.side !== 'enemy' || this.botz?.map !== 'island') return false;
+    if (actor === other || actor.side !== 'enemy' || other.side !== 'enemy') return false;
+    if (this.blitzLives.get(actor.id)?.swinger.swing && this.blitzLives.get(other.id)?.swinger.swing) return true;
+    if (this.botz?.map !== 'island') return false;
     return this.botzLives.get(actor.id)?.run?.leg === 0 || this.botzLives.get(other.id)?.run?.leg === 0;
   }
 

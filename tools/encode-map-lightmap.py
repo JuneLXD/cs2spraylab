@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('irradiance', type=Path)
 parser.add_argument('shadows', type=Path)
 parser.add_argument('output', type=Path)
+parser.add_argument('--shadow-channel', type=int, choices=range(4), default=0)
 args = parser.parse_args()
 source = OpenEXR.InputFile(str(args.irradiance))
 box = source.header()['dataWindow']
@@ -37,10 +38,13 @@ packed[:, :, 3] = np.round(multiplier * 255)
 args.output.parent.mkdir(parents=True, exist_ok=True)
 Image.fromarray(packed, 'RGBA').save(f'{args.output}-lightmap.webp', lossless=True, method=4)
 with Image.open(args.shadows) as image:
-    # R is baked shadow index 0, the light_environment in aim_redline.
-    image.convert('RGB').resize((width // factor, height // factor), getattr(Image, 'Resampling', Image).BOX).save(
+    # Shadow channels are independent data, not RGB plus opacity. Resize the sun's
+    # band alone to avoid alpha-premultiplied filtering erasing the other channels.
+    image.convert('RGBA').getchannel(args.shadow_channel).resize(
+        (width // factor, height // factor), getattr(Image, 'Resampling', Image).BOX).convert('RGB').save(
         f'{args.output}-sun-shadow.webp', lossless=True, method=4)
 report = {'width': width // factor, 'height': height // factor, 'encoding': 'linear RGBM',
+          'sunShadowChannel': args.shadow_channel,
           'range': rgbm_range, 'maximum': float(rgb.max()),
           'clippedFraction': float(np.mean(rgb.max(axis=-1) > rgbm_range))}
 Path(f'{args.output}-lighting.json').write_text(json.dumps(report, indent=2) + '\n')

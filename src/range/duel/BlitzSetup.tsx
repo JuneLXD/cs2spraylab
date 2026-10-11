@@ -1,11 +1,11 @@
 import {memo} from 'react';
-import {blitzDifficultyLevels, blitzMaps, blitzPresets, type BlitzConfig, type BlitzHistory} from './blitz';
+import {blitzDifficultyLevels, blitzMaps, blitzPresets, type BlitzArena, type BlitzConfig, type BlitzHistory} from './blitz';
 import type {SkillLevel} from './config';
 import type {DuelStatus} from './DuelEngine';
 
 /** Blitz setup: Refrag's chat commands as controls. Any change starts the arena again. */
 export const BlitzSetup = memo(function BlitzSetup({config, update, arenas, status}: {config: BlitzConfig; update: (patch: Partial<BlitzConfig>) => void;
-  arenas: number; status?: DuelStatus['blitz']}) {
+  arenas: readonly Pick<BlitzArena, 'name'>[]; status?: DuelStatus['blitz']}) {
   const levels: SkillLevel[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, '10+'];
   return <div className="duel-controls-body">
     <label className="duel-field"><span>Map</span><select aria-label="Blitz map" value={config.map} onChange={event => update({map: event.target.value as BlitzConfig['map']})}>
@@ -31,7 +31,7 @@ export const BlitzSetup = memo(function BlitzSetup({config, update, arenas, stat
     <label className="duel-field"><span>Arena order</span><select aria-label="Arena order" title=".n / .p: arenas in order, or any next" value={config.order} onChange={event => update({order: event.target.value as BlitzConfig['order']})}>
       <option value="random">Random</option><option value="sequence">In order</option></select></label>
     <label className="duel-field"><span>Start at arena</span><select aria-label="Start arena" value={config.arena} onChange={event => update({arena: +event.target.value})}>
-      <option value={0}>Any</option>{Array.from({length: arenas}, (_, i) => <option key={i + 1} value={i + 1}>Arena {i + 1}</option>)}</select></label>
+      <option value={0}>Any</option>{arenas.map((arena, i) => <option key={i + 1} value={i + 1}>{i + 1} · {arena.name}</option>)}</select></label>
     <label className="duel-field"><span>Repeat a cleared arena <output>{config.repeat < 0 ? 'forever' : config.repeat ? `×${config.repeat}` : 'no'}</output></span><input aria-label="Repeat arena" title=".repeat: times to repeat an arena after clearing it; all the way left repeats forever" type="range" min="-1" max="10" step="1" value={config.repeat} onChange={event => update({repeat: +event.target.value})}/></label>
     <label className="duel-check"><span>Skip after three deaths (Smart)</span><input aria-label="Autoskip" title=".autoskip: in Smart mode, move on after three deaths in one arena" type="checkbox" checked={config.autoskip} onChange={event => update({autoskip: event.target.checked})}/></label>
     {status && <p className="setting-explanation">Arena {status.arena} of {status.arenas}{status.name ? ` (${status.name})` : ''}: {status.clears} {status.clears === 1 ? 'clear' : 'clears'}, {status.deaths} {status.deaths === 1 ? 'death' : 'deaths'} here. Bots at level {status.level}.</p>}

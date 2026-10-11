@@ -1,23 +1,19 @@
 import {describe, expect, it} from 'vitest';
-import {STEP, UNIT} from '../actor-physics';
+import {UNIT} from '../actor-physics';
+import {fitsTerrain} from '../actor-collision';
+import {arenaTerrainNear, arenaFloor} from './traversal';
 import {blitzDuelConfig, blitzLevel, blitzSummary, chooseSwingers, nextArena, sanitizeBlitzConfig, smartStep, swingSchedule,
   type BlitzArena, type BlitzArenaSet} from './blitz';
-import {traceSolid, type Arena} from './geometry';
+import {testArena, type Arena} from './geometry';
 import {DuelSimulation, freeSpawnPose} from './simulation';
 import {workshopArena, type WorkshopData} from './workshop';
 import ancient from './maps/de_ancient.json';
 import ancientArenas from './maps/de_ancient.blitz.json';
 
-const EYE = 64 * UNIT;
 const lcg = (seed: number) => () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296;
 const arenaSet = ancientArenas as unknown as BlitzArenaSet;
 let cachedArena: Arena | undefined;
 const map = () => cachedArena ??= workshopArena('de_ancient', ancient as unknown as WorkshopData);
-const sees = (arena: Arena, from: {x: number; y: number; z: number}, to: {x: number; y: number; z: number}) => {
-  const dx = to.x - from.x, dy = to.y - from.y, dz = to.z - from.z, length = Math.hypot(dx, dy, dz);
-  return !Number.isFinite(traceSolid(from, {x: dx / length, y: dy / length, z: dz / length}, arena, length - .05).distance);
-};
-
 describe('Blitz setup', () => {
   it('bounds every option, maps Refrag\'s difficulties and presets, and derives the duel config', () => {
     const d = sanitizeBlitzConfig({});
@@ -75,35 +71,45 @@ describe('Blitz setup', () => {
 });
 
 describe('Ancient arenas', () => {
-  it('has spread-out arenas whose swingers hide from you and then show themselves 5-30 m away', () => {
+  it.each(['B Site #11', 'B Site #13'])('lets overlapping authored holds swing independently in %s', name => {
+    const scene = arenaSet.arenas.find(arena => arena.name === name)!;
+    const config = sanitizeBlitzConfig({firstSwingSeconds: .1, swingGapMin: .1, swingGapMax: .1});
+    const sim = new DuelSimulation(blitzDuelConfig(config), 7, map(), 'ak47', 'usp', true, undefined, {config, arena: scene, level: 6});
+    const start = sim.actors.map(actor => ({...actor.position}));
+    sim.actors[0].health = 100000; sim.start();
+    while (sim.time < 1.25) sim.step();
+    for (const actor of sim.actors.slice(1))
+      expect(Math.hypot(actor.position.x - start[actor.id].x, actor.position.z - start[actor.id].z)).toBeGreaterThan(.15);
+  }, 60000);
+
+  it('loads all 38 authored arenas and preserves their roster, facing and bounded spawn correction', () => {
     const arena = map(), {arenas} = arenaSet;
-    expect(arenaSet.map).toBe('de_ancient');
-    expect(arenas.length).toBeGreaterThanOrEqual(12);
-    for (const a of arenas) for (const b of arenas) if (a !== b) expect(Math.hypot(a.player.x - b.player.x, a.player.z - b.player.z)).toBeGreaterThanOrEqual(10 - 1e-9);
-    for (const scene of arenas.slice(0, 8)) {
-      expect(scene.swingers.length).toBeGreaterThanOrEqual(5);
-      // A strict (full-hull) spot: the engine places you there without moving you sideways (a voxel floor may lift the
-      // feet by a few centimetres).
-      const settled = (spot: {x: number; y: number; z: number}) => {
+    expect(arenaSet.source).toMatchObject({provider: 'Refrag', setId: 4530, version: 120});
+    expect(arenas).toHaveLength(38);
+    expect(arenas.map(a => a.swingers.length)).toEqual(Array(38).fill(5));
+    expect(new Set(arenas.map(a => a.id)).size).toBe(38);
+    expect(arenas[0].name).toBe('A Site'); expect(arenas[37].name).toBe('B Site #13');
+    for (const scene of arenas) {
+      for (const spot of [scene.player, ...scene.swingers.map(s => s.hold)]) {
         const pose = freeSpawnPose({...spot}, arena);
-        expect(Math.hypot(pose.x - spot.x, pose.z - spot.z)).toBe(0); expect(Math.abs(pose.y - spot.y)).toBeLessThan(.2);
-      };
-      settled(scene.player);
-      const eye = {x: scene.player.x, y: scene.player.y + EYE, z: scene.player.z};
-      const sectors = new Set<number>();
-      for (const swinger of scene.swingers) {
-        expect(swinger.distance).toBeGreaterThanOrEqual(5); expect(swinger.distance).toBeLessThanOrEqual(30);
-        expect(Math.hypot(swinger.peek.x - swinger.hold.x, swinger.peek.z - swinger.hold.z)).toBeLessThanOrEqual(1.5 + 1e-9);
-        expect(sees(arena, eye, {x: swinger.peek.x, y: swinger.peek.y + EYE, z: swinger.peek.z})).toBe(true);
-        expect(sees(arena, eye, {x: swinger.hold.x, y: swinger.hold.y + EYE, z: swinger.hold.z})).toBe(false);
-        settled(swinger.hold); settled(swinger.peek);
-        sectors.add(Math.floor(swinger.bearing / 30));
+        // The 20 cm collision voxel approximation can require a bounded hull correction.
+        expect(Math.hypot(pose.x - spot.x, pose.z - spot.z)).toBeLessThanOrEqual(.5 + 1e-8);
+        expect(Math.abs(pose.y - spot.y)).toBeLessThanOrEqual(.46);
+        const eye={x:pose.x,y:pose.y+64*UNIT,z:pose.z};
+        expect(fitsTerrain(eye,pose.y,72*UNIT,{solids:arenaTerrainNear(arena,eye),floor:arenaFloor(arena),bounds:arena}),
+          `${scene.name}: ${JSON.stringify(spot)}`).toBe(true);
       }
-      expect(sectors.size).toBeGreaterThanOrEqual(4);
+      const chosen = chooseSwingers(scene, 5, lcg(7));
+      expect(new Set(chosen)).toEqual(new Set(scene.swingers));
+      expect(chooseSwingers(scene, 3, lcg(7))).toHaveLength(3);
+      for (const swinger of chosen) {
+        expect(Math.hypot(swinger.swing!.x, swinger.swing!.z)).toBeCloseTo(1, 10);
+        expect(swinger.widest).toBeDefined(); expect(swinger.yaw).toBeTypeOf('number');
+      }
     }
   }, 60000);
 
-  it('holds the swingers hidden until their swing, then sends them at you, and ends the arena when all are down', () => {
+  it('waits for the schedule, uses the native swing direction and finishes on kills or death', () => {
     const arena = map(), scene = arenaSet.arenas[0];
     const config = sanitizeBlitzConfig({swingers: 5, firstSwingSeconds: 1, swingGapMin: .5, swingGapMax: .5});
     const sim = new DuelSimulation(blitzDuelConfig(config), 7, arena, 'ak47', 'usp', true, undefined, {config, arena: scene, level: 6});
@@ -115,20 +121,26 @@ describe('Ancient arenas', () => {
     const run = (until: number) => {while (sim.time < until && sim.phase === 'fighting') sim.step();};
     expect(Math.hypot(player.position.x - scene.player.x, player.position.z - scene.player.z)).toBeLessThan(.6);
     expect(player.yaw).toBeCloseTo(scene.player.yaw, 3);
+    expect(player.pitch).toBeCloseTo(scene.player.pitch!, 6);
     const holds = sim.actors.slice(1).map(bot => ({...bot.position}));
     const schedule = sim.blitzSchedule().sort((a, b) => a.swingAt - b.swingAt);
     expect(schedule.map(s => s.swingAt)).toEqual([1, 1.5, 2, 2.5, 3]);
     sim.start();
     // Before the first swing nobody moves: the swingers hold facing you, out of your sight.
-    const eye = player.position;
-    for (const bot of sim.actors.slice(1)) expect(sees(arena, eye, bot.position)).toBe(false);
+    for (const bot of sim.actors.slice(1)) {
+      const authored = scene.swingers.find(s => Math.hypot(s.hold.x-bot.position.x,s.hold.z-bot.position.z) < .6)!;
+      expect(authored).toBeDefined(); expect(bot.yaw).toBeCloseTo(authored.yaw!, 6);
+    }
     run(.9);
     sim.actors.slice(1).forEach((bot, i) => expect(Math.hypot(bot.position.x - holds[i].x, bot.position.z - holds[i].z)).toBeLessThan(.05));
     expect(sim.blitzSwung()).toBe(0);
     run(1.6);
     expect(sim.blitzSwung()).toBe(2);
     const first = schedule[0].id;
-    expect(Math.hypot(sim.actors[first].position.x - holds[first - 1].x, sim.actors[first].position.z - holds[first - 1].z)).toBeGreaterThan(.3);
+    const dx = sim.actors[first].position.x - holds[first - 1].x, dz = sim.actors[first].position.z - holds[first - 1].z;
+    const firstSpawn = scene.swingers.find(s => Math.hypot(s.hold.x-holds[first-1].x,s.hold.z-holds[first-1].z) < .6)!;
+    expect(Math.hypot(dx, dz)).toBeGreaterThan(.3);
+    expect(dx * firstSpawn.swing!.x + dz * firstSpawn.swing!.z).toBeGreaterThan(.2);
     run(3.2);
     expect(sim.blitzSwung()).toBe(5);
     expect(sim.phase).toBe('fighting');
@@ -147,4 +159,39 @@ describe('Ancient arenas', () => {
     expect(eco.actors[0].weapon.id).toBe('usp');
     expect(eco.actors.slice(1).every(bot => ['glock', 'usp'].includes(bot.weapon.id))).toBe(true);
   }, 60000);
+});
+
+
+describe('authored swing limit', () => {
+  it('moves in the authored direction and stops at the sight target after the player leaves the spawn', () => {
+    const arena: Arena = {...testArena(), workshop:{name:'fixture',credits:'',model:'',spawns:[],floor:0,spots:[]}, solids: [{center:{x:0,y:2,z:0},size:{x:2,y:4,z:1}}]};
+    const scene: BlitzArena = {id:'swing-limit',name:'Swing limit',side:'ct',player:{x:0,y:0,z:5,yaw:0},swingers:[{
+      hold:{x:-1,y:0,z:-5},yaw:Math.PI,pitch:0,swing:{x:1,z:0},widest:{x:0,y:72*UNIT,z:5},distance:10,bearing:0,
+    }]};
+    const config = sanitizeBlitzConfig({swingers:1,firstSwingSeconds:.1});
+    const sim = new DuelSimulation(blitzDuelConfig(config),1,arena,'ak47','usp',true,undefined,{config,arena:scene,level:6});
+    sim.actors[0].position.x = -8; sim.actors[0].health = 100000;
+    sim.start();
+    while(sim.time<1.5)sim.step();
+    const bot=sim.actors[1], stop={...bot.position};
+    expect(stop.x).toBeGreaterThan(2); expect(stop.x).toBeLessThan(3.2);
+    expect(stop.z).toBeCloseTo(-5,2);
+    while(sim.time<3)sim.step();
+    expect(Math.hypot(bot.position.x-stop.x,bot.position.z-stop.z)).toBeLessThan(.05);
+  });
+});
+
+
+describe('native voxel spawn corners', () => {
+  it('resolves simultaneous floor and wall overlap with a small combined correction', () => {
+    const arena: Arena={...testArena(),solids:[
+      {center:{x:0,y:-.5,z:0},size:{x:10,y:1.2,z:10}},
+      {center:{x:-.9,y:1.6,z:0},size:{x:1,y:3.2,z:10}},
+    ]};
+    const pose=freeSpawnPose({x:0,y:0,z:0,yaw:1,pitch:.2},arena);
+    expect(pose.x).toBeGreaterThan(.0064); expect(pose.y).toBeGreaterThanOrEqual(.1-1e-9);
+    expect(Math.hypot(pose.x,pose.z)).toBeLessThanOrEqual(.1); expect(pose.y).toBeLessThanOrEqual(.15);
+    expect(pose).toMatchObject({yaw:1,pitch:.2});
+    expect(fitsTerrain({...pose,y:pose.y+64*UNIT},pose.y,72*UNIT,{solids:arena.solids,floor:0,bounds:arena})).toBe(true);
+  });
 });

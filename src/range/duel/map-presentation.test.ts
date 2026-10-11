@@ -51,4 +51,33 @@ describe('imported map lighting resources', () => {
     const {scene} = bakedScene(); await applyMapPresentation(scene, 'another-map');
     expect(load).not.toHaveBeenCalled(); disposeResources([scene]);
   });
+
+  it('keeps imported surface details sharp within the GPU filtering limit', async () => {
+    const scene = new THREE.Group(), texture = new THREE.Texture();
+    scene.add(new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.MeshStandardMaterial({map: texture})));
+    await applyMapPresentation(scene, 'de_ancient', 4); expect(texture.anisotropy).toBe(4);
+    await applyMapPresentation(scene, 'de_ancient', 16); expect(texture.anisotropy).toBe(8);
+    disposeResources([scene]);
+  });
+
+  it('uses Ancient lighting metadata and shares atlases across prop and layered-world UV channels', async () => {
+    const {scene, material} = bakedScene(), light = new THREE.Texture(), shadow = new THREE.Texture();
+    scene.userData.nativeMapLighting = {version: 1, sunDirection: [-.438, .766, -.47],
+      sunColor: [3.34, 3.13, 2.43], sunShadowMask: [1, 0, 0, 0]};
+    const world = new THREE.PlaneGeometry(); world.setAttribute('uv2', world.getAttribute('uv').clone());
+    const layered = new THREE.MeshStandardMaterial();
+    layered.userData = {nativeLightmap: true, nativeLightmapUv: 2}; scene.add(new THREE.Mesh(world, layered));
+    const load = vi.spyOn(THREE.TextureLoader.prototype, 'loadAsync').mockResolvedValueOnce(light).mockResolvedValueOnce(shadow);
+    const shadowDispose = vi.spyOn(shadow, 'dispose');
+    await applyMapPresentation(scene, 'de_ancient');
+    expect(load).toHaveBeenCalledTimes(2);
+    expect(load).toHaveBeenCalledWith('/maps/de_ancient-lightmap.webp?v=2');
+    expect(material.lightMap?.channel).toBe(1); expect(layered.lightMap?.channel).toBe(2);
+    expect(layered.lightMap?.source).toBe(light.source);
+    const shader = {uniforms: {}, fragmentShader: '#include <lights_fragment_maps>'} as THREE.WebGLProgramParametersWithUniforms;
+    layered.onBeforeCompile(shader, {} as THREE.WebGLRenderer);
+    expect(shader.uniforms.nativeSunColor.value.toArray()).toEqual([3.34, 3.13, 2.43]);
+    expect(shader.fragmentShader).toContain('dot(worldNormal, nativeSunDirection)');
+    disposeResources([scene]); expect(shadowDispose).toHaveBeenCalledOnce();
+  });
 });

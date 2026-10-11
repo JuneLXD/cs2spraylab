@@ -323,7 +323,7 @@ export class DuelEngine {
     const loader = new GLTFLoader();
     loader.setMeshoptDecoder(MeshoptDecoder);
     loader.loadAsync(map.model).then(async ({scene}) => {
-      try {await applyMapPresentation(scene, map.name);}
+      try {await applyMapPresentation(scene, map.name, this.renderer.capabilities.getMaxAnisotropy());}
       catch (error) {disposeResources([scene]); throw error;}
       if (this.disposed) {disposeResources([scene]); return;}
       scene.traverse(object => {object.matrixAutoUpdate = false; object.updateMatrix();});

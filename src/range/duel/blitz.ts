@@ -109,11 +109,15 @@ export function blitzDuelConfig(config: BlitzConfig, smartLevel?: SkillLevel): D
     spawnImmunitySeconds: 0, overrides: []};
 }
 
-/** An arena from tools/build-blitz-arenas.mjs: where you stand and the swingers' hold (hidden) and peek (visible) spots. */
-export type BlitzSwinger = {hold: Vec; peek: Vec; distance: number; bearing: number};
-export type BlitzArena = {id: string; name: string; side: 't' | 'ct'; player: {x: number; y: number; z: number; yaw: number};
-  sectors: number; swingers: BlitzSwinger[]};
-export type BlitzArenaSet = {map: string; seed: number; candidates: number; arenas: BlitzArena[]};
+/** Authored Refrag placements, or legacy generated hold/peek arenas. Positions are feet in metres. */
+export type BlitzSwinger = {hold: Vec; peek?: Vec; distance: number; bearing: number;
+  /** Authored facing and fixed world-space strafe, with the native widest-swing sight target. */
+  permissions?: {jump: boolean; jiggle: boolean; duck: boolean};
+  index?: number; yaw?: number; pitch?: number; swing?: {x: number; z: number}; widest?: Vec};
+export type BlitzArena = {id: string; name: string; side: 't' | 'ct'; player: {x: number; y: number; z: number; yaw: number; pitch?: number};
+  sectors?: number; swingers: BlitzSwinger[]};
+export type BlitzArenaSet = {map: string; seed?: number; candidates?: number; arenas: BlitzArena[];
+  source?: {provider: string; title: string; setId: number; version: number; captureDate: string; command: string; url: string}};
 
 const arenaSets: Record<BlitzMap, () => Promise<unknown>> = {de_ancient: () => import('./maps/de_ancient.blitz.json')};
 /** Loads a map's arenas (a separate chunk). */
@@ -122,9 +126,16 @@ export async function loadBlitzArenas(map: BlitzMap): Promise<BlitzArenaSet> {
   return (module.default ?? module) as BlitzArenaSet;
 }
 
-/** `count` of an arena's swingers, as far apart in bearing as its set allows, shuffled by `random`. */
+/** Shuffle an authored roster; legacy generated arenas spread their selected swingers by bearing. */
 export function chooseSwingers(arena: BlitzArena, count: number, random: () => number): BlitzSwinger[] {
-  const pool = [...arena.swingers].sort(() => random() - .5), chosen: BlitzSwinger[] = [];
+  const pool = [...arena.swingers];
+  // Authored sets randomize the roster itself; do not impose the generator's angular-spacing heuristic.
+  if (pool.every(swinger => swinger.swing)) {
+    for (let i = pool.length - 1; i > 0; i--) {const j = Math.floor(random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]];}
+    return pool.slice(0, count);
+  }
+  pool.sort(() => random() - .5);
+  const chosen: BlitzSwinger[] = [];
   const gap = (a: number, b: number) => {const d = Math.abs(a - b) % 360; return Math.min(d, 360 - d);};
   while (chosen.length < count && pool.length) {
     // The next swinger is the one farthest in bearing from every chosen one.

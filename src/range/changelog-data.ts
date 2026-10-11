@@ -424,6 +424,14 @@ export const latestChanges = {
     {id: 'character-joint-bending', title: 'Natural death poses', items: [
       'Knees and elbows keep their natural bend direction during death falls, with linked bone rotations that prevent sideways twisting.',
     ]},
+    {id: 'blitz-refrag-ancient', title: 'Ancient Blitz sets', items: [
+      'Ancient now uses all 38 arenas and 190 enemy placements captured from Refrag’s BLITZ 2.0 set, replacing the generated arenas.',
+      'Player and enemy facing, arena names and order, left/right/forward swings and widest-swing targets follow the authored set.',
+      'Refined collision in two tight passages, improved spawn settling, and let overlapping swingers move independently.',
+    ]},
+    {id: 'ancient-map-lighting', title: 'Ancient textures & lighting', items: [
+      'Restored Ancient’s baked lighting and sunlight, corrected surface texture coordinates and foliage colours, and sharpened textures viewed at an angle.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

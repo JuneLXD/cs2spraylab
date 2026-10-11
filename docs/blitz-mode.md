@@ -1,71 +1,95 @@
 # Blitz: Ancient
 
-Added 2026-10-11 at the user's request, after Refrag's Blitz (their wiki calls it a user-generated version of
-Crossfire: "fast-peeking, aggressive bots swinging you in quick succession"). Refrag's own bot sets are made in their
-Creator Studio and live on their servers; nothing public lists their positions, so the arenas here are derived
-from the map's geometry instead (below). It runs on the duel engine (`mode: 'blitz'`, variant `blitz` of
-`DuelStage`), on Valve's de_ancient imported from the installed game, under its own Blitz tab in Play (one
-entry per map as more are imported).
+Ancient uses **BLITZ 2.0 - Ancient**, Refrag set **4530**, live **version 120**, captured from the user's
+membership practice server on 2026-10-11 UTC. All **38 arenas, 38 player spawns and 190 bot spawns** are included.
+Every arena has one DEFAULT group with five bots. Arena names and order are preserved. This replaces the former
+24 procedurally generated arenas.
 
-## Map import
+## Source and reproducibility
 
-- `node tools/import-map.mjs ~/Desktop/cs2/cs2-game/game/csgo/maps/de_ancient.vpk --game ~/Desktop/cs2/cs2-game --keep --voxel .2 --headroom 16 --below 8`
-  (under the memory cap; the Source 2 Viewer export of a full competitive map takes about 25 minutes and 2 GB of work
-  files; `--resume <work folder>` reruns only the collision and presentation steps). The importer learned three things
-  for competitive maps: the collision grid's vertical range is now `--headroom` above the highest spawn and `--below`
-  under the lowest (4 and 1.5 by default, as before; Ancient's upper areas were cut off and the air flood could not
-  cross them, which left 5,794 standing spots instead of 15,443); a floor under a player clip counts as standable
-  (competitive maps smooth stairs, rocks and ledges with clip brushes players walk on); and a texture whose original
-  cannot be extracted keeps the adapted image instead of failing the import.
-- Collision: 20 cm voxels (150,321 boxes, 46,000 of them clips; 10 cm gave 572,712), `src/range/duel/maps/de_ancient.json`
-  (8.7 MB; its 47,279 standing spots are the importer's lattice and include clip tops, see below). Render: `public/revamp/maps/de_ancient.glb` (174 MB, 9.2 M triangles, 200 textures at 1024², gitignored
-  and mirrored by the deploy). Both are untouched Valve content.
+The documented [Creator Studio inspection commands](https://wiki.refrag.gg/en/creator-studio) expose the set:
 
-## Arenas
+1. Launch [Blitz](https://wiki.refrag.gg/en/blitz) on Ancient, connect using the linked Steam account, and enter `.dev`.
+2. `.arenas` reports the set ID, live version and full arena roster.
+3. For indices 0 through 37, `.arenas <index>` reports arena metadata and player spawns;
+   `.arenas <index> 0` reports every bot's position, facing, direction and widest-swing target.
+4. Preserve only the authored arena output, without account identity or server connection information.
 
-`node tools/build-blitz-arenas.mjs de_ancient [--arenas 24] [--seed 7]` writes `src/range/duel/maps/de_ancient.blitz.json`:
+The captured input is [`evidence/refrag-ancient-blitz-v120.txt`](evidence/refrag-ancient-blitz-v120.txt).
+Regenerate the game data from it with:
 
-- Walkability is computed on the voxel grid rebuilt from the collision boxes, not from the importer's standing spots
-  (a 0.6 m lattice that misses narrow stairways, and which now also lists the tops of clip volumes such as Ancient's
-  ceiling clip). A cell is standable when its floor voxel is solid (clips included) and a hull is air above it: the
-  full 1.0 x 1.8 m hull above knee height, only the centre column below it, so the hull may overlap the next riser of
-  a stair as CS2's step-up does. Cells are flooded from the spawn cells through their eight neighbours up to the step
-  height (0.4 m) up or down; Ancient yields about 79,000 cells. The walkable cells are then sampled on a 0.6 m lattice.
-- Every third walkable spot whose full hull fits (the engine's `fitsTerrain`, so nobody is nudged after placement)
-  is a candidate. A swinger for it is a pair of such spots: a *peek* spot 5-30 m away that the candidate's eye can
-  see, and the nearest *hold* spot 0.5-1.5 m from the peek (no more than 0.45 m up or down) hidden from that eye and
-  from four eyes 0.3 m around it. Lines of sight are exact voxel walks through the shot-blocking boxes (clips let
-  sight through).
-- In play a swinger's navigator is its own: hold to peek, then straight at its goal. The duel engine's grid router
-  only sees obstacles between 0 and 1.8 m, a flat-world assumption that does not hold on Ancient.
-- A candidate needs peeks from at least four of twelve 30-degree sectors. Arenas are picked best score first
-  (sectors × 10 + pairs, capped), at least 10 m apart. Each keeps up to ten swingers served sector by sector, closest to
-  13 m first, never two within 2 m; you start facing the middle of their bearings.
+```sh
+node tools/import-refrag-blitz.mjs docs/evidence/refrag-ancient-blitz-v120.txt
+```
 
-## Play
+On the shared LAN host, run Node commands through the repository's prescribed `systemd-run` memory cap.
+The importer rejects missing arenas/bots, extra unhandled groups/spawns, and unsupported movement settings.
+It writes `src/range/duel/maps/de_ancient.blitz.json`, with source identity and version attached.
+The old `tools/build-blitz-arenas.mjs` remains a procedural authoring tool; do not run it over this captured file.
 
-- `BlitzConfig` (`src/range/duel/blitz.ts`, key `spraylab.blitz.v1`): swingers 1-5, difficulty easy/normal/hard (levels
-  3/6/9) or a custom level, Smart mode (a level up after a clean clear, down after a death), bot loadout presets
-  (pistol, save, eco, force, default, AWP: weapon pools and armor), no primary (you keep the sidearm, bots get pistols),
-  reaction and repeek reaction in ms (0 = the level's own; the repeek value applies once a bot sees you again, through
-  `BotTraits.repeekRecognitionMs`), aim offset (accuracy multiplier), headshots only, first-swing delay and swing gap,
-  arena time limit, arena order (random / in order) and start arena, repeat (0, n or forever) and autoskip after three
-  deaths in Smart mode. `blitzDuelConfig` turns that into the duel config: holders with the preset's loadout, no
-  respawns, radar off, no spawn protection.
-- `DuelSimulation` with a `blitz` argument places you at the arena (`freeSpawnPose`), picks `chooseSwingers` (as far
-  apart in bearing as the set allows) and `swingSchedule`, and stands each swinger at its hold spot facing you with a
-  `BotBrain` (holder). Until its swing time a swinger gets an idle command; at its swing it `hear`s your position and
-  heads for it, sees you as it rounds the corner, and as a holder stops to shoot once it does. The arena ends like a
-  duel round: all swingers down = won, you down = lost, the time limit = draw.
-- `DuelEngine` keeps the run (`blitzRun`: arena index, clears and deaths there), steps Smart mode's level and picks
-  the next arena (`nextArena`) when the round flow restarts, records each finished arena (`spraylab.blitz.history.v1`)
-  and reports `status.blitz`. The stage shows ARENA n/N, swingers left, deaths here, and "Arena cleared in x s" /
-  "You died".
+## Coordinates and movement
 
-## Limits
+- Source `(x, y, z)` becomes game `(y, z, x) × 0.0254`. Spawn coordinates are feet, without an eye-height offset.
+  Native `getpos` reports the camera at roughly 64 units above the feet; the captured `.arenas` values are origins.
+- Source yaw becomes `yaw + 180°`; Source pitch is negated. Both player and bot facing are preserved.
+- The captured bots have zero displacement and peek group zero. There are 94 left swings, 94 right swings and two
+  forward swings (in Mid #7 and Mid #8). Swing vectors use each bot's authored yaw, independent of its aim updates.
+- Bots wait for the configured schedule, then move in the authored direction. They stop when their captured
+  widest-swing target becomes visible, even if the player has moved away. Those targets are sight targets, not bot
+  destinations. The game still handles aiming, reaction time, firing and movement through its own simulation.
+- The default five-bot roster now shuffles the five authored bots; it does not select candidates by angular spread.
+  Lower swinger counts choose a shuffled subset.
+- Authored Blitz bots pass through each other so overlapping hold positions can swing independently. They still
+  collide with the player and the map.
+- Spawn data retains the exact captured coordinates. Runtime hull settling uses a bounded correction for voxel
+  rounding, including corners that need both a small lift and a sideways adjustment. Two tight passages use
+  one-inch collision rebuilt from native physics; the rest of the map retains its 20 cm grid. Browser collision
+  and bot AI are approximations of native CS2.
 
-- Arenas are geometric, not Refrag's hand-made sets: a peek spot can be an odd angle, and a few arenas may sit in
-  less common parts of the map. The generator is deterministic (seed 7) so arenas can be reviewed and pruned.
-- Ancient renders without its baked lighting (the aim_redline lightmap path is map-specific) and the 9.2 M-triangle
-  model is heavy: expect a few seconds of load and a strong GPU. No browser test drives the map; the unit tests cover
-  the arena data, the swing timing and the round outcome.
+## Map presentation
+
+Ancient's geometry and textures come from the installed Valve map. The presentation now restores native baked
+irradiance and sun shadows, sun direction/colour, authored surface UV transforms, correct lighting UV channels,
+foliage colour handling and black unlit backing surfaces. Anisotropic filtering improves oblique texture clarity.
+
+The layered world surfaces use UV2 for their lightmap; props use UV1. Foliage vertex colours contain animation
+weights and must not darken the texture. The retained import is rebuilt with `tools/import-map.mjs --resume`;
+`tools/map-lighting.mjs` reads the environment light and `tools/encode-map-lightmap.py` packs the HDR irradiance.
+The staged GLB is about 171 MB plus 35 MiB of lighting atlases, with the existing 9.2-million-triangle geometry.
+Collision detail is stored in `src/range/duel/maps/de_ancient.json`. Each fine region replaces only the corresponding
+coarse volume, preserving solid materials and the distinction between bullet-blocking surfaces and player clips.
+The refinement seeds open air from the original grid, without clearing space based on player or bot coordinates.
+The map importer applies `tools/de_ancient-collision-regions.json` when rebuilding collision. A same-resolution
+`--resume` keeps the existing collision data; to refine an older import separately, use the retained physics export:
+
+```sh
+node tools/refine-map-collision.mjs <export>/physics/maps/de_ancient/world_physics_physics.glb \
+  src/range/duel/maps/de_ancient.json tools/de_ancient-collision-regions.json
+```
+
+Full Source 2 layered moss/dirt/wetness blending, local reflection probes and the native sky shader remain
+approximate. This is a presentation improvement, not a complete Source 2 renderer. A strong GPU is still helpful.
+
+## Existing controls
+
+The Blitz tab retains difficulty/Smart mode, loadout presets, no primary, reaction/repeek reaction, aim offset,
+headshots only, first-swing delay/gap, round time, random/sequential arena order, start arena, repeat and autoskip.
+Captured per-bot jump/jiggle/duck permissions are retained as metadata (20/159/129 bots respectively), but those
+optional behaviors are not reproduced by the current Blitz AI. These are local training controls; importing the
+authored set does not claim identical Refrag AI or timing.
+Arena completion and saved session history still use the duel engine.
+
+## Validation
+
+Importer tests check the complete captured roster, coordinate transforms, all three movement directions and
+rejection of incomplete captures. Simulation tests cover spawn/facing, schedules, directional swings, stopping at
+the sight target when the player moves, arena outcomes and loadouts. Collision tests check the complete roster's
+full player hulls, tight passages and preservation of materials and bullet behavior across refinement boundaries.
+Presentation tests cover both lighting UV channels, shared-material handling and resource disposal; visual review
+compares the native A Site camera.
+
+Verified locally on 2026-10-11 UTC: 109 focused tests and TypeScript passed. A sweep of all 38 arenas checked all
+38 player hulls and 190 bot hulls, then confirmed that every bot started moving during the first 1.25 seconds with
+an accelerated 0.1-second swing schedule. The browser check loaded all 38 named choices, started A Site with five
+rendered bots and pointer lock, selected B Site #13, and reported no page or HTTP errors. The rendered Ancient had
+279 lightmapped material groups. Full rounds retain the local simulation's AI and timing behavior described above.
