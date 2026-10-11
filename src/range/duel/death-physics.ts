@@ -32,6 +32,7 @@ export class DeathPhysics {
   readonly bodies: DeathBody[];
   readonly positions: Float64Array;
   private previous: Float64Array;
+  private stepStart: Float64Array;
   private inverseMass: Float64Array;
   private links: {a: number; b: number; length: number}[];
   private struts: {a: number; b: number; min: number; max: number}[];
@@ -55,6 +56,7 @@ export class DeathPhysics {
     this.bodies = bodies.map(b => ({...b, position: {...b.position}}));
     this.positions = new Float64Array(bodies.flatMap(b => axes.map(a => b.position[a])));
     this.previous = this.positions.slice();
+    this.stepStart = this.positions.slice();
     this.inverseMass = new Float64Array(bodies.map(b => 1 / Math.max(.1, b.mass ?? 1)));
     this.damping = Math.min(1, Math.max(.9, options.damping ?? .992));
     this.friction = Math.min(1, Math.max(0, options.friction ?? .18));
@@ -104,6 +106,7 @@ export class DeathPhysics {
     this.stats.links = this.stats.struts = this.stats.hinges = this.stats.pairs = this.stats.contacts = this.stats.speed = 0;
     while (this.accumulator + 1e-10 >= STEP) {
       this.accumulator -= STEP; this.age += STEP;
+      this.stepStart.set(this.positions);
       for (let i = 0; i < this.positions.length; i++) {
         const p = this.positions[i], delta = Math.max(-.08, Math.min(.08, (p - this.previous[i]) * this.damping));
         const gravity = Number.isFinite(world.gravity) && world.gravity! >= 0 ? world.gravity! : GRAVITY;
@@ -123,12 +126,14 @@ export class DeathPhysics {
         }
       }
       let motion = 0;
-      for (let i = 0; i < this.positions.length; i++) motion = Math.max(motion, Math.abs(this.positions[i] - this.previous[i]) / STEP);
+      // Contacts edit `previous` to remove velocity. Sleep uses actual movement
+      // between solved poses, not those artificial friction/contact offsets.
+      for (let i = 0; i < this.positions.length; i++) motion = Math.max(motion, Math.abs(this.positions[i] - this.stepStart[i]) / STEP);
       this.stats.speed = Math.max(this.stats.speed, motion);
       // A settled rig still jitters a little against the floor and itself; that is quiet enough to freeze.
       this.quiet = motion < (this.pairs.length ? .12 : .045) ? this.quiet + STEP : 0;
       // Sleeping freezes a solved contact pose; it does not switch to a canned floor pose.
-      if (this.quiet > .5 || this.age > 8) this.sleeping = true;
+      if (this.quiet > .5 || this.age > 8) {this.sleeping = true; this.accumulator = 0; break;}
     }
     return contacts;
   }
@@ -228,23 +233,24 @@ export const skeletalDeathLinks: DeathLink[] = [
 export const corpseJoints: readonly {name: string; radius: number; mass: number}[] = [
   // Trunk spheres stay close to the hip and shoulder radii: a rigid frame whose joints want different floor
   // clearances never comes to rest on the floor.
-  {name: 'pelvis', radius: .1, mass: 6}, {name: 'spine_2', radius: .11, mass: 4}, {name: 'head_0', radius: .12, mass: 2},
+  {name: 'pelvis', radius: .1, mass: 6}, {name: 'spine_2', radius: .11, mass: 4},
+  {name: 'neck_0', radius: .09, mass: 1}, {name: 'head_0', radius: .12, mass: 2},
   {name: 'arm_upper_L', radius: .08, mass: 1.5}, {name: 'arm_lower_L', radius: .06, mass: 1}, {name: 'hand_L', radius: .045, mass: .6},
   {name: 'arm_upper_R', radius: .08, mass: 1.5}, {name: 'arm_lower_R', radius: .06, mass: 1}, {name: 'hand_R', radius: .045, mass: .6},
   {name: 'leg_upper_L', radius: .09, mass: 2}, {name: 'leg_lower_L', radius: .07, mass: 1.5}, {name: 'ankle_L', radius: .06, mass: 1},
   {name: 'leg_upper_R', radius: .09, mass: 2}, {name: 'leg_lower_R', radius: .07, mass: 1.5}, {name: 'ankle_R', radius: .06, mass: 1},
 ];
 const corpseChain: readonly [string, string][] = [
-  ['pelvis', 'spine_2'], ['spine_2', 'head_0'],
+  ['pelvis', 'spine_2'], ['spine_2', 'neck_0'], ['neck_0', 'head_0'],
   ['spine_2', 'arm_upper_L'], ['arm_upper_L', 'arm_lower_L'], ['arm_lower_L', 'hand_L'],
   ['spine_2', 'arm_upper_R'], ['arm_upper_R', 'arm_lower_R'], ['arm_lower_R', 'hand_R'],
   ['pelvis', 'leg_upper_L'], ['leg_upper_L', 'leg_lower_L'], ['leg_lower_L', 'ankle_L'],
   ['pelvis', 'leg_upper_R'], ['leg_upper_R', 'leg_lower_R'], ['leg_lower_R', 'ankle_R'],
 ];
-/** Joints held at their pose distances from each other: the hips and the shoulder girdle are rigid in a body. */
+/** A single torso frame preserves the captured spine curve and shoulder/hip alignment.
+ * Separate hip and shoulder frames share only one point and can turn inside out around it. */
 const corpseFrames: readonly (readonly string[])[] = [
-  ['pelvis', 'leg_upper_L', 'leg_upper_R', 'spine_2'],
-  ['spine_2', 'arm_upper_L', 'arm_upper_R'],
+  ['pelvis', 'leg_upper_L', 'leg_upper_R', 'spine_2', 'arm_upper_L', 'arm_upper_R', 'neck_0'],
 ];
 /**
  * Joint limits as a fraction of the straight chain length (knees and elbows fold so far, the trunk cannot fold in
@@ -252,11 +258,12 @@ const corpseFrames: readonly (readonly string[])[] = [
  * starts at rest instead of fighting its first frame.
  */
 const corpseLimits: readonly {a: string; b: string; through: string; min: number; basis?: 'chain' | 'rest'}[] = [
-  {a: 'leg_upper_L', b: 'ankle_L', through: 'leg_lower_L', min: .45}, {a: 'leg_upper_R', b: 'ankle_R', through: 'leg_lower_R', min: .45},
+  {a: 'leg_upper_L', b: 'ankle_L', through: 'leg_lower_L', min: .82}, {a: 'leg_upper_R', b: 'ankle_R', through: 'leg_lower_R', min: .82},
   {a: 'arm_upper_L', b: 'hand_L', through: 'arm_lower_L', min: .35}, {a: 'arm_upper_R', b: 'hand_R', through: 'arm_lower_R', min: .35},
   {a: 'pelvis', b: 'head_0', through: 'spine_2', min: .82},
-  // Hips flex to a sitting angle, no further.
-  {a: 'leg_lower_L', b: 'spine_2', through: 'pelvis', min: .7}, {a: 'leg_lower_R', b: 'spine_2', through: 'pelvis', min: .7},
+  // Standing legs give way without folding the knees into the chest. The rest-pose
+  // clamp below still admits the full crouch or running pose at the instant of death.
+  {a: 'leg_lower_L', b: 'spine_2', through: 'pelvis', min: .88}, {a: 'leg_lower_R', b: 'spine_2', through: 'pelvis', min: .88},
   // The head hangs on the neck: it can whip back or loll, but not drop onto a shoulder.
   {a: 'head_0', b: 'arm_upper_L', through: 'spine_2', min: .8, basis: 'rest'}, {a: 'head_0', b: 'arm_upper_R', through: 'spine_2', min: .8, basis: 'rest'},
 ];
@@ -271,6 +278,7 @@ export function buildCorpseRig(position: (bone: string) => Vec | undefined): Cor
   const has = (name: string) => bodies.some(body => body.name === name);
   if (!has('pelvis') || !has('spine_2')) return undefined;
   const links: DeathLink[] = corpseChain.filter(([a, b]) => has(a) && has(b)).map(([a, b]) => ({a, b}));
+  if (!has('neck_0') && has('head_0')) links.push({a: 'spine_2', b: 'head_0'});
   const seen = new Set(links.map(({a, b}) => `${a}|${b}`));
   for (const frame of corpseFrames) for (let i = 0; i < frame.length; i++) for (let j = i + 1; j < frame.length; j++) {
     const a = frame[i], b = frame[j];

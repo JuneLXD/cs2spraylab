@@ -359,10 +359,21 @@ export class DuelAnimator {
       const rig = buildCorpseRig(worldPosition);
       if (!rig) {this.deathWorld = undefined; this.dying = false; this.updateDeath(actor, dt); return;}
       this.dynamicDeath = new DeathPhysics(rig.bodies, rig.links, velocity ?? {x: actor.velocity.x, y: 0, z: actor.velocity.z},
-        {struts: rig.struts, hinges: rig.hinges, selfCollision: true, damping: .98, friction: .45, iterations: 10});
+        {struts: rig.struts, hinges: rig.hinges, selfCollision: true, damping: .98, friction: .45, iterations: 16});
       // The lethal shot pushes the part it hit, plus a share of the trunk; a limb takes the side the bullet entered.
       const direction = actor.deathDirection ?? {x: -Math.sin(actor.yaw), y: 0, z: -Math.cos(actor.yaw)};
       const speed = actor.deathImpulse ?? 2;
+      // Start a whole-body tip about the feet. A push on one light joint alone is
+      // absorbed by the constraints while gravity crumples the legs vertically.
+      // Preserve the incoming travel velocity; this is only the loss-of-balance response.
+      const horizontal = Math.hypot(direction.x, direction.z);
+      const dx = horizontal > .001 ? direction.x / horizontal : -Math.sin(actor.yaw);
+      const dz = horizontal > .001 ? direction.z / horizontal : -Math.cos(actor.yaw);
+      const feet = Math.min(...rig.bodies.filter(body => body.name.startsWith('ankle_')).map(body => body.position.y));
+      if (Number.isFinite(feet)) for (const body of rig.bodies) {
+        const tip = Math.max(0, body.position.y - feet) * (.9 + Math.min(speed, 4.5) * .15);
+        this.dynamicDeath.impulse(body.name, {x: dx * tip, y: 0, z: dz * tip});
+      }
       const limb = direction.x * Math.cos(actor.yaw) - direction.z * Math.sin(actor.yaw) > 0 ? 'L' : 'R';
       const targets: Record<Hitgroup, [string, number][]> = {
         head: [['head_0', 1], ['spine_2', .35]],
@@ -381,8 +392,12 @@ export class DuelAnimator {
       const segment = (name: string, child: string, from = name) =>
         this.deathBindings.push({...bind(name), position: name === 'pelvis', segment: {from: from === name ? undefined : from, child,
           direction: worldPosition(child)!.sub(worldPosition(from)!).normalize()}});
-      // The trunk takes its full rotation from the hips and the shoulder girdle; a skeleton without them turns by its spine only.
-      for (const [name, primary, left, right] of [['pelvis', 'spine_2', 'leg_upper_L', 'leg_upper_R'], ['spine_2', 'arm_upper_L', 'arm_upper_L', 'arm_upper_R']] as const) {
+      // Use one long, wide frame for the rigid torso. Solving the chest separately
+      // magnifies tiny contact corrections into a twist of the upper spine.
+      const fullTorso = ['neck_0', 'arm_upper_L', 'arm_upper_R'].every(has);
+      const frames = fullTorso ? [['pelvis', 'neck_0', 'arm_upper_L', 'arm_upper_R']]
+        : [['pelvis', 'spine_2', 'leg_upper_L', 'leg_upper_R'], ['spine_2', 'arm_upper_L', 'arm_upper_L', 'arm_upper_R']];
+      for (const [name, primary, left, right] of frames) {
         if (![name, primary, left, right].every(has)) {if (has(name) && has(name === 'pelvis' ? 'spine_2' : 'head_0')) segment(name, name === 'pelvis' ? 'spine_2' : 'head_0'); continue;}
         // The shoulder girdle's primary axis runs from the chest to the midpoint between the shoulders.
         const to = name === 'pelvis' ? worldPosition(primary)! : worldPosition(left)!.add(worldPosition(right)!).multiplyScalar(.5);
@@ -390,7 +405,7 @@ export class DuelAnimator {
         this.deathBindings.push({...bind(name), position: name === 'pelvis', frame: {primary, left, right, basis}});
       }
       // The neck follows the head joint, which hangs free of the shoulder girdle.
-      if (has('spine_2') && has('head_0') && this.model.getObjectByName('neck_0')) segment('neck_0', 'head_0', 'spine_2');
+      if (has('neck_0') && has('head_0')) segment('neck_0', 'head_0');
       for (const [name, child] of [['arm_upper_L', 'arm_lower_L'], ['arm_lower_L', 'hand_L'], ['arm_upper_R', 'arm_lower_R'], ['arm_lower_R', 'hand_R'],
         ['leg_upper_L', 'leg_lower_L'], ['leg_lower_L', 'ankle_L'], ['leg_upper_R', 'leg_lower_R'], ['leg_lower_R', 'ankle_R']] as const)
         if (has(name) && has(child)) segment(name, child);

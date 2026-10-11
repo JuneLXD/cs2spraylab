@@ -51,7 +51,7 @@ describe('cosmetic skeletal contact solver', () => {
 
 /** A standing pose with the rifle held ahead: hands forward of the chest, knees a little ahead of the hips. */
 const standing: Record<string, {x: number; y: number; z: number}> = {
-  pelvis: {x: 0, y: 1, z: 0}, spine_2: {x: 0, y: 1.25, z: 0}, head_0: {x: 0, y: 1.6, z: 0},
+  pelvis: {x: 0, y: 1, z: 0}, spine_2: {x: 0, y: 1.25, z: 0}, neck_0: {x: 0, y: 1.48, z: 0}, head_0: {x: 0, y: 1.6, z: 0},
   arm_upper_L: {x: -.2, y: 1.45, z: 0}, arm_lower_L: {x: -.25, y: 1.2, z: .08}, hand_L: {x: -.15, y: 1.1, z: .32},
   arm_upper_R: {x: .2, y: 1.45, z: 0}, arm_lower_R: {x: .25, y: 1.2, z: .08}, hand_R: {x: .1, y: 1.1, z: .3},
   leg_upper_L: {x: -.1, y: .95, z: 0}, leg_lower_L: {x: -.1, y: .5, z: .03}, ankle_L: {x: -.1, y: .06, z: 0},
@@ -88,6 +88,8 @@ describe('corpse rig', () => {
       expect(point.y).toBeGreaterThanOrEqual(body.radius - 1e-6);
     }
     expect(rag.point('head_0')!.y).toBeLessThan(.5); expect(rag.point('pelvis')!.y).toBeLessThan(.4);
+    const head = rag.point('head_0')!, left = rag.point('ankle_L')!, right = rag.point('ankle_R')!;
+    expect(Math.hypot(head.x - (left.x + right.x) / 2, head.z - (left.z + right.z) / 2)).toBeGreaterThan(1.2);
     for (const link of rig.links) {
       const a = rag.point(link.a)!, b = rag.point(link.b)!, pa = standing[link.a], pb = standing[link.b];
       expect(Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z)).toBeCloseTo(Math.hypot(pa.x - pb.x, pa.y - pb.y, pa.z - pb.z), 1);

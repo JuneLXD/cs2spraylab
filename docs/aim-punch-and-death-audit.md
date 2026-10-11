@@ -68,6 +68,32 @@ Source 2 interpolates rotations. No live-game parity claim is made.
 
 ## Death Assets
 
+### Runtime fall rework (October 10, 2026)
+
+The live contact rig now holds hips, chest, shoulders and neck in one frame,
+preserving the spine curve captured at death. The old hip/shoulder frames shared
+only one point, allowing the shoulders to fold independently through the body.
+The neck now has its own contact joint, and its bone aims from neck to head;
+aiming from chest to head put the rendered skull far from its solved position.
+One shared torso rotation avoids amplifying contact errors into spine twists.
+
+Standing hip and knee flexion is limited more tightly, with limits clamped to
+the initial pose so crouched and running victims do not snap upright. A bounded
+height-weighted push initiates a tip in the shot direction while preserving
+incoming movement and hit-specific impulses. This is cosmetic tuning, not a
+claim of Source 2 ragdoll parity. Gravity, damage and live collision are unchanged.
+Settling measures movement between solved poses and stops at the same physics
+step at every render rate; contact edits to the velocity history no longer keep
+a stationary corpse awake.
+
+`tools/death-preview.html` is a lightweight Vite preview with standing/crouched
+and front/side/rear replay controls. `tools/capture-death-preview.mjs <out>` captures
+the real target mesh and motion bank. `tools/verify-death-preview.mjs <report.json>`
+checks 30 falls including head/leg hits, movement, airborne starts and a raised
+platform. Run browser tools one at a time under the host memory cap, with the
+preview served at `http://192.168.0.18:5184`. The older baked assets below remain
+the fallback when a contact world is unavailable.
+
 The three previously imported death clips contain severe joint discontinuities
 in the DMX-derived source, not only after glTF optimization. For example,
 `death_chest_b` rotates `spine_1` by about 179 degrees in one 30 Hz frame.

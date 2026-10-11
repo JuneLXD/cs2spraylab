@@ -406,6 +406,10 @@ export const latestChanges = {
       'Custom mouse-axis coefficients, vertical sensitivity scaling and axis inversions carry through import, aiming and config export in Range and Duel.',
       'Video settings explain how graphics quality can lower actual rendering resolution while preserving sensitivity and field of view.',
     ]},
+    {id: 'character-death-falls', title: 'Character death falls', items: [
+      'Characters tip in the shot direction with their torso intact, controlled leg bending and a head that follows the neck, replacing the inward collapse.',
+      'Falls preserve the current crouch and movement, contact floors and props, and settle without lingering motion.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

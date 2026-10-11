@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Character death preview</title>
+<style>
+body {margin:0;background:#202831;color:#eee;font:15px system-ui} canvas {display:block}
+nav {position:absolute;top:16px;left:16px;display:flex;gap:12px;align-items:center}
+button,select {font:inherit;padding:6px} #time {font-variant-numeric:tabular-nums}
+</style>
+<nav><button id="replay">Replay fall</button><label>Stance <select id="stance"><option value="0">Standing</option><option value="0.5">Half crouched</option><option value="1">Crouched</option></select></label><label>Shot <select id="direction"><option value="0">Front</option><option value="1.57079632679">Side</option><option value="3.14159265359">Behind</option></select></label><span id="time">Loading…</span></nav>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {clone} from 'three/addons/utils/SkeletonUtils.js';
+import {DuelAnimator} from '../src/range/duel/animation.ts';
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(1); renderer.setSize(innerWidth,innerHeight); document.body.append(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#202831');
+scene.add(new THREE.HemisphereLight(0xffffff,0x667788,2.5));
+const light=new THREE.DirectionalLight(0xffffff,3);light.position.set(3,5,2);scene.add(light);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.MeshStandardMaterial({color:0x54616b}));
+floor.rotation.x=-Math.PI/2;floor.position.y=-.005;scene.add(floor);
+scene.add(new THREE.GridHelper(20,40,0x82919b,0x64717b));
+const camera = new THREE.PerspectiveCamera(37,innerWidth/innerHeight,.01,50);
+camera.position.set(4,2.4,4);camera.lookAt(0,.7,.25);
+const loader=new GLTFLoader();
+const target=await loader.loadAsync('/models/target.glb');
+const motion=await loader.loadAsync('/models/duel-motion.glb');
+let model, animator, actor, age=0, running=false;
+const render=()=>{renderer.render(scene,camera);document.querySelector('#time').textContent=`${age.toFixed(2)} s`;};
+function reset(options={}) {
+  if(model){animator.dispose();scene.remove(model);model.traverse(n=>n.skeleton?.dispose());}
+  model=clone(target.scene);model.position.y=options.height??0;scene.add(model);
+  model.traverse(node=>{if(node.name.startsWith('held_weapon_target'))node.visible=false;});
+  actor={id:1,alive:true,position:{x:0,y:1.6256,z:0},feet:0,velocity:options.velocity??{x:0,z:0},yaw:Math.PI,pitch:0,
+    duckAmount:options.duck??Number(document.querySelector('#stance').value),grounded:true,equipment:'ak47',reloading:false};
+  animator=new DuelAnimator(model,motion.animations,options.phase??0,'ak47');
+  animator.update(actor,0);animator.setDeathWorld({floor:0,boxes:options.boxes??[]});
+  const angle=options.direction??Number(document.querySelector('#direction').value);
+  Object.assign(actor,{alive:false,deathDirection:{x:Math.sin(angle),y:0,z:-Math.cos(angle)},deathGroup:options.group??'chest',deathImpulse:options.impulse??2.5});
+  animator.update(actor,0);age=0;running=false;render();
+}
+function step(dt){animator.update(actor,dt);age+=dt;render();}
+function advance(seconds){for(let i=0;i<Math.round(seconds*120);i++){animator.update(actor,1/120);age+=1/120;}render();}
+function sample(){
+  const rag=animator.dynamicDeath;
+  return {age,sleeping:rag?.sleeping,stats:rag?.stats,joints:rag?.bodies.map(b=>({name:b.name,solver:rag.point(b.name),rendered:model.getObjectByName(b.name)?.getWorldPosition(new THREE.Vector3()).toArray()}))};
+}
+window.deathPreview={reset,step,advance,sample};reset();
+let last=performance.now();
+function tick(now){const dt=Math.min((now-last)/1000,1/30);last=now;if(running){step(dt);if(age>4)running=false;}requestAnimationFrame(tick);}
+requestAnimationFrame(tick);
+document.querySelector('#replay').onclick=()=>{reset();running=true;};
+for(const id of ['stance','direction'])document.querySelector(`#${id}`).onchange=()=>{reset();running=true;};
+addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();render();});
+</script>
+</html>

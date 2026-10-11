@@ -2,6 +2,7 @@ import {describe, expect, it, vi} from 'vitest';
 import * as THREE from 'three';
 import {DuelAnimator, nativeGestureName, nativeGestureClips} from './animation';
 import type {DuelActorSnapshot} from './types';
+import type {DeathPhysics} from './death-physics';
 
 const actor = (): DuelActorSnapshot => ({id: 1, generation: 1, side: 'enemy', position: {x: 0, y: 0, z: 0},
   feet: 0, velocity: {x: 0, z: 0}, yaw: 0, pitch: 0, crouched: false, duckAmount: 0,
@@ -166,6 +167,24 @@ function limbFixture() {
   return {model, names, animator: new DuelAnimator(model, clips, 0, 'ak47')};
 }
 describe('corpse rig on the native skeleton', () => {
+  it.each([0, Math.PI / 2, Math.PI])('keeps the rendered head and shoulders on the contact rig throughout a fall from %s radians', direction => {
+    const f = limbFixture(), a = actor(); f.animator.update(a, 0);
+    a.alive = false; a.deathDirection = {x: Math.sin(direction), y: 0, z: Math.cos(direction)};
+    a.deathGroup = 'chest'; a.deathImpulse = 2.5;
+    f.animator.setDeathWorld({floor: 0}); f.animator.update(a, 0);
+    const rag = (f.animator as unknown as {dynamicDeath: DeathPhysics}).dynamicDeath;
+    const point = new THREE.Vector3();
+    for (let n = 0; n < 180; n++) {
+      f.animator.update(a, 1 / 60);
+      for (const name of ['pelvis', 'spine_2', 'neck_0', 'head_0', 'arm_upper_L', 'arm_upper_R']) {
+        const solved = rag.point(name)!;
+        f.model.getObjectByName(name)!.getWorldPosition(point);
+        // Stay inside the contact sphere even on this flat, synthetic torso.
+        expect(point.distanceTo(new THREE.Vector3(solved.x, solved.y, solved.z)), `${name}, frame ${n}`).toBeLessThan(.06);
+      }
+    }
+    f.animator.dispose();
+  });
   it('rotates bones only, so no bone stretches while the body falls and lies down', () => {
     const f = limbFixture(), a = actor(); f.animator.update(a, 0);
     const lengths = new Map(f.names.map(name => [name, f.model.getObjectByName(name)!.position.length()]));
