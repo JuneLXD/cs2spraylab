@@ -4,7 +4,8 @@ Added 2026-10-11 at the user's request, after Refrag's Blitz (their wiki calls i
 Crossfire: "fast-peeking, aggressive bots swinging you in quick succession"). Refrag's own bot sets are made in their
 Creator Studio and live on their servers; nothing public lists their positions, so the arenas here are derived
 from the map's geometry instead (below). It runs on the duel engine (`mode: 'blitz'`, variant `blitz` of
-`DuelStage`), on Valve's de_ancient imported from the installed game.
+`DuelStage`), on Valve's de_ancient imported from the installed game, under its own Blitz tab in Play (one
+entry per map as more are imported).
 
 ## Map import
 

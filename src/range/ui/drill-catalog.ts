@@ -1,7 +1,9 @@
 import type {Mode} from '../config';
 export const drillCategories = [
   {id: 'warmup', label: 'Aim warm-up', modes: ['botz', 'redline', 'reflex', 'pop']},
-  {id: 'duel', label: 'AI Duel', modes: ['duel', 'deathmatch', 'blitz']},
+  {id: 'duel', label: 'AI Duel', modes: ['duel', 'deathmatch']},
+  // Blitz gets its own tab: one entry per map as more are imported.
+  {id: 'blitz', label: 'Blitz', modes: ['blitz']},
   {id: 'range', label: 'Spray & movement', modes: ['guided', 'spray', 'transfer', 'peek', 'precision', 'burst']},
   {id: 'hearing', label: 'Hearing', modes: ['hearing']},
 ] as const;
