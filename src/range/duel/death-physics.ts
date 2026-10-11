@@ -1,4 +1,5 @@
 import {GRAVITY, type Vec} from '../actor-physics';
+import {CapsuleContacts, type DeathCapsule} from './death-collisions';
 
 export type DeathBody = {name: string; position: Vec; radius: number; mass?: number};
 export type DeathLink = {a: string; b: string};
@@ -18,6 +19,8 @@ export type DeathOptions = {
   hinges?: readonly DeathHinge[];
   /** Keep joints that share no link apart by their radii (hands out of the chest, knees apart). */
   selfCollision?: boolean;
+  /** Solid limb and torso volumes, including the gaps between joint spheres. */
+  capsules?: readonly DeathCapsule[];
   /** Velocity kept per 1/120 s step. */
   damping?: number;
   /** Share of tangential motion removed on each floor or box contact. */
@@ -27,7 +30,7 @@ export type DeathOptions = {
 const axes = ['x', 'y', 'z'] as const;
 const STEP = 1 / 120;
 
-/** Cosmetic sphere/link PBD, deliberately independent of damage and live actor collision. */
+/** Cosmetic joint/capsule PBD, deliberately independent of damage and live actor collision. */
 export class DeathPhysics {
   readonly bodies: DeathBody[];
   readonly positions: Float64Array;
@@ -38,6 +41,8 @@ export class DeathPhysics {
   private struts: {a: number; b: number; min: number; max: number}[];
   private hinges: {joint: number; pivot: number; origin: number; up: number; left: number; right: number; min: number; sign: number}[];
   private pairs: [number, number][] = [];
+  private readonly capsuleContacts?: CapsuleContacts;
+  private readonly contactRadii: Float64Array;
   private readonly damping: number;
   private readonly friction: number;
   private readonly iterations: number;
@@ -47,7 +52,7 @@ export class DeathPhysics {
   private lastContacts = new Map<number, number>();
   sleeping = false;
   /** Correction distances applied per constraint kind in the last step() call, for tuning probes. */
-  readonly stats = {links: 0, struts: 0, hinges: 0, pairs: 0, contacts: 0, speed: 0};
+  readonly stats = {links: 0, struts: 0, hinges: 0, pairs: 0, capsules: 0, contacts: 0, speed: 0};
   constructor(bodies: readonly DeathBody[], links: readonly DeathLink[], velocity: Vec = {x: 0, y: 0, z: 0}, options: DeathOptions = {}) {
     if (bodies.length > 24 || new Set(bodies.map(b => b.name)).size !== bodies.length ||
       bodies.some(b => !axes.every(a => Number.isFinite(b.position[a])) || !Number.isFinite(b.radius) || b.radius <= 0 ||
@@ -58,6 +63,7 @@ export class DeathPhysics {
     this.previous = this.positions.slice();
     this.stepStart = this.positions.slice();
     this.inverseMass = new Float64Array(bodies.map(b => 1 / Math.max(.1, b.mass ?? 1)));
+    this.contactRadii = new Float64Array(bodies.map(b => b.radius));
     this.damping = Math.min(1, Math.max(.9, options.damping ?? .992));
     this.friction = Math.min(1, Math.max(0, options.friction ?? .18));
     this.iterations = Math.min(24, Math.max(1, Math.round(options.iterations ?? 8)));
@@ -87,6 +93,10 @@ export class DeathPhysics {
     if (options.selfCollision) {
       const joined = new Set([...this.links, ...this.struts].map(({a, b}) => a * 64 + b).flatMap(key => [key, (key % 64) * 64 + Math.floor(key / 64)]));
       for (let a = 0; a < bodies.length; a++) for (let b = a + 1; b < bodies.length; b++) if (!joined.has(a * 64 + b)) this.pairs.push([a, b]);
+      if (options.capsules?.length) {
+        this.capsuleContacts = new CapsuleContacts(options.capsules, bodies, this.positions, this.inverseMass);
+        this.capsuleContacts.expandRadii(this.contactRadii);
+      }
     }
   }
   point(name: string): Vec | undefined {
@@ -103,7 +113,7 @@ export class DeathPhysics {
     if (this.sleeping || !Number.isFinite(dt) || dt <= 0) return [];
     this.accumulator = Math.min(this.accumulator + dt, STEP * 8);
     const contacts: DeathContact[] = [], boxes = world.boxes?.slice(0, 128) ?? [];
-    this.stats.links = this.stats.struts = this.stats.hinges = this.stats.pairs = this.stats.contacts = this.stats.speed = 0;
+    this.stats.links = this.stats.struts = this.stats.hinges = this.stats.pairs = this.stats.capsules = this.stats.contacts = this.stats.speed = 0;
     while (this.accumulator + 1e-10 >= STEP) {
       this.accumulator -= STEP; this.age += STEP;
       this.stepStart.set(this.positions);
@@ -119,8 +129,9 @@ export class DeathPhysics {
         for (const strut of this.struts) this.stats.struts += this.separate(strut.a, strut.b, strut.min, strut.max);
         for (const hinge of this.hinges) this.stats.hinges += this.limitHinge(hinge);
         for (const [a, b] of this.pairs) this.stats.pairs += this.separate(a, b, (this.bodies[a].radius + this.bodies[b].radius) * .75, Infinity);
+        this.stats.capsules += this.capsuleContacts?.solve(this.age) ?? 0;
         for (let i = 0; i < this.bodies.length; i++) {
-          const at = i * 3, floor = (world.floor ?? 0) + this.bodies[i].radius;
+          const at = i * 3, floor = (world.floor ?? 0) + this.contactRadii[i];
           if (this.positions[at + 1] < floor) this.contact(i, 1, floor, -1, contacts);
           boxes.forEach((box, solid) => this.collide(i, box, solid, contacts));
         }
@@ -181,12 +192,12 @@ export class DeathPhysics {
     if (speed > .6 && this.age - (this.lastContacts.get(body) ?? -Infinity) > .1) {
       this.lastContacts.set(body, this.age);
       const point = this.point(this.bodies[body].name)!;
-      point[axes[axis]] -= normal[axes[axis]] * this.bodies[body].radius;
+      point[axes[axis]] -= normal[axes[axis]] * this.contactRadii[body];
       contacts.push({body: this.bodies[body].name, point, normal, speed, solid});
     }
   }
   private collide(body: number, box: DeathBox, solid: number, contacts: DeathContact[]) {
-    const at = body * 3, radius = this.bodies[body].radius;
+    const at = body * 3, radius = this.contactRadii[body];
     const x = this.positions[at], y = this.positions[at + 1], z = this.positions[at + 2];
     const minX = box.center.x - box.size.x / 2 - radius, maxX = box.center.x + box.size.x / 2 + radius;
     if (x >= maxX || x <= minX) return;
@@ -205,7 +216,7 @@ export class DeathPhysics {
     this.contact(body, axis, value, solid, contacts);
   }
   private sweep(body: number, box: DeathBox, solid: number, contacts: DeathContact[]) {
-    const at = body * 3, radius = this.bodies[body].radius;
+    const at = body * 3, radius = this.contactRadii[body];
     let near = 0, far = 1, hitAxis = -1, edge = 0;
     for (let k = 0; k < 3; k++) {
       const min = box.center[axes[k]] - box.size[axes[k]] / 2 - radius, max = min + box.size[axes[k]] + radius * 2;
@@ -267,7 +278,19 @@ const corpseLimits: readonly {a: string; b: string; through: string; min: number
   // The head hangs on the neck: it can whip back or loll, but not drop onto a shoulder.
   {a: 'head_0', b: 'arm_upper_L', through: 'spine_2', min: .8, basis: 'rest'}, {a: 'head_0', b: 'arm_upper_R', through: 'spine_2', min: .8, basis: 'rest'},
 ];
-export type CorpseRig = {bodies: DeathBody[]; links: DeathLink[]; struts: DeathStrut[]; hinges: DeathHinge[]};
+const corpseCapsules: readonly DeathCapsule[] = [
+  {name: 'hips', a: 'pelvis', b: 'spine_2', radius: .16, exclude: ['thigh_L', 'thigh_R', 'head']},
+  {name: 'chest', a: 'spine_2', b: 'neck_0', radius: .17, exclude: ['upper_arm_L', 'upper_arm_R', 'head']},
+  {name: 'head', a: 'head_0', b: 'head_0', radius: .12},
+  ...(['L', 'R'] as const).flatMap(side => [
+    {name: `upper_arm_${side}`, a: `arm_upper_${side}`, b: `arm_lower_${side}`, radius: .075, start: .2},
+    {name: `forearm_${side}`, a: `arm_lower_${side}`, b: `hand_${side}`, radius: .065},
+    {name: `hand_${side}`, a: `hand_${side}`, b: `hand_${side}`, radius: .085},
+    {name: `thigh_${side}`, a: `leg_upper_${side}`, b: `leg_lower_${side}`, radius: .105, start: .15},
+    {name: `shin_${side}`, a: `leg_lower_${side}`, b: `ankle_${side}`, radius: .075},
+  ]),
+];
+export type CorpseRig = {bodies: DeathBody[]; links: DeathLink[]; struts: DeathStrut[]; hinges: DeathHinge[]; capsules: DeathCapsule[]};
 /** Builds the rig from the bones' world positions at death; joints the model lacks are left out with their constraints. */
 export function buildCorpseRig(position: (bone: string) => Vec | undefined): CorpseRig | undefined {
   const bodies: DeathBody[] = [];
@@ -293,5 +316,5 @@ export function buildCorpseRig(position: (bone: string) => Vec | undefined): Cor
   });
   // A distance limit bounds a joint both ways (a hip folds forward or back to the same angle), and the floor takes
   // the rest; the frame-based hinges kept twitching a corpse that had already come to rest, so the rig uses none.
-  return {bodies, links, struts, hinges: []};
+  return {bodies, links, struts, hinges: [], capsules: corpseCapsules.filter(c => has(c.a) && has(c.b))};
 }

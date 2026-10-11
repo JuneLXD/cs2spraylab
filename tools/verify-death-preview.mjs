@@ -13,10 +13,10 @@ try {
     const cases=[];
     for(const duck of [0,.5,1])for(const direction of [0,Math.PI/2,Math.PI])for(const group of ['chest','head','leg'])
       cases.push({duck,direction,group});
-    cases.push({velocity:{x:2,z:0},phase:.35},{height:1,velocity:{x:1,z:0}},
-      {height:.6,boxes:[{center:{x:0,y:.3,z:0},size:{x:6,y:.6,z:6}}]});
+    cases.push({duck:0,direction:0,velocity:{x:2,z:0},phase:.35},{duck:0,direction:0,height:1,velocity:{x:1,z:0}},
+      {duck:0,direction:0,height:.6,boxes:[{center:{x:0,y:.3,z:0},size:{x:6,y:.6,z:6}}]});
     for(const options of cases){
-      preview.reset(options);let maxError=0,minY=Infinity,maxLinkError=0;
+      preview.reset(options);let maxError=0,minY=Infinity,maxLinkError=0,maxPenetration=0,worstPair=null;
       const initial=preview.sample();
       const joint=(sample,name)=>sample.joints.find(j=>j.name===name).rendered;
       const torsoDistance=s=>Math.hypot(...joint(s,'neck_0').map((v,i)=>v-joint(s,'pelvis')[i]));
@@ -28,9 +28,10 @@ try {
           minY=Math.min(minY,j.rendered[1]);
         }
         maxLinkError=Math.max(maxLinkError,Math.abs(torsoDistance(s)-torso));
+        if(s.age>=.2&&s.penetration>maxPenetration){maxPenetration=s.penetration;worstPair=s.worstPair;}
       }
       const end=preview.sample();
-      results.push({options,maxError,minY,maxLinkError,sleeping:end.sleeping,headY:joint(end,'head_0')[1],hipY:joint(end,'pelvis')[1]});
+      results.push({options,maxError,minY,maxLinkError,maxPenetration,worstPair,sleeping:end.sleeping,headY:joint(end,'head_0')[1],hipY:joint(end,'pelvis')[1]});
     }
     return results;
   });
@@ -41,6 +42,7 @@ try {
     assert(r.maxError<.055,`Rendered skeleton must follow contacts: ${context}`);
     assert(r.minY>-.035,`Body must stay above floor: ${context}`);
     assert(r.maxLinkError<.035,`Torso must retain its length: ${context}`);
+    assert(r.maxPenetration<.025,`Body volumes must remain separated: ${context}`);
     assert(r.sleeping,`Corpse must settle: ${context}`);
     const floor=r.options.boxes?.length ? .6 : 0;
     assert(r.headY<floor+.5&&r.hipY<floor+.4,`Corpse must lie down: ${context}`);

@@ -12,7 +12,9 @@ button,select {font:inherit;padding:6px} #time {font-variant-numeric:tabular-num
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {DuelAnimator} from '../src/range/duel/animation.ts';
+import {closestSegments} from '../src/range/duel/death-collisions.ts';
 const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(1); renderer.setSize(innerWidth,innerHeight); document.body.append(renderer.domElement);
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#202831');
@@ -22,13 +24,19 @@ const floor=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.MeshStandard
 floor.rotation.x=-Math.PI/2;floor.position.y=-.005;scene.add(floor);
 scene.add(new THREE.GridHelper(20,40,0x82919b,0x64717b));
 const camera = new THREE.PerspectiveCamera(37,innerWidth/innerHeight,.01,50);
-camera.position.set(4,2.4,4);camera.lookAt(0,.7,.25);
+camera.position.set(3.2,2,3.2);camera.lookAt(0,.7,.25);
 const loader=new GLTFLoader();
 const target=await loader.loadAsync('/models/target.glb');
 const motion=await loader.loadAsync('/models/duel-motion.glb');
 let model, animator, actor, age=0, running=false;
 const render=()=>{renderer.render(scene,camera);document.querySelector('#time').textContent=`${age.toFixed(2)} s`;};
+const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,.7,.25);controls.update();controls.addEventListener('change',render);
 function reset(options={}) {
+  if(options.duck!==undefined)document.querySelector('#stance').value=String(options.duck);
+  if(options.direction!==undefined){
+    const select=document.querySelector('#direction'),option=[...select.options].find(o=>Math.abs(Number(o.value)-options.direction)<1e-6);
+    if(option)select.value=option.value;
+  }
   if(model){animator.dispose();scene.remove(model);model.traverse(n=>n.skeleton?.dispose());}
   model=clone(target.scene);model.position.y=options.height??0;scene.add(model);
   model.traverse(node=>{if(node.name.startsWith('held_weapon_target'))node.visible=false;});
@@ -44,7 +52,20 @@ function step(dt){animator.update(actor,dt);age+=dt;render();}
 function advance(seconds){for(let i=0;i<Math.round(seconds*120);i++){animator.update(actor,1/120);age+=1/120;}render();}
 function sample(){
   const rag=animator.dynamicDeath;
-  return {age,sleeping:rag?.sleeping,stats:rag?.stats,joints:rag?.bodies.map(b=>({name:b.name,solver:rag.point(b.name),rendered:model.getObjectByName(b.name)?.getWorldPosition(new THREE.Vector3()).toArray()}))};
+  const joints=rag?.bodies.map(b=>({name:b.name,solver:rag.point(b.name),rendered:model.getObjectByName(b.name)?.getWorldPosition(new THREE.Vector3()).toArray()}));
+  let penetration=0,worstPair=null;
+  const contacts=rag?.capsuleContacts,result=new Float64Array(6);
+  if(contacts)for(const pair of contacts.pairs){
+    const a=contacts.definitions[pair.a],b=contacts.definitions[pair.b];
+    const ends=cap=>{
+      const p=joints.find(j=>j.name===cap.a).rendered,q=joints.find(j=>j.name===cap.b).rendered;
+      return [cap.start??0,cap.end??1].map(t=>p.map((v,k)=>v*(1-t)+q[k]*t));
+    };
+    closestSegments(...ends(a),...ends(b),result);
+    const overlap=a.radius+b.radius-result[5];
+    if(overlap>penetration){penetration=overlap;worstPair=[a.name,b.name];}
+  }
+  return {age,sleeping:rag?.sleeping,stats:rag?.stats,penetration,worstPair,joints};
 }
 window.deathPreview={reset,step,advance,sample};reset();
 let last=performance.now();

@@ -86,6 +86,14 @@ Settling measures movement between solved poses and stops at the same physics
 step at every render rate; contact edits to the velocity history no longer keep
 a stationary corpse awake.
 
+The follow-up adds 13 solid torso/limb/hand/head volumes. Closest points along
+non-adjacent capsules exchange mass-weighted separation corrections; endpoint
+spheres alone could miss completely intersecting limbs. Anatomically adjoining
+volumes are excluded, while a slight overlap in the imported holding pose eases
+out over .18 seconds. The same thickness feeds floor and prop contacts. Crouched
+falls retain an upper-body push and a small lateral lean to avoid balancing on a
+hand. Rendered capsule separation is checked as well as solver/bone alignment.
+
 `tools/death-preview.html` is a lightweight Vite preview with standing/crouched
 and front/side/rear replay controls. `tools/capture-death-preview.mjs <out>` captures
 the real target mesh and motion bank. `tools/verify-death-preview.mjs <report.json>`

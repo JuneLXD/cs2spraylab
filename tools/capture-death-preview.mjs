@@ -1,5 +1,6 @@
 // Isolated real-skeleton captures without loading a map, weapon skins or game HUD.
-// Run under the host memory cap against Vite: node tools/capture-death-preview.mjs <output-directory>
+// Run under the host memory cap against Vite:
+// node tools/capture-death-preview.mjs <output-directory> [JSON-options] [frame-count]
 import fs from 'node:fs';
 import path from 'node:path';
 import {chromium} from '@playwright/test';
@@ -13,7 +14,7 @@ try {
   const frames=[];
   const options=JSON.parse(process.argv[3]??'{}');
   await page.evaluate(options=>window.deathPreview.reset(options),options);
-  for(let i=0;i<13;i++) {
+  for(let i=0;i<Number(process.argv[4]??13);i++) {
     const file=`death-${String(i).padStart(2,'0')}.png`;
     await page.screenshot({path:path.join(out,file)});
     frames.push({file,...await page.evaluate(()=>window.deathPreview.sample())});

@@ -359,7 +359,7 @@ export class DuelAnimator {
       const rig = buildCorpseRig(worldPosition);
       if (!rig) {this.deathWorld = undefined; this.dying = false; this.updateDeath(actor, dt); return;}
       this.dynamicDeath = new DeathPhysics(rig.bodies, rig.links, velocity ?? {x: actor.velocity.x, y: 0, z: actor.velocity.z},
-        {struts: rig.struts, hinges: rig.hinges, selfCollision: true, damping: .98, friction: .45, iterations: 16});
+        {struts: rig.struts, hinges: rig.hinges, capsules: rig.capsules, selfCollision: true, damping: .98, friction: .45, iterations: 16});
       // The lethal shot pushes the part it hit, plus a share of the trunk; a limb takes the side the bullet entered.
       const direction = actor.deathDirection ?? {x: -Math.sin(actor.yaw), y: 0, z: -Math.cos(actor.yaw)};
       const speed = actor.deathImpulse ?? 2;
@@ -370,9 +370,13 @@ export class DuelAnimator {
       const dx = horizontal > .001 ? direction.x / horizontal : -Math.sin(actor.yaw);
       const dz = horizontal > .001 ? direction.z / horizontal : -Math.cos(actor.yaw);
       const feet = Math.min(...rig.bodies.filter(body => body.name.startsWith('ankle_')).map(body => body.position.y));
+      const height = Math.max(...rig.bodies.map(body => body.position.y)) - feet;
+      // A crouched body has a shorter lever and can balance on both feet and a
+      // hand. Preserve the upper-body push and let it fall slightly off centre.
+      const lean = (actor.id % 2 ? 1 : -1) * .18 * stanceCurve(actor.duckAmount);
       if (Number.isFinite(feet)) for (const body of rig.bodies) {
-        const tip = Math.max(0, body.position.y - feet) * (.9 + Math.min(speed, 4.5) * .15);
-        this.dynamicDeath.impulse(body.name, {x: dx * tip, y: 0, z: dz * tip});
+        const tip = Math.max(0, body.position.y - feet) * (.9 + Math.min(speed, 4.5) * .15) * Math.min(1.6, 1.5 / Math.max(.65, height));
+        this.dynamicDeath.impulse(body.name, {x: (dx + dz * lean) * tip, y: 0, z: (dz - dx * lean) * tip});
       }
       const limb = direction.x * Math.cos(actor.yaw) - direction.z * Math.sin(actor.yaw) > 0 ? 'L' : 'R';
       const targets: Record<Hitgroup, [string, number][]> = {

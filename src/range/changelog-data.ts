@@ -410,6 +410,9 @@ export const latestChanges = {
       'Characters tip in the shot direction with their torso intact, controlled leg bending and a head that follows the neck, replacing the inward collapse.',
       'Falls preserve the current crouch and movement, contact floors and props, and settle without lingering motion.',
     ]},
+    {id: 'character-body-collision', title: 'Body collision during falls', items: [
+      'Solid collision volumes along the torso, arms, hands and legs keep body parts apart as a character falls and comes to rest.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
