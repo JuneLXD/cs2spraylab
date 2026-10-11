@@ -1,5 +1,7 @@
 import {GRAVITY, type Vec} from '../actor-physics';
 import {CapsuleContacts, type DeathCapsule} from './death-collisions';
+import {Vector3} from 'three';
+import {LimbConstraints, type DeathLimb} from './death-joints';
 
 export type DeathBody = {name: string; position: Vec; radius: number; mass?: number};
 export type DeathLink = {a: string; b: string};
@@ -17,6 +19,7 @@ export type DeathWorld = {floor?: number; boxes?: readonly DeathBox[]; gravity?:
 export type DeathOptions = {
   struts?: readonly DeathStrut[];
   hinges?: readonly DeathHinge[];
+  limbs?: readonly DeathLimb[];
   /** Keep joints that share no link apart by their radii (hands out of the chest, knees apart). */
   selfCollision?: boolean;
   /** Solid limb and torso volumes, including the gaps between joint spheres. */
@@ -42,6 +45,8 @@ export class DeathPhysics {
   private hinges: {joint: number; pivot: number; origin: number; up: number; left: number; right: number; min: number; sign: number}[];
   private pairs: [number, number][] = [];
   private readonly capsuleContacts?: CapsuleContacts;
+  private readonly limbConstraints?: LimbConstraints;
+  private readonly limbAxis = new Vector3();
   private readonly contactRadii: Float64Array;
   private readonly damping: number;
   private readonly friction: number;
@@ -52,7 +57,7 @@ export class DeathPhysics {
   private lastContacts = new Map<number, number>();
   sleeping = false;
   /** Correction distances applied per constraint kind in the last step() call, for tuning probes. */
-  readonly stats = {links: 0, struts: 0, hinges: 0, pairs: 0, capsules: 0, contacts: 0, speed: 0};
+  readonly stats = {links: 0, struts: 0, hinges: 0, limbs: 0, pairs: 0, capsules: 0, contacts: 0, speed: 0};
   constructor(bodies: readonly DeathBody[], links: readonly DeathLink[], velocity: Vec = {x: 0, y: 0, z: 0}, options: DeathOptions = {}) {
     if (bodies.length > 24 || new Set(bodies.map(b => b.name)).size !== bodies.length ||
       bodies.some(b => !axes.every(a => Number.isFinite(b.position[a])) || !Number.isFinite(b.radius) || b.radius <= 0 ||
@@ -90,6 +95,7 @@ export class DeathPhysics {
         throw new Error('Death hinge joints must exist and define a frame.');
       return {joint, pivot, origin, up, left, right, min: hinge.min, sign: hinge.sign < 0 ? -1 : 1};
     });
+    if (options.limbs?.length) this.limbConstraints = new LimbConstraints(options.limbs, bodies, this.positions, this.inverseMass);
     if (options.selfCollision) {
       const joined = new Set([...this.links, ...this.struts].map(({a, b}) => a * 64 + b).flatMap(key => [key, (key % 64) * 64 + Math.floor(key / 64)]));
       for (let a = 0; a < bodies.length; a++) for (let b = a + 1; b < bodies.length; b++) if (!joined.has(a * 64 + b)) this.pairs.push([a, b]);
@@ -103,6 +109,10 @@ export class DeathPhysics {
     const i = this.bodies.findIndex(body => body.name === name) * 3;
     return i < 0 ? undefined : {x: this.positions[i], y: this.positions[i + 1], z: this.positions[i + 2]};
   }
+  limbNormal(root: string): Vec | undefined {
+    const normal = this.limbConstraints?.normal(root, this.limbAxis);
+    return normal && {x: normal.x, y: normal.y, z: normal.z};
+  }
   impulse(name: string, velocity: Vec) {
     const index = this.bodies.findIndex(body => body.name === name) * 3;
     if (index < 0 || !axes.every(a => Number.isFinite(velocity[a]))) return;
@@ -113,7 +123,7 @@ export class DeathPhysics {
     if (this.sleeping || !Number.isFinite(dt) || dt <= 0) return [];
     this.accumulator = Math.min(this.accumulator + dt, STEP * 8);
     const contacts: DeathContact[] = [], boxes = world.boxes?.slice(0, 128) ?? [];
-    this.stats.links = this.stats.struts = this.stats.hinges = this.stats.pairs = this.stats.capsules = this.stats.contacts = this.stats.speed = 0;
+    this.stats.links = this.stats.struts = this.stats.hinges = this.stats.limbs = this.stats.pairs = this.stats.capsules = this.stats.contacts = this.stats.speed = 0;
     while (this.accumulator + 1e-10 >= STEP) {
       this.accumulator -= STEP; this.age += STEP;
       this.stepStart.set(this.positions);
@@ -130,6 +140,10 @@ export class DeathPhysics {
         for (const hinge of this.hinges) this.stats.hinges += this.limitHinge(hinge);
         for (const [a, b] of this.pairs) this.stats.pairs += this.separate(a, b, (this.bodies[a].radius + this.bodies[b].radius) * .75, Infinity);
         this.stats.capsules += this.capsuleContacts?.solve(this.age) ?? 0;
+        this.stats.limbs += this.limbConstraints?.solve() ?? 0;
+        // Angular projection moves the endpoints of a limb. Close its lengths
+        // and the torso frame again before placing those bones against solids.
+        if (this.limbConstraints) for (const link of this.links) this.stats.links += this.separate(link.a, link.b, link.length, link.length);
         for (let i = 0; i < this.bodies.length; i++) {
           const at = i * 3, floor = (world.floor ?? 0) + this.contactRadii[i];
           if (this.positions[at + 1] < floor) this.contact(i, 1, floor, -1, contacts);
@@ -141,8 +155,9 @@ export class DeathPhysics {
       // between solved poses, not those artificial friction/contact offsets.
       for (let i = 0; i < this.positions.length; i++) motion = Math.max(motion, Math.abs(this.positions[i] - this.stepStart[i]) / STEP);
       this.stats.speed = Math.max(this.stats.speed, motion);
-      // A settled rig still jitters a little against the floor and itself; that is quiet enough to freeze.
-      this.quiet = motion < (this.pairs.length ? .12 : .045) ? this.quiet + STEP : 0;
+      // Hinges and contacts can alternate millimetre corrections in an otherwise
+      // settled pose. Freeze those after half a second instead of visible buzzing.
+      this.quiet = motion < (this.limbConstraints ? .18 : this.pairs.length ? .12 : .045) ? this.quiet + STEP : 0;
       // Sleeping freezes a solved contact pose; it does not switch to a canned floor pose.
       if (this.quiet > .5 || this.age > 8) {this.sleeping = true; this.accumulator = 0; break;}
     }
@@ -290,7 +305,7 @@ const corpseCapsules: readonly DeathCapsule[] = [
     {name: `shin_${side}`, a: `leg_lower_${side}`, b: `ankle_${side}`, radius: .075},
   ]),
 ];
-export type CorpseRig = {bodies: DeathBody[]; links: DeathLink[]; struts: DeathStrut[]; hinges: DeathHinge[]; capsules: DeathCapsule[]};
+export type CorpseRig = {bodies: DeathBody[]; links: DeathLink[]; struts: DeathStrut[]; hinges: DeathHinge[]; limbs: DeathLimb[]; capsules: DeathCapsule[]};
 /** Builds the rig from the bones' world positions at death; joints the model lacks are left out with their constraints. */
 export function buildCorpseRig(position: (bone: string) => Vec | undefined): CorpseRig | undefined {
   const bodies: DeathBody[] = [];
@@ -314,7 +329,13 @@ export function buildCorpseRig(position: (bone: string) => Vec | undefined): Cor
     const span = limit.basis === 'rest' ? distance(limit.a, limit.b) : distance(limit.a, limit.through) + distance(limit.through, limit.b);
     return {a: limit.a, b: limit.b, min: Math.min(span * limit.min, distance(limit.a, limit.b) * .98)};
   });
-  // A distance limit bounds a joint both ways (a hip folds forward or back to the same angle), and the floor takes
-  // the rest; the frame-based hinges kept twitching a corpse that had already come to rest, so the rig uses none.
-  return {bodies, links, struts, hinges: [], capsules: corpseCapsules.filter(c => has(c.a) && has(c.b))};
+  const limbs: DeathLimb[] = [];
+  if (['neck_0', 'arm_upper_L', 'arm_upper_R'].every(has)) for (const side of ['L', 'R']) {
+    for (const [kind, tip, maxBend, maxSwing, maxTwist] of [['leg', 'ankle', 110, 65, 30], ['arm', 'hand', 150, 130, 65]] as const) {
+      const root = `${kind}_upper_${side}`, joint = `${kind}_lower_${side}`, end = `${tip}_${side}`;
+      if ([root, joint, end].every(has)) limbs.push({root, joint, tip: end, maxBend: maxBend * Math.PI / 180,
+        maxSwing: maxSwing * Math.PI / 180, maxTwist: maxTwist * Math.PI / 180});
+    }
+  }
+  return {bodies, links, struts, hinges: [], limbs, capsules: corpseCapsules.filter(c => has(c.a) && has(c.b))};
 }

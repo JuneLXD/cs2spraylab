@@ -148,7 +148,7 @@ describe('native weapon layers and dynamic death hooks', () => {
 });
 
 /** The native skeleton's chains with bone offsets near the real ones, standing with the hands ahead. */
-function limbFixture() {
+function limbFixture(straight = false) {
   const model = new THREE.Group();
   const bone = (name: string, parent: THREE.Object3D, x: number, y: number, z: number) => {
     const b = new THREE.Bone(); b.name = name; b.position.set(x, y, z); parent.add(b); return b;
@@ -159,7 +159,7 @@ function limbFixture() {
   for (const [side, sign] of [['L', -1], ['R', 1]] as const) {
     const clavicle = bone(`clavicle_${side}`, spine3, sign * .05, .05, 0), upper = bone(`arm_upper_${side}`, clavicle, sign * .15, 0, 0);
     const lower = bone(`arm_lower_${side}`, upper, sign * .05, -.25, .1); bone(`hand_${side}`, lower, 0, -.1, .25);
-    const thigh = bone(`leg_upper_${side}`, pelvis, sign * .1, -.05, 0), shin = bone(`leg_lower_${side}`, thigh, 0, -.45, .03); bone(`ankle_${side}`, shin, 0, -.44, -.03);
+    const thigh = bone(`leg_upper_${side}`, pelvis, sign * .1, -.05, 0), shin = bone(`leg_lower_${side}`, thigh, 0, -.45, straight ? 0 : .03); bone(`ankle_${side}`, shin, 0, -.44, straight ? 0 : -.03);
   }
   const names: string[] = []; model.traverse(node => {if (node instanceof THREE.Bone) names.push(node.name);});
   const clips = [new THREE.AnimationClip('animation/anims/world/idle_rifle', 0,
@@ -167,6 +167,54 @@ function limbFixture() {
   return {model, names, animator: new DuelAnimator(model, clips, 0, 'ak47')};
 }
 describe('corpse rig on the native skeleton', () => {
+  it('retains a stable hinge when a leg starts perfectly straight', () => {
+    const f = limbFixture(true), a = actor(); f.animator.update(a, 0);
+    a.alive = false; a.deathDirection = {x: .6, y: 0, z: -1}; a.deathImpulse = 2.5;
+    f.animator.setDeathWorld({floor: 0});
+    for (let frame = 0; frame < 180; frame++) {
+      f.animator.update(a, 1 / 60);
+      for (const side of ['L', 'R']) {
+        const knee = f.model.getObjectByName(`leg_lower_${side}`)!;
+        expect(knee.quaternion.toArray().every(Number.isFinite)).toBe(true);
+        // This fixture's knee hinge is local X, including at zero flexion.
+        expect(Math.hypot(knee.quaternion.y, knee.quaternion.z)).toBeLessThan(.035);
+        // q and -q encode the same orientation; canonicalize before checking flexion.
+        expect(knee.quaternion.x * Math.sign(knee.quaternion.w)).toBeGreaterThan(-.02);
+      }
+    }
+    f.animator.dispose();
+  });
+  it.each([0, Math.PI / 2, Math.PI])('keeps knees and elbows on their anatomical hinges during a fall from %s radians', direction => {
+    const f = limbFixture(), a = actor(); f.animator.update(a, 0);
+    const chains = ['L', 'R'].flatMap(side => ['leg', 'arm'].map(kind => {
+      const upper = f.model.getObjectByName(`${kind}_upper_${side}`)!, lower = f.model.getObjectByName(`${kind}_lower_${side}`)!;
+      const tip = f.model.getObjectByName(`${kind === 'leg' ? 'ankle' : 'hand'}_${side}`)!;
+      const u = lower.getWorldPosition(new THREE.Vector3()).sub(upper.getWorldPosition(new THREE.Vector3())).normalize();
+      const v = tip.getWorldPosition(new THREE.Vector3()).sub(lower.getWorldPosition(new THREE.Vector3())).normalize();
+      const axis = new THREE.Vector3().crossVectors(u, v).normalize().applyQuaternion(upper.getWorldQuaternion(new THREE.Quaternion()).invert());
+      return {upper, lower, tip, axis, initial: lower.quaternion.clone(), maxBend: (kind === 'leg' ? 110 : 150) * Math.PI / 180};
+    }));
+    a.alive = false; a.deathDirection = {x: Math.sin(direction), y: 0, z: Math.cos(direction)}; a.deathImpulse = 2.5;
+    f.animator.setDeathWorld({floor: 0});
+    for (let frame = 0; frame < 180; frame++) {
+      f.animator.update(a, 1 / 60);
+      for (const chain of chains) {
+        const {upper, lower, tip, axis, initial, maxBend} = chain;
+        const delta = lower.quaternion.clone().multiply(initial.clone().invert());
+        // A knee/elbow may flex around its original hinge; it must not acquire
+        // a second rotation axis as the entire body rolls onto the floor.
+        const twist = new THREE.Vector3(delta.x, delta.y, delta.z).cross(axis).length();
+        expect(twist, `${lower.name}, frame ${frame}`).toBeLessThan(.035);
+        const u = lower.getWorldPosition(new THREE.Vector3()).sub(upper.getWorldPosition(new THREE.Vector3())).normalize();
+        const v = tip.getWorldPosition(new THREE.Vector3()).sub(lower.getWorldPosition(new THREE.Vector3())).normalize();
+        const normal = axis.clone().applyQuaternion(upper.getWorldQuaternion(new THREE.Quaternion()));
+        const bend = Math.atan2(normal.dot(new THREE.Vector3().crossVectors(u, v)), u.dot(v));
+        expect(bend, `${lower.name}, frame ${frame}`).toBeGreaterThan(-.035);
+        expect(bend, `${lower.name}, frame ${frame}`).toBeLessThan(maxBend + .035);
+      }
+    }
+    f.animator.dispose();
+  });
   it.each([0, Math.PI / 2, Math.PI])('keeps the rendered head and shoulders on the contact rig throughout a fall from %s radians', direction => {
     const f = limbFixture(), a = actor(); f.animator.update(a, 0);
     a.alive = false; a.deathDirection = {x: Math.sin(direction), y: 0, z: Math.cos(direction)};

@@ -28,7 +28,7 @@ camera.position.set(3.2,2,3.2);camera.lookAt(0,.7,.25);
 const loader=new GLTFLoader();
 const target=await loader.loadAsync('/models/target.glb');
 const motion=await loader.loadAsync('/models/duel-motion.glb');
-let model, animator, actor, age=0, running=false;
+let model, animator, actor, age=0, running=false, limbs=[];
 const render=()=>{renderer.render(scene,camera);document.querySelector('#time').textContent=`${age.toFixed(2)} s`;};
 const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,.7,.25);controls.update();controls.addEventListener('change',render);
 function reset(options={}) {
@@ -38,18 +38,26 @@ function reset(options={}) {
     if(option)select.value=option.value;
   }
   if(model){animator.dispose();scene.remove(model);model.traverse(n=>n.skeleton?.dispose());}
-  model=clone(target.scene);model.position.y=options.height??0;scene.add(model);
+  model=clone(target.scene);model.position.y=options.height??0;model.rotation.y=options.yaw??0;scene.add(model);
   model.traverse(node=>{if(node.name.startsWith('held_weapon_target'))node.visible=false;});
-  actor={id:1,alive:true,position:{x:0,y:1.6256,z:0},feet:0,velocity:options.velocity??{x:0,z:0},yaw:Math.PI,pitch:0,
+  actor={id:1,alive:true,position:{x:0,y:1.6256,z:0},feet:0,velocity:options.velocity??{x:0,z:0},yaw:Math.PI+(options.yaw??0),pitch:options.pitch??0,
     duckAmount:options.duck??Number(document.querySelector('#stance').value),grounded:true,equipment:'ak47',reloading:false};
   animator=new DuelAnimator(model,motion.animations,options.phase??0,'ak47');
   animator.update(actor,0);animator.setDeathWorld({floor:0,boxes:options.boxes??[]});
   const angle=options.direction??Number(document.querySelector('#direction').value);
   Object.assign(actor,{alive:false,deathDirection:{x:Math.sin(angle),y:0,z:-Math.cos(angle)},deathGroup:options.group??'chest',deathImpulse:options.impulse??2.5});
-  animator.update(actor,0);age=0;running=false;render();
+  animator.update(actor,0);
+  limbs=['L','R'].flatMap(side=>['leg','arm'].map(kind=>{
+    const upper=model.getObjectByName(`${kind}_upper_${side}`),lower=model.getObjectByName(`${kind}_lower_${side}`),tip=model.getObjectByName(`${kind==='leg'?'ankle':'hand'}_${side}`);
+    const u=lower.getWorldPosition(new THREE.Vector3()).sub(upper.getWorldPosition(new THREE.Vector3())).normalize();
+    const v=tip.getWorldPosition(new THREE.Vector3()).sub(lower.getWorldPosition(new THREE.Vector3())).normalize();
+    const axis=new THREE.Vector3().crossVectors(u,v).normalize().applyQuaternion(upper.getWorldQuaternion(new THREE.Quaternion()).invert());
+    return {upper,lower,tip,axis,initial:lower.quaternion.clone()};
+  }));
+  age=0;running=false;render();
 }
 function step(dt){animator.update(actor,dt);age+=dt;render();}
-function advance(seconds){for(let i=0;i<Math.round(seconds*120);i++){animator.update(actor,1/120);age+=1/120;}render();}
+function advance(seconds,draw=true){for(let i=0;i<Math.round(seconds*120);i++){animator.update(actor,1/120);age+=1/120;}if(draw)render();}
 function sample(){
   const rag=animator.dynamicDeath;
   const joints=rag?.bodies.map(b=>({name:b.name,solver:rag.point(b.name),rendered:model.getObjectByName(b.name)?.getWorldPosition(new THREE.Vector3()).toArray()}));
@@ -65,9 +73,17 @@ function sample(){
     const overlap=a.radius+b.radius-result[5];
     if(overlap>penetration){penetration=overlap;worstPair=[a.name,b.name];}
   }
-  return {age,sleeping:rag?.sleeping,stats:rag?.stats,penetration,worstPair,joints};
+  const angles=limbs.map(({upper,lower,tip,axis,initial})=>{
+    const u=lower.getWorldPosition(new THREE.Vector3()).sub(upper.getWorldPosition(new THREE.Vector3())).normalize();
+    const v=tip.getWorldPosition(new THREE.Vector3()).sub(lower.getWorldPosition(new THREE.Vector3())).normalize();
+    const normal=axis.clone().applyQuaternion(upper.getWorldQuaternion(new THREE.Quaternion()));
+    const delta=lower.quaternion.clone().multiply(initial.clone().invert());
+    return {name:lower.name,bend:Math.atan2(normal.dot(new THREE.Vector3().crossVectors(u,v)),u.dot(v))*180/Math.PI,
+      offAxis:2*Math.asin(Math.min(1,new THREE.Vector3(delta.x,delta.y,delta.z).cross(axis).length()))*180/Math.PI};
+  });
+  return {age,sleeping:rag?.sleeping,stats:rag?.stats,penetration,worstPair,joints,angles};
 }
-window.deathPreview={reset,step,advance,sample};reset();
+window.deathPreview={reset,step,advance,sample,view(position,target){camera.position.fromArray(position);controls.target.fromArray(target);controls.update();render();}};reset();
 let last=performance.now();
 function tick(now){const dt=Math.min((now-last)/1000,1/30);last=now;if(running){step(dt);if(age>4)running=false;}requestAnimationFrame(tick);}
 requestAnimationFrame(tick);

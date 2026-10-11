@@ -94,11 +94,35 @@ out over .18 seconds. The same thickness feeds floor and prop contacts. Crouched
 falls retain an upper-body push and a small lateral lean to avoid balancing on a
 hand. Rendered capsule separation is checked as well as solver/bone alignment.
 
+The anatomical-joint follow-up corrects a limitation those contact checks missed:
+distance limits admit both forward and backward flexion, and independently aiming
+the two bones with shortest-arc rotations twists the skin at the knee or elbow.
+Each limb now has a signed hinge plane transported with the torso and upper limb.
+Knees allow 0–110 degrees of flexion, elbows 0–150, with bounded hip/shoulder swing
+and socket roll. Both bones use the same hinge frame, preserving their captured
+anatomical alignment. Hip swing includes the neutral downward direction and the
+initial crouch, so the legs can relax without forcing the victim upright. These
+are cosmetic limits, not a reproduction of native Source 2 joint constraints.
+
+Regression checks measure actual local knee/elbow rotations throughout the fall,
+including straight initial knees, and verify fixed-step determinism. The real-model
+preview also measures signed flexion, sideways twist, and head rise at 60 Hz,
+alongside body contacts and bone/solver alignment. Visual review includes standing,
+side and crouched falls; the user-supplied twisted-leg screenshot remains the
+reason for checking the skinned result rather than only point separation.
+
+Final verification: 61 focused unit tests and TypeScript passed. All 50 actual-model
+cases settled by 3.6 seconds. At 60 Hz, maximum sideways knee/elbow rotation was
+0.94 degrees, maximum bone/solver error 3.58 cm, and maximum post-blend body-volume
+overlap 1.51 cm. Head rise stayed below 4 mm. Local evidence is retained under
+`native-audit/reports/death-joints/` (`variants-final.json`, `units-passed.log`,
+`types-final.log`, and the final skinned captures).
+
 `tools/death-preview.html` is a lightweight Vite preview with standing/crouched
 and front/side/rear replay controls. `tools/capture-death-preview.mjs <out>` captures
 the real target mesh and motion bank. `tools/verify-death-preview.mjs <report.json>`
-checks 30 falls including head/leg hits, movement, airborne starts and a raised
-platform. Run browser tools one at a time under the host memory cap, with the
+checks 50 falls including head/leg hits, gait phases, rotated/pitched poses,
+airborne starts and a raised platform. Run browser tools one at a time under the host memory cap, with the
 preview served at `http://192.168.0.18:5184`. The older baked assets below remain
 the fallback when a contact world is unavailable.
 

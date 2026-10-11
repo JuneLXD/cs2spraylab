@@ -59,13 +59,14 @@ const standing: Record<string, {x: number; y: number; z: number}> = {
 };
 const rigOf = (pose = standing) => buildCorpseRig(name => pose[name]);
 const solver = (rig: NonNullable<ReturnType<typeof rigOf>>, velocity = {x: 0, y: 0, z: 0}) =>
-  new DeathPhysics(rig.bodies, rig.links, velocity, {struts: rig.struts, hinges: rig.hinges, selfCollision: true, damping: .98, friction: .45, iterations: 10});
+  new DeathPhysics(rig.bodies, rig.links, velocity, {struts: rig.struts, hinges: rig.hinges, limbs: rig.limbs, selfCollision: true, damping: .98, friction: .45, iterations: 10});
 
 describe('corpse rig', () => {
   it('builds every joint of the native skeleton with limits the pose already satisfies', () => {
     const rig = rigOf()!;
     expect(rig.bodies.map(body => body.name)).toEqual(corpseJoints.map(joint => joint.name));
     expect(rig.links.length).toBeGreaterThan(14); expect(rig.hinges).toHaveLength(0);
+    expect(rig.limbs).toHaveLength(4);
     const at = (name: string) => rig.bodies.find(body => body.name === name)!.position;
     for (const strut of rig.struts) {
       const a = at(strut.a), b = at(strut.b);
@@ -98,6 +99,17 @@ describe('corpse rig', () => {
       const a = rag.point(strut.a)!, b = rag.point(strut.b)!;
       expect(Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z)).toBeGreaterThanOrEqual(strut.min! - .02);
     }
+  });
+  it('keeps anatomical constraints deterministic across render rates and read-only bone mapping', () => {
+    const a = solver(rigOf()!), b = solver(rigOf()!);
+    a.impulse('spine_2', {x: 1, y: -.3, z: 2}); b.impulse('spine_2', {x: 1, y: -.3, z: 2});
+    for (let frame = 0; frame < 180; frame++) {
+      a.step(1 / 60);
+      for (const root of ['leg_upper_L', 'leg_upper_R', 'arm_upper_L', 'arm_upper_R']) a.limbNormal(root);
+    }
+    for (let frame = 0; frame < 360; frame++) b.step(1 / 120);
+    expect([...a.positions]).toEqual([...b.positions]); expect(a.sleeping).toBe(b.sleeping);
+    expect(a.limbNormal('missing')).toBeUndefined();
   });
   it('pushes a joint ahead of its hinge and separates overlapping unlinked joints', () => {
     const bodies = [{name: 'origin', position: {x: 0, y: 0, z: 0}, radius: .05}, {name: 'up', position: {x: 0, y: 1, z: 0}, radius: .05},

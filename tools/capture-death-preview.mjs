@@ -14,6 +14,7 @@ try {
   const frames=[];
   const options=JSON.parse(process.argv[3]??'{}');
   await page.evaluate(options=>window.deathPreview.reset(options),options);
+  if(options.camera)await page.evaluate(options=>window.deathPreview.view(options.camera,options.target??[0,.6,0]),options);
   for(let i=0;i<Number(process.argv[4]??13);i++) {
     const file=`death-${String(i).padStart(2,'0')}.png`;
     await page.screenshot({path:path.join(out,file)});

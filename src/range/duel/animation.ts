@@ -87,6 +87,7 @@ export class DuelAnimator {
   /** Parents first: a bone's world rotation is solved against its already updated parent. */
   private deathBindings: {bone: THREE.Object3D; quaternion: THREE.Quaternion; position?: boolean;
     segment?: {from?: string; child: string; direction: THREE.Vector3};
+    limb?: {root: string; basis: THREE.Quaternion};
     frame?: {primary: string; left: string; right: string; basis: THREE.Quaternion}}[] = [];
   private flinches: {key: string; elapsed: number; fade?: number}[] = [];
   private flinchTurn = 0;
@@ -359,7 +360,7 @@ export class DuelAnimator {
       const rig = buildCorpseRig(worldPosition);
       if (!rig) {this.deathWorld = undefined; this.dying = false; this.updateDeath(actor, dt); return;}
       this.dynamicDeath = new DeathPhysics(rig.bodies, rig.links, velocity ?? {x: actor.velocity.x, y: 0, z: actor.velocity.z},
-        {struts: rig.struts, hinges: rig.hinges, capsules: rig.capsules, selfCollision: true, damping: .98, friction: .45, iterations: 16});
+        {struts: rig.struts, hinges: rig.hinges, limbs: rig.limbs, capsules: rig.capsules, selfCollision: true, damping: .97, friction: .45, iterations: 24});
       // The lethal shot pushes the part it hit, plus a share of the trunk; a limb takes the side the bullet entered.
       const direction = actor.deathDirection ?? {x: -Math.sin(actor.yaw), y: 0, z: -Math.cos(actor.yaw)};
       const speed = actor.deathImpulse ?? 2;
@@ -393,9 +394,15 @@ export class DuelAnimator {
         const bone = this.model.getObjectByName(name)!;
         return {bone, quaternion: bone.getWorldQuaternion(new THREE.Quaternion())};
       };
-      const segment = (name: string, child: string, from = name) =>
-        this.deathBindings.push({...bind(name), position: name === 'pelvis', segment: {from: from === name ? undefined : from, child,
-          direction: worldPosition(child)!.sub(worldPosition(from)!).normalize()}});
+      const segment = (name: string, child: string, from = name) => {
+        const direction = worldPosition(child)!.sub(worldPosition(from)!).normalize();
+        const chain = rig.limbs.find(limb => limb.root === name || limb.joint === name);
+        const normal = chain && this.dynamicDeath!.limbNormal(chain.root);
+        const limb = normal && chain ? {root: chain.root, basis: this.basisQuaternion(direction.clone(),
+          new THREE.Vector3(normal.x, normal.y, normal.z).cross(direction), new THREE.Quaternion())} : undefined;
+        this.deathBindings.push({...bind(name), position: name === 'pelvis', limb,
+          segment: {from: from === name ? undefined : from, child, direction}});
+      };
       // Use one long, wide frame for the rigid torso. Solving the chest separately
       // magnifies tiny contact corrections into a twist of the upper spine.
       const fullTorso = ['neck_0', 'arm_upper_L', 'arm_upper_R'].every(has);
@@ -425,7 +432,11 @@ export class DuelAnimator {
       if (binding.segment) {
         const child = this.dynamicDeath.point(binding.segment.child)!, from = binding.segment.from ? this.dynamicDeath.point(binding.segment.from)! : point;
         this.vector.set(child.x - from.x, child.y - from.y, child.z - from.z).normalize();
-        this.quaternion.setFromUnitVectors(binding.segment.direction, this.vector).multiply(binding.quaternion);
+        if (binding.limb) {
+          const normal = this.dynamicDeath.limbNormal(binding.limb.root)!;
+          b.set(normal.x, normal.y, normal.z).cross(this.vector);
+          this.basisQuaternion(this.vector, b, this.quaternion).multiply(basis.copy(binding.limb.basis).invert()).multiply(binding.quaternion);
+        } else this.quaternion.setFromUnitVectors(binding.segment.direction, this.vector).multiply(binding.quaternion);
       } else if (binding.frame) {
         const primary = this.dynamicDeath.point(binding.frame.primary)!, left = this.dynamicDeath.point(binding.frame.left)!, right = this.dynamicDeath.point(binding.frame.right)!;
         if (binding.frame.primary === binding.frame.left) a.set((left.x + right.x) / 2 - point.x, (left.y + right.y) / 2 - point.y, (left.z + right.z) / 2 - point.z);

@@ -413,6 +413,9 @@ export const latestChanges = {
     {id: 'character-body-collision', title: 'Body collision during falls', items: [
       'Solid collision volumes along the torso, arms, hands and legs keep body parts apart as a character falls and comes to rest.',
     ]},
+    {id: 'character-joint-bending', title: 'Natural death poses', items: [
+      'Knees and elbows keep their natural bend direction during death falls, with linked bone rotations that prevent sideways twisting.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
