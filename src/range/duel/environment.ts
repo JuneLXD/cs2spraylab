@@ -74,7 +74,7 @@ export function environmentTerrainWorld(arena: Arena, state?: EnvironmentState):
       solids.push({id: volume.id, center: volume.center, size: volume.size, traversal: {kind: 'ladder', normal}});
     } else if (volume.kind === 'water') solids.push({id: volume.id, center: volume.center, size: volume.size, traversal: {kind: 'water'}});
   }
-  return {solids, floor: 0, bounds: {minX: arena.minX, maxX: arena.maxX, minZ: arena.minZ, maxZ: arena.maxZ}};
+  return {solids, floor: arena.workshop?.floor ?? 0, bounds: {minX: arena.minX, maxX: arena.maxX, minZ: arena.minZ, maxZ: arena.maxZ}};
 }
 
 function replacePiece(state: EnvironmentState, id: string, piece: EnvironmentPieceState): EnvironmentState {

@@ -5,10 +5,10 @@ import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybi
 import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
 
 export type Weapon = keyof typeof data.weapons;
-export type Mode = 'duel' | 'deathmatch' | 'botz' | 'reflex' | 'redline' | 'pop' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
-export const modeNames: Record<Mode, string> = { duel: 'AI Duel', deathmatch: 'Deathmatch: aim_redline', botz: 'Aim Botz', reflex: 'Fast Aim / Reflex', redline: 'aim_redline', pop: 'Pop', guided: 'Guided spray', spray: 'Free spray', transfer: 'Spray transfer', peek: 'Peeking practice', precision: 'Counterstrafing practice', burst: 'Burst & reposition', hearing: 'Hearing practice' };
+export type Mode = 'duel' | 'deathmatch' | 'blitz' | 'botz' | 'reflex' | 'redline' | 'pop' | 'guided' | 'spray' | 'transfer' | 'peek' | 'precision' | 'burst' | 'hearing';
+export const modeNames: Record<Mode, string> = { duel: 'AI Duel', deathmatch: 'Deathmatch: aim_redline', blitz: 'Blitz: Ancient', botz: 'Aim Botz', reflex: 'Fast Aim / Reflex', redline: 'aim_redline', pop: 'Pop', guided: 'Guided spray', spray: 'Free spray', transfer: 'Spray transfer', peek: 'Peeking practice', precision: 'Counterstrafing practice', burst: 'Burst & reposition', hearing: 'Hearing practice' };
 /** Modes that run on the duel engine rather than the static range. */
-export const isDuelEngineMode = (mode: Mode) => mode === 'duel' || mode === 'deathmatch' || mode === 'botz' || mode === 'reflex' || mode === 'redline';
+export const isDuelEngineMode = (mode: Mode) => mode === 'duel' || mode === 'deathmatch' || mode === 'blitz' || mode === 'botz' || mode === 'reflex' || mode === 'redline';
 export const historyModeNames = { ...modeNames, tracking: 'Target tracking (retired)' };
 export function migrateMode(mode: unknown): Mode {
   if(typeof mode==='string'&&['weak','ghost','trace','fade','tracking'].includes(mode))return 'guided';
@@ -90,6 +90,8 @@ export type Settings = {
    * axis: speed (m/s), range each way from where the ball appeared (m) and sudden direction changes per second. */
   popRespawn: number; popRespawnMode: PopRespawnMode; popMoveX: number; popRangeX: number; popFlipX: number;
   popMoveY: number; popRangeY: number; popFlipY: number;
+  /** Pop: the share (0-1) of balls that move at all when movement is set. */
+  popMoveChance: number;
   /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
   cs2Crosshair?: Cs2Crosshair;
 };
@@ -120,7 +122,7 @@ export const defaults: Settings = {
   viewmodel: classicViewmodel,
   tracers: 'native',
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
-  popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0,
+  popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0, popMoveChance: .5,
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -184,6 +186,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     popMoveX: Math.round(numeric(s.popMoveX, defaults.popMoveX, 0, 6) * 10) / 10, popRangeX: Math.round(numeric(s.popRangeX, defaults.popRangeX, 0, 5) * 10) / 10,
     popFlipX: Math.round(numeric(s.popFlipX, defaults.popFlipX, 0, 4) * 10) / 10, popMoveY: Math.round(numeric(s.popMoveY, defaults.popMoveY, 0, 4) * 10) / 10,
     popRangeY: Math.round(numeric(s.popRangeY, defaults.popRangeY, 0, 1.4) * 10) / 10, popFlipY: Math.round(numeric(s.popFlipY, defaults.popFlipY, 0, 4) * 10) / 10,
+    popMoveChance: Math.round(numeric(s.popMoveChance, defaults.popMoveChance, 0, 1) * 20) / 20,
     ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }

@@ -74,3 +74,6 @@ ones every other range drill uses.
   on `POP_SPAWN` (its 1.6 m fixed width is gone). `popPad()` and `popSpawn()` put the pad and your start position at the
   wall's centre x (`POP_SPAWN.x` with no wall), so you begin behind cover and step out past the edge; changing the wall
   or its width re-places you there. The ball field still hangs off the edge (peek line), not the spawn.
+- Chance a ball moves (same day): `popMoveChance` (0-1 in steps of 0.05, default 0.5, shown as a percentage) is rolled
+  once per ball in `spawn()` whenever motion is configured; a ball that fails the roll stays still with no travel
+  window. Still fields (no motion configured) still draw no extra random numbers.

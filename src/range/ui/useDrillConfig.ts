@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import {sanitizeDuelConfig, type DuelConfig} from '../duel/config';
 import {sanitizeBotzConfig, type BotzConfig} from '../duel/botz';
+import {sanitizeBlitzConfig, type BlitzConfig} from '../duel/blitz';
 
 function read(key: string): object {try {return JSON.parse(localStorage.getItem(key) || '{}');} catch {return {};}}
 function save(key: string, value: unknown) {try {localStorage.setItem(key, JSON.stringify(value));} catch { /* Session-only setup. */ }}
@@ -19,6 +20,15 @@ export function useDuelConfig(kind: 'duel' | 'deathmatch' = 'duel') {
   useEffect(() => save(key, config), [key, config]);
   const update = useCallback((patch: Partial<DuelConfig>) => setConfig(previous => sanitize({...previous, ...patch})), [sanitize]);
   const reset = useCallback(() => setConfig(sanitize({})), [sanitize]);
+  return {config, update, reset};
+}
+/** Blitz keeps its own setup (swingers, difficulty, loadouts, arena order) under its own key. */
+export function useBlitzConfig() {
+  const key = 'spraylab.blitz.v1';
+  const [config, setConfig] = useState(() => sanitizeBlitzConfig(read(key)));
+  useEffect(() => save(key, config), [config]);
+  const update = useCallback((patch: Partial<BlitzConfig>) => setConfig(previous => sanitizeBlitzConfig({...previous, ...patch})), []);
+  const reset = useCallback(() => setConfig(sanitizeBlitzConfig({})), []);
   return {config, update, reset};
 }
 export function useBotzConfig(kind: 'botz' | 'reflex' | 'redline') {

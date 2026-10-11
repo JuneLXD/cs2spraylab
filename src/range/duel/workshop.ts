@@ -11,6 +11,9 @@ export const workshopMaps = {
   // The T spawns look at a wall of crates. From the north end you see down the whole hall: floor, crates and catwalk.
   aim_redline: {credits: 'BOT Reed', model: '/maps/aim_redline.glb?v=lighting-3', aimBotz: {x: 11, z: -28, yaw: Math.PI},
     load: () => import('./maps/aim_redline.json')},
+  // Valve's Ancient from the installed game (tools/import-map.mjs with --voxel .2 --headroom 16 --below 8), for Blitz.
+  de_ancient: {credits: 'Valve', model: '/maps/de_ancient.glb?v=1', aimBotz: undefined,
+    load: () => import('./maps/de_ancient.json')},
 } as const;
 export type WorkshopMapId = keyof typeof workshopMaps;
 
@@ -23,7 +26,7 @@ export function workshopArena(id: WorkshopMapId, data: WorkshopData): Arena {
     ...(material < 0 ? {shotBlocking: false} : {})}));
   return {...data.bounds, solids, design: id,
     workshop: {name: id, credits: workshopMaps[id].credits, model: workshopMaps[id].model, aimBotz: workshopMaps[id].aimBotz,
-      spawns: data.spawns, spots: data.spots}};
+      spawns: data.spawns, spots: data.spots, floor: oy}};
 }
 
 /** Loads a map's data (a separate chunk) and builds its arena. */

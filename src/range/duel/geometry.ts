@@ -15,6 +15,8 @@ export type Arena = {minX: number; maxX: number; minZ: number; maxZ: number; sol
   workshop?: WorkshopMap};
 export type WorkshopSpawn = {team: 't' | 'ct'; x: number; y: number; z: number; yaw: number};
 export type WorkshopMap = {name: string; credits: string; model: string; spawns: WorkshopSpawn[];
+  /** The ground plane under everything (the collision grid's bottom): the duel hall's y = 0 does not hold on a competitive map. */
+  floor: number;
   /** Where Aim Botz puts you, when not at a team spawn: the floor spot nearest x, z, facing yaw. */
   aimBotz?: {x: number; z: number; yaw: number};
   /** Where a bot can stand: x, feet height, z. */

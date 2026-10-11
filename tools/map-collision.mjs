@@ -27,7 +27,7 @@ const groupOf = name => /passbullets|playerclip/.test(name) ? CLIP : 1 + mapMate
   /glass/.test(name) ? 'glass' : /grate|chainlink/.test(name) ? 'grate' : /metal/.test(name) ? 'metal'
     : /wood|cardboard|crate|plastic|carpet|sheetrock/.test(name) ? 'wood' : 'concrete');
 
-export async function buildMapCollision({physics, entities, voxel = .1, headroom = 4, margin = .5}) {
+export async function buildMapCollision({physics, entities, voxel = .1, headroom = 4, margin = .5, below = 1.5}) {
   const spawns = parseEntities(entities).filter(entity => /^info_player_(terrorist|counterterrorist)$/.test(entity.classname))
     .map(entity => ({team: entity.classname.endsWith('counterterrorist') ? 'ct' : 't', ...fromSource(entity.origin), yaw: yawFromSource(entity.angles[1])}));
   if (!spawns.length) throw new Error('The map has no player spawns');
@@ -46,8 +46,10 @@ export async function buildMapCollision({physics, entities, voxel = .1, headroom
 
   const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
   for (const {points} of triangles) for (const p of points) for (let a = 0; a < 3; a++) {lo[a] = Math.min(lo[a], p[a]); hi[a] = Math.max(hi[a], p[a]);}
-  // y = 0 (the usual floor) falls on a voxel boundary, so floors come out exact.
-  const min = [lo[0] - voxel, Math.floor((Math.min(...spawns.map(s => s.y)) - 1.5) / voxel) * voxel, lo[2] - voxel];
+  // y = 0 (the usual floor) falls on a voxel boundary, so floors come out exact. The vertical range reaches `below`
+  // metres under the lowest spawn and `headroom` above the highest: a workshop hall needs little, a competitive map
+  // with sites above and below its spawns needs a lot more (see --headroom / --below in import-map.mjs).
+  const min = [lo[0] - voxel, Math.floor((Math.min(...spawns.map(s => s.y)) - below) / voxel) * voxel, lo[2] - voxel];
   const max = [hi[0] + voxel, Math.max(...spawns.map(s => s.y)) + headroom, hi[2] + voxel];
   const [nx, ny, nz] = [0, 1, 2].map(a => Math.ceil((max[a] - min[a]) / voxel));
   const grid = new Uint8Array(nx * ny * nz), at = (x, y, z) => x + nx * (z + nz * y);
@@ -117,12 +119,15 @@ export async function buildMapCollision({physics, entities, voxel = .1, headroom
     boxes.push([x, y, z, x2 + 1, y2 + 1, z2 + 1, label === CLIP ? -1 : label - 1]);
   }
 
-  // Standing spots for bots, every 0.5 m: a full hull of air on top of something that is not a clip.
-  const spots = [], every = Math.max(1, Math.round(.5 / voxel)), half = Math.ceil(HALF_WIDTH / voxel), tall = Math.ceil(HULL / voxel);
+  // Standing spots for bots, every 0.5 m: a hull of air on top of something solid. A player clip counts as a floor
+  // too: competitive maps smooth their stairs, rocks and ledges with clip brushes that players walk on. The hull is
+  // rounded to whole voxels (1.0 x 1.8 m at 20 cm) rather than rounded up: a doorway or passage a player fits through
+  // must keep its spots, or the map's walkable area falls apart into patches.
+  const spots = [], every = Math.max(1, Math.round(.5 / voxel)), half = Math.max(1, Math.round(HALF_WIDTH / voxel)), tall = Math.max(1, Math.round(HULL / voxel));
   const isAir = (x, y, z) => x >= 0 && z >= 0 && x < nx && z < nz && y < ny && grid[at(x, y, z)] === AIR;
   for (let z = half; z < nz - half; z += every) for (let x = half; x < nx - half; x += every) for (let y = 1; y < ny - tall; y++) {
     const below = grid[at(x, y - 1, z)];
-    if (!isAir(x, y, z) || below === AIR || below === CLIP) continue;
+    if (!isAir(x, y, z) || below === AIR) continue;
     let clear = true;
     for (let j = y; j < y + tall && clear; j++) for (let k = z - half; k <= z + half && clear; k++) for (let i = x - half; i <= x + half && clear; i++) clear = isAir(i, j, k);
     if (clear) spots.push([min[0] + (x + .5) * voxel, min[1] + y * voxel, min[2] + (z + .5) * voxel]);

@@ -8,12 +8,13 @@ import {DEG, UNIT, type Vec} from './actor-physics';
  * behind it. A popped ball's replacement appears after `respawn` seconds (0 = at once), or, with `respawnMode` 'pad',
  * when you step onto the pad on the floor. Movement
  * per axis: `speed` (m/s), `range` (how far a ball travels each way from where it appeared, m) and `flips` (sudden
- * reversals per second on top of turning back at the ends of its range); a speed or range of 0 keeps that axis still. */
+ * reversals per second on top of turning back at the ends of its range); a speed or range of 0 keeps that axis still.
+ * `moveChance` is the share of balls that move at all: each ball that appears rolls it once and otherwise stays still. */
 export type PopWallSide = 'off' | 'left' | 'right' | 'both';
 export type PopRespawnMode = 'timer' | 'pad';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
 export type PopConfig = {size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
-  respawn: number; respawnMode: PopRespawnMode; x: PopAxisMotion; y: PopAxisMotion};
+  respawn: number; respawnMode: PopRespawnMode; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
 export type PopBall = {id: number; x: number; y: number; z: number; radius: number; hits: number; vx: number; vy: number};
 export type PopHit = {ball: PopBall; point: Vec; distance: number; popped: boolean};
@@ -41,11 +42,11 @@ export const POP_PAD = {radius: .45} as const;
 
 export function popConfig(settings: {popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
   popWallWidth: number; popRespawn: number; popRespawnMode: PopRespawnMode; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number;
-  popFlipY: number}): PopConfig {
+  popFlipY: number; popMoveChance: number}): PopConfig {
   return {size: settings.popSize / 100, count: settings.popCount, spacing: settings.popSpacing, distance: settings.popDistance,
     hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
     x: {speed: settings.popMoveX, range: settings.popRangeX, flips: settings.popFlipX},
-    y: {speed: settings.popMoveY, range: settings.popRangeY, flips: settings.popFlipY}};
+    y: {speed: settings.popMoveY, range: settings.popRangeY, flips: settings.popFlipY}, moveChance: settings.popMoveChance};
 }
 
 export const popWallSide = (wall: PopWallSide): -1 | 0 | 1 => wall === 'left' ? -1 : wall === 'right' ? 1 : 0;
@@ -134,8 +135,9 @@ export class PopField {
       if (clearance > bestClearance) {bestClearance = clearance; best = candidate;}
     }
     this.nextId++; this.balls.push(best!);
-    if (this.moving) {
-      // It drifts from where it appeared, as far as its range each way but never past the field's edge.
+    // With motion configured, each ball rolls once whether it moves at all; a mover drifts from where it appeared,
+    // as far as its range each way but never past the field's edge.
+    if (this.moving && this.random() < config.moveChance) {
       const ball = best!, {x, y} = config;
       if (axisMoves(x)) ball.vx = x.speed * (this.random() < .5 ? -1 : 1);
       if (axisMoves(y)) ball.vy = y.speed * (this.random() < .5 ? -1 : 1);
@@ -160,15 +162,18 @@ export class PopField {
       if (ball.x <= travel.minX) {ball.x = travel.minX; ball.vx = Math.abs(ball.vx);} else if (ball.x >= travel.maxX) {ball.x = travel.maxX; ball.vx = -Math.abs(ball.vx);}
       if (ball.y <= travel.minY) {ball.y = travel.minY; ball.vy = Math.abs(ball.vy);} else if (ball.y >= travel.maxY) {ball.y = travel.maxY; ball.vy = -Math.abs(ball.vy);}
     }
-    // Balls that ran into each other are pushed apart and, if still closing, bounce along the axis they met on.
+    // Balls that ran into each other part again and, if still closing, bounce along the axis they met on. Only the
+    // movers give way: a still ball is never shoved.
     for (let i = 0; i < this.balls.length; i++) for (let j = i + 1; j < this.balls.length; j++) {
-      const a = this.balls[i], b = this.balls[j];
+      const a = this.balls[i], b = this.balls[j], aMoves = this.travel.has(a.id), bMoves = this.travel.has(b.id);
+      if (!aMoves && !bMoves) continue;
       const dx = b.x - a.x, dy = b.y - a.y, gap = Math.hypot(dx, dy), least = a.radius + b.radius;
       if (gap >= least || gap < 1e-9) continue;
-      const push = (least - gap) / 2, nx = dx / gap, ny = dy / gap;
-      a.x -= nx * push; a.y -= ny * push; b.x += nx * push; b.y += ny * push;
-      if (Math.abs(dx) >= Math.abs(dy)) {if ((b.vx - a.vx) * dx < 0) {a.vx = -a.vx; b.vx = -b.vx;}}
-      else if ((b.vy - a.vy) * dy < 0) {a.vy = -a.vy; b.vy = -b.vy;}
+      const push = (least - gap) / (aMoves && bMoves ? 2 : 1), nx = dx / gap, ny = dy / gap;
+      if (aMoves) {a.x -= nx * push; a.y -= ny * push;}
+      if (bMoves) {b.x += nx * push; b.y += ny * push;}
+      if (Math.abs(dx) >= Math.abs(dy)) {if ((b.vx - a.vx) * dx < 0) {if (aMoves) a.vx = -a.vx; if (bMoves) b.vx = -b.vx;}}
+      else if ((b.vy - a.vy) * dy < 0) {if (aMoves) a.vy = -a.vy; if (bMoves) b.vy = -b.vy;}
     }
   }
   /** Whether a player standing at `position` (x/z) is on the respawn pad. */

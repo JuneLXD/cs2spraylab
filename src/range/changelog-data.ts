@@ -398,6 +398,14 @@ export const latestChanges = {
       'Peek wall width (0.6-8 m): a one-sided wall keeps its edge past your shoulder and runs that wide the other way; the pillar is that wide, centred.',
       'You start, and the respawn pad sits, centred behind the wall instead of at its edge, so every peek starts from cover.',
     ]},
+    {id: 'pop-move-chance', title: 'Pop: mixed moving and still balls', items: [
+      'Chance a ball moves (default 50%): each ball that appears rolls once whether it moves with the configured motion or stays still, so a field can mix moving and static balls.',
+    ]},
+    {id: 'blitz-ancient', title: 'Blitz on Ancient', items: [
+      'A new Blitz tab with its first drill, Blitz: Ancient, after Refrag\'s Blitz. Valve\'s de_ancient is imported from the installed game; you stand at one of its arenas while up to five swingers wait out of sight around you, then swing into view one after another from different angles. Clear them and the next arena loads; die and the arena repeats.',
+      'Arenas and swingers come from the map\'s own geometry: positions with peeks from at least four directions, spread 10 m apart, each swinger a hidden hold spot and a visible peek spot 5-30 m away.',
+      'Refrag\'s commands as settings: .easy/.normal/.hard or a custom level, .smart, .presets bot loadouts, .noprimary, .reaction and .repeekreaction, .aimoffset, .hs, .swingers, arena order and start (.n/.p), .repeat and .autoskip.',
+    ]},
     {id: 'duel-aggressive-bots', title: 'Aggressive duel bots', items: [
       'Aggressive bots never hold: they peek as soon as they reach an angle, chase the last place they saw you after a burst loses its target, and sweep the forward crates and lane edges within 1.5 s of losing contact instead of waiting at cover.',
     ]},
