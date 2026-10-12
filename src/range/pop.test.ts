@@ -106,9 +106,10 @@ describe('pop peek wall and hits to pop', () => {
     const wide = popWall({wall: 'left', wallWidth: 5}, POP_SPAWN)!;
     expect(wide.edges).toEqual([-.35]); expect(wide.size.x).toBe(5); expect(wide.center.x).toBeCloseTo(2.15);
     expect(popWall({wall: 'both', wallWidth: 3}, POP_SPAWN)!.edges).toEqual([-1.5, 1.5]);
-    expect(popPad({wall: 'left', wallWidth: 5}, POP_SPAWN)).toEqual({x: 2.15, z: 2, radius: .45});
-    expect(popPad({wall: 'both', wallWidth: 3}, POP_SPAWN)).toEqual({x: 0, z: 2, radius: .45});
-    expect(popPad({wall: 'off', wallWidth: 3}, POP_SPAWN)).toEqual({x: 0, z: 2, radius: .45});
+    const pad = {padWidth: .9, padDepth: .9};
+    expect(popPad({wall: 'left', wallWidth: 5, ...pad}, POP_SPAWN)).toEqual({x: 2.15, z: 2, halfW: .45, halfD: .45});
+    expect(popPad({wall: 'both', wallWidth: 3, ...pad}, POP_SPAWN)).toEqual({x: 0, z: 2, halfW: .45, halfD: .45});
+    expect(popPad({wall: 'off', wallWidth: 3, ...pad}, POP_SPAWN)).toEqual({x: 0, z: 2, halfW: .45, halfD: .45});
     expect(popSpawn({wall: 'right', wallWidth: 3}, POP_SPAWN)).toEqual({x: -1.15, y: POP_SPAWN.y, z: 2});
     expect(popRegion(popConfig({...base, popWall: 'left', popWallWidth: 5}), POP_SPAWN).x).toBeCloseTo(-1);
     expect(sanitizeSettings({}).popWallWidth).toBe(3);
@@ -163,7 +164,7 @@ describe('pop peek wall and hits to pop', () => {
     expect(rangeDrillDefaults('pop')).toMatchObject({popHits: 1, popWall: 'off', popBackground: '#151a28'});
     const botz = sanitizeBotzConfig({}), duel = sanitizeDuelConfig({});
     expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popHits: 4, popWall: 'left', popRespawn: 1.5, popMoveX: 2, popMoveY: .5}), botz, duel)).toContain('4 hits to pop · peek wall, left, 3 m · 1.5 s respawn · 2 m/s ±1.5 m left-right · 0.5 m/s ±0.5 m up-down');
-    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popRespawnMode: 'pad', popRespawn: 2, popMoveX: 2, popRangeX: 0}), botz, duel)).toContain(' · respawn on the pad · never reload');
+    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popRespawnMode: 'pad', popRespawn: 2, popMoveX: 2, popRangeX: 0}), botz, duel)).toContain(' · respawn on the 0.9 x 0.9 m pad · never reload');
     expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popRespawnMode: 'pad', popRespawn: 2, popMoveX: 2, popRangeX: 0}), botz, duel)).not.toMatch(/2 s respawn|left-right/);
     expect(drillSetupSummary(sanitizeSettings({mode: 'pop'}), botz, duel)).not.toMatch(/hits to pop|peek wall|respawn|m\/s/);
   });
@@ -285,16 +286,40 @@ describe('pop peek wall and hits to pop', () => {
   it('in pad mode, popped balls wait until you step onto the pad', () => {
     const field = new PopField(popConfig({...base, popRespawnMode: 'pad', popRespawn: 1}), POP_SPAWN, lcg(29));
     const onPad = {...POP_SPAWN}, offPad = {x: -1, y: POP_SPAWN.y, z: POP_SPAWN.z};
-    expect(field.pad).toEqual({x: 0, z: 2, radius: .45});
+    expect(field.pad).toEqual({x: 0, z: 2, halfW: .45, halfD: .45});
     expect(field.onPadAt(onPad)).toBe(true); expect(field.onPadAt({x: .3, y: 0, z: 2.3})).toBe(true); expect(field.onPadAt({x: .5, y: 0, z: 2})).toBe(false);
-    field.advance(0, onPad);
+    field.advance(0, onPad); expect(field.drainPadTrigger()).toBe(0);
     expect(field.hit(onPad, unit(onPad, field.balls[0]), Infinity, 1)?.popped).toBe(true);
     expect(field.balls).toHaveLength(2); expect(field.pending).toEqual([Infinity]);
     field.advance(2, onPad); field.advance(9, onPad);           // standing on it, and no timer, bring nothing back
-    expect(field.balls).toHaveLength(2);
+    expect(field.balls).toHaveLength(2); expect(field.drainPadTrigger()).toBe(0);
     field.advance(10, offPad); expect(field.balls).toHaveLength(2);
     field.advance(11, onPad); expect(field.balls).toHaveLength(3); expect(field.pending).toEqual([]);
-    field.reset(); field.advance(12, onPad); expect(field.balls).toHaveLength(3);
+    expect(field.drainPadTrigger()).toBe(1); expect(field.drainPadTrigger()).toBe(0);
+    field.reset(); field.advance(12, onPad); expect(field.balls).toHaveLength(3); expect(field.drainPadTrigger()).toBe(0);
+  });
+
+  it('sizes the pad as a rectangle from the settings and triggers once per step-on with the count brought back', () => {
+    const field = new PopField(popConfig({...base, popCount: 4, popRespawnMode: 'pad', popPadWidth: 2, popPadDepth: .6}), POP_SPAWN, lcg(37));
+    expect(field.pad).toEqual({x: 0, z: 2, halfW: 1, halfD: .3});
+    // Corners count, the rectangle's own edges count, and just past an edge does not: a disc would have missed the corner.
+    expect(field.onPadAt({x: 1, y: 0, z: 2.3})).toBe(true); expect(field.onPadAt({x: -1, y: 0, z: 1.7})).toBe(true);
+    expect(field.onPadAt({x: 1.01, y: 0, z: 2})).toBe(false); expect(field.onPadAt({x: 0, y: 0, z: 2.31})).toBe(false);
+    const offPad = {x: 0, y: POP_SPAWN.y, z: 2.5}, onPad = {...POP_SPAWN};
+    field.advance(0, offPad);
+    for (const ball of [...field.balls].slice(0, 3)) expect(field.hit(offPad, unit(offPad, ball), Infinity, 1)?.popped).toBe(true);
+    expect(field.balls).toHaveLength(1); expect(field.pending).toEqual([Infinity, Infinity, Infinity]);
+    field.advance(1, onPad);
+    expect(field.balls).toHaveLength(4); expect(field.drainPadTrigger()).toBe(3);
+    // The pad sits centred behind a one-sided wall with its own width, whatever the pad's size.
+    expect(popPad({wall: 'right', wallWidth: 3, padWidth: 2, padDepth: .6}, POP_SPAWN)).toEqual({x: -1.15, z: 2, halfW: 1, halfD: .3});
+    expect(sanitizeSettings({})).toMatchObject({popPadWidth: .9, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime'});
+    expect(sanitizeSettings({popPadWidth: 0, popPadDepth: 99, popPadColor: '#FFD23F', popPadSound: 'pop'})).toMatchObject({popPadWidth: .3, popPadDepth: 3, popPadColor: '#ffd23f', popPadSound: 'pop'});
+    expect(sanitizeSettings({popPadWidth: 1.26, popPadDepth: 'x', popPadColor: 'red', popPadSound: 'x'})).toMatchObject({popPadWidth: 1.3, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime'});
+    expect(sanitizeSettings({popPadSound: 'off'}).popPadSound).toBe('off'); expect(sanitizeSettings({popPadSound: 'hitmarker'}).popPadSound).toBe('hitmarker');
+    expect(rangeDrillDefaults('pop')).toMatchObject({popPadWidth: .9, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime'});
+    const botz = sanitizeBotzConfig({}), duel = sanitizeDuelConfig({});
+    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popRespawnMode: 'pad', popPadWidth: 2, popPadDepth: .6}), botz, duel)).toContain(' · respawn on the 2 x 0.6 m pad');
   });
 
   it('brings pad-mode balls back when the player walks onto the pad in the simulation', () => {

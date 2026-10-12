@@ -233,6 +233,29 @@ export class RangeAudio {
     click.start(now); click.stop(now + .02);
     return true;
   }
+  /** Pop's respawn pad: the sound for stepping onto it and bringing the balls back. The chime is synthesized here; the
+   * others reuse the hit sounds. 'off' plays nothing. */
+  playPadSound(kind: 'chime' | 'hitmarker' | 'pop' | 'off', volume: number) {
+    if (kind === 'off') return false;
+    if (kind === 'chime') return this.playPadChime(volume);
+    return this.playPopSound(kind, volume);
+  }
+  /** A soft two-note rising chime (E6 then B6, triangle waves with a quiet octave above each) over about 220 ms: a
+   * ready tone, distinct from the hit sounds, so you can turn and peek without looking at the pad. */
+  playPadChime(volume: number) {
+    const ctx = this.context;
+    if (!ctx || ctx.state !== 'running' || !this.master || !Number.isFinite(volume) || volume <= 0 || this.disposed) return false;
+    const now = ctx.currentTime, level = Math.min(1, volume) * .55;
+    for (const [frequency, at, length, gain] of [[1318.5, 0, .12, 1], [2637, 0, .08, .18], [1975.5, .09, .16, 1], [3951, .09, .1, .16]] as const) {
+      const tone = ctx.createOscillator(), env = ctx.createGain(), start = now + at;
+      tone.type = 'triangle'; tone.frequency.value = frequency;
+      env.gain.setValueAtTime(0, start); env.gain.linearRampToValueAtTime(level * gain, start + .006); env.gain.exponentialRampToValueAtTime(.001, start + length);
+      tone.connect(env); env.connect(this.master);
+      tone.onended = () => {tone.disconnect(); env.disconnect();};
+      tone.start(start); tone.stop(start + length + .01);
+    }
+    return true;
+  }
   /** Pop mode: a synthesized pop, a sine bloop sweeping down over 180 ms with a short band-passed click, pitched a little
    * at random; several pops at once ring a touch higher. */
   playPop(volume: number, count = 1) {

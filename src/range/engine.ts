@@ -86,9 +86,12 @@ export class RangeEngine {
   private popWall?: THREE.Mesh;
   private popWallMaterial?: THREE.MeshStandardMaterial;
   private popWallEdgeMaterial = new THREE.MeshBasicMaterial({color: '#ffd23f'});
-  /** The respawn pad on the floor at the spawn point; lit while popped balls wait for you to step on it. */
+  /** The respawn pad on the floor at the spawn point: a filled rectangle in the chosen colour with a solid border, lit
+   * brighter while popped balls wait for you to step on it, and flashing for a moment as they come back. */
   private popPad?: THREE.Mesh;
-  private popPadMaterial = new THREE.MeshBasicMaterial({color: '#4df3ff', transparent: true, opacity: .4, side: THREE.DoubleSide, depthWrite: false});
+  private popPadMaterial = new THREE.MeshBasicMaterial({color: '#4df3ff', transparent: true, opacity: .3, side: THREE.DoubleSide, depthWrite: false, fog: false});
+  private popPadEdgeMaterial = new THREE.MeshBasicMaterial({color: '#4df3ff', transparent: true, opacity: .7, side: THREE.DoubleSide, depthWrite: false, fog: false});
+  private popPadFlashAt = -Infinity;
   /** Dimmer copies of popMaterial for balls that have taken hits, by damage step. */
   private popDamaged = new Map<number, THREE.MeshStandardMaterial>();
   /** The benches by the entrance: hidden in Pop, so they live outside the static batches. */
@@ -497,13 +500,13 @@ export class RangeEngine {
     this.renderer.shadowMap.needsUpdate = true;
     // Presentation changes, such as a crosshair or volume toggle bound to a key, keep the attempt.
     const presentation = new Set<keyof Settings>(['crosshair', 'cs2Crosshair', 'volume', 'showFps', 'viewmodel', 'tracers', 'impactSize',
-      'showImpactPattern', 'showMousePath', 'animatedGuides', 'quality', 'frameLimit', 'protectShortcuts', 'popColor', 'popBackground']);
+      'showImpactPattern', 'showMousePath', 'animatedGuides', 'quality', 'frameLimit', 'protectShortcuts', 'popColor', 'popBackground', 'popPadColor', 'popPadSound']);
     if ((Object.keys({...settings, ...this.sim.settings}) as (keyof Settings)[]).some(key => !presentation.has(key) && settings[key] !== this.sim.settings[key])
       || measured !== this.sim.measured) this.cancelProgression();
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popRespawn', 'popRespawnMode', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
+      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -754,14 +757,24 @@ export class RangeEngine {
       this.renderer.shadowMap.needsUpdate = true;
     }
     if (config.respawnMode === 'pad' && !this.popPad) {
-      this.popPad = new THREE.Mesh(new THREE.RingGeometry(pop.pad.radius * .62, pop.pad.radius, 48), this.popPadMaterial);
-      this.popPad.rotation.x = -Math.PI / 2; this.popPad.position.set(pop.pad.x, .012, pop.pad.z); this.popPad.name = 'pop-pad';
-      this.pop.add(this.popPad);
+      // A filled rectangle lying on the floor (the plane's +y turns into world -z) with a solid border strip around it.
+      const {pad} = pop, width = pad.halfW * 2, depth = pad.halfD * 2, border = Math.min(.06, width / 6, depth / 6);
+      this.popPad = new THREE.Mesh(new THREE.PlaneGeometry(width, depth), this.popPadMaterial);
+      this.popPad.rotation.x = -Math.PI / 2; this.popPad.position.set(pad.x, .012, pad.z); this.popPad.name = 'pop-pad';
+      const corners = (w: number, d: number) => [new THREE.Vector2(-w, -d), new THREE.Vector2(w, -d), new THREE.Vector2(w, d), new THREE.Vector2(-w, d)];
+      const outline = new THREE.Shape(corners(width / 2, depth / 2));
+      outline.holes.push(new THREE.Path(corners(width / 2 - border, depth / 2 - border)));
+      const edge = new THREE.Mesh(new THREE.ShapeGeometry(outline), this.popPadEdgeMaterial);
+      edge.position.z = .002; edge.name = 'pop-pad-edge'; this.popPad.add(edge);
+      this.popPadFlashAt = -Infinity; this.pop.add(this.popPad);
     }
     if (this.popPad) {
-      // Waiting balls light the pad up: step onto it to bring them back.
-      const armed = pop.pending.length > 0;
-      this.popPadMaterial.color.set(armed ? '#ffd23f' : '#4df3ff'); this.popPadMaterial.opacity = armed ? .9 : .4;
+      // The chosen colour, lit brighter while balls wait for you to step on it; stepping on plays the trigger sound and
+      // flashes the pad as they come back.
+      if (pop.drainPadTrigger()) {this.popPadFlashAt = this.elapsed; this.audio.playPadSound(this.sim.settings.popPadSound, this.sim.settings.volume);}
+      const armed = pop.pending.length > 0, flash = Math.max(0, 1 - (this.elapsed - this.popPadFlashAt) / .4);
+      this.popPadMaterial.color.set(this.sim.settings.popPadColor); this.popPadEdgeMaterial.color.set(this.sim.settings.popPadColor);
+      this.popPadMaterial.opacity = Math.max(armed ? .85 : .3, flash); this.popPadEdgeMaterial.opacity = Math.max(armed ? 1 : .7, flash);
     }
     for (const ball of pop.drainPopped()) {
       const mesh = this.popMeshes.get(ball.id); if (!mesh) continue;
@@ -801,7 +814,7 @@ export class RangeEngine {
     this.pop.clear(); this.popMeshes.clear(); this.popBursts = [];
     this.popBackdrop?.geometry.dispose(); (this.popBackdrop?.material as THREE.Material | undefined)?.dispose(); this.popBackdrop = undefined;
     this.popWall?.geometry.dispose(); this.popWall?.children.forEach(child => (child as THREE.Mesh).geometry.dispose()); this.popWall = undefined;
-    this.popPad?.geometry.dispose(); this.popPad = undefined;
+    this.popPad?.geometry.dispose(); this.popPad?.children.forEach(child => (child as THREE.Mesh).geometry.dispose()); this.popPad = undefined;
   }
   /** Pop darkens the range: black sky and near fog, dim lights, so the glowing balls stand out. */
   private setPopAtmosphere(on: boolean) {
@@ -1120,7 +1133,7 @@ export class RangeEngine {
     this.viewAnimations.forEach(animation => animation.dispose());
     this.scope.dispose();
     this.popGeometry.dispose(); this.popMaterial.dispose(); this.clearPopScene();
-    this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popPadMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
+    this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popPadMaterial.dispose(); this.popPadEdgeMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
     this.markerGeometry.dispose(); this.missMaterial.dispose(); this.hitMaterial.dispose(); this.bodyMaterial.dispose();
     this.cues.forEach(c => c.remove()); this.hitCaption.remove();
     this.environment?.dispose(); this.renderer.dispose(); this.renderer.domElement.remove();

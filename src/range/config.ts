@@ -1,5 +1,5 @@
 import data from './game-data.json';
-import type {PopRespawnMode, PopWallSide} from './pop';
+import type {PopPadSound, PopRespawnMode, PopWallSide} from './pop';
 import { nativeRecoilPattern } from './recoil';
 import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybinds/profile';
 import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
@@ -92,6 +92,9 @@ export type Settings = {
   popMoveY: number; popRangeY: number; popFlipY: number;
   /** Pop: the share (0-1) of balls that move at all when movement is set. */
   popMoveChance: number;
+  /** Pop: the respawn pad's width across and depth along your line to the wall (m), its colour, and the sound it makes
+   * when stepping onto it brings the balls back. */
+  popPadWidth: number; popPadDepth: number; popPadColor: string; popPadSound: PopPadSound;
   /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
   cs2Crosshair?: Cs2Crosshair;
 };
@@ -123,6 +126,7 @@ export const defaults: Settings = {
   tracers: 'native',
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
   popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0, popMoveChance: .5,
+  popPadWidth: .9, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime',
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -187,6 +191,9 @@ export function sanitizeSettings(raw: unknown): Settings {
     popFlipX: Math.round(numeric(s.popFlipX, defaults.popFlipX, 0, 4) * 10) / 10, popMoveY: Math.round(numeric(s.popMoveY, defaults.popMoveY, 0, 4) * 10) / 10,
     popRangeY: Math.round(numeric(s.popRangeY, defaults.popRangeY, 0, 1.4) * 10) / 10, popFlipY: Math.round(numeric(s.popFlipY, defaults.popFlipY, 0, 4) * 10) / 10,
     popMoveChance: Math.round(numeric(s.popMoveChance, defaults.popMoveChance, 0, 1) * 20) / 20,
+    popPadWidth: Math.round(numeric(s.popPadWidth, defaults.popPadWidth, .3, 3) * 10) / 10, popPadDepth: Math.round(numeric(s.popPadDepth, defaults.popPadDepth, .3, 3) * 10) / 10,
+    popPadColor: typeof s.popPadColor === 'string' && /^#[\da-f]{6}$/i.test(s.popPadColor) ? s.popPadColor.toLowerCase() : defaults.popPadColor,
+    popPadSound: s.popPadSound === 'hitmarker' || s.popPadSound === 'pop' || s.popPadSound === 'off' ? s.popPadSound : 'chime',
     ...(cs2Crosshair ? { cs2Crosshair } : {})
   };
 }

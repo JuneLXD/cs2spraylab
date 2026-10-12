@@ -67,13 +67,23 @@ ones every other range drill uses.
   field stays centred. Single-sided walls keep their 3 m width and one edge.
 - Respawn pad (same day): `popRespawnMode` 'pad' queues each popped ball with an Infinity due time; `advance(time,
   player)` (the simulation passes its position) spawns every waiting ball the moment the player steps onto the pad
-  (`POP_PAD.radius` 0.45 m around `POP_SPAWN`), edge-triggered so standing on it does nothing and a session never
-  starts by triggering it. The engine draws it as a flat ring (`pop-pad`) that turns yellow while balls are waiting.
+  (originally a 0.45 m disc around `POP_SPAWN`, now the rectangle below), edge-triggered so standing on it does nothing
+  and a session never starts by triggering it. The engine drew it as a flat ring (`pop-pad`) that turned yellow while
+  balls were waiting; see the pad entry below for the current rectangle.
 - Wall width and the pad (same day): `popWallWidth` (0.6-8 m, default 3) is the wall's x extent: a one-sided wall keeps
   its edge 0.35 m past the shoulder of `POP_SPAWN` and runs that wide the other way; the pillar is that wide and centred
   on `POP_SPAWN` (its 1.6 m fixed width is gone). `popPad()` and `popSpawn()` put the pad and your start position at the
   wall's centre x (`POP_SPAWN.x` with no wall), so you begin behind cover and step out past the edge; changing the wall
   or its width re-places you there. The ball field still hangs off the edge (peek line), not the spawn.
+- Pad size, colour and trigger sound (2026-10-11): the pad is a rectangle, `popPadWidth` across (x) and `popPadDepth`
+  along your line to the wall (z), 0.3-3 m each (default 0.9 x 0.9, which covers the old 0.45 m disc); `PopPad` carries
+  `halfW`/`halfD` and `onPadAt()` is an axis-aligned test with the edges included, so corners count. `popPadColor` is a
+  hex colour (presets in `popPadColors`); the engine draws a filled `PlaneGeometry` in it (`pop-pad`, unlit, no fog)
+  with a solid border strip (`pop-pad-edge`, a `ShapeGeometry` frame), at 30%/70% opacity idle and 85%/100% while balls
+  wait. `PopField.drainPadTrigger()` returns how many balls the last step-on brought back; the engine's `syncPop` reads
+  it each frame, flashes the pad to full opacity over 0.4 s and plays `RangeAudio.playPadSound(popPadSound, volume)`:
+  'chime' (synthesized two-note rising triangle chime, E6 then B6, about 220 ms), 'hitmarker' or 'pop' (the hit
+  sounds), or 'off'. Width/depth rebuild the field (reset keys); colour and sound are presentation-only.
 - Chance a ball moves (same day): `popMoveChance` (0-1 in steps of 0.05, default 0.5, shown as a percentage) is rolled
   once per ball in `spawn()` whenever motion is configured; a ball that fails the roll stays still with no travel
   window. Still fields (no motion configured) still draw no extra random numbers.

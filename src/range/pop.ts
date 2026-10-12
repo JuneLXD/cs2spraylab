@@ -6,7 +6,7 @@ import {DEG, UNIT, type Vec} from './actor-physics';
  * ball). `wall` adds a peek wall 1.5 m ahead of you that you step out from, to the left or the right, or a pillar you can
  * step out of on either side ('both'); `wallWidth` is how wide it is (m). You start, and the respawn pad sits, centred
  * behind it. A popped ball's replacement appears after `respawn` seconds (0 = at once), or, with `respawnMode` 'pad',
- * when you step onto the pad on the floor. Movement
+ * when you step onto the pad on the floor: a `padWidth` by `padDepth` (m) rectangle across and along your line to the wall. Movement
  * per axis: `speed` (m/s), `range` (how far a ball travels each way from where it appeared, m) and `flips` (sudden
  * reversals per second on top of turning back at the ends of its range); a speed or range of 0 keeps that axis still.
  * `moveChance` is the share of balls that move at all: each ball that appears rolls it once and otherwise stays still. */
@@ -14,7 +14,7 @@ export type PopWallSide = 'off' | 'left' | 'right' | 'both';
 export type PopRespawnMode = 'timer' | 'pad';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
 export type PopConfig = {size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
-  respawn: number; respawnMode: PopRespawnMode; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
+  respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
 export type PopBall = {id: number; x: number; y: number; z: number; radius: number; hits: number; vx: number; vy: number};
 export type PopHit = {ball: PopBall; point: Vec; distance: number; popped: boolean};
@@ -22,29 +22,34 @@ export type PopRegion = {x: number; y: number; z: number; halfW: number; halfH: 
 /** The peek wall as a collision box: `side` is the direction you step out (-1 = left, +1 = right, 0 = either side of a
  * pillar) and `edges` the x of each edge you can step past. */
 export type PopWall = {id: string; center: Vec; size: Vec; side: -1 | 0 | 1; edges: number[]};
-/** The respawn pad: a disc on the floor you step onto to bring popped balls back. */
-export type PopPad = {x: number; z: number; radius: number};
+/** The respawn pad: a rectangle on the floor you step onto to bring popped balls back, `halfW` across (x) and `halfD`
+ * along your line to the wall (z) from its centre. */
+export type PopPad = {x: number; z: number; halfW: number; halfD: number};
 
 export const POP_EYE = 64 * UNIT;
 /** Where you stand in Pop: the near end of the range, so 40 m of wall fit in front of you. */
 export const POP_SPAWN: Vec = {x: 0, y: POP_EYE, z: 2};
 export const popLimits = {size: [8, 80], count: [1, 12], spacing: [.2, 5], distance: [3, 40], hits: [1, 10], wallWidth: [.6, 8], respawn: [0, 5],
-  speedX: [0, 6], rangeX: [0, 5], flipsX: [0, 4], speedY: [0, 4], rangeY: [0, 1.4], flipsY: [0, 4]} as const;
+  padWidth: [.3, 3], padDepth: [.3, 3], speedX: [0, 6], rangeX: [0, 5], flipsX: [0, 4], speedY: [0, 4], rangeY: [0, 1.4], flipsY: [0, 4]} as const;
 export const popColors: readonly (readonly [string, string])[] = [['Orange', '#ff6a4d'], ['Yellow', '#ffd23f'], ['Green', '#5dff7f'],
   ['Cyan', '#4df3ff'], ['Pink', '#ff4dd2'], ['White', '#ffffff']];
 export const popBackgrounds: readonly (readonly [string, string])[] = [['Navy', '#151a28'], ['Black', '#000000'], ['Charcoal', '#2b2f36'],
   ['Slate', '#5b6470'], ['White', '#f0f0ec'], ['Forest', '#1d4d33']];
+export const popPadColors: readonly (readonly [string, string])[] = [['Cyan', '#4df3ff'], ['Yellow', '#ffd23f'], ['Green', '#5dff7f'],
+  ['Orange', '#ff6a4d'], ['Magenta', '#ff4dd2'], ['White', '#ffffff']];
+/** The sound the pad makes when stepping onto it brings the balls back: a synthesized two-note chime, the Pop hit sounds, or none. */
+export type PopPadSound = 'chime' | 'hitmarker' | 'pop' | 'off';
 /** Peek wall: its near edge sits just past your shoulder, 1.5 m ahead, and it reaches the chosen width across the other
  * way; the two-sided pillar is centred on where you first stood. */
 export const POP_WALL = {edge: .35, height: 2.8, thickness: .4, ahead: 1.5, peek: 1} as const;
-/** The respawn pad sits on your spawn point; you are on it within this radius (m) of its centre. */
-export const POP_PAD = {radius: .45} as const;
+/** The respawn pad sits on your spawn point, centred behind the peek wall; `padWidth`/`padDepth` set its extent. */
 
 export function popConfig(settings: {popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
-  popWallWidth: number; popRespawn: number; popRespawnMode: PopRespawnMode; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number;
-  popFlipY: number; popMoveChance: number}): PopConfig {
+  popWallWidth: number; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number; popPadDepth: number; popMoveX: number; popRangeX: number;
+  popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
   return {size: settings.popSize / 100, count: settings.popCount, spacing: settings.popSpacing, distance: settings.popDistance,
     hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
+    padWidth: settings.popPadWidth, padDepth: settings.popPadDepth,
     x: {speed: settings.popMoveX, range: settings.popRangeX, flips: settings.popFlipX},
     y: {speed: settings.popMoveY, range: settings.popRangeY, flips: settings.popFlipY}, moveChance: settings.popMoveChance};
 }
@@ -65,10 +70,10 @@ export function popWall(config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: V
 }
 
 /** The respawn pad: centred behind the peek wall when one is up, else on the Pop spawn point. */
-export const popPad = (config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: Vec): PopPad =>
-  ({x: popWall(config, origin)?.center.x ?? origin.x, z: origin.z, radius: POP_PAD.radius});
-/** Where you start: on the pad, so centred behind the cover. */
-export const popSpawn = (config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: Vec): Vec => ({...origin, x: popPad(config, origin).x});
+export const popPad = (config: Pick<PopConfig, 'wall' | 'wallWidth' | 'padWidth' | 'padDepth'>, origin: Vec): PopPad =>
+  ({x: popWall(config, origin)?.center.x ?? origin.x, z: origin.z, halfW: config.padWidth / 2, halfD: config.padDepth / 2});
+/** Where you start: on the pad's centre, so centred behind the cover. */
+export const popSpawn = (config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: Vec): Vec => ({...origin, x: popWall(config, origin)?.center.x ?? origin.x});
 
 /** The wall the balls float on: centred ahead at eye height (on your peek line when a one-sided peek wall is up), wide
  * enough for the count at the requested spacing, and capped so every ball stays well inside the 90-degree 4:3 view and
@@ -112,6 +117,8 @@ export class PopField {
   private travel = new Map<number, Travel>();
   /** Whether you were on the pad at the last advance; unknown until the first one, so a session never starts by triggering it. */
   private onPad?: boolean;
+  /** Balls the pad brought back since the engine last asked, for its trigger sound and flash. */
+  private padReturned = 0;
   private nextId = 1;
   readonly region: PopRegion;
   readonly wall?: PopWall;
@@ -176,8 +183,8 @@ export class PopField {
       else if ((b.vy - a.vy) * dy < 0) {if (aMoves) a.vy = -a.vy; if (bMoves) b.vy = -b.vy;}
     }
   }
-  /** Whether a player standing at `position` (x/z) is on the respawn pad. */
-  onPadAt(position: Vec) {return Math.hypot(position.x - this.pad.x, position.z - this.pad.z) <= this.pad.radius;}
+  /** Whether a player standing at `position` (x/z) is on the respawn pad: within its rectangle, edges included. */
+  onPadAt(position: Vec) {return Math.abs(position.x - this.pad.x) <= this.pad.halfW + 1e-9 && Math.abs(position.z - this.pad.z) <= this.pad.halfD + 1e-9;}
   /** Moves the balls on to `time` and spawns the replacements that are due: by the timer, or, in pad mode, all of them
    * the moment you step onto the pad (`player` is where you stand). */
   advance(time: number, player?: Vec) {
@@ -186,7 +193,7 @@ export class PopField {
     if (this.config.respawnMode === 'pad') {
       if (player) {
         const on = this.onPadAt(player);
-        if (on && this.onPad === false) while (this.pending.length) {this.pending.shift(); this.spawn();}
+        if (on && this.onPad === false) while (this.pending.length) {this.pending.shift(); this.spawn(); this.padReturned++;}
         this.onPad = on;
       }
     } else while (this.pending.length && this.pending[0] <= time + 1e-9) {this.pending.shift(); this.spawn();}
@@ -228,8 +235,10 @@ export class PopField {
     return nearest;
   }
   drainPopped() {const popped = this.popped; this.popped = []; return popped;}
+  /** How many balls stepping onto the pad brought back since the last call (0 when it has not triggered). */
+  drainPadTrigger() {const returned = this.padReturned; this.padReturned = 0; return returned;}
   reset() {
-    this.balls = []; this.popped = []; this.pending = []; this.travel.clear(); this.onPad = undefined;
+    this.balls = []; this.popped = []; this.pending = []; this.travel.clear(); this.onPad = undefined; this.padReturned = 0;
     this.pops = this.hits = this.shots = 0;
     for (let i = 0; i < this.config.count; i++) this.spawn();
   }

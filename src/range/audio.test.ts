@@ -91,6 +91,13 @@ describe('native audio consumer', () => {
     expect(audio.playPopSound('synth', .5)).toBe(true);
     expect(sources.length).toBe(5); expect(sources.every(source => source.start.mock.calls.length === 1)).toBe(true);
     expect(audio.playPopSound('pop', .5)).toBe(true); expect(sources.length).toBe(7);
+    // The respawn pad's trigger sound: the chime is four voices, the others reuse the hit sounds, off plays nothing.
+    expect(audio.playPadSound('chime', .5)).toBe(true); expect(sources.length).toBe(11);
+    expect(sources.slice(7).every(source => source.start.mock.calls.length === 1 && source.stop.mock.calls.length === 1)).toBe(true);
+    expect(audio.playPadSound('chime', 0)).toBe(false); expect(sources.length).toBe(11);
+    expect(audio.playPadSound('hitmarker', .5)).toBe(true); expect(sources.length).toBe(12);
+    expect(audio.playPadSound('pop', .5)).toBe(true); expect(sources.length).toBe(14);
+    expect(audio.playPadSound('off', .5)).toBe(false); expect(sources.length).toBe(14);
     audio.dispose();
   });
   it('maps estimated cue attenuation to full acoustic path length, not apparent corner distance', async () => {

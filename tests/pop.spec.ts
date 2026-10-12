@@ -104,6 +104,53 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
   expect(walled.spawn.x).toBeCloseTo(1.15, 5); expect(walled.spawn.z).toBe(2);   // centred behind the 3 m wall
   expect(walled.blocked).toEqual({shots: 1, hits: 0, caption: 'MISS'});
   expect(struck).toEqual({shots: 2, hits: 1, pops: 0, ballHits: 1, caption: 'HIT'});
+  // The respawn pad: a sized, coloured rectangle on the floor behind the wall that plays its trigger sound as the balls come back.
+  await page.keyboard.press('Escape');
+  await page.getByLabel('Hits to pop').fill('1');
+  await page.getByLabel('Left-right speed').fill('0');
+  await expect(page.getByLabel('Pad width')).toBeHidden();
+  await page.getByLabel('Ball respawn', {exact: true}).selectOption('pad');
+  await expect(page.getByLabel('Ball respawn delay')).toBeHidden();
+  await page.getByLabel('Pad width').fill('2');
+  await page.getByLabel('Pad depth').fill('0.6');
+  await page.getByRole('button', {name: 'Yellow pad'}).click();
+  await expect(page.getByLabel('Pad color', {exact: true})).toHaveValue('#ffd23f');
+  await expect(page.getByLabel('Pad trigger sound')).toHaveValue('chime');
+  await page.getByLabel('Pad trigger sound').selectOption('pop');
+  await expect(page.locator('.sl-ready small')).toContainText('respawn on the 2 x 0.6 m pad');
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await page.waitForFunction(() => (window as any).popEngine?.sim?.pop?.config.respawnMode === 'pad' && !!(window as any).popEngine.pop.getObjectByName('pop-pad'));
+  const padBefore = await page.evaluate(() => {
+    const engine = (window as any).popEngine, sim = engine.sim, pad = engine.pop.getObjectByName('pop-pad');
+    const calls: [string, number][] = []; (window as any).padCalls = calls;
+    engine.audio.playPadSound = (kind: string, volume: number) => {calls.push([kind, volume]); return true;};
+    const ball = sim.pop.balls[0];
+    sim.position.x = -1;          // stepped out past the wall's edge, off the pad
+    const dx = ball.x - sim.position.x, dy = ball.y - sim.position.y, dz = ball.z - sim.position.z;
+    sim.yaw = Math.atan2(-dx, -dz); sim.pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
+    sim.start(); sim.release('mouse');
+    return {geometry: pad.geometry.parameters, edge: !!pad.getObjectByName('pop-pad-edge'), color: pad.material.color.getHexString(),
+      pad: sim.pop.pad, position: {x: pad.position.x, z: pad.position.z}, pops: sim.pop.pops, pending: sim.pop.pending.length, balls: sim.pop.balls.length};
+  });
+  expect(padBefore.geometry).toMatchObject({width: 2, height: .6}); expect(padBefore.edge).toBe(true); expect(padBefore.color).toBe('ffd23f');
+  expect(padBefore.pad).toEqual({x: 1.15, z: 2, halfW: 1, halfD: .3}); expect(padBefore.position).toEqual({x: 1.15, z: 2});
+  expect(padBefore).toMatchObject({pops: 1, pending: 1, balls: 3});
+  await page.waitForFunction(() => (window as any).popEngine.pop.getObjectByName('pop-pad').material.opacity >= .85);   // lit while a ball waits
+  await page.evaluate(() => {(window as any).popEngine.sim.position.x = 1.15;});   // back onto the pad
+  await page.waitForFunction(() => (window as any).padCalls.length > 0);
+  const padAfter = await page.evaluate(() => {
+    const engine = (window as any).popEngine, sim = engine.sim, pad = engine.pop.getObjectByName('pop-pad');
+    // Software rendering runs frames 100+ ms apart, so the 0.4 s flash may be over by now: check when it started instead.
+    return {calls: (window as any).padCalls, pending: sim.pop.pending.length, balls: sim.pop.balls.length, sinceFlash: engine.elapsed - engine.popPadFlashAt,
+      color: pad.material.color.getHexString(), edgeColor: pad.children[0].material.color.getHexString()};
+  });
+  expect(padAfter.calls).toHaveLength(1); expect(padAfter.calls[0][0]).toBe('pop'); expect(padAfter.calls[0][1]).toBeCloseTo(.2, 6);
+  expect(padAfter).toMatchObject({pending: 0, balls: 4, color: 'ffd23f', edgeColor: 'ffd23f'});
+  expect(padAfter.sinceFlash).toBeGreaterThanOrEqual(0); expect(padAfter.sinceFlash).toBeLessThan(5);
+  await page.evaluate(() => {const sim = (window as any).popEngine.sim; sim.position.x = 1.15; sim.position.z = 3.3; sim.yaw = 0; sim.pitch = -.95;});
+  await page.waitForTimeout(600);   // the flash fades; the pad settles to its idle look
+  await page.screenshot({path: info.outputPath('pop-pad.png')});
+  expect(await page.evaluate(() => (window as any).popEngine.pop.getObjectByName('pop-pad').material.opacity)).toBeCloseTo(.3, 6);
   // The master volume in the top bar is the same level as the Audio setting.
   await page.keyboard.press('Escape');
   const slider = page.getByLabel('Master volume');

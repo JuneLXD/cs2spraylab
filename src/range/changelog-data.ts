@@ -432,6 +432,10 @@ export const latestChanges = {
     {id: 'ancient-map-lighting', title: 'Ancient textures & lighting', items: [
       'Restored Ancient’s baked lighting and sunlight, corrected surface texture coordinates and foliage colours, and sharpened textures viewed at an angle.',
     ]},
+    {id: 'pop-pad-options', title: 'Pop: respawn pad size, colour and trigger sound', items: [
+      'The respawn pad is now a filled rectangle on the floor in a colour you pick, with Pad width (across) and Pad depth (toward the wall) sliders from 0.3 to 3 m; it lights up while popped balls wait and flashes as they come back.',
+      'Pad trigger sound: a chime (default), your hitmarker file, the pop, or off, played the moment stepping onto the pad brings the balls back.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
