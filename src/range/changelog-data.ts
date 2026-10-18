@@ -436,6 +436,10 @@ export const latestChanges = {
       'The respawn pad is now a filled rectangle on the floor in a colour you pick, with Pad width (across) and Pad depth (toward the wall) sliders from 0.3 to 3 m; it lights up while popped balls wait and flashes as they come back.',
       'Pad trigger sound: a chime (default), your hitmarker file, the pop, or off, played the moment stepping onto the pad brings the balls back.',
     ]},
+    {id: 'pop-wallbang', title: 'Pop: wallbang the peek wall', items: [
+      'Wallbang through the wall lets bullets through the peek wall by CS2\'s penetration rules: the weapon, the wall\'s material (wood, concrete or metal) and how much wall the shot crosses decide what comes out the far side. Wood lets every gun through; at that thickness concrete and metal stop everything but the AWP, SSG 08, SCAR-20, G3SG1, Deagle and R8.',
+      'Balls the wall hides show faintly through it (See balls through the wall). A ball reached through the wall reads WALLBANG POP or WALLBANG HIT, and a shot the wall swallows reads BLOCKED.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

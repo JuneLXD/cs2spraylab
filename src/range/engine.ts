@@ -39,6 +39,7 @@ import {resolveBulletRay,type PenetrationSolid,type SurfaceContact} from './duel
 import {resolveDamage} from './duel/damage';
 import {equipmentStats} from './equipment';
 import {AcousticScene} from './spatial-audio';
+import type {PopWallMaterial} from './pop';
 
 export type RangeStatus = {
   weapon: Weapon;
@@ -53,6 +54,8 @@ export type RangeStatus = {
   drill?: {round:number; completed:number; passed:number; scenario:string; covered:boolean; exposure:Exposure; side:number; peekDirection?:number; phase:'prepare'|'exposed'|'feedback'|'reposition'; accurate:boolean; error:number; remaining?:number; last?:DrillMetrics};
 };
 const vector = (v: Vec) => new THREE.Vector3(v.x, v.y, v.z);
+/** Pop's peek wall tint (colour, emissive) by material; a wall that stops every bullet keeps the concrete look. */
+const popWallLooks: Record<PopWallMaterial, readonly [string, string]> = {concrete: ['#8a949a', '#30363e'], wood: ['#b08c62', '#42301d'], metal: ['#8ea2b8', '#2d3a49']};
 const targetMeshCache = new WeakMap<THREE.Object3D, THREE.Mesh[]>();
 function scoringMeshes(model: THREE.Object3D) {
   let meshes = targetMeshCache.get(model);
@@ -86,6 +89,9 @@ export class RangeEngine {
   private popWall?: THREE.Mesh;
   private popWallMaterial?: THREE.MeshStandardMaterial;
   private popWallEdgeMaterial = new THREE.MeshBasicMaterial({color: '#ffd23f'});
+  /** A faint glowing copy of each ball that draws only where something nearer (the wall) hides it, so the balls behind a
+   * wallbangable wall can be aimed at. The copy is a hair larger than the ball, so it can never show over a ball you can see. */
+  private popGhostMaterial = new THREE.MeshBasicMaterial({color: '#ff6a4d', transparent: true, opacity: .5, blending: THREE.AdditiveBlending, depthFunc: THREE.GreaterDepth, depthWrite: false, fog: false});
   /** The respawn pad on the floor at the spawn point: a filled rectangle in the chosen colour with a solid border, lit
    * brighter while popped balls wait for you to step on it, and flashing for a moment as they come back. */
   private popPad?: THREE.Mesh;
@@ -500,13 +506,13 @@ export class RangeEngine {
     this.renderer.shadowMap.needsUpdate = true;
     // Presentation changes, such as a crosshair or volume toggle bound to a key, keep the attempt.
     const presentation = new Set<keyof Settings>(['crosshair', 'cs2Crosshair', 'volume', 'showFps', 'viewmodel', 'tracers', 'impactSize',
-      'showImpactPattern', 'showMousePath', 'animatedGuides', 'quality', 'frameLimit', 'protectShortcuts', 'popColor', 'popBackground', 'popPadColor', 'popPadSound']);
+      'showImpactPattern', 'showMousePath', 'animatedGuides', 'quality', 'frameLimit', 'protectShortcuts', 'popColor', 'popBackground', 'popPadColor', 'popPadSound', 'popWallXray']);
     if ((Object.keys({...settings, ...this.sim.settings}) as (keyof Settings)[]).some(key => !presentation.has(key) && settings[key] !== this.sim.settings[key])
       || measured !== this.sim.measured) this.cancelProgression();
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
+      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -676,19 +682,25 @@ export class RangeEngine {
       {local:true,volume:this.sim.settings.volume});
   }
 
-  /** Pop: every ray hits the first ball it crosses (the peek wall stops bullets first), and a ball pops once it has
-   * taken the configured hits. Misses mark the dark wall behind the balls or the peek wall. Knife swings count too. */
+  /** Pop: every ray hits the first ball it crosses, and a ball pops once it has taken the configured hits. The peek wall
+   * stops bullets first, unless Wallbang is on: then each bullet goes through it by CS2's penetration arithmetic, which
+   * can still stop it (BLOCKED). Misses mark the dark wall behind the balls or the peek wall, and a bullet that got through
+   * leaves its mark where it entered. Knife swings count too, but never wallbang. */
   private popShot(shot: Shot) {
     const pop = this.sim.pop!;
     const muzzles = this.viewMuzzles.get(this.sim.equipped), muzzle = muzzles?.main ?? muzzles?.[this.sim.loadedAmmo % 2 ? 'right' : 'left'];
     if (!shot.melee) this.viewFlashes.fire(muzzle, this.sim.equipped, this.elapsed);
-    let popped = 0, struck = 0;
+    const bullet = shot.kind === 'bullet' || shot.kind === 'pellets' ? this.sim.stats : undefined;
+    let popped = 0, struck = 0, banged = 0, swallowed = 0;
     for (const dir of shot.pelletDirections ?? [shot.direction]) {
-      const hit = pop.hit(shot.origin, dir, shot.maxDistance, shot.at);
-      const blocked = hit ? undefined : pop.wallHit(shot.origin, dir, shot.maxDistance);
+      const pass = bullet && pop.wallPass(shot.origin, dir, shot.maxDistance, bullet);
+      const hit = pop.hit(shot.origin, dir, shot.maxDistance, shot.at, pass);
+      const blocked = hit ? undefined : pass ? (pass.exit ? undefined : pass.entry) : pop.wallHit(shot.origin, dir, shot.maxDistance);
       const end = hit ? vector(hit.point) : blocked ? vector(blocked.point) : this.popBackdropPoint(shot.origin, dir, shot.maxDistance);
-      if (hit) {if (hit.popped) popped++; else struck++;}
+      if (hit) {if (hit.popped) popped++; else struck++; if (hit.wallbang) banged++;}
       else if (end && !this.sim.settings.popHideImpacts) this.addImpact(this.impacts, end.clone().addScaledVector(vector(dir), -.012), end.distanceTo(vector(shot.origin)), this.missMaterial.color);
+      if (pass && blocked) swallowed++;
+      if (pass?.exit && !this.sim.settings.popHideImpacts) this.addImpact(this.impacts, vector(pass.entry.point).addScaledVector(vector(dir), -.012), pass.entry.distance, this.missMaterial.color);
       if (muzzle && !shot.melee && end) {
         this.viewScene.updateMatrixWorld(true);
         const start = viewMuzzleToWorld(muzzle.getWorldPosition(new THREE.Vector3()), this.viewCamera, this.camera, this.width, this.height);
@@ -698,7 +710,8 @@ export class RangeEngine {
     if (shot.melee) this.sim.resolveMeleeHit(shot.ordinal, popped + struck > 0);
     this.kick = 1; this.hitTime = .45;
     this.hitmarker.style.color = this.hitCaption.style.color = popped ? '#ffdc59' : struck ? '#51edee' : '#ff7469';
-    this.hitCaption.textContent = popped > 1 ? `${popped} POPS` : popped ? 'POP' : struck ? 'HIT' : 'MISS';
+    const bang = banged ? 'WALLBANG ' : '';
+    this.hitCaption.textContent = popped > 1 ? `${bang}${popped} POPS` : popped ? `${bang}POP` : struck ? `${bang}HIT` : swallowed ? 'BLOCKED' : 'MISS';
     if (popped || struck) this.audio.playPopSound(this.sim.settings.popSound, this.sim.settings.volume, Math.max(1, popped));
     if (shot.melee) this.audio.playKnife(shot.attack === 'secondary' ? 'stab' : 'slash', this.sim.settings.volume);
     else if (!this.sim.settings.popMuteGun) {
@@ -725,7 +738,7 @@ export class RangeEngine {
     if (rebuild) {this.clearPopScene(); this.clearImpacts();}
     if (this.popColorApplied !== this.sim.settings.popColor) {
       this.popColorApplied = this.sim.settings.popColor;
-      this.popMaterial.color.set(this.popColorApplied); this.popMaterial.emissive.set(this.popColorApplied);
+      this.popMaterial.color.set(this.popColorApplied); this.popMaterial.emissive.set(this.popColorApplied); this.popGhostMaterial.color.set(this.popColorApplied);
       this.popDamaged.forEach(material => material.dispose()); this.popDamaged.clear();
     }
     const {region, config} = pop;
@@ -745,6 +758,8 @@ export class RangeEngine {
       const wall = pop.wall;
       this.popWallMaterial ??= new THREE.MeshStandardMaterial({color: '#8a949a', emissive: '#30363e', emissiveIntensity: 1, roughness: .92, fog: false,
         map: this.drillScenery.texture, normalMap: this.drillScenery.normal, normalScale: new THREE.Vector2(.3, .3)});
+      const [wallColor, wallEmissive] = popWallLooks[config.wallbang ? config.wallMaterial : 'concrete'];
+      this.popWallMaterial.color.set(wallColor); this.popWallMaterial.emissive.set(wallEmissive);
       this.popWall = new THREE.Mesh(new THREE.BoxGeometry(wall.size.x, wall.size.y, wall.size.z), this.popWallMaterial);
       this.popWall.position.set(wall.center.x, wall.center.y, wall.center.z);
       this.popWall.castShadow = this.popWall.receiveShadow = true; this.popWall.name = 'pop-wall';
@@ -782,11 +797,16 @@ export class RangeEngine {
       const burst = this.popMaterial.clone(); burst.transparent = true; mesh.material = burst;
       this.popBursts.push({mesh, at: this.elapsed, radius: ball.radius});
     }
-    const live = new Set<number>();
+    const live = new Set<number>(), ghosts = !!pop.wall && config.wallbang && this.sim.settings.popWallXray;
     for (const ball of pop.balls) {
       live.add(ball.id);
       let mesh = this.popMeshes.get(ball.id);
       if (!mesh) {mesh = new THREE.Mesh(this.popGeometry, this.popMaterial); mesh.name = `pop-ball-${ball.id}`; this.popMeshes.set(ball.id, mesh); this.pop.add(mesh);}
+      // Each ball carries a faint ghost that only shows where the wall hides it.
+      if (mesh.children.length !== +ghosts) {
+        mesh.clear();
+        if (ghosts) {const ghost = new THREE.Mesh(this.popGeometry, this.popGhostMaterial); ghost.name = 'pop-ball-ghost'; ghost.scale.setScalar(1.03); mesh.add(ghost);}
+      }
       mesh.position.set(ball.x, ball.y, ball.z); mesh.scale.setScalar(ball.radius);
       const material = ball.hits ? this.popDamagedMaterial(ball.hits / config.hits) : this.popMaterial;
       if (mesh.material !== material) mesh.material = material;
@@ -1133,7 +1153,7 @@ export class RangeEngine {
     this.viewAnimations.forEach(animation => animation.dispose());
     this.scope.dispose();
     this.popGeometry.dispose(); this.popMaterial.dispose(); this.clearPopScene();
-    this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popPadMaterial.dispose(); this.popPadEdgeMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
+    this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popGhostMaterial.dispose(); this.popPadMaterial.dispose(); this.popPadEdgeMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
     this.markerGeometry.dispose(); this.missMaterial.dispose(); this.hitMaterial.dispose(); this.bodyMaterial.dispose();
     this.cues.forEach(c => c.remove()); this.hitCaption.remove();
     this.environment?.dispose(); this.renderer.dispose(); this.renderer.domElement.remove();

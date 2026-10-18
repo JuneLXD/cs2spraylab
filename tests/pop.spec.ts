@@ -160,3 +160,85 @@ test('pop: the balls follow the setup, a shot pops the ball it crosses and a new
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.range.v2')!).volume)).toBeCloseTo(.19, 6);
   expect(errors).toEqual([]);
 });
+
+test('pop: wallbang sends bullets through the peek wall, shows the balls it hides and says when the wall swallowed a shot', async ({page}, info) => {
+  test.skip(info.project.name !== 'chromium', 'Desktop range smoke test');
+  test.setTimeout(180000);
+  await page.addInitScript(() => {
+    if (localStorage.getItem('spraylab.range.v2')) return;
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'pop', weapon: 'ak47', quality: 'auto', spread: false,
+      popCount: 3, popSize: 40, popSpacing: 1, popDistance: 10, popWall: 'left'}));
+  });
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/');
+  await selectDrill(page, 'pop');
+  // The wall is solid until the switch is on; the material and the x-ray only show with it.
+  await expect(page.getByLabel('Wallbang through the wall')).not.toBeChecked();
+  await expect(page.getByLabel('Wall material')).toBeHidden();
+  await expect(page.getByLabel('See balls through the wall')).toBeHidden();
+  await page.getByLabel('Wallbang through the wall').check();
+  await expect(page.getByLabel('Wall material')).toHaveValue('wood');
+  await expect(page.getByLabel('See balls through the wall')).toBeChecked();
+  await expect(page.locator('.sl-ready small')).toContainText('peek wall, left, 3 m, wallbang (wood)');
+  await expect(page.getByRole('button', {name: 'Enter range', exact: true})).toBeEnabled({timeout: 60000});
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await popEngine(page);
+  await page.waitForFunction(() => (window as any).popEngine.sim.pop.config.wallbang === true && !!(window as any).popEngine.pop.getObjectByName('pop-wall'));
+  /** Hangs one ball 10 m straight ahead, hidden by the wall, and taps once from behind the wall's centre. */
+  const tap = () => page.evaluate(() => {
+    const engine = (window as any).popEngine, sim = engine.sim, pop = sim.pop;
+    sim.position.x = 1.15; sim.position.z = 2; sim.yaw = 0; sim.pitch = 0;
+    pop.balls = [{id: 9000 + pop.shots, x: 1.15, y: sim.position.y, z: sim.position.z - 10, radius: .2, hits: 0, vx: 0, vy: 0}];
+    sim.start(); sim.release('mouse');
+    return {shots: pop.shots, hits: pop.hits, pops: pop.pops, balls: pop.balls.length, caption: engine.hitCaption.textContent};
+  });
+  // Wood: the AK's bullet comes out the far side and pops the ball the wall hides.
+  await page.waitForTimeout(400);
+  expect(await tap()).toEqual({shots: 1, hits: 1, pops: 1, balls: 1, caption: 'WALLBANG POP'});
+  // The wall looks like wood while it can be shot through, and the hidden ball shows through it as a faint ghost.
+  await page.waitForFunction(() => !!(window as any).popEngine.pop.getObjectByName('pop-ball-ghost'));
+  const wood = await page.evaluate(() => {
+    const engine = (window as any).popEngine, wall = engine.pop.getObjectByName('pop-wall'), ghost = engine.pop.getObjectByName('pop-ball-ghost');
+    return {color: wall.material.color.getHexString(), ghosts: engine.pop.children.filter((child: any) => child.children.some((c: any) => c.name === 'pop-ball-ghost')).length,
+      depthFunc: ghost.material.depthFunc, transparent: ghost.material.transparent, ghostColor: ghost.material.color.getHexString(), ballColor: engine.popMaterial.color.getHexString()};
+  });
+  expect(wood).toMatchObject({color: 'b08c62', ghosts: 1, transparent: true});
+  expect(wood.depthFunc).toBe(6); expect(wood.ghostColor).toBe(wood.ballColor);   // THREE.GreaterDepth: only where something nearer hides it
+  await page.waitForTimeout(600);
+  await page.screenshot({path: info.outputPath('pop-wallbang-wood.png')});
+  // A ball half hidden by the wall's edge: the visible half is the ball, the hidden half the ghost, with no seam or overlay on the visible part.
+  await page.evaluate(() => {
+    const engine = (window as any).popEngine, sim = engine.sim, ball = sim.pop.balls[0];
+    sim.position.x = .3; sim.position.z = 2; Object.assign(ball, {x: -4.7, y: sim.position.y, z: -8, radius: .5});
+    const dx = ball.x - sim.position.x, dy = ball.y - sim.position.y, dz = ball.z - sim.position.z;
+    sim.yaw = Math.atan2(-dx, -dz); sim.pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
+  });
+  await page.waitForTimeout(600);
+  await page.screenshot({path: info.outputPath('pop-wallbang-edge.png')});
+  // Concrete that thick stops the AK: the shot reads BLOCKED and the ball stays up.
+  await page.keyboard.press('Escape');
+  await page.getByLabel('Wall material').selectOption('concrete');
+  await expect(page.locator('.sl-ready small')).toContainText('wallbang (concrete)');
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await page.waitForFunction(() => (window as any).popEngine.sim.pop.config.wallMaterial === 'concrete');
+  await page.waitForTimeout(400);
+  expect(await tap()).toEqual({shots: 1, hits: 0, pops: 0, balls: 1, caption: 'BLOCKED'});
+  expect(await page.evaluate(() => (window as any).popEngine.pop.getObjectByName('pop-wall').material.color.getHexString())).toBe('8a949a');
+  // Turning the x-ray off takes the ghosts away without restarting the session.
+  await page.keyboard.press('Escape');
+  await page.getByLabel('See balls through the wall').uncheck();
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await page.waitForFunction(() => !(window as any).popEngine.pop.getObjectByName('pop-ball-ghost'));
+  expect(await page.evaluate(() => (window as any).popEngine.sim.pop.shots)).toBe(1);
+  // Wallbang off: the wall is solid again, whatever the material, and shots into it read MISS.
+  await page.keyboard.press('Escape');
+  await page.getByLabel('Wallbang through the wall').uncheck();
+  await expect(page.getByLabel('Wall material')).toBeHidden();
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await page.waitForFunction(() => (window as any).popEngine.sim.pop.config.wallbang === false);
+  await page.waitForTimeout(400);
+  expect(await tap()).toEqual({shots: 1, hits: 0, pops: 0, balls: 1, caption: 'MISS'});
+  expect(await page.evaluate(() => (window as any).popEngine.pop.getObjectByName('pop-wall').material.color.getHexString())).toBe('8a949a');
+  expect(errors).toEqual([]);
+});

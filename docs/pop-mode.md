@@ -87,3 +87,18 @@ ones every other range drill uses.
 - Chance a ball moves (same day): `popMoveChance` (0-1 in steps of 0.05, default 0.5, shown as a percentage) is rolled
   once per ball in `spawn()` whenever motion is configured; a ball that fails the roll stays still with no travel
   window. Still fields (no motion configured) still draw no extra random numbers.
+- Wallbang (2026-10-18): with a peek wall up, `popWallbang` (off by default) lets bullets through it. `popWallMaterial`
+  ('wood' by default, 'concrete', 'metal') is what the wall is made of and `popWallXray` (on by default) shows the balls it
+  hides. `PopField.wallPass(origin, direction, range, stats)` sends the bullet through the wall with `resolveBulletRay`, the
+  penetration arithmetic the drills and AI Duel use: the weapon's penetration, the material and the thickness of wall the
+  ray actually crosses (the wall is 0.4 m, so a ray that clips an edge crosses far less than one that goes straight through)
+  decide the damage left on the far side. It returns where the bullet entered and left the wall and `reach`, how far past the
+  wall it can still do 1 damage (the range falloff after the exit); `hit(..., pass)` takes it, so a bullet that came out the
+  far side hits the balls behind the wall (`PopHit.wallbang`) and one that did not stops at the wall's face, as before. At
+  0.4 m wood lets every gun through; concrete and metal stop everything but the AWP, SSG 08, SCAR-20, G3SG1, Deagle and R8
+  (pinned in `pop.test.ts`). Only bullets and pellets wallbang: a knife or Zeus never does, and the wall still blocks walking.
+  `RangeEngine.popShot()` reads the pass: the caption says WALLBANG POP / WALLBANG HIT for a ball reached through the wall and
+  BLOCKED for a shot the wall swallowed (MISS otherwise), a bullet that got through marks the wall where it entered (unless
+  Hide bullet impacts is on), and the wall takes a wood, concrete or metal tint while wallbang is on. With See balls through
+  the wall, each ball carries a faint child mesh (`popGhostMaterial`, `GreaterDepth`) that draws only where the wall hides the
+  ball. `popWallbang` and `popWallMaterial` re-create the field like the other wall settings; `popWallXray` is presentation.

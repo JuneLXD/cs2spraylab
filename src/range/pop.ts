@@ -1,23 +1,36 @@
 import {DEG, UNIT, type Vec} from './actor-physics';
+import {resolveBulletRay, type PenetrationSolid, type PenetrationStats, type SurfaceContact} from './duel/penetration';
 
 /** Pop (after Refrag's Pop mode): bright balls float on a dark wall ahead of you; a shot pops the first ball it
  * crosses and a new one appears elsewhere. Sizes and distances are metres; the setting stores the size in cm.
  * `hits` is how many bullets a ball takes before it pops (1 = Refrag's one-tap balls; more lets a spray stay on one
  * ball). `wall` adds a peek wall 1.5 m ahead of you that you step out from, to the left or the right, or a pillar you can
- * step out of on either side ('both'); `wallWidth` is how wide it is (m). You start, and the respawn pad sits, centred
- * behind it. A popped ball's replacement appears after `respawn` seconds (0 = at once), or, with `respawnMode` 'pad',
+ * step out of on either side ('both'); `wallWidth` is how wide it is (m). With `wallbang` the wall no longer stops every
+ * bullet: it is made of `wallMaterial` and the weapon's penetration decides, as in CS2, how much damage comes out the far
+ * side (see `wallPass`). You start, and the respawn pad sits, centred behind it. A popped ball's replacement appears after
+ * `respawn` seconds (0 = at once), or, with `respawnMode` 'pad',
  * when you step onto the pad on the floor: a `padWidth` by `padDepth` (m) rectangle across and along your line to the wall. Movement
  * per axis: `speed` (m/s), `range` (how far a ball travels each way from where it appeared, m) and `flips` (sudden
  * reversals per second on top of turning back at the ends of its range); a speed or range of 0 keeps that axis still.
  * `moveChance` is the share of balls that move at all: each ball that appears rolls it once and otherwise stays still. */
 export type PopWallSide = 'off' | 'left' | 'right' | 'both';
 export type PopRespawnMode = 'timer' | 'pad';
+/** What a wallbangable peek wall is made of: it sets how much of a bullet's damage the wall eats (CS2 surface materials). */
+export type PopWallMaterial = 'wood' | 'concrete' | 'metal';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
 export type PopConfig = {size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
+  wallbang: boolean; wallMaterial: PopWallMaterial;
   respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
 export type PopBall = {id: number; x: number; y: number; z: number; radius: number; hits: number; vx: number; vy: number};
-export type PopHit = {ball: PopBall; point: Vec; distance: number; popped: boolean};
+/** `wallbang` is true when the bullet came through the peek wall to reach the ball. */
+export type PopHit = {ball: PopBall; point: Vec; distance: number; popped: boolean; wallbang: boolean};
+/** Where a bullet met a face of the peek wall: distance along the ray (m), the point, the face's outward normal and the
+ * damage the bullet carried at that face (an entry's is before the wall takes its share, an exit's after). */
+export type PopWallContact = {distance: number; point: Vec; normal: Vec; damage: number};
+/** What a wallbangable peek wall did to one bullet that met it: `entry` is where it hit the wall, `exit` where it came out
+ * the far side (undefined when the wall stopped it) and `reach` how far along the ray (m) it can still do at least 1 damage. */
+export type PopWallPass = {entry: PopWallContact; exit?: PopWallContact; reach: number};
 export type PopRegion = {x: number; y: number; z: number; halfW: number; halfH: number};
 /** The peek wall as a collision box: `side` is the direction you step out (-1 = left, +1 = right, 0 = either side of a
  * pillar) and `edges` the x of each edge you can step past. */
@@ -44,11 +57,15 @@ export type PopPadSound = 'chime' | 'hitmarker' | 'pop' | 'off';
 export const POP_WALL = {edge: .35, height: 2.8, thickness: .4, ahead: 1.5, peek: 1} as const;
 /** The respawn pad sits on your spawn point, centred behind the peek wall; `padWidth`/`padDepth` set its extent. */
 
+/** The materials a wallbangable peek wall can be made of, as the Wall material setting lists them. */
+export const popWallMaterials: readonly (readonly [PopWallMaterial, string])[] = [['wood', 'Wood'], ['concrete', 'Concrete'], ['metal', 'Metal']];
+
 export function popConfig(settings: {popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
-  popWallWidth: number; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number; popPadDepth: number; popMoveX: number; popRangeX: number;
-  popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
+  popWallWidth: number; popWallbang: boolean; popWallMaterial: PopWallMaterial; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number;
+  popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
   return {size: settings.popSize / 100, count: settings.popCount, spacing: settings.popSpacing, distance: settings.popDistance,
-    hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
+    hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, wallbang: settings.popWallbang, wallMaterial: settings.popWallMaterial,
+    respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
     padWidth: settings.popPadWidth, padDepth: settings.popPadDepth,
     x: {speed: settings.popMoveX, range: settings.popRangeX, flips: settings.popFlipX},
     y: {speed: settings.popMoveY, range: settings.popRangeY, flips: settings.popFlipY}, moveChance: settings.popMoveChance};
@@ -122,10 +139,13 @@ export class PopField {
   private nextId = 1;
   readonly region: PopRegion;
   readonly wall?: PopWall;
+  /** The wall as a surface bullets can pass through; only when wallbang is on. */
+  private readonly wallSolid?: PenetrationSolid;
   readonly pad: PopPad;
   constructor(readonly config: PopConfig, origin: Vec, private readonly random: () => number = Math.random) {
     this.region = popRegion(config, origin);
     this.wall = popWall(config, origin);
+    this.wallSolid = this.wall && config.wallbang ? {id: this.wall.id, center: this.wall.center, size: this.wall.size, material: config.wallMaterial} : undefined;
     this.pad = popPad(config, origin);
     for (let i = 0; i < config.count; i++) this.spawn();
   }
@@ -206,11 +226,28 @@ export class PopField {
     if (distance === undefined || distance > maxDistance) return undefined;
     return {distance, point: {x: origin.x + direction.x * distance, y: origin.y + direction.y * distance, z: origin.z + direction.z * distance}};
   }
+  /** What a wallbangable peek wall does to a bullet fired along the unit `direction`, by CS2's penetration arithmetic: the
+   * weapon's `stats`, the wall's material and the thickness of wall this ray actually crosses (a ray that clips the edge
+   * crosses far less than one that goes straight through) decide how much damage comes out the far side. Undefined when the
+   * wall is off, not wallbangable, or the ray misses it. Pass the result to `hit()`. */
+  wallPass(origin: Vec, direction: Vec, range: number, stats: PenetrationStats): PopWallPass | undefined {
+    if (!this.wallSolid) return undefined;
+    const ray = resolveBulletRay({origin, direction, range, stats, arena: {solids: [this.wallSolid]}, actors: []});
+    const entry = ray.surfaces.find(contact => contact.phase === 'entry'), exit = ray.surfaces.find(contact => contact.phase === 'exit');
+    if (!entry) return undefined;
+    const contact = ({distance, point, normal, residualDamage}: SurfaceContact): PopWallContact => ({distance, point, normal, damage: residualDamage});
+    if (!exit) return {entry: contact(entry), reach: entry.distance};
+    // Past the wall only the range falloff is left, so the bullet stays dangerous until it drops below 1 damage.
+    const falloff = Math.log(stats.rangeModifier);
+    return {entry: contact(entry), exit: contact(exit), reach: falloff < 0 ? exit.distance + 500 * UNIT * Math.log(exit.residualDamage) / -falloff : Infinity};
+  }
   /** The nearest ball a unit-direction ray crosses within `maxDistance` and before the peek wall: it takes a hit, and
    * once it has taken `config.hits` it is popped and replaced (after the respawn delay counted from `time`, or when
-   * you next step onto the pad). Undefined for a miss. */
-  hit(origin: Vec, direction: Vec, maxDistance = Infinity, time = this.now): PopHit | undefined {
-    const limit = Math.min(maxDistance, this.wallHit(origin, direction, maxDistance)?.distance ?? Infinity);
+   * you next step onto the pad). A wallbangable wall is handled by `wallPass()`: given its result, a bullet that came out
+   * the far side keeps going as far as it has damage left (`reach`) and one that did not stops at the wall's face. Undefined
+   * for a miss. */
+  hit(origin: Vec, direction: Vec, maxDistance = Infinity, time = this.now, pass?: PopWallPass): PopHit | undefined {
+    const limit = Math.min(maxDistance, pass ? pass.reach : this.wallHit(origin, direction, maxDistance)?.distance ?? Infinity);
     let nearest: PopHit | undefined;
     for (const ball of this.balls) {
       const ox = origin.x - ball.x, oy = origin.y - ball.y, oz = origin.z - ball.z;
@@ -220,7 +257,7 @@ export class PopField {
       if (discriminant < 0) continue;
       const t = -b - Math.sqrt(discriminant);
       if (t < 0 || t > limit) continue;
-      if (!nearest || t < nearest.distance) nearest = {ball, distance: t, popped: false,
+      if (!nearest || t < nearest.distance) nearest = {ball, distance: t, popped: false, wallbang: !!pass?.exit && t > pass.exit.distance,
         point: {x: origin.x + direction.x * t, y: origin.y + direction.y * t, z: origin.z + direction.z * t}};
     }
     if (!nearest) return undefined;

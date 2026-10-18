@@ -1,6 +1,7 @@
 import {describe, expect, it} from 'vitest';
 import {POP_SPAWN, PopField, popConfig, popPad, popRegion, popSpawn, popWall, rayBoxDistance} from './pop';
-import {defaults, sanitizeSettings} from './config';
+import {defaults, gameData, sanitizeSettings, type Weapon} from './config';
+import {UNIT} from './actor-physics';
 import {Simulation} from './simulation';
 import {drillSetupSummary, rangeDrillDefaults} from './ui/drill-setup';
 import {sanitizeBotzConfig} from './duel/botz';
@@ -347,5 +348,128 @@ describe('pop peek wall and hits to pop', () => {
     sim.yaw = Math.atan2(-dx, -dz); sim.pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
     sim.start(); sim.release('mouse');
     expect(sim.pop!.pops).toBe(1);
+  });
+});
+
+describe('pop wallbang', () => {
+  const base = {...defaults, popSize: 40, popCount: 3, popSpacing: 1, popDistance: 10, popHits: 1, popWall: 'left' as const, popWallbang: true};
+  const ahead = {x: 0, y: 0, z: -1}, stats = (id: Weapon) => gameData.weapons[id], range = (id: Weapon) => stats(id).range * UNIT;
+  /** A field whose only ball hangs straight ahead of the spawn, behind the wall. */
+  const behind = (settings: Partial<typeof base> = {}) => {
+    const field = new PopField(popConfig({...base, ...settings}), POP_SPAWN, lcg(5));
+    field.balls = [{id: 900, x: 0, y: POP_SPAWN.y, z: POP_SPAWN.z - 10, radius: .2, hits: 0, vx: 0, vy: 0}];
+    return field;
+  };
+
+  it('is off by default and the settings are bounded', () => {
+    expect(sanitizeSettings({})).toMatchObject({popWallbang: false, popWallMaterial: 'wood', popWallXray: true});
+    expect(sanitizeSettings({popWallbang: true, popWallMaterial: 'metal', popWallXray: false})).toMatchObject({popWallbang: true, popWallMaterial: 'metal', popWallXray: false});
+    expect(sanitizeSettings({popWallMaterial: 'concrete'}).popWallMaterial).toBe('concrete');
+    expect(sanitizeSettings({popWallbang: 'yes', popWallMaterial: 'glass', popWallXray: 'no'})).toMatchObject({popWallbang: false, popWallMaterial: 'wood', popWallXray: true});
+    expect(popConfig({...base, popWallMaterial: 'concrete'})).toMatchObject({wallbang: true, wallMaterial: 'concrete'});
+    expect(rangeDrillDefaults('pop')).toMatchObject({popWallbang: false, popWallMaterial: 'wood', popWallXray: true});
+    const botz = sanitizeBotzConfig({}), duel = sanitizeDuelConfig({});
+    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popWall: 'left', popWallbang: true, popWallMaterial: 'concrete'}), botz, duel)).toContain(' · peek wall, left, 3 m, wallbang (concrete)');
+    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popWall: 'left'}), botz, duel)).not.toMatch(/wallbang/);
+    expect(drillSetupSummary(sanitizeSettings({mode: 'pop', popWallbang: true}), botz, duel)).not.toMatch(/wallbang/);
+  });
+
+  it('keeps the wall solid for every bullet unless wallbang is on', () => {
+    const solid = behind({popWallbang: false});
+    expect(solid.wallPass(POP_SPAWN, ahead, range('ak47'), stats('ak47'))).toBeUndefined();
+    expect(solid.hit(POP_SPAWN, ahead, range('ak47'))).toBeUndefined();
+    expect(solid.hits).toBe(0);
+    // No wall, no pass, whatever the setting says.
+    const open = new PopField(popConfig({...base, popWall: 'off'}), POP_SPAWN, lcg(5));
+    expect(open.wallPass(POP_SPAWN, ahead, range('ak47'), stats('ak47'))).toBeUndefined();
+  });
+
+  it('sends a bullet through a wooden wall and pops the ball behind it', () => {
+    const field = behind();
+    const pass = field.wallPass(POP_SPAWN, ahead, range('ak47'), stats('ak47'))!;
+    // The wall is 0.4 m thick, 1.3 m ahead of the eye; the AK comes out the far side with most of its 36 damage.
+    expect(pass.entry.distance).toBeCloseTo(1.3, 6); expect(pass.exit!.distance).toBeCloseTo(1.7, 6);
+    expect(pass.entry.point.z).toBeCloseTo(.7, 6); expect(pass.exit!.point.z).toBeCloseTo(.3, 6);
+    expect(pass.entry.normal).toEqual({x: 0, y: 0, z: 1}); expect(pass.exit!.normal).toEqual({x: 0, y: 0, z: -1});
+    expect(pass.entry.damage).toBeCloseTo(36 * Math.pow(.98, 1.3 / (500 * UNIT)), 6);
+    expect(pass.exit!.damage).toBeGreaterThan(20); expect(pass.exit!.damage).toBeLessThan(pass.entry.damage);
+    const hit = field.hit(POP_SPAWN, ahead, range('ak47'), 0, pass)!;
+    expect(hit.ball.id).toBe(900); expect(hit.popped).toBe(true); expect(hit.wallbang).toBe(true);
+    expect(hit.distance).toBeCloseTo(9.8, 6); expect(field.pops).toBe(1); expect(field.hits).toBe(1);
+  });
+
+  it('lets only the heavy hitters through a wall that thick in concrete or metal, and every gun through wood', () => {
+    const through = (material: 'wood' | 'concrete' | 'metal') => Object.keys(gameData.weapons).filter(id => (gameData.weapons[id as Weapon].penetration ?? 0) > 0)
+      .filter(id => !!behind({popWallMaterial: material}).wallPass(POP_SPAWN, ahead, range(id as Weapon), stats(id as Weapon))?.exit).sort();
+    const armed = Object.keys(gameData.weapons).filter(id => (gameData.weapons[id as Weapon].penetration ?? 0) > 0).sort();
+    expect(through('wood')).toEqual(armed);
+    expect(through('concrete')).toEqual(['awp', 'deagle', 'g3sg1', 'revolver', 'scar20', 'ssg08']);
+    expect(through('metal')).toEqual(['awp', 'deagle', 'g3sg1', 'revolver', 'scar20', 'ssg08']);
+    // A stopped bullet ends at the wall's face and hurts nothing behind it.
+    const field = behind({popWallMaterial: 'concrete'});
+    const pass = field.wallPass(POP_SPAWN, ahead, range('ak47'), stats('ak47'))!;
+    expect(pass.exit).toBeUndefined(); expect(pass.reach).toBeCloseTo(1.3, 6);
+    expect(field.hit(POP_SPAWN, ahead, range('ak47'), 0, pass)).toBeUndefined();
+    expect(field.hits).toBe(0); expect(field.pops).toBe(0); expect(field.balls).toHaveLength(1);
+    // The AWP gets through the same wall.
+    const awp = field.wallPass(POP_SPAWN, ahead, range('awp'), stats('awp'))!;
+    expect(awp.exit!.damage).toBeGreaterThan(60);
+    expect(field.hit(POP_SPAWN, ahead, range('awp'), 0, awp)).toMatchObject({popped: true, wallbang: true});
+  });
+
+  it('weighs the wall the ray actually crosses: clipping its edge costs far less than going straight through', () => {
+    // Concrete stops the AK straight on, but a ray that enters the front face a hand's width from the edge leaves through the
+    // end of the wall after about 7 cm of it.
+    const field = new PopField(popConfig({...base, popWallMaterial: 'concrete'}), POP_SPAWN, lcg(5));
+    const start = popSpawn(field.config, POP_SPAWN), edge = unit(start, {x: -.3, y: start.y, z: .7});
+    const clipped = field.wallPass(start, edge, range('ak47'), stats('ak47'))!;
+    expect(clipped.exit).toBeDefined(); expect(clipped.exit!.distance - clipped.entry.distance).toBeCloseTo(.0672, 3);
+    expect(clipped.exit!.normal.x).toBeCloseTo(-1, 6);
+    const straight = field.wallPass(start, ahead, range('ak47'), stats('ak47'))!;
+    expect(straight.exit).toBeUndefined();
+    field.balls = [{id: 901, x: start.x + edge.x * 10, y: start.y, z: start.z + edge.z * 10, radius: .2, hits: 0, vx: 0, vy: 0}];
+    expect(field.hit(start, edge, range('ak47'), 0, clipped)).toMatchObject({popped: true, wallbang: true});
+    // A ray that passes the wall's edge without touching it has no pass at all.
+    expect(field.wallPass(start, unit(start, {x: -12, y: start.y, z: -8}), range('ak47'), stats('ak47'))).toBeUndefined();
+  });
+
+  it('stops a bullet that has no damage left past the wall: range falloff counts after the exit', () => {
+    const weak = {...stats('ak47'), damage: 12, rangeModifier: .5};
+    const field = behind();
+    const pass = field.wallPass(POP_SPAWN, ahead, range('ak47'), weak)!;
+    const left = pass.exit!.damage;
+    expect(left).toBeGreaterThan(1); expect(left).toBeLessThan(6);
+    // It keeps its damage for as far as it takes the falloff to bring it down to 1.
+    expect(left * Math.pow(.5, (pass.reach - pass.exit!.distance) / (500 * UNIT))).toBeCloseTo(1, 9);
+    const ball = (distance: number) => ({id: 902, x: 0, y: POP_SPAWN.y, z: POP_SPAWN.z - distance, radius: .2, hits: 0, vx: 0, vy: 0});
+    field.balls = [ball(pass.reach - .5)];
+    expect(field.hit(POP_SPAWN, ahead, range('ak47'), 0, pass)).toMatchObject({popped: true, wallbang: true});
+    field.balls = [ball(pass.reach + .5)];
+    expect(field.hit(POP_SPAWN, ahead, range('ak47'), 0, pass)).toBeUndefined();
+    // No falloff at all means no limit.
+    expect(behind().wallPass(POP_SPAWN, ahead, range('ak47'), {...stats('ak47'), rangeModifier: 1})!.reach).toBe(Infinity);
+  });
+
+  it('counts a wallbang as a hit like any other: hits to pop, and a ball in the open is not a wallbang', () => {
+    const field = behind({popHits: 2, popWall: 'left'});
+    const pass = field.wallPass(POP_SPAWN, ahead, range('ak47'), stats('ak47'))!;
+    const first = field.hit(POP_SPAWN, ahead, range('ak47'), 0, pass)!;
+    expect(first).toMatchObject({popped: false, wallbang: true}); expect(first.ball.hits).toBe(1);
+    expect(field.hit(POP_SPAWN, ahead, range('ak47'), 0, pass)).toMatchObject({popped: true, wallbang: true});
+    expect([field.hits, field.pops]).toEqual([2, 1]);
+    // Stepped out past the edge there is no wall in the way: the ray misses it and the hit is an ordinary one.
+    const open = behind(), peek = {x: -1, y: POP_SPAWN.y, z: POP_SPAWN.z};
+    open.balls = [{id: 903, x: -1, y: POP_SPAWN.y, z: POP_SPAWN.z - 10, radius: .2, hits: 0, vx: 0, vy: 0}];
+    expect(open.wallPass(peek, ahead, range('ak47'), stats('ak47'))).toBeUndefined();
+    expect(open.hit(peek, ahead, range('ak47'), 0)).toMatchObject({popped: true, wallbang: false});
+  });
+
+  it('still blocks walking through the wall', () => {
+    const sim = new Simulation({...defaults, mode: 'pop', weapon: 'ak47', popWall: 'left', popWallbang: true});
+    expect(sim.pop!.config).toMatchObject({wallbang: true, wallMaterial: 'wood'});
+    expect(sim.environment.solids.map(solid => solid.id)).toContain('pop-wall');
+    sim.active = true; sim.input = {...sim.input, forward: 1};
+    for (let t = 0; t < 2; t += .25) sim.advance(.25);
+    expect(sim.position.z).toBeGreaterThan(1); expect(sim.position.z).toBeLessThan(1.3);
   });
 });
