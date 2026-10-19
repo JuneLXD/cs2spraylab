@@ -39,7 +39,6 @@ import {resolveBulletRay,type PenetrationSolid,type SurfaceContact} from './duel
 import {resolveDamage} from './duel/damage';
 import {equipmentStats} from './equipment';
 import {AcousticScene} from './spatial-audio';
-import type {PopWallMaterial} from './pop';
 
 export type RangeStatus = {
   weapon: Weapon;
@@ -54,8 +53,6 @@ export type RangeStatus = {
   drill?: {round:number; completed:number; passed:number; scenario:string; covered:boolean; exposure:Exposure; side:number; peekDirection?:number; phase:'prepare'|'exposed'|'feedback'|'reposition'; accurate:boolean; error:number; remaining?:number; last?:DrillMetrics};
 };
 const vector = (v: Vec) => new THREE.Vector3(v.x, v.y, v.z);
-/** Pop's peek wall tint (colour, emissive) by material; a wall that stops every bullet keeps the concrete look. */
-const popWallLooks: Record<PopWallMaterial, readonly [string, string]> = {concrete: ['#8a949a', '#30363e'], wood: ['#b08c62', '#42301d'], metal: ['#8ea2b8', '#2d3a49']};
 const targetMeshCache = new WeakMap<THREE.Object3D, THREE.Mesh[]>();
 function scoringMeshes(model: THREE.Object3D) {
   let meshes = targetMeshCache.get(model);
@@ -758,8 +755,6 @@ export class RangeEngine {
       const wall = pop.wall;
       this.popWallMaterial ??= new THREE.MeshStandardMaterial({color: '#8a949a', emissive: '#30363e', emissiveIntensity: 1, roughness: .92, fog: false,
         map: this.drillScenery.texture, normalMap: this.drillScenery.normal, normalScale: new THREE.Vector2(.3, .3)});
-      const [wallColor, wallEmissive] = popWallLooks[config.wallbang ? config.wallMaterial : 'concrete'];
-      this.popWallMaterial.color.set(wallColor); this.popWallMaterial.emissive.set(wallEmissive);
       this.popWall = new THREE.Mesh(new THREE.BoxGeometry(wall.size.x, wall.size.y, wall.size.z), this.popWallMaterial);
       this.popWall.position.set(wall.center.x, wall.center.y, wall.center.z);
       this.popWall.castShadow = this.popWall.receiveShadow = true; this.popWall.name = 'pop-wall';

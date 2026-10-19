@@ -99,6 +99,7 @@ ones every other range drill uses.
   (pinned in `pop.test.ts`). Only bullets and pellets wallbang: a knife or Zeus never does, and the wall still blocks walking.
   `RangeEngine.popShot()` reads the pass: the caption says WALLBANG POP / WALLBANG HIT for a ball reached through the wall and
   BLOCKED for a shot the wall swallowed (MISS otherwise), a bullet that got through marks the wall where it entered (unless
-  Hide bullet impacts is on), and the wall takes a wood, concrete or metal tint while wallbang is on. With See balls through
-  the wall, each ball carries a faint child mesh (`popGhostMaterial`, `GreaterDepth`) that draws only where the wall hides the
-  ball. `popWallbang` and `popWallMaterial` re-create the field like the other wall settings; `popWallXray` is presentation.
+  Hide bullet impacts is on). The wall's look (colour and texture) never changes with the material or the switch: the
+  material only decides the penetration. With See balls through the wall, each ball carries a faint child mesh
+  (`popGhostMaterial`, `GreaterDepth`) that draws only where the wall hides the ball. `popWallbang` and `popWallMaterial`
+  re-create the field like the other wall settings; `popWallXray` is presentation.

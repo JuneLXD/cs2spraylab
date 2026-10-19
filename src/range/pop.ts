@@ -15,7 +15,8 @@ import {resolveBulletRay, type PenetrationSolid, type PenetrationStats, type Sur
  * `moveChance` is the share of balls that move at all: each ball that appears rolls it once and otherwise stays still. */
 export type PopWallSide = 'off' | 'left' | 'right' | 'both';
 export type PopRespawnMode = 'timer' | 'pad';
-/** What a wallbangable peek wall is made of: it sets how much of a bullet's damage the wall eats (CS2 surface materials). */
+/** What a wallbangable peek wall is made of: it sets how much of a bullet's damage the wall eats (CS2 surface materials). It
+ * never changes how the wall looks. */
 export type PopWallMaterial = 'wood' | 'concrete' | 'metal';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
 export type PopConfig = {size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;

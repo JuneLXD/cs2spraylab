@@ -196,14 +196,20 @@ test('pop: wallbang sends bullets through the peek wall, shows the balls it hide
   // Wood: the AK's bullet comes out the far side and pops the ball the wall hides.
   await page.waitForTimeout(400);
   expect(await tap()).toEqual({shots: 1, hits: 1, pops: 1, balls: 1, caption: 'WALLBANG POP'});
-  // The wall looks like wood while it can be shot through, and the hidden ball shows through it as a faint ghost.
+  // The wall keeps its usual look (the material only decides the penetration), and the hidden ball shows through it as a faint ghost.
   await page.waitForFunction(() => !!(window as any).popEngine.pop.getObjectByName('pop-ball-ghost'));
+  const wallLook = () => page.evaluate(() => {
+    const material = (window as any).popEngine.pop.getObjectByName('pop-wall').material;
+    return {color: material.color.getHexString(), emissive: material.emissive.getHexString(), map: material.map?.uuid, normalMap: material.normalMap?.uuid};
+  });
+  const look = await wallLook();
+  expect(look).toMatchObject({color: '8a949a', emissive: '30363e'}); expect(look.map).toBeTruthy();
   const wood = await page.evaluate(() => {
-    const engine = (window as any).popEngine, wall = engine.pop.getObjectByName('pop-wall'), ghost = engine.pop.getObjectByName('pop-ball-ghost');
-    return {color: wall.material.color.getHexString(), ghosts: engine.pop.children.filter((child: any) => child.children.some((c: any) => c.name === 'pop-ball-ghost')).length,
+    const engine = (window as any).popEngine, ghost = engine.pop.getObjectByName('pop-ball-ghost');
+    return {ghosts: engine.pop.children.filter((child: any) => child.children.some((c: any) => c.name === 'pop-ball-ghost')).length,
       depthFunc: ghost.material.depthFunc, transparent: ghost.material.transparent, ghostColor: ghost.material.color.getHexString(), ballColor: engine.popMaterial.color.getHexString()};
   });
-  expect(wood).toMatchObject({color: 'b08c62', ghosts: 1, transparent: true});
+  expect(wood).toMatchObject({ghosts: 1, transparent: true});
   expect(wood.depthFunc).toBe(6); expect(wood.ghostColor).toBe(wood.ballColor);   // THREE.GreaterDepth: only where something nearer hides it
   await page.waitForTimeout(600);
   await page.screenshot({path: info.outputPath('pop-wallbang-wood.png')});
@@ -224,7 +230,7 @@ test('pop: wallbang sends bullets through the peek wall, shows the balls it hide
   await page.waitForFunction(() => (window as any).popEngine.sim.pop.config.wallMaterial === 'concrete');
   await page.waitForTimeout(400);
   expect(await tap()).toEqual({shots: 1, hits: 0, pops: 0, balls: 1, caption: 'BLOCKED'});
-  expect(await page.evaluate(() => (window as any).popEngine.pop.getObjectByName('pop-wall').material.color.getHexString())).toBe('8a949a');
+  expect(await wallLook()).toEqual(look);   // concrete looks exactly like wood
   // Turning the x-ray off takes the ghosts away without restarting the session.
   await page.keyboard.press('Escape');
   await page.getByLabel('See balls through the wall').uncheck();
@@ -239,6 +245,6 @@ test('pop: wallbang sends bullets through the peek wall, shows the balls it hide
   await page.waitForFunction(() => (window as any).popEngine.sim.pop.config.wallbang === false);
   await page.waitForTimeout(400);
   expect(await tap()).toEqual({shots: 1, hits: 0, pops: 0, balls: 1, caption: 'MISS'});
-  expect(await page.evaluate(() => (window as any).popEngine.pop.getObjectByName('pop-wall').material.color.getHexString())).toBe('8a949a');
+  expect(await wallLook()).toEqual(look);   // and so does the solid wall
   expect(errors).toEqual([]);
 });
