@@ -95,6 +95,21 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .sl-switch:checked { background: var(--sl-go); }
 .sl-switch:checked::after { transform: translateX(22px); background: white; }
 .sl-switch:disabled { opacity: .45; cursor: default; }
+.sl-text {
+  width: 55%;
+  min-width: 120px;
+  height: 34px;
+  padding: 4px 10px;
+  border: 1px solid var(--sl-hairline-strong);
+  background: var(--sl-field);
+  color: var(--sl-text);
+  font-size: 14px;
+}
+.sl-text::placeholder { color: var(--sl-text-3); }
+.sl-preset-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
+.sl-preset-actions .sl-button { min-height: 36px; padding: 6px 14px; }
+.sl-preset-status { margin: 0; padding: 4px 0 8px; color: var(--sl-text-2); font-size: 12px; line-height: 1.5; }
+.sl-preset-status:empty { display: none; }
 .sl-tile { border: 1px solid var(--sl-hairline-strong); background: var(--sl-panel); padding: 12px; }
 .sl-tile:hover { background: var(--sl-row-hover); }
 .sl-tile[aria-pressed=true] { border-color: var(--sl-text); background: var(--sl-row-active); }

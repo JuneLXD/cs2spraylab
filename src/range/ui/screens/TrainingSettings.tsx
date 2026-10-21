@@ -1,11 +1,13 @@
 import {memo, useId} from 'react';
 import {gameData, isDuelEngineMode, loadoutWeapon, weaponNames, type Settings} from '../../config';
 import {popBackgrounds, popColors, popLimits, popPadColors, popWallMaterials} from '../../pop';
+import {PopPresets} from './PopPresets';
 import {SettingRow, SliderRow as Slider, SwitchRow as Toggle} from '../primitives';
 export const TrainingSettings = memo(function TrainingSettings({settings, update}: {settings: Settings; update: (patch: Partial<Settings>) => void}) {
   const weapon = gameData.weapons[loadoutWeapon(settings)];
   const colorId = useId(), backgroundId = useId(), padColorId = useId();
   if (settings.mode === 'pop') return <>
+    <PopPresets settings={settings} update={update}/>
     <h2>Pop</h2>
     <Slider label="Ball size" value={settings.popSize} min={popLimits.size[0]} max={popLimits.size[1]} suffix=" cm" onChange={popSize => update({popSize})}/>
     <Slider label="Balls at once" value={settings.popCount} min={popLimits.count[0]} max={popLimits.count[1]} onChange={popCount => update({popCount})}/>

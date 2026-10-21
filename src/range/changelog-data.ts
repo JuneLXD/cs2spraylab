@@ -440,6 +440,11 @@ export const latestChanges = {
       'Wallbang through the wall lets bullets through the peek wall by CS2\'s penetration rules: the weapon, the wall\'s material (wood, concrete or metal) and how much wall the shot crosses decide what comes out the far side. Wood lets every gun through; at that thickness concrete and metal stop everything but the AWP, SSG 08, SCAR-20, G3SG1, Deagle and R8.',
       'Balls the wall hides show faintly through it (See balls through the wall). A ball reached through the wall reads WALLBANG POP or WALLBANG HIT, and a shot the wall swallows reads BLOCKED.',
     ]},
+    {id: 'pop-presets', title: 'Pop: presets', items: [
+      'Pop has presets for the balls and the environment. Nine ready-made setups (classic warm-up, head-sized balls, long range flicks, spray control, pistol heads, strafing balls, peek and pop, and two wallbang drills) load from the Presets list at the top of the Pop settings, and they keep your colours.',
+      'Save the current setup under your own name, then update, rename or delete it later. Saved presets keep the colours too, stay in this browser, and never include your ammo, sound or HUD options.',
+      'A preset can be tied to a weapon: loading it equips that weapon, as the long range, spray control, pistol and concrete wallbang presets do. Tick Tie to my current weapon when you save your own.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

@@ -103,3 +103,21 @@ ones every other range drill uses.
   material only decides the penetration. With See balls through the wall, each ball carries a faint child mesh
   (`popGhostMaterial`, `GreaterDepth`) that draws only where the wall hides the ball. `popWallbang` and `popWallMaterial`
   re-create the field like the other wall settings; `popWallXray` is presentation.
+- Presets (2026-10-20): a named setup of the balls and the environment that loads in one click, at the top of the Pop settings
+  (`src/range/pop-presets.ts`, UI in `ui/screens/PopPresets.tsx`). A preset holds `popPresetKeys`: the 17 core keys (`popCoreKeys`:
+  ball size, count, spacing, distance, hits, respawn and its mode, movement per axis and its chance, the peek wall, its width and
+  the wallbang switch) plus the wall material, pad size, see-through balls and the three colours. The personal options
+  (`popPersonalKeys`: ammo mode, hit sound, mute gun, hide impacts, hide HUD, pad sound) are never part of one, and a test makes
+  every `pop*` setting belong to one list or the other. The nine built-in presets (`popBuiltInPresets`) set exactly the core keys
+  (plus the wall material in the two wallbang ones), so loading one replaces the scenario but leaves your colours, pad size and
+  see-through setting as they are. Saved presets (`PopPresetStore`, key `spraylab.pop.presets.v1`, at most 50, names up to 40
+  characters, replaced when saved again under the same name ignoring case) keep every preset key, colours included. The store
+  re-reads storage before each change, so two tabs do not overwrite each other (a `storage` event refreshes the list), bounds
+  every value like the settings screen on the way in, and keeps working in memory when storage is unavailable.
+- Weapon ties (same day): a preset can be tied to a weapon. Four built-ins are (Long range flicks on the AWP, Spray control on the AK-47, Pistol
+  heads on the Deagle, Wallbang through concrete on the AWP), and "Tie to my current weapon" records `loadoutWeapon(settings)` for your own. Loading it
+  equips that weapon the way the Loadout screen does: a pistol becomes the sidearm with no primary carried, anything else the
+  primary. The list shows "Custom" when no preset matches the settings, says when a loaded one has been changed, Update replaces a
+  saved preset (and renames it when the name field changed), Delete removes it. The Play screen and Settings > Game both show
+  the block, so the chosen preset is kept in the store (`selectedId`, not persisted) and both show the same one. Presets are not a drill-wide default: Restore
+  drill defaults still resets every Pop setting, and presets never touch the ammo, sound or HUD options.

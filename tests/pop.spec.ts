@@ -248,3 +248,84 @@ test('pop: wallbang sends bullets through the peek wall, shows the balls it hide
   expect(await wallLook()).toEqual(look);   // and so does the solid wall
   expect(errors).toEqual([]);
 });
+
+test('pop: presets load a ready-made setup with its weapon, save your own tied to a weapon, and survive a reload', async ({page}, info) => {
+  test.skip(info.project.name !== 'chromium', 'Desktop range smoke test');
+  test.setTimeout(420000);
+  await page.addInitScript(() => {
+    if (localStorage.getItem('spraylab.range.v2')) return;
+    localStorage.setItem('spraylab.range.v2', JSON.stringify({mode: 'pop', weapon: 'ak47', quality: 'auto', spread: false}));
+  });
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/');
+  await selectDrill(page, 'pop');
+  const preset = page.getByLabel('Pop preset'), status = page.locator('.sl-preset-status[role=status]');
+  const stored = () => page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.range.v2')!));
+  const saved = preset.locator('optgroup[label="Saved"] option');
+  // Untouched, the setup is the classic warm-up, and the saved list does not exist yet.
+  await expect(preset).toHaveValue('builtin-classic');
+  await expect(preset.locator('optgroup[label="Built-in"] option')).toHaveCount(9);
+  await expect(saved).toHaveCount(0);
+  await expect(page.getByRole('button', {name: 'Save preset', exact: true})).toBeDisabled();
+  // A built-in preset tied to a weapon loads its balls, its wall and its weapon, and leaves your colours alone.
+  const colours = await stored();
+  await preset.selectOption({label: 'Wallbang through concrete · AWP'});
+  await expect(page.getByLabel('Wallbang through the wall')).toBeChecked();
+  await expect(page.getByLabel('Wall material')).toHaveValue('concrete');
+  await expect(page.getByLabel('Balls at once')).toHaveValue('4');
+  await expect(page.getByLabel('Distance to the balls')).toHaveValue('20');
+  await expect(page.getByLabel('Tie to my current weapon')).not.toBeChecked();
+  await expect(page.getByLabel('Tie to my current weapon')).toHaveAccessibleName('Tie to my current weapon (AWP)');
+  await expect.poll(stored).toMatchObject({weapon: 'awp', primaryEnabled: true, popWall: 'both', popWallbang: true, popWallMaterial: 'concrete', popCount: 4, popDistance: 20,
+    popColor: colours.popColor, popBackground: colours.popBackground});
+  // Changing it says so; saving it under your own name, tied to the AWP, adds it to the saved list.
+  await page.getByLabel('Balls at once').fill('6');
+  await expect(status).toContainText('Changed since you loaded it.');
+  await page.getByLabel('Preset name').fill('My wallbang');
+  await page.getByLabel('Tie to my current weapon').check();
+  await page.getByRole('button', {name: 'Save preset', exact: true}).click();
+  await expect(status).toContainText('Saved “My wallbang”.');
+  await expect(saved).toHaveText(['My wallbang · AWP']);
+  await expect(preset).toHaveValue(/^user-/);
+  await page.screenshot({path: info.outputPath('pop-presets.png')});
+  // A built-in preset tied to a pistol makes it the weapon you start with; one with no tie leaves the weapon alone.
+  await preset.selectOption({label: 'Pistol heads · Desert Eagle'});
+  await expect.poll(stored).toMatchObject({sidearm: 'deagle', primaryEnabled: false, popSize: 20, popCount: 3, popWall: 'off', popWallbang: false});
+  await preset.selectOption({label: 'Strafing balls'});
+  await expect.poll(stored).toMatchObject({popMoveX: 2.5, popMoveChance: 1, sidearm: 'deagle', primaryEnabled: false});
+  // After a reload the saved preset is still there, and loading it brings back the setup, the AWP and its name and tie.
+  await page.reload();
+  await selectDrill(page, 'pop');
+  await expect(preset).toHaveValue('builtin-strafing');
+  await expect(saved).toHaveText(['My wallbang · AWP']);
+  await preset.selectOption({label: 'My wallbang · AWP'});
+  await expect.poll(stored).toMatchObject({weapon: 'awp', primaryEnabled: true, popCount: 6, popWall: 'both', popWallbang: true, popWallMaterial: 'concrete', popDistance: 20});
+  await expect(page.getByLabel('Balls at once')).toHaveValue('6');
+  await expect(page.getByLabel('Preset name')).toHaveValue('My wallbang');
+  await expect(page.getByLabel('Tie to my current weapon')).toBeChecked();
+  // Update replaces it; delete removes it.
+  await page.getByLabel('Balls at once').fill('2');
+  await page.getByRole('button', {name: 'Update preset', exact: true}).click();
+  await expect(status).toContainText('Updated “My wallbang”.');
+  await preset.selectOption('builtin-classic');
+  await preset.selectOption({label: 'My wallbang · AWP'});
+  await expect(page.getByLabel('Balls at once')).toHaveValue('2');
+  // The same block is in Settings > Game, showing the same saved list and the same choice, and a choice made there shows here.
+  await page.getByRole('button', {name: 'Settings', exact: true}).click();
+  const inSettings = page.getByRole('dialog').getByLabel('Pop preset');
+  await expect(inSettings).toHaveValue(/^user-/);
+  await expect(inSettings.locator('optgroup[label="Saved"] option')).toHaveText(['My wallbang · AWP']);
+  await inSettings.scrollIntoViewIfNeeded();
+  await page.screenshot({path: info.outputPath('pop-presets-settings.png')});
+  await inSettings.selectOption('builtin-classic');
+  await page.getByRole('button', {name: 'Close panel', exact: true}).click();
+  await expect(preset).toHaveValue('builtin-classic');
+  await preset.selectOption({label: 'My wallbang · AWP'});
+  await page.getByRole('button', {name: 'Delete preset', exact: true}).click();
+  await expect(status).toContainText('Deleted “My wallbang”.');
+  await expect(saved).toHaveCount(0);
+  await expect(page.getByRole('button', {name: 'Delete preset', exact: true})).toBeHidden();
+  expect(await page.evaluate(() => localStorage.getItem('spraylab.pop.presets.v1'))).toBe('[]');
+  expect(errors).toEqual([]);
+});
