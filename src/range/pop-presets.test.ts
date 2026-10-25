@@ -40,9 +40,9 @@ describe('what a Pop preset holds', () => {
   });
 
   it('loads as the same settings plus the weapon, picked as the Loadout screen picks it', () => {
-    expect(popPresetPatch({settings: {popSize: 25}})).toEqual({popSize: 25});
-    expect(popPresetPatch({settings: {popSize: 25}, weapon: 'awp'})).toEqual({popSize: 25, weapon: 'awp', primaryEnabled: true});
-    expect(popPresetPatch({settings: {popSize: 25}, weapon: 'deagle'})).toEqual({popSize: 25, sidearm: 'deagle', primaryEnabled: false});
+    expect(popPresetPatch({settings: {popSize: 25}})).toEqual({popVariant: 'classic', popSize: 25});
+    expect(popPresetPatch({settings: {popSize: 25}, weapon: 'awp'})).toEqual({popVariant: 'classic', popSize: 25, weapon: 'awp', primaryEnabled: true});
+    expect(popPresetPatch({settings: {popSize: 25}, weapon: 'deagle'})).toEqual({popVariant: 'classic', popSize: 25, sidearm: 'deagle', primaryEnabled: false});
     const preset = {settings: capturePopPreset(custom(), false).settings, weapon: 'deagle' as const};
     const loaded = {...defaults, ...popPresetPatch(preset)};
     expect(loadoutWeapon(loaded)).toBe('deagle');

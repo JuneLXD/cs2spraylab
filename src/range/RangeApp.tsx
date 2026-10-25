@@ -1,3 +1,4 @@
+import {popVariants} from './pop';
 import {download} from './ui/download';
 import {HomeScreen} from './ui/screens/HomeScreen';
 import {SessionScreen} from './ui/screens/SessionScreen';
@@ -152,8 +153,8 @@ export default function RangeApp() {
           setRepFeedback({id:result.id,mode:result.mode,...makeRepFeedback(result.mode,result.drill,previous)});
         } else if (result.shots && result.mode !== 'tracking') {
           setRepFeedback({id: result.id, mode: result.mode, passed: result.hits / result.shots >= .7,
-            message: result.mode === 'pop' ? `${result.hits}/${result.shots} shots hit a ball` : `${result.hits}/${result.shots} hits / ${result.heads} head hits`,
-            tip: result.mode === 'pop' ? (result.hits / result.shots < .5 ? 'Flick to the ball, stop, then tap. Bigger or closer balls make an easier warm-up.' : 'Keep the rhythm: flick, settle, tap. Smaller balls or more space between them push it further.')
+            message: result.mode === 'pop' ? `${result.hits}/${result.shots} shots hit a target` : `${result.hits}/${result.shots} hits / ${result.heads} head hits`,
+            tip: result.mode === 'pop' ? (result.hits / result.shots < .5 ? 'Flick to the target, stop, then tap. Bigger or closer targets make an easier warm-up.' : 'Keep the rhythm: flick, settle, tap. Try smaller targets or increase the distance.')
               : result.hits / result.shots < .5 ? 'Start on the head, stop moving, then correct recoil as it climbs. Use shorter bursts until the first shots connect.'
               : 'Keep the same starting aim. Check the wall marks for shots that drifted away as the spray continued.'});
         }
@@ -239,7 +240,7 @@ export default function RangeApp() {
       <div className={`range-view sl-game-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
       <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
-      {!isDrillMode(settings.mode)&&<div className="target-label">{modeNames[settings.mode]} <span>{status.distance.toFixed(1)} m</span></div>}
+      {!isDrillMode(settings.mode)&&<div className="target-label">{settings.mode === 'pop' ? popVariants.find(variant => variant.id === settings.popVariant)?.name : modeNames[settings.mode]} <span>{status.distance.toFixed(1)} m</span></div>}
       {settings.mode === 'transfer' && settings.transferRule === 'kill' && <div className="transfer-health" aria-label="Transfer target health">
         {(status.targetHealth ?? [100,100]).map((health, i) => <span key={i} className={health === 0 ? 'down' : ''}>{i ? 'B' : 'A'} <b>{health === 0 ? 'DOWN' : `${Math.ceil(health)} HP`}</b></span>)}
       </div>}

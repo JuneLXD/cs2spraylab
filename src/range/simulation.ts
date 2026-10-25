@@ -183,7 +183,7 @@ export class Simulation {
   configure(s: Settings, measured?: MeasuredProfile) {
     const changedMode = s.mode !== this.settings.mode;
     // Raising or moving the peek wall puts you back behind it: you may be standing where it goes up.
-    const changedWall = s.mode === 'pop' && (s.popWall !== this.settings.popWall || s.popWallWidth !== this.settings.popWallWidth);
+    const changedWall = s.mode === 'pop' && (s.popWall !== this.settings.popWall || s.popWallWidth !== this.settings.popWallWidth || s.popVariant !== this.settings.popVariant);
     const leavingPositionedDrill = isDrillMode(this.settings.mode) || this.settings.mode === 'pop';
     this.cancel(); this.settings = s; this.measured = measured;
     if (!s.primaryEnabled && this.slot === 1) this.slot = 2;

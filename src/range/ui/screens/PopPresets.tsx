@@ -56,7 +56,7 @@ export function PopPresets({settings, update}: {settings: Settings; update: (pat
       <optgroup label="Built-in">{popBuiltInPresets.map(preset => <option key={preset.id} value={preset.id}>{optionLabel(preset)}</option>)}</optgroup>
       {presets.length > 0 && <optgroup label="Saved">{presets.map(preset => <option key={preset.id} value={preset.id}>{optionLabel(preset)}</option>)}</optgroup>}
     </select></label>
-    <p className="setting-explanation">Presets set the balls (size, count, spacing, distance, hits, movement, respawn) and the environment (peek wall, wallbang, pad). Pick one to load it. Built-in presets leave your colours alone; the ones you save keep them. A preset tied to a weapon equips that weapon when you load it. No preset changes your ammo, sound or HUD options. Saved presets stay in this browser.</p>
+    <p className="setting-explanation">Presets save the Pop mode, targets and environment. Pick one to load it. Built-in presets use Classic Pop and leave your colours alone; the ones you save keep them. A preset tied to a weapon equips that weapon when you load it. No preset changes your ammo, sound or HUD options. Saved presets stay in this browser.</p>
     <p className="sl-preset-status" role="status">{[selected?.note, modified ? 'Changed since you loaded it.' : '', message].filter(Boolean).join(' ')}</p>
     <SettingRow label="Preset name" htmlFor={nameId}><input id={nameId} className="sl-text" aria-label="Preset name" type="text" maxLength={MAX_POP_PRESET_NAME}
       value={name} placeholder="Name your setup" autoComplete="off" spellCheck={false} onChange={event => setName(event.target.value)}

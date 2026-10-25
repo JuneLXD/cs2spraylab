@@ -1,4 +1,5 @@
 import {defaults, loadoutWeapon, pistolIds, sanitizeSettings, weaponIds, type Pistol, type Settings, type Weapon} from './config';
+import type {PopVariant} from './pop';
 
 /** Pop presets: a named setup of the balls and the environment that can be loaded in one click, saved under your own name,
  * and optionally tied to a weapon (loading it then equips that weapon). A preset never touches your ammo mode, sounds or
@@ -6,7 +7,7 @@ import {defaults, loadoutWeapon, pistolIds, sanitizeSettings, weaponIds, type Pi
 
 /** What every preset sets: the balls, how popped balls come back, and the peek wall with its wallbang switch. Built-in
  * presets set exactly these, so loading one fully replaces the scenario. */
-export const popCoreKeys = ['popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popRespawn', 'popRespawnMode',
+export const popCoreKeys = ['popVariant', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popRespawn', 'popRespawnMode',
   'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance', 'popWall', 'popWallWidth', 'popWallbang'] as const;
 /** Everything a saved preset keeps. The extra keys (wall material, pad size, colours, see-through balls) are details a
  * built-in preset leaves as you have them, unless it is about that detail (the wallbang presets pick a material). */
@@ -20,6 +21,14 @@ export type PopPresetKey = typeof popPresetKeys[number];
 export type PopPresetSettings = Partial<Pick<Settings, PopPresetKey>>;
 export type PopPreset = {id: string; name: string; settings: PopPresetSettings; weapon?: Weapon; note?: string; builtIn?: true};
 export type CapturedPopPreset = {settings: PopPresetSettings; weapon?: Weapon};
+
+/** Selecting a drill starts its recommended setup, preserving personal options, weapon and colours. */
+export function popVariantPatch(popVariant: PopVariant): PopPresetSettings {
+  const core = Object.fromEntries(popCoreKeys.map(key => [key, defaults[key]])) as PopPresetSettings;
+  if (popVariant === 'classic') return core;
+  return {...core, popVariant, popCount: 1, popDistance: popVariant === 'wide' ? 6 : 8,
+    popSize: popVariant === 'precision' ? 8 : popVariant === 'microshot' ? 18 : 30};
+}
 
 export const MAX_SAVED_POP_PRESETS = 50, MAX_POP_PRESET_NAME = 40;
 const STORAGE_KEY = 'spraylab.pop.presets.v1';
@@ -44,12 +53,13 @@ export function capturePopPreset(settings: Settings, tieWeapon: boolean): Captur
  * screen picks it (a pistol is carried as the sidearm with no primary, anything else as the primary). */
 export function popPresetPatch(preset: Pick<PopPreset, 'settings' | 'weapon'>): Partial<Settings> {
   const {weapon} = preset;
-  return {...preset.settings, ...(weapon ? isPistol(weapon) ? {sidearm: weapon, primaryEnabled: false} : {weapon, primaryEnabled: true} : {})};
+  return {popVariant: 'classic', ...preset.settings, ...(weapon ? isPistol(weapon) ? {sidearm: weapon, primaryEnabled: false} : {weapon, primaryEnabled: true} : {})};
 }
 
 /** Whether the settings still are the preset: every key it sets, and the weapon it is tied to. */
 export function matchesPopPreset(preset: Pick<PopPreset, 'settings' | 'weapon'>, settings: Settings): boolean {
-  return (Object.keys(preset.settings) as PopPresetKey[]).every(key => settings[key] === preset.settings[key])
+  return (preset.settings.popVariant ?? 'classic') === settings.popVariant
+    && (Object.keys(preset.settings) as PopPresetKey[]).every(key => settings[key] === preset.settings[key])
     && (!preset.weapon || loadoutWeapon(settings) === preset.weapon);
 }
 

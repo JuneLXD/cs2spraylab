@@ -1,5 +1,5 @@
 import data from './game-data.json';
-import type {PopPadSound, PopRespawnMode, PopWallMaterial, PopWallSide} from './pop';
+import type {PopPadSound, PopRespawnMode, PopVariant, PopWallMaterial, PopWallSide} from './pop';
 import { nativeRecoilPattern } from './recoil';
 import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybinds/profile';
 import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
@@ -77,7 +77,7 @@ export type Settings = {
   /** Your bullet tracers: every round (practice), CS2's per-weapon cadence, or none. */
   tracers: 'every' | 'native' | 'off';
   /** Pop: ball diameter in cm, balls at once, minimum space between them (m), distance from you (m), ball colour. */
-  popSize: number; popCount: number; popSpacing: number; popDistance: number; popColor: string;
+  popVariant: PopVariant; popSize: number; popCount: number; popSpacing: number; popDistance: number; popColor: string;
   /** Pop: ammo as sv_infinite_ammo ('magazine' = 1 never reloads, 'reserve' = 2 reloads from a full reserve) and the hit sound. */
   popAmmo: 'off' | 'reserve' | 'magazine'; popSound: 'hitmarker' | 'synth' | 'pop';
   /** Pop only: no gunshot audio, no miss marks on the wall, no HUD over the view. */
@@ -127,7 +127,7 @@ export const defaults: Settings = {
   keyboard: defaultKeyboard,
   viewmodel: classicViewmodel,
   tracers: 'native',
-  popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
+  popVariant: 'classic', popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
   popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popWallbang: false, popWallMaterial: 'wood', popWallXray: true, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0, popMoveChance: .5,
   popPadWidth: .9, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime',
 };
@@ -180,6 +180,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     keyboard: sanitizeKeyboard(s.keyboard),
     viewmodel: sanitizeViewmodel(s.viewmodel),
     tracers: s.tracers === 'every' || s.tracers === 'off' ? s.tracers : 'native',
+    popVariant: s.popVariant === 'precision' || s.popVariant === 'wide' || s.popVariant === 'microshot' ? s.popVariant : 'classic',
     popSize: Math.round(numeric(s.popSize, defaults.popSize, 8, 80)), popCount: Math.round(numeric(s.popCount, defaults.popCount, 1, 12)),
     popSpacing: numeric(s.popSpacing, defaults.popSpacing, .2, 5), popDistance: numeric(s.popDistance, defaults.popDistance, 3, 40),
     popColor: typeof s.popColor === 'string' && /^#[\da-f]{6}$/i.test(s.popColor) ? s.popColor.toLowerCase() : defaults.popColor,

@@ -15,11 +15,18 @@ import {resolveBulletRay, type PenetrationSolid, type PenetrationStats, type Sur
  * `moveChance` is the share of balls that move at all: each ball that appears rolls it once and otherwise stays still. */
 export type PopWallSide = 'off' | 'left' | 'right' | 'both';
 export type PopRespawnMode = 'timer' | 'pad';
+export type PopVariant = 'classic' | 'precision' | 'wide' | 'microshot';
+export const popVariants: readonly {id: PopVariant; name: string; description: string}[] = [
+  {id: 'classic', name: 'Classic Pop', description: 'Build your own field of balls, movement and peek cover.'},
+  {id: 'precision', name: 'Precision', description: 'One small target on a tall, narrow panel. Settle your crosshair before each shot.'},
+  {id: 'wide', name: 'Wide Flicks', description: 'One target alternates across a wide field. Flick to the other side after each pop.'},
+  {id: 'microshot', name: 'Microshot', description: 'One square target in a compact panel. Make small, controlled corrections; the whole square counts.'},
+];
 /** What a wallbangable peek wall is made of: it sets how much of a bullet's damage the wall eats (CS2 surface materials). It
  * never changes how the wall looks. */
 export type PopWallMaterial = 'wood' | 'concrete' | 'metal';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
-export type PopConfig = {size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
+export type PopConfig = {variant: PopVariant; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
   wallbang: boolean; wallMaterial: PopWallMaterial;
   respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
@@ -61,15 +68,18 @@ export const POP_WALL = {edge: .35, height: 2.8, thickness: .4, ahead: 1.5, peek
 /** The materials a wallbangable peek wall can be made of, as the Wall material setting lists them. */
 export const popWallMaterials: readonly (readonly [PopWallMaterial, string])[] = [['wood', 'Wood'], ['concrete', 'Concrete'], ['metal', 'Metal']];
 
-export function popConfig(settings: {popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
+export function popConfig(settings: {popVariant: PopVariant; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
   popWallWidth: number; popWallbang: boolean; popWallMaterial: PopWallMaterial; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number;
   popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
-  return {size: settings.popSize / 100, count: settings.popCount, spacing: settings.popSpacing, distance: settings.popDistance,
+  const classic = settings.popVariant === 'classic';
+  return {variant: settings.popVariant, size: settings.popSize / 100, count: classic ? settings.popCount : 1, spacing: settings.popSpacing, distance: settings.popDistance,
     hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, wallbang: settings.popWallbang, wallMaterial: settings.popWallMaterial,
     respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
     padWidth: settings.popPadWidth, padDepth: settings.popPadDepth,
     x: {speed: settings.popMoveX, range: settings.popRangeX, flips: settings.popFlipX},
-    y: {speed: settings.popMoveY, range: settings.popRangeY, flips: settings.popFlipY}, moveChance: settings.popMoveChance};
+    y: {speed: settings.popMoveY, range: settings.popRangeY, flips: settings.popFlipY}, moveChance: settings.popMoveChance,
+    ...(!classic ? {wall: 'off' as const, wallbang: false, respawnMode: 'timer' as const,
+      x: {speed: 0, range: 0, flips: 0}, y: {speed: 0, range: 0, flips: 0}, moveChance: 0} : {})};
 }
 
 export const popWallSide = (wall: PopWallSide): -1 | 0 | 1 => wall === 'left' ? -1 : wall === 'right' ? 1 : 0;
@@ -98,6 +108,14 @@ export const popSpawn = (config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: 
  * between knee and head height. */
 export function popRegion(config: PopConfig, origin: Vec): PopRegion {
   const r = config.size / 2, gap = config.spacing + 2 * r;
+  if (config.variant !== 'classic') {
+    // These are panel edges; single-target spawns inset by the target radius below. Scale with distance so each
+    // exercise keeps its angular footprint until the physical floor/side-wall limits of the range.
+    const scale = config.distance / 8;
+    const halfW = config.variant === 'wide' ? Math.min(config.distance * .8, 11) : (config.variant === 'precision' ? .55 : 1) * scale;
+    const halfH = Math.min((config.variant === 'microshot' ? .6 : 1.25) * scale, 1.4);
+    return {x: origin.x, y: origin.y, z: origin.z - config.distance, halfW: Math.max(halfW, r * 2), halfH: Math.max(halfH, r * 2)};
+  }
   const wanted = Math.max(gap, gap * Math.sqrt(config.count) * .75);
   const halfW = Math.min(wanted, config.distance * Math.tan(45 * DEG) * .55);
   const halfH = Math.min(wanted * .6, config.distance * Math.tan(36.87 * DEG) * .45, 1.4);
@@ -138,6 +156,8 @@ export class PopField {
   /** Balls the pad brought back since the engine last asked, for its trigger sound and flash. */
   private padReturned = 0;
   private nextId = 1;
+  /** Retained across delayed respawns, so consecutive single targets cannot occupy the same spot. */
+  private previous?: PopBall;
   readonly region: PopRegion;
   readonly wall?: PopWall;
   /** The wall as a surface bullets can pass through; only when wallbang is on. */
@@ -154,6 +174,23 @@ export class PopField {
   /** A new ball at least the chosen space from every other one; when the wall cannot fit that, the clearest spot tried. */
   private spawn() {
     const {region, config} = this, r = config.size / 2, gap = config.spacing + 2 * r;
+    if (config.variant !== 'classic') {
+      const w = region.halfW - r, h = region.halfH - r;
+      const side = this.previous ? (this.previous.x >= region.x ? -1 : 1) : (this.random() < .5 ? -1 : 1);
+      let x = region.x, y = region.y;
+      for (let attempt = 0; attempt < 32; attempt++) {
+        x = region.x + (config.variant === 'wide' ? side * (.35 + this.random() * .65) : this.random() * 2 - 1) * w;
+        y = region.y + (this.random() * 2 - 1) * h;
+        if (!this.previous || Math.hypot(x - this.previous.x, y - this.previous.y) >= Math.min(config.size * 1.5, Math.max(w, h))) break;
+        // Even a constant RNG must produce a different, fully bounded target.
+        if (attempt === 31) {
+          x = region.x + (this.previous.x >= region.x ? -w : w);
+          y = region.y + (this.previous.y >= region.y ? -h : h);
+        }
+      }
+      const ball: PopBall = {id: this.nextId++, x, y, z: region.z, radius: r, hits: 0, vx: 0, vy: 0};
+      this.balls.push(ball); return ball;
+    }
     let best: PopBall | undefined, bestClearance = -Infinity;
     for (let attempt = 0; attempt < 64; attempt++) {
       const candidate = {id: this.nextId, x: region.x + (this.random() * 2 - 1) * region.halfW,
@@ -251,6 +288,15 @@ export class PopField {
     const limit = Math.min(maxDistance, pass ? pass.reach : this.wallHit(origin, direction, maxDistance)?.distance ?? Infinity);
     let nearest: PopHit | undefined;
     for (const ball of this.balls) {
+      if (this.config.variant === 'microshot') {
+        if (Math.abs(direction.z) < 1e-12) continue;
+        const t = (ball.z - origin.z) / direction.z;
+        if (t < 0 || t > limit) continue;
+        const point = {x: origin.x + direction.x * t, y: origin.y + direction.y * t, z: ball.z};
+        if (Math.abs(point.x - ball.x) > ball.radius + 1e-9 || Math.abs(point.y - ball.y) > ball.radius + 1e-9) continue;
+        if (!nearest || t < nearest.distance) nearest = {ball, point, distance: t, popped: false, wallbang: false};
+        continue;
+      }
       const ox = origin.x - ball.x, oy = origin.y - ball.y, oz = origin.z - ball.z;
       const b = ox * direction.x + oy * direction.y + oz * direction.z;
       const c = ox * ox + oy * oy + oz * oz - ball.radius * ball.radius;
@@ -265,6 +311,7 @@ export class PopField {
     this.hits++; nearest.ball.hits++;
     if (nearest.ball.hits < this.config.hits) return nearest;
     nearest.popped = true;
+    this.previous = nearest.ball;
     this.balls = this.balls.filter(ball => ball !== nearest!.ball); this.travel.delete(nearest.ball.id);
     this.pops++; this.popped.push(nearest.ball);
     if (this.config.respawnMode === 'pad') this.pending.push(Infinity);
@@ -276,6 +323,7 @@ export class PopField {
   /** How many balls stepping onto the pad brought back since the last call (0 when it has not triggered). */
   drainPadTrigger() {const returned = this.padReturned; this.padReturned = 0; return returned;}
   reset() {
+    this.previous = undefined;
     this.balls = []; this.popped = []; this.pending = []; this.travel.clear(); this.onPad = undefined; this.padReturned = 0;
     this.pops = this.hits = this.shots = 0;
     for (let i = 0; i < this.config.count; i++) this.spawn();

@@ -121,3 +121,29 @@ ones every other range drill uses.
   saved preset (and renames it when the name field changed), Delete removes it. The Play screen and Settings > Game both show
   the block, so the chosen preset is kept in the store (`selectedId`, not persisted) and both show the same one. Presets are not a drill-wide default: Restore
   drill defaults still resets every Pop setting, and presets never touch the ammo, sound or HUD options.
+
+
+## Specific modes (2026-10-25)
+
+The **Pop mode** selector offers Classic Pop plus three screenshot-inspired exercises. The user delegated the
+rules; these are original interpretations, not claims of exact parity with the reference map.
+
+- **Precision:** one 8 cm sphere at 8 m on a tall, narrow panel. Every pop relocates it within the panel.
+- **Wide Flicks:** one 30 cm sphere at 6 m. Replacements alternate left/right, between 35% and 100% of the
+  usable half width, with random height. The field spans roughly 77 degrees horizontally at the start position.
+- **Microshot:** one 18 cm square at 8 m in a compact landscape panel. A hit anywhere inside the outline,
+  including its centre and corners, counts; ray/plane bounds match the rendered square.
+
+Selecting a mode resets the core drill settings to its recommended setup and recentres the player. Target size,
+distance, hits to pop and respawn delay remain adjustable. Colours, weapon, ammo, sound and HUD are preserved.
+Only Classic exposes multiple targets, movement, spacing, peek walls and pad respawning. The three specific
+modes enforce one stationary target, no cover and timer respawns, even if imported settings contain old Classic
+values. Panel bounds include target radius; replacements avoid the previous target, including after a delay.
+Regular recoil, spread, scoring, hit sounds and endless session handling remain shared with Pop.
+
+`popVariant` is stored with settings and saved presets and is an additional core preset key. Old settings and
+presets default to Classic; loading an old or built-in preset exits the specific mode. Restore drill defaults
+also returns to Classic. Rendering uses a subtle framed panel and a square outline for Microshot; miss impacts
+land on the panel. No external assets are required.
+
+Coverage: `pop-variants.test.ts`, existing Pop/preset regression tests, and `tests/pop-modes.spec.ts`.

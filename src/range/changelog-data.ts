@@ -445,6 +445,10 @@ export const latestChanges = {
       'Save the current setup under your own name, then update, rename or delete it later. Saved presets keep the colours too, stay in this browser, and never include your ammo, sound or HUD options.',
       'A preset can be tied to a weapon: loading it equips that weapon, as the long range, spray control, pistol and concrete wallbang presets do. Tick Tie to my current weapon when you save your own.',
     ]},
+    {id: 'pop-specific-modes', title: 'Pop: Precision, Wide Flicks and Microshot', items: [
+      'Choose a dedicated mode within Pop: a tiny target on a tall Precision panel, alternating single-target Wide Flicks, or a square Microshot target in a compact panel.',
+      'Tune target size, distance, hits and respawn delay, and save the mode in a preset. Your weapon, colours, ammo, sound and HUD preferences carry across modes; Classic Pop keeps its full set of controls.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

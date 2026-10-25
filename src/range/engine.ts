@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {popFrameGeometry} from './pop-geometry';
 import {recoilView} from './view-recoil';
 import {ViewmodelAir} from './viewmodel-air';
 import {followCrosshairDirection, followCrosshairOffset} from './crosshair-follow';
@@ -79,7 +80,9 @@ export class RangeEngine {
   private popMeshes = new Map<number, THREE.Mesh>();
   private popBursts: {mesh: THREE.Mesh; at: number; radius: number}[] = [];
   private popBackdrop?: THREE.Mesh;
+  private popPanel?: THREE.Mesh;
   private popGeometry = new THREE.SphereGeometry(1, 32, 20);
+  private popSquareGeometry = popFrameGeometry(1, 1, .3);
   popMaterial = new THREE.MeshStandardMaterial({color: '#ff6a4d', emissive: '#ff6a4d', emissiveIntensity: .8, roughness: .35, metalness: 0, fog: false});
   private popColorApplied = '';
   private popBackgroundApplied = '';
@@ -509,7 +512,7 @@ export class RangeEngine {
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
+      'popVariant', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -719,7 +722,7 @@ export class RangeEngine {
   private popBackdropPoint(origin: Vec, dir: Vec, maxDistance: number) {
     if (!this.popBackdrop) return undefined;
     this.ray.set(vector(origin), vector(dir));
-    const hit = this.ray.intersectObject(this.popBackdrop, false)[0];
+    const hit = this.ray.intersectObjects(this.popPanel ? [this.popPanel, this.popBackdrop] : [this.popBackdrop], false)[0];
     return hit && hit.distance <= maxDistance ? hit.point : undefined;
   }
   /** Mirrors the simulation's balls as glowing spheres (dimmer once hit), animates the popped ones away, and keeps the
@@ -747,9 +750,24 @@ export class RangeEngine {
       this.popBackdrop.position.set(region.x, Math.max(height / 2, region.y), region.z - config.size - .5);
       this.popBackdrop.name = 'pop-backdrop'; this.pop.add(this.popBackdrop);
     }
+    if (config.variant !== 'classic' && !this.popPanel) {
+      this.popPanel = new THREE.Mesh(new THREE.PlaneGeometry(region.halfW * 2, region.halfH * 2),
+        new THREE.MeshBasicMaterial({fog: false}));
+      this.popPanel.name = 'pop-panel'; this.popPanel.position.set(region.x, region.y, region.z - .04);
+      const edge = new THREE.Mesh(popFrameGeometry(region.halfW, region.halfH, .04 * config.distance / 8), new THREE.MeshBasicMaterial({fog: false}));
+      edge.name = 'pop-panel-edge'; edge.position.z = .002; this.popPanel.add(edge); this.pop.add(this.popPanel);
+      this.popBackgroundApplied = ''; // Apply the background and panel colours together below.
+    }
     if (this.popBackgroundApplied !== this.sim.settings.popBackground) {
       this.popBackgroundApplied = this.sim.settings.popBackground;
       (this.popBackdrop.material as THREE.MeshBasicMaterial).color.set(this.popBackgroundApplied);
+      if (this.popPanel) {
+        const panel = this.popPanel.material as THREE.MeshBasicMaterial;
+        panel.color.set(this.popBackgroundApplied);
+        const contrast = panel.color.r + panel.color.g + panel.color.b > 1.5 ? '#111827' : '#dbe5f5';
+        panel.color.lerp(new THREE.Color(contrast), .06);
+        ((this.popPanel.children[0] as THREE.Mesh).material as THREE.MeshBasicMaterial).color.set(contrast);
+      }
     }
     if (pop.wall && !this.popWall) {
       const wall = pop.wall;
@@ -796,7 +814,7 @@ export class RangeEngine {
     for (const ball of pop.balls) {
       live.add(ball.id);
       let mesh = this.popMeshes.get(ball.id);
-      if (!mesh) {mesh = new THREE.Mesh(this.popGeometry, this.popMaterial); mesh.name = `pop-ball-${ball.id}`; this.popMeshes.set(ball.id, mesh); this.pop.add(mesh);}
+      if (!mesh) {mesh = new THREE.Mesh(config.variant === 'microshot' ? this.popSquareGeometry : this.popGeometry, this.popMaterial); mesh.name = `pop-ball-${ball.id}`; this.popMeshes.set(ball.id, mesh); this.pop.add(mesh);}
       // Each ball carries a faint ghost that only shows where the wall hides it.
       if (mesh.children.length !== +ghosts) {
         mesh.clear();
@@ -826,7 +844,9 @@ export class RangeEngine {
     return material;
   }
   private clearPopScene() {
+    this.popBursts.forEach(({mesh}) => (mesh.material as THREE.Material).dispose());
     this.pop.clear(); this.popMeshes.clear(); this.popBursts = [];
+    this.popPanel?.traverse(object => {const mesh = object as THREE.Mesh; mesh.geometry.dispose(); (mesh.material as THREE.Material).dispose();}); this.popPanel = undefined;
     this.popBackdrop?.geometry.dispose(); (this.popBackdrop?.material as THREE.Material | undefined)?.dispose(); this.popBackdrop = undefined;
     this.popWall?.geometry.dispose(); this.popWall?.children.forEach(child => (child as THREE.Mesh).geometry.dispose()); this.popWall = undefined;
     this.popPad?.geometry.dispose(); this.popPad?.children.forEach(child => (child as THREE.Mesh).geometry.dispose()); this.popPad = undefined;
@@ -1147,7 +1167,7 @@ export class RangeEngine {
     disposeResources([this.scene, ...this.solids]); this.modelCache.forEach(m => this.disposeObject(m));
     this.viewAnimations.forEach(animation => animation.dispose());
     this.scope.dispose();
-    this.popGeometry.dispose(); this.popMaterial.dispose(); this.clearPopScene();
+    this.popGeometry.dispose(); this.popSquareGeometry.dispose(); this.popMaterial.dispose(); this.clearPopScene();
     this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popGhostMaterial.dispose(); this.popPadMaterial.dispose(); this.popPadEdgeMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
     this.markerGeometry.dispose(); this.missMaterial.dispose(); this.hitMaterial.dispose(); this.bodyMaterial.dispose();
     this.cues.forEach(c => c.remove()); this.hitCaption.remove();
