@@ -5,6 +5,21 @@ of you; a shot pops the first ball it crosses and a new one appears elsewhere. I
 (`mode: 'pop'`, category Aim warm-up), so the weapon, recoil, spread, reload and crosshair code are the
 ones every other range drill uses.
 
+- **Close Pairs** and **Pokeball** (2026-10-25): two 8 cm dots at 8 m, default centre spacing 0.35 m,
+  bounded to a fixed 1 m centre radius. Clearing either dot spawns its replacement near the surviving dot,
+  which stays put. Random directions that leave the circle are retried; an inward fallback always fits.
+  `popPairGap` (0.12–1 m) and `popPairRadius` (0.3–1.2 m) are adjustable. Effective spacing is capped by
+  radius and grows to diameter + 2 cm when needed to avoid overlap; the radius grows with it if necessary.
+  Both modes support target size, distance, respawn delay, 3D balls and saved presets. They ignore Classic
+  movement, cover and pad settings. Close Pairs uses normal weapon shots and the existing hits-to-pop control.
+- Pokeball uses held-fire contact time, independent of weapon bullets, recoil, spread, ammo and fire rate.
+  `popHoldTime` is 50–500 ms (default 150 ms). Each dot accumulates progress while the actual crosshair ray
+  intersects its sphere; partial progress remains when you leave or release. The dot darkens and the HUD
+  shows current progress. Release stops damage; pause freezes time and clears held input; reset clears
+  all progress and stats. The crosshair remains visible with normally unscoped sniper weapons too.
+  HUD and history report on-target time percentage, with off-target seconds and pops per minute in the HUD.
+  Results use optional `pokeball` time totals, never fabricated bullet counts. Normal Pop bullet rules remain
+  unchanged. Regression coverage: `pop-pairs.test.ts`, `tests/pop-pairs.spec.ts`.
 - **3D balls** (2026-10-25): optional shaded spheres in every Pop mode (`pop3D`, off by default).
   A generated neutral matcap gives the existing sphere geometry a highlight and dark rim, while preserving
   the chosen ball colour and dim room lighting. Switching the appearance keeps target positions, motion,

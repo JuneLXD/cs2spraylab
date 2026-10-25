@@ -41,7 +41,7 @@ function readResults(): Result[] {
     const a = JSON.parse(localStorage.getItem('spraylab.results.v2') || '[]');
     return Array.isArray(a) ? a.filter(r => r && equipmentIds.includes(r.weapon) && typeof r.id === 'string'
       && ['shots', 'hits', 'heads', 'seconds', 'tracking'].every(k => Number.isFinite(r[k])) && Number.isFinite(Date.parse(r.date))
-      && Array.isArray(r.samples) && r.samples.length <= 150 && r.samples.every((p: Record<string, unknown>) => p && ['x', 'y', 'bullet'].every(k => Number.isFinite(p[k])))).slice(0, 100).map(r => ({ ...r, drill:readDrillMetrics(r.drill), mode: r.mode === 'tracking' ? 'tracking' : migrateMode(r.mode) })) : [];
+      && Array.isArray(r.samples) && r.samples.length <= 150 && r.samples.every((p: Record<string, unknown>) => p && ['x', 'y', 'bullet'].every(k => Number.isFinite(p[k])))).slice(0, 100).map(r => ({ ...r, pokeball: r.pokeball && ['pops', 'heldSeconds', 'onTargetSeconds'].every(k => Number.isFinite(r.pokeball[k]) && r.pokeball[k] >= 0) && r.pokeball.onTargetSeconds <= r.pokeball.heldSeconds ? r.pokeball : undefined, drill:readDrillMetrics(r.drill), mode: r.mode === 'tracking' ? 'tracking' : migrateMode(r.mode) })) : [];
   } catch { return []; }
 }
 const emptyStatus: RangeStatus = { weapon: 'ak47', equipped:'ak47',slot:1,equipReady:true,magazine:30, active: false, firing: false, shots: 0, hits: 0, heads: 0, remaining: 30, reload: 0, speed: 0, distance: 12, input: 'Ready', audio: 'locked', assets: 'Loading models', fps: 0 };
@@ -97,7 +97,7 @@ export default function RangeApp() {
   const drawer = useRef<HTMLElement>(null);
   const selectedWeapon = loadoutWeapon(settings);
   const assetReady = status.assets === 'Models ready' && status.weapon === selectedWeapon;
-  const score = settings.mode==='precision' ? status.drill?.last?.movementScore ?? 0 : settings.mode === 'pop' ? status.pop?.shots ? status.pop.hits / status.pop.shots * 100 : 0 : status.shots ? status.hits / status.shots * 100 : 0;
+  const score = settings.mode==='precision' ? status.drill?.last?.movementScore ?? 0 : settings.mode === 'pop' ? status.pop?.hold ? (status.pop.hold.heldSeconds ? status.pop.hold.onTargetSeconds / status.pop.hold.heldSeconds * 100 : 0) : status.pop?.shots ? status.pop.hits / status.pop.shots * 100 : 0 : status.shots ? status.hits / status.shots * 100 : 0;
   const showRepFeedback=repFeedback?.mode===settings.mode && status.active && !status.firing && !status.hitFlash;
   const update = useCallback((patch: Partial<Settings>) => setSettings(s => ({ ...s, ...patch })), []);
   // A manual edit replaces the CS2 convars; the next bound crosshair command starts from this crosshair.
@@ -239,8 +239,9 @@ export default function RangeApp() {
       {settings.mode === 'hearing' ? <HearingPractice backToPlay={play} volume={settings.volume} openSettings={() => open('settings')} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' || settings.mode === 'deathmatch' || settings.mode === 'blitz' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={entered} engineRef={duel} onMenuStatus={onDuelMenu} controlsTarget={controlsTarget} config={selectedDuel.config} update={selectedDuel.update} resetSetup={settings.mode==='duel'||settings.mode==='deathmatch'?selectedDuel.reset:settings.mode==='blitz'?blitzConfig.reset:selectedBotz.reset} botz={selectedBotz.config} updateBotz={selectedBotz.update} blitz={blitzConfig.config} updateBlitz={blitzConfig.update} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view sl-game-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
-      <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
+      <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{settings.mode === 'pop' && settings.popVariant === 'pokeball' ? 'CONTINUOUS AIM' : profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
       {!isDrillMode(settings.mode)&&<div className="target-label">{settings.mode === 'pop' ? popVariants.find(variant => variant.id === settings.popVariant)?.name : modeNames[settings.mode]} <span>{status.distance.toFixed(1)} m</span>
+        {settings.mode === 'pop' && settings.popVariant === 'pokeball' && <span data-testid="pop-hold-cue">Hold fire · {Math.round((status.pop?.hold?.progress ?? 0) * 100)}% cleared</span>}
         {settings.mode === 'pop' && settings.popVariant === 'precision' && <span data-testid="pop-center-cue">{status.pop?.phase === 'target' ? 'Shoot the moving dot' : 'Aim at the center dot'}</span>}
         {settings.mode === 'pop' && settings.popVariant === 'microshot' && <span data-testid="pop-cluster-cue">{status.pop?.cluster?.remaining === 0 ? 'Next rectangle…' : `${status.pop?.cluster?.remaining ?? settings.popClusterCount}/${settings.popClusterCount} dots left`} · {status.pop?.cluster?.cleared ?? 0} cleared</span>}</div>}
       {settings.mode === 'transfer' && settings.transferRule === 'kill' && <div className="transfer-health" aria-label="Transfer target health">
@@ -253,7 +254,7 @@ export default function RangeApp() {
       {settings.mode==='peek'&&status.active&&!!status.drill?.peekDirection&&<div className="peek-direction" role="status" aria-label={`Peek ${status.drill.peekDirection<0?'left':'right'}`}>
         {status.drill.peekDirection<0?<ArrowLeft size={32}/>:<ArrowRight size={32}/>}<span>Peek {status.drill.peekDirection<0?'left':'right'}</span>
       </div>}
-      {!settings.spread&&<button className="spread-warning" onClick={()=>{update({spread:true});}} title="Enable movement and firing inaccuracy">Spread off<Shield size={12}/></button>}
+      {!settings.spread&&!(settings.mode === 'pop' && settings.popVariant === 'pokeball')&&<button className="spread-warning" onClick={()=>{update({spread:true});}} title="Enable movement and firing inaccuracy">Spread off<Shield size={12}/></button>}
       <div className="hit-marker" ref={hitmarker}><X size={42} strokeWidth={3} /></div>
       {showRepFeedback&&repFeedback&&<div className={`rep-feedback${repFeedback.passed?' passed':''}`} role="status" aria-label="Rep feedback"><Check className="sl-rep-icon" size={24}/><div><b>{repFeedback.message}</b>{repFeedback.tip&&<p>{repFeedback.tip}</p>}</div></div>}
       {error && <div className="range-error" role="alert"><Shield size={24} /><p>{error}</p><button onClick={() => { setError(''); setGeneration(g => g + 1); }}><RotateCcw size={16} />Restart range</button></div>}
@@ -266,8 +267,10 @@ export default function RangeApp() {
         <ScoreBar className="hud-result">
           {settings.mode === 'pop' ? <>
             <ScoreCell value={status.pop?.pops ?? 0} label="POPS" tone="gold"/>
-            <ScoreCell value={<>{Math.round(score)}<em>%</em></>} label="HIT RATE" testId="accuracy"/>
-            <ScoreCell value={(status.pop?.shots ?? 0) - (status.pop?.hits ?? 0)} label="MISS" tone="miss"/>
+            <ScoreCell value={<>{Math.round(score)}<em>%</em></>} label={settings.popVariant === 'pokeball' ? "ON TARGET" : "HIT RATE"} testId="accuracy"/>
+            {settings.popVariant === 'pokeball'
+              ? <ScoreCell value={`${Math.max(0, (status.pop?.hold?.heldSeconds ?? 0) - (status.pop?.hold?.onTargetSeconds ?? 0)).toFixed(1)}s`} label="OFF TARGET" tone="miss"/>
+              : <ScoreCell value={(status.pop?.shots ?? 0) - (status.pop?.hits ?? 0)} label="MISS" tone="miss"/>}
             <ScoreCell value={status.pop?.seconds ? Math.round(status.pop.pops / status.pop.seconds * 60) : 0} label="POPS / MIN" tone="blue"/>
           </> : <>
             <ScoreCell value={status.heads} label="HEAD" tone="gold"/>

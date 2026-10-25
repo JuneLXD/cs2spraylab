@@ -15,18 +15,21 @@ import {resolveBulletRay, type PenetrationSolid, type PenetrationStats, type Sur
  * `moveChance` is the share of balls that move at all: each ball that appears rolls it once and otherwise stays still. */
 export type PopWallSide = 'off' | 'left' | 'right' | 'both';
 export type PopRespawnMode = 'timer' | 'pad';
-export type PopVariant = 'classic' | 'precision' | 'wide' | 'microshot';
+export type PopVariant = 'classic' | 'precision' | 'wide' | 'microshot' | 'closepairs' | 'pokeball';
+export const pairedPop = (variant: PopVariant) => variant === 'closepairs' || variant === 'pokeball';
 export const popVariants: readonly {id: PopVariant; name: string; description: string}[] = [
   {id: 'classic', name: 'Classic Pop', description: 'Build your own field of balls, movement and peek cover.'},
   {id: 'precision', name: 'Center Return', description: 'Aim at the fixed center dot, shoot the moving dot entering from a side, then return to center to start the next rep.'},
   {id: 'wide', name: 'Micro Flicks', description: 'One dot starts at center and smoothly moves a short distance in a random direction after each hit. It always stays within the center radius.'},
   {id: 'microshot', name: 'Microshot', description: 'Clear every dot inside the small rectangle. Only then does the rectangle move to a new position with a fresh group.'},
+  {id: 'closepairs', name: 'Close Pairs', description: 'Two nearby dots. Click either one; its replacement appears close to the remaining dot. Keep making short, controlled corrections.'},
+  {id: 'pokeball', name: 'Pokeball', description: 'Hold fire and settle on each dot until it pops. Progress stays on partially cleared dots as you switch between them.'},
 ];
 /** What a wallbangable peek wall is made of: it sets how much of a bullet's damage the wall eats (CS2 surface materials). It
  * never changes how the wall looks. */
 export type PopWallMaterial = 'wood' | 'concrete' | 'metal';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
-export type PopConfig = {variant: PopVariant; precisionSpeed: number; flickStep: number; flickRadius: number; clusterWidth: number; clusterHeight: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
+export type PopConfig = {variant: PopVariant; pairGap: number; pairRadius: number; holdTime: number; precisionSpeed: number; flickStep: number; flickRadius: number; clusterWidth: number; clusterHeight: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
   wallbang: boolean; wallMaterial: PopWallMaterial;
   respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
@@ -72,14 +75,15 @@ export const POP_WALL = {edge: .35, height: 2.8, thickness: .4, ahead: 1.5, peek
 /** The materials a wallbangable peek wall can be made of, as the Wall material setting lists them. */
 export const popWallMaterials: readonly (readonly [PopWallMaterial, string])[] = [['wood', 'Wood'], ['concrete', 'Concrete'], ['metal', 'Metal']];
 
-export function popConfig(settings: {popVariant: PopVariant; popPrecisionSpeed: number; popFlickStep: number; popFlickRadius: number; popClusterCount: number; popClusterWidth: number; popClusterHeight: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
+export function popConfig(settings: {popVariant: PopVariant; popPairGap: number; popPairRadius: number; popHoldTime: number; popPrecisionSpeed: number; popFlickStep: number; popFlickRadius: number; popClusterCount: number; popClusterWidth: number; popClusterHeight: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
   popWallWidth: number; popWallbang: boolean; popWallMaterial: PopWallMaterial; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number;
   popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
   const classic = settings.popVariant === 'classic';
-  return {variant: settings.popVariant, precisionSpeed: settings.popPrecisionSpeed, flickStep: Math.min(settings.popFlickStep, settings.popFlickRadius), flickRadius: settings.popFlickRadius,
+  const pairGap = Math.max(settings.popSize / 100 + .02, Math.min(settings.popPairGap, settings.popPairRadius));
+  return {variant: settings.popVariant, pairGap, pairRadius: Math.max(settings.popPairRadius, pairGap), holdTime: settings.popHoldTime, precisionSpeed: settings.popPrecisionSpeed, flickStep: Math.min(settings.popFlickStep, settings.popFlickRadius), flickRadius: settings.popFlickRadius,
     clusterWidth: settings.popClusterWidth, clusterHeight: settings.popClusterHeight,
-    size: settings.popSize / 100, count: classic ? settings.popCount : settings.popVariant === 'microshot' ? settings.popClusterCount : 1, spacing: settings.popSpacing, distance: settings.popDistance,
-    hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, wallbang: settings.popWallbang, wallMaterial: settings.popWallMaterial,
+    size: settings.popSize / 100, count: classic ? settings.popCount : settings.popVariant === 'microshot' ? settings.popClusterCount : pairedPop(settings.popVariant) ? 2 : 1, spacing: settings.popSpacing, distance: settings.popDistance,
+    hits: settings.popVariant === 'pokeball' ? 1 : settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, wallbang: settings.popWallbang, wallMaterial: settings.popWallMaterial,
     respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
     padWidth: settings.popPadWidth, padDepth: settings.popPadDepth,
     x: {speed: settings.popMoveX, range: settings.popRangeX, flips: settings.popFlipX},
@@ -124,6 +128,8 @@ function clusterLayout(config: PopConfig) {
  * between knee and head height. */
 export function popRegion(config: PopConfig, origin: Vec): PopRegion {
   const r = config.size / 2, gap = config.spacing + 2 * r;
+  if (pairedPop(config.variant)) return {x: origin.x, y: origin.y, z: origin.z - config.distance,
+    halfW: config.pairRadius + r, halfH: config.pairRadius + r};
   if (config.variant === 'wide') return {x: origin.x, y: origin.y, z: origin.z - config.distance,
     halfW: config.flickRadius + r, halfH: config.flickRadius + r};
   if (config.variant === 'microshot') {
@@ -168,6 +174,8 @@ export class PopField {
   balls: PopBall[] = [];
   /** Balls burst, bullets that touched a ball (pops included), and shots fired this session. */
   pops = 0; hits = 0; shots = 0;
+  heldSeconds = 0; onTargetSeconds = 0; holdTarget?: number;
+  get holdProgress() {return this.balls.find(ball => ball.id === this.holdTarget)?.hits ?? 0;}
   /** Balls popped since the renderer last asked, for the burst animation. */
   private popped: PopBall[] = [];
   /** Replacements waiting: when each is due in simulation seconds (Infinity = until you step on the pad). */
@@ -286,6 +294,18 @@ export class PopField {
       const ball: PopBall = {id: this.nextId++, x: region.x, y: region.y, z: region.z, radius: r, hits: 0, vx: 0, vy: 0};
       this.balls.push(ball); return ball;
     }
+    if (pairedPop(config.variant)) {
+      const anchor = this.balls[0];
+      let x = region.x, y = region.y;
+      if (anchor) for (let attempt = 0; attempt <= 64; attempt++) {
+        // The inward fallback always fits because gap <= radius. Never move the surviving dot.
+        const angle = attempt < 64 ? this.random() * Math.PI * 2 : Math.atan2(region.y - anchor.y, region.x - anchor.x);
+        x = anchor.x + Math.cos(angle) * config.pairGap; y = anchor.y + Math.sin(angle) * config.pairGap;
+        if (Math.hypot(x - region.x, y - region.y) <= config.pairRadius + 1e-9) break;
+      }
+      const ball: PopBall = {id: this.nextId++, x, y, z: region.z, radius: r, hits: 0, vx: 0, vy: 0};
+      this.balls.push(ball); return ball;
+    }
     let best: PopBall | undefined, bestClearance = -Infinity;
     for (let attempt = 0; attempt < 64; attempt++) {
       const candidate = {id: this.nextId, x: region.x + (this.random() * 2 - 1) * region.halfW,
@@ -386,12 +406,33 @@ export class PopField {
    * the far side keeps going as far as it has damage left (`reach`) and one that did not stops at the wall's face. Undefined
    * for a miss. */
   hit(origin: Vec, direction: Vec, maxDistance = Infinity, time = this.now, pass?: PopWallPass): PopHit | undefined {
+    if (this.config.variant === 'pokeball') return undefined;
     if (this.config.variant === 'wide') {
       this.advanceFlick(time);
       // Keep the dot visible during a configured delay, without scoring repeated hits at its old position.
       // This also stops other pellets from the clearing shot from immediately scoring the same dot again.
       if (this.flickMotion && time <= this.flickMotion.at + 1e-9) return undefined;
     }
+    const nearest = this.raycast(origin, direction, maxDistance, pass);
+    if (!nearest) return undefined;
+    this.hits++; nearest.ball.hits++;
+    if (nearest.ball.hits < this.config.hits) return nearest;
+    return this.clearBall(nearest, time);
+  }
+  /** Held-fire damage is time on the visible sphere, independent of weapon rate, recoil or frame rate. */
+  hold(origin: Vec, direction: Vec, dt: number, time = this.now): PopHit | undefined {
+    if (this.config.variant !== 'pokeball' || dt <= 0) return undefined;
+    this.heldSeconds += dt;
+    const nearest = this.raycast(origin, direction);
+    this.holdTarget = nearest?.ball.id;
+    if (!nearest) return undefined;
+    this.onTargetSeconds += dt;
+    nearest.ball.hits = Math.min(1, nearest.ball.hits + dt / this.config.holdTime);
+    if (nearest.ball.hits < 1 - 1e-9) return nearest;
+    this.holdTarget = undefined;
+    return this.clearBall(nearest, time);
+  }
+  private raycast(origin: Vec, direction: Vec, maxDistance = Infinity, pass?: PopWallPass) {
     const limit = Math.min(maxDistance, pass ? pass.reach : this.wallHit(origin, direction, maxDistance)?.distance ?? Infinity);
     let nearest: PopHit | undefined;
     for (const ball of this.balls) {
@@ -405,9 +446,9 @@ export class PopField {
       if (!nearest || t < nearest.distance) nearest = {ball, distance: t, popped: false, wallbang: !!pass?.exit && t > pass.exit.distance,
         point: {x: origin.x + direction.x * t, y: origin.y + direction.y * t, z: origin.z + direction.z * t}};
     }
-    if (!nearest) return undefined;
-    this.hits++; nearest.ball.hits++;
-    if (nearest.ball.hits < this.config.hits) return nearest;
+    return nearest;
+  }
+  private clearBall(nearest: PopHit, time: number): PopHit {
     nearest.popped = true;
     if (this.config.variant === 'wide') {
       this.pops++; nearest.ball.hits = 0; this.startFlick(nearest.ball, time);
@@ -431,7 +472,7 @@ export class PopField {
   reset() {
     this.flickMotion = undefined;
     this.balls = []; this.popped = []; this.pending = []; this.travel.clear(); this.onPad = undefined; this.padReturned = 0;
-    this.pops = this.hits = this.shots = 0;
+    this.pops = this.hits = this.shots = this.heldSeconds = this.onTargetSeconds = 0; this.holdTarget = undefined;
     this.cluster = undefined; this.nextClusterAt = undefined; this.clustersCleared = 0;
     if (this.config.variant === 'microshot') this.spawnCluster();
     else if (this.center) {this.returnToCenter(this.now); this.precisionReadyAt = this.now;}

@@ -7,7 +7,7 @@ import type {PopVariant} from './pop';
 
 /** What every preset sets: the balls, how popped balls come back, and the peek wall with its wallbang switch. Built-in
  * presets set exactly these, so loading one fully replaces the scenario. */
-export const popCoreKeys = ['popVariant', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popRespawn', 'popRespawnMode',
+export const popCoreKeys = ['popVariant', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popRespawn', 'popRespawnMode',
   'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance', 'popWall', 'popWallWidth', 'popWallbang'] as const;
 /** Everything a saved preset keeps. The extra keys (wall material, pad size, colours, see-through balls) are details a
  * built-in preset leaves as you have them, unless it is about that detail (the wallbang presets pick a material). */
@@ -26,7 +26,7 @@ export type CapturedPopPreset = {settings: PopPresetSettings; weapon?: Weapon};
 export function popVariantPatch(popVariant: PopVariant): PopPresetSettings {
   const core = Object.fromEntries(popCoreKeys.map(key => [key, defaults[key]])) as PopPresetSettings;
   if (popVariant === 'classic') return core;
-  return {...core, popVariant, popCount: 1, popDistance: 8, popSize: 8};
+  return {...core, popVariant, popCount: popVariant === 'closepairs' || popVariant === 'pokeball' ? 2 : 1, popDistance: 8, popSize: 8};
 }
 
 export const MAX_SAVED_POP_PRESETS = 50, MAX_POP_PRESET_NAME = 40;

@@ -27,7 +27,11 @@ export type Shot = {index: number; at: number; origin: Vec; direction: Vec; reco
   maxDistance: number; pelletDirections?: Vec[]; firstSlash?: boolean};
 export type RangeWeaponActionEvent = (ReloadActionEvent | {kind: 'zeus-discharge' | 'zeus-ready'; at: number}) & {equipment: Equipment};
 export type ImpactSample = { x: number; y: number; hit: boolean; head: boolean; bullet: number };
-export type Result = { id: string; weapon: Equipment; mode: Settings['mode'] | 'tracking'; shots: number; hits: number; heads: number; seconds: number; tracking: number; date: string; samples: ImpactSample[]; drill?: DrillMetrics };
+export type Result = { id: string; weapon: Equipment; mode: Settings['mode'] | 'tracking'; shots: number; hits: number; heads: number; seconds: number; tracking: number; date: string; samples: ImpactSample[]; drill?: DrillMetrics; pokeball?: {pops: number; heldSeconds: number; onTargetSeconds: number} };
+export function resultAccuracy(result: Result) {
+  return result.pokeball ? (result.pokeball.heldSeconds ? result.pokeball.onTargetSeconds / result.pokeball.heldSeconds * 100 : 0)
+    : result.mode === 'tracking' ? result.tracking : result.shots ? result.hits / result.shots * 100 : 0;
+}
 export type Input = MoveInput;
 
 export {mouseAngle} from './mouse-look';
@@ -227,10 +231,12 @@ export class Simulation {
   /** Pop keeps one running tally per session; a pause records it once per new shots. */
   publishPopResult() {
     const pop = this.pop;
-    if (!pop || !pop.shots || pop.shots === this.popPublishedShots) return;
-    this.popPublishedShots = pop.shots;
+    const activity = pop ? pop.heldSeconds || pop.shots : 0;
+    if (!pop || !activity || activity === this.popPublishedShots) return;
+    this.popPublishedShots = activity;
     this.latest = {id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, weapon: this.equipped, mode: 'pop', shots: pop.shots, hits: pop.hits,
-      heads: 0, seconds: this.time - this.popStartedAt, tracking: 0, date: new Date().toISOString(), samples: []};
+      heads: 0, seconds: this.time - this.popStartedAt, tracking: 0, date: new Date().toISOString(), samples: [],
+      ...(pop.config.variant === 'pokeball' ? {pokeball: {pops: pop.pops, heldSeconds: pop.heldSeconds, onTargetSeconds: pop.onTargetSeconds}} : {})};
     this.attempts++; this.onResult(this.latest);
   }
   equip(slot: Slot) {
@@ -327,6 +333,11 @@ export class Simulation {
     return started;
   }
   start(automatic = false, alternate = false, scheduledAt = this.time) {
+    if (this.pop?.config.variant === 'pokeball') {
+      if (alternate) return false;
+      this.active = this.firing = true; this.automatic = automatic; this.resumeHeldAt = undefined;
+      return true;
+    }
     if (this.firing || this.time < Math.max(this.equipReadyAt, this.actions.readyAt) || this.drill?.finished) return false;
     if(this.equipped==='knife'&&this.time<(this.shotReady.get('knife')??0))return false;
     if (this.reloadState.active) {
@@ -380,6 +391,7 @@ export class Simulation {
   finish() {
     if (!this.firing) return;
     this.firing = false; this.automatic = false;
+    if (this.pop) this.pop.holdTarget = undefined;
     this.actions.chargeTrigger(this.time, false);
     this.readyAt = this.time;
     if (this.shots && !this.drill && !this.pop) this.publishResult();
@@ -469,11 +481,15 @@ export class Simulation {
     }
     if (reloading && !this.reloadState.active && !weapon.reloadsSingleShells) recovery.reloadFinished();
     this.recoil=this.equipped==='knife' || this.equipped==='zeus'?{yaw:0,pitch:0}:recovery.recoil;
-    if (this.pop?.center) {
+    if (this.pop?.center || this.pop?.config.variant === 'pokeball') {
       const view = recoilView(this.yaw, this.pitch, this.recoil, this.viewPunch.sample(this.time));
       const aim = this.settings.follow && !this.actions.hidesViewmodel
         ? followCrosshairDirection(this.yaw, this.pitch, this.recoil) : direction(view.yaw, view.pitch);
-      this.pop.advance(this.time, this.position, aim);
+      if (this.pop.center) this.pop.advance(this.time, this.position, aim);
+      else if (this.firing) {
+        if (!this.pop.heldSeconds) this.popStartedAt = this.time - dt;
+        this.pop.hold(this.position, aim, dt, this.time);
+      }
     }
     if (this.settings.moving && !this.drill) {
       const extent = this.settings.mode === 'transfer' ? 1.25 : 3;
@@ -516,6 +532,7 @@ export class Simulation {
     recovery.finishAccuracy();
   }
   fire() {
+    if (this.pop?.config.variant === 'pokeball') return;
     const weapon = this.stats;
     if (this.time + 1e-9 < (this.shotReady.get(this.equipped) ?? 0)) return;
     if (this.reloadState.active && (this.reloadState.empty || !this.reloadState.interrupt(this.time))) return;
