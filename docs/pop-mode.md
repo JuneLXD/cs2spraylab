@@ -147,3 +147,27 @@ also returns to Classic. Rendering uses a subtle framed panel and a square outli
 land on the panel. No external assets are required.
 
 Coverage: `pop-variants.test.ts`, existing Pop/preset regression tests, and `tests/pop-modes.spec.ts`.
+
+
+## Center Return correction (2026-10-25)
+
+The user clarified the first reference: put the crosshair on the fixed center dot, micro-adjust to a moving
+dot entering from a side, then recenter and repeat. The first mode now shows as **Center Return**, retaining
+`popVariant: 'precision'` so existing saved setups load the corrected drill. Wide Flicks and Microshot are unchanged.
+
+- A permanent gold diamond marks the panel center. Aim at it continuously for 120 ms (no shot required) to arm a rep.
+  It turns green while centering and dims while the side target is active. The HUD also names the current step.
+- One target enters fully inside a randomly chosen left/right edge, at a random height, and crosses horizontally.
+  The lane stays clear of the center, so camping or firing at the center cannot pop the crossing target.
+- Pop the moving dot with the configured hits. The field then waits for a fresh center fixation. If it escapes
+  through the far edge, the same center gate is required. A miss shot leaves the current target moving.
+- `popPrecisionSpeed` sets crossing speed (0.1–3 m/s, default 0.8); it is sanitized, saved in presets and restored by
+  defaults. The existing respawn delay adds a minimum pause after each completed/escaped rep, in addition to recentering.
+- No target spawns while the menu is open. The simulation checks the displayed crosshair direction, including
+  follow-recoil or scoped camera aim, rather than a shot ray with random spread. The marker never counts as a hit.
+- Panel dimensions at 8 m are 1.5 × 2.2 m, with radius-aware bounds for extreme sizes. Motion uses simulation time,
+  pauses with the session, and resets to the center step on a new session or settings rebuild.
+
+Coverage: `pop-center-return.test.ts` exercises the gate, motion, repeat cycle, escape, multi-hit, cooldown, reset,
+settings and recoil-aware aim. The browser smoke performs two actual moving-target hits separated by recentering,
+checks marker persistence and phase prompts, and confirms that leaving the mode removes its marker.

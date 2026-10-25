@@ -36,7 +36,7 @@ describe('Pop specific modes', () => {
       field.hit(POP_SPAWN, aim(ball));
     }
   });
-  it.each(['precision', 'wide', 'microshot'] as const)('%s keeps one target fully inside its panel across 200 replacements', variant => {
+  it.each(['wide', 'microshot'] as const)('%s keeps one target fully inside its panel across 200 replacements', variant => {
     const field = new PopField(popConfig(setup(variant)), POP_SPAWN, random(7));
     let previous = field.balls[0];
     for (let i = 0; i < 200; i++) {
@@ -54,7 +54,7 @@ describe('Pop specific modes', () => {
     expect(field.pops).toBe(200);
   });
 
-  it.each(['precision', 'wide', 'microshot'] as const)('%s stays bounded with extreme size/distance and a constant random source', variant => {
+  it.each(['wide', 'microshot'] as const)('%s stays bounded with extreme size/distance and a constant random source', variant => {
     const field = new PopField(popConfig({...setup(variant), popSize: 80, popDistance: 3}), POP_SPAWN, () => .5);
     for (let i = 0; i < 20; i++) {
       const ball = field.balls[0];

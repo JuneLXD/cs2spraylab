@@ -14,6 +14,8 @@ import {resolveDamage} from './duel/damage';
 import {NativeReloadState, WeaponActions, type ReloadActionEvent} from './weapon-actions';
 import {reloadInputAllows, usesNativeReloadInput} from './reload-input';
 import {POP_SPAWN, PopField, popConfig, popSpawn} from './pop';
+import {recoilView} from './view-recoil';
+import {followCrosshairDirection} from './crosshair-follow';
 
 export {DEG, GRAVITY, JUMP_SPEED, STEP, UNIT, airVelocity, groundVelocity, idleInput, direction};
 export const VERTICAL_FOV = 2 * Math.atan(.75) / DEG;
@@ -424,7 +426,7 @@ export class Simulation {
     if (this.resumeHeldAt !== undefined && reloading && !this.reloadState.active)
       this.resumeHeldAt = Math.max(this.resumeHeldAt, reloadEnd);
     // Pop's infinite modes top the reserve (and the magazine) back up every tick, as sv_infinite_ammo does.
-    if (this.pop) {this.refillPopAmmo(); this.pop.advance(this.time, this.position);}
+    if (this.pop) {this.refillPopAmmo(); if (!this.pop.center) this.pop.advance(this.time, this.position);}
     if (this.firing && this.reloadState.active && this.reloadState.empty) this.reloadState.interrupt();
     for (const [id, until] of this.rechargeTimes) if (this.time + 1e-9 >= until) {
       this.ammoFor(id).ammo = 1; this.rechargeTimes.delete(id);
@@ -467,6 +469,12 @@ export class Simulation {
     }
     if (reloading && !this.reloadState.active && !weapon.reloadsSingleShells) recovery.reloadFinished();
     this.recoil=this.equipped==='knife' || this.equipped==='zeus'?{yaw:0,pitch:0}:recovery.recoil;
+    if (this.pop?.center) {
+      const view = recoilView(this.yaw, this.pitch, this.recoil, this.viewPunch.sample(this.time));
+      const aim = this.settings.follow && !this.actions.hidesViewmodel
+        ? followCrosshairDirection(this.yaw, this.pitch, this.recoil) : direction(view.yaw, view.pitch);
+      this.pop.advance(this.time, this.position, aim);
+    }
     if (this.settings.moving && !this.drill) {
       const extent = this.settings.mode === 'transfer' ? 1.25 : 3;
       this.targetVelocity = this.targetSign * targetSpeed(this.settings);

@@ -240,7 +240,8 @@ export default function RangeApp() {
       <div className={`range-view sl-game-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
       <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
-      {!isDrillMode(settings.mode)&&<div className="target-label">{settings.mode === 'pop' ? popVariants.find(variant => variant.id === settings.popVariant)?.name : modeNames[settings.mode]} <span>{status.distance.toFixed(1)} m</span></div>}
+      {!isDrillMode(settings.mode)&&<div className="target-label">{settings.mode === 'pop' ? popVariants.find(variant => variant.id === settings.popVariant)?.name : modeNames[settings.mode]} <span>{status.distance.toFixed(1)} m</span>
+        {settings.mode === 'pop' && settings.popVariant === 'precision' && <span data-testid="pop-center-cue">{status.pop?.phase === 'target' ? 'Shoot the moving dot' : 'Aim at the center dot'}</span>}</div>}
       {settings.mode === 'transfer' && settings.transferRule === 'kill' && <div className="transfer-health" aria-label="Transfer target health">
         {(status.targetHealth ?? [100,100]).map((health, i) => <span key={i} className={health === 0 ? 'down' : ''}>{i ? 'B' : 'A'} <b>{health === 0 ? 'DOWN' : `${Math.ceil(health)} HP`}</b></span>)}
       </div>}

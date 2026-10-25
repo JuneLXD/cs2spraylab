@@ -7,7 +7,7 @@ import type {PopVariant} from './pop';
 
 /** What every preset sets: the balls, how popped balls come back, and the peek wall with its wallbang switch. Built-in
  * presets set exactly these, so loading one fully replaces the scenario. */
-export const popCoreKeys = ['popVariant', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popRespawn', 'popRespawnMode',
+export const popCoreKeys = ['popVariant', 'popPrecisionSpeed', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popRespawn', 'popRespawnMode',
   'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance', 'popWall', 'popWallWidth', 'popWallbang'] as const;
 /** Everything a saved preset keeps. The extra keys (wall material, pad size, colours, see-through balls) are details a
  * built-in preset leaves as you have them, unless it is about that detail (the wallbang presets pick a material). */

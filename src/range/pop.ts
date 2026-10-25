@@ -18,7 +18,7 @@ export type PopRespawnMode = 'timer' | 'pad';
 export type PopVariant = 'classic' | 'precision' | 'wide' | 'microshot';
 export const popVariants: readonly {id: PopVariant; name: string; description: string}[] = [
   {id: 'classic', name: 'Classic Pop', description: 'Build your own field of balls, movement and peek cover.'},
-  {id: 'precision', name: 'Precision', description: 'One small target on a tall, narrow panel. Settle your crosshair before each shot.'},
+  {id: 'precision', name: 'Center Return', description: 'Aim at the fixed center dot, shoot the moving dot entering from a side, then return to center to start the next rep.'},
   {id: 'wide', name: 'Wide Flicks', description: 'One target alternates across a wide field. Flick to the other side after each pop.'},
   {id: 'microshot', name: 'Microshot', description: 'One square target in a compact panel. Make small, controlled corrections; the whole square counts.'},
 ];
@@ -26,7 +26,7 @@ export const popVariants: readonly {id: PopVariant; name: string; description: s
  * never changes how the wall looks. */
 export type PopWallMaterial = 'wood' | 'concrete' | 'metal';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
-export type PopConfig = {variant: PopVariant; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
+export type PopConfig = {variant: PopVariant; precisionSpeed: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
   wallbang: boolean; wallMaterial: PopWallMaterial;
   respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
@@ -50,6 +50,8 @@ export type PopPad = {x: number; z: number; halfW: number; halfD: number};
 export const POP_EYE = 64 * UNIT;
 /** Where you stand in Pop: the near end of the range, so 40 m of wall fit in front of you. */
 export const POP_SPAWN: Vec = {x: 0, y: POP_EYE, z: 2};
+/** A brief continuous fixation arms a rep; merely sweeping across the center does not. */
+export const POP_CENTER_HOLD = .12;
 export const popLimits = {size: [8, 80], count: [1, 12], spacing: [.2, 5], distance: [3, 40], hits: [1, 10], wallWidth: [.6, 8], respawn: [0, 5],
   padWidth: [.3, 3], padDepth: [.3, 3], speedX: [0, 6], rangeX: [0, 5], flipsX: [0, 4], speedY: [0, 4], rangeY: [0, 1.4], flipsY: [0, 4]} as const;
 export const popColors: readonly (readonly [string, string])[] = [['Orange', '#ff6a4d'], ['Yellow', '#ffd23f'], ['Green', '#5dff7f'],
@@ -68,11 +70,11 @@ export const POP_WALL = {edge: .35, height: 2.8, thickness: .4, ahead: 1.5, peek
 /** The materials a wallbangable peek wall can be made of, as the Wall material setting lists them. */
 export const popWallMaterials: readonly (readonly [PopWallMaterial, string])[] = [['wood', 'Wood'], ['concrete', 'Concrete'], ['metal', 'Metal']];
 
-export function popConfig(settings: {popVariant: PopVariant; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
+export function popConfig(settings: {popVariant: PopVariant; popPrecisionSpeed: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
   popWallWidth: number; popWallbang: boolean; popWallMaterial: PopWallMaterial; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number;
   popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
   const classic = settings.popVariant === 'classic';
-  return {variant: settings.popVariant, size: settings.popSize / 100, count: classic ? settings.popCount : 1, spacing: settings.popSpacing, distance: settings.popDistance,
+  return {variant: settings.popVariant, precisionSpeed: settings.popPrecisionSpeed, size: settings.popSize / 100, count: classic ? settings.popCount : 1, spacing: settings.popSpacing, distance: settings.popDistance,
     hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, wallbang: settings.popWallbang, wallMaterial: settings.popWallMaterial,
     respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
     padWidth: settings.popPadWidth, padDepth: settings.popPadDepth,
@@ -112,9 +114,10 @@ export function popRegion(config: PopConfig, origin: Vec): PopRegion {
     // These are panel edges; single-target spawns inset by the target radius below. Scale with distance so each
     // exercise keeps its angular footprint until the physical floor/side-wall limits of the range.
     const scale = config.distance / 8;
-    const halfW = config.variant === 'wide' ? Math.min(config.distance * .8, 11) : (config.variant === 'precision' ? .55 : 1) * scale;
-    const halfH = Math.min((config.variant === 'microshot' ? .6 : 1.25) * scale, 1.4);
-    return {x: origin.x, y: origin.y, z: origin.z - config.distance, halfW: Math.max(halfW, r * 2), halfH: Math.max(halfH, r * 2)};
+    const halfW = config.variant === 'wide' ? Math.min(config.distance * .8, 11) : (config.variant === 'precision' ? .75 : 1) * scale;
+    const halfH = Math.min((config.variant === 'microshot' ? .6 : config.variant === 'precision' ? 1.1 : 1.25) * scale, 1.4);
+    return {x: origin.x, y: origin.y, z: origin.z - config.distance, halfW: Math.max(halfW, r * 2),
+      halfH: Math.max(halfH, r * 2 + (config.variant === 'precision' ? .1 * scale : 0))};
   }
   const wanted = Math.max(gap, gap * Math.sqrt(config.count) * .75);
   const halfW = Math.min(wanted, config.distance * Math.tan(45 * DEG) * .55);
@@ -158,6 +161,13 @@ export class PopField {
   private nextId = 1;
   /** Retained across delayed respawns, so consecutive single targets cannot occupy the same spot. */
   private previous?: PopBall;
+  /** Center Return's fixed marker is an aim gate, never a scored/shootable ball. */
+  readonly center?: Vec & {radius: number};
+  precisionPhase: 'center' | 'target' = 'center';
+  centerProgress = 0;
+  private centeredSince?: number;
+  private precisionReadyAt = 0;
+  private precisionMotion?: {at: number; x: number};
   readonly region: PopRegion;
   readonly wall?: PopWall;
   /** The wall as a surface bullets can pass through; only when wallbang is on. */
@@ -165,12 +175,45 @@ export class PopField {
   readonly pad: PopPad;
   constructor(readonly config: PopConfig, origin: Vec, private readonly random: () => number = Math.random) {
     this.region = popRegion(config, origin);
+    if (config.variant === 'precision') this.center = {...this.region, radius: .05 * config.distance / 8};
     this.wall = popWall(config, origin);
     this.wallSolid = this.wall && config.wallbang ? {id: this.wall.id, center: this.wall.center, size: this.wall.size, material: config.wallMaterial} : undefined;
     this.pad = popPad(config, origin);
-    for (let i = 0; i < config.count; i++) this.spawn();
+    if (!this.center) for (let i = 0; i < config.count; i++) this.spawn();
   }
-  get moving() {return axisMoves(this.config.x) || axisMoves(this.config.y);}
+  get moving() {return !!this.center || axisMoves(this.config.x) || axisMoves(this.config.y);}
+  /** Fixed center dot under the actual crosshair ray, independent of shots/spread. */
+  aimedAtCenter(origin: Vec, direction: Vec) {
+    const center = this.center;
+    if (!center || direction.z >= -1e-12) return false;
+    const t = (center.z - origin.z) / direction.z;
+    return t >= 0 && Math.hypot(origin.x + direction.x * t - center.x, origin.y + direction.y * t - center.y) <= center.radius;
+  }
+  private returnToCenter(time: number) {
+    this.balls = []; this.precisionMotion = undefined; this.precisionPhase = 'center';
+    this.centeredSince = undefined; this.centerProgress = 0; this.precisionReadyAt = time + this.config.respawn;
+  }
+  private advancePrecision(time: number, player?: Vec, aim?: Vec) {
+    const {region, config} = this;
+    if (this.precisionPhase === 'target') {
+      const ball = this.balls[0], motion = this.precisionMotion!;
+      ball.x = motion.x + ball.vx * Math.max(0, time - motion.at);
+      if (Math.abs(ball.x - region.x) > region.halfW - ball.radius + 1e-9) this.returnToCenter(time);
+      return;
+    }
+    if (!player || !aim || !this.aimedAtCenter(player, aim)) {this.centeredSince = undefined; this.centerProgress = 0; return;}
+    this.centeredSince ??= time;
+    this.centerProgress = Math.min(1, (time - this.centeredSince) / POP_CENTER_HOLD);
+    if (this.centerProgress < 1 || time < this.precisionReadyAt) return;
+    const side = this.random() < .5 ? -1 : 1, r = config.size / 2, h = region.halfH - r;
+    // Keep the travel lane clear of the center dot: waiting on center can never score a target crossing it.
+    const laneGap = Math.min(h, r + this.center!.radius * 2);
+    const y = (this.random() < .5 ? -1 : 1) * (laneGap + this.random() * (h - laneGap));
+    const ball = {id: this.nextId++, x: region.x + side * (region.halfW - r), y: region.y + y,
+      z: region.z, radius: r, hits: 0, vx: -side * config.precisionSpeed, vy: 0};
+    this.balls.push(ball); this.precisionMotion = {at: time, x: ball.x}; this.precisionPhase = 'target';
+    this.centeredSince = undefined; this.centerProgress = 0;
+  }
   /** A new ball at least the chosen space from every other one; when the wall cannot fit that, the clearest spot tried. */
   private spawn() {
     const {region, config} = this, r = config.size / 2, gap = config.spacing + 2 * r;
@@ -245,9 +288,10 @@ export class PopField {
   onPadAt(position: Vec) {return Math.abs(position.x - this.pad.x) <= this.pad.halfW + 1e-9 && Math.abs(position.z - this.pad.z) <= this.pad.halfD + 1e-9;}
   /** Moves the balls on to `time` and spawns the replacements that are due: by the timer, or, in pad mode, all of them
    * the moment you step onto the pad (`player` is where you stand). */
-  advance(time: number, player?: Vec) {
+  advance(time: number, player?: Vec, aim?: Vec) {
     const dt = Math.min(Math.max(time - this.now, 0), .25);
     this.now = time;
+    if (this.center) {this.advancePrecision(time, player, aim); return;}
     if (this.config.respawnMode === 'pad') {
       if (player) {
         const on = this.onPadAt(player);
@@ -314,6 +358,7 @@ export class PopField {
     this.previous = nearest.ball;
     this.balls = this.balls.filter(ball => ball !== nearest!.ball); this.travel.delete(nearest.ball.id);
     this.pops++; this.popped.push(nearest.ball);
+    if (this.center) {this.returnToCenter(time); return nearest;}
     if (this.config.respawnMode === 'pad') this.pending.push(Infinity);
     else if (this.config.respawn > 0) this.pending.push(time + this.config.respawn);
     else this.spawn();
@@ -326,6 +371,7 @@ export class PopField {
     this.previous = undefined;
     this.balls = []; this.popped = []; this.pending = []; this.travel.clear(); this.onPad = undefined; this.padReturned = 0;
     this.pops = this.hits = this.shots = 0;
-    for (let i = 0; i < this.config.count; i++) this.spawn();
+    if (this.center) {this.returnToCenter(this.now); this.precisionReadyAt = this.now;}
+    else for (let i = 0; i < this.config.count; i++) this.spawn();
   }
 }

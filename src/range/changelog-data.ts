@@ -449,6 +449,10 @@ export const latestChanges = {
       'Choose a dedicated mode within Pop: a tiny target on a tall Precision panel, alternating single-target Wide Flicks, or a square Microshot target in a compact panel.',
       'Tune target size, distance, hits and respawn delay, and save the mode in a preset. Your weapon, colours, ammo, sound and HUD preferences carry across modes; Classic Pop keeps its full set of controls.',
     ]},
+    {id: 'pop-center-return', title: 'Pop: center, moving dot, center', items: [
+      'The first Pop submode is now Center Return: aim at its fixed center dot to release a moving dot from either side, shoot it, then recenter before the next rep. The center marker needs no shot and awards no points.',
+      'Target speed controls the crossing pace. Escaped targets also return the drill to its center step; the HUD shows which step is active.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 
