@@ -461,6 +461,10 @@ export const latestChanges = {
       'The former Wide Flicks mode is now Micro Flicks: one dot starts at center, then hops a short distance in a random direction after each pop. It stays still until hit and always remains near the fixed starting center.',
       'Adjust jump distance and center radius, and save them in Pop presets. Hops turn inward at the boundary; a new session starts at center again.',
     ]},
+    {id: 'pop-flick-travel', title: 'Micro Flicks: visible movement', items: [
+      'The same dot now travels smoothly to its next position after a hit, staying visible throughout the move. It stops at the destination, and its hit area follows it while moving.',
+      'Movement delay keeps the dot visible before it moves. The short distance and fixed center limit still apply.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

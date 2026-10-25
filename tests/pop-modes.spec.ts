@@ -31,15 +31,32 @@ test('Micro Flicks: short random hops stay near the fixed center and controls pe
   await page.waitForTimeout(500);
   expect(await page.evaluate(() => (window as any).flickEngine.sim.pop.balls[0])).toEqual(initial.ball);
   for (let rep = 0; rep < 10; rep++) {
-    const hit = await page.evaluate(() => {
-      const sim = (window as any).flickEngine.sim, before = {...sim.pop.balls[0]};
+    const hit = await page.evaluate(async () => {
+      const engine = (window as any).flickEngine, sim = engine.sim, before = {...sim.pop.balls[0]};
+      const mesh = engine.pop.getObjectByName(`pop-ball-${before.id}`), meshId = mesh.uuid;
       sim.resetRecovery();
       const dx = before.x - sim.position.x, dy = before.y - sim.position.y, dz = before.z - sim.position.z;
       sim.yaw = Math.atan2(-dx, -dz); sim.pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
       sim.start(); sim.release('mouse'); sim.yaw = sim.pitch = 0;
-      return {before, after: {...sim.pop.balls[0]}, count: sim.pop.balls.length, pops: sim.pop.pops, shots: sim.pop.shots};
+      const immediate = {...sim.pop.balls[0]}, at = sim.time, samples = [];
+      do {
+        await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+        const ball = sim.pop.balls[0], rendered = engine.pop.getObjectByName(`pop-ball-${before.id}`);
+        samples.push({x: ball?.x, y: ball?.y, count: sim.pop.balls.length, meshId: rendered?.uuid,
+          meshX: rendered?.position.x, meshY: rendered?.position.y, visible: rendered?.visible});
+      } while (sim.time < at + .25);
+      return {before, immediate, samples, meshId, after: {...sim.pop.balls[0]}, count: sim.pop.balls.length, pops: sim.pop.pops, shots: sim.pop.shots};
     });
     expect(hit.count).toBe(1); expect(hit.pops).toBe(rep + 1); expect(hit.shots).toBe(rep + 1);
+    expect(hit.immediate).toEqual(hit.before); expect(hit.after.id).toBe(hit.before.id);
+    expect(hit.samples.some(sample => {
+      const distance = Math.hypot(sample.x - hit.before.x, sample.y - hit.before.y); return distance > .01 && distance < .29;
+    })).toBe(true);
+    for (const sample of hit.samples) {
+      expect(sample.count).toBe(1); expect(sample.meshId).toBe(hit.meshId); expect(sample.visible).toBe(true);
+      expect(sample.meshX).toBeCloseTo(sample.x, 8); expect(sample.meshY).toBeCloseTo(sample.y, 8);
+      expect(Math.hypot(sample.x - initial.region.x, sample.y - initial.region.y)).toBeLessThanOrEqual(1 + 1e-9);
+    }
     expect(Math.hypot(hit.after.x - hit.before.x, hit.after.y - hit.before.y)).toBeCloseTo(.3, 8);
     expect(Math.hypot(hit.after.x - initial.region.x, hit.after.y - initial.region.y)).toBeLessThanOrEqual(1 + 1e-9);
     await page.waitForTimeout(350);

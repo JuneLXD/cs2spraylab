@@ -19,7 +19,7 @@ export type PopVariant = 'classic' | 'precision' | 'wide' | 'microshot';
 export const popVariants: readonly {id: PopVariant; name: string; description: string}[] = [
   {id: 'classic', name: 'Classic Pop', description: 'Build your own field of balls, movement and peek cover.'},
   {id: 'precision', name: 'Center Return', description: 'Aim at the fixed center dot, shoot the moving dot entering from a side, then return to center to start the next rep.'},
-  {id: 'wide', name: 'Micro Flicks', description: 'One dot starts at center and makes a short hop in a random direction after each pop. It always stays within the center radius.'},
+  {id: 'wide', name: 'Micro Flicks', description: 'One dot starts at center and smoothly moves a short distance in a random direction after each hit. It always stays within the center radius.'},
   {id: 'microshot', name: 'Microshot', description: 'Clear every dot inside the small rectangle. Only then does the rectangle move to a new position with a fresh group.'},
 ];
 /** What a wallbangable peek wall is made of: it sets how much of a bullet's damage the wall eats (CS2 surface materials). It
@@ -52,6 +52,8 @@ export const POP_EYE = 64 * UNIT;
 export const POP_SPAWN: Vec = {x: 0, y: POP_EYE, z: 2};
 /** A brief continuous fixation arms a rep; merely sweeping across the center does not. */
 export const POP_CENTER_HOLD = .12;
+/** Micro Flicks keeps the same visible dot throughout each short move. */
+export const POP_FLICK_TRAVEL = .2;
 export const popLimits = {size: [8, 80], count: [1, 12], spacing: [.2, 5], distance: [3, 40], hits: [1, 10], wallWidth: [.6, 8], respawn: [0, 5],
   padWidth: [.3, 3], padDepth: [.3, 3], speedX: [0, 6], rangeX: [0, 5], flipsX: [0, 4], speedY: [0, 4], rangeY: [0, 1.4], flipsY: [0, 4]} as const;
 export const popColors: readonly (readonly [string, string])[] = [['Orange', '#ff6a4d'], ['Yellow', '#ffd23f'], ['Green', '#5dff7f'],
@@ -178,8 +180,7 @@ export class PopField {
   /** Balls the pad brought back since the engine last asked, for its trigger sound and flash. */
   private padReturned = 0;
   private nextId = 1;
-  /** Retained across delayed respawns, so consecutive single targets cannot occupy the same spot. */
-  private previous?: PopBall;
+  private flickMotion?: {at: number; from: {x: number; y: number}; to: {x: number; y: number}};
   /** Center Return's fixed marker is an aim gate, never a scored/shootable ball. */
   readonly center?: Vec & {radius: number};
   precisionPhase: 'center' | 'target' = 'center';
@@ -205,7 +206,7 @@ export class PopField {
     if (config.variant === 'microshot') this.spawnCluster();
     else if (!this.center) for (let i = 0; i < config.count; i++) this.spawn();
   }
-  get moving() {return !!this.center || axisMoves(this.config.x) || axisMoves(this.config.y);}
+  get moving() {return !!this.center || !!this.flickMotion || axisMoves(this.config.x) || axisMoves(this.config.y);}
   /** Fixed center dot under the actual crosshair ray, independent of shots/spread. */
   aimedAtCenter(origin: Vec, direction: Vec) {
     const center = this.center;
@@ -259,22 +260,30 @@ export class PopField {
       z: region.z, radius: config.size / 2, hits: 0, vx: 0, vy: 0});
     }
   }
+  private startFlick(ball: PopBall, time: number) {
+    const {region, config} = this;
+    let x = ball.x, y = ball.y;
+    // Re-sample directions that would leave the fixed circle. The inward fallback preserves the move length.
+    for (let attempt = 0; attempt <= 32; attempt++) {
+      const angle = attempt < 32 ? this.random() * Math.PI * 2 : Math.atan2(region.y - ball.y, region.x - ball.x);
+      x = ball.x + Math.cos(angle) * config.flickStep; y = ball.y + Math.sin(angle) * config.flickStep;
+      if (Math.hypot(x - region.x, y - region.y) <= config.flickRadius + 1e-9) break;
+    }
+    this.flickMotion = {at: time + config.respawn, from: {x: ball.x, y: ball.y}, to: {x, y}};
+  }
+  private advanceFlick(time: number) {
+    const motion = this.flickMotion, ball = this.balls[0];
+    if (!motion || !ball) return;
+    const t = Math.max(0, Math.min(1, (time - motion.at) / POP_FLICK_TRAVEL)), eased = t * t * (3 - 2 * t);
+    ball.x = motion.from.x + (motion.to.x - motion.from.x) * eased;
+    ball.y = motion.from.y + (motion.to.y - motion.from.y) * eased;
+    if (t >= 1 - 1e-9) {ball.x = motion.to.x; ball.y = motion.to.y; this.flickMotion = undefined;}
+  }
   /** A new ball at least the chosen space from every other one; when the wall cannot fit that, the clearest spot tried. */
   private spawn() {
     const {region, config} = this, r = config.size / 2, gap = config.spacing + 2 * r;
     if (config.variant === 'wide') {
-      let x = region.x, y = region.y;
-      if (this.previous) {
-        // Re-sample directions that would leave the fixed center circle. Never clamp to the edge:
-        // every hop keeps its length, including when a constant RNG repeatedly points outward.
-        for (let attempt = 0; attempt <= 32; attempt++) {
-          const angle = attempt < 32 ? this.random() * Math.PI * 2 : Math.atan2(region.y - this.previous.y, region.x - this.previous.x);
-          x = this.previous.x + Math.cos(angle) * config.flickStep;
-          y = this.previous.y + Math.sin(angle) * config.flickStep;
-          if (Math.hypot(x - region.x, y - region.y) <= config.flickRadius + 1e-9) break;
-        }
-      }
-      const ball: PopBall = {id: this.nextId++, x, y, z: region.z, radius: r, hits: 0, vx: 0, vy: 0};
+      const ball: PopBall = {id: this.nextId++, x: region.x, y: region.y, z: region.z, radius: r, hits: 0, vx: 0, vy: 0};
       this.balls.push(ball); return ball;
     }
     let best: PopBall | undefined, bestClearance = -Infinity;
@@ -335,6 +344,7 @@ export class PopField {
     const dt = Math.min(Math.max(time - this.now, 0), .25);
     this.now = time;
     if (this.center) {this.advancePrecision(time, player, aim); return;}
+    if (this.config.variant === 'wide') {this.advanceFlick(time); return;}
     if (this.config.variant === 'microshot') {
       if (this.nextClusterAt !== undefined && time + 1e-9 >= this.nextClusterAt) this.spawnCluster();
       return;
@@ -376,6 +386,12 @@ export class PopField {
    * the far side keeps going as far as it has damage left (`reach`) and one that did not stops at the wall's face. Undefined
    * for a miss. */
   hit(origin: Vec, direction: Vec, maxDistance = Infinity, time = this.now, pass?: PopWallPass): PopHit | undefined {
+    if (this.config.variant === 'wide') {
+      this.advanceFlick(time);
+      // Keep the dot visible during a configured delay, without scoring repeated hits at its old position.
+      // This also stops other pellets from the clearing shot from immediately scoring the same dot again.
+      if (this.flickMotion && time <= this.flickMotion.at + 1e-9) return undefined;
+    }
     const limit = Math.min(maxDistance, pass ? pass.reach : this.wallHit(origin, direction, maxDistance)?.distance ?? Infinity);
     let nearest: PopHit | undefined;
     for (const ball of this.balls) {
@@ -393,7 +409,10 @@ export class PopField {
     this.hits++; nearest.ball.hits++;
     if (nearest.ball.hits < this.config.hits) return nearest;
     nearest.popped = true;
-    this.previous = nearest.ball;
+    if (this.config.variant === 'wide') {
+      this.pops++; nearest.ball.hits = 0; this.startFlick(nearest.ball, time);
+      return nearest;
+    }
     this.balls = this.balls.filter(ball => ball !== nearest!.ball); this.travel.delete(nearest.ball.id);
     this.pops++; this.popped.push(nearest.ball);
     if (this.center) {this.returnToCenter(time); return nearest;}
@@ -410,7 +429,7 @@ export class PopField {
   /** How many balls stepping onto the pad brought back since the last call (0 when it has not triggered). */
   drainPadTrigger() {const returned = this.padReturned; this.padReturned = 0; return returned;}
   reset() {
-    this.previous = undefined;
+    this.flickMotion = undefined;
     this.balls = []; this.popped = []; this.pending = []; this.travel.clear(); this.onPad = undefined; this.padReturned = 0;
     this.pops = this.hits = this.shots = 0;
     this.cluster = undefined; this.nextClusterAt = undefined; this.clustersCleared = 0;

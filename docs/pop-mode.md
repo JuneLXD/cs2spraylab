@@ -221,3 +221,22 @@ with measured hop lengths and center bounds, stationary waits, controls rebuildi
 saved preset/reload persistence, and the existing other-mode regressions. First/tenth-hop screenshots captured;
 the tenth-hop image was visually reviewed. Unit coverage includes 1,000 successive hops in all directions,
 constant outward RNG, extreme size/distance/radius, misses, multiple required hits, delayed replacement and reset.
+
+
+## Micro Flicks visible travel (2026-10-25)
+
+The user clarified that the reference dot visibly travels between positions instead of disappearing and
+reappearing. Micro Flicks now retains the same dot and rendered mesh across hits, interpolating its actual
+position over0.2s with smooth acceleration/deceleration. It stops at the destination. The existing random
+short displacement and fixed center radius also bound the whole straight-line path.
+
+Movement is simulation-driven: pause freezes it, reset cancels it, and collision uses the current position.
+A hit during travel redirects from that position without teleporting. Extra pellets at the same shot time
+cannot immediately score the same cleared dot again. No popped-dot burst or replacement mesh is emitted.
+The old respawn delay is now labeled Movement delay: the dot stays visible during the pause, with scoring
+held until movement starts. Count, radius, distance, other modes, sound and score handling are unchanged.
+
+Validation:171 affected units and TypeScript pass. Four Chromium cases pass; ten scored movements sample
+intermediate frames, checking one persistent visible mesh, matching collision/render positions, no immediate
+jump and bounded movement. Units cover intermediate positions, current-position hits, mid-move redirection,
+no duplicate pellet score/burst, delayed motion, reset and frozen simulation time.

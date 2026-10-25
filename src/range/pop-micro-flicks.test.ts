@@ -2,7 +2,7 @@ import {createElement} from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {describe, expect, it} from 'vitest';
 import {defaults, sanitizeSettings} from './config';
-import {POP_SPAWN, PopField, popConfig} from './pop';
+import {POP_FLICK_TRAVEL, POP_SPAWN, PopField, popConfig} from './pop';
 import {capturePopPreset, popPresetPatch, popVariantPatch} from './pop-presets';
 import {rangeDrillDefaults} from './ui/drill-setup';
 import {TrainingSettings} from './ui/screens/TrainingSettings';
@@ -15,6 +15,35 @@ const aim = (point: {x: number; y: number; z: number}) => {
 };
 
 describe('Micro Flicks', () => {
+  it('keeps one visible dot moving continuously through intermediate positions with no pop burst', () => {
+    const field = new PopField(popConfig(setup), POP_SPAWN, seeded(2)), ball = field.balls[0], start = {...ball};
+    field.hit(POP_SPAWN, aim(ball), Infinity, 0);
+    expect(field.balls[0]).toBe(ball); expect(ball).toEqual(start); expect(field.drainPopped()).toEqual([]);
+    expect(field.hit(POP_SPAWN, aim(ball), Infinity, 0)).toBeUndefined(); expect(field.pops).toBe(1);
+    let previousDistance = 0;
+    for (let frame = 1; frame <= 8; frame++) {
+      field.advance(frame * POP_FLICK_TRAVEL / 8);
+      const distance = Math.hypot(ball.x - start.x, ball.y - start.y);
+      expect(distance).toBeGreaterThan(previousDistance); expect(distance).toBeLessThanOrEqual(.3 + 1e-9);
+      expect(field.balls).toEqual([ball]); expect(field.balls[0]).toBe(ball);
+      previousDistance = distance;
+    }
+    const end = {...ball}; field.advance(10); expect(ball).toEqual(end); expect(field.moving).toBe(false);
+  });
+
+  it('hits the moving dot at its current position and redirects it without teleporting', () => {
+    const field = new PopField(popConfig(setup), POP_SPAWN, seeded(3)), start = {...field.balls[0]};
+    field.hit(POP_SPAWN, aim(start), Infinity, 0); field.advance(.1);
+    const midpoint = {...field.balls[0]};
+    field.advance(.1); expect(field.balls[0]).toEqual(midpoint); // A paused simulation clock freezes the movement.
+    expect(field.hit(POP_SPAWN, aim(start), Infinity, .1)).toBeUndefined();
+    expect(field.hit(POP_SPAWN, aim(midpoint), Infinity, .1)?.popped).toBe(true);
+    expect(field.balls[0]).toEqual(midpoint);
+    field.advance(.1 + POP_FLICK_TRAVEL);
+    expect(Math.hypot(field.balls[0].x - midpoint.x, field.balls[0].y - midpoint.y)).toBeCloseTo(.3);
+    expect(field.pops).toBe(2); expect(field.drainPopped()).toEqual([]);
+  });
+
   it('starts at center, waits on misses, and moves only after the required hits', () => {
     const field = new PopField(popConfig({...setup, popHits: 2}), POP_SPAWN, seeded(1)), ball = {...field.balls[0]};
     expect([ball.x, ball.y, ball.z]).toEqual([POP_SPAWN.x, POP_SPAWN.y, POP_SPAWN.z - 8]);
@@ -23,7 +52,11 @@ describe('Micro Flicks', () => {
     expect(field.hit(POP_SPAWN, aim(ball))?.popped).toBe(false);
     field.advance(200); expect(field.balls).toEqual([{...ball, hits: 1}]);
     expect(field.hit(POP_SPAWN, aim(ball))?.popped).toBe(true);
-    expect(field.balls).toHaveLength(1); expect(field.balls[0].id).not.toBe(ball.id);
+    expect(field.balls).toHaveLength(1); expect(field.balls[0].id).toBe(ball.id);
+    expect(field.balls[0]).toEqual(ball);
+    field.advance(200 + POP_FLICK_TRAVEL / 2);
+    expect(Math.hypot(field.balls[0].x - ball.x, field.balls[0].y - ball.y)).toBeCloseTo(.15);
+    field.advance(200 + POP_FLICK_TRAVEL);
     expect(Math.hypot(field.balls[0].x - ball.x, field.balls[0].y - ball.y)).toBeCloseTo(.3);
     expect(field.hits).toBe(2); expect(field.pops).toBe(1);
   });
@@ -32,8 +65,9 @@ describe('Micro Flicks', () => {
     const field = new PopField(popConfig(setup), POP_SPAWN, seeded(7)), directions = new Set<number>();
     let sameSide = 0;
     for (let i = 0; i < 1000; i++) {
-      const before = field.balls[0];
-      expect(field.hit(POP_SPAWN, aim(before))?.popped).toBe(true);
+      const before = {...field.balls[0]};
+      expect(field.hit(POP_SPAWN, aim(before), Infinity, i)?.popped).toBe(true);
+      field.advance(i + POP_FLICK_TRAVEL);
       expect(field.balls).toHaveLength(1);
       const after = field.balls[0], dx = after.x - before.x, dy = after.y - before.y;
       expect(Math.hypot(dx, dy)).toBeCloseTo(.3, 10);
@@ -47,7 +81,8 @@ describe('Micro Flicks', () => {
   it.each([0, .25, .5, .75])('turns inward instead of sticking at the boundary with a constant RNG of %s', value => {
     const field = new PopField(popConfig({...setup, popFlickRadius: .3, popFlickStep: 1, popSize: 80, popDistance: 3}), POP_SPAWN, () => value);
     for (let i = 0; i < 50; i++) {
-      const before = field.balls[0]; field.hit(POP_SPAWN, aim(before));
+      const before = {...field.balls[0]}; field.hit(POP_SPAWN, aim(before), Infinity, i);
+      field.advance(i + POP_FLICK_TRAVEL);
       const after = field.balls[0];
       expect(Math.hypot(after.x - before.x, after.y - before.y)).toBeCloseTo(.3);
       expect(Math.hypot(after.x - field.region.x, after.y - field.region.y)).toBeLessThanOrEqual(.3 + 1e-9);
@@ -58,9 +93,11 @@ describe('Micro Flicks', () => {
   it('preserves the previous position through a delay and restarts at center', () => {
     const field = new PopField(popConfig({...setup, popRespawn: .5}), POP_SPAWN, seeded(5));
     for (let i = 0; i < 5; i++) {
-      const before = field.balls[0]; field.hit(POP_SPAWN, aim(before), Infinity, i);
-      field.advance(i + .49); expect(field.balls).toHaveLength(0);
-      field.advance(i + .5); expect(field.balls).toHaveLength(1);
+      const before = {...field.balls[0]}; field.hit(POP_SPAWN, aim(before), Infinity, i);
+      field.advance(i + .49); expect(field.balls).toEqual([before]);
+      expect(field.hit(POP_SPAWN, aim(before), Infinity, i + .49)).toBeUndefined();
+      field.advance(i + .5); expect(field.balls).toEqual([before]);
+      field.advance(i + .5 + POP_FLICK_TRAVEL); expect(field.balls).toHaveLength(1);
       expect(Math.hypot(field.balls[0].x - before.x, field.balls[0].y - before.y)).toBeCloseTo(.3);
     }
     field.hit(POP_SPAWN, aim(field.balls[0]), Infinity, 10); field.reset(); field.advance(20);
@@ -75,7 +112,8 @@ describe('Micro Flicks', () => {
       expect(ball.y - ball.radius).toBeGreaterThan(0);
       expect(Math.abs(ball.x) + ball.radius).toBeLessThan(3);
       expect(Math.abs(ball.y - POP_SPAWN.y) + ball.radius).toBeLessThan(3 * .75);
-      field.hit(POP_SPAWN, aim(ball));
+      field.hit(POP_SPAWN, aim(ball), Infinity, i);
+      field.advance(i + POP_FLICK_TRAVEL);
     }
   });
 
