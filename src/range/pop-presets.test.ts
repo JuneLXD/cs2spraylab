@@ -28,10 +28,10 @@ describe('what a Pop preset holds', () => {
   });
 
   it('captures the balls and environment, never the personal options, and ties the weapon you start with only when asked', () => {
-    const settings = custom();
+    const settings = custom({pop3D: true});
     const captured = capturePopPreset(settings, false);
     expect(Object.keys(captured.settings).sort()).toEqual([...popPresetKeys].sort());
-    expect(captured.settings).toMatchObject({popSize: 44, popCount: 7, popWall: 'right', popWallbang: true, popWallMaterial: 'metal', popColor: '#4df3ff'});
+    expect(captured.settings).toMatchObject({popSize: 44, popCount: 7, popWall: 'right', popWallbang: true, popWallMaterial: 'metal', popColor: '#4df3ff', pop3D: true});
     for (const key of popPersonalKeys) expect(captured.settings).not.toHaveProperty(key);
     expect(captured.weapon).toBeUndefined();
     expect(capturePopPreset(settings, true).weapon).toBe('m4a4');

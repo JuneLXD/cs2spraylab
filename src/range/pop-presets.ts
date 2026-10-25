@@ -11,9 +11,9 @@ export const popCoreKeys = ['popVariant', 'popPrecisionSpeed', 'popFlickStep', '
   'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance', 'popWall', 'popWallWidth', 'popWallbang'] as const;
 /** Everything a saved preset keeps. The extra keys (wall material, pad size, colours, see-through balls) are details a
  * built-in preset leaves as you have them, unless it is about that detail (the wallbang presets pick a material). */
-export const popPresetKeys = [...popCoreKeys, 'popWallMaterial', 'popPadWidth', 'popPadDepth', 'popWallXray', 'popColor', 'popBackground', 'popPadColor'] as const;
+export const popPresetKeys = [...popCoreKeys, 'popWallMaterial', 'popPadWidth', 'popPadDepth', 'popWallXray', 'popColor', 'popBackground', 'popPadColor', 'pop3D'] as const;
 /** The look of the balls and the environment: built-in presets never change these. */
-export const popLookKeys = ['popWallXray', 'popColor', 'popBackground', 'popPadColor'] as const;
+export const popLookKeys = ['popWallXray', 'popColor', 'popBackground', 'popPadColor', 'pop3D'] as const;
 /** Pop settings that are about you, not the scenario; no preset touches them. */
 export const popPersonalKeys = ['popAmmo', 'popSound', 'popMuteGun', 'popHideImpacts', 'popHideHud', 'popPadSound'] as const;
 export type PopCoreKey = typeof popCoreKeys[number];

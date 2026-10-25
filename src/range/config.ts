@@ -82,6 +82,8 @@ export type Settings = {
   popPrecisionSpeed: number;
   /** Micro Flicks: hop length and maximum distance from the fixed starting center, in metres. */
   popFlickStep: number; popFlickRadius: number;
+  /** Shaded spheres instead of the original glowing target appearance. */
+  pop3D: boolean;
   /** Microshot: dots per rectangle, and its requested dimensions in metres. */
   popClusterCount: number; popClusterWidth: number; popClusterHeight: number;
   /** Pop: ammo as sv_infinite_ammo ('magazine' = 1 never reloads, 'reserve' = 2 reloads from a full reserve) and the hit sound. */
@@ -133,7 +135,7 @@ export const defaults: Settings = {
   keyboard: defaultKeyboard,
   viewmodel: classicViewmodel,
   tracers: 'native',
-  popVariant: 'classic', popPrecisionSpeed: .8, popFlickStep: .3, popFlickRadius: 1, popClusterCount: 3, popClusterWidth: .7, popClusterHeight: .6,
+  popVariant: 'classic', pop3D: false, popPrecisionSpeed: .8, popFlickStep: .3, popFlickRadius: 1, popClusterCount: 3, popClusterWidth: .7, popClusterHeight: .6,
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
   popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popWallbang: false, popWallMaterial: 'wood', popWallXray: true, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0, popMoveChance: .5,
   popPadWidth: .9, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime',
@@ -188,6 +190,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     viewmodel: sanitizeViewmodel(s.viewmodel),
     tracers: s.tracers === 'every' || s.tracers === 'off' ? s.tracers : 'native',
     popVariant: s.popVariant === 'precision' || s.popVariant === 'wide' || s.popVariant === 'microshot' ? s.popVariant : 'classic',
+    pop3D: s.pop3D === true,
     popPrecisionSpeed: Math.round(numeric(s.popPrecisionSpeed, defaults.popPrecisionSpeed, .1, 3) * 10) / 10,
     popFlickRadius: Math.round(numeric(s.popFlickRadius, defaults.popFlickRadius, .3, 1.2) * 10) / 10,
     popFlickStep: Math.min(Math.round(numeric(s.popFlickStep, defaults.popFlickStep, .05, 1) * 20) / 20,

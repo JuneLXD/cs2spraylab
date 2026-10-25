@@ -5,6 +5,11 @@ of you; a shot pops the first ball it crosses and a new one appears elsewhere. I
 (`mode: 'pop'`, category Aim warm-up), so the weapon, recoil, spread, reload and crosshair code are the
 ones every other range drill uses.
 
+- **3D balls** (2026-10-25): optional shaded spheres in every Pop mode (`pop3D`, off by default).
+  A generated neutral matcap gives the existing sphere geometry a highlight and dark rim, while preserving
+  the chosen ball colour and dim room lighting. Switching the appearance keeps target positions, motion,
+  hit areas and accumulated hits intact. Damaged balls still darken; saved presets include the option,
+  mode changes and built-in presets preserve it, and Restore defaults turns it off.
 - Settings: `popSize` (ball diameter, 8-80 cm), `popCount` (balls at once, 1-12), `popSpacing` (minimum
   centre-to-centre space, 0.2-5 m), `popDistance` (from you to the wall, 3-40 m), `popColor` (hex;
   presets in `pop.ts`). Restore defaults covers them; the summary chip shows them.

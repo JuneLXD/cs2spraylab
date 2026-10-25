@@ -13,6 +13,7 @@ export const TrainingSettings = memo(function TrainingSettings({settings, update
     <label className="select-row">Pop mode<select aria-label="Pop mode" value={settings.popVariant} onChange={e => {popPresetStore.select(''); update(popVariantPatch(e.target.value as Settings['popVariant']));}}>{popVariants.map(variant => <option key={variant.id} value={variant.id}>{variant.name}</option>)}</select></label>
     <p className="setting-explanation">{popVariants.find(variant => variant.id === settings.popVariant)?.description} Choose a mode to start its recommended setup, then tune size, distance and hits below.</p>
     <PopPresets settings={settings} update={update}/>
+    <Toggle label="3D balls" checked={settings.pop3D} onChange={pop3D => update({pop3D})}/>
     <Slider label={classicPop ? "Ball size" : "Target size"} value={settings.popSize} min={popLimits.size[0]} max={popLimits.size[1]} suffix=" cm" onChange={popSize => update({popSize})}/>
     {settings.popVariant === 'precision' && <Slider label="Target speed" value={settings.popPrecisionSpeed} min={.1} max={3} step={.1} suffix=" m/s" onChange={popPrecisionSpeed => update({popPrecisionSpeed})}/>}
     {settings.popVariant === 'wide' && <>

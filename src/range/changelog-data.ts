@@ -465,6 +465,9 @@ export const latestChanges = {
       'The same dot now travels smoothly to its next position after a hit, staying visible throughout the move. It stops at the destination, and its hit area follows it while moving.',
       'Movement delay keeps the dot visible before it moves. The short distance and fixed center limit still apply.',
     ]},
+    {id: 'pop-3d-balls', title: 'Pop: shaded 3D balls', items: [
+      'Turn on 3D balls for shaded spheres with highlights. The option works in every Pop mode and saves with your presets.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

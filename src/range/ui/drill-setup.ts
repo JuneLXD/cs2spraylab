@@ -8,12 +8,12 @@ import {blitzSummary, type BlitzConfig} from '../duel/blitz';
 export function rangeDrillDefaults(mode: Mode): Partial<Settings> {
   const {burst, peekScenario, peekDuration, drillPace, follow, transferRule, transferAfter,
     impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides,
-    popVariant, popPrecisionSpeed, popFlickStep, popFlickRadius, popClusterCount, popClusterWidth, popClusterHeight, popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud,
+    popVariant, pop3D, popPrecisionSpeed, popFlickStep, popFlickRadius, popClusterCount, popClusterWidth, popClusterHeight, popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud,
     popBackground, popHits, popWall, popWallWidth, popWallbang, popWallMaterial, popWallXray, popRespawn, popRespawnMode, popMoveX, popRangeX, popFlipX, popMoveY, popRangeY, popFlipY, popMoveChance,
     popPadWidth, popPadDepth, popPadColor, popPadSound} = defaults;
   return {burst, peekScenario, peekDuration, drillPace, follow, transferRule, transferAfter,
     impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides, spread: mode !== 'guided',
-    popVariant, popPrecisionSpeed, popFlickStep, popFlickRadius, popClusterCount, popClusterWidth, popClusterHeight, popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud,
+    popVariant, pop3D, popPrecisionSpeed, popFlickStep, popFlickRadius, popClusterCount, popClusterWidth, popClusterHeight, popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud,
     popBackground, popHits, popWall, popWallWidth, popWallbang, popWallMaterial, popWallXray, popRespawn, popRespawnMode, popMoveX, popRangeX, popFlipX, popMoveY, popRangeY, popFlipY, popMoveChance,
     popPadWidth, popPadDepth, popPadColor, popPadSound};
 }

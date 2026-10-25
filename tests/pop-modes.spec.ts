@@ -1,6 +1,70 @@
 import {expect, test} from '@playwright/test';
 import {selectDrill} from './menu-helpers';
 
+test('3D balls: switch appearance without resetting targets and save it in presets', async ({page}, info) => {
+  test.skip(info.project.name !== 'chromium', 'Desktop WebGL appearance check');
+  test.setTimeout(180000);
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({
+      mode: 'pop', popVariant: 'classic', popSize: 60, popDistance: 8, popCount: 3, popHits: 2,
+      weapon: 'ak47', primaryEnabled: true, quality: 'performance', spread: false, follow: false,
+      autoFullscreen: false, protectShortcuts: false, volume: 0,
+    }));
+  });
+  await page.goto('/'); await selectDrill(page, 'pop');
+  await expect(page.getByRole('switch', {name: '3D balls', exact: true})).not.toBeChecked();
+  await page.evaluate(async () => {
+    const url = performance.getEntriesByType('resource').find(entry => entry.name.includes('/range/engine.ts'))!.name;
+    const {RangeEngine} = await import(/* @vite-ignore */ url), tick = RangeEngine.prototype.tick;
+    RangeEngine.prototype.tick = function(time: number) {(window as any).appearanceEngine = this; tick.call(this, time);};
+  });
+  await page.waitForFunction(() => !!(window as any).appearanceEngine?.sim.pop);
+  const before = await page.evaluate(() => {
+    const engine = (window as any).appearanceEngine; (window as any).appearanceField = engine.sim.pop;
+    return engine.sim.pop.balls.map((ball: any) => ({...ball}));
+  });
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await page.screenshot({path: info.outputPath('glow-balls.png')});
+  await page.keyboard.press('Escape');
+  await page.getByRole('switch', {name: '3D balls', exact: true}).check();
+  await page.waitForFunction(() => {
+    const engine = (window as any).appearanceEngine, ball = engine.sim.pop.balls[0];
+    return engine.pop.getObjectByName(`pop-ball-${ball.id}`).material.type === 'MeshMatcapMaterial';
+  });
+  expect(await page.evaluate(() => (window as any).appearanceEngine.sim.pop === (window as any).appearanceField)).toBe(true);
+  expect(await page.evaluate(() => (window as any).appearanceEngine.sim.pop.balls)).toEqual(before);
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await page.screenshot({path: info.outputPath('3d-balls.png')});
+  await page.evaluate(() => {
+    const sim = (window as any).appearanceEngine.sim, ball = sim.pop.balls[0];
+    sim.resetRecovery();
+    const dx = ball.x - sim.position.x, dy = ball.y - sim.position.y, dz = ball.z - sim.position.z;
+    sim.yaw = Math.atan2(-dx, -dz); sim.pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
+    sim.start(); sim.release('mouse'); sim.yaw = sim.pitch = 0;
+  });
+  await page.waitForFunction(() => {
+    const engine = (window as any).appearanceEngine, ball = engine.sim.pop.balls[0], material = engine.pop.getObjectByName(`pop-ball-${ball.id}`).material;
+    return ball.hits === 1 && material.type === 'MeshMatcapMaterial' && material.color.r < engine.popSphereMaterial.color.r;
+  });
+  await page.keyboard.press('Escape');
+  await page.getByLabel('Preset name').fill('3D spheres');
+  await page.getByRole('button', {name: 'Save preset', exact: true}).click();
+  const saved = await page.getByLabel('Pop preset', {exact: true}).inputValue();
+  await page.getByRole('switch', {name: '3D balls', exact: true}).uncheck();
+  await page.waitForFunction(() => {
+    const engine = (window as any).appearanceEngine, ball = engine.sim.pop.balls[0];
+    return ball.hits === 1 && engine.pop.getObjectByName(`pop-ball-${ball.id}`).material.type === 'MeshStandardMaterial';
+  });
+  await page.getByLabel('Pop preset', {exact: true}).selectOption(saved);
+  await page.reload(); await selectDrill(page, 'pop');
+  await expect(page.getByRole('switch', {name: '3D balls', exact: true})).toBeChecked();
+  await page.getByLabel('Pop mode', {exact: true}).selectOption('wide');
+  await expect(page.getByRole('switch', {name: '3D balls', exact: true})).toBeChecked();
+  expect(errors).toEqual([]);
+});
+
 test('Micro Flicks: short random hops stay near the fixed center and controls persist', async ({page}, info) => {
   test.skip(info.project.name !== 'chromium', 'Desktop WebGL smoke test');
   test.setTimeout(180000);

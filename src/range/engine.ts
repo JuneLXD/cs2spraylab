@@ -1,3 +1,4 @@
+import {createPopSphereMaterial} from './pop-sphere-material';
 import * as THREE from 'three';
 import {popFrameGeometry} from './pop-geometry';
 import {recoilView} from './view-recoil';
@@ -85,6 +86,8 @@ export class RangeEngine {
   private popCluster?: THREE.Mesh;
   private popGeometry = new THREE.SphereGeometry(1, 32, 20);
   popMaterial = new THREE.MeshStandardMaterial({color: '#ff6a4d', emissive: '#ff6a4d', emissiveIntensity: .8, roughness: .35, metalness: 0, fog: false});
+  private popSphereMaterial = createPopSphereMaterial();
+  private pop3DApplied?: boolean;
   private popColorApplied = '';
   private popBackgroundApplied = '';
   private popWall?: THREE.Mesh;
@@ -100,7 +103,7 @@ export class RangeEngine {
   private popPadEdgeMaterial = new THREE.MeshBasicMaterial({color: '#4df3ff', transparent: true, opacity: .7, side: THREE.DoubleSide, depthWrite: false, fog: false});
   private popPadFlashAt = -Infinity;
   /** Dimmer copies of popMaterial for balls that have taken hits, by damage step. */
-  private popDamaged = new Map<number, THREE.MeshStandardMaterial>();
+  private popDamaged = new Map<number, THREE.MeshStandardMaterial | THREE.MeshMatcapMaterial>();
   /** The benches by the entrance: hidden in Pop, so they live outside the static batches. */
   private benches = new THREE.Group();
   private popAtmosphere = false;
@@ -737,8 +740,10 @@ export class RangeEngine {
     }
     this.setPopAtmosphere(true);
     if (rebuild) {this.clearPopScene(); this.clearImpacts();}
-    if (this.popColorApplied !== this.sim.settings.popColor) {
+    if (this.popColorApplied !== this.sim.settings.popColor || this.pop3DApplied !== this.sim.settings.pop3D) {
+      this.pop3DApplied = this.sim.settings.pop3D;
       this.popColorApplied = this.sim.settings.popColor;
+      this.popSphereMaterial.color.set(this.popColorApplied);
       this.popMaterial.color.set(this.popColorApplied); this.popMaterial.emissive.set(this.popColorApplied); this.popGhostMaterial.color.set(this.popColorApplied);
       this.popDamaged.forEach(material => material.dispose()); this.popDamaged.clear();
     }
@@ -826,7 +831,7 @@ export class RangeEngine {
     for (const ball of pop.drainPopped()) {
       const mesh = this.popMeshes.get(ball.id); if (!mesh) continue;
       this.popMeshes.delete(ball.id);
-      const burst = this.popMaterial.clone(); burst.transparent = true; mesh.material = burst;
+      const burst = (this.sim.settings.pop3D ? this.popSphereMaterial : this.popMaterial).clone(); burst.transparent = true; mesh.material = burst;
       this.popBursts.push({mesh, at: this.elapsed, radius: ball.radius});
     }
     const live = new Set<number>(), ghosts = !!pop.wall && config.wallbang && this.sim.settings.popWallXray;
@@ -840,7 +845,7 @@ export class RangeEngine {
         if (ghosts) {const ghost = new THREE.Mesh(this.popGeometry, this.popGhostMaterial); ghost.name = 'pop-ball-ghost'; ghost.scale.setScalar(1.03); mesh.add(ghost);}
       }
       mesh.position.set(ball.x, ball.y, ball.z); mesh.scale.setScalar(ball.radius);
-      const material = ball.hits ? this.popDamagedMaterial(ball.hits / config.hits) : this.popMaterial;
+      const material = ball.hits ? this.popDamagedMaterial(ball.hits / config.hits) : this.sim.settings.pop3D ? this.popSphereMaterial : this.popMaterial;
       if (mesh.material !== material) mesh.material = material;
     }
     for (const [id, mesh] of this.popMeshes) if (!live.has(id)) {this.popMeshes.delete(id); mesh.removeFromParent();}
@@ -856,8 +861,9 @@ export class RangeEngine {
     const level = Math.max(1, Math.min(3, Math.ceil(fraction * 4)));
     let material = this.popDamaged.get(level);
     if (!material) {
-      material = this.popMaterial.clone();
-      material.color.lerp(new THREE.Color('#000000'), level * .22); material.emissiveIntensity = .8 * (1 - level * .27);
+      material = (this.sim.settings.pop3D ? this.popSphereMaterial : this.popMaterial).clone();
+      material.color.lerp(new THREE.Color('#000000'), level * .22);
+      if (material instanceof THREE.MeshStandardMaterial) material.emissiveIntensity = .8 * (1 - level * .27);
       this.popDamaged.set(level, material);
     }
     return material;
@@ -1190,7 +1196,7 @@ export class RangeEngine {
     disposeResources([this.scene, ...this.solids]); this.modelCache.forEach(m => this.disposeObject(m));
     this.viewAnimations.forEach(animation => animation.dispose());
     this.scope.dispose();
-    this.popGeometry.dispose(); this.popMaterial.dispose(); this.clearPopScene();
+    this.popGeometry.dispose(); this.popMaterial.dispose(); this.popSphereMaterial.matcap?.dispose(); this.popSphereMaterial.dispose(); this.clearPopScene();
     this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popGhostMaterial.dispose(); this.popPadMaterial.dispose(); this.popPadEdgeMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
     this.markerGeometry.dispose(); this.missMaterial.dispose(); this.hitMaterial.dispose(); this.bodyMaterial.dispose();
     this.cues.forEach(c => c.remove()); this.hitCaption.remove();
