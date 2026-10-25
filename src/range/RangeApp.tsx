@@ -1,4 +1,4 @@
-import {popVariants} from './pop';
+import {holdPop, popVariants} from './pop';
 import {download} from './ui/download';
 import {HomeScreen} from './ui/screens/HomeScreen';
 import {SessionScreen} from './ui/screens/SessionScreen';
@@ -239,9 +239,9 @@ export default function RangeApp() {
       {settings.mode === 'hearing' ? <HearingPractice backToPlay={play} volume={settings.volume} openSettings={() => open('settings')} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : isDuelEngineMode(settings.mode) ? <DuelStage key={settings.mode} variant={settings.mode === 'botz' || settings.mode === 'reflex' || settings.mode === 'redline' || settings.mode === 'deathmatch' || settings.mode === 'blitz' ? settings.mode : 'duel'} onConsole={consoleCommand} settings={settings} progression={progression} cosmeticRevision={progressionState.profile.equipped} openSettings={() => open('settings')} onEnter={entered} engineRef={duel} onMenuStatus={onDuelMenu} controlsTarget={controlsTarget} config={selectedDuel.config} update={selectedDuel.update} resetSetup={settings.mode==='duel'||settings.mode==='deathmatch'?selectedDuel.reset:settings.mode==='blitz'?blitzConfig.reset:selectedBotz.reset} botz={selectedBotz.config} updateBotz={selectedBotz.update} blitz={blitzConfig.config} updateBlitz={blitzConfig.update} suspended={screen !== 'game' || !!panel || tutorial || armoryOpen}/> : <>
       <div className={`range-view sl-game-view${showRepFeedback?' has-rep-feedback':''}`}>
       <div className="canvas-host" ref={host} />
-      <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{settings.mode === 'pop' && settings.popVariant === 'pokeball' ? 'CONTINUOUS AIM' : profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
+      <div className="range-topline"><span className="range-badge"><i />{status.active ? 'LIVE RANGE' : 'RANGE 01'}</span><span>{settings.mode === 'pop' && holdPop(settings.popVariant) ? 'CONTINUOUS AIM' : profiles[settings.weapon] ? 'IMPORTED RECOIL CAPTURE' : 'GAME-DERIVED RECOIL'}</span></div>
       {!isDrillMode(settings.mode)&&<div className="target-label">{settings.mode === 'pop' ? popVariants.find(variant => variant.id === settings.popVariant)?.name : modeNames[settings.mode]} <span>{status.distance.toFixed(1)} m</span>
-        {settings.mode === 'pop' && settings.popVariant === 'pokeball' && <span data-testid="pop-hold-cue">Hold fire · {Math.round((status.pop?.hold?.progress ?? 0) * 100)}% cleared</span>}
+        {settings.mode === 'pop' && holdPop(settings.popVariant) && <span data-testid="pop-hold-cue">Hold fire · {Math.round((status.pop?.hold?.progress ?? 0) * 100)}% cleared</span>}
         {settings.mode === 'pop' && settings.popVariant === 'precision' && <span data-testid="pop-center-cue">{status.pop?.phase === 'target' ? 'Shoot the moving dot' : 'Aim at the center dot'}</span>}
         {settings.mode === 'pop' && settings.popVariant === 'microshot' && <span data-testid="pop-cluster-cue">{status.pop?.cluster?.remaining === 0 ? 'Next rectangle…' : `${status.pop?.cluster?.remaining ?? settings.popClusterCount}/${settings.popClusterCount} dots left`} · {status.pop?.cluster?.cleared ?? 0} cleared</span>}</div>}
       {settings.mode === 'transfer' && settings.transferRule === 'kill' && <div className="transfer-health" aria-label="Transfer target health">
@@ -254,7 +254,7 @@ export default function RangeApp() {
       {settings.mode==='peek'&&status.active&&!!status.drill?.peekDirection&&<div className="peek-direction" role="status" aria-label={`Peek ${status.drill.peekDirection<0?'left':'right'}`}>
         {status.drill.peekDirection<0?<ArrowLeft size={32}/>:<ArrowRight size={32}/>}<span>Peek {status.drill.peekDirection<0?'left':'right'}</span>
       </div>}
-      {!settings.spread&&!(settings.mode === 'pop' && settings.popVariant === 'pokeball')&&<button className="spread-warning" onClick={()=>{update({spread:true});}} title="Enable movement and firing inaccuracy">Spread off<Shield size={12}/></button>}
+      {!settings.spread&&!(settings.mode === 'pop' && holdPop(settings.popVariant))&&<button className="spread-warning" onClick={()=>{update({spread:true});}} title="Enable movement and firing inaccuracy">Spread off<Shield size={12}/></button>}
       <div className="hit-marker" ref={hitmarker}><X size={42} strokeWidth={3} /></div>
       {showRepFeedback&&repFeedback&&<div className={`rep-feedback${repFeedback.passed?' passed':''}`} role="status" aria-label="Rep feedback"><Check className="sl-rep-icon" size={24}/><div><b>{repFeedback.message}</b>{repFeedback.tip&&<p>{repFeedback.tip}</p>}</div></div>}
       {error && <div className="range-error" role="alert"><Shield size={24} /><p>{error}</p><button onClick={() => { setError(''); setGeneration(g => g + 1); }}><RotateCcw size={16} />Restart range</button></div>}
@@ -267,8 +267,8 @@ export default function RangeApp() {
         <ScoreBar className="hud-result">
           {settings.mode === 'pop' ? <>
             <ScoreCell value={status.pop?.pops ?? 0} label="POPS" tone="gold"/>
-            <ScoreCell value={<>{Math.round(score)}<em>%</em></>} label={settings.popVariant === 'pokeball' ? "ON TARGET" : "HIT RATE"} testId="accuracy"/>
-            {settings.popVariant === 'pokeball'
+            <ScoreCell value={<>{Math.round(score)}<em>%</em></>} label={holdPop(settings.popVariant) ? "ON TARGET" : "HIT RATE"} testId="accuracy"/>
+            {holdPop(settings.popVariant)
               ? <ScoreCell value={`${Math.max(0, (status.pop?.hold?.heldSeconds ?? 0) - (status.pop?.hold?.onTargetSeconds ?? 0)).toFixed(1)}s`} label="OFF TARGET" tone="miss"/>
               : <ScoreCell value={(status.pop?.shots ?? 0) - (status.pop?.hits ?? 0)} label="MISS" tone="miss"/>}
             <ScoreCell value={status.pop?.seconds ? Math.round(status.pop.pops / status.pop.seconds * 60) : 0} label="POPS / MIN" tone="blue"/>

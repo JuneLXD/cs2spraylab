@@ -465,6 +465,10 @@ export const latestChanges = {
       'The same dot now travels smoothly to its next position after a hit, staying visible throughout the move. It stops at the destination, and its hit area follows it while moving.',
       'Movement delay keeps the dot visible before it moves. The short distance and fixed center limit still apply.',
     ]},
+    {id: 'pop-moving-exercises', title: 'Pop: Floating Heads, Pasu Micro and DriftTS', items: [
+      'Floating Heads adds horizontal strafes with gentle bobbing. Pasu Micro adds diagonal targets that change direction. DriftTS adds held-fire tracking on targets that accelerate and slow down.',
+      'Adjust count, speed, center radius, bobbing or direction changes, and save each setup as a preset. All three support 3D balls.',
+    ]},
     {id: 'pop-close-pairs-pokeball', title: 'Pop: Close Pairs and Pokeball', items: [
       'Close Pairs keeps two small dots close together near center. Clear a dot and its replacement appears beside the survivor.',
       'Pokeball uses continuous held-fire aim. Settle on each dot until it clears, with adjustable hold time, on-target accuracy and saved presets.',

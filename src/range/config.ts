@@ -84,6 +84,8 @@ export type Settings = {
   popFlickStep: number; popFlickRadius: number;
   /** Close Pairs / Pokeball: center spacing, bounded spawn radius (m), and on-target hold time (s). */
   popPairGap: number; popPairRadius: number; popHoldTime: number;
+  /** Moving Pop exercises: target count, speed, center radius, turns per second, and vertical bob (m). */
+  popMotionCount: number; popMotionSpeed: number; popMotionRadius: number; popMotionRate: number; popFloatBob: number;
   /** Shaded spheres instead of the original glowing target appearance. */
   pop3D: boolean;
   /** Microshot: dots per rectangle, and its requested dimensions in metres. */
@@ -137,6 +139,7 @@ export const defaults: Settings = {
   keyboard: defaultKeyboard,
   viewmodel: classicViewmodel,
   tracers: 'native',
+  popMotionCount: 3, popMotionSpeed: .6, popMotionRadius: 1, popMotionRate: 1.2, popFloatBob: .04,
   popVariant: 'classic', pop3D: false, popPairGap: .35, popPairRadius: 1, popHoldTime: .15, popPrecisionSpeed: .8, popFlickStep: .3, popFlickRadius: 1, popClusterCount: 3, popClusterWidth: .7, popClusterHeight: .6,
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
   popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popWallbang: false, popWallMaterial: 'wood', popWallXray: true, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0, popMoveChance: .5,
@@ -191,8 +194,13 @@ export function sanitizeSettings(raw: unknown): Settings {
     keyboard: sanitizeKeyboard(s.keyboard),
     viewmodel: sanitizeViewmodel(s.viewmodel),
     tracers: s.tracers === 'every' || s.tracers === 'off' ? s.tracers : 'native',
-    popVariant: s.popVariant === 'precision' || s.popVariant === 'wide' || s.popVariant === 'microshot' || s.popVariant === 'closepairs' || s.popVariant === 'pokeball' ? s.popVariant : 'classic',
+    popVariant: s.popVariant === 'precision' || s.popVariant === 'wide' || s.popVariant === 'microshot' || s.popVariant === 'closepairs' || s.popVariant === 'pokeball' || s.popVariant === 'floatingheads' || s.popVariant === 'pasu' || s.popVariant === 'driftts' ? s.popVariant : 'classic',
     pop3D: s.pop3D === true,
+    popMotionCount: Math.round(numeric(s.popMotionCount, defaults.popMotionCount, 1, 6)),
+    popMotionSpeed: Math.round(numeric(s.popMotionSpeed, defaults.popMotionSpeed, .1, 3) * 10) / 10,
+    popMotionRadius: Math.round(numeric(s.popMotionRadius, defaults.popMotionRadius, .4, 1.2) * 10) / 10,
+    popMotionRate: Math.round(numeric(s.popMotionRate, defaults.popMotionRate, .5, 3) * 10) / 10,
+    popFloatBob: Math.round(numeric(s.popFloatBob, defaults.popFloatBob, 0, .2) * 100) / 100,
     popPairGap: Math.round(numeric(s.popPairGap, defaults.popPairGap, .12, 1) * 100) / 100,
     popPairRadius: Math.round(numeric(s.popPairRadius, defaults.popPairRadius, .3, 1.2) * 10) / 10,
     popHoldTime: Math.round(numeric(s.popHoldTime, defaults.popHoldTime, .05, .5) * 100) / 100,

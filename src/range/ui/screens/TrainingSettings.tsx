@@ -1,13 +1,14 @@
 import {memo, useId} from 'react';
 import {gameData, isDuelEngineMode, loadoutWeapon, weaponNames, type Settings} from '../../config';
-import {popBackgrounds, popColors, popLimits, popPadColors, popVariants, popWallMaterials} from '../../pop';
+import {holdPop, movingPop, popBackgrounds, popColors, popLimits, popPadColors, popVariants, popWallMaterials} from '../../pop';
 import {PopPresets} from './PopPresets';
 import {popPresetStore, popVariantPatch} from '../../pop-presets';
 import {SettingRow, SliderRow as Slider, SwitchRow as Toggle} from '../primitives';
 export const TrainingSettings = memo(function TrainingSettings({settings, update}: {settings: Settings; update: (patch: Partial<Settings>) => void}) {
   const weapon = gameData.weapons[loadoutWeapon(settings)];
   const colorId = useId(), backgroundId = useId(), padColorId = useId();
-  const classicPop = settings.popVariant === 'classic', pokeball = settings.popVariant === 'pokeball', paired = pokeball || settings.popVariant === 'closepairs';
+  const classicPop = settings.popVariant === 'classic', heldAim = holdPop(settings.popVariant), moving = movingPop(settings.popVariant),
+    paired = settings.popVariant === 'pokeball' || settings.popVariant === 'closepairs';
   if (settings.mode === 'pop') return <>
     <h2>Pop</h2>
     <label className="select-row">Pop mode<select aria-label="Pop mode" value={settings.popVariant} onChange={e => {popPresetStore.select(''); update(popVariantPatch(e.target.value as Settings['popVariant']));}}>{popVariants.map(variant => <option key={variant.id} value={variant.id}>{variant.name}</option>)}</select></label>
@@ -20,12 +21,20 @@ export const TrainingSettings = memo(function TrainingSettings({settings, update
       <Slider label="Jump distance" value={settings.popFlickStep} min={.05} max={Math.min(1, settings.popFlickRadius)} step={.05} suffix=" m" onChange={popFlickStep => update({popFlickStep})}/>
       <Slider label="Center radius" value={settings.popFlickRadius} min={.3} max={1.2} step={.1} suffix=" m" onChange={popFlickRadius => update({popFlickRadius})}/>
     </>}
+    {moving && <>
+      <Slider label="Moving targets" value={settings.popMotionCount} min={1} max={6} onChange={popMotionCount => update({popMotionCount})}/>
+      <Slider label="Target speed" value={settings.popMotionSpeed} min={.1} max={3} step={.1} suffix=" m/s" onChange={popMotionSpeed => update({popMotionSpeed})}/>
+      <Slider label="Center radius" value={settings.popMotionRadius} min={.4} max={1.2} step={.1} suffix=" m" onChange={popMotionRadius => update({popMotionRadius})}/>
+      {settings.popVariant === 'floatingheads'
+        ? <Slider label="Vertical bob" value={Math.round(settings.popFloatBob * 100)} min={0} max={20} suffix=" cm" onChange={cm => update({popFloatBob: cm / 100})}/>
+        : <Slider label="Direction changes" value={settings.popMotionRate} min={.5} max={3} step={.1} suffix=" /s" onChange={popMotionRate => update({popMotionRate})}/>}
+    </>}
     {paired && <>
       <Slider label="Target spacing" value={settings.popPairGap} min={.12} max={1} step={.01} suffix=" m" onChange={popPairGap => update({popPairGap})}/>
       <Slider label="Center radius" value={settings.popPairRadius} min={.3} max={1.2} step={.1} suffix=" m" onChange={popPairRadius => update({popPairRadius})}/>
       <p className="setting-explanation">Two dots stay near center. Spacing is limited by the center radius; both grow if needed to prevent overlap.</p>
     </>}
-    {pokeball && <>
+    {heldAim && <>
       <Slider label="Hold time" value={Math.round(settings.popHoldTime * 1000)} min={50} max={500} step={10} suffix=" ms" onChange={ms => update({popHoldTime: ms / 1000})}/>
       <p className="setting-explanation">Hold fire while switching dots. Each dot darkens as it clears. This exercise measures time under your crosshair, independent of weapon recoil, spread and ammo.</p>
     </>}
@@ -36,7 +45,7 @@ export const TrainingSettings = memo(function TrainingSettings({settings, update
       <Slider label="Rectangle height" value={settings.popClusterHeight} min={.3} max={2} step={.1} suffix=" m" onChange={popClusterHeight => update({popClusterHeight})}/>
       <p className="setting-explanation">Clear every dot before the rectangle moves. Smaller rectangles keep the dots closer together; the rectangle grows if needed to fit them without overlap.</p>
     </>}
-    {!pokeball && <Slider label="Hits to pop" value={settings.popHits} min={popLimits.hits[0]} max={popLimits.hits[1]} onChange={popHits => update({popHits})}/>}
+    {!heldAim && <Slider label="Hits to pop" value={settings.popHits} min={popLimits.hits[0]} max={popLimits.hits[1]} onChange={popHits => update({popHits})}/>}
     {classicPop && <label className="select-row">Ball respawn<select aria-label="Ball respawn" value={settings.popRespawnMode} onChange={e => update({popRespawnMode: e.target.value as Settings['popRespawnMode']})}><option value="timer">After a delay</option><option value="pad">When you step on the pad behind cover</option></select></label>}
     {(!classicPop || settings.popRespawnMode === 'timer') && <Slider label={settings.popVariant === 'microshot' ? 'Next rectangle delay' : settings.popVariant === 'wide' ? 'Movement delay' : 'Ball respawn delay'} value={settings.popRespawn} min={popLimits.respawn[0]} max={popLimits.respawn[1]} step={.1} suffix=" s" onChange={popRespawn => update({popRespawn})}/>}
     {classicPop && settings.popRespawnMode === 'pad' && <>
@@ -78,7 +87,7 @@ export const TrainingSettings = memo(function TrainingSettings({settings, update
       <input id={backgroundId} aria-label="Background color" type="color" value={settings.popBackground} onChange={event => update({popBackground: event.target.value})}/>
       <div className="sl-swatches" role="group" aria-label="Background color presets">{popBackgrounds.map(([name, value]) => <button key={value} type="button" aria-label={`${name} background`} title={name} aria-pressed={settings.popBackground === value} style={{background: value}} onClick={() => update({popBackground: value})}/>)}</div>
     </div></SettingRow>
-    {!pokeball && <label className="select-row">Ammo<select aria-label="Ammo mode" value={settings.popAmmo} onChange={e => update({popAmmo: e.target.value as Settings['popAmmo']})}><option value="magazine">Never reload</option><option value="reserve">Infinite reserve</option><option value="off">Normal reserves</option></select></label>}
+    {!heldAim && <label className="select-row">Ammo<select aria-label="Ammo mode" value={settings.popAmmo} onChange={e => update({popAmmo: e.target.value as Settings['popAmmo']})}><option value="magazine">Never reload</option><option value="reserve">Infinite reserve</option><option value="off">Normal reserves</option></select></label>}
     <label className="select-row">Hit sound<select aria-label="Hit sound" value={settings.popSound} onChange={e => update({popSound: e.target.value as Settings['popSound']})}><option value="hitmarker">Hitmarker (your file)</option><option value="synth">Synthesized hitmarker</option><option value="pop">Pop</option></select></label>
     <Toggle label="Mute gun sound" checked={settings.popMuteGun} onChange={popMuteGun => update({popMuteGun})}/>
     <Toggle label="Hide bullet impacts" checked={settings.popHideImpacts} onChange={popHideImpacts => update({popHideImpacts})}/>

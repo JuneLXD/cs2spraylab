@@ -3,12 +3,12 @@ import {equipmentNames, type Equipment} from '../equipment';
 import {loadBotzHistory, type BotzHistory} from '../duel/botz';
 import {loadDuelHistory, type DuelHistory} from '../duel/coaching';
 import {clock} from '../duel/BotzPanel';
-import {resultAccuracy, type Result} from '../simulation';
+import {heldAimName, resultAccuracy, type Result} from '../simulation';
 export type SessionHistories = {botz: BotzHistory[]; reflex: BotzHistory[]; redline: BotzHistory[]; duel: DuelHistory[]};
 export const readSessionHistories = (): SessionHistories => ({botz:loadBotzHistory(),reflex:loadBotzHistory('island'),redline:loadBotzHistory('redline'),duel:loadDuelHistory()});
 export type RecentSession = {id:string; date:string; mode:Mode; title:string; detail:string; value:string; unit:string; weapon?:Equipment};
 export function recentSessions(results: Result[], histories: SessionHistories): RecentSession[] {
-  const rows:RecentSession[] = results.map(result=>({id:result.id,date:result.date,mode:result.mode==='tracking'?'spray':result.mode,title:result.pokeball ? 'Pokeball' : historyModeNames[result.mode],weapon:result.weapon,
+  const rows:RecentSession[] = results.map(result=>({id:result.id,date:result.date,mode:result.mode==='tracking'?'spray':result.mode,title:result.pokeball ? heldAimName(result) : historyModeNames[result.mode],weapon:result.weapon,
     detail:result.pokeball ? `${result.pokeball.pops} pops · ${clock(result.seconds)}` : `${equipmentNames[result.weapon]} · ${result.hits}/${result.shots} hits · ${clock(result.seconds)}`,
     value:result.mode==='precision' ? result.drill?.movementScore===undefined?'—':String(result.drill.movementScore) : `${Math.round(resultAccuracy(result))}%`,unit:result.pokeball?'ON TARGET':result.mode==='precision'?'MOVEMENT':'HIT RATE'}));
   for (const mode of ['botz','reflex','redline'] as const) histories[mode].forEach((entry,index)=>rows.push({id:`${mode}-${entry.date}-${index}`,date:entry.date,mode,title:historyModeNames[mode],weapon:entry.weapon,

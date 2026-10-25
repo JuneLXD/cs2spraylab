@@ -5,6 +5,25 @@ of you; a shot pops the first ball it crosses and a new one appears elsewhere. I
 (`mode: 'pop'`, category Aim warm-up), so the weapon, recoil, spread, reload and crosshair code are the
 ones every other range drill uses.
 
+- **Floating Heads**, **Pasu Micro** and **DriftTS** (2026-10-25) adapt the remaining researched exercises to
+  a compact field ahead of the player. Defaults: three 12 cm dots at 8 m, 0.6 m/s, 1 m center radius.
+  `popMotionCount` (1–6), `popMotionSpeed` (0.1–3 m/s) and `popMotionRadius` (0.4–1.2 m) control all three.
+  Centers move inside a rectangle inscribed in that radius; even the largest supported spheres stay above
+  the physical floor. Dense setups can overlap, as in Classic; smaller dots give clearer separation.
+- Floating Heads makes long horizontal sweeps, slowing smoothly at the ends, in separate vertical lanes.
+  `popFloatBob` adds 0–20 cm of vertical bob, default 4 cm (limited by field height). Pasu Micro travels
+  diagonally, reflects continuously at boundaries and chooses new diagonal directions at jittered intervals.
+  `popMotionRate` (0.5–3 changes/s, default 1.2) controls those direction choices. Both use normal weapon shots.
+- DriftTS makes short, mostly horizontal strokes with smooth acceleration/deceleration and small vertical
+  adjustments. It uses the same direction-change control and held-fire contact as Pokeball, with a 200 ms
+  default hold. Speed is a ceiling; the compact area can shorten a stroke. Partial progress follows the
+  moving dot; release stops damage, and pause stops movement. History labels this as DriftTS, retaining the
+  existing `pokeball` result storage key with an optional `variant` for backward compatibility.
+- `pop-motion.ts` uses absolute simulation time and per-target deterministic turn choices. Motion is identical
+  across frame rates, new fields start at the current simulation time, and each replacement starts its own
+  path at birth. Rendering and collision use the same continuously updated ball position. Count, speed,
+  bounds, bob/rate and hold time save in presets; 3D appearance is preserved. Coverage: `pop-motion.test.ts`
+  and `tests/pop-moving.spec.ts`, plus the existing Pop regression cases.
 - **Close Pairs** and **Pokeball** (2026-10-25): two 8 cm dots at 8 m, default centre spacing 0.35 m,
   bounded to a fixed 1 m centre radius. Clearing either dot spawns its replacement near the surviving dot,
   which stays put. Random directions that leave the circle are retried; an inward fallback always fits.

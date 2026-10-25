@@ -13,7 +13,7 @@ import {TERRAIN_RULES} from './terrain';
 import {resolveDamage} from './duel/damage';
 import {NativeReloadState, WeaponActions, type ReloadActionEvent} from './weapon-actions';
 import {reloadInputAllows, usesNativeReloadInput} from './reload-input';
-import {POP_SPAWN, PopField, popConfig, popSpawn} from './pop';
+import {holdPop, POP_SPAWN, PopField, popConfig, popSpawn} from './pop';
 import {recoilView} from './view-recoil';
 import {followCrosshairDirection} from './crosshair-follow';
 
@@ -27,7 +27,8 @@ export type Shot = {index: number; at: number; origin: Vec; direction: Vec; reco
   maxDistance: number; pelletDirections?: Vec[]; firstSlash?: boolean};
 export type RangeWeaponActionEvent = (ReloadActionEvent | {kind: 'zeus-discharge' | 'zeus-ready'; at: number}) & {equipment: Equipment};
 export type ImpactSample = { x: number; y: number; hit: boolean; head: boolean; bullet: number };
-export type Result = { id: string; weapon: Equipment; mode: Settings['mode'] | 'tracking'; shots: number; hits: number; heads: number; seconds: number; tracking: number; date: string; samples: ImpactSample[]; drill?: DrillMetrics; pokeball?: {pops: number; heldSeconds: number; onTargetSeconds: number} };
+export type Result = { id: string; weapon: Equipment; mode: Settings['mode'] | 'tracking'; shots: number; hits: number; heads: number; seconds: number; tracking: number; date: string; samples: ImpactSample[]; drill?: DrillMetrics; pokeball?: {variant?: 'pokeball' | 'driftts'; pops: number; heldSeconds: number; onTargetSeconds: number} };
+export const heldAimName = (result: Result) => result.pokeball?.variant === 'driftts' ? 'DriftTS' : 'Pokeball';
 export function resultAccuracy(result: Result) {
   return result.pokeball ? (result.pokeball.heldSeconds ? result.pokeball.onTargetSeconds / result.pokeball.heldSeconds * 100 : 0)
     : result.mode === 'tracking' ? result.tracking : result.shots ? result.hits / result.shots * 100 : 0;
@@ -209,7 +210,7 @@ export class Simulation {
       this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
     } }
     if (s.mode === 'pop') {
-      this.pop = new PopField(popConfig(s), POP_SPAWN, this.random ?? Math.random); this.popPublishedShots = 0;
+      this.pop = new PopField(popConfig(s), POP_SPAWN, this.random ?? Math.random, this.time); this.popPublishedShots = 0;
       // A fresh simulation starts in Pop too (the constructor configures with the mode already set).
       if (changedMode || !this.popPlaced || changedWall) {
         this.popPlaced = true;
@@ -236,7 +237,7 @@ export class Simulation {
     this.popPublishedShots = activity;
     this.latest = {id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, weapon: this.equipped, mode: 'pop', shots: pop.shots, hits: pop.hits,
       heads: 0, seconds: this.time - this.popStartedAt, tracking: 0, date: new Date().toISOString(), samples: [],
-      ...(pop.config.variant === 'pokeball' ? {pokeball: {pops: pop.pops, heldSeconds: pop.heldSeconds, onTargetSeconds: pop.onTargetSeconds}} : {})};
+      ...(holdPop(pop.config.variant) ? {pokeball: {variant: pop.config.variant as 'pokeball' | 'driftts', pops: pop.pops, heldSeconds: pop.heldSeconds, onTargetSeconds: pop.onTargetSeconds}} : {})};
     this.attempts++; this.onResult(this.latest);
   }
   equip(slot: Slot) {
@@ -333,7 +334,7 @@ export class Simulation {
     return started;
   }
   start(automatic = false, alternate = false, scheduledAt = this.time) {
-    if (this.pop?.config.variant === 'pokeball') {
+    if (holdPop(this.pop?.config.variant)) {
       if (alternate) return false;
       this.active = this.firing = true; this.automatic = automatic; this.resumeHeldAt = undefined;
       return true;
@@ -481,7 +482,7 @@ export class Simulation {
     }
     if (reloading && !this.reloadState.active && !weapon.reloadsSingleShells) recovery.reloadFinished();
     this.recoil=this.equipped==='knife' || this.equipped==='zeus'?{yaw:0,pitch:0}:recovery.recoil;
-    if (this.pop?.center || this.pop?.config.variant === 'pokeball') {
+    if (this.pop && (this.pop.center || holdPop(this.pop.config.variant))) {
       const view = recoilView(this.yaw, this.pitch, this.recoil, this.viewPunch.sample(this.time));
       const aim = this.settings.follow && !this.actions.hidesViewmodel
         ? followCrosshairDirection(this.yaw, this.pitch, this.recoil) : direction(view.yaw, view.pitch);
@@ -532,7 +533,7 @@ export class Simulation {
     recovery.finishAccuracy();
   }
   fire() {
-    if (this.pop?.config.variant === 'pokeball') return;
+    if (holdPop(this.pop?.config.variant)) return;
     const weapon = this.stats;
     if (this.time + 1e-9 < (this.shotReady.get(this.equipped) ?? 0)) return;
     if (this.reloadState.active && (this.reloadState.empty || !this.reloadState.interrupt(this.time))) return;

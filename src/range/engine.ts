@@ -1,3 +1,4 @@
+import {holdPop} from './pop';
 import {createPopSphereMaterial} from './pop-sphere-material';
 import * as THREE from 'three';
 import {popFrameGeometry} from './pop-geometry';
@@ -516,7 +517,7 @@ export class RangeEngine {
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popVariant', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
+      'popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -829,7 +830,7 @@ export class RangeEngine {
       this.popPadMaterial.opacity = Math.max(armed ? .85 : .3, flash); this.popPadEdgeMaterial.opacity = Math.max(armed ? 1 : .7, flash);
     }
     const cleared = pop.drainPopped();
-    if (config.variant === 'pokeball' && cleared.length) {
+    if (holdPop(config.variant) && cleared.length) {
       this.hitTime = .2; this.hitCaption.textContent = cleared.length > 1 ? `${cleared.length} POPS` : 'POP';
       this.hitmarker.style.color = this.hitCaption.style.color = '#ffdc59';
       this.audio.playPopSound(this.sim.settings.popSound, this.sim.settings.volume, cleared.length);
@@ -1093,7 +1094,7 @@ export class RangeEngine {
     this.camera.rotation.set(view.pitch, view.yaw, 0, 'YXZ');
     const scoped = this.scope.update(this.sim.actions, this.camera, this.sim.time + this.sim.accumulator);
     this.weaponRoot.visible = !scoped;
-    this.crosshair.style.visibility = scoped || this.sim.pop?.config.variant !== 'pokeball' && this.sim.equipped !== 'knife' && !gameData.weapons[this.sim.equipped].showCrosshair ? 'hidden' : '';
+    this.crosshair.style.visibility = scoped || !holdPop(this.sim.pop?.config.variant) && this.sim.equipped !== 'knife' && !gameData.weapons[this.sim.equipped].showCrosshair ? 'hidden' : '';
     this.camera.updateMatrixWorld();
     this.kick = Math.max(0, this.kick - dt * 10);
     this.muzzle.intensity = 0;
@@ -1174,7 +1175,7 @@ export class RangeEngine {
       this.onStatus({ weapon: loadoutWeapon(this.sim.settings), equipped:this.sim.equipped,slot:this.sim.slot,equipReady:this.sim.time>=this.sim.equipReadyAt,
         magazine:this.sim.slot===1?this.sim.burstSize:this.sim.stats.magazine, targetHealth: [...this.sim.targetHealth],
         pop: this.sim.pop ? {pops: this.sim.pop.pops, hits: this.sim.pop.hits, shots: this.sim.pop.shots, seconds: this.sim.pop.shots || this.sim.pop.heldSeconds ? this.sim.time - this.sim.popStartedAt : 0,
-          hold: this.sim.pop.config.variant === 'pokeball' ? {heldSeconds: this.sim.pop.heldSeconds, onTargetSeconds: this.sim.pop.onTargetSeconds, progress: this.sim.pop.holdProgress} : undefined,
+          hold: holdPop(this.sim.pop.config.variant) ? {heldSeconds: this.sim.pop.heldSeconds, onTargetSeconds: this.sim.pop.onTargetSeconds, progress: this.sim.pop.holdProgress} : undefined,
           phase: this.sim.pop.center ? this.sim.pop.precisionPhase : undefined,
           cluster: this.sim.pop.cluster ? {remaining: this.sim.pop.balls.length, total: this.sim.pop.config.count, cleared: this.sim.pop.clustersCleared} : undefined} : undefined,
         active: this.sim.active, firing: this.sim.firing, hitFlash:this.hitTime>0, shots: drill?.shots ?? this.sim.shots, hits: drill?.hits ?? this.sim.hits, heads: drill?.heads ?? this.sim.heads,
