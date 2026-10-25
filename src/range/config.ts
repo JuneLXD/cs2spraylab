@@ -80,6 +80,8 @@ export type Settings = {
   popVariant: PopVariant; popSize: number; popCount: number; popSpacing: number; popDistance: number; popColor: string;
   /** Center Return: horizontal speed of the side target in m/s. */
   popPrecisionSpeed: number;
+  /** Microshot: dots per rectangle, and its requested dimensions in metres. */
+  popClusterCount: number; popClusterWidth: number; popClusterHeight: number;
   /** Pop: ammo as sv_infinite_ammo ('magazine' = 1 never reloads, 'reserve' = 2 reloads from a full reserve) and the hit sound. */
   popAmmo: 'off' | 'reserve' | 'magazine'; popSound: 'hitmarker' | 'synth' | 'pop';
   /** Pop only: no gunshot audio, no miss marks on the wall, no HUD over the view. */
@@ -129,7 +131,8 @@ export const defaults: Settings = {
   keyboard: defaultKeyboard,
   viewmodel: classicViewmodel,
   tracers: 'native',
-  popVariant: 'classic', popPrecisionSpeed: .8, popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
+  popVariant: 'classic', popPrecisionSpeed: .8, popClusterCount: 3, popClusterWidth: .7, popClusterHeight: .6,
+  popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
   popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popWallbang: false, popWallMaterial: 'wood', popWallXray: true, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0, popMoveChance: .5,
   popPadWidth: .9, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime',
 };
@@ -184,6 +187,9 @@ export function sanitizeSettings(raw: unknown): Settings {
     tracers: s.tracers === 'every' || s.tracers === 'off' ? s.tracers : 'native',
     popVariant: s.popVariant === 'precision' || s.popVariant === 'wide' || s.popVariant === 'microshot' ? s.popVariant : 'classic',
     popPrecisionSpeed: Math.round(numeric(s.popPrecisionSpeed, defaults.popPrecisionSpeed, .1, 3) * 10) / 10,
+    popClusterCount: Math.round(numeric(s.popClusterCount, defaults.popClusterCount, 1, 12)),
+    popClusterWidth: Math.round(numeric(s.popClusterWidth, defaults.popClusterWidth, .3, 2) * 10) / 10,
+    popClusterHeight: Math.round(numeric(s.popClusterHeight, defaults.popClusterHeight, .3, 2) * 10) / 10,
     popSize: Math.round(numeric(s.popSize, defaults.popSize, 8, 80)), popCount: Math.round(numeric(s.popCount, defaults.popCount, 1, 12)),
     popSpacing: numeric(s.popSpacing, defaults.popSpacing, .2, 5), popDistance: numeric(s.popDistance, defaults.popDistance, 3, 40),
     popColor: typeof s.popColor === 'string' && /^#[\da-f]{6}$/i.test(s.popColor) ? s.popColor.toLowerCase() : defaults.popColor,

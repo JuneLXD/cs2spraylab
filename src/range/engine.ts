@@ -50,7 +50,7 @@ export type RangeStatus = {
   equipped: Equipment; slot: Slot; equipReady: boolean; magazine: number;
   targetHealth?: number[];
   /** Pop mode: the session tally. */
-  pop?: {pops: number; hits: number; shots: number; seconds: number; phase?: 'center' | 'target'};
+  pop?: {pops: number; hits: number; shots: number; seconds: number; phase?: 'center' | 'target'; cluster?: {remaining: number; total: number; cleared: number}};
   drill?: {round:number; completed:number; passed:number; scenario:string; covered:boolean; exposure:Exposure; side:number; peekDirection?:number; phase:'prepare'|'exposed'|'feedback'|'reposition'; accurate:boolean; error:number; remaining?:number; last?:DrillMetrics};
 };
 const vector = (v: Vec) => new THREE.Vector3(v.x, v.y, v.z);
@@ -82,8 +82,8 @@ export class RangeEngine {
   private popBackdrop?: THREE.Mesh;
   private popPanel?: THREE.Mesh;
   private popCenter?: THREE.Mesh;
+  private popCluster?: THREE.Mesh;
   private popGeometry = new THREE.SphereGeometry(1, 32, 20);
-  private popSquareGeometry = popFrameGeometry(1, 1, .3);
   popMaterial = new THREE.MeshStandardMaterial({color: '#ff6a4d', emissive: '#ff6a4d', emissiveIntensity: .8, roughness: .35, metalness: 0, fog: false});
   private popColorApplied = '';
   private popBackgroundApplied = '';
@@ -513,7 +513,7 @@ export class RangeEngine {
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popVariant', 'popPrecisionSpeed', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
+      'popVariant', 'popPrecisionSpeed', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -743,6 +743,15 @@ export class RangeEngine {
       this.popDamaged.forEach(material => material.dispose()); this.popDamaged.clear();
     }
     const {region, config} = pop;
+    if (pop.cluster && !this.popCluster) {
+      this.popCluster = new THREE.Mesh(popFrameGeometry(pop.cluster.halfW, pop.cluster.halfH, .02 * config.distance / 8),
+        new THREE.MeshBasicMaterial({color: '#64ff9d', fog: false, toneMapped: false}));
+      this.popCluster.name = 'pop-cluster'; this.pop.add(this.popCluster);
+    }
+    if (this.popCluster && pop.cluster) {
+      this.popCluster.position.set(pop.cluster.x, pop.cluster.y, pop.cluster.z + .005);
+      this.popCluster.visible = pop.balls.length > 0;
+    }
     if (pop.center && !this.popCenter) {
       this.popCenter = new THREE.Mesh(new THREE.CircleGeometry(pop.center.radius, 4), new THREE.MeshBasicMaterial({color: '#ffd05b', fog: false, toneMapped: false}));
       this.popCenter.name = 'pop-center'; this.popCenter.position.set(pop.center.x, pop.center.y, pop.center.z + .005);
@@ -824,7 +833,7 @@ export class RangeEngine {
     for (const ball of pop.balls) {
       live.add(ball.id);
       let mesh = this.popMeshes.get(ball.id);
-      if (!mesh) {mesh = new THREE.Mesh(config.variant === 'microshot' ? this.popSquareGeometry : this.popGeometry, this.popMaterial); mesh.name = `pop-ball-${ball.id}`; this.popMeshes.set(ball.id, mesh); this.pop.add(mesh);}
+      if (!mesh) {mesh = new THREE.Mesh(this.popGeometry, this.popMaterial); mesh.name = `pop-ball-${ball.id}`; this.popMeshes.set(ball.id, mesh); this.pop.add(mesh);}
       // Each ball carries a faint ghost that only shows where the wall hides it.
       if (mesh.children.length !== +ghosts) {
         mesh.clear();
@@ -858,6 +867,7 @@ export class RangeEngine {
     this.pop.clear(); this.popMeshes.clear(); this.popBursts = [];
     this.popPanel?.traverse(object => {const mesh = object as THREE.Mesh; mesh.geometry.dispose(); (mesh.material as THREE.Material).dispose();}); this.popPanel = undefined;
     this.popCenter?.geometry.dispose(); (this.popCenter?.material as THREE.Material | undefined)?.dispose(); this.popCenter = undefined;
+    this.popCluster?.geometry.dispose(); (this.popCluster?.material as THREE.Material | undefined)?.dispose(); this.popCluster = undefined;
     this.popBackdrop?.geometry.dispose(); (this.popBackdrop?.material as THREE.Material | undefined)?.dispose(); this.popBackdrop = undefined;
     this.popWall?.geometry.dispose(); this.popWall?.children.forEach(child => (child as THREE.Mesh).geometry.dispose()); this.popWall = undefined;
     this.popPad?.geometry.dispose(); this.popPad?.children.forEach(child => (child as THREE.Mesh).geometry.dispose()); this.popPad = undefined;
@@ -1152,7 +1162,8 @@ export class RangeEngine {
       this.onStatus({ weapon: loadoutWeapon(this.sim.settings), equipped:this.sim.equipped,slot:this.sim.slot,equipReady:this.sim.time>=this.sim.equipReadyAt,
         magazine:this.sim.slot===1?this.sim.burstSize:this.sim.stats.magazine, targetHealth: [...this.sim.targetHealth],
         pop: this.sim.pop ? {pops: this.sim.pop.pops, hits: this.sim.pop.hits, shots: this.sim.pop.shots, seconds: this.sim.pop.shots ? this.sim.time - this.sim.popStartedAt : 0,
-          phase: this.sim.pop.center ? this.sim.pop.precisionPhase : undefined} : undefined,
+          phase: this.sim.pop.center ? this.sim.pop.precisionPhase : undefined,
+          cluster: this.sim.pop.cluster ? {remaining: this.sim.pop.balls.length, total: this.sim.pop.config.count, cleared: this.sim.pop.clustersCleared} : undefined} : undefined,
         active: this.sim.active, firing: this.sim.firing, hitFlash:this.hitTime>0, shots: drill?.shots ?? this.sim.shots, hits: drill?.hits ?? this.sim.hits, heads: drill?.heads ?? this.sim.heads,
         remaining:this.sim.slot===3?0:this.sim.loadedAmmo,reserve:this.sim.reserveAmmo,reloadSilent:this.sim.reloadSilent,
         recharge:Math.max(0,this.sim.rechargeUntil-this.sim.time),reload: reloadRemaining, reloadProgress: reloading ? this.sim.reloadState.progress : undefined,
@@ -1179,7 +1190,7 @@ export class RangeEngine {
     disposeResources([this.scene, ...this.solids]); this.modelCache.forEach(m => this.disposeObject(m));
     this.viewAnimations.forEach(animation => animation.dispose());
     this.scope.dispose();
-    this.popGeometry.dispose(); this.popSquareGeometry.dispose(); this.popMaterial.dispose(); this.clearPopScene();
+    this.popGeometry.dispose(); this.popMaterial.dispose(); this.clearPopScene();
     this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popGhostMaterial.dispose(); this.popPadMaterial.dispose(); this.popPadEdgeMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
     this.markerGeometry.dispose(); this.missMaterial.dispose(); this.hitMaterial.dispose(); this.bodyMaterial.dispose();
     this.cues.forEach(c => c.remove()); this.hitCaption.remove();

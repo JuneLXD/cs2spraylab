@@ -36,7 +36,7 @@ describe('Pop specific modes', () => {
       field.hit(POP_SPAWN, aim(ball));
     }
   });
-  it.each(['wide', 'microshot'] as const)('%s keeps one target fully inside its panel across 200 replacements', variant => {
+  it.each(['wide'] as const)('%s keeps one target fully inside its panel across 200 replacements', variant => {
     const field = new PopField(popConfig(setup(variant)), POP_SPAWN, random(7));
     let previous = field.balls[0];
     for (let i = 0; i < 200; i++) {
@@ -54,7 +54,7 @@ describe('Pop specific modes', () => {
     expect(field.pops).toBe(200);
   });
 
-  it.each(['wide', 'microshot'] as const)('%s stays bounded with extreme size/distance and a constant random source', variant => {
+  it.each(['wide'] as const)('%s stays bounded with extreme size/distance and a constant random source', variant => {
     const field = new PopField(popConfig({...setup(variant), popSize: 80, popDistance: 3}), POP_SPAWN, () => .5);
     for (let i = 0; i < 20; i++) {
       const ball = field.balls[0];
@@ -63,19 +63,6 @@ describe('Pop specific modes', () => {
       field.hit(POP_SPAWN, aim(ball));
       expect(Math.hypot(field.balls[0].x - ball.x, field.balls[0].y - ball.y)).toBeGreaterThan(0);
     }
-  });
-
-  it('uses a rectangular hit area for Microshot, including corners and the hollow centre', () => {
-    const field = new PopField(popConfig({...setup('microshot'), popHits: 3}), POP_SPAWN, random(4));
-    const ball = field.balls[0];
-    expect(field.hit(POP_SPAWN, aim({...ball, x: ball.x + ball.radius * 1.01}))).toBeUndefined();
-    expect(field.hit(POP_SPAWN, {x: 1, y: 0, z: 0})).toBeUndefined();
-    expect(field.hit(POP_SPAWN, {x: 0, y: 0, z: 1})).toBeUndefined();
-    expect(field.hit(POP_SPAWN, aim(ball), 1)).toBeUndefined();
-    expect(field.hit(POP_SPAWN, aim({...ball, x: ball.x + ball.radius * .95, y: ball.y + ball.radius * .95}))?.popped).toBe(false);
-    expect(field.hit(POP_SPAWN, aim(ball))?.popped).toBe(false);
-    expect(field.hit(POP_SPAWN, aim({...ball, x: ball.x - ball.radius}))?.popped).toBe(true);
-    expect(field.hits).toBe(3); expect(field.pops).toBe(1);
   });
 
   it('retains the previous side through delayed respawn and resets the session cleanly', () => {
@@ -90,13 +77,13 @@ describe('Pop specific modes', () => {
     expect(field.balls).toHaveLength(1); expect(field.pending).toEqual([]); expect(field.pops).toBe(0);
   });
 
-  it('isolates single-target rules from hidden classic settings and repositions on a mode change', () => {
+  it('isolates specific-mode rules from hidden classic settings and repositions on a mode change', () => {
     const settings = {...setup('classic'), popWall: 'both' as const, popRespawnMode: 'pad' as const, popMoveX: 4};
     const sim = new Simulation(settings, random(1));
     sim.position.x = 5; sim.yaw = 1;
     sim.configure({...settings, popVariant: 'microshot'});
     expect(sim.position).toEqual(POP_SPAWN); expect(sim.yaw).toBe(0);
-    expect(sim.pop!.balls).toHaveLength(1); expect(sim.pop!.moving).toBe(false); expect(sim.pop!.wall).toBeUndefined();
+    expect(sim.pop!.balls).toHaveLength(3); expect(sim.pop!.moving).toBe(false); expect(sim.pop!.wall).toBeUndefined();
     expect(sim.pop!.config.respawnMode).toBe('timer');
     sim.configure(settings);
     expect(sim.pop!.balls).toHaveLength(5); expect(sim.pop!.wall).toBeDefined(); expect(sim.pop!.moving).toBe(true);

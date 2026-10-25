@@ -453,6 +453,10 @@ export const latestChanges = {
       'The first Pop submode is now Center Return: aim at its fixed center dot to release a moving dot from either side, shoot it, then recenter before the next rep. The center marker needs no shot and awards no points.',
       'Target speed controls the crossing pace. Escaped targets also return the drill to its center step; the HUD shows which step is active.',
     ]},
+    {id: 'pop-microshot-clusters', title: 'Microshot: clear the rectangle', items: [
+      'Microshot now places several closely spaced dots inside a green rectangle. Pop every dot in any order before the rectangle moves to a new position with a fresh group.',
+      'Choose 1–12 dots, rectangle width and height, and a delay between groups. The HUD shows dots remaining and rectangles cleared; your setup saves in Pop presets.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

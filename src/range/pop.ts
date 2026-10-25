@@ -20,13 +20,13 @@ export const popVariants: readonly {id: PopVariant; name: string; description: s
   {id: 'classic', name: 'Classic Pop', description: 'Build your own field of balls, movement and peek cover.'},
   {id: 'precision', name: 'Center Return', description: 'Aim at the fixed center dot, shoot the moving dot entering from a side, then return to center to start the next rep.'},
   {id: 'wide', name: 'Wide Flicks', description: 'One target alternates across a wide field. Flick to the other side after each pop.'},
-  {id: 'microshot', name: 'Microshot', description: 'One square target in a compact panel. Make small, controlled corrections; the whole square counts.'},
+  {id: 'microshot', name: 'Microshot', description: 'Clear every dot inside the small rectangle. Only then does the rectangle move to a new position with a fresh group.'},
 ];
 /** What a wallbangable peek wall is made of: it sets how much of a bullet's damage the wall eats (CS2 surface materials). It
  * never changes how the wall looks. */
 export type PopWallMaterial = 'wood' | 'concrete' | 'metal';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
-export type PopConfig = {variant: PopVariant; precisionSpeed: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
+export type PopConfig = {variant: PopVariant; precisionSpeed: number; clusterWidth: number; clusterHeight: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
   wallbang: boolean; wallMaterial: PopWallMaterial;
   respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
@@ -70,11 +70,12 @@ export const POP_WALL = {edge: .35, height: 2.8, thickness: .4, ahead: 1.5, peek
 /** The materials a wallbangable peek wall can be made of, as the Wall material setting lists them. */
 export const popWallMaterials: readonly (readonly [PopWallMaterial, string])[] = [['wood', 'Wood'], ['concrete', 'Concrete'], ['metal', 'Metal']];
 
-export function popConfig(settings: {popVariant: PopVariant; popPrecisionSpeed: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
+export function popConfig(settings: {popVariant: PopVariant; popPrecisionSpeed: number; popClusterCount: number; popClusterWidth: number; popClusterHeight: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
   popWallWidth: number; popWallbang: boolean; popWallMaterial: PopWallMaterial; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number;
   popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
   const classic = settings.popVariant === 'classic';
-  return {variant: settings.popVariant, precisionSpeed: settings.popPrecisionSpeed, size: settings.popSize / 100, count: classic ? settings.popCount : 1, spacing: settings.popSpacing, distance: settings.popDistance,
+  return {variant: settings.popVariant, precisionSpeed: settings.popPrecisionSpeed, clusterWidth: settings.popClusterWidth, clusterHeight: settings.popClusterHeight,
+    size: settings.popSize / 100, count: classic ? settings.popCount : settings.popVariant === 'microshot' ? settings.popClusterCount : 1, spacing: settings.popSpacing, distance: settings.popDistance,
     hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, wallbang: settings.popWallbang, wallMaterial: settings.popWallMaterial,
     respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
     padWidth: settings.popPadWidth, padDepth: settings.popPadDepth,
@@ -105,17 +106,33 @@ export const popPad = (config: Pick<PopConfig, 'wall' | 'wallWidth' | 'padWidth'
 /** Where you start: on the pad's centre, so centred behind the cover. */
 export const popSpawn = (config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: Vec): Vec => ({...origin, x: popWall(config, origin)?.center.x ?? origin.x});
 
+/** Give each dot its own jittered cell. Grow the rectangle only when its count/size cannot fit without overlap;
+ * add columns instead of rows when necessary to keep the rectangle above the physical floor. */
+function clusterLayout(config: PopConfig) {
+  const gap = Math.max(.015, config.size * .08), padding = Math.max(.025 * config.distance / 8, config.size * .1);
+  const cell = config.size + gap, maxRows = Math.max(1, Math.floor((2.8 - padding * 2) / cell));
+  const cols = Math.min(config.count, Math.max(Math.ceil(Math.sqrt(config.count * config.clusterWidth / config.clusterHeight)), Math.ceil(config.count / maxRows)));
+  const rows = Math.ceil(config.count / cols);
+  return {cols, rows, padding, gap, width: Math.max(config.clusterWidth, cols * cell + padding * 2), height: Math.max(config.clusterHeight, rows * cell + padding * 2)};
+}
+
 /** The wall the balls float on: centred ahead at eye height (on your peek line when a one-sided peek wall is up), wide
  * enough for the count at the requested spacing, and capped so every ball stays well inside the 90-degree 4:3 view and
  * between knee and head height. */
 export function popRegion(config: PopConfig, origin: Vec): PopRegion {
   const r = config.size / 2, gap = config.spacing + 2 * r;
+  if (config.variant === 'microshot') {
+    const layout = clusterLayout(config), scale = config.distance / 8;
+    return {x: origin.x, y: origin.y, z: origin.z - config.distance,
+      halfW: Math.min(11, Math.max(2.8 * scale, layout.width / 2 + .3 * scale)),
+      halfH: Math.min(1.4, Math.max(1.2 * scale, layout.height / 2 + .1 * scale))};
+  }
   if (config.variant !== 'classic') {
     // These are panel edges; single-target spawns inset by the target radius below. Scale with distance so each
     // exercise keeps its angular footprint until the physical floor/side-wall limits of the range.
     const scale = config.distance / 8;
     const halfW = config.variant === 'wide' ? Math.min(config.distance * .8, 11) : (config.variant === 'precision' ? .75 : 1) * scale;
-    const halfH = Math.min((config.variant === 'microshot' ? .6 : config.variant === 'precision' ? 1.1 : 1.25) * scale, 1.4);
+    const halfH = Math.min((config.variant === 'precision' ? 1.1 : 1.25) * scale, 1.4);
     return {x: origin.x, y: origin.y, z: origin.z - config.distance, halfW: Math.max(halfW, r * 2),
       halfH: Math.max(halfH, r * 2 + (config.variant === 'precision' ? .1 * scale : 0))};
   }
@@ -168,6 +185,10 @@ export class PopField {
   private centeredSince?: number;
   private precisionReadyAt = 0;
   private precisionMotion?: {at: number; x: number};
+  /** Microshot's current rectangle. Popped dots stay gone until the whole group is cleared. */
+  cluster?: PopRegion;
+  clustersCleared = 0;
+  private nextClusterAt?: number;
   readonly region: PopRegion;
   readonly wall?: PopWall;
   /** The wall as a surface bullets can pass through; only when wallbang is on. */
@@ -179,7 +200,8 @@ export class PopField {
     this.wall = popWall(config, origin);
     this.wallSolid = this.wall && config.wallbang ? {id: this.wall.id, center: this.wall.center, size: this.wall.size, material: config.wallMaterial} : undefined;
     this.pad = popPad(config, origin);
-    if (!this.center) for (let i = 0; i < config.count; i++) this.spawn();
+    if (config.variant === 'microshot') this.spawnCluster();
+    else if (!this.center) for (let i = 0; i < config.count; i++) this.spawn();
   }
   get moving() {return !!this.center || axisMoves(this.config.x) || axisMoves(this.config.y);}
   /** Fixed center dot under the actual crosshair ray, independent of shots/spread. */
@@ -213,6 +235,27 @@ export class PopField {
       z: region.z, radius: r, hits: 0, vx: -side * config.precisionSpeed, vy: 0};
     this.balls.push(ball); this.precisionMotion = {at: time, x: ball.x}; this.precisionPhase = 'target';
     this.centeredSince = undefined; this.centerProgress = 0;
+  }
+  private spawnCluster() {
+    const {config, region} = this, layout = clusterLayout(config), halfW = layout.width / 2, halfH = layout.height / 2;
+    const w = region.halfW - halfW, h = region.halfH - halfH, previous = this.cluster;
+    let x = region.x, y = region.y;
+    for (let attempt = 0; attempt < 32; attempt++) {
+      x = region.x + (this.random() * 2 - 1) * w; y = region.y + (this.random() * 2 - 1) * h;
+      if (!previous || Math.hypot(x - previous.x, y - previous.y) >= Math.min(Math.max(layout.width, layout.height), Math.max(w, h))) break;
+      if (attempt === 31) {x = region.x + (previous.x >= region.x ? -w : w); y = region.y + (previous.y >= region.y ? -h : h);}
+    }
+    this.cluster = {x, y, z: region.z, halfW, halfH}; this.nextClusterAt = undefined;
+    const cells = Array.from({length: layout.cols * layout.rows}, (_, i) => i);
+    for (let i = cells.length - 1; i > 0; i--) {const j = Math.floor(this.random() * (i + 1)); [cells[i], cells[j]] = [cells[j], cells[i]];}
+    const cellW = (layout.width - 2 * layout.padding) / layout.cols, cellH = (layout.height - 2 * layout.padding) / layout.rows;
+    for (const cell of cells.slice(0, config.count)) {
+      this.balls.push({id: this.nextId++, x: x - halfW + layout.padding + (cell % layout.cols + .5) * cellW +
+        (this.random() * 2 - 1) * Math.max(0, (cellW - config.size - layout.gap) / 2),
+      y: y - halfH + layout.padding + (Math.floor(cell / layout.cols) + .5) * cellH +
+        (this.random() * 2 - 1) * Math.max(0, (cellH - config.size - layout.gap) / 2),
+      z: region.z, radius: config.size / 2, hits: 0, vx: 0, vy: 0});
+    }
   }
   /** A new ball at least the chosen space from every other one; when the wall cannot fit that, the clearest spot tried. */
   private spawn() {
@@ -292,6 +335,10 @@ export class PopField {
     const dt = Math.min(Math.max(time - this.now, 0), .25);
     this.now = time;
     if (this.center) {this.advancePrecision(time, player, aim); return;}
+    if (this.config.variant === 'microshot') {
+      if (this.nextClusterAt !== undefined && time + 1e-9 >= this.nextClusterAt) this.spawnCluster();
+      return;
+    }
     if (this.config.respawnMode === 'pad') {
       if (player) {
         const on = this.onPadAt(player);
@@ -332,15 +379,6 @@ export class PopField {
     const limit = Math.min(maxDistance, pass ? pass.reach : this.wallHit(origin, direction, maxDistance)?.distance ?? Infinity);
     let nearest: PopHit | undefined;
     for (const ball of this.balls) {
-      if (this.config.variant === 'microshot') {
-        if (Math.abs(direction.z) < 1e-12) continue;
-        const t = (ball.z - origin.z) / direction.z;
-        if (t < 0 || t > limit) continue;
-        const point = {x: origin.x + direction.x * t, y: origin.y + direction.y * t, z: ball.z};
-        if (Math.abs(point.x - ball.x) > ball.radius + 1e-9 || Math.abs(point.y - ball.y) > ball.radius + 1e-9) continue;
-        if (!nearest || t < nearest.distance) nearest = {ball, point, distance: t, popped: false, wallbang: false};
-        continue;
-      }
       const ox = origin.x - ball.x, oy = origin.y - ball.y, oz = origin.z - ball.z;
       const b = ox * direction.x + oy * direction.y + oz * direction.z;
       const c = ox * ox + oy * oy + oz * oz - ball.radius * ball.radius;
@@ -359,6 +397,10 @@ export class PopField {
     this.balls = this.balls.filter(ball => ball !== nearest!.ball); this.travel.delete(nearest.ball.id);
     this.pops++; this.popped.push(nearest.ball);
     if (this.center) {this.returnToCenter(time); return nearest;}
+    if (this.config.variant === 'microshot') {
+      if (!this.balls.length) {this.clustersCleared++; this.nextClusterAt = time + this.config.respawn;}
+      return nearest;
+    }
     if (this.config.respawnMode === 'pad') this.pending.push(Infinity);
     else if (this.config.respawn > 0) this.pending.push(time + this.config.respawn);
     else this.spawn();
@@ -371,7 +413,9 @@ export class PopField {
     this.previous = undefined;
     this.balls = []; this.popped = []; this.pending = []; this.travel.clear(); this.onPad = undefined; this.padReturned = 0;
     this.pops = this.hits = this.shots = 0;
-    if (this.center) {this.returnToCenter(this.now); this.precisionReadyAt = this.now;}
+    this.cluster = undefined; this.nextClusterAt = undefined; this.clustersCleared = 0;
+    if (this.config.variant === 'microshot') this.spawnCluster();
+    else if (this.center) {this.returnToCenter(this.now); this.precisionReadyAt = this.now;}
     else for (let i = 0; i < this.config.count; i++) this.spawn();
   }
 }

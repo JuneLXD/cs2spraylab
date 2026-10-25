@@ -123,7 +123,7 @@ ones every other range drill uses.
   drill defaults still resets every Pop setting, and presets never touch the ammo, sound or HUD options.
 
 
-## Specific modes (2026-10-25)
+## Initial specific modes (2026-10-25; corrected below)
 
 The **Pop mode** selector offers Classic Pop plus three screenshot-inspired exercises. The user delegated the
 rules; these are original interpretations, not claims of exact parity with the reference map.
@@ -171,3 +171,28 @@ dot entering from a side, then recenter and repeat. The first mode now shows as 
 Coverage: `pop-center-return.test.ts` exercises the gate, motion, repeat cycle, escape, multi-hit, cooldown, reset,
 settings and recoil-aware aim. The browser smoke performs two actual moving-target hits separated by recentering,
 checks marker persistence and phase prompts, and confirms that leaving the mode removes its marker.
+
+
+## Microshot correction (2026-10-25)
+
+The user clarified the rectangle reference: several close dots inside one rectangle; clear every dot before
+moving on to the next rectangle. This supersedes the initial single-square interpretation above.
+
+- Microshot now starts with three 8 cm dots inside a 0.7 × 0.6 m green rectangle at 8 m.
+  Each dot uses the normal sphere hit test; the rectangle is only a boundary and awards no hits.
+- Dots can be cleared in any order. A partial group never refills or moves, even after the respawn delay.
+  Once the last dot is popped, a fresh group appears elsewhere inside the larger panel.
+- **Dots per rectangle** supports 1–12 dots. Width and height support 0.3–2 m. Layout uses separated, jittered
+  cells and grows the rectangle only as needed for large dots/counts, keeping it within the outer panel.
+- **Next rectangle delay** begins at the final pop. Even at zero delay, the new group waits until the next
+  simulation update, preventing pellets in the clearing shot from hitting the following group.
+- Hits to pop applies to each dot. The HUD shows dots remaining and rectangles cleared; the existing Pop
+  tally counts popped dots. Session reset cancels pending groups and restores a full, fresh group.
+- Count/width/height are sanitized, saved in Pop presets and restored by drill defaults. Missing fields in
+  older Microshot setups get the new defaults. Classic Pop's separate ball count remains independent.
+
+Validation: 164 affected unit tests and TypeScript passed. Three Chromium tests passed, including six scored
+shots clearing two groups, unchanged positions after partial clears, delayed group respawn, rendered frame
+relocation, count changes, cleanup on leaving Microshot, and existing Center Return/preset regressions.
+The temporary browser test server disables file watching because the host's inotify watcher limit was full.
+Screenshots of both groups were captured and the first group visually reviewed.
