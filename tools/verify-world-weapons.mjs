@@ -15,7 +15,8 @@ async function load(id) {
   return new GLTFLoader().parseAsync(JSON.stringify(json), '');
 }
 
-const vite = await createServer({server: {middlewareMode: true}, appType: 'custom', logLevel: 'error'});
+// This one-shot asset check only imports modules; watching the checkout wastes the host's inotify budget.
+const vite = await createServer({configFile: false, server: {middlewareMode: true, watch: null}, appType: 'custom', logLevel: 'error'});
 try {
   const {DuelAnimator} = await vite.ssrLoadModule('/src/range/duel/animation.ts');
   const {DuelSimulation} = await vite.ssrLoadModule('/src/range/duel/simulation.ts');
