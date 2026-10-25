@@ -1,6 +1,71 @@
 import {expect, test} from '@playwright/test';
 import {selectDrill} from './menu-helpers';
 
+test('Micro Flicks: short random hops stay near the fixed center and controls persist', async ({page}, info) => {
+  test.skip(info.project.name !== 'chromium', 'Desktop WebGL smoke test');
+  test.setTimeout(180000);
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('spraylab.range.v2')) localStorage.setItem('spraylab.range.v2', JSON.stringify({
+      mode: 'pop', popVariant: 'wide', popSize: 8, popDistance: 8,
+      weapon: 'ak47', primaryEnabled: true, quality: 'performance', spread: false, follow: false,
+      autoFullscreen: false, protectShortcuts: false, volume: 0,
+    }));
+  });
+  await page.goto('/'); await selectDrill(page, 'pop');
+  await expect(page.getByLabel('Pop mode', {exact: true}).locator('option:checked')).toHaveText('Micro Flicks');
+  await expect(page.getByLabel('Jump distance', {exact: true})).toHaveValue('0.3');
+  await page.evaluate(async () => {
+    const url = performance.getEntriesByType('resource').find(entry => entry.name.includes('/range/engine.ts'))!.name;
+    const {RangeEngine} = await import(/* @vite-ignore */ url), tick = RangeEngine.prototype.tick;
+    RangeEngine.prototype.tick = function(time: number) {(window as any).flickEngine = this; tick.call(this, time);};
+  });
+  await page.waitForFunction(() => !!(window as any).flickEngine?.sim.pop);
+  const initial = await page.evaluate(() => {
+    const engine = (window as any).flickEngine, field = engine.sim.pop;
+    return {ball: {...field.balls[0]}, region: field.region, panel: !!engine.pop.getObjectByName('pop-panel')};
+  });
+  expect(initial.ball.x).toBe(initial.region.x); expect(initial.ball.y).toBe(initial.region.y); expect(initial.panel).toBe(false);
+  await page.getByRole('button', {name: 'Enter range', exact: true}).click();
+  await page.waitForTimeout(500);
+  expect(await page.evaluate(() => (window as any).flickEngine.sim.pop.balls[0])).toEqual(initial.ball);
+  for (let rep = 0; rep < 10; rep++) {
+    const hit = await page.evaluate(() => {
+      const sim = (window as any).flickEngine.sim, before = {...sim.pop.balls[0]};
+      sim.resetRecovery();
+      const dx = before.x - sim.position.x, dy = before.y - sim.position.y, dz = before.z - sim.position.z;
+      sim.yaw = Math.atan2(-dx, -dz); sim.pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
+      sim.start(); sim.release('mouse'); sim.yaw = sim.pitch = 0;
+      return {before, after: {...sim.pop.balls[0]}, count: sim.pop.balls.length, pops: sim.pop.pops, shots: sim.pop.shots};
+    });
+    expect(hit.count).toBe(1); expect(hit.pops).toBe(rep + 1); expect(hit.shots).toBe(rep + 1);
+    expect(Math.hypot(hit.after.x - hit.before.x, hit.after.y - hit.before.y)).toBeCloseTo(.3, 8);
+    expect(Math.hypot(hit.after.x - initial.region.x, hit.after.y - initial.region.y)).toBeLessThanOrEqual(1 + 1e-9);
+    await page.waitForTimeout(350);
+    expect(await page.evaluate(() => (window as any).flickEngine.sim.pop.balls[0])).toEqual(hit.after);
+    if (rep === 0 || rep === 9) await page.screenshot({path: info.outputPath(`micro-flicks-hit-${rep + 1}.png`)});
+  }
+  await page.keyboard.press('Escape');
+  await page.getByLabel('Center radius', {exact: true}).fill('0.5');
+  await page.getByLabel('Jump distance', {exact: true}).fill('0.15');
+  await page.waitForFunction(() => {
+    const field = (window as any).flickEngine.sim.pop;
+    return field.config.flickStep === .15 && field.config.flickRadius === .5 && field.balls[0].x === field.region.x && field.balls[0].y === field.region.y;
+  });
+  await page.getByLabel('Preset name').fill('Small center hops');
+  await page.getByRole('button', {name: 'Save preset', exact: true}).click();
+  const saved = await page.getByLabel('Pop preset', {exact: true}).inputValue();
+  await page.reload(); await selectDrill(page, 'pop');
+  await expect(page.getByLabel('Pop preset', {exact: true})).toHaveValue(saved);
+  await expect(page.getByLabel('Pop mode', {exact: true})).toHaveValue('wide');
+  await expect(page.getByLabel('Jump distance', {exact: true})).toHaveValue('0.15');
+  await expect(page.getByLabel('Center radius', {exact: true})).toHaveValue('0.5');
+  await page.getByLabel('Pop mode', {exact: true}).selectOption('classic');
+  await expect(page.getByLabel('Jump distance', {exact: true})).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test('specific Pop modes: select, render, shoot, save, reload and return to Classic', async ({page}, info) => {
   test.skip(info.project.name !== 'chromium', 'Desktop WebGL smoke test');
   test.setTimeout(240000);
@@ -22,18 +87,18 @@ test('specific Pop modes: select, render, shoot, save, reload and return to Clas
   });
   await page.waitForFunction(() => !!(window as any).popModeEngine?.sim?.pop);
 
-  for (const [variant, name] of [['precision', 'Center Return'], ['wide', 'Wide Flicks'], ['microshot', 'Microshot']]) {
+  for (const [variant, name] of [['precision', 'Center Return'], ['wide', 'Micro Flicks'], ['microshot', 'Microshot']]) {
     await page.getByLabel('Pop mode', {exact: true}).selectOption(variant);
     await expect(page.getByLabel('Balls at once')).toHaveCount(0);
     await expect(page.locator('.sl-ready small')).toContainText(name);
     await page.getByRole('button', {name: 'Enter range', exact: true}).click();
-    await page.waitForFunction(variant => (window as any).popModeEngine?.sim?.pop?.config.variant === variant && !!(window as any).popModeEngine.pop.getObjectByName('pop-panel'), variant);
+    await page.waitForFunction(variant => (window as any).popModeEngine?.sim?.pop?.config.variant === variant && (variant === 'wide' || !!(window as any).popModeEngine.pop.getObjectByName('pop-panel')), variant);
     await expect(page.locator('.target-label')).toContainText(name);
     if (variant === 'precision') await page.waitForFunction(() => (window as any).popModeEngine.sim.pop.balls.length === 1);
     const observed = await page.evaluate(() => {
       const engine = (window as any).popModeEngine, sim = engine.sim, field = sim.pop, ball = field.balls[0];
       const mesh = engine.pop.getObjectByName(`pop-ball-${ball.id}`), panel = engine.pop.getObjectByName('pop-panel');
-      const before = {count: field.balls.length, square: mesh.geometry.type === 'ShapeGeometry', panel: panel.geometry.parameters,
+      const before = {count: field.balls.length, square: mesh.geometry.type === 'ShapeGeometry', panel: panel?.geometry.parameters,
         region: field.region, color: engine.popMaterial.color.getHexString(), oldX: ball.x};
       const dx = ball.x - sim.position.x, dy = ball.y - sim.position.y, dz = ball.z - sim.position.z;
       sim.yaw = Math.atan2(-dx, -dz); sim.pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
@@ -43,8 +108,8 @@ test('specific Pop modes: select, render, shoot, save, reload and return to Clas
     });
     expect(observed.count).toBe(variant === 'microshot' ? 3 : 1); expect(observed.square).toBe(false);
     expect(observed.color).toBe('4df3ff'); expect(observed.pops).toBe(1); expect(observed.shots).toBe(1); expect(observed.caption).toBe('POP');
-    expect(observed.panel.width).toBeCloseTo(observed.region.halfW * 2);
-    if (variant === 'wide') expect(observed.newX * observed.oldX).toBeLessThan(0);
+    if (variant === 'wide') expect(observed.panel).toBeUndefined();
+    else expect(observed.panel.width).toBeCloseTo(observed.region.halfW * 2);
     if (variant === 'precision') expect(observed.panel.height).toBeGreaterThan(observed.panel.width);
     await page.waitForTimeout(350);
     await page.screenshot({path: info.outputPath(`${variant}.png`)});

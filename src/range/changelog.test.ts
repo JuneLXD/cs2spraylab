@@ -37,7 +37,7 @@ describe('append-only changelog', () => {
       'native-ground-friction',
       'native-awp-walking',
       'native-ground-timing',
-      'pop-spray-peek', 'pop-respawn-delay', 'pop-moving-balls', 'pop-wall-width', 'pop-move-chance', 'blitz-ancient', 'duel-aggressive-bots', 'cs2-aim-settings', 'character-death-falls', 'character-body-collision', 'character-joint-bending', 'blitz-refrag-ancient', 'ancient-map-lighting', 'pop-pad-options', 'pop-wallbang', 'pop-presets', 'pop-specific-modes', 'pop-center-return', 'pop-microshot-clusters',
+      'pop-spray-peek', 'pop-respawn-delay', 'pop-moving-balls', 'pop-wall-width', 'pop-move-chance', 'blitz-ancient', 'duel-aggressive-bots', 'cs2-aim-settings', 'character-death-falls', 'character-body-collision', 'character-joint-bending', 'blitz-refrag-ancient', 'ancient-map-lighting', 'pop-pad-options', 'pop-wallbang', 'pop-presets', 'pop-specific-modes', 'pop-center-return', 'pop-microshot-clusters', 'pop-micro-flicks',
     ]);
     expect(latestChanges.sections.find(section => section.id === 'reflex')!.items.join(' ')).toContain('come at you through its gaps');
     expect(latestChanges.sections.find(section => section.id === 'aim-redline')!.items.join(' ')).toContain('BOT Reed');

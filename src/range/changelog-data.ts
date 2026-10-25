@@ -457,6 +457,10 @@ export const latestChanges = {
       'Microshot now places several closely spaced dots inside a green rectangle. Pop every dot in any order before the rectangle moves to a new position with a fresh group.',
       'Choose 1–12 dots, rectangle width and height, and a delay between groups. The HUD shows dots remaining and rectangles cleared; your setup saves in Pop presets.',
     ]},
+    {id: 'pop-micro-flicks', title: 'Micro Flicks: short hops around center', items: [
+      'The former Wide Flicks mode is now Micro Flicks: one dot starts at center, then hops a short distance in a random direction after each pop. It stays still until hit and always remains near the fixed starting center.',
+      'Adjust jump distance and center radius, and save them in Pop presets. Hops turn inward at the boundary; a new session starts at center again.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

@@ -4,7 +4,7 @@ import {describe, expect, it} from 'vitest';
 import {Mesh, MeshBasicMaterial, Raycaster, Vector3} from 'three';
 import {popFrameGeometry} from './pop-geometry';
 import {defaults, sanitizeSettings} from './config';
-import {POP_SPAWN, PopField, popConfig, type PopVariant} from './pop';
+import {POP_SPAWN, type PopVariant} from './pop';
 import {capturePopPreset, matchesPopPreset, popBuiltInPresets, popPresetPatch, popVariantPatch, sanitizeSavedPopPresets} from './pop-presets';
 import {Simulation} from './simulation';
 import {rangeDrillDefaults} from './ui/drill-setup';
@@ -12,11 +12,6 @@ import {TrainingSettings} from './ui/screens/TrainingSettings';
 
 const random = (seed: number) => () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
 const setup = (variant: PopVariant) => sanitizeSettings({...defaults, mode: 'pop', ...popVariantPatch(variant)});
-const aim = (to: {x: number; y: number; z: number}) => {
-  const x = to.x - POP_SPAWN.x, y = to.y - POP_SPAWN.y, z = to.z - POP_SPAWN.z, length = Math.hypot(x, y, z);
-  return {x: x / length, y: y / length, z: z / length};
-};
-
 describe('Pop specific modes', () => {
   it('renders all four sides of the square outline with an open centre', () => {
     const geometry = popFrameGeometry(1, 1, .3), material = new MeshBasicMaterial(), mesh = new Mesh(geometry, material);
@@ -25,56 +20,6 @@ describe('Pop specific modes', () => {
     }
     expect(new Raycaster(new Vector3(0, 0, 1), new Vector3(0, 0, -1)).intersectObject(mesh)).toHaveLength(0);
     geometry.dispose(); material.dispose();
-  });
-
-  it('keeps far Wide Flicks targets inside the physical range walls', () => {
-    const field = new PopField(popConfig({...setup('wide'), popDistance: 40}), POP_SPAWN, random(7));
-    expect(field.region.halfW).toBe(11);
-    for (let i = 0; i < 100; i++) {
-      const ball = field.balls[0];
-      expect(Math.abs(ball.x) + ball.radius).toBeLessThan(11.75);
-      field.hit(POP_SPAWN, aim(ball));
-    }
-  });
-  it.each(['wide'] as const)('%s keeps one target fully inside its panel across 200 replacements', variant => {
-    const field = new PopField(popConfig(setup(variant)), POP_SPAWN, random(7));
-    let previous = field.balls[0];
-    for (let i = 0; i < 200; i++) {
-      expect(field.balls).toHaveLength(1);
-      const ball = field.balls[0];
-      expect(Math.abs(ball.x - field.region.x) + ball.radius).toBeLessThanOrEqual(field.region.halfW + 1e-9);
-      expect(Math.abs(ball.y - field.region.y) + ball.radius).toBeLessThanOrEqual(field.region.halfH + 1e-9);
-      if (i) {
-        expect(Math.hypot(ball.x - previous.x, ball.y - previous.y)).toBeGreaterThanOrEqual(field.config.size * 1.5 - 1e-9);
-        if (variant === 'wide') expect((ball.x - field.region.x) * (previous.x - field.region.x)).toBeLessThan(0);
-      }
-      expect(field.hit(POP_SPAWN, aim(ball))?.popped).toBe(true);
-      previous = ball;
-    }
-    expect(field.pops).toBe(200);
-  });
-
-  it.each(['wide'] as const)('%s stays bounded with extreme size/distance and a constant random source', variant => {
-    const field = new PopField(popConfig({...setup(variant), popSize: 80, popDistance: 3}), POP_SPAWN, () => .5);
-    for (let i = 0; i < 20; i++) {
-      const ball = field.balls[0];
-      expect(Math.abs(ball.x) + ball.radius).toBeLessThanOrEqual(field.region.halfW + 1e-9);
-      expect(Math.abs(ball.y - field.region.y) + ball.radius).toBeLessThanOrEqual(field.region.halfH + 1e-9);
-      field.hit(POP_SPAWN, aim(ball));
-      expect(Math.hypot(field.balls[0].x - ball.x, field.balls[0].y - ball.y)).toBeGreaterThan(0);
-    }
-  });
-
-  it('retains the previous side through delayed respawn and resets the session cleanly', () => {
-    const field = new PopField(popConfig({...setup('wide'), popRespawn: .5}), POP_SPAWN, random(4));
-    const ball = field.balls[0];
-    field.hit(POP_SPAWN, aim(ball), Infinity, 2);
-    expect(field.balls).toHaveLength(0);
-    field.advance(2.49); expect(field.balls).toHaveLength(0);
-    field.advance(2.5); expect(field.balls).toHaveLength(1);
-    expect(field.balls[0].x * ball.x).toBeLessThan(0);
-    field.hit(POP_SPAWN, aim(field.balls[0])); field.reset(); field.advance(10);
-    expect(field.balls).toHaveLength(1); expect(field.pending).toEqual([]); expect(field.pops).toBe(0);
   });
 
   it('isolates specific-mode rules from hidden classic settings and repositions on a mode change', () => {

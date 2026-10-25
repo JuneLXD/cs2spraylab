@@ -196,3 +196,28 @@ shots clearing two groups, unchanged positions after partial clears, delayed gro
 relocation, count changes, cleanup on leaving Microshot, and existing Center Return/preset regressions.
 The temporary browser test server disables file watching because the host's inotify watcher limit was full.
 Screenshots of both groups were captured and the first group visually reviewed.
+
+
+## Micro Flicks correction (2026-10-25)
+
+The user clarified the remaining single-dot reference: each successful click moves the dot a small distance
+in a random direction, without allowing it to drift too far from center. The former Wide Flicks mode is now
+**Micro Flicks**, retaining `popVariant: wide` so saved setups load the corrected mechanics.
+
+- Start with one 8cm dot at the fixed center, 8m away. It stays still until popped (one hit by default).
+- Every pop produces a 0.3m hop in a random direction from the previous dot. Its center always stays within
+  a 1m radius of the original center, independent of where the player aims. The existing optional respawn
+  delay preserves the previous position until the next dot appears. A fresh session starts at center.
+- **Jump distance** supports 0.05–1m, capped by **Center radius** (0.3–1.2m). At the boundary, directions are
+  resampled to stay inside the circle; an inward fallback handles pathological random sources while keeping
+  the hop length. It never clamps a dot onto the edge or jumps across the whole field.
+- Render only the dot against the existing backdrop; there is no small panel or second center target.
+  Dot size, hits, distance, personal options, ordinary recoil/spread and Pop scoring remain available.
+- New controls are sanitized, included in presets and Restore drill defaults, and missing fields in old
+  saved wide-mode settings get the new defaults. Classic, Center Return and Microshot mechanics are unchanged.
+
+Validation:169 affected units and TypeScript passed. Four Chromium tests passed, including ten scored shots
+with measured hop lengths and center bounds, stationary waits, controls rebuilding the field at center,
+saved preset/reload persistence, and the existing other-mode regressions. First/tenth-hop screenshots captured;
+the tenth-hop image was visually reviewed. Unit coverage includes 1,000 successive hops in all directions,
+constant outward RNG, extreme size/distance/radius, misses, multiple required hits, delayed replacement and reset.

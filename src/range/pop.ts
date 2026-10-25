@@ -19,14 +19,14 @@ export type PopVariant = 'classic' | 'precision' | 'wide' | 'microshot';
 export const popVariants: readonly {id: PopVariant; name: string; description: string}[] = [
   {id: 'classic', name: 'Classic Pop', description: 'Build your own field of balls, movement and peek cover.'},
   {id: 'precision', name: 'Center Return', description: 'Aim at the fixed center dot, shoot the moving dot entering from a side, then return to center to start the next rep.'},
-  {id: 'wide', name: 'Wide Flicks', description: 'One target alternates across a wide field. Flick to the other side after each pop.'},
+  {id: 'wide', name: 'Micro Flicks', description: 'One dot starts at center and makes a short hop in a random direction after each pop. It always stays within the center radius.'},
   {id: 'microshot', name: 'Microshot', description: 'Clear every dot inside the small rectangle. Only then does the rectangle move to a new position with a fresh group.'},
 ];
 /** What a wallbangable peek wall is made of: it sets how much of a bullet's damage the wall eats (CS2 surface materials). It
  * never changes how the wall looks. */
 export type PopWallMaterial = 'wood' | 'concrete' | 'metal';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
-export type PopConfig = {variant: PopVariant; precisionSpeed: number; clusterWidth: number; clusterHeight: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
+export type PopConfig = {variant: PopVariant; precisionSpeed: number; flickStep: number; flickRadius: number; clusterWidth: number; clusterHeight: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
   wallbang: boolean; wallMaterial: PopWallMaterial;
   respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
@@ -70,11 +70,12 @@ export const POP_WALL = {edge: .35, height: 2.8, thickness: .4, ahead: 1.5, peek
 /** The materials a wallbangable peek wall can be made of, as the Wall material setting lists them. */
 export const popWallMaterials: readonly (readonly [PopWallMaterial, string])[] = [['wood', 'Wood'], ['concrete', 'Concrete'], ['metal', 'Metal']];
 
-export function popConfig(settings: {popVariant: PopVariant; popPrecisionSpeed: number; popClusterCount: number; popClusterWidth: number; popClusterHeight: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
+export function popConfig(settings: {popVariant: PopVariant; popPrecisionSpeed: number; popFlickStep: number; popFlickRadius: number; popClusterCount: number; popClusterWidth: number; popClusterHeight: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
   popWallWidth: number; popWallbang: boolean; popWallMaterial: PopWallMaterial; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number;
   popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
   const classic = settings.popVariant === 'classic';
-  return {variant: settings.popVariant, precisionSpeed: settings.popPrecisionSpeed, clusterWidth: settings.popClusterWidth, clusterHeight: settings.popClusterHeight,
+  return {variant: settings.popVariant, precisionSpeed: settings.popPrecisionSpeed, flickStep: Math.min(settings.popFlickStep, settings.popFlickRadius), flickRadius: settings.popFlickRadius,
+    clusterWidth: settings.popClusterWidth, clusterHeight: settings.popClusterHeight,
     size: settings.popSize / 100, count: classic ? settings.popCount : settings.popVariant === 'microshot' ? settings.popClusterCount : 1, spacing: settings.popSpacing, distance: settings.popDistance,
     hits: settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, wallbang: settings.popWallbang, wallMaterial: settings.popWallMaterial,
     respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
@@ -121,20 +122,21 @@ function clusterLayout(config: PopConfig) {
  * between knee and head height. */
 export function popRegion(config: PopConfig, origin: Vec): PopRegion {
   const r = config.size / 2, gap = config.spacing + 2 * r;
+  if (config.variant === 'wide') return {x: origin.x, y: origin.y, z: origin.z - config.distance,
+    halfW: config.flickRadius + r, halfH: config.flickRadius + r};
   if (config.variant === 'microshot') {
     const layout = clusterLayout(config), scale = config.distance / 8;
     return {x: origin.x, y: origin.y, z: origin.z - config.distance,
       halfW: Math.min(11, Math.max(2.8 * scale, layout.width / 2 + .3 * scale)),
       halfH: Math.min(1.4, Math.max(1.2 * scale, layout.height / 2 + .1 * scale))};
   }
-  if (config.variant !== 'classic') {
+  if (config.variant === 'precision') {
     // These are panel edges; single-target spawns inset by the target radius below. Scale with distance so each
     // exercise keeps its angular footprint until the physical floor/side-wall limits of the range.
     const scale = config.distance / 8;
-    const halfW = config.variant === 'wide' ? Math.min(config.distance * .8, 11) : (config.variant === 'precision' ? .75 : 1) * scale;
-    const halfH = Math.min((config.variant === 'precision' ? 1.1 : 1.25) * scale, 1.4);
+    const halfW = .75 * scale, halfH = Math.min(1.1 * scale, 1.4);
     return {x: origin.x, y: origin.y, z: origin.z - config.distance, halfW: Math.max(halfW, r * 2),
-      halfH: Math.max(halfH, r * 2 + (config.variant === 'precision' ? .1 * scale : 0))};
+      halfH: Math.max(halfH, r * 2 + .1 * scale)};
   }
   const wanted = Math.max(gap, gap * Math.sqrt(config.count) * .75);
   const halfW = Math.min(wanted, config.distance * Math.tan(45 * DEG) * .55);
@@ -260,18 +262,16 @@ export class PopField {
   /** A new ball at least the chosen space from every other one; when the wall cannot fit that, the clearest spot tried. */
   private spawn() {
     const {region, config} = this, r = config.size / 2, gap = config.spacing + 2 * r;
-    if (config.variant !== 'classic') {
-      const w = region.halfW - r, h = region.halfH - r;
-      const side = this.previous ? (this.previous.x >= region.x ? -1 : 1) : (this.random() < .5 ? -1 : 1);
+    if (config.variant === 'wide') {
       let x = region.x, y = region.y;
-      for (let attempt = 0; attempt < 32; attempt++) {
-        x = region.x + (config.variant === 'wide' ? side * (.35 + this.random() * .65) : this.random() * 2 - 1) * w;
-        y = region.y + (this.random() * 2 - 1) * h;
-        if (!this.previous || Math.hypot(x - this.previous.x, y - this.previous.y) >= Math.min(config.size * 1.5, Math.max(w, h))) break;
-        // Even a constant RNG must produce a different, fully bounded target.
-        if (attempt === 31) {
-          x = region.x + (this.previous.x >= region.x ? -w : w);
-          y = region.y + (this.previous.y >= region.y ? -h : h);
+      if (this.previous) {
+        // Re-sample directions that would leave the fixed center circle. Never clamp to the edge:
+        // every hop keeps its length, including when a constant RNG repeatedly points outward.
+        for (let attempt = 0; attempt <= 32; attempt++) {
+          const angle = attempt < 32 ? this.random() * Math.PI * 2 : Math.atan2(region.y - this.previous.y, region.x - this.previous.x);
+          x = this.previous.x + Math.cos(angle) * config.flickStep;
+          y = this.previous.y + Math.sin(angle) * config.flickStep;
+          if (Math.hypot(x - region.x, y - region.y) <= config.flickRadius + 1e-9) break;
         }
       }
       const ball: PopBall = {id: this.nextId++, x, y, z: region.z, radius: r, hits: 0, vx: 0, vy: 0};
