@@ -1,0 +1,43 @@
+{
+  "format": "spraylab-direction-profile",
+  "version": 1,
+  "created": "2026-10-29T07:44:46.511Z",
+  "flicks": 96,
+  "strength": 1,
+  "profile": {
+    "rotation": 1.25,
+    "right": 1.0341,
+    "left": 0.9671,
+    "up": 1.0836,
+    "down": 1.0015
+  },
+  "rawAccel": {
+    "Output DPI": 1034.1,
+    "Y/X output DPI ratio (vertical sens multiplier)": 0.9685,
+    "L/R output DPI ratio (left sens multiplier)": 0.9352,
+    "U/D output DPI ratio (up sens multiplier)": 1.082,
+    "Degrees of rotation": 1.25
+  },
+  "fitted": {
+    "rotation": 1.27,
+    "right": 1.0357,
+    "left": 0.9655,
+    "up": 1.0874,
+    "down": 1.0016
+  },
+  "standardErrors": {
+    "rotation": 0.1609,
+    "asymmetry": 0.011,
+    "up": 0.0104,
+    "down": 0.0137
+  },
+  "horizontalScale": 0.9833,
+  "comparison": {
+    "raw": 0.0916,
+    "iso": 0.0906,
+    "axis": 0.0818,
+    "full": 0.0837,
+    "fixable": 0.0069,
+    "share": 1
+  }
+}

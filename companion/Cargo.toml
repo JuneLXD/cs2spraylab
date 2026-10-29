@@ -1,0 +1,27 @@
+[package]
+name = "spraylab-direction"
+version = "0.1.0"
+edition = "2021"
+description = "Applies a SprayLab Direction Calibration profile to all mouse input through Raw Accel"
+license-file = "../LICENSE"
+publish = false
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+# preserve_order keeps Raw Accel's settings.json in its own key order when it is written back.
+serde_json = { version = "1", features = ["preserve_order"] }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+  "Win32_Foundation",
+  "Win32_System_Console",
+  "Win32_System_Diagnostics_Debug",
+  "Win32_System_Diagnostics_ToolHelp",
+  "Win32_UI_Input_KeyboardAndMouse",
+  "Win32_UI_WindowsAndMessaging",
+] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true

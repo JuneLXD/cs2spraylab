@@ -470,6 +470,11 @@ export const latestChanges = {
       'Results show where your flicks land in every direction with 95% intervals, fit a right/left/up/down profile with rotation, and say how much of your directional error it can fix.',
       'Apply the profile in SprayLab at any strength, check it with a blind A/B test, and copy it as Raw Accel settings to use in CS2.',
     ]},
+    {id: 'pop-direction-companion', title: 'Direction Calibration: use it in CS2', items: [
+      'A Windows companion, spraylab-direction.exe, writes your downloaded profile into Raw Accel on top of your own settings and puts them back when you switch it off.',
+      'It can switch the profile with a hotkey, keep it on only while CS2 runs, and start when you sign in.',
+      'The gap report now says when the four-direction profile already gets all of the improvement, and the CS2 section explains combining the profile with your own Raw Accel settings.',
+    ]},
     {id: 'pop-moving-exercises', title: 'Pop: Floating Heads, Pasu Micro and DriftTS', items: [
       'Floating Heads adds horizontal strafes with gentle bobbing. Pasu Micro adds diagonal targets that change direction. DriftTS adds held-fire tracking on targets that accelerate and slow down.',
       'Adjust count, speed, center radius, bobbing or direction changes, and save each setup as a preset. All three support 3D balls.',

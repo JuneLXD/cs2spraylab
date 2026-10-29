@@ -10,6 +10,7 @@ import {popCoreKeys, popVariantPatch} from './pop-presets';
 import {VECTOR_BLOCK, VECTOR_REST, VECTOR_TIMEOUT, vectorReach, vectorSizes} from './pop-vector';
 import {DEG, Simulation} from './simulation';
 import {rangeDrillDefaults} from './ui/drill-setup';
+import {gapText} from './ui/screens/DirectionCalibration';
 import {TrainingSettings} from './ui/screens/TrainingSettings';
 
 const seeded = (seed: number) => () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
@@ -160,6 +161,17 @@ describe('Direction Calibration settings', () => {
     const html = renderToStaticMarkup(createElement(TrainingSettings, {settings: base, update: () => {}}));
     expect(html).toContain('Direction Calibration'); expect(html).toContain('Largest flick'); expect(html).toContain('Pause between flicks');
     expect(html).toContain('Direction profile'); expect(html).toContain('Blind A/B test'); expect(html).not.toContain('Balls at once');
+  });
+
+  it('words the gap report by which model wins out of sample', () => {
+    // The live probe's simulated player: the four-direction model beats the sixteen-direction one under cross-validation.
+    const axisWins = gapText({raw: .0916, iso: .0906, axis: .0818, full: .0837, fixable: .0069, share: 1});
+    expect(axisWins).toContain('from 9.1% to 8.2%'); expect(axisWins).toContain('gets all of it');
+    expect(axisWins).not.toContain('could add the rest'); expect(axisWins).toContain('The remaining 8.2%');
+    const fullWins = gapText({raw: .1, iso: .09, axis: .085, full: .07, fixable: .02, share: .43});
+    expect(fullWins).toContain('from 9.0% to 7.0%'); expect(fullWins).toContain('8.5%, 43% of that improvement; finer directional control could add the rest');
+    expect(fullWins).toContain('The remaining 7.0%');
+    expect(gapText({raw: .1, iso: .09, axis: .0905, full: .0899, fixable: .0001})).toContain('No reliable direction pattern');
   });
 
   it('stores flicks across sessions, newest kept', () => {

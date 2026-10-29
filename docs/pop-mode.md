@@ -32,8 +32,15 @@ ones every other range drill uses.
   model: that profile plus a smooth correction over direction (a turn and a Fourier gain to the third harmonic, light ridge), so
   it can do everything the four-direction profile can and more. It reports how much direction-dependent sensitivity could fix and
   what share the four-direction profile captures (the rest is what finer control, an Interception driver or PureVector's firmware,
-  could add), or that there is no reliable pattern. The error left by the full model is flick-to-flick variation no fixed
-  profile removes.
+  could add), or that there is no reliable pattern. When the four-direction profile does at least as well out of sample (the
+  full model overfits on fewer flicks), it says the four directions get all of it. The error left by the best model is
+  flick-to-flick variation no fixed profile removes.
+- CS2 through Raw Accel: Download profile writes the `directionProfileFile` JSON. The Rust companion in `companion/`
+  (`spraylab-direction.exe`, see its README) composes it with your own Raw Accel values (per direction the multipliers multiply
+  and the rotations add, exactly when your own ratios are even), writes the five fields into Raw Accel's settings.json, which
+  Raw Accel 1.7 and 1.6 name differently, and activates them with Raw Accel's writer.exe; `off` restores your values. Raw
+  Accel's window has no L/R or U/D fields. SprayLab sees Raw Accel's output, so calibrate with the Raw Accel profile off and
+  leave Apply profile in SprayLab off while it is on.
 - Blind A/B test (`directionTest`): in Direction Calibration the profile is on or off for whole blocks of 16 flicks, in balanced
   pairs, without saying which. `compareProfileTest` compares the geometric-mean time to hit (ratio with a Welch 95% interval on log
   times), first-movement error and first-shot hits once both sides have 32 flicks.

@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState, useSyncExternalStore} from 'react';
 import type {Settings} from '../../config';
 import {directionLimits, directionProfileFile, directionReport, isNeutralProfile, MIN_FIT, modelExtent, neutralDirectionProfile, RECOMMENDED_FLICKS, TEST_FLICKS,
-  type DirectionProfile, type DirectionReport} from '../../aim-vector';
+  type DirectionProfile, type DirectionReport, type ModelComparison} from '../../aim-vector';
 import {directionStore} from '../../direction-store';
 import {vectorReach} from '../../pop-vector';
 import {download} from '../download';
@@ -14,6 +14,15 @@ const percent = (value: number, digits = 0) => `${(value * 100).toFixed(digits)}
 const signedPercent = (value: number, digits = 1) => `${value >= 0 ? '+' : '−'}${Math.abs(value * 100).toFixed(digits)}%`;
 const milliseconds = (seconds: number) => `${Math.round(seconds * 1000)} ms`;
 const degrees = (value: number) => `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(1)}°`;
+
+/** What the cross-validated comparison says a direction profile can fix, and how much of it the four-direction profile Raw
+ * Accel applies captures. When the sixteen-direction model does no better out of sample, the four directions get all of it. */
+export function gapText(c: ModelComparison) {
+  const remaining = ` The remaining ${percent(Math.min(c.iso, c.axis, c.full), 1)} is flick-to-flick variation that no fixed profile can remove; only practice shrinks it.`;
+  if (c.share === undefined) return `No reliable direction pattern: on your flicks, direction-dependent sensitivity does not beat a plain sensitivity change (cross-validated, ${percent(c.full, 1)} vs ${percent(c.iso, 1)} typical miss). Your aim is even across directions, or there are not enough flicks yet.${remaining}`;
+  if (c.axis <= c.full) return `Direction-dependent sensitivity could cut your typical first-movement miss from ${percent(c.iso, 1)} to ${percent(c.axis, 1)} of the flick distance (cross-validated), and the four-direction profile Raw Accel can apply gets all of it: with this many flicks, finer directional control adds nothing measurable.${remaining}`;
+  return `Direction-dependent sensitivity could cut your typical first-movement miss from ${percent(c.iso, 1)} to ${percent(c.full, 1)} of the flick distance (cross-validated). With the four-direction profile Raw Accel can apply it would be ${percent(c.axis, 1)}, ${percent(c.share)} of that improvement; finer directional control could add the rest.${remaining}`;
+}
 
 /** The stored flicks, refreshed when another tab records some. */
 export function useDirectionRecords() {
@@ -91,10 +100,7 @@ export function DirectionCalibration({settings, update}: {settings: Settings; up
       Typical miss {percent(summary.error, 1)} of the flick distance. Reaction {milliseconds(summary.reaction)}, time to hit {milliseconds(summary.total)}, {summary.corrections.toFixed(1)} corrections per flick, {percent(summary.firstShot)} hit with the first shot.
       Overall your first movements {summary.bias < 0 ? `fall ${percent(-summary.bias, 1)} short` : `overshoot by ${percent(summary.bias, 1)}`} (that is your sensitivity, which a direction profile leaves alone)
       {Math.abs(summary.angle) < .1 ? ' and keep their direction' : ` and turn ${Math.abs(summary.angle).toFixed(1)}° ${summary.angle > 0 ? 'counterclockwise' : 'clockwise'}`}.</p>}
-    {comparison && <p className="setting-explanation" data-testid="direction-gap">{comparison.share === undefined
-      ? `No reliable direction pattern: on your flicks, direction-dependent sensitivity does not beat a plain sensitivity change (cross-validated, ${percent(comparison.full, 1)} vs ${percent(comparison.iso, 1)} typical miss). Your aim is even across directions, or there are not enough flicks yet.`
-      : `Direction-dependent sensitivity could cut your typical first-movement miss from ${percent(comparison.iso, 1)} to ${percent(comparison.full, 1)} of the flick distance (cross-validated). With the four-direction profile Raw Accel can apply it would be ${percent(comparison.axis, 1)}, ${percent(comparison.share)} of that improvement; finer directional control could add the rest.`}
-      {` The remaining ${percent(comparison.full, 1)} is flick-to-flick variation that no fixed profile can remove; only practice shrinks it.`}</p>}
+    {comparison && <p className="setting-explanation" data-testid="direction-gap">{gapText(comparison)}</p>}
     {fit ? <>
       <ProfileTable fit={fit} applied={applied}/>
       <p className="setting-explanation">Multipliers act on mouse counts before your sensitivity, in Raw Accel's order: rotate, then scale each direction. To apply shrinks each one toward no change by its own uncertainty, so noise never becomes a correction; limits are {percent(directionLimits.gain[0] - 1)}/+{percent(directionLimits.gain[1] - 1)} and ±{directionLimits.rotation}°. Your flicks imply a horizontal sensitivity ×{fit.scale.toFixed(3)}; that is reported, not applied. Changing up and down also changes how far you pull down to control a spray.</p>
@@ -112,7 +118,7 @@ export function DirectionCalibration({settings, update}: {settings: Settings; up
     </> : 'Once a profile is in use, the blind A/B test measures whether it actually makes you faster.'}</p>
     {hasProfile && <>
       <h2>Use it in CS2</h2>
-      <p className="setting-explanation">Raw Accel, a signed Windows mouse driver, applies these fields to all mouse input, so they work in CS2 too. They include the strength above. Output DPI assumes Raw Accel's default of 1000; if you changed it, multiply yours by {(applied.right ** settings.directionStrength).toFixed(4)} instead.</p>
+      <p className="setting-explanation">Raw Accel, a signed Windows mouse driver, can apply these fields to all mouse input, CS2 included. They include the strength above and assume Raw Accel's defaults (Output DPI 1000, ratios 1, no rotation): with other settings, multiply your Output DPI by {(applied.right ** settings.directionStrength).toFixed(4)}, multiply each ratio by its value here and add the rotation. Raw Accel's window has no left/right or up/down fields, so edit them in its settings.json and run writer.exe settings.json, or let the SprayLab companion (spraylab-direction.exe) do all of it from the downloaded profile. While Raw Accel applies the profile, switch Apply profile in SprayLab off, and switch the Raw Accel profile off before calibrating again: SprayLab sees what Raw Accel outputs, so it would measure on top of it.</p>
       <pre className="sl-direction-export" data-testid="raw-accel-fields">{Object.entries(file.rawAccel).map(([key, value]) => `"${key}": ${value}`).join('\n')}</pre>
       <div className="sl-preset-actions"><Button onClick={() => void copy()}>Copy profile</Button><Button onClick={() => download('spraylab-direction-profile.json', file)}>Download profile</Button></div>
     </>}
