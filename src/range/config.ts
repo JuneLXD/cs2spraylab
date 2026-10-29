@@ -1,5 +1,6 @@
 import data from './game-data.json';
 import type {PopPadSound, PopRespawnMode, PopVariant, PopWallMaterial, PopWallSide} from './pop';
+import {neutralDirectionProfile, sanitizeDirectionProfile, type DirectionProfile} from './aim-vector';
 import { nativeRecoilPattern } from './recoil';
 import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybinds/profile';
 import { crosshairLimits, sanitizeCs2Crosshair, type Cs2Crosshair } from './keybinds/crosshair-cvars';
@@ -90,6 +91,11 @@ export type Settings = {
   pop3D: boolean;
   /** Microshot: dots per rectangle, and its requested dimensions in metres. */
   popClusterCount: number; popClusterWidth: number; popClusterHeight: number;
+  /** Direction Calibration: the largest of its three flick sizes, in degrees of view. */
+  popVectorReach: number;
+  /** The direction profile applied to mouse input before the sensitivity (Raw Accel's pipeline, see aim-vector.ts), whether it
+   * is switched on, its strength (0 = no change, 1 = full) and whether Direction Calibration runs the blind A/B test instead. */
+  directionProfile: DirectionProfile; directionProfileOn: boolean; directionStrength: number; directionTest: boolean;
   /** Pop: ammo as sv_infinite_ammo ('magazine' = 1 never reloads, 'reserve' = 2 reloads from a full reserve) and the hit sound. */
   popAmmo: 'off' | 'reserve' | 'magazine'; popSound: 'hitmarker' | 'synth' | 'pop';
   /** Pop only: no gunshot audio, no miss marks on the wall, no HUD over the view. */
@@ -141,6 +147,7 @@ export const defaults: Settings = {
   tracers: 'native',
   popMotionCount: 3, popMotionSpeed: .6, popMotionRadius: 1, popMotionRate: 1.2, popFloatBob: .04,
   popVariant: 'classic', pop3D: false, popPairGap: .35, popPairRadius: 1, popHoldTime: .15, popPrecisionSpeed: .8, popFlickStep: .3, popFlickRadius: 1, popClusterCount: 3, popClusterWidth: .7, popClusterHeight: .6,
+  popVectorReach: 12, directionProfile: neutralDirectionProfile, directionProfileOn: false, directionStrength: 1, directionTest: false,
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
   popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popWallbang: false, popWallMaterial: 'wood', popWallXray: true, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0, popMoveChance: .5,
   popPadWidth: .9, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime',
@@ -194,7 +201,10 @@ export function sanitizeSettings(raw: unknown): Settings {
     keyboard: sanitizeKeyboard(s.keyboard),
     viewmodel: sanitizeViewmodel(s.viewmodel),
     tracers: s.tracers === 'every' || s.tracers === 'off' ? s.tracers : 'native',
-    popVariant: s.popVariant === 'precision' || s.popVariant === 'wide' || s.popVariant === 'microshot' || s.popVariant === 'closepairs' || s.popVariant === 'pokeball' || s.popVariant === 'floatingheads' || s.popVariant === 'pasu' || s.popVariant === 'driftts' ? s.popVariant : 'classic',
+    popVariant: s.popVariant === 'precision' || s.popVariant === 'wide' || s.popVariant === 'microshot' || s.popVariant === 'closepairs' || s.popVariant === 'pokeball' || s.popVariant === 'floatingheads' || s.popVariant === 'pasu' || s.popVariant === 'driftts' || s.popVariant === 'vector' ? s.popVariant : 'classic',
+    popVectorReach: Math.round(numeric(s.popVectorReach, defaults.popVectorReach, 4, 20)),
+    directionProfile: sanitizeDirectionProfile(s.directionProfile), directionProfileOn: s.directionProfileOn === true,
+    directionStrength: Math.round(numeric(s.directionStrength, defaults.directionStrength, 0, 1) * 20) / 20, directionTest: s.directionTest === true,
     pop3D: s.pop3D === true,
     popMotionCount: Math.round(numeric(s.popMotionCount, defaults.popMotionCount, 1, 6)),
     popMotionSpeed: Math.round(numeric(s.popMotionSpeed, defaults.popMotionSpeed, .1, 3) * 10) / 10,

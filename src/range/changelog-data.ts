@@ -465,6 +465,11 @@ export const latestChanges = {
       'The same dot now travels smoothly to its next position after a hit, staying visible throughout the move. It stops at the destination, and its hit area follows it while moving.',
       'Movement delay keeps the dot visible before it moves. The short distance and fixed center limit still apply.',
     ]},
+    {id: 'pop-direction-calibration', title: 'Pop: Direction Calibration', items: [
+      'Flick from a center dot to targets in 16 directions at three sizes. Each flick records your reaction, where your first movement landed and the corrections that followed.',
+      'Results show where your flicks land in every direction with 95% intervals, fit a right/left/up/down profile with rotation, and say how much of your directional error it can fix.',
+      'Apply the profile in SprayLab at any strength, check it with a blind A/B test, and copy it as Raw Accel settings to use in CS2.',
+    ]},
     {id: 'pop-moving-exercises', title: 'Pop: Floating Heads, Pasu Micro and DriftTS', items: [
       'Floating Heads adds horizontal strafes with gentle bobbing. Pasu Micro adds diagonal targets that change direction. DriftTS adds held-fire tracking on targets that accelerate and slow down.',
       'Adjust count, speed, center radius, bobbing or direction changes, and save each setup as a preset. All three support 3D balls.',

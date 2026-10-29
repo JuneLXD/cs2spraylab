@@ -1,4 +1,6 @@
-import {mouseLook} from './mouse-look';
+import {mouseAngle, mouseLook} from './mouse-look';
+import {applyDirectionProfile, isNeutralProfile, profileNumbers, scaleProfile, type DirectionProfile} from './aim-vector';
+import type {VectorLook} from './pop-vector';
 import { Angle, clamp, gameData, loadoutWeapon, MeasuredProfile, recoilPattern, Settings } from './config';
 import {ViewPunch} from './view-punch';
 import {FootstepCadence} from './footsteps';
@@ -319,9 +321,30 @@ export class Simulation {
       seconds:this.time-(this.drill?.beganAt ?? this.startedAt),tracking:0,date:new Date().toISOString(),samples:[...this.samples],...(drill ? {drill} : {})};
     this.attempts++; this.onResult(this.latest);
   }
+  /** The direction profile mouse input runs with now: yours when it is switched on, or the blind test's choice for the current
+   * block in Direction Calibration; undefined when none applies. */
+  directionProfileNow(): DirectionProfile | undefined {
+    const s = this.settings, vector = this.pop?.vector;
+    return (vector && s.directionTest ? vector.testOn : s.directionProfileOn) && !isNeutralProfile(s.directionProfile) ? s.directionProfile : undefined;
+  }
+  /** What Direction Calibration needs to know each step (see VectorLook). */
+  private vectorLook(): VectorLook {
+    const s = this.settings, punch = this.viewPunch.sample(this.time);
+    const flip = (Math.sign(s.mouseYaw || 1) * (s.invertX ? -1 : 1) < 0 ? 1 : 0) | (Math.sign(s.mousePitch * s.sensitivityYScale || 1) * (s.invertY ? -1 : 1) < 0 ? 2 : 0);
+    return {yaw: this.yaw, pitch: this.pitch, settled: Math.hypot(this.recoil.yaw, this.recoil.pitch) < .05 && Math.hypot(punch.yaw, punch.pitch) < .05, flip,
+      ...(isNeutralProfile(s.directionProfile) ? {} : {profile: profileNumbers(scaleProfile(s.directionProfile, s.directionStrength))}),
+      on: s.directionProfileOn, testing: s.directionTest};
+  }
   aim(dx: number, dy: number, touch = false) {
-    const look = mouseLook(dx, dy, this.settings, touch);
+    const profile = touch ? undefined : this.directionProfileNow();
+    const [x, y] = profile ? applyDirectionProfile(dx, dy, profile, this.settings.directionStrength) : [dx, dy];
+    const look = mouseLook(x, y, this.settings, touch);
     const scale = this.actions.sensitivityAt(this.time + this.accumulator, touch ? 1 : this.settings.keyboard.zoomSensitivity);
+    if (this.pop?.vector && !touch) {
+      // Degrees of view per count on each axis, for the flick's record in mouse space.
+      const s = this.settings, kx = Math.abs(mouseAngle(1, s.sensitivity, s.mouseYaw)) * scale / DEG, ky = Math.abs(mouseAngle(1, s.sensitivity, s.mousePitch) * s.sensitivityYScale) * scale / DEG;
+      this.pop.vector.record(this.time + this.accumulator, dx * kx, dy * ky, x * kx, y * ky);
+    }
     this.drill?.mouse(Math.hypot(look.yaw, look.pitch)*scale/DEG);
     this.yaw += look.yaw * scale;
     this.pitch = clamp(this.pitch + look.pitch * scale, -89 * DEG, 89 * DEG);
@@ -486,7 +509,7 @@ export class Simulation {
       const view = recoilView(this.yaw, this.pitch, this.recoil, this.viewPunch.sample(this.time));
       const aim = this.settings.follow && !this.actions.hidesViewmodel
         ? followCrosshairDirection(this.yaw, this.pitch, this.recoil) : direction(view.yaw, view.pitch);
-      if (this.pop.center) this.pop.advance(this.time, this.position, aim);
+      if (this.pop.center) this.pop.advance(this.time, this.position, aim, this.pop.vector ? this.vectorLook() : undefined);
       else if (this.firing) {
         if (!this.pop.heldSeconds) this.popStartedAt = this.time - dt;
         this.pop.hold(this.position, aim, dt, this.time);

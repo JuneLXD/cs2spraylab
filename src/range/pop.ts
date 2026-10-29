@@ -2,6 +2,7 @@ import {PopMotion, movingPop, holdPop} from './pop-motion';
 export {movingPop, holdPop} from './pop-motion';
 import {DEG, UNIT, type Vec} from './actor-physics';
 import {resolveBulletRay, type PenetrationSolid, type PenetrationStats, type SurfaceContact} from './duel/penetration';
+import {PopVector, VECTOR_CENTER, vectorReach, type VectorLook} from './pop-vector';
 
 /** Pop (after Refrag's Pop mode): bright balls float on a dark wall ahead of you; a shot pops the first ball it
  * crosses and a new one appears elsewhere. Sizes and distances are metres; the setting stores the size in cm.
@@ -17,7 +18,7 @@ import {resolveBulletRay, type PenetrationSolid, type PenetrationStats, type Sur
  * `moveChance` is the share of balls that move at all: each ball that appears rolls it once and otherwise stays still. */
 export type PopWallSide = 'off' | 'left' | 'right' | 'both';
 export type PopRespawnMode = 'timer' | 'pad';
-export type PopVariant = 'classic' | 'precision' | 'wide' | 'microshot' | 'closepairs' | 'pokeball' | 'floatingheads' | 'pasu' | 'driftts';
+export type PopVariant = 'classic' | 'precision' | 'wide' | 'microshot' | 'closepairs' | 'pokeball' | 'floatingheads' | 'pasu' | 'driftts' | 'vector';
 export const pairedPop = (variant: PopVariant) => variant === 'closepairs' || variant === 'pokeball';
 export const popVariants: readonly {id: PopVariant; name: string; description: string}[] = [
   {id: 'classic', name: 'Classic Pop', description: 'Build your own field of balls, movement and peek cover.'},
@@ -29,12 +30,13 @@ export const popVariants: readonly {id: PopVariant; name: string; description: s
   {id: 'floatingheads', name: 'Floating Heads', description: 'Time your clicks on small targets making long horizontal strafes with gentle vertical bobbing.'},
   {id: 'pasu', name: 'Pasu Micro', description: 'Click small targets moving diagonally and changing direction inside a compact area.'},
   {id: 'driftts', name: 'DriftTS', description: 'Hold fire, flick onto a drifting target, then track its changing speed until it clears.'},
+  {id: 'vector', name: 'Direction Calibration', description: 'Rest on the center dot, flick to the target and shoot it. Every round covers 16 directions at three sizes; the results show where your flicks land in each direction and fit a direction profile.'},
 ];
 /** What a wallbangable peek wall is made of: it sets how much of a bullet's damage the wall eats (CS2 surface materials). It
  * never changes how the wall looks. */
 export type PopWallMaterial = 'wood' | 'concrete' | 'metal';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
-export type PopConfig = {variant: PopVariant; motionSpeed: number; motionRadius: number; motionRate: number; floatBob: number; pairGap: number; pairRadius: number; holdTime: number; precisionSpeed: number; flickStep: number; flickRadius: number; clusterWidth: number; clusterHeight: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
+export type PopConfig = {variant: PopVariant; motionSpeed: number; motionRadius: number; motionRate: number; floatBob: number; pairGap: number; pairRadius: number; holdTime: number; precisionSpeed: number; flickStep: number; flickRadius: number; clusterWidth: number; clusterHeight: number; vectorReach: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
   wallbang: boolean; wallMaterial: PopWallMaterial;
   respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
@@ -80,13 +82,13 @@ export const POP_WALL = {edge: .35, height: 2.8, thickness: .4, ahead: 1.5, peek
 /** The materials a wallbangable peek wall can be made of, as the Wall material setting lists them. */
 export const popWallMaterials: readonly (readonly [PopWallMaterial, string])[] = [['wood', 'Wood'], ['concrete', 'Concrete'], ['metal', 'Metal']];
 
-export function popConfig(settings: {popVariant: PopVariant; popMotionCount: number; popMotionSpeed: number; popMotionRadius: number; popMotionRate: number; popFloatBob: number; popPairGap: number; popPairRadius: number; popHoldTime: number; popPrecisionSpeed: number; popFlickStep: number; popFlickRadius: number; popClusterCount: number; popClusterWidth: number; popClusterHeight: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
+export function popConfig(settings: {popVariant: PopVariant; popMotionCount: number; popMotionSpeed: number; popMotionRadius: number; popMotionRate: number; popFloatBob: number; popPairGap: number; popPairRadius: number; popHoldTime: number; popPrecisionSpeed: number; popFlickStep: number; popFlickRadius: number; popClusterCount: number; popClusterWidth: number; popClusterHeight: number; popVectorReach: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
   popWallWidth: number; popWallbang: boolean; popWallMaterial: PopWallMaterial; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number;
   popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
   const classic = settings.popVariant === 'classic';
   const pairGap = Math.max(settings.popSize / 100 + .02, Math.min(settings.popPairGap, settings.popPairRadius));
   return {variant: settings.popVariant, motionSpeed: settings.popMotionSpeed, motionRadius: settings.popMotionRadius, motionRate: settings.popMotionRate, floatBob: settings.popFloatBob, pairGap, pairRadius: Math.max(settings.popPairRadius, pairGap), holdTime: settings.popHoldTime, precisionSpeed: settings.popPrecisionSpeed, flickStep: Math.min(settings.popFlickStep, settings.popFlickRadius), flickRadius: settings.popFlickRadius,
-    clusterWidth: settings.popClusterWidth, clusterHeight: settings.popClusterHeight,
+    clusterWidth: settings.popClusterWidth, clusterHeight: settings.popClusterHeight, vectorReach: settings.popVectorReach,
     size: settings.popSize / 100, count: movingPop(settings.popVariant) ? settings.popMotionCount : classic ? settings.popCount : settings.popVariant === 'microshot' ? settings.popClusterCount : pairedPop(settings.popVariant) ? 2 : 1, spacing: settings.popSpacing, distance: settings.popDistance,
     hits: holdPop(settings.popVariant) ? 1 : settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, wallbang: settings.popWallbang, wallMaterial: settings.popWallMaterial,
     respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
@@ -139,6 +141,11 @@ export function popRegion(config: PopConfig, origin: Vec): PopRegion {
     halfW: config.pairRadius + r, halfH: config.pairRadius + r};
   if (config.variant === 'wide') return {x: origin.x, y: origin.y, z: origin.z - config.distance,
     halfW: config.flickRadius + r, halfH: config.flickRadius + r};
+  if (config.variant === 'vector') {
+    // Straight ahead at eye height, as wide as the largest flick reaches; vectorReach keeps it above the floor.
+    const reach = Math.tan(vectorReach(config) * DEG) * config.distance + r * 2 + .05;
+    return {x: origin.x, y: origin.y, z: origin.z - config.distance, halfW: reach, halfH: Math.min(1.4, reach)};
+  }
   if (config.variant === 'microshot') {
     const layout = clusterLayout(config), scale = config.distance / 8;
     return {x: origin.x, y: origin.y, z: origin.z - config.distance,
@@ -204,6 +211,8 @@ export class PopField {
   private centeredSince?: number;
   private precisionReadyAt = 0;
   private precisionMotion?: {at: number; x: number};
+  /** Direction Calibration's schedule and flick recording; its center dot is `center`, as in Center Return. */
+  readonly vector?: PopVector;
   /** Microshot's current rectangle. Popped dots stay gone until the whole group is cleared. */
   cluster?: PopRegion;
   clustersCleared = 0;
@@ -218,6 +227,10 @@ export class PopField {
     this.region = popRegion(config, origin);
     if (movingPop(config.variant)) this.motion = new PopMotion(config, this.region, this.random);
     if (config.variant === 'precision') this.center = {...this.region, radius: .05 * config.distance / 8};
+    if (config.variant === 'vector') {
+      this.vector = new PopVector(config, this.region, this.random, time);
+      this.center = {...this.region, radius: Math.tan(VECTOR_CENTER * DEG) * config.distance};
+    }
     this.wall = popWall(config, origin);
     this.wallSolid = this.wall && config.wallbang ? {id: this.wall.id, center: this.wall.center, size: this.wall.size, material: config.wallMaterial} : undefined;
     this.pad = popPad(config, origin);
@@ -256,6 +269,11 @@ export class PopField {
       z: region.z, radius: r, hits: 0, vx: -side * config.precisionSpeed, vy: 0};
     this.balls.push(ball); this.precisionMotion = {at: time, x: ball.x}; this.precisionPhase = 'target';
     this.centeredSince = undefined; this.centerProgress = 0;
+  }
+  private advanceVector(time: number, player?: Vec, aim?: Vec, look?: VectorLook) {
+    const vector = this.vector!, result = vector.advance(time, player, !!player && !!aim && this.aimedAtCenter(player, aim), look, this.shots);
+    if (result === 'withdrawn') this.balls = []; else if (result) this.balls = [result];
+    this.precisionPhase = vector.phase; this.centerProgress = vector.progress;
   }
   private spawnCluster() {
     const {config, region} = this, layout = clusterLayout(config), halfW = layout.width / 2, halfH = layout.height / 2;
@@ -381,10 +399,11 @@ export class PopField {
   /** Whether a player standing at `position` (x/z) is on the respawn pad: within its rectangle, edges included. */
   onPadAt(position: Vec) {return Math.abs(position.x - this.pad.x) <= this.pad.halfW + 1e-9 && Math.abs(position.z - this.pad.z) <= this.pad.halfD + 1e-9;}
   /** Moves the balls on to `time` and spawns the replacements that are due: by the timer, or, in pad mode, all of them
-   * the moment you step onto the pad (`player` is where you stand). */
-  advance(time: number, player?: Vec, aim?: Vec) {
+   * the moment you step onto the pad (`player` is where you stand). Direction Calibration also needs your view (`look`). */
+  advance(time: number, player?: Vec, aim?: Vec, look?: VectorLook) {
     const dt = Math.min(Math.max(time - this.now, 0), .25);
     this.now = time;
+    if (this.vector) {this.advanceVector(time, player, aim, look); return;}
     if (this.center) {this.advancePrecision(time, player, aim); return;}
     if (this.config.variant === 'wide') {this.advanceFlick(time); return;}
     if (this.config.variant === 'microshot') {
@@ -479,6 +498,7 @@ export class PopField {
     }
     this.balls = this.balls.filter(ball => ball !== nearest!.ball); this.travel.delete(nearest.ball.id); this.motion?.remove(nearest.ball.id);
     this.pops++; this.popped.push(nearest.ball);
+    if (this.vector) {this.vector.finish(time, this.shots); this.precisionPhase = 'center'; this.centerProgress = 0; return nearest;}
     if (this.center) {this.returnToCenter(time); return nearest;}
     if (this.config.variant === 'microshot') {
       if (!this.balls.length) {this.clustersCleared++; this.nextClusterAt = time + this.config.respawn;}
@@ -498,6 +518,7 @@ export class PopField {
     this.pops = this.hits = this.shots = this.heldSeconds = this.onTargetSeconds = 0; this.holdTarget = undefined;
     this.cluster = undefined; this.nextClusterAt = undefined; this.clustersCleared = 0;
     if (this.config.variant === 'microshot') this.spawnCluster();
+    else if (this.vector) {this.vector.reset(this.now); this.precisionPhase = 'center'; this.centerProgress = 0;}
     else if (this.center) {this.returnToCenter(this.now); this.precisionReadyAt = this.now;}
     else for (let i = 0; i < this.config.count; i++) this.spawn();
   }

@@ -1,0 +1,28 @@
+/* Direction Calibration results (DirectionCalibration.tsx). */
+.sl-direction-chart { display: block; width: 100%; max-width: 320px; margin: 4px auto 0; }
+.sl-direction-chart .ring { fill: none; stroke: var(--sl-hairline-strong); stroke-dasharray: 2 4; }
+.sl-direction-chart .ring-target { fill: none; stroke: var(--sl-text-3); stroke-width: 1.5; }
+.sl-direction-chart .spoke { stroke: var(--sl-hairline); }
+.sl-direction-chart .label { fill: var(--sl-text-3); font: 600 11px var(--sl-font-body); }
+.sl-direction-chart .scale { fill: var(--sl-text-3); font: 10px var(--sl-font-body); }
+.sl-direction-chart .fit-axis { fill: none; stroke: var(--sl-go-text); stroke-width: 2; }
+.sl-direction-chart .fit-full { fill: none; stroke: var(--sl-ct); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.sl-direction-chart .interval { stroke: var(--sl-text-2); stroke-width: 1.5; stroke-linecap: round; }
+.sl-direction-chart .measured { fill: var(--sl-text); }
+.sl-direction-chart .profiled { fill: none; stroke: var(--sl-t); stroke-width: 1.5; }
+.sl-direction-legend { margin: 6px 0 14px; color: var(--sl-text-2); font-size: 12px; line-height: 1.7; }
+.sl-direction-legend .key { display: inline-block; width: 14px; height: 0; margin: 0 6px 3px 10px; vertical-align: middle; border-top: 2px solid; }
+.sl-direction-legend .key:first-child { margin-left: 0; }
+.sl-direction-legend .key.measured { width: 7px; height: 7px; border: 0; border-radius: 50%; background: var(--sl-text); }
+.sl-direction-legend .key.fit-axis { border-color: var(--sl-go-text); }
+.sl-direction-legend .key.fit-full { border-color: var(--sl-ct); border-top-style: dashed; }
+.sl-direction-legend .key.profiled { width: 8px; height: 8px; border: 1.5px solid var(--sl-t); border-radius: 50%; }
+.sl-direction-table { width: 100%; margin: 4px 0 10px; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.sl-direction-table th, .sl-direction-table td { padding: 5px 8px; border-bottom: 1px solid var(--sl-hairline); text-align: left; }
+.sl-direction-table thead th { color: var(--sl-text-3); font-weight: 600; font-size: 12px; }
+.sl-direction-table tbody th { color: var(--sl-text-2); font-weight: 500; }
+.sl-direction-table small { color: var(--sl-text-3); }
+.sl-direction-export { margin: 4px 0 8px; padding: 10px 12px; overflow-x: auto; background: var(--sl-field); border: 1px solid var(--sl-hairline-strong);
+  color: var(--sl-text); font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.sl-direction-details { margin: 4px 0 10px; }
+.sl-direction-details summary { cursor: pointer; padding: 6px 0; color: var(--sl-text-2); font-size: 13px; }

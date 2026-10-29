@@ -12,6 +12,7 @@ import {InputClock, inputTimestamp} from '../input-clock';
 import {createGameRenderer} from '../render-context';
 import {VERTICAL_FOV} from '../simulation';
 import {mouseLook} from '../mouse-look';
+import {applyDirectionProfile, isNeutralProfile} from '../aim-vector';
 import {dynamicCrosshairGap} from '../crosshair-spread';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
 import {attachBindInput} from '../keybinds/dom-input';
@@ -910,6 +911,9 @@ export class DuelEngine {
       }
       const actions = this.sim.actors[0].weapon.actions;
       const mouse = event.pointerType === 'mouse';
+      // Your direction profile applies to the counts before the sensitivity, as Raw Accel's driver would.
+      if (mouse && this.settings.directionProfileOn && !isNeutralProfile(this.settings.directionProfile))
+        [dx, dy] = applyDirectionProfile(dx, dy, this.settings.directionProfile, this.settings.directionStrength);
       const look = mouseLook(dx, dy, this.settings, !mouse);
       const scale = actions.sensitivityAt(this.sim.time + this.sim.accumulator, mouse ? this.settings.keyboard.zoomSensitivity : 1);
       if (dx || dy) this.sim.command(0, {yawDelta: look.yaw * scale, pitchDelta: look.pitch * scale});

@@ -5,6 +5,47 @@ of you; a shot pops the first ball it crosses and a new one appears elsewhere. I
 (`mode: 'pop'`, category Aim warm-up), so the weapon, recoil, spread, reload and crosshair code are the
 ones every other range drill uses.
 
+- **Direction Calibration** (2026-10-28, `popVariant: 'vector'`): an open, measured take on Corsair's PureVector (Sabre v3 Pro,
+  with Aimlabs), which writes eight hidden per-direction DPI values into the mouse after five SpiderShot rounds. Rest the crosshair
+  on the gold center dot (0.4 degrees of view) for a random 0.2-0.45 s, with recoil and view punch below 0.05 degrees; one target
+  appears at an exact yaw/pitch offset from the dot; shoot it and return. Each round of 48 shows 16 screen directions at three sizes
+  (a third, two thirds and all of `popVectorReach`, 4-20 degrees, default 12, limited so targets stay above the floor) once each in
+  shuffled order. Defaults: 10 cm targets at 5 m (about 1.1 degrees). A target not hit in 4 s, or whose profile setting changes
+  mid-flick, is withdrawn and set aside. Code: `pop-vector.ts` (exercise), `aim-vector.ts` (analysis), `direction-store.ts`
+  (browser storage, key `spraylab.direction.v1`, newest 3,000 flicks), `ui/screens/DirectionCalibration.tsx` (results).
+- Analysis (`analyzeFlick`): `Simulation.aim()` records every mouse event during a flick in mouse-space degrees, both without and
+  with the profile. The movement is resampled every 2 ms (each event spread over at most one 60 Hz frame) and Gaussian-smoothed
+  (8 ms). The first movement is the first push past 30% of the largest; it starts at 5% of its own peak speed (reaction) and ends
+  at 10% of it or at an earlier dip below half that a new push follows. Later pushes past 12% count as corrections. Set aside:
+  anticipated starts under 80 ms, already moving at spawn, no movement, first movements under 20% or over 250% of the distance or
+  more than 45 degrees off.
+- Profile (`DirectionProfile`): rotation, then right/left/up/down multipliers on mouse counts before the sensitivity, in exactly
+  Raw Accel's order and rotation formula (`modify` in RawAccelOfficial/rawaccel common/rawaccel.hpp), so a profile proven here
+  behaves identically in its signed driver. `rawAccelFields` maps it: Output DPI x right, Y/X = down/right, L/R = left/right,
+  U/D = up/down, same Degrees of rotation. `fitDirectionProfile` fits it by weighted least squares on where first movements of
+  calibration flicks (profile off, the latest 480) land relative to their targets: closed-form per half-axis, rotation by grid and
+  golden-section search, one Huber pass. The horizontal scale it implies is your sensitivity: reported, never applied. Each part is
+  shrunk toward no change by its bootstrap standard error (40 resamples; priors 5% per multiplier, 1.5 degrees) and bounded to
+  -20%/+25% and 10 degrees. `directionStrength` blends it in (multipliers as powers).
+- Gap report (`compareDirectionModels`): 5-fold cross-validated RMS endpoint error, as a fraction of the flick distance, as
+  recorded, after the best sensitivity and rotation change alone, after the four-direction profile, and after a full-resolution
+  model: that profile plus a smooth correction over direction (a turn and a Fourier gain to the third harmonic, light ridge), so
+  it can do everything the four-direction profile can and more. It reports how much direction-dependent sensitivity could fix and
+  what share the four-direction profile captures (the rest is what finer control, an Interception driver or PureVector's firmware,
+  could add), or that there is no reliable pattern. The error left by the full model is flick-to-flick variation no fixed
+  profile removes.
+- Blind A/B test (`directionTest`): in Direction Calibration the profile is on or off for whole blocks of 16 flicks, in balanced
+  pairs, without saying which. `compareProfileTest` compares the geometric-mean time to hit (ratio with a Welch 95% interval on log
+  times), first-movement error and first-shot hits once both sides have 32 flicks.
+- Settings: `popVectorReach` is a core preset key; `directionProfile`, `directionProfileOn`, `directionStrength` and `directionTest`
+  are personal mouse settings outside presets. The profile applies to mouse input in every range mode and in AI Duel, Deathmatch,
+  Aim Botz, Reflex and Blitz, never to touch input. Coverage: `aim-vector.test.ts` (Raw Accel equivalence, synthetic minimum-jerk
+  flicks at 250 and 60 Hz, recovery of a known profile under noise, shrinkage, axis-aligned versus diagonal-only patterns, the A/B
+  statistics) and `pop-vector.test.ts` (simulation-driven exercise, exact target angles, balanced schedule, mouse-recorded flicks
+  with and without the profile, timeouts, recoil gate, blind blocks, storage, settings and UI).
+- Limits, stated plainly: a first movement in the trainer is not proof of in-game improvement; adaptation changes your motor
+  output under a new profile, so recalibrate with it off after a while; and there is no independent evidence yet that
+  direction-dependent sensitivity, PureVector's included, makes players faster. The blind test exists to answer that for you.
 - **Floating Heads**, **Pasu Micro** and **DriftTS** (2026-10-25) adapt the remaining researched exercises to
   a compact field ahead of the player. Defaults: three 12 cm dots at 8 m, 0.6 m/s, 1 m center radius.
   `popMotionCount` (1–6), `popMotionSpeed` (0.1–3 m/s) and `popMotionRadius` (0.4–1.2 m) control all three.

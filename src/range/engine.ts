@@ -1,4 +1,5 @@
 import {holdPop} from './pop';
+import {directionStore} from './direction-store';
 import {createPopSphereMaterial} from './pop-sphere-material';
 import * as THREE from 'three';
 import {popFrameGeometry} from './pop-geometry';
@@ -52,7 +53,8 @@ export type RangeStatus = {
   equipped: Equipment; slot: Slot; equipReady: boolean; magazine: number;
   targetHealth?: number[];
   /** Pop mode: the session tally. */
-  pop?: {pops: number; hits: number; shots: number; seconds: number; hold?: {heldSeconds: number; onTargetSeconds: number; progress: number}; phase?: 'center' | 'target'; cluster?: {remaining: number; total: number; cleared: number}};
+  pop?: {pops: number; hits: number; shots: number; seconds: number; hold?: {heldSeconds: number; onTargetSeconds: number; progress: number}; phase?: 'center' | 'target'; cluster?: {remaining: number; total: number; cleared: number};
+    vector?: {flicks: number; accepted: number; testing: boolean}};
   drill?: {round:number; completed:number; passed:number; scenario:string; covered:boolean; exposure:Exposure; side:number; peekDirection?:number; phase:'prepare'|'exposed'|'feedback'|'reposition'; accurate:boolean; error:number; remaining?:number; last?:DrillMetrics};
 };
 const vector = (v: Vec) => new THREE.Vector3(v.x, v.y, v.z);
@@ -517,7 +519,7 @@ export class RangeEngine {
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
+      'popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popVectorReach', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -740,6 +742,7 @@ export class RangeEngine {
       this.setPopAtmosphere(false); return;
     }
     this.setPopAtmosphere(true);
+    if (pop.vector) {const finished = pop.vector.drain(); if (finished.length) directionStore.add(finished);}
     if (rebuild) {this.clearPopScene(); this.clearImpacts();}
     if (this.popColorApplied !== this.sim.settings.popColor || this.pop3DApplied !== this.sim.settings.pop3D) {
       this.pop3DApplied = this.sim.settings.pop3D;
@@ -1177,7 +1180,8 @@ export class RangeEngine {
         pop: this.sim.pop ? {pops: this.sim.pop.pops, hits: this.sim.pop.hits, shots: this.sim.pop.shots, seconds: this.sim.pop.shots || this.sim.pop.heldSeconds ? this.sim.time - this.sim.popStartedAt : 0,
           hold: holdPop(this.sim.pop.config.variant) ? {heldSeconds: this.sim.pop.heldSeconds, onTargetSeconds: this.sim.pop.onTargetSeconds, progress: this.sim.pop.holdProgress} : undefined,
           phase: this.sim.pop.center ? this.sim.pop.precisionPhase : undefined,
-          cluster: this.sim.pop.cluster ? {remaining: this.sim.pop.balls.length, total: this.sim.pop.config.count, cleared: this.sim.pop.clustersCleared} : undefined} : undefined,
+          cluster: this.sim.pop.cluster ? {remaining: this.sim.pop.balls.length, total: this.sim.pop.config.count, cleared: this.sim.pop.clustersCleared} : undefined,
+          vector: this.sim.pop.vector ? {flicks: this.sim.pop.vector.flicks, accepted: this.sim.pop.vector.accepted, testing: this.sim.settings.directionTest} : undefined} : undefined,
         active: this.sim.active, firing: this.sim.firing, hitFlash:this.hitTime>0, shots: drill?.shots ?? this.sim.shots, hits: drill?.hits ?? this.sim.hits, heads: drill?.heads ?? this.sim.heads,
         remaining:this.sim.slot===3?0:this.sim.loadedAmmo,reserve:this.sim.reserveAmmo,reloadSilent:this.sim.reloadSilent,
         recharge:Math.max(0,this.sim.rechargeUntil-this.sim.time),reload: reloadRemaining, reloadProgress: reloading ? this.sim.reloadState.progress : undefined,
