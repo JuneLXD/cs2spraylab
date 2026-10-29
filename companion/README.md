@@ -1,34 +1,55 @@
 # SprayLab Direction: the Raw Accel companion
 
-`spraylab-direction.exe` applies a profile from SprayLab's Direction Calibration (Pop) to all mouse input through
+SprayLab Direction applies a profile from SprayLab's Direction Calibration (Pop) to all mouse input through
 [Raw Accel](https://github.com/RawAccelOfficial/rawaccel), the signed Windows mouse driver, so CS2 gets the same
 correction SprayLab measured. It changes five values of one Raw Accel profile in Raw Accel's `settings.json` (Output DPI,
 the Y/X, L/R and U/D ratios, and the rotation) and has Raw Accel's own `writer.exe` send them to the driver. It never reads
 or touches a game, and nothing in it depends on where targets are.
 
+It comes as two programs:
+
+- `spraylab-direction.exe`: the window and a tray icon, in SprayLab's look. Use this one.
+- `spraylab-direction-cli.exe`: the same apply, off and status from a terminal.
+
 ## Setup
 
 1. Install Raw Accel 1.7 (1.6 also works): run `installer.exe` from its release zip, restart Windows, then open
    `rawaccel.exe` once so it writes `settings.json`.
-2. Put `spraylab-direction.exe` in Raw Accel's folder, next to `writer.exe`. (Elsewhere, pass `--rawaccel FOLDER`.)
+2. Put `spraylab-direction.exe` in Raw Accel's folder, next to `writer.exe`. Elsewhere, it asks you to locate `writer.exe`.
 3. In SprayLab, with no direction profile on anywhere, calibrate in Pop > Direction Calibration (48 flicks at least, 144
-   recommended), then press Download profile.
+   recommended), then press Download profile. The window picks up the newest download by itself.
+4. Open `spraylab-direction.exe` and press Turn on.
 
-Double-clicking the program shows its help and status. Everything else runs from a terminal in that folder.
+## The window
 
-## Commands
+- **Status card:** ON or OFF in large letters, what that means, and the button to switch. When Raw Accel is missing or
+  no profile was downloaded yet, it says what to do and offers Locate writer.exe or Choose profile.
+- **Profile:** the profile's four directions around a dial with its rotation. Gold means more sensitive that way, blue
+  less. A strength slider applies part of the profile; while it is on, changing the strength or the file shows Apply
+  changes. A newer download in your Downloads folder is offered with Use it.
+- **Raw Accel:** your own five values beside the ones with the profile (or what Raw Accel has now), and Locate Raw Accel.
+- **Switching:** the hotkey (Ctrl+Alt+P by default, also in game; None turns it off), On only while CS2 runs (on when
+  `cs2.exe` starts, off when it closes; the hotkey still works between), a beep on the hotkey (high for on, low for off,
+  two low ones when it failed) and Start with Windows, which starts it in the tray when you sign in.
+
+Closing the window keeps it running in the tray, next to the clock (Windows 11 may put new icons under the ^ arrow). Click
+the icon to open the window; right-click it to switch or quit. The icon is green while the profile is on, grey while off,
+and amber while switching or when Raw Accel needs a look. Only one copy runs: starting it again opens the running one.
+
+Its settings are in `%APPDATA%\SprayLab Direction\options.json`, and `log.txt` beside them records what it did.
+
+## Command line
 
 | Command | What it does |
 | --- | --- |
-| `spraylab-direction apply [PROFILE]` | Writes the profile into Raw Accel and activates it. Without a path it takes the newest `spraylab-direction-profile*.json` in your Downloads folder. |
-| `spraylab-direction off` | Puts your own values back and activates them. |
-| `spraylab-direction status` | Shows your own values, what `settings.json` has now and whether the profile is on. |
-| `spraylab-direction run [PROFILE]` | Stays open. Ctrl+Alt+P (or `--hotkey KEYS`) switches the profile on and off, with a high beep for on and a low one for off. With `--cs2` it is on only while `cs2.exe` runs. It uses the profile last applied. |
-| `spraylab-direction startup on [run options]` | Starts `run` minimized when you sign in to Windows, through a batch file in your Startup folder. `startup off` removes it. |
+| `spraylab-direction-cli apply [PROFILE]` | Writes the profile into Raw Accel and activates it. Without a path it takes the newest `spraylab-direction-profile*.json` in your Downloads folder. |
+| `spraylab-direction-cli off` | Puts your own values back and activates them. |
+| `spraylab-direction-cli status` | Shows your own values, what `settings.json` has now and whether the profile is on. |
 
-Options: `--profile-name NAME` changes another Raw Accel profile than the first; `--strength S` applies S (0 to 1) of
-the profile (the file already includes SprayLab's strength slider); `--dry-run` shows the change and writes nothing;
-`--quiet` turns off the beeps; `--rebase` is explained below.
+Options: `--rawaccel FOLDER` for Raw Accel's folder when the program is not in it; `--profile-name NAME` changes another
+Raw Accel profile than the first; `--strength S` applies S (0 to 1) of the profile; `--dry-run` shows the change and writes
+nothing; `--rebase` is explained below. Both programs keep the same records, so either can switch off what the other
+switched on.
 
 ## How it combines with your Raw Accel settings
 
@@ -37,19 +58,21 @@ rotates the input, applies its curve and Output DPI, multiplies y by Y/X, then n
 per direction the multipliers multiply and the rotations add: Output DPI x right, Y/X x down/right, L/R x left/right,
 U/D x up/down, rotation plus the profile's (minus it when your Y/X is negative, which mirrors the screen). That is exact
 when your own ratios are even, as they are by default. If they are not, the added rotation is approximate, and the
-program prints by how much (typically well under 1% of a movement).
+program says by how much (typically well under 1% of a movement).
 
-- Your values from before the profile are kept in `spraylab-direction-state.json` beside `settings.json`, and `off`
-  restores exactly those. The first change also keeps your original file as `settings.json.spraylab-backup`.
+- Your values from before the profile are kept in `spraylab-direction-state.json` beside `settings.json`, and switching
+  off restores exactly those. The first change also keeps your original file as `settings.json.spraylab-backup`.
 - Applying a new profile replaces the old one; it never stacks.
 - If `writer.exe` refuses the settings, `settings.json` is put back as it was.
-- Close Raw Accel's window before applying: if you then press Apply in it, it writes back the values it loaded. Its
-  window has no L/R or U/D fields, which is why this program edits `settings.json` directly.
-- If Raw Accel's values change while the profile is on (say you changed sensitivity in its window), `apply` refuses to
-  guess. Run `off`, make the change in Raw Accel, and apply again. If you reset the values to ones with no profile in
-  them, `apply --rebase` keeps them as your own.
+- Close Raw Accel's window before switching: if you then press Apply in it, it writes back the values it loaded. Its
+  window has no L/R or U/D fields, which is why this program edits `settings.json` directly. The window warns while
+  `rawaccel.exe` is open.
+- If Raw Accel's values change while the profile is on (say you pressed Apply in its window), the window shows Check Raw
+  Accel and offers Restore my values (your own from before the profile, profile off) or Keep these values (if they have
+  no profile in them, for example after you reset Raw Accel). The command line refuses instead; `apply --rebase` keeps them.
 - Raw Accel's driver keeps no settings across restarts. Raw Accel's window, or `writer.exe settings.json` at startup,
-  applies `settings.json` again, profile included. `run --cs2` (with `startup on`) switches it itself.
+  applies `settings.json` again, profile included. Started with Windows, this program also sends it once at sign-in while
+  the profile is on.
 
 ## Before you rely on it
 
@@ -60,21 +83,29 @@ program prints by how much (typically well under 1% of a movement).
   flick-to-flick variation that no profile removes.
 - Raw Accel's driver waits a second before taking new settings, which is its anti-cheat safeguard, so each switch takes
   about a second. Raw Accel's FAQ says it works in FACEIT and Valorant matches; neither Raw Accel nor this program can
-  guarantee how an anti-cheat treats it.
+  guarantee how an anti-cheat treats it. The hotkey is an ordinary Windows hotkey, and `writer.exe` runs without a console
+  window, so switching in game does not take the focus from it.
+- The programs are not code-signed, so Windows SmartScreen may warn the first time (More info > Run anyway).
 
 ## Building and tests
 
-`cargo test` runs 22 unit tests and 8 end-to-end tests of the built program. The end-to-end tests run against a
-temporary Raw Accel folder whose `writer.exe` is a stand-in script, so they need Linux or macOS. The tests cover the
-profile file, the Raw Accel 1.7 and 1.6 formats, the composition against Raw Accel's transform, on/off bookkeeping,
-outside changes, a failing writer, strength, dry runs, startup files and hotkey parsing. `tests/fixtures` holds a profile
-downloaded from SprayLab's live build and a Raw Accel 1.7 default `settings.json`, reconstructed from Raw Accel 1.7.1's
-source (`DriverConfig` in `wrapper/wrapper.cpp`, defaults in `common/rawaccel-base.hpp`).
+`cargo test` runs 27 unit tests, 7 end-to-end tests of the command line, and a test of the window itself: it builds the
+real window headless with Slint's software renderer, drives it through its buttons against a temporary Raw Accel folder
+whose `writer.exe` is a stand-in script, checks what it shows and writes in each state, and saves a screenshot of each in
+`target/tmp/screenshots`. The end-to-end and window tests need Linux or macOS. `tests/fixtures` holds a profile downloaded
+from SprayLab's live build and a Raw Accel 1.7 default `settings.json`, reconstructed from Raw Accel 1.7.1's source
+(`DriverConfig` in `wrapper/wrapper.cpp`, defaults in `common/rawaccel-base.hpp`).
 
-Build the Windows program from Linux with Zig 0.14.1 and cargo-zigbuild 0.23.4 (both on PATH):
+The window is written in [Slint](https://slint.dev) (`ui/app.slint`, used here under the GPL like the rest of this
+repository) and drawn by its software renderer, so the screenshots match what Windows shows. Its fonts are SprayLab's
+Rajdhani and Barlow (`ui/fonts`, SIL Open Font License), built into the program. The icon is drawn in code
+(`src/icon.rs`).
+
+Build the Windows programs from Linux with Zig 0.14.1 and cargo-zigbuild 0.23.4 (both on PATH):
 
     cargo zigbuild --release --target x86_64-pc-windows-gnu
 
-Or build it on Windows with `cargo build --release`. The Windows-only parts (the hotkey, finding CS2, beeps and
-keeping a double-clicked window open) compile and pass clippy for Windows. They have not yet run on Windows; nor has
-the program been run against a real Raw Accel install.
+The build uses `zig rc` for the icon, version information and manifest; elsewhere the programs build without them. Or
+build on Windows with `cargo build --release`. The Windows-only parts (the tray icon, hotkey, finding CS2, Start with
+Windows, file dialogs and beeps) compile and pass clippy for Windows, but have not run on Windows yet; nor has either
+program been run against a real Raw Accel install.

@@ -125,7 +125,8 @@ impl Fields {
     }
 }
 
-fn short(value: f64) -> String {
+/// A value with up to six decimals and no trailing zeros.
+pub fn short(value: f64) -> String {
     let text = format!("{value:.6}");
     text.trim_end_matches('0').trim_end_matches('.').to_string()
 }
@@ -239,23 +240,25 @@ pub fn find_folder(explicit: Option<&Path>) -> Result<PathBuf, String> {
         return if folder.join(WRITER).is_file() {
             Ok(folder)
         } else {
-            Err(format!("{} has no writer.exe: --rawaccel needs Raw Accel's folder.", folder.display()))
+            Err(format!("{} has no writer.exe, so it is not Raw Accel's folder.", folder.display()))
         };
     }
     let own = std::env::current_exe().ok().and_then(|exe| exe.parent().map(Path::to_path_buf));
     [own, std::env::current_dir().ok()].into_iter().flatten().find(|folder| folder.join(WRITER).is_file()).ok_or_else(|| {
-        "Cannot find Raw Accel. Put spraylab-direction.exe in Raw Accel's folder, next to writer.exe and settings.json, or pass --rawaccel FOLDER.".to_string()
+        "Cannot find Raw Accel. Put SprayLab Direction in Raw Accel's folder, next to writer.exe and settings.json, or choose that folder (--rawaccel FOLDER on the command line).".to_string()
     })
 }
 
 /// Sends settings.json to the driver with Raw Accel's own writer.exe. The driver waits a second before taking new settings
 /// (its anti-cheat safeguard), so this takes a little over a second. On an error writer.exe shows a message box and exits 1.
 pub fn activate(folder: &Path, settings: &Path) -> Result<(), String> {
-    let status = Command::new(folder.join(WRITER))
-        .arg(settings)
-        .current_dir(folder)
-        .status()
-        .map_err(|error| format!("Cannot run Raw Accel's writer.exe: {error}."))?;
+    let mut writer = Command::new(folder.join(WRITER));
+    writer.arg(settings).current_dir(folder);
+    // No console window for it: one popping up while switching in game could take the focus from a fullscreen game.
+    // (Its message boxes still show.)
+    #[cfg(windows)]
+    std::os::windows::process::CommandExt::creation_flags(&mut writer, 0x0800_0000);
+    let status = writer.status().map_err(|error| format!("Cannot run Raw Accel's writer.exe: {error}."))?;
     if status.success() {
         Ok(())
     } else {

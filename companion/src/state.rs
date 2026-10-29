@@ -9,7 +9,7 @@ use std::fs;
 use std::path::Path;
 
 pub const STATE_FILE: &str = "spraylab-direction-state.json";
-/// The copy of the last applied profile, which `run` and sign-in startup use.
+/// The copy of the last applied profile, which the window uses until another is chosen.
 pub const INSTALLED_PROFILE: &str = "spraylab-direction-profile.json";
 const FORMAT: &str = "spraylab-direction-state";
 
@@ -62,7 +62,7 @@ pub fn base_for_on(current: &Fields, state: Option<&State>, profile_name: &str, 
     let Some(state) = state else { return Ok((*current, None)) };
     let Some(applied) = state.applied else { return Ok((*current, None)) };
     if state.profile_name != profile_name {
-        return Err(format!("The SprayLab profile is on in Raw Accel profile \"{}\": run spraylab-direction off first.", state.profile_name));
+        return Err(format!("The SprayLab profile is on in Raw Accel profile \"{}\": switch it off first.", state.profile_name));
     }
     if current.close(&applied) {
         return Ok((state.base, None));
@@ -75,8 +75,9 @@ pub fn base_for_on(current: &Fields, state: Option<&State>, profile_name: &str, 
     }
     Err(format!(
         "Raw Accel's settings changed after the SprayLab profile was applied: they are {}, but this program wrote {}.\n\
-         If you changed them with the profile on, run spraylab-direction off (it puts back your own values from before the profile: {}), \
-         make your change again in Raw Accel, then apply. If the current values have no profile in them, apply with --rebase to keep them as your own.",
+         If you changed them with the profile on, switch the profile off (that puts back your own values from before it: {}), \
+         make your change again in Raw Accel, then switch it on. If the current values have no profile in them, keep them as \
+         your own (Keep these values in the window, or apply --rebase).",
         current.describe(schema), applied.describe(schema), state.base.describe(schema)
     ))
 }
@@ -86,25 +87,6 @@ pub fn off_values(current: &Fields, state: &State, schema: &Schema) -> (Fields, 
     let changed = state.applied.is_some_and(|applied| !current.close(&applied)) && !current.close(&state.base);
     let note = changed.then(|| format!("Raw Accel's values had changed since the profile was applied ({}); putting back your own from before it.", current.describe(schema)));
     (state.base, note)
-}
-
-/// The two sets of values `run` switches between.
-#[derive(Clone, Copy, Debug)]
-pub struct Switch {
-    pub base: Fields,
-    pub on: Fields,
-    pub is_on: bool,
-}
-
-impl Switch {
-    /// The values to write to switch on or off, as long as Raw Accel still has what this program wrote last.
-    pub fn target(&self, current: &Fields, on: bool) -> Result<Fields, String> {
-        let expected = if self.is_on { self.on } else { self.base };
-        if !current.close(&expected) {
-            return Err("Raw Accel's settings changed outside this program, so it leaves them alone. Restart spraylab-direction run to pick them up.".into());
-        }
-        Ok(if on { self.on } else { self.base })
-    }
 }
 
 #[cfg(test)]
@@ -144,9 +126,9 @@ mod tests {
     fn refuses_to_guess_after_an_outside_change_unless_told() {
         let edited = Fields { scale: 1100.0, ..BASE.with(P) };
         let error = base_for_on(&edited, Some(&on_state()), "default", false, &SCHEMAS[0]).unwrap_err();
-        assert!(error.contains("--rebase") && error.contains("spraylab-direction off"));
+        assert!(error.contains("--rebase") && error.contains("Keep these values") && error.contains("switch the profile off"));
         assert_eq!(base_for_on(&edited, Some(&on_state()), "default", true, &SCHEMAS[0]).unwrap().0, edited);
-        assert!(base_for_on(&BASE, Some(&on_state()), "other", false, &SCHEMAS[0]).unwrap_err().contains("run spraylab-direction off first"));
+        assert!(base_for_on(&BASE, Some(&on_state()), "other", false, &SCHEMAS[0]).unwrap_err().contains("switch it off first"));
     }
 
     #[test]
@@ -156,15 +138,6 @@ mod tests {
         let (values, note) = off_values(&Fields { scale: 1100.0, ..BASE }, &state, &SCHEMAS[0]);
         assert_eq!(values, BASE);
         assert!(note.unwrap().contains("had changed"));
-    }
-
-    #[test]
-    fn run_switches_only_while_raw_accel_has_its_values() {
-        let switch = Switch { base: BASE, on: BASE.with(P), is_on: false };
-        assert_eq!(switch.target(&BASE, true).unwrap(), BASE.with(P));
-        assert!(switch.target(&BASE.with(P), true).is_err());
-        let on = Switch { is_on: true, ..switch };
-        assert_eq!(on.target(&BASE.with(P), false).unwrap(), BASE);
     }
 
     #[test]

@@ -1,25 +1,65 @@
 [package]
 name = "spraylab-direction"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "Applies a SprayLab Direction Calibration profile to all mouse input through Raw Accel"
 license-file = "../LICENSE"
 publish = false
+default-run = "spraylab-direction"
+
+# The window and tray icon (a Windows program; elsewhere it only explains that).
+[[bin]]
+name = "spraylab-direction"
+path = "src/bin/gui.rs"
+
+# The same apply, off and status from a terminal.
+[[bin]]
+name = "spraylab-direction-cli"
+path = "src/bin/cli.rs"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 # preserve_order keeps Raw Accel's settings.json in its own key order when it is written back.
 serde_json = { version = "1", features = ["preserve_order"] }
+# The window. Slint's software renderer draws it the same on Windows and headless, which is how the tests render it.
+# The internal Slint crates below must stay on exactly this version.
+slint = { version = "=1.18.1", default-features = false, features = ["std", "compat-1-2", "renderer-software", "software-renderer-systemfonts", "software-renderer-path"] }
 
 [target.'cfg(windows)'.dependencies]
+slint = { version = "=1.18.1", default-features = false, features = ["backend-winit", "system-tray", "raw-window-handle-06", "unstable-winit-030"] }
+raw-window-handle = "0.6"
 windows-sys = { version = "0.59", features = [
   "Win32_Foundation",
+  "Win32_Graphics_Gdi",
+  "Win32_Security",
   "Win32_System_Console",
   "Win32_System_Diagnostics_Debug",
   "Win32_System_Diagnostics_ToolHelp",
+  "Win32_System_LibraryLoader",
+  "Win32_System_Registry",
+  "Win32_System_Threading",
+  "Win32_UI_Controls_Dialogs",
   "Win32_UI_Input_KeyboardAndMouse",
+  "Win32_UI_Shell",
   "Win32_UI_WindowsAndMessaging",
 ] }
+
+# Without a windowing backend nothing turns on Slint's image decoding, which its widgets' icons need.
+[target.'cfg(not(windows))'.dependencies]
+i-slint-core = { version = "=1.18.1", features = ["default", "image-decoders", "svg"] }
+
+# Load fontconfig at run time, so building on Linux needs no fontconfig development files.
+[target.'cfg(target_os = "linux")'.dependencies]
+i-slint-common = { version = "=1.18.1", features = ["fontconfig-dlopen"] }
+
+[build-dependencies]
+slint-build = "=1.18.1"
+# For the .ico in the Windows resources.
+png = "0.18"
+
+[dev-dependencies]
+# For the screenshots the window tests write.
+png = "0.18"
 
 [profile.release]
 lto = true

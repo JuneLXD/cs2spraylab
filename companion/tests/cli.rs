@@ -37,7 +37,7 @@ impl Setup {
     }
 
     fn run(&self, args: &[&str]) -> Output {
-        Command::new(env!("CARGO_BIN_EXE_spraylab-direction"))
+        Command::new(env!("CARGO_BIN_EXE_spraylab-direction-cli"))
             .args(args)
             .arg("--rawaccel")
             .arg(&self.raw)
@@ -85,7 +85,7 @@ fn apply_writes_the_newest_download_and_off_puts_the_file_back_exactly() {
     assert_eq!(profile[DPI], 1034.1);
     assert_eq!(profile[ROTATION], 1.25);
     assert!((profile[UD].as_f64().unwrap() - 1.0836 / 1.0015).abs() < 1e-6);
-    // writer.exe got settings.json; the original is kept once; the profile is installed for run and sign-in startup.
+    // writer.exe got settings.json; the original is kept once; the profile is installed for the window.
     assert_eq!(setup.writer_calls().len(), 1);
     assert!(setup.writer_calls()[0].ends_with("settings.json"));
     assert_eq!(fs::read_to_string(setup.raw.join("settings.json.spraylab-backup")).unwrap(), SETTINGS);
@@ -156,23 +156,10 @@ fn refuses_a_file_that_is_not_a_profile() {
 }
 
 #[test]
-fn startup_runs_the_last_applied_profile_at_sign_in() {
-    let setup = Setup::new("startup");
-    assert!(stderr(&setup.run(&["startup", "on"])).contains("Apply a profile first"));
-    assert!(setup.run(&["apply"]).status.success());
-    assert!(setup.run(&["startup", "on", "--cs2", "--hotkey", "f8"]).status.success());
-    let file = setup.home.join("AppData/Microsoft/Windows/Start Menu/Programs/Startup/SprayLab Direction.cmd");
-    let text = fs::read_to_string(&file).unwrap();
-    assert!(text.contains("start \"SprayLab Direction\" /min ") && text.contains(" run --rawaccel \"") && text.ends_with("--hotkey f8 --cs2\r\n"), "{text}");
-    assert!(setup.run(&["startup", "off"]).status.success());
-    assert!(!file.exists());
-}
-
-#[test]
 fn a_relative_raw_accel_folder_reaches_writer_as_an_absolute_settings_path() {
     // writer.exe runs inside Raw Accel's folder, so a relative settings path would point somewhere else.
     let setup = Setup::new("relative");
-    let applied = Command::new(env!("CARGO_BIN_EXE_spraylab-direction"))
+    let applied = Command::new(env!("CARGO_BIN_EXE_spraylab-direction-cli"))
         .args(["apply", "--rawaccel", "Raw Accel"])
         .current_dir(&setup.root)
         .env("HOME", &setup.home)
@@ -185,9 +172,10 @@ fn a_relative_raw_accel_folder_reaches_writer_as_an_absolute_settings_path() {
 }
 
 #[test]
-fn run_needs_windows_and_a_raw_accel_folder_is_required() {
+fn run_and_startup_moved_to_the_window_and_a_raw_accel_folder_is_required() {
     let setup = Setup::new("run");
-    assert!(stderr(&setup.run(&["run"])).contains("needs Windows"));
-    let lost = Command::new(env!("CARGO_BIN_EXE_spraylab-direction")).arg("status").current_dir(&setup.root).output().unwrap();
+    assert!(stderr(&setup.run(&["run"])).contains("in the window now"));
+    assert!(stderr(&setup.run(&["startup", "on"])).contains("in the window now"));
+    let lost = Command::new(env!("CARGO_BIN_EXE_spraylab-direction-cli")).arg("status").current_dir(&setup.root).output().unwrap();
     assert!(!lost.status.success() && stderr(&lost).contains("Cannot find Raw Accel"));
 }

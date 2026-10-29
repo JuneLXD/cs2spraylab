@@ -471,8 +471,8 @@ export const latestChanges = {
       'Apply the profile in SprayLab at any strength, check it with a blind A/B test, and copy it as Raw Accel settings to use in CS2.',
     ]},
     {id: 'pop-direction-companion', title: 'Direction Calibration: use it in CS2', items: [
-      'A Windows companion, spraylab-direction.exe, writes your downloaded profile into Raw Accel on top of your own settings and puts them back when you switch it off.',
-      'It can switch the profile with a hotkey, keep it on only while CS2 runs, and start when you sign in.',
+      'SprayLab Direction, a Windows companion with a window and a tray icon in SprayLab\'s look, writes your downloaded profile into Raw Accel on top of your own settings and puts them back when you switch it off.',
+      'A hotkey switches it in game, it can stay on only while CS2 runs, and it can start with Windows in the tray; spraylab-direction-cli does the same from a terminal.',
       'The gap report now says when the four-direction profile already gets all of the improvement, and the CS2 section explains combining the profile with your own Raw Accel settings.',
     ]},
     {id: 'pop-moving-exercises', title: 'Pop: Floating Heads, Pasu Micro and DriftTS', items: [
