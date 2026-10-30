@@ -1,16 +1,17 @@
 # Aim report
 
-Every mode that shoots records the same aim report, and the **Aim** tab in the main menu shows it. It is the one report: since
-2026-10-30 it also holds Direction Calibration's results (see Directions below), and it can be downloaded. A report covers one
+Every mode that shoots records the same aim report, and the **Aim** tab in the main menu shows it in two views: **Session report**
+and **Direction calibration** (below), which every mode feeds since 2026-10-30. Reports can be downloaded. A report covers one
 session: from entering a mode until a new session, a setup change that restarts the drill, or leaving the mode. It is saved
 whenever you pause, at the end of a round or timed session, and when the session ends. AI Duel rounds of one session share
 a report. The browser keeps the latest 60 reports (`spraylab.aim.reports.v1`), newest first. The tab picks a session by
 mode and compares it with your previous session of the same mode (for Pop, the same exercise).
 
-Code: `src/range/aim-report.ts` (recorder, analysis, tips), `src/range/aim-report-store.ts` (storage),
-`src/range/aim-report-export.ts` (downloads), `src/range/ui/screens/AimScreen.tsx` (the tab). Tests: `aim-report.test.ts`
-(synthetic flicks, strafes, sprays and clicks), `aim-report-engines.test.ts` (the real range and duel simulations),
-`aim-report-export.test.ts` and `ui/screens/AimScreen.test.ts`. Reports saved before the later metrics still load: every
+Code: `src/range/aim-report.ts` (recorder, analysis, tips, calibration flicks), `src/range/aim-report-store.ts` (storage),
+`src/range/aim-report-export.ts` (downloads), `src/range/direction-calibration.ts` (calibration settings), `src/range/aim-vector.ts`
+(the direction analysis) and `src/range/ui/screens/AimScreen.tsx` (the tab). Tests: `aim-report.test.ts` (synthetic flicks,
+strafes, sprays, clicks and calibration flicks), `aim-report-engines.test.ts` (the real range and duel simulations),
+`direction-calibration.test.ts`, `aim-report-export.test.ts` and `ui/screens/AimScreen.test.ts`. Reports saved before the later metrics still load: every
 field added since is optional.
 
 ## What the engines feed it
@@ -101,7 +102,8 @@ crosshair (or three times its zone). With no target near, it is the crosshair's 
 ## Flicks by direction
 
 This session's measured flicks, in any mode, by the direction of the movement they needed on screen: eight 45-degree sectors
-(right, up-right, up, ...), each with its first-movement bias, typical miss and time to hit.
+(right, up-right, up, ...), each with its first-movement bias, typical miss and time to hit. The panel also says how many of the
+session's flicks went into Direction calibration (`calibration`, while it records) and opens that view.
 
 ## Bursts, misses and stance
 
@@ -113,20 +115,71 @@ This session's measured flicks, in any mode, by the direction of the movement th
 - **Stops by side**: stops while strafing left and right (mostly sideways relative to your view when the key last pushed you),
   with how many came before you were accurate and the median time to accurate.
 
-## Directions
+## Direction calibration
 
-Below the session's panels, the Aim tab holds Direction Calibration's results, moved there from Pop's setup: the chart of where
-first movements land in 16 directions with 95% intervals, the fitted four- and sixteen-direction profiles, the gap report, the
-profile table, Use fitted profile, Apply profile in SprayLab, Profile strength, the blind A/B test, the Raw Accel fields, Copy and
-Download profile, and Clear recorded flicks. Unlike the session report, they cover every calibration flick in this browser
-(`spraylab.direction.v1`), so they show even before the first session report. The analysis itself is unchanged (`aim-vector.ts`,
-`docs/pop-mode.md`).
+The Aim tab's second view: an open, measured take on Corsair's PureVector (Sabre v3 Pro with Aimlabs), which writes eight hidden
+per-direction DPI values into the mouse after five SpiderShot rounds. From 2026-10-28 to 2026-10-30 it was a Pop exercise of
+its own (`popVariant: 'vector'`: rest on a center dot, one target at an exact offset, 16 directions at three sizes per round);
+now every mode feeds it, and a setup saved in the exercise opens as Classic Pop.
+
+- **Recording** (`directionCalibrate`, on by default; the view's **Record calibration flicks** switch). While on, each engine's aim
+  recorder keeps every flick that measures your aim cleanly as a calibration flick (`AimRecorder.keepCalibration`): a valid,
+  timed flick (as above) that ended with a shot hitting the target while the crosshair was on it, so that was where you meant
+  to go; 2-45 degrees long (`CALIBRATION_AMP`) to a target whose angular radius is at most a fifth of that (`CALIBRATION_ZONE`);
+  with recoil, view punch and, in the duel engine, the punch of being hit all under 0.05 degrees from 50 ms before the first
+  movement started; and with that movement made by the mouse with one state of the profile throughout. Left out: touch input,
+  held-fire Pop exercises (the crosshair touching the target ends the flick in the middle of the movement), targets already
+  under the crosshair, anticipated starts and first movements that went far off, flicks whose window began with the session or
+  ran over 4 s, and the spray drills' fixed targets. Both engines give the recorder each mouse event's view movement and the
+  one its counts would have made without the profile (`AimMouse`). The record is in mouse space (`FlickRecord`, `aim-vector.ts`):
+  the target where it was when the first movement ended (so a moving target and your own movement count), where that movement
+  ended without and with the profile, the inverted axes and the profile in use. The engines add the session's calibration
+  flicks to `spraylab.direction.v1` (newest 3,000) when its report is saved, so nothing is written to storage mid-play. Switch
+  recording off while Raw Accel applies a profile: SprayLab sees Raw Accel's output and would measure on top of it.
+- **Results**: the chart of where first movements land in 16 directions with 95% intervals, the fitted four- and
+  sixteen-direction profiles, the gap report, the per-direction table, the profile table, Use fitted profile, Apply profile in
+  SprayLab, Profile strength, the blind A/B test, the Raw Accel fields, Copy and Download profile, and Clear recorded flicks. They
+  cover every calibration flick in this browser, so they show without any session report. Directions with fewer than 3 flicks
+  are named, since their part of the fit is loose.
+- **Analysis** (`segmentMovement`, `analyzeFlick`): the movement is resampled every 2 ms (each event spread over at most one 60 Hz
+  frame) and Gaussian-smoothed (8 ms). The first movement is the first push past 30% of the largest; it starts when the crosshair
+  last left its resting place (1% of the distance) and ends at 10% of its peak speed or at an earlier dip below half that a new
+  push follows. Later pushes past 12% count as corrections.
+- **Profile** (`DirectionProfile`): rotation, then right/left/up/down multipliers on mouse counts before the sensitivity, in exactly
+  Raw Accel's order and rotation formula (`modify` in RawAccelOfficial/rawaccel common/rawaccel.hpp), so a profile proven here
+  behaves identically in its signed driver. `rawAccelFields` maps it: Output DPI x right, Y/X = down/right, L/R = left/right,
+  U/D = up/down, same Degrees of rotation. `fitDirectionProfile` fits it by weighted least squares on where first movements of
+  calibration flicks (profile off, the latest 480) land relative to their targets: closed-form per half-axis, rotation by grid and
+  golden-section search, one Huber pass. The horizontal scale it implies is your sensitivity: reported, never applied. Each part is
+  shrunk toward no change by its bootstrap standard error (40 resamples; priors 5% per multiplier, 1.5 degrees) and bounded to
+  -20%/+25% and 10 degrees. `directionStrength` blends it in (multipliers as powers).
+- **Gap report** (`compareDirectionModels`): 5-fold cross-validated RMS endpoint error, as a fraction of the flick distance, as
+  recorded, after the best sensitivity and rotation change alone, after the four-direction profile, and after a full-resolution
+  model (that profile plus a smooth correction over direction: a turn and a Fourier gain to the third harmonic, light ridge). It
+  reports how much direction-dependent sensitivity could fix and what share the four-direction profile captures, or that there is
+  no reliable pattern.
+- **Blind A/B test** (`directionTest`): in every mode, while recording, the profile is on or off for whole blocks of 16 calibration
+  flicks (`DIRECTION_TEST_BLOCK`), in balanced pairs drawn anew each session, without saying which (`AimRecorder.testOn`; both
+  engines apply it through `activeDirectionProfile`). A flick whose first movement spans a switch is left out.
+  `compareProfileTest` compares the geometric-mean time to hit (ratio with a Welch 95% interval on log times), first-movement
+  error and first-shot hits once both sides have 32 flicks.
+- **CS2 through Raw Accel**: Download profile writes the `directionProfileFile` JSON. The Rust companion in `companion/` (see its
+  README) composes it with your own Raw Accel values and applies it through Raw Accel's writer.exe, with a window, a tray icon
+  and a hotkey.
+- **Settings**: `directionCalibrate`, `directionProfile`, `directionProfileOn`, `directionStrength` and `directionTest` are personal
+  mouse settings outside Pop presets. The profile applies to mouse input in every range mode and in AI Duel, Deathmatch, Aim Botz,
+  Reflex and Blitz, never to touch input.
+- **Limits**: flicks from every mode are less controlled than the old exercise. Directions come as the modes give them (Aim Botz
+  is mostly horizontal), flick and target sizes vary, and many flicks start right after a shot, so fewer of them qualify and some
+  directions fill slowly. A first movement in the trainer is not proof of in-game improvement; adaptation changes your motor
+  output under a new profile, so recalibrate with it off after a while; and there is no independent evidence yet that
+  direction-dependent sensitivity, PureVector's included, makes players faster. The blind test exists to answer that for you.
 
 ## Downloads
 
 - **Download report** saves a self-contained page (`aimReportHtml` in `aim-report-export.ts`): the tips, the key numbers and every
-  section of the tab with the numbers written out, and the direction section with its chart drawn in SVG when there are
-  calibration flicks. It opens in any browser and prints to PDF. File name: `spraylab-aim-report-<mode>-<date>.html`.
+  section of the session report with the numbers written out, and Direction calibration with its chart drawn in SVG when there
+  are calibration flicks. It opens in any browser and prints to PDF. File name: `spraylab-aim-report-<mode>-<date>.html`.
 - **Download data** saves the same session as JSON (format `spraylab-aim-report`, version 1): the report object and, with
   calibration flicks, their summary, the 16-direction table, the fit, the gap report, the blind test and the profile in use.
 - **Download all reports** saves every report this browser keeps (format `spraylab-aim-reports`).

@@ -91,11 +91,10 @@ export type Settings = {
   pop3D: boolean;
   /** Microshot: dots per rectangle, and its requested dimensions in metres. */
   popClusterCount: number; popClusterWidth: number; popClusterHeight: number;
-  /** Direction Calibration: the largest of its three flick sizes, in degrees of view. */
-  popVectorReach: number;
-  /** The direction profile applied to mouse input before the sensitivity (Raw Accel's pipeline, see aim-vector.ts), whether it
-   * is switched on, its strength (0 = no change, 1 = full) and whether Direction Calibration runs the blind A/B test instead. */
-  directionProfile: DirectionProfile; directionProfileOn: boolean; directionStrength: number; directionTest: boolean;
+  /** Direction Calibration (direction-calibration.ts): whether every mode records calibration flicks, the direction profile
+   * applied to mouse input before the sensitivity (Raw Accel's pipeline, see aim-vector.ts), whether it is switched on, its
+   * strength (0 = no change, 1 = full) and whether the blind A/B test switches it instead. */
+  directionCalibrate: boolean; directionProfile: DirectionProfile; directionProfileOn: boolean; directionStrength: number; directionTest: boolean;
   /** Pop: ammo as sv_infinite_ammo ('magazine' = 1 never reloads, 'reserve' = 2 reloads from a full reserve) and the hit sound. */
   popAmmo: 'off' | 'reserve' | 'magazine'; popSound: 'hitmarker' | 'synth' | 'pop';
   /** Pop only: no gunshot audio, no miss marks on the wall, no HUD over the view. */
@@ -147,7 +146,7 @@ export const defaults: Settings = {
   tracers: 'native',
   popMotionCount: 3, popMotionSpeed: .6, popMotionRadius: 1, popMotionRate: 1.2, popFloatBob: .04,
   popVariant: 'classic', pop3D: false, popPairGap: .35, popPairRadius: 1, popHoldTime: .15, popPrecisionSpeed: .8, popFlickStep: .3, popFlickRadius: 1, popClusterCount: 3, popClusterWidth: .7, popClusterHeight: .6,
-  popVectorReach: 12, directionProfile: neutralDirectionProfile, directionProfileOn: false, directionStrength: 1, directionTest: false,
+  directionCalibrate: true, directionProfile: neutralDirectionProfile, directionProfileOn: false, directionStrength: 1, directionTest: false,
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
   popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popWallbang: false, popWallMaterial: 'wood', popWallXray: true, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0, popMoveChance: .5,
   popPadWidth: .9, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime',
@@ -165,6 +164,9 @@ export function sanitizeSettings(raw: unknown): Settings {
   const s = (raw && typeof raw === 'object' ? raw : {}) as Partial<Settings>;
   const c = s.crosshair && typeof s.crosshair === 'object' ? s.crosshair : defaults.crosshair;
   const cs2Crosshair = sanitizeCs2Crosshair(s.cs2Crosshair);
+  // Direction Calibration was a Pop exercise with its own ball size, count and distance. It now runs in every mode, so a setup
+  // saved in it opens as Classic Pop with Classic's balls.
+  const fromVector = (s.popVariant as string | undefined) === 'vector';
   return {
     weapon: typeof s.weapon === 'string' && Object.prototype.hasOwnProperty.call(weaponNames, s.weapon) ? s.weapon : defaults.weapon,
     sidearm: pistolIds.includes(s.sidearm!) ? s.sidearm! : 'usp',
@@ -201,8 +203,8 @@ export function sanitizeSettings(raw: unknown): Settings {
     keyboard: sanitizeKeyboard(s.keyboard),
     viewmodel: sanitizeViewmodel(s.viewmodel),
     tracers: s.tracers === 'every' || s.tracers === 'off' ? s.tracers : 'native',
-    popVariant: s.popVariant === 'precision' || s.popVariant === 'wide' || s.popVariant === 'microshot' || s.popVariant === 'closepairs' || s.popVariant === 'pokeball' || s.popVariant === 'floatingheads' || s.popVariant === 'pasu' || s.popVariant === 'driftts' || s.popVariant === 'vector' ? s.popVariant : 'classic',
-    popVectorReach: Math.round(numeric(s.popVectorReach, defaults.popVectorReach, 4, 20)),
+    popVariant: s.popVariant === 'precision' || s.popVariant === 'wide' || s.popVariant === 'microshot' || s.popVariant === 'closepairs' || s.popVariant === 'pokeball' || s.popVariant === 'floatingheads' || s.popVariant === 'pasu' || s.popVariant === 'driftts' ? s.popVariant : 'classic',
+    directionCalibrate: s.directionCalibrate !== false,
     directionProfile: sanitizeDirectionProfile(s.directionProfile), directionProfileOn: s.directionProfileOn === true,
     directionStrength: Math.round(numeric(s.directionStrength, defaults.directionStrength, 0, 1) * 20) / 20, directionTest: s.directionTest === true,
     pop3D: s.pop3D === true,
@@ -221,8 +223,9 @@ export function sanitizeSettings(raw: unknown): Settings {
     popClusterCount: Math.round(numeric(s.popClusterCount, defaults.popClusterCount, 1, 12)),
     popClusterWidth: Math.round(numeric(s.popClusterWidth, defaults.popClusterWidth, .3, 2) * 10) / 10,
     popClusterHeight: Math.round(numeric(s.popClusterHeight, defaults.popClusterHeight, .3, 2) * 10) / 10,
-    popSize: Math.round(numeric(s.popSize, defaults.popSize, 8, 80)), popCount: Math.round(numeric(s.popCount, defaults.popCount, 1, 12)),
-    popSpacing: numeric(s.popSpacing, defaults.popSpacing, .2, 5), popDistance: numeric(s.popDistance, defaults.popDistance, 3, 40),
+    popSize: fromVector ? defaults.popSize : Math.round(numeric(s.popSize, defaults.popSize, 8, 80)),
+    popCount: fromVector ? defaults.popCount : Math.round(numeric(s.popCount, defaults.popCount, 1, 12)),
+    popSpacing: numeric(s.popSpacing, defaults.popSpacing, .2, 5), popDistance: fromVector ? defaults.popDistance : numeric(s.popDistance, defaults.popDistance, 3, 40),
     popColor: typeof s.popColor === 'string' && /^#[\da-f]{6}$/i.test(s.popColor) ? s.popColor.toLowerCase() : defaults.popColor,
     popAmmo: s.popAmmo === 'off' || s.popAmmo === 'reserve' ? s.popAmmo : 'magazine', popSound: s.popSound === 'pop' || s.popSound === 'synth' ? s.popSound : 'hitmarker',
     popMuteGun: s.popMuteGun === true, popHideImpacts: s.popHideImpacts === true, popHideHud: s.popHideHud === true,

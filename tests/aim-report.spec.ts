@@ -93,20 +93,23 @@ test('aim report: an Aim Botz kill shows up in the Aim tab after a pause', async
     await page.getByRole('button', {name: 'Resume Aim Botz'}).click().catch(() => undefined);
   await expect(page.getByRole('button', {name: 'Pause Aim Botz'})).toBeVisible();
   await page.waitForFunction(() => (window as any).aimEngine.models.size === 1, undefined, {timeout: 45000});
-  await page.evaluate(() => {
-    const sim = (window as any).aimEngine.sim, eye = sim.actors[0].position, bot = sim.actors[1];
-    const dx = bot.position.x - eye.x, dy = bot.feet + 1.62 - eye.y, dz = bot.position.z - eye.z;
-    sim.actors[0].yaw = Math.atan2(-dx, -dz); sim.actors[0].pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
-  });
-  await page.waitForTimeout(300);
-  // Fire through the simulation's own command: a scripted mouse click under headless pointer lock is unreliable here.
-  await page.evaluate(() => (window as any).aimEngine.sim.command(0, {firePressed: true, fireHeld: true}));
-  await page.waitForTimeout(300);
-  await page.evaluate(() => (window as any).aimEngine.sim.command(0, {fireHeld: false}));
+  // Single presses through the simulation's own command, each aimed at the head first: a scripted mouse click under headless
+  // pointer lock is unreliable here, and a trigger held for a moment of real time becomes a spray at a few frames a second.
+  for (let attempt = 0; attempt < 10 && !(await page.locator('.duel-round').textContent())?.includes('1 KILLS'); attempt++) {
+    await page.evaluate(() => {
+      const sim = (window as any).aimEngine.sim, eye = sim.actors[0].position, bot = sim.actors[1];
+      const dx = bot.position.x - eye.x, dy = bot.feet + 1.62 - .45 * (bot.duckAmount ?? 0) - eye.y, dz = bot.position.z - eye.z;
+      sim.actors[0].yaw = Math.atan2(-dx, -dz); sim.actors[0].pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
+      sim.command(0, {firePressed: true});
+    });
+    await page.waitForTimeout(500);
+  }
   await expect(page.locator('.duel-round')).toContainText('1 KILLS');
   await page.keyboard.press('Escape');
   await expect.poll(async () => (await reports(page)).length).toBe(1);
-  expect((await reports(page))[0]).toMatchObject({mode: 'botz', label: 'Aim Botz', hits: 1, heads: 1, cleared: 1});
+  const [saved] = await reports(page);
+  expect(saved).toMatchObject({mode: 'botz', label: 'Aim Botz', cleared: 1});
+  expect(saved.hits).toBeGreaterThanOrEqual(1); expect(saved.shots).toBeLessThanOrEqual(10);
   await page.getByRole('button', {name: 'Aim', exact: true}).click();
   const tab = page.getByRole('region', {name: 'Aim report'});
   await expect(tab.getByRole('heading', {name: 'Aim Botz'})).toBeVisible();

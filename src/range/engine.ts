@@ -1,6 +1,7 @@
 import {holdPop, popVariants} from './pop';
 import {directionStore} from './direction-store';
 import {aimReport, AimRecorder} from './aim-report';
+import {directionCalibration} from './direction-calibration';
 import {aimReportStore} from './aim-report-store';
 import {createPopSphereMaterial} from './pop-sphere-material';
 import * as THREE from 'three';
@@ -55,8 +56,7 @@ export type RangeStatus = {
   equipped: Equipment; slot: Slot; equipReady: boolean; magazine: number;
   targetHealth?: number[];
   /** Pop mode: the session tally. */
-  pop?: {pops: number; hits: number; shots: number; seconds: number; hold?: {heldSeconds: number; onTargetSeconds: number; progress: number}; phase?: 'center' | 'target'; cluster?: {remaining: number; total: number; cleared: number};
-    vector?: {flicks: number; accepted: number; testing: boolean}};
+  pop?: {pops: number; hits: number; shots: number; seconds: number; hold?: {heldSeconds: number; onTargetSeconds: number; progress: number}; phase?: 'center' | 'target'; cluster?: {remaining: number; total: number; cleared: number}};
   drill?: {round:number; completed:number; passed:number; scenario:string; covered:boolean; exposure:Exposure; side:number; peekDirection?:number; phase:'prepare'|'exposed'|'feedback'|'reposition'; accurate:boolean; error:number; remaining?:number; last?:DrillMetrics};
 };
 const vector = (v: Vec) => new THREE.Vector3(v.x, v.y, v.z);
@@ -187,7 +187,7 @@ export class RangeEngine {
     this.cues.forEach((cue, i) => { cue.className = `aim-cue ${i ? 'next' : 'now'}`; cue.style.color = i ? GUIDE_COLORS.next : GUIDE_COLORS.now; cue.innerHTML = `<i></i><span>${i ? 'NEXT' : 'NOW'}</span>`; host.append(cue); });
     this.cueLabels = this.cues.map(cue => cue.querySelector('span')!);
     this.hitCaption.className = 'hit-caption'; host.append(this.hitCaption);
-    this.sim = new Simulation(settings); this.sim.aimLog = this.aimLog;
+    this.sim = new Simulation(settings); this.sim.aimLog = this.aimLog; this.aimLog.calibration = directionCalibration(settings);
     this.binds = new BindRuntime(settings.keyboard, event => this.onBind(event));
     this.applyViewmodel(settings.viewmodel);
     this.renderer = createGameRenderer({antialias: qualityPolicy(settings.quality).shadows, lowLatency: settings.lowLatency});
@@ -491,11 +491,14 @@ export class RangeEngine {
     this.attemptId = null; this.attemptRevision++; this.attemptTargets.clear();
   }
   reset() {this.saveAim(true); this.cancelProgression(); this.viewAnimations.get(this.sim.equipped)?.cancel(); this.sim.reset(); this.clearImpacts();}
-  /** Saves this session's aim report for the Aim tab (on a pause, and when the session ends); `finish` starts the next session.
-   * A setup change that restarts the drill ends the session, so each report covers one mode and setup. */
+  /** Saves this session's aim report for the Aim tab (on a pause, and when the session ends), with the calibration flicks it kept;
+   * `finish` starts the next session. A setup change that restarts the drill ends the session, so each report covers one mode
+   * and setup. */
   saveAim(finish = false) {
     const log = this.sim?.aimLog, settings = this.sim?.settings;
     if (!log || !settings) return;
+    const flicks = log.drainCalibration();
+    if (flicks.length) directionStore.add(flicks);
     // Classic is plain Pop; every other exercise is named after it.
     const exercise = settings.mode === 'pop' && settings.popVariant !== 'classic' ? popVariants.find(variant => variant.id === settings.popVariant)?.name : undefined;
     const label = exercise ? `Pop · ${exercise}` : modeNames[settings.mode];
@@ -520,6 +523,7 @@ export class RangeEngine {
     if (this.viewCamera.fov !== fov) {this.viewCamera.fov = fov; this.viewCamera.updateProjectionMatrix();}
   }
   configure(settings: Settings, measured?: MeasuredProfile) {
+    if (this.sim?.aimLog) this.sim.aimLog.calibration = directionCalibration(settings);
     this.binds?.setProfile(settings.keyboard);
     if (settings.viewmodel) this.applyViewmodel(settings.viewmodel);
     if (this.shortcuts) this.shortcuts.codes = protectedCodes(settings.keyboard.binds);
@@ -536,7 +540,7 @@ export class RangeEngine {
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popVectorReach', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
+      'popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -762,7 +766,6 @@ export class RangeEngine {
       this.setPopAtmosphere(false); return;
     }
     this.setPopAtmosphere(true);
-    if (pop.vector) {const finished = pop.vector.drain(); if (finished.length) directionStore.add(finished);}
     if (rebuild) {this.clearPopScene(); this.clearImpacts();}
     if (this.popColorApplied !== this.sim.settings.popColor || this.pop3DApplied !== this.sim.settings.pop3D) {
       this.pop3DApplied = this.sim.settings.pop3D;
@@ -1200,8 +1203,7 @@ export class RangeEngine {
         pop: this.sim.pop ? {pops: this.sim.pop.pops, hits: this.sim.pop.hits, shots: this.sim.pop.shots, seconds: this.sim.pop.shots || this.sim.pop.heldSeconds ? this.sim.time - this.sim.popStartedAt : 0,
           hold: holdPop(this.sim.pop.config.variant) ? {heldSeconds: this.sim.pop.heldSeconds, onTargetSeconds: this.sim.pop.onTargetSeconds, progress: this.sim.pop.holdProgress} : undefined,
           phase: this.sim.pop.center ? this.sim.pop.precisionPhase : undefined,
-          cluster: this.sim.pop.cluster ? {remaining: this.sim.pop.balls.length, total: this.sim.pop.config.count, cleared: this.sim.pop.clustersCleared} : undefined,
-          vector: this.sim.pop.vector ? {flicks: this.sim.pop.vector.flicks, accepted: this.sim.pop.vector.accepted, testing: this.sim.settings.directionTest} : undefined} : undefined,
+          cluster: this.sim.pop.cluster ? {remaining: this.sim.pop.balls.length, total: this.sim.pop.config.count, cleared: this.sim.pop.clustersCleared} : undefined} : undefined,
         active: this.sim.active, firing: this.sim.firing, hitFlash:this.hitTime>0, shots: drill?.shots ?? this.sim.shots, hits: drill?.hits ?? this.sim.hits, heads: drill?.heads ?? this.sim.heads,
         remaining:this.sim.slot===3?0:this.sim.loadedAmmo,reserve:this.sim.reserveAmmo,reloadSilent:this.sim.reloadSilent,
         recharge:Math.max(0,this.sim.rechargeUntil-this.sim.time),reload: reloadRemaining, reloadProgress: reloading ? this.sim.reloadState.progress : undefined,

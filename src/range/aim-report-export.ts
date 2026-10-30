@@ -3,10 +3,10 @@ import {DIRECTION_NAMES, isNeutralProfile, type DirectionProfile, type Direction
 import {equipmentNames} from './equipment';
 
 /** The aim report as files to keep or share: a readable page (self-contained HTML that prints well) and the numbers as JSON. Both
- * carry the session's report and, when you have Direction Calibration flicks, the direction section of the Aim tab: where first
+ * carry the session's report and, when you have calibration flicks, the Aim tab's Direction calibration view: where first
  * movements land in 16 directions, the fitted profile, the gap report and the blind test. Built from the same numbers the tab shows. */
 
-/** The Aim tab's direction section: Direction Calibration's analysis of every calibration flick in this browser, the gap report's
+/** The Aim tab's Direction calibration view: the analysis of every calibration flick in this browser, from every mode, the gap report's
  * wording, and the profile in use. */
 export type DirectionSection = {report: DirectionReport; gap?: string; applied: DirectionProfile; on: boolean; strength: number};
 
@@ -77,7 +77,7 @@ function directionHtml(direction: DirectionSection) {
     degrees(applied.rotation)]])) : note(`The profile needs 48 calibration flicks; ${summary.valid} so far.`);
   const time = test.time;
   return `<div class="columns"><div>${directionChart(report)}
-${note(`${summary.valid} calibration flicks (every Direction Calibration flick in this browser, not only this session). First movements: ${percent(summary.perfect)} inside the target, ${percent(summary.over)} past it, ${percent(summary.under)} short; typical miss ${percent(summary.error, 1)} of the flick; reaction ${ms(summary.reaction)}, time to hit ${ms(summary.total)}.`)}
+${note(`${summary.valid} calibration flicks (every calibration flick in this browser, from every mode, not only this session). First movements: ${percent(summary.perfect)} inside the target, ${percent(summary.over)} past it, ${percent(summary.under)} short; typical miss ${percent(summary.error, 1)} of the flick; ${ms(summary.reaction)} before moving, time to hit ${ms(summary.total)}.`)}
 ${gap ? note(gap) : ''}</div><div><h3>Fitted profile</h3>${fitted}
 ${note(`Profile in use: ${isNeutralProfile(applied) ? 'none' : `${on ? 'on' : 'off'} in SprayLab at ${Math.round(strength * 100)}% strength`}.`)}
 ${note(test.ready && time && test.error ? `Blind A/B test: with the profile your time to hit was ${percent(time.estimate - 1, 1)} (95% interval ${percent(time.low - 1, 1)} to ${percent(time.high - 1, 1)}) and first movements ended ${percent(test.error.estimate, 1)} of the distance ${test.error.estimate <= 0 ? 'closer' : 'further'}.`
@@ -116,7 +116,8 @@ ${report.sizes.length ? groups('Flick size', report.sizes) : ''}` : note('No fli
   ].filter(Boolean).map(note).join('') + (halves ? table(['Half', 'Shots', 'Hit rate', 'Timed flicks', 'Time to hit'], [['First half', String(halves.first.shots), percent(halves.first.hit),
     String(halves.first.flicks), halves.first.time === undefined ? '–' : ms(halves.first.time)], ['Second half', String(halves.second.shots), percent(halves.second.hit),
     String(halves.second.flicks), halves.second.time === undefined ? '–' : ms(halves.second.time)]]) : '')));
-  if (report.directions?.length) parts.push(section('Flicks by direction (this session)', groups('Direction', report.directions)));
+  if (report.directions?.length) parts.push(section('Flicks by direction (this session)', groups('Direction', report.directions)
+    + (report.calibration === undefined ? '' : note(`${report.calibration} of this session's flicks went into Direction calibration.`))));
   parts.push(section('Shooting while moving', table(['When you fired', 'Shots', 'Share', 'Hit rate'], [
     ['Standing', String(movement.standing.shots), percent(movement.standing.shots / n), rate(movement.standing)],
     ['Stopped', String(movement.stopped.shots), percent(movement.stopped.shots / n), rate(movement.stopped)],

@@ -3896,7 +3896,7 @@ dependencies = [
 
 [[package]]
 name = "spraylab-direction"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "i-slint-common",
  "i-slint-core",

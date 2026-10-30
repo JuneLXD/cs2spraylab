@@ -4,7 +4,7 @@ import {equipmentIds, type Equipment} from './equipment';
 /** The aim reports of recent sessions, kept in this browser for the Aim tab: newest first, at most `MAX_AIM_REPORTS`. A session
  * saves its report again whenever it pauses or ends, replacing its earlier copy (same id). Every change re-reads storage first,
  * so two tabs do not overwrite each other, and it keeps working in memory when storage is unavailable. Shaped for
- * useSyncExternalStore, like the Direction Calibration store. */
+ * useSyncExternalStore, like the calibration flicks' store (direction-store.ts). */
 export const MAX_AIM_REPORTS = 60;
 const STORAGE_KEY = 'spraylab.aim.reports.v1';
 
@@ -24,6 +24,7 @@ const groups = (value: unknown, limit: number) => Array.isArray(value) && value.
 /** The fields added after the first reports: each may be missing, and must be well formed when present. */
 function later(r: Record<string, unknown>) {
   if (!numbers(r, [], ['perMinute', 'throughput', 'peak'])) return false;
+  if (r.calibration !== undefined && !(Number.isInteger(r.calibration) && (r.calibration as number) >= 0)) return false;
   const spread = r.spread as Record<string, unknown> | undefined, halves = r.halves as Record<string, unknown> | undefined;
   if (spread !== undefined && !(typeof spread === 'object' && (spread.reaction === undefined || pair(spread.reaction)) && (spread.time === undefined || pair(spread.time)) &&
     (spread.scatter === undefined || finite(spread.scatter)))) return false;

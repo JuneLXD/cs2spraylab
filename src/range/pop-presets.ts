@@ -7,7 +7,7 @@ import {movingPop, type PopVariant} from './pop';
 
 /** What every preset sets: the balls, how popped balls come back, and the peek wall with its wallbang switch. Built-in
  * presets set exactly these, so loading one fully replaces the scenario. */
-export const popCoreKeys = ['popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popVectorReach', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popRespawn', 'popRespawnMode',
+export const popCoreKeys = ['popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popRespawn', 'popRespawnMode',
   'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance', 'popWall', 'popWallWidth', 'popWallbang'] as const;
 /** Everything a saved preset keeps. The extra keys (wall material, pad size, colours, see-through balls) are details a
  * built-in preset leaves as you have them, unless it is about that detail (the wallbang presets pick a material). */
@@ -26,9 +26,8 @@ export type CapturedPopPreset = {settings: PopPresetSettings; weapon?: Weapon};
 export function popVariantPatch(popVariant: PopVariant): PopPresetSettings {
   const core = Object.fromEntries(popCoreKeys.map(key => [key, defaults[key]])) as PopPresetSettings;
   if (popVariant === 'classic') return core;
-  // Direction Calibration: 10 cm at 5 m is about 1.1 degrees, a head at 9 m, and leaves room for 12-degree flicks above the floor.
-  return {...core, popVariant, popCount: popVariant === 'closepairs' || popVariant === 'pokeball' ? 2 : 1, popDistance: popVariant === 'vector' ? 5 : 8,
-    popSize: movingPop(popVariant) ? 12 : popVariant === 'vector' ? 10 : 8, ...(popVariant === 'driftts' ? {popHoldTime: .2} : {})};
+  return {...core, popVariant, popCount: popVariant === 'closepairs' || popVariant === 'pokeball' ? 2 : 1, popDistance: 8,
+    popSize: movingPop(popVariant) ? 12 : 8, ...(popVariant === 'driftts' ? {popHoldTime: .2} : {})};
 }
 
 export const MAX_SAVED_POP_PRESETS = 50, MAX_POP_PRESET_NAME = 40;

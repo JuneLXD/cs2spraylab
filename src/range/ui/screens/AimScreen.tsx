@@ -2,11 +2,11 @@ import {memo, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode
 import {ACCURATE_SPEED, type AimBucket, type AimGroup, type AimReport} from '../../aim-report';
 import {aimReportData, aimReportFileName, aimReportHtml, type DirectionSection} from '../../aim-report-export';
 import {aimReportStore} from '../../aim-report-store';
-import {directionReport, isNeutralProfile} from '../../aim-vector';
+import {directionReport, MIN_FIT, type DirectionReport, type FlickRecord} from '../../aim-vector';
 import type {Settings} from '../../config';
 import {equipmentNames} from '../../equipment';
 import {download, downloadText} from '../download';
-import {Button, Panel} from '../primitives';
+import {Button, Panel, SwitchRow as Toggle, Tabs} from '../primitives';
 import {DirectionCalibration, gapText, useDirectionRecords} from './DirectionCalibration';
 import '../aim.css';
 
@@ -98,11 +98,13 @@ function Pace({report}: {report: AimReport}) {
   </div></Panel>;
 }
 
-function Directions({report}: {report: AimReport}) {
+function Directions({report, openDirection}: {report: AimReport; openDirection: () => void}) {
   return <Panel title="Flicks by direction" className="sl-aim-panel"><div className="sl-aim-body">
     {report.directions?.length ? <><Groups title="Direction" list={report.directions}/>
-      <p className="sl-aim-note">This session's measured flicks by the way they went on screen, in any mode. For a full map of your aim by direction with a fitted profile, play Direction Calibration: its results are below.</p></>
+      <p className="sl-aim-note">This session's measured flicks by the way they went on screen.</p></>
       : <p className="sl-aim-note">No measured flicks in this session yet.</p>}
+    <p className="sl-aim-note">{report.calibration !== undefined && `${plural(report.calibration, 'flick')} from this session went into Direction calibration. `}The Direction calibration view maps your aim by direction over every session and fits a profile.</p>
+    <div className="sl-preset-actions"><Button onClick={openDirection}>Open Direction calibration</Button></div>
   </div></Panel>;
 }
 
@@ -165,12 +167,38 @@ function Bursts({report}: {report: AimReport}) {
   </div></Panel>;
 }
 
-/** The Aim tab: one report for every mode. A session's aim, chosen from the ones this browser keeps, and below it Direction
- * Calibration's map of your aim by direction with its profile, which covers every calibration flick. */
-export const AimScreen = memo(function AimScreen({mode, settings, update}: {mode: string; settings: Settings; update: (patch: Partial<Settings>) => void}) {
+export type AimView = 'session' | 'direction';
+const views: readonly {id: AimView; label: string}[] = [{id: 'session', label: 'Session report'}, {id: 'direction', label: 'Direction calibration'}];
+/** The view shown last, so coming back to the Aim tab opens it again (until the page reloads). */
+let lastView: AimView = 'session';
+
+/** Direction Calibration's view: its switch, how many calibration flicks every mode has given it, and its results. */
+function DirectionView({settings, update, records, persisted, analysis}: {settings: Settings; update: (patch: Partial<Settings>) => void;
+  records: readonly FlickRecord[]; persisted: boolean; analysis: DirectionReport}) {
+  const count = analysis.summary.valid;
+  return <>
+    <header className="sl-aim-head">
+      <div><small>DIRECTION CALIBRATION</small><h1>Your aim by direction</h1>
+        <p>{plural(count, 'calibration flick')} from every mode · {analysis.fit ? 'profile fitted' : `${Math.max(0, MIN_FIT - count)} more for a profile`}</p></div>
+      <div className="sl-aim-record">
+        <Toggle label="Record calibration flicks" checked={settings.directionCalibrate} onChange={directionCalibrate => update({directionCalibrate})}/>
+        <p>{settings.directionCalibrate ? 'On: every mode adds the flicks that measure your aim cleanly.' : 'Off: nothing new is recorded. Your flicks and profile stay.'}</p>
+      </div>
+    </header>
+    <div className="sl-aim-scroll"><Panel title="Direction profile" className="sl-aim-panel"><div className="sl-aim-body">
+      <DirectionCalibration settings={settings} update={update} records={records} persisted={persisted} report={analysis}/></div></Panel></div>
+  </>;
+}
+
+/** The Aim tab: one report for every mode, in two views. The session report shows one session's aim, chosen from the ones this
+ * browser keeps; Direction calibration maps your aim by direction from the calibration flicks every mode records, with its
+ * profile. `initialView` opens a view directly. */
+export const AimScreen = memo(function AimScreen({mode, settings, update, initialView}: {mode: string; settings: Settings; update: (patch: Partial<Settings>) => void;
+  initialView?: AimView}) {
   const {reports, persisted} = useAimReports();
+  const [view, setView] = useState<AimView>(() => initialView ?? lastView);
+  const choose = (next: AimView) => {lastView = next; setView(next);};
   const calibration = useDirectionRecords(), analysis = useMemo(() => directionReport(calibration.records), [calibration.records]);
-  const hasDirections = calibration.records.length > 0 || !isNeutralProfile(settings.directionProfile);
   const modes = useMemo(() => [...new Map(reports.map(report => [report.mode, report.label.split(' · ')[0]])).entries()], [reports]);
   const [filter, setFilter] = useState<string>('all'), [chosen, setChosen] = useState<string>(), [confirm, setConfirm] = useState(false);
   const shown = filter === 'all' ? reports : reports.filter(report => report.mode === filter);
@@ -180,12 +208,12 @@ export const AimScreen = memo(function AimScreen({mode, settings, update}: {mode
   useEffect(() => setConfirm(false), [report?.id]);
   const direction: DirectionSection | undefined = analysis.summary.valid || analysis.test.on + analysis.test.off ? {report: analysis,
     ...(analysis.comparison ? {gap: gapText(analysis.comparison)} : {}), applied: settings.directionProfile, on: settings.directionProfileOn, strength: settings.directionStrength} : undefined;
-  const directionPanel = hasDirections && <Panel title="Direction profile" className="sl-aim-panel sl-aim-wide"><div className="sl-aim-body">
-    <DirectionCalibration settings={settings} update={update} records={calibration.records} persisted={calibration.persisted} report={analysis}/></div></Panel>;
-  if (!report) return <section className="sl-aim sl-menu-page" aria-label="Aim report"><div className="sl-aim-scroll">
+  const tabs = <Tabs label="Aim report views" value={view} items={views} onChange={choose}/>;
+  if (view === 'direction') return <section className="sl-aim sl-menu-page" aria-label="Aim report">{tabs}
+    <DirectionView settings={settings} update={update} records={calibration.records} persisted={calibration.persisted} analysis={analysis}/></section>;
+  if (!report) return <section className="sl-aim sl-menu-page" aria-label="Aim report">{tabs}<div className="sl-aim-scroll">
     <div className="sl-aim-empty"><small>AIM REPORT</small><h1>No report yet</h1>
-      <p>Play any mode: when you pause or finish, your report appears here. It covers your flicks (reaction, first movement, adjusting), pace and consistency, how you shot while moving and how you stopped, your clicks and misses, and Direction Calibration's map of your aim by direction.{!persisted && ' Browser storage is unavailable, so reports last until you close this tab.'}</p></div>
-    {directionPanel}
+      <p>Play any mode: when you pause or finish, your report appears here. It covers your flicks (reaction, first movement, adjusting), pace and consistency, how you shot while moving and how you stopped, and your clicks and misses. Your aim by direction, from the flicks of every mode, is in the Direction calibration view.{!persisted && ' Browser storage is unavailable, so reports last until you close this tab.'}</p></div>
   </div></section>;
   const moving = (entry: AimReport) => entry.shots ? (entry.movement.moving.shots + entry.movement.air.shots) / entry.shots : undefined;
   const tiles = [
@@ -205,7 +233,7 @@ export const AimScreen = memo(function AimScreen({mode, settings, update}: {mode
   const save = (kind: 'html' | 'json') => kind === 'html'
     ? downloadText(aimReportFileName(report, 'html'), aimReportHtml(report, direction), 'text/html')
     : download(aimReportFileName(report, 'json'), aimReportData(report, direction));
-  return <section className="sl-aim sl-menu-page" aria-label="Aim report">
+  return <section className="sl-aim sl-menu-page" aria-label="Aim report">{tabs}
     <header className="sl-aim-head">
       <div><small>AIM REPORT{report.mode === mode ? ' · THIS MODE' : ''}</small><h1>{report.label}</h1>
         <p>{equipmentNames[report.weapon]} · {when(report.started)} · {clock(report.seconds)} played · {report.cleared} of {plural(report.targets, 'target')} cleared</p></div>
@@ -221,8 +249,7 @@ export const AimScreen = memo(function AimScreen({mode, settings, update}: {mode
       <section className="sl-aim-tips" aria-label="What to work on">{report.tips.map(tip => <article key={tip.title} className={tip.tone}>
         <strong>{tip.title}</strong><p>{tip.detail}</p></article>)}{!report.tips.length && <article className="good"><strong>Not enough shots for advice yet</strong><p>Play a little longer: each tip needs enough shots or flicks to be sure of it.</p></article>}</section>
       <div className="sl-result-tiles sl-aim-tiles">{tiles}</div>
-      <div className="sl-aim-grid"><Flicks report={report}/><Pace report={report}/><Directions report={report}/><Movement report={report}/><Clicks report={report}/><Bursts report={report}/></div>
-      {directionPanel}
+      <div className="sl-aim-grid"><Flicks report={report}/><Pace report={report}/><Directions report={report} openDirection={() => choose('direction')}/><Movement report={report}/><Clicks report={report}/><Bursts report={report}/></div>
       <footer className="sl-aim-footer"><p>Reports stay in this browser{persisted ? '' : ' until you close this tab (storage is unavailable)'}: the latest {reports.length} of at most 60. A session's report updates whenever you pause. Download report saves a page you can open, print or share; Download data saves the numbers as JSON.</p>
         <Button onClick={() => download('spraylab-aim-reports.json', {format: 'spraylab-aim-reports', version: 1, exported: new Date().toISOString(), reports})}>Download all reports</Button>
         {confirm ? <><Button onClick={() => {aimReportStore.remove(report.id); setChosen(undefined);}}>Delete this report</Button><Button onClick={() => {aimReportStore.clear(); setChosen(undefined);}}>Delete all {reports.length}</Button><Button onClick={() => setConfirm(false)}>Keep them</Button></>

@@ -13,7 +13,7 @@ Usage:
   spraylab-direction-cli off               put your own values back and activate them
   spraylab-direction-cli status            show your values, the profile and what Raw Accel's settings have now
 
-PROFILE is the file SprayLab downloads (Pop > Direction Calibration > Download profile). Without it, apply takes the
+PROFILE is the file SprayLab downloads (Aim > Direction calibration > Download profile). Without it, apply takes the
 newest spraylab-direction-profile*.json in your Downloads folder.
 
 Options:
@@ -23,8 +23,8 @@ Options:
   --rebase             take Raw Accel's current values as your own although they changed after the profile was applied
   --dry-run            show what would change and write nothing
 
-Switch the profile off before calibrating in SprayLab again: SprayLab sees what Raw Accel outputs, so it would measure
-on top of the profile. While the profile is on, leave Apply profile in SprayLab off, or SprayLab applies it twice.
+While the profile is on, switch Record calibration flicks off in SprayLab: SprayLab sees what Raw Accel outputs, so it
+would measure on top of the profile. Leave Apply profile in SprayLab off too, or SprayLab applies it twice.
 ";
 
 #[derive(Default)]
@@ -85,7 +85,7 @@ fn apply(options: &Options, report: &mut Report) -> Result<(), String> {
     };
     ops::turn_on(&request, report)?;
     if !options.dry_run {
-        println!("Run spraylab-direction-cli off before calibrating in SprayLab again, and leave Apply profile in SprayLab off meanwhile.");
+        println!("While the profile is on, switch Record calibration flicks and Apply profile off in SprayLab.");
     }
     Ok(())
 }

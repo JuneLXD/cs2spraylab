@@ -31,6 +31,8 @@ describe('downloadable aim report', () => {
       '80% of your shots were fired while moving', 'Hit rate', 'Throughput'])
       expect(html).toContain(text);
     expect(html).not.toContain('Direction profile');
+    expect(html).not.toContain('went into Direction calibration');
+    expect(aimReportHtml({...value, calibration: 3})).toContain('3 of this session&#39;s flicks went into Direction calibration.');
   });
   it('escapes what it writes', () => {
     const html = aimReportHtml(report('<script>alert(1)</script> & co'));
@@ -39,7 +41,8 @@ describe('downloadable aim report', () => {
   });
   it('adds the direction section: the chart, the fit, the gap report and the 16 directions', () => {
     const html = aimReportHtml(report(), direction());
-    for (const text of ['Direction profile', '<svg class="chart"', 'Fitted profile', 'No reliable direction pattern: test wording.', 'By direction', 'Right, up-right', '64 calibration flicks'])
+    for (const text of ['Direction profile', '<svg class="chart"', 'Fitted profile', 'No reliable direction pattern: test wording.', 'By direction', 'Right, up-right', '64 calibration flicks',
+      'from every mode'])
       expect(html).toContain(text);
     // Turns of no direction read 0.0°, never -0.0°, and every label stays inside the chart.
     expect(html).not.toContain('-0.0°');

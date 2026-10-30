@@ -95,7 +95,7 @@ pub fn newest_download() -> Result<PathBuf, String> {
     let folder = profile::downloads_folder().ok_or("Cannot find your Downloads folder: give the profile's path.")?;
     profile::newest_in(&folder).ok_or_else(|| {
         format!(
-            "There is no spraylab-direction-profile*.json in {}. Download one from SprayLab (Pop > Direction Calibration > Download profile), or give its path.",
+            "There is no spraylab-direction-profile*.json in {}. Download one from SprayLab (Aim > Direction calibration > Download profile), or give its path.",
             folder.display()
         )
     })

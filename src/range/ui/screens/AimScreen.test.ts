@@ -5,17 +5,20 @@ import {DEG, UNIT} from '../../actor-physics';
 import {aimReport, AimRecorder, type AimPlayer} from '../../aim-report';
 import {aimReportStore} from '../../aim-report-store';
 import type {FlickRecord} from '../../aim-vector';
-import {defaults} from '../../config';
+import {defaults, type Settings} from '../../config';
 import {directionStore} from '../../direction-store';
-import {AimScreen} from './AimScreen';
+import {AimScreen, type AimView} from './AimScreen';
 
 const player = (patch: Partial<AimPlayer> = {}): AimPlayer => ({eye: {x: 0, y: 1.6, z: 0}, yaw: 0, pitch: 0, vx: 0, vz: 0, maxSpeed: 215 * UNIT,
   forward: 0, side: 0, airborne: false, walking: false, ducking: false, ...patch});
-const render = (mode: string) => renderToStaticMarkup(createElement(AimScreen, {mode, settings: defaults, update: () => {}}));
+const render = (mode: string, initialView: AimView = 'session', settings: Settings = defaults) =>
+  renderToStaticMarkup(createElement(AimScreen, {mode, settings, update: () => {}, initialView}));
 
 /** A short session: a flick to a target that appears, a hit, and a few shots while strafing. */
 function session() {
   const recorder = new AimRecorder();
+  // Recording calibration flicks, though this flick's mouse events carry no mouse data (as touch input), so it is not one.
+  recorder.calibration = {flip: 0};
   let t = 0, yaw = 0;
   const step = (until: number, each?: () => void) => {while (t + 1e-9 < until) {t += 1 / 128; each?.(); recorder.frame(t, player({yaw}), t > .5 ? [{key: 'a', point: {x: Math.sin(8 * DEG) * 5, y: 1.6, z: -Math.cos(8 * DEG) * 5}, radius: .1}] : []);}};
   step(.75);
@@ -25,7 +28,7 @@ function session() {
   for (let i = 0; i < 4; i++) recorder.shot(t, player({yaw, vx: 215 * UNIT, side: 1}), 'ak47', i + 1);
   return aimReport(recorder, {mode: 'botz', label: 'Aim Botz', weapon: 'ak47'})!;
 }
-/** Direction Calibration flicks that land 10% short, 4 per direction at 8 degrees. */
+/** Calibration flicks that land 10% short, 4 per direction at 8 degrees. */
 const calibration = (): FlickRecord[] => Array.from({length: 64}, (_, i) => {
   const dir = i % 16, angle = dir * Math.PI / 8, tx = 8 * Math.cos(angle), ty = -8 * Math.sin(angle);
   return {at: i, dir, amp: 8, radius: .57, tx, ty, mx: tx * .9, my: ty * .9, px: tx * .9, py: ty * .9, reaction: .2, total: .5, corrections: 1, shots: 1, condition: 'off', valid: true};
@@ -37,6 +40,8 @@ describe('Aim tab', () => {
     const html = render('pop');
     expect(html).toContain('No report yet');
     expect(html).toContain('Play any mode');
+    // Both views are tabs; the session report is open.
+    expect(html).toContain('Session report'); expect(html).toContain('Direction calibration');
     expect(html).not.toContain('Direction profile');
   });
   it('shows the latest session: tips, tiles, every panel and the downloads', () => {
@@ -47,22 +52,35 @@ describe('Aim tab', () => {
     expect(html).toContain('THIS MODE');
     expect(html).toContain('80% of your shots were fired while moving');
     for (const text of ['Hit rate', 'Time to hit', 'Reaction', 'Shots while moving', 'Throughput', 'Targets per minute', 'Where your time to hit goes', 'Shooting while moving',
-      'Clicks and misses', 'Pace and consistency', 'Flicks by direction', 'Bursts and sprays', 'Download report', 'Download data', 'Download all reports'])
+      'Clicks and misses', 'Pace and consistency', 'Flicks by direction', 'Bursts and sprays', 'Download report', 'Download data', 'Download all reports',
+      '0 flicks from this session went into Direction calibration', 'Open Direction calibration'])
       expect(html).toContain(text);
     expect(html).toContain('1 of 1 target cleared');
     expect(html).toContain('5 shots');
+    // Direction calibration has its own view now.
+    expect(html).not.toContain('Direction profile');
     aimReportStore.clear();
   });
-  it('holds Direction Calibration\'s results: the chart, the fitted profile and the blind test, even with no session report', () => {
+  it('holds Direction Calibration in its own view: the switch, the chart, the fitted profile and the blind test, with or without a session report', () => {
     aimReportStore.clear(); directionStore.clear();
     directionStore.add(calibration());
-    const empty = render('pop');
-    expect(empty).toContain('No report yet'); expect(empty).toContain('Direction profile');
-    aimReportStore.save(session());
-    const html = render('pop');
-    for (const text of ['Direction profile', '64 calibration flicks recorded', 'every Direction Calibration flick in this browser', 'sl-direction-chart', 'Use fitted profile',
-      'Apply profile in SprayLab', 'Blind A/B test', 'Per-direction numbers'])
-      expect(html).toContain(text);
+    for (const withSession of [false, true]) {
+      if (withSession) aimReportStore.save(session());
+      const html = render('pop', 'direction');
+      expect(html).not.toContain('No report yet');
+      for (const text of ['DIRECTION CALIBRATION', 'Your aim by direction', 'Record calibration flicks', 'On: every mode adds the flicks that measure your aim cleanly',
+        '64 calibration flicks from every mode · profile fitted', 'Direction profile', '64 calibration flicks recorded, from every mode', 'sl-direction-chart', 'Use fitted profile',
+        'Apply profile in SprayLab', 'Blind A/B test', 'Per-direction numbers', 'Which flicks count'])
+        expect(html).toContain(text);
+    }
     aimReportStore.clear(); directionStore.clear();
+  });
+  it('says when recording is off and nothing is recorded yet', () => {
+    aimReportStore.clear(); directionStore.clear();
+    const html = render('duel', 'direction', {...defaults, directionCalibrate: false});
+    expect(html).toContain('Off: nothing new is recorded');
+    expect(html).toContain('0 calibration flicks from every mode · 48 more for a profile');
+    expect(html).toContain('recording is off: switch Record calibration flicks on');
+    expect(render('duel', 'direction')).toContain('No calibration flicks yet. Play any mode');
   });
 });

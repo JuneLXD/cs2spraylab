@@ -496,6 +496,11 @@ export const latestChanges = {
       'New metrics: throughput, first-movement speed, consistency, first half against second half, flicks by direction, hits by shot in a spray, why shots missed, crouched and walking shots, and stops from strafing left against right.',
       'Download a report as a page you can open, print or share, or as data.',
     ]},
+    {id: 'direction-calibration-everywhere', title: 'Direction calibration in every mode', items: [
+      'Pop\'s Direction Calibration exercise is gone: every mode now adds the flicks that measure your aim cleanly, after recoil has settled and with the crosshair on the target when you hit it.',
+      'The Aim tab has two views: Session report, and Direction calibration with the direction chart, the fitted profile, the blind A/B test and the Raw Accel export.',
+      'Record calibration flicks switches the recording on or off; the blind A/B test now runs in every mode too.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

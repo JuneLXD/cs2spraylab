@@ -1,5 +1,6 @@
 import {DEG, UNIT, type Vec} from './actor-physics';
-import {segmentMovement, type FlickEvent} from './aim-vector';
+import {segmentMovement, type FlickCondition, type FlickEvent, type FlickRecord, type MovementSegment} from './aim-vector';
+import type {AimCalibration} from './direction-calibration';
 import type {Equipment} from './equipment';
 
 /** The aim report: what every mode measures about your aim, the same way on the range and in AI Duel.
@@ -12,17 +13,24 @@ import type {Equipment} from './equipment';
  * go), whether you were accurate yet, and how fast the target was crossing your crosshair when you clicked. `aimReport` turns a
  * session's records into the numbers and tips the Aim tab shows.
  *
- * Offsets are in mouse space, as Direction Calibration's: degrees of view rotation, x to the right and y down, so a first movement
- * and the movement a target needs compare directly. View angles never include recoil: they are what the mouse controls. */
+ * Offsets are degrees of view rotation, x to the right and y down, so a first movement and the movement a target needs compare
+ * directly. View angles never include recoil: they are what the mouse controls.
+ *
+ * While Direction Calibration records (`calibration`), every flick that measures your aim cleanly is also kept as a calibration
+ * flick, in mouse space, for the direction profile (see `keepCalibration`); the engines collect them with `drainCalibration`. */
 
 /** A target this step: a key that is new for every life (a respawned bot, a new ball), the point to aim at (world metres) and the
  * radius around it that counts as on target. `persistent` targets (the spray drills' dummy) get shot statistics only: a flick to
  * a target that never goes away is not a flick. */
 export type AimTarget = {key: string; point: Vec; radius: number; persistent?: boolean};
 /** You this step: eye position (metres), view angles (radians, without recoil), horizontal velocity and the weapon's running speed
- * (metres per second), the movement keys as the engines hold them (forward and side, -1 to 1), and your stance. */
+ * (metres per second), the movement keys as the engines hold them (forward and side, -1 to 1), your stance, and whether recoil
+ * and view punch have settled (under 0.05 degrees each; the crosshair you see is then where the view points). */
 export type AimPlayer = {eye: Vec; yaw: number; pitch: number; vx: number; vz: number; maxSpeed: number; forward: number; side: number;
-  airborne: boolean; walking: boolean; ducking: boolean};
+  airborne: boolean; walking: boolean; ducking: boolean; settled?: boolean};
+/** A mouse event as Direction Calibration needs it: the view movement its counts would have made without your direction profile
+ * (degrees right and down) and how the profile stood for it. Touch input passes none: it never calibrates. */
+export type AimMouse = {x: number; y: number; condition: FlickCondition};
 export type AimShotState = 'standing' | 'stopped' | 'moving' | 'air';
 /** How a stop before a shot was made: tapping the opposite key, letting go, or not at all (the key still held). `since` is seconds
  * from starting the stop to the shot; `accurate` how long after you became accurate the shot came (negative: that much too early;
@@ -63,6 +71,12 @@ export const AIM_DIRECTIONS = ['Right', 'Up-right', 'Up', 'Up-left', 'Left', 'Do
 /** Shots of a trigger press the report compares: the first (a click), then the rest of a burst or spray. */
 export const AIM_BULLETS: readonly {label: string; from: number; to: number}[] = [{label: '1st', from: 0, to: 0}, {label: '2nd–3rd', from: 1, to: 2},
   {label: '4th–10th', from: 3, to: 9}, {label: '11th on', from: 10, to: Infinity}];
+/** Calibration flicks: from 2 to 45 degrees, to a target whose radius is at most a fifth of that (a large one says little about
+ * where you meant to land). The blind A/B test switches the profile every 16 of its flicks. */
+export const CALIBRATION_AMP: readonly [number, number] = [2, 45], CALIBRATION_ZONE = .2, DIRECTION_TEST_BLOCK = 16;
+/** Recoil must have settled from this long before the first movement starts (s), so the crosshair you aimed from was the view's. */
+const SETTLED_BEFORE = .05;
+const CONDITIONS: readonly FlickCondition[] = ['off', 'on', 'test-off', 'test-on'];
 
 const wrap = (angle: number) => Math.atan2(Math.sin(angle), Math.cos(angle));
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
@@ -93,6 +107,9 @@ function pushOf(player: AimPlayer) {
 
 type Sample = {t: number; x: number; y: number; on: boolean};
 type Move = {t: number; ratio: number; air: boolean; push: number; lateral: number};
+/** A mouse event: `bx`/`by` the view movement without the direction profile, `ox`/`oy` the actual one, and `c` the profile's state
+ * (an index into CONDITIONS; -1 for touch input). */
+type LookEvent = FlickEvent & {c: number};
 /** A target from when it came into view until it was killed or gone. `initial`: already there when the clock started, so it
  * never "appeared". `placement` is the angle from your crosshair when it came into view, `shots` the shots aimed at it, and
  * `start` where the flick to it began. */
@@ -107,20 +124,41 @@ export class AimRecorder {
   shots: AimShot[] = [];
   /** Targets that were killed or left view, with their flicks. */
   done: AimTrack[] = [];
+  /** Direction Calibration, set by the engine while recording calibration flicks is on (see direction-calibration.ts). */
+  calibration?: AimCalibration;
+  /** Calibration flicks kept this session. */
+  calibrated = 0;
   private tracks = new Map<string, AimTrack>();
-  private events: FlickEvent[] = [];
+  private events: LookEvent[] = [];
   private moves: Move[] = [];
   private pending: AimShot[] = [];
   private lastFrame?: number;
   /** Your view at the last frame or shot, so a hit can check the crosshair against the target it actually hit. */
   private lastPlayer?: AimPlayer;
+  /** Spans of simulation time (from, to) when recoil or view punch had not settled, over the last few seconds. */
+  private unsettled: [number, number][] = [];
+  /** Calibration flicks not yet collected by `drainCalibration`. */
+  private calibrationFlicks: FlickRecord[] = [];
+  /** The blind A/B test's hidden blocks (profile on or off), drawn in balanced pairs, and its flicks this session. */
+  private blocks: boolean[] = [];
+  private tested = 0;
+  constructor(private readonly random: () => number = Math.random) {}
 
-  /** Mouse movement that turned the view at simulation time `t`: degrees to the right and down. */
-  look(t: number, x: number, y: number) {
-    if (!x && !y) return;
-    this.events.push({t, bx: x, by: y, ox: x, oy: y});
+  /** Mouse movement that turned the view at simulation time `t`: degrees to the right and down. `mouse` is the same movement
+   * without your direction profile, for Direction Calibration; touch input has none. */
+  look(t: number, x: number, y: number, mouse?: AimMouse) {
+    if (!x && !y && !mouse?.x && !mouse?.y) return;
+    this.events.push({t, bx: mouse?.x ?? x, by: mouse?.y ?? y, ox: x, oy: y, c: mouse ? CONDITIONS.indexOf(mouse.condition) : -1});
     if (this.events.length > MAX_EVENTS) this.events.splice(0, this.events.length - MAX_EVENTS);
   }
+  /** Whether the blind A/B test has your profile on for the current block of DIRECTION_TEST_BLOCK test flicks. */
+  get testOn() {
+    const block = Math.floor(this.tested / DIRECTION_TEST_BLOCK);
+    while (this.blocks.length <= block) this.blocks.push(...(this.random() < .5 ? [true, false] : [false, true]));
+    return this.blocks[block];
+  }
+  /** Calibration flicks kept since the last call, for storage. */
+  drainCalibration() {const flicks = this.calibrationFlicks; this.calibrationFlicks = []; return flicks;}
   /** One simulation step: you and the targets in view. `contact` counts the crosshair touching a target as its hit (held-fire
    * Pop exercises, which fire no shots). */
   frame(t: number, player: AimPlayer, targets: readonly AimTarget[], contact = false) {
@@ -130,6 +168,11 @@ export class AimRecorder {
     const ratio = player.maxSpeed > 0 ? Math.hypot(player.vx, player.vz) / player.maxSpeed : 0;
     this.moves.push({t, ratio, air: player.airborne, push: pushOf(player), lateral: lateralOf(player)});
     while (this.moves.length && this.moves[0].t < t - STOP_WINDOW - .2) this.moves.shift();
+    if (player.settled === false) {
+      const last = this.unsettled[this.unsettled.length - 1];
+      if (last && t - last[1] < .02) last[1] = t; else this.unsettled.push([t, t]);
+    }
+    while (this.unsettled.length && this.unsettled[0][1] < t - HISTORY) this.unsettled.shift();
     // A shot fired before you were accurate learns how early it was once you are.
     if (ratio <= ACCURATE_SPEED && !player.airborne) for (const shot of this.pending) if (shot.stop) shot.stop.accurate = shot.t - t;
     this.pending = this.pending.filter(shot => shot.stop?.accurate === undefined && t - shot.t < STOP_WINDOW);
@@ -144,7 +187,7 @@ export class AimRecorder {
       track.seenAt = t; track.point = {x: target.point.x, y: target.point.y, z: target.point.z}; track.radius = target.radius; track.zone = offset.zone;
       track.samples.push({t, x: offset.x, y: offset.y, on: offset.on});
       while (track.samples.length > 2 && track.samples[0].t < t - HISTORY) track.samples.shift();
-      if (contact && offset.on && track.firstHitAt === undefined && !track.persistent) this.firstHit(track, t, true);
+      if (contact && offset.on && track.firstHitAt === undefined && !track.persistent) this.firstHit(track, t, true, false);
     }
     for (const track of [...this.tracks.values()]) if (t - track.seenAt > LOST) this.close(track);
     let old = 0;
@@ -194,17 +237,18 @@ export class AimRecorder {
   clear(key: string, t: number) {
     const track = this.tracks.get(key);
     if (!track) return;
-    if (track.firstHitAt === undefined && !track.persistent) this.firstHit(track, t, true);
+    if (track.firstHitAt === undefined && !track.persistent) this.firstHit(track, t, true, false);
     track.killAt = t; this.close(track);
   }
   /** The simulation's clock starts over (a new duel round): open targets end and the histories go; the session's shots stay. */
   segment() {
     for (const track of [...this.tracks.values()]) this.close(track);
-    this.events = []; this.moves = []; this.pending = []; this.lastFrame = undefined;
+    this.events = []; this.moves = []; this.pending = []; this.unsettled = []; this.lastFrame = undefined;
   }
-  /** A new session. */
+  /** A new session; calibration flicks not yet collected stay for `drainCalibration`. */
   restart() {
     this.segment(); this.shots = []; this.done = []; this.seconds = 0;
+    this.calibrated = 0; this.blocks = []; this.tested = 0;
     this.id = newId(); this.started = new Date().toISOString();
   }
   /** The targets you engaged, the ones that are gone first. */
@@ -277,17 +321,17 @@ export class AimRecorder {
     return latest;
   }
   /** A target appearing is "fresh" when it came into view after your last shot or kill on anything else, within the longest
-   * flick: only then is the time before moving a reaction. */
-  private firstHit(track: AimTrack, end: number, on: boolean) {
+   * flick: only then is the time before moving a reaction. `shot`: a shot hit it (not the crosshair touching it in held fire). */
+  private firstHit(track: AimTrack, end: number, on: boolean, shot = true) {
     track.firstHitAt = end;
     const other = this.lastOther(track.key, end);
     const fresh = !track.initial && (other === undefined || other < track.appearAt - 1e-6) && end - track.appearAt <= LONGEST;
     track.start = Math.max(track.appearAt, other ?? -Infinity, end - LONGEST);
     const timed = !(track.initial && other === undefined) && track.start > end - LONGEST + 1e-9;
-    track.flick = this.analyse(track, track.start, end, fresh, timed, on);
+    track.flick = this.analyse(track, track.start, end, fresh, timed, on, shot);
   }
   /** The flick to `track` between `start` and the hit at `end`. */
-  private analyse(track: AimTrack, start: number, end: number, fresh: boolean, timed: boolean, on: boolean): AimFlick {
+  private analyse(track: AimTrack, start: number, end: number, fresh: boolean, timed: boolean, on: boolean, shot: boolean): AimFlick {
     const begin = this.offsetAt(track, start), needed = Math.hypot(begin.x, begin.y), total = Math.max(0, end - start);
     const heading = (x: number, y: number) => (Math.atan2(-y, x) / DEG + 360) % 360;
     const result = (valid: boolean, reason?: string, peak = 0): AimFlick => ({valid, ...(reason ? {reason} : {}), fresh, timed, amp: needed, heading: heading(begin.x, begin.y),
@@ -304,10 +348,38 @@ export class AimRecorder {
     if (Math.abs(angle) > 45) return result(false, 'wrong direction', segment.peak);
     const onAt = on ? this.onTargetSince(track, end) : undefined, onset = start + segment.reaction;
     const adjust = onAt === undefined ? Math.max(0, end - segment.stop) : Math.max(0, onAt - segment.stop);
-    return {valid: true, fresh, timed, amp, heading: heading(rx, ry), zone: track.zone, peak: segment.peak, along, angle, error: Math.hypot(land.x, land.y) / amp,
+    const flick: AimFlick = {valid: true, fresh, timed, amp, heading: heading(rx, ry), zone: track.zone, peak: segment.peak, along, angle, error: Math.hypot(land.x, land.y) / amp,
       inside: Math.hypot(land.x, land.y) <= track.zone,
       before: segment.reaction, flick: Math.max(0, segment.stop - onset), adjust, ...(onAt === undefined ? {} : {confirm: Math.max(0, end - Math.max(onAt, segment.stop))}),
       total, corrections: segment.corrections};
+    if (this.calibration && shot && on && timed) this.keepCalibration(track, flick, segment, start, end, {x: rx, y: ry});
+    return flick;
+  }
+  /** Keeps a measured flick as a calibration flick when it measures your aim cleanly: it ended with a shot that hit while the
+   * crosshair was on the target (so that was where you meant to go), it is a size `CALIBRATION_AMP` allows to a target small for
+   * its size, recoil had settled before the first movement started, and that movement came from the mouse with one state of the
+   * profile throughout. The record is in mouse space (aim-vector.ts): the target where it was when the first movement ended, and
+   * where that movement ended without and with the profile. */
+  private keepCalibration(track: AimTrack, flick: AimFlick, segment: MovementSegment, start: number, end: number, target: {x: number; y: number}) {
+    const calibration = this.calibration!;
+    if (flick.amp < CALIBRATION_AMP[0] || flick.amp > CALIBRATION_AMP[1] || flick.zone > flick.amp * CALIBRATION_ZONE) return;
+    const onset = start + segment.reaction;
+    if (this.unsettled.some(([from, to]) => from <= onset + 1e-9 && to >= onset - SETTLED_BEFORE)) return;
+    let code = -1;
+    for (const event of this.events) {
+      if (event.t < start - 1e-9 || event.t > segment.stop + 1e-9) continue;
+      if (event.c < 0 || (code >= 0 && event.c !== code)) return;
+      code = event.c;
+    }
+    if (code < 0) return;
+    const condition = CONDITIONS[code], fx = calibration.flip & 1 ? -1 : 1, fy = calibration.flip & 2 ? -1 : 1, r = (value: number) => Math.round(value * 1e4) / 1e4;
+    this.calibrationFlicks.push({at: Date.now(), dir: Math.round(flick.heading / 22.5) % 16, amp: r(flick.amp), radius: r(flick.zone),
+      tx: r(target.x * fx), ty: r(target.y * fy), mx: r(segment.base.x * fx), my: r(segment.base.y * fy), px: r(segment.out.x * fx), py: r(segment.out.y * fy),
+      reaction: r(segment.reaction), total: r(end - start), corrections: segment.corrections, shots: track.shots, condition,
+      ...((condition === 'on' || condition === 'test-on') && calibration.profile ? {profile: [...calibration.profile]} : {}),
+      ...(calibration.flip ? {flip: calibration.flip} : {}), valid: true});
+    this.calibrated++;
+    if (condition === 'test-on' || condition === 'test-off') this.tested++;
   }
   /** When the crosshair last came onto the target before `end` (it is on it then). */
   private onTargetSince(track: AimTrack, end: number) {
@@ -356,7 +428,8 @@ export type AimGroup = {label: string; n: number; bias: number; error: number; t
  *   movements vary around their own bias (one standard deviation, as a share of the flick).
  * - `halves` the session's first and second half; `directions` flicks by the eight screen directions; `bullets` hit rates by a
  *   shot's place in its trigger press; `misses` the missed shots with a target near, split by whether the crosshair was on it;
- *   `stance` crouched and walking shots; `sides` stops while strafing left and right. */
+ *   `stance` crouched and walking shots; `sides` stops while strafing left and right.
+ * - `calibration` the session's flicks that Direction Calibration kept, when it was recording. */
 export type AimReport = {version: 1; id: string; mode: string; label: string; weapon: Equipment; started: string; date: string; seconds: number;
   shots: number; hits: number; heads: number; targets: number; cleared: number; firstShot?: number; hitTimes: number; timeToHit?: number; timeToKill?: number;
   placement?: number; placed?: number; fresh: number; reaction?: number; flicks: number;
@@ -375,6 +448,7 @@ export type AimReport = {version: 1; id: string; mode: string; label: string; we
   misses?: {n: number; on: number; off: number};
   stance?: {crouched: AimBucket; walking: AimBucket};
   sides?: {left?: AimSide; right?: AimSide};
+  calibration?: number;
   tips: AimTip[]};
 
 const median = (values: readonly number[]) => {
@@ -471,6 +545,7 @@ function more(recorder: AimRecorder, shots: readonly AimShot[], tracks: readonly
     ...(missed.length ? {misses: {n: missed.length, on: missed.filter(shot => shot.on).length, off: missed.filter(shot => !shot.on).length}} : {}),
     ...(shots.length ? {stance: {crouched: bucket(shots.filter(shot => shot.crouched)), walking: bucket(shots.filter(shot => shot.walking))}} : {}),
     ...(left || right ? {sides: {...(left ? {left} : {}), ...(right ? {right} : {})}} : {}),
+    ...(recorder.calibration || recorder.calibrated ? {calibration: recorder.calibrated} : {}),
   };
 }
 const optional = <K extends string>(key: K, value: number | undefined) => (value === undefined ? {} : {[key]: value}) as Partial<Record<K, number>>;

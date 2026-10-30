@@ -14,7 +14,9 @@ import {InputClock, inputTimestamp} from '../input-clock';
 import {createGameRenderer} from '../render-context';
 import {VERTICAL_FOV} from '../simulation';
 import {mouseLook} from '../mouse-look';
-import {applyDirectionProfile, isNeutralProfile} from '../aim-vector';
+import {applyDirectionProfile} from '../aim-vector';
+import {activeDirectionProfile, directionCalibration, flickCondition} from '../direction-calibration';
+import {directionStore} from '../direction-store';
 import {dynamicCrosshairGap} from '../crosshair-spread';
 import {BindRuntime, cycleSlot, trainerSlot, type BindEvent} from '../keybinds/runtime';
 import {attachBindInput} from '../keybinds/dom-input';
@@ -238,7 +240,7 @@ export class DuelEngine {
       this.config = blitzDuelConfig(blitz.config, this.blitzLevel); this.blitzHistory = loadBlitzHistory(); this.blitzRun = this.blitzStart();
     }
     this.cosmeticKey = JSON.stringify(progression?.getSnapshot().profile.equipped);
-    this.sim = this.createSimulation(); this.sim.aimLog = this.aimLog;
+    this.sim = this.createSimulation(); this.sim.aimLog = this.aimLog; this.aimLog.calibration = directionCalibration(settings);
     this.radar = new DuelRadar(host);
     this.scope = new ScopeOverlay(host);
     this.damageFeedback = new DamageFeedback(host);
@@ -726,6 +728,7 @@ export class DuelEngine {
     const weaponChanged = settings.weapon !== this.settings.weapon || settings.sidearm !== this.settings.sidearm || settings.primaryEnabled !== this.settings.primaryEnabled;
     const qualityChanged = settings.quality !== this.settings.quality;
     this.settings = settings;
+    this.aimLog.calibration = directionCalibration(settings);
     if (weaponChanged) void this.loadViewModel(loadoutWeapon(settings));
     if (weaponChanged) this.restart();
     if (qualityChanged) this.metrics.resetResolution();
@@ -792,11 +795,14 @@ export class DuelEngine {
     this.restart();
   }
 
-  /** Saves this session's aim report for the Aim tab (on a pause, at the end of a round or timed session); `finish` starts the
-   * next session. Rounds of one duel session share a report; a setup change or a new session starts another. */
+  /** Saves this session's aim report for the Aim tab (on a pause, at the end of a round or timed session), with the calibration
+   * flicks it kept; `finish` starts the next session. Rounds of one duel session share a report; a setup change or a new session
+   * starts another. */
   private saveAim(finish = false) {
     const log = this.sim?.aimLog;
     if (!log) return;
+    const flicks = log.drainCalibration();
+    if (flicks.length) directionStore.add(flicks);
     const mode: Mode = this.blitz ? 'blitz' : this.botz ? this.botz.map === 'island' ? 'reflex' : this.botz.map === 'redline' ? 'redline' : 'botz'
       : this.sim.deathmatch ? 'deathmatch' : 'duel';
     const report = aimReport(log, {mode, label: modeNames[mode], weapon: loadoutWeapon(this.settings)});
@@ -929,15 +935,19 @@ export class DuelEngine {
         this.pointerX = event.clientX; this.pointerY = event.clientY;
       }
       const actions = this.sim.actors[0].weapon.actions;
-      const mouse = event.pointerType === 'mouse';
-      // Your direction profile applies to the counts before the sensitivity, as Raw Accel's driver would.
-      if (mouse && this.settings.directionProfileOn && !isNeutralProfile(this.settings.directionProfile))
-        [dx, dy] = applyDirectionProfile(dx, dy, this.settings.directionProfile, this.settings.directionStrength);
-      const look = mouseLook(dx, dy, this.settings, !mouse);
+      const mouse = event.pointerType === 'mouse', log = this.sim.aimLog, testOn = log?.testOn ?? false;
+      // Your direction profile (or the blind A/B test's choice) applies to the counts before the sensitivity, as Raw Accel's
+      // driver would.
+      const profile = mouse ? activeDirectionProfile(this.settings, testOn) : undefined;
+      const [px, py] = profile ? applyDirectionProfile(dx, dy, profile, this.settings.directionStrength) : [dx, dy];
+      const look = mouseLook(px, py, this.settings, !mouse);
       const scale = actions.sensitivityAt(this.sim.time + this.sim.accumulator, mouse ? this.settings.keyboard.zoomSensitivity : 1);
-      if (dx || dy) {
+      if (px || py) {
         this.sim.command(0, {yawDelta: look.yaw * scale, pitchDelta: look.pitch * scale});
-        this.sim.aimLog?.look(this.sim.time + this.sim.accumulator, -look.yaw * scale / DEG, -look.pitch * scale / DEG);
+        // Direction Calibration also needs the movement the counts would have made without the profile.
+        const right = -look.yaw * scale / DEG, down = -look.pitch * scale / DEG, base = profile ? mouseLook(dx, dy, this.settings, false) : undefined;
+        log?.look(this.sim.time + this.sim.accumulator, right, down, mouse
+          ? {x: base ? -base.yaw * scale / DEG : right, y: base ? -base.pitch * scale / DEG : down, condition: flickCondition(this.settings, testOn)} : undefined);
       }
     }) as EventListener, {capture: true});
     this.listen(document, 'pointerup', ((event: PointerEvent) => {

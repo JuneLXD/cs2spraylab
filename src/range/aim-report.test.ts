@@ -1,6 +1,7 @@
 import {describe, expect, it} from 'vitest';
 import {DEG, UNIT} from './actor-physics';
-import {aimReport, AimRecorder, type AimPlayer, type AimTarget} from './aim-report';
+import {aimReport, AimRecorder, CALIBRATION_AMP, DIRECTION_TEST_BLOCK, type AimPlayer, type AimTarget} from './aim-report';
+import type {FlickCondition} from './aim-vector';
 import {AimReportStore, MAX_AIM_REPORTS, sanitizeAimReports} from './aim-report-store';
 
 const RUN = 215 * UNIT;
@@ -12,11 +13,13 @@ const minimumJerk = (s: number) => {const u = Math.min(1, Math.max(0, s)); retur
 /** A recorder driven at 128 Hz: the crosshair turns with each mouse event, and every step reports you and the targets. */
 class Rig {
   recorder = new AimRecorder(); t = 0; yaw = 0; pitch = 0; state: Partial<AimPlayer> = {}; targets: AimTarget[] = [];
+  /** With a condition, mouse events carry what Direction Calibration needs (no profile: the same movement); without, they are as touch input. */
+  mouse?: FlickCondition;
   get player(): AimPlayer {
     return {eye: {x: 0, y: 1.6, z: 0}, yaw: this.yaw, pitch: this.pitch, vx: 0, vz: 0, maxSpeed: RUN, forward: 0, side: 0,
       airborne: false, walking: false, ducking: false, ...this.state};
   }
-  look(x: number, y: number) {this.yaw -= x * DEG; this.pitch -= y * DEG; this.recorder.look(this.t, x, y);}
+  look(x: number, y: number) {this.yaw -= x * DEG; this.pitch -= y * DEG; this.recorder.look(this.t, x, y, this.mouse ? {x, y, condition: this.mouse} : undefined);}
   run(until: number, each?: (t: number) => void) {
     while (this.t + 1e-9 < until) {this.t = Math.min(until, this.t + 1 / 128); each?.(this.t); this.recorder.frame(this.t, this.player, this.targets);}
   }
@@ -277,6 +280,129 @@ describe('aim report: more metrics', () => {
     // 34% of the speed is left after 66% of the stop: 53 ms stopping from the right, 92 ms from the left.
     expect(report.sides!.right!.toAccurate!).toBeLessThan(report.sides!.left!.toAccurate!);
     expect(report.tips.map(tip => tip.title)).toContain('Your stops from strafing left are slower');
+  });
+});
+
+/** A calibration rig: recording on, a target appearing `right` and `up` degrees away (radius in metres at 5 m), a 90% first
+ * movement and a correction, then a shot on it. Returns the calibration flicks kept. */
+function calibrated(rig: Rig, right: number, up: number, options: {radius?: number; on?: boolean} = {}) {
+  const start = rig.t, key = `t${start}`;
+  rig.run(start + .25);
+  rig.targets = [{key, point: pointAt(right, up), radius: options.radius ?? .03}];
+  rig.run(start + .5);
+  rig.flick(right * .9, -up * .9, start + .5, start + .7);
+  rig.run(start + .8);
+  rig.flick(right * .1, -up * .1, start + .8, start + .87);
+  rig.run(start + .95);
+  if (options.on === false) {rig.yaw += 2 * DEG; rig.run(start + .96);}
+  rig.recorder.hit(rig.fire(), key, false, true);
+  rig.targets = [];
+  rig.yaw = rig.pitch = 0;
+  return rig.recorder.drainCalibration();
+}
+const calibrationRig = (flip = 0) => {const rig = new Rig(); rig.recorder.calibration = {flip}; rig.mouse = 'off'; rig.run(.1); return rig;};
+
+describe('Direction calibration from every mode', () => {
+  it('keeps a clean flick in mouse space: where the target was and where the first movement ended', () => {
+    const [flick] = calibrated(calibrationRig(), 10, 0);
+    expect(flick).toMatchObject({valid: true, condition: 'off', dir: 0, shots: 1, corrections: 1});
+    expect(flick.amp).toBeCloseTo(10, 1); expect(flick.tx).toBeCloseTo(10, 1); expect(flick.ty).toBeCloseTo(0, 2);
+    expect(flick.mx / flick.tx).toBeCloseTo(.9, 1); expect(flick.px).toBe(flick.mx); expect(flick.radius).toBeCloseTo(Math.atan(.03 / 5) / DEG, 3);
+    expect(flick).not.toHaveProperty('flip'); expect(flick).not.toHaveProperty('profile');
+    // Up on screen is toward the top: away from you in mouse space (negative y), screen direction 4 of 16.
+    const [up] = calibrated(calibrationRig(), 0, 8);
+    expect(up.dir).toBe(4); expect(up.ty).toBeCloseTo(-8, 1); expect(up.my / up.ty).toBeCloseTo(.9, 1);
+    // With both axes inverted the mouse moves the other way for the same target, and the record says so.
+    const [inverted] = calibrated(calibrationRig(3), 10, 0);
+    expect(inverted.flip).toBe(3); expect(inverted.tx).toBeCloseTo(-10, 1); expect(inverted.mx / inverted.tx).toBeCloseTo(.9, 1); expect(inverted.dir).toBe(0);
+  });
+
+  it('keeps the profile it was made with, and how it stood', () => {
+    const rig = calibrationRig(); rig.recorder.calibration = {flip: 0, profile: [0, 1.1, .9, 1, 1]}; rig.mouse = 'on';
+    const [flick] = calibrated(rig, 10, 0);
+    expect(flick).toMatchObject({condition: 'on', profile: [0, 1.1, .9, 1, 1]});
+    rig.mouse = 'off';
+    expect(calibrated(rig, 10, 0)[0]).not.toHaveProperty('profile');
+  });
+
+  it('sets aside flicks that do not measure your aim cleanly', () => {
+    // Recording off, touch input, a hit with the crosshair off the target.
+    const off = calibrationRig(); off.recorder.calibration = undefined;
+    expect(calibrated(off, 10, 0)).toEqual([]);
+    const touch = calibrationRig(); touch.mouse = undefined;
+    expect(calibrated(touch, 10, 0)).toEqual([]);
+    expect(calibrated(calibrationRig(), 10, 0, {on: false})).toEqual([]);
+    // Too small, too large, or a target too big for the flick.
+    expect(calibrated(calibrationRig(), CALIBRATION_AMP[0] * .8, 0)).toEqual([]);
+    expect(calibrated(calibrationRig(), CALIBRATION_AMP[1] + 5, 0)).toEqual([]);
+    expect(calibrated(calibrationRig(), 10, 0, {radius: .25})).toEqual([]);
+    // The profile changed during the first movement.
+    const changed = calibrationRig(), start = changed.t;
+    changed.run(start + .25); changed.targets = [{key: 'c', point: pointAt(10, 0), radius: .03}];
+    changed.run(start + .5);
+    let done = 0;
+    changed.run(start + .7, t => {
+      if (t > start + .6) changed.mouse = 'on';
+      const next = minimumJerk((t - start - .5) / .2); if (next > done) {changed.look(9 * (next - done), 0); done = next;}
+    });
+    changed.run(start + .95); changed.recorder.hit(changed.fire(), 'c', false, true);
+    expect(changed.recorder.done[0].flick).toMatchObject({valid: true});
+    expect(changed.recorder.drainCalibration()).toEqual([]);
+    // Held fire: the crosshair touching the target clears it, which cuts the first movement short.
+    const held = calibrationRig(), at = held.t;
+    held.run(at + .25); held.targets = [{key: 'h', point: pointAt(10, 0), radius: .03}];
+    held.run(at + .5); held.flick(10, 0, at + .5, at + .7);
+    for (let i = 0; i < 12; i++) {held.t += 1 / 128; held.recorder.frame(held.t, held.player, held.targets, true);}
+    expect(held.recorder.targets.find(track => track.key === 'h')?.flick).toMatchObject({valid: true});
+    expect(held.recorder.drainCalibration()).toEqual([]);
+  });
+
+  it('needs recoil to have settled before the first movement started', () => {
+    const rig = calibrationRig(), start = rig.t;
+    rig.state = {settled: false};
+    rig.run(start + .25); rig.targets = [{key: 'r', point: pointAt(10, 0), radius: .03}];
+    rig.run(start + .5);
+    // Still kicking as the movement starts (about 20 ms in, when the crosshair has moved 1% of the way).
+    let done = 0;
+    rig.run(start + .7, t => {if (t > start + .53) rig.state = {}; const next = minimumJerk((t - start - .5) / .2); if (next > done) {rig.look(9 * (next - done), 0); done = next;}});
+    rig.run(start + .95);
+    rig.recorder.hit(rig.fire(), 'r', false, true);
+    expect(rig.recorder.done[0].flick).toMatchObject({valid: true});
+    expect(rig.recorder.drainCalibration()).toEqual([]);
+    // Settled long before; a shot that misses while adjusting kicks only after the first movement ended.
+    const later = calibrationRig(), at = later.t;
+    later.run(at + .25); later.targets = [{key: 's', point: pointAt(10, 0), radius: .03}];
+    later.run(at + .5); later.flick(9, 0, at + .5, at + .7);
+    later.state = {settled: false}; later.run(at + .8); later.state = {};
+    later.flick(1, 0, at + .8, at + .87); later.run(at + .95);
+    later.recorder.hit(later.fire(), 's', false, true);
+    expect(later.recorder.drainCalibration()).toHaveLength(1);
+  });
+
+  it('runs the blind test in hidden blocks: whole blocks with or without the profile, in balanced pairs, anew each session', () => {
+    let seed = 7;
+    const rig = new Rig(); rig.recorder = new AimRecorder(() => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+    rig.recorder.calibration = {flip: 0, profile: [0, 1.1, .9, 1, 1]}; rig.run(.1);
+    const conditions: FlickCondition[] = [];
+    for (let i = 0; i < DIRECTION_TEST_BLOCK * 4; i++) {
+      rig.mouse = rig.recorder.testOn ? 'test-on' : 'test-off';
+      const [flick] = calibrated(rig, i % 2 ? 8 : -8, i % 3 ? 4 : -4);
+      conditions.push(flick.condition);
+    }
+    const blocks = [0, 1, 2, 3].map(b => conditions.slice(b * DIRECTION_TEST_BLOCK, (b + 1) * DIRECTION_TEST_BLOCK));
+    for (const block of blocks) expect(new Set(block).size).toBe(1);
+    expect(new Set([blocks[0][0], blocks[1][0]])).toEqual(new Set(['test-on', 'test-off']));
+    expect(new Set([blocks[2][0], blocks[3][0]])).toEqual(new Set(['test-on', 'test-off']));
+    rig.recorder.restart();
+    expect(rig.recorder.calibrated).toBe(0);
+  });
+
+  it('counts the session\'s calibration flicks in its report while recording', () => {
+    const rig = calibrationRig();
+    calibrated(rig, 10, 0); calibrated(rig, -6, 5);
+    expect(aimReport(rig.recorder, {mode: 'pop', label: 'Pop', weapon: 'ak47'})!.calibration).toBe(2);
+    const off = new Rig(); off.run(.1); calibrated(off, 10, 0);
+    expect(aimReport(off.recorder, {mode: 'pop', label: 'Pop', weapon: 'ak47'})).not.toHaveProperty('calibration');
   });
 });
 

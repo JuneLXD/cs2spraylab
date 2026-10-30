@@ -680,11 +680,14 @@ export class DuelSimulation {
       return visible ? [visible] : [];
     });
   }
-  /** You as the aim report sees you: eye, view without recoil, velocity, the weapon's running speed, keys and stance. */
+  /** You as the aim report sees you: eye, view without recoil, velocity, the weapon's running speed, keys, stance and whether
+   * recoil, view punch and the punch of being hit have settled. */
   private aimPlayer(actor: CombatActor): AimPlayer {
+    const recoil = actor.weapon.recovery.recoil, view = actor.viewPunch.sample(this.time), hit = actor.punch.shotFor(actor.weapon.recovery.angle);
     return {eye: {...actor.position}, yaw: actor.yaw, pitch: actor.pitch, vx: actor.velocity.x, vz: actor.velocity.z,
       maxSpeed: actor.weapon.actions.stats.speed * UNIT, forward: actor.command.forward, side: actor.command.side,
-      airborne: !(actor.grounded ?? actor.feet === 0), walking: !!actor.command.walk, ducking: !!actor.duckFlag};
+      airborne: !(actor.grounded ?? actor.feet === 0), walking: !!actor.command.walk, ducking: !!actor.duckFlag,
+      settled: Math.hypot(recoil.yaw, recoil.pitch) < .05 && Math.hypot(view.yaw, view.pitch) < .05 && Math.hypot(hit.yaw, hit.pitch) < .05};
   }
 
   /** A fresh Aim Botz life: full health and armor at a new spot, facing you. A Reflex bot waits out of sight for `hold` seconds. */

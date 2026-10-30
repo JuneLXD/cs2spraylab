@@ -1,6 +1,6 @@
 # SprayLab Direction: the Raw Accel companion
 
-SprayLab Direction applies a profile from SprayLab's Direction Calibration (Pop) to all mouse input through
+SprayLab Direction applies a profile from SprayLab's Direction Calibration (the Aim tab) to all mouse input through
 [Raw Accel](https://github.com/RawAccelOfficial/rawaccel), the signed Windows mouse driver, so CS2 gets the same
 correction SprayLab measured. It changes five values of one Raw Accel profile in Raw Accel's `settings.json` (Output DPI,
 the Y/X, L/R and U/D ratios, and the rotation) and has Raw Accel's own `writer.exe` send them to the driver. It never reads
@@ -16,8 +16,9 @@ It comes as two programs:
 1. Install Raw Accel 1.7 (1.6 also works): run `installer.exe` from its release zip, restart Windows, then open
    `rawaccel.exe` once so it writes `settings.json`.
 2. Put `spraylab-direction.exe` in Raw Accel's folder, next to `writer.exe`. Elsewhere, it asks you to locate `writer.exe`.
-3. In SprayLab, with no direction profile on anywhere, calibrate in Pop > Direction Calibration (48 flicks at least, 144
-   recommended), then press Download profile. The window picks up the newest download by itself.
+3. In SprayLab, with no direction profile on anywhere, play any mode with Record calibration flicks on (Aim > Direction
+   calibration; 48 flicks at least, 144 recommended), then press Download profile there. The window picks up the newest
+   download by itself.
 4. Open `spraylab-direction.exe` and press Turn on.
 
 ## The window

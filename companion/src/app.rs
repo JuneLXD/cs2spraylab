@@ -497,7 +497,7 @@ impl Controller {
                 view.profile_name = "No profile yet".into();
                 view.profile_detail = match &self.profile {
                     Err(error) => error.clone(),
-                    Ok(_) => "Download one in SprayLab: Pop › Direction Calibration.".into(),
+                    Ok(_) => "Download one in SprayLab: Aim › Direction calibration.".into(),
                 };
                 view.gains = std::array::from_fn(|_| "\u{2014}".to_string());
             }
@@ -572,8 +572,8 @@ impl Controller {
                 view.tag = "CHANGES NOT APPLIED".into();
             }
             view.summary = format!(
-                "CS2 and every other program get the profile now. Keep Apply profile off in SprayLab, and switch this off before \
-                 calibrating again.{}",
+                "CS2 and every other program get the profile now. In SprayLab, keep Apply profile and Record calibration flicks \
+                 off while it is on.{}",
                 if self.options.cs2_only { " It goes off by itself when CS2 closes." } else { "" }
             );
             view.hint = hint;
@@ -590,8 +590,8 @@ impl Controller {
                 Err(error) => error.clone(),
                 Ok(_) => match &self.profile {
                     Err(error) => format!("{error} Choose another file, or download the profile again."),
-                    Ok(_) => "No profile yet. In SprayLab, with no direction profile on anywhere, calibrate in Pop › Direction Calibration and \
-                              press Download profile. It shows up here by itself."
+                    Ok(_) => "No profile yet. In SprayLab, with no direction profile on anywhere, play any mode with Record calibration \
+                              flicks on, then press Download profile in Aim › Direction calibration. It shows up here by itself."
                         .into(),
                 },
             };
