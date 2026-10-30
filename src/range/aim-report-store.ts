@@ -1,4 +1,4 @@
-import {AIM_SIZES, type AimBucket, type AimReport, type AimTip} from './aim-report';
+import {AIM_BULLETS, AIM_DIRECTIONS, AIM_SIZES, type AimBucket, type AimReport, type AimTip} from './aim-report';
 import {equipmentIds, type Equipment} from './equipment';
 
 /** The aim reports of recent sessions, kept in this browser for the Aim tab: newest first, at most `MAX_AIM_REPORTS`. A session
@@ -18,6 +18,23 @@ const bucket = (value: unknown): value is AimBucket => !!value && typeof value =
   finite((value as AimBucket).shots) && finite((value as AimBucket).hits) && (value as AimBucket).hits <= (value as AimBucket).shots;
 const numbers = (value: unknown, keys: readonly string[], optionalKeys: readonly string[] = []) => !!value && typeof value === 'object' &&
   keys.every(key => finite((value as Record<string, unknown>)[key])) && optionalKeys.every(key => (value as Record<string, unknown>)[key] === undefined || finite((value as Record<string, unknown>)[key]));
+const pair = (value: unknown) => Array.isArray(value) && value.length === 2 && value.every(finite);
+const groups = (value: unknown, limit: number) => Array.isArray(value) && value.length <= limit &&
+  value.every(entry => numbers(entry, ['n', 'bias', 'error', 'time']) && text((entry as Record<string, unknown>).label, 20));
+/** The fields added after the first reports: each may be missing, and must be well formed when present. */
+function later(r: Record<string, unknown>) {
+  if (!numbers(r, [], ['perMinute', 'throughput', 'peak'])) return false;
+  const spread = r.spread as Record<string, unknown> | undefined, halves = r.halves as Record<string, unknown> | undefined;
+  if (spread !== undefined && !(typeof spread === 'object' && (spread.reaction === undefined || pair(spread.reaction)) && (spread.time === undefined || pair(spread.time)) &&
+    (spread.scatter === undefined || finite(spread.scatter)))) return false;
+  if (halves !== undefined && !['first', 'second'].every(key => numbers(halves[key], ['shots', 'flicks'], ['time']) && share((halves[key] as Record<string, unknown>).hit))) return false;
+  if (r.directions !== undefined && !groups(r.directions, AIM_DIRECTIONS.length)) return false;
+  if (r.bullets !== undefined && !(Array.isArray(r.bullets) && r.bullets.length <= AIM_BULLETS.length && r.bullets.every(entry => bucket(entry) && text((entry as Record<string, unknown>).label, 20)))) return false;
+  if (r.misses !== undefined && !numbers(r.misses, ['n', 'on', 'off'])) return false;
+  const stance = r.stance as Record<string, unknown> | undefined, sides = r.sides as Record<string, unknown> | undefined;
+  if (stance !== undefined && !(bucket(stance.crouched) && bucket(stance.walking))) return false;
+  return sides === undefined || (typeof sides === 'object' && ['left', 'right'].every(key => sides[key] === undefined || numbers(sides[key], ['n', 'early'], ['toAccurate'])));
+}
 
 /** Stored reports: malformed entries are dropped, every number must be finite and every share between 0 and 1. */
 export function sanitizeAimReports(raw: unknown): AimReport[] {
@@ -40,6 +57,7 @@ export function sanitizeAimReports(raw: unknown): AimReport[] {
       (stops.toAccurate === undefined || numbers(stops.toAccurate, [], ['counter', 'release'])))) continue;
     const click = r.click as Record<string, unknown> | undefined;
     if (click !== undefined && !(numbers(click, ['n', 'speed']) && bucket(click.settled) && bucket(click.moving))) continue;
+    if (!later(r)) continue;
     if (!Array.isArray(r.tips) || r.tips.length > 3 || !r.tips.every(tip => tip && typeof tip === 'object' && ((tip as AimTip).tone === 'good' || (tip as AimTip).tone === 'warn') &&
       text((tip as AimTip).title, 200) && text((tip as AimTip).detail, 600))) continue;
     reports.push(entry as AimReport);

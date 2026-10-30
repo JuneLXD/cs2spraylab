@@ -491,6 +491,11 @@ export const latestChanges = {
       'It checks shooting while moving: shots fired standing, after a stop, moving or in the air with their hit rates, whether you stopped with the opposite key or by letting go, and whether you fired before you were accurate.',
       'It also measures your clicks, gives up to three tips from the numbers, compares with your last session in the same mode and keeps the latest 60 reports in this browser.',
     ]},
+    {id: 'aim-report-directions', title: 'One aim report, more metrics, downloads', items: [
+      'Direction Calibration\'s results now live in the Aim tab with the rest of your aim report: the direction chart, the fitted profile, the blind A/B test and the Raw Accel export.',
+      'New metrics: throughput, first-movement speed, consistency, first half against second half, flicks by direction, hits by shot in a spray, why shots missed, crouched and walking shots, and stops from strafing left against right.',
+      'Download a report as a page you can open, print or share, or as data.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

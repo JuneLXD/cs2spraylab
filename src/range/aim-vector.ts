@@ -59,6 +59,9 @@ export function rawAccelFields(profile: DirectionProfile, outputDpi = 1000) {
     'Degrees of rotation': round(profile.rotation, 2)};
 }
 
+/** The 16 screen directions of a flick's `dir`, counterclockwise from right. */
+export const DIRECTION_NAMES = ['Right', 'Right, up-right', 'Up-right', 'Up, up-right', 'Up', 'Up, up-left', 'Up-left', 'Left, up-left', 'Left', 'Left, down-left', 'Down-left',
+  'Down, down-left', 'Down', 'Down, down-right', 'Down-right', 'Right, down-right'] as const;
 /** Whether a flick ran with the profile applied; 'test-*' flicks belong to the blind A/B test. */
 export type FlickCondition = 'off' | 'on' | 'test-off' | 'test-on';
 /** One flick as stored. `at` is when (ms since 1970); `dir` its screen direction (0-15) and `amp` its size; `radius` the target's

@@ -1,4 +1,7 @@
-/* Direction Calibration results (DirectionCalibration.tsx). */
+/* Direction Calibration results (DirectionCalibration.tsx), in the Aim tab: the chart and fit left, the profile's controls right. */
+.sl-direction-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+.sl-direction h3 { margin: 16px 0 6px; font: 600 13px var(--sl-font-body); color: var(--sl-text-2); }
+@media (max-width: 900px) { .sl-direction-columns { grid-template-columns: minmax(0, 1fr); } }
 .sl-direction-chart { display: block; width: 100%; max-width: 320px; margin: 4px auto 0; }
 .sl-direction-chart .ring { fill: none; stroke: var(--sl-hairline-strong); stroke-dasharray: 2 4; }
 .sl-direction-chart .ring-target { fill: none; stroke: var(--sl-text-3); stroke-width: 1.5; }

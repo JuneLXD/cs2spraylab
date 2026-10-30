@@ -25,7 +25,7 @@ class Rig {
     let done = 0;
     this.run(to, t => {const next = minimumJerk((t - from) / (to - from)); if (next > done) {this.look(x * (next - done), y * (next - done)); done = next;}});
   }
-  fire(first = true) {return this.recorder.shot(this.t, this.player, 'ak47', first);}
+  fire(n = 0) {return this.recorder.shot(this.t, this.player, 'ak47', n);}
 }
 
 describe('aim report flicks', () => {
@@ -207,6 +207,90 @@ describe('aim report summary and tips', () => {
     rig.targets = [{key: 'a', point: pointAt(5, 0), radius: .05}];
     rig.run(1);
     expect(aimReport(rig.recorder, {mode: 'pop', label: 'Pop', weapon: 'ak47'})).toBeUndefined();
+  });
+});
+
+describe('aim report: more metrics', () => {
+  /** A point `right` and `up` degrees from where the rig looks now, 8 m away. */
+  const ahead = (rig: Rig, right: number, up: number) => {
+    const yaw = rig.yaw - right * DEG, pitch = rig.pitch + up * DEG, distance = 8;
+    return {x: -Math.sin(yaw) * Math.cos(pitch) * distance, y: 1.6 + Math.sin(pitch) * distance, z: -Math.cos(yaw) * Math.cos(pitch) * distance};
+  };
+
+  it('splits a spray by bullet, crouched shots, and misses with the crosshair on the target', () => {
+    const rig = new Rig();
+    rig.targets = [{key: 'a', point: pointAt(0, 0), radius: .1}];
+    rig.run(.3);
+    rig.state = {ducking: true};
+    for (let n = 0; n < 12; n++) {
+      const index = rig.fire(n);
+      if (n < 3) rig.recorder.hit(index, 'a', false, false);
+      rig.run(rig.t + .1);
+    }
+    const report = aimReport(rig.recorder, {mode: 'spray', label: 'Free spray', weapon: 'ak47'})!;
+    expect(report.bullets).toEqual([{label: '1st', shots: 1, hits: 1}, {label: '2nd–3rd', shots: 2, hits: 2}, {label: '4th–10th', shots: 7, hits: 0}, {label: '11th on', shots: 2, hits: 0}]);
+    expect(report.misses).toEqual({n: 9, on: 9, off: 0});
+    expect(report.stance).toEqual({crouched: {shots: 12, hits: 3}, walking: {shots: 0, hits: 0}});
+    expect(report.tips.map(tip => tip.title)).toContain('Most misses came with the crosshair on the target');
+  });
+
+  it('groups flicks by direction and measures throughput, top speed, spread and the two halves', () => {
+    const rig = new Rig();
+    rig.run(.5);
+    const ways: [number, number][] = [[8, 0], [0, 8], [-8, 0], [0, -8], [6, 6], [8, 0], [0, 8], [-8, 0], [0, -8], [-6, -6]];
+    ways.forEach(([right, up], i) => {
+      rig.targets = [{key: `t${i}`, point: ahead(rig, right, up), radius: .05}];
+      const start = rig.t, reaction = .22 + (i % 3) * .02, duration = .18 + (i >= 5 ? -.04 : 0);
+      rig.run(start + reaction);
+      rig.flick(right, -up, start + reaction, start + reaction + duration);
+      rig.run(rig.t + .05);
+      rig.recorder.hit(rig.fire(), `t${i}`, false, true);
+      rig.targets = [];
+      rig.run(rig.t + .6);
+    });
+    const report = aimReport(rig.recorder, {mode: 'pop', label: 'Pop', weapon: 'ak47', placement: false})!;
+    expect(report.flicks).toBe(10);
+    expect(report.directions!.map(entry => [entry.label, entry.n])).toEqual([['Right', 2], ['Up-right', 1], ['Up', 2], ['Left', 2], ['Down-left', 1], ['Down', 2]]);
+    // log2(8 / 0.716 + 1) ≈ 3.6 bits over about 0.21 s (first half) and 0.18 s (second half) of movement: synthetic flicks are fast.
+    expect(report.throughput).toBeGreaterThan(15); expect(report.throughput).toBeLessThan(23);
+    expect(report.peak).toBeGreaterThan(50);
+    expect(report.spread!.reaction![0]).toBeLessThanOrEqual(report.reaction!); expect(report.spread!.reaction![1]).toBeGreaterThanOrEqual(report.reaction!);
+    expect(report.spread!.scatter).toBeLessThan(.02);
+    // The second half's flicks were 40 ms quicker.
+    expect(report.halves!.first.flicks).toBe(5); expect(report.halves!.second.time!).toBeLessThan(report.halves!.first.time!);
+    expect(report.perMinute).toBeCloseTo(10 / report.seconds * 60, 6);
+  });
+
+  it('times counter-strafes separately for strafing left and right', () => {
+    const rig = new Rig();
+    const stop = (way: 1 | -1, decay: number) => {
+      const from = rig.t;
+      rig.run(from + .5, () => {rig.state = {vx: way * RUN, side: way};});
+      const at = rig.t;
+      rig.run(at + .15, () => {const left = Math.max(0, 1 - (rig.t - at) / decay); rig.state = {vx: way * RUN * left, side: rig.t - at < decay ? -way : 0};});
+      rig.fire();
+      rig.run(rig.t + .8, () => {rig.state = {};});
+    };
+    for (let i = 0; i < 4; i++) {stop(1, .08); stop(-1, .14);}
+    const report = aimReport(rig.recorder, {mode: 'precision', label: 'Counterstrafing practice', weapon: 'ak47'})!;
+    expect(report.sides!.right).toMatchObject({n: 4, early: 0}); expect(report.sides!.left).toMatchObject({n: 4, early: 0});
+    // 34% of the speed is left after 66% of the stop: 53 ms stopping from the right, 92 ms from the left.
+    expect(report.sides!.right!.toAccurate!).toBeLessThan(report.sides!.left!.toAccurate!);
+    expect(report.tips.map(tip => tip.title)).toContain('Your stops from strafing left are slower');
+  });
+});
+
+describe('aim report store: older reports', () => {
+  it('keeps reports saved before the later metrics, and drops a malformed new field', () => {
+    const rig = new Rig();
+    rig.run(.25); rig.targets = [{key: 'a', point: pointAt(.1, 0), radius: .1}]; rig.run(.5);
+    rig.recorder.hit(rig.fire(), 'a', false, true);
+    const report = aimReport(rig.recorder, {mode: 'botz', label: 'Aim Botz', weapon: 'ak47'})!;
+    const {bullets, stance, misses, directions, halves, spread, perMinute, throughput, peak, sides, ...older} = report;
+    void [bullets, stance, misses, directions, halves, spread, perMinute, throughput, peak, sides];
+    expect(sanitizeAimReports([older])).toEqual([older]);
+    expect(sanitizeAimReports([{...report, bullets: [{label: '1st', shots: 1, hits: 2}]}])).toEqual([]);
+    expect(sanitizeAimReports([{...report, spread: {reaction: [1]}}])).toEqual([]);
   });
 });
 

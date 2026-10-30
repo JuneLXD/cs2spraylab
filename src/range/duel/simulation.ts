@@ -576,7 +576,7 @@ export class DuelSimulation {
       else if (actor.id === 0) this.coach.shot(this.snapshot()[0]);
       const shotId = this.shotId++;
       if (actor.id === 0 && this.aimLog && fired.kind !== 'melee')
-        this.aimShots.set(shotId, this.aimLog.shot(this.time, this.aimPlayer(actor), fired.weapon, this.triggerShots++ === 0));
+        this.aimShots.set(shotId, this.aimLog.shot(this.time, this.aimPlayer(actor), fired.weapon, this.triggerShots++));
       shots.push({actor, fired, shotId});
       this.lastShotAt.set(actor.id,this.time);
       if (actor.immuneUntil) actor.immuneUntil = 0; // attacking ends spawn protection

@@ -626,7 +626,7 @@ export class Simulation {
       weaponId:this.equipped,alternateFire:this.actions.alternateFire,recoilIndex:this.recovery.index,seed:ordinal+1}, weapon.pellets, this.random);
     const index = this.shots++;
     // Before the shot moves anything: you and your speed as you fired. The first shot of each trigger press is a click.
-    const aim = this.aimLog?.shot(this.time, this.aimPlayer(), this.equipped, index === 0);
+    const aim = this.aimLog?.shot(this.time, this.aimPlayer(), this.equipped, index);
     if (this.pop) {if (!this.pop.shots) this.popStartedAt = this.time; this.pop.shots++;}
     this.reloadState.ammo--;
     if (this.pop) this.refillPopAmmo(); this.shotOrdinals.set(this.equipped, ordinal + 1);

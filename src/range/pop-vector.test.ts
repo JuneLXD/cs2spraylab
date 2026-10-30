@@ -157,10 +157,12 @@ describe('Direction Calibration settings', () => {
     expect(rangeDrillDefaults('pop').popVectorReach).toBe(12);
   });
 
-  it('shows the calibration controls and the results panel', () => {
+  it('shows the calibration controls and points to the Aim tab for the results', () => {
     const html = renderToStaticMarkup(createElement(TrainingSettings, {settings: base, update: () => {}}));
     expect(html).toContain('Direction Calibration'); expect(html).toContain('Largest flick'); expect(html).toContain('Pause between flicks');
-    expect(html).toContain('Direction profile'); expect(html).toContain('Blind A/B test'); expect(html).not.toContain('Balls at once');
+    expect(html).toContain('calibration flicks recorded'); expect(html).toContain('are in the Aim tab');
+    // The results themselves (chart, profile, blind test) moved to the Aim tab: see AimScreen.test.ts.
+    expect(html).not.toContain('Blind A/B test'); expect(html).not.toContain('Balls at once');
   });
 
   it('words the gap report by which model wins out of sample', () => {

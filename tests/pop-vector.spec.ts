@@ -16,8 +16,9 @@ test('Direction Calibration: a real-input flick, a fitted profile, the results p
   await page.goto('/'); await selectDrill(page, 'pop');
   await expect(page.getByLabel('Pop mode', {exact: true})).toHaveValue('vector');
   await expect(page.getByText('Largest flick', {exact: true})).toBeVisible();
-  await expect(page.getByRole('heading', {name: 'Direction profile'})).toBeVisible();
+  // The results live in the Aim tab; Pop's setup shows the count and the way there.
   await expect(page.getByText('0 calibration flicks recorded', {exact: false})).toBeVisible();
+  await expect(page.getByRole('button', {name: 'Open the Aim tab'})).toBeVisible();
   await page.evaluate(async () => {
     const url = performance.getEntriesByType('resource').find(entry => entry.name.includes('/range/engine.ts'))!.name;
     const {RangeEngine} = await import(/* @vite-ignore */ url), tick = RangeEngine.prototype.tick;
@@ -107,6 +108,8 @@ test('Direction Calibration: a real-input flick, a fitted profile, the results p
   await page.waitForFunction(() => JSON.parse(localStorage.getItem('spraylab.direction.v1') ?? '[]').length === 61);
   await expect(page.getByTestId('pop-vector-cue')).toContainText('flicks recorded');
   await page.keyboard.press('Escape');
+  await expect(page.getByText(/6\d calibration flicks recorded/)).toBeVisible();
+  await page.getByRole('button', {name: 'Open the Aim tab'}).click();
   await expect(page.getByRole('heading', {name: 'Direction profile'})).toBeVisible();
   await expect(page.getByText(/6\d calibration flicks recorded/)).toBeVisible();
   await expect(page.locator('svg.sl-direction-chart')).toBeVisible();
@@ -117,14 +120,15 @@ test('Direction Calibration: a real-input flick, a fitted profile, the results p
   const applied = await page.evaluate(() => JSON.parse(localStorage.getItem('spraylab.range.v2')!).directionProfile);
   // Falling short going up asks for more upward gain; overshooting left asks for less leftward gain.
   expect(applied.up).toBeGreaterThan(1.03); expect(applied.left).toBeLessThan(applied.right);
-  // The panel lives in the scrolling setup column: bring each part into view for the review screenshots.
-  await page.locator('section.sl-direction h2').first().evaluate(element => element.scrollIntoView({block: 'start'}));
+  // The panel sits below the session's report in the Aim tab: bring each part into view for the review screenshots.
+  await page.getByRole('heading', {name: 'Direction profile'}).evaluate(element => element.scrollIntoView({block: 'start'}));
   await page.screenshot({path: info.outputPath('vector-panel-chart.png')});
   await page.getByRole('heading', {name: 'Use it in CS2'}).evaluate(element => element.scrollIntoView({block: 'center'}));
   await page.screenshot({path: info.outputPath('vector-panel-export.png')});
 
   await page.reload(); await selectDrill(page, 'pop');
   await expect(page.getByText(/6\d calibration flicks recorded/)).toBeVisible();
+  await page.getByRole('button', {name: 'Open the Aim tab'}).click();
   await expect(page.getByRole('switch', {name: 'Apply profile in SprayLab'})).toBeChecked();
   expect(errors).toEqual([]);
 });

@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import {expect, test, type Page} from '@playwright/test';
 import {selectDrill} from './menu-helpers';
 
@@ -61,6 +62,13 @@ test('aim report: a Pop session shows up in the Aim tab after a pause', async ({
   // Both clicks came with the crosshair resting on the ball.
   await expect(tab.getByRole('row', {name: /^Settled/})).toContainText('2');
   await tab.screenshot({path: `test-results/${info.project.name}-aim-report-pop.png`});
+  // The report as a page and as data.
+  const [page_] = await Promise.all([page.waitForEvent('download'), tab.getByRole('button', {name: 'Download report'}).click()]);
+  expect(page_.suggestedFilename()).toMatch(/^spraylab-aim-report-pop-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}\.html$/);
+  const html = readFileSync(await page_.path(), 'utf8');
+  expect(html).toContain('SPRAYLAB AIM REPORT'); expect(html).toContain('<h1>Pop</h1>'); expect(html).toContain('Shooting while moving');
+  const [data] = await Promise.all([page.waitForEvent('download'), tab.getByRole('button', {name: 'Download data'}).click()]);
+  expect(JSON.parse(readFileSync(await data.path(), 'utf8'))).toMatchObject({format: 'spraylab-aim-report', version: 1, report: {mode: 'pop', shots: 2}});
   expect(errors).toEqual([]);
 });
 
@@ -91,7 +99,10 @@ test('aim report: an Aim Botz kill shows up in the Aim tab after a pause', async
     sim.actors[0].yaw = Math.atan2(-dx, -dz); sim.actors[0].pitch = Math.asin(dy / Math.hypot(dx, dy, dz));
   });
   await page.waitForTimeout(300);
-  await page.mouse.down(); await page.waitForTimeout(40); await page.mouse.up();
+  // Fire through the simulation's own command: a scripted mouse click under headless pointer lock is unreliable here.
+  await page.evaluate(() => (window as any).aimEngine.sim.command(0, {firePressed: true, fireHeld: true}));
+  await page.waitForTimeout(300);
+  await page.evaluate(() => (window as any).aimEngine.sim.command(0, {fireHeld: false}));
   await expect(page.locator('.duel-round')).toContainText('1 KILLS');
   await page.keyboard.press('Escape');
   await expect.poll(async () => (await reports(page)).length).toBe(1);

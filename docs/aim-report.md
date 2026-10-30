@@ -1,14 +1,17 @@
 # Aim report
 
-Every mode that shoots records the same aim report, and the **Aim** tab in the main menu shows it. A report covers one
+Every mode that shoots records the same aim report, and the **Aim** tab in the main menu shows it. It is the one report: since
+2026-10-30 it also holds Direction Calibration's results (see Directions below), and it can be downloaded. A report covers one
 session: from entering a mode until a new session, a setup change that restarts the drill, or leaving the mode. It is saved
 whenever you pause, at the end of a round or timed session, and when the session ends. AI Duel rounds of one session share
 a report. The browser keeps the latest 60 reports (`spraylab.aim.reports.v1`), newest first. The tab picks a session by
 mode and compares it with your previous session of the same mode (for Pop, the same exercise).
 
 Code: `src/range/aim-report.ts` (recorder, analysis, tips), `src/range/aim-report-store.ts` (storage),
-`src/range/ui/screens/AimScreen.tsx` (the tab). Tests: `aim-report.test.ts` (synthetic flicks, strafes and clicks),
-`aim-report-engines.test.ts` (the real range and duel simulations), `ui/screens/AimScreen.test.ts`.
+`src/range/aim-report-export.ts` (downloads), `src/range/ui/screens/AimScreen.tsx` (the tab). Tests: `aim-report.test.ts`
+(synthetic flicks, strafes, sprays and clicks), `aim-report-engines.test.ts` (the real range and duel simulations),
+`aim-report-export.test.ts` and `ui/screens/AimScreen.test.ts`. Reports saved before the later metrics still load: every
+field added since is optional.
 
 ## What the engines feed it
 
@@ -82,6 +85,52 @@ last 30 ms (degrees per second): the target's movement relative to your view, so
 settled. Under 30°/s is *settled*. A shot belongs to the target it hit, else to the nearest target within 4° of the
 crosshair (or three times its zone). With no target near, it is the crosshair's own speed.
 
+## Pace and consistency
+
+- **Throughput** (bits per second, Fitts): for each timed flick, log2 of the distance over the target's width (twice its zone
+  radius) plus 1, divided by the time from starting to move to the hit; the mean of at least five flicks. It is nominal
+  throughput (the target's size, not the spread of your endpoints), and it only compares fairly within one drill and target size.
+- **First-movement top speed**: the median peak speed of first movements (degrees per second).
+- **Spread**: the middle half (25th to 75th percentile) of reaction times and times to hit, and the *scatter* of first movements:
+  one standard deviation of log(`along`), as a share of the flick. A bias bigger than the scatter is a habit; scatter bigger than
+  the bias is consistency.
+- **Halves**: from 10 shots on, the session's first and second half (shots in order, timed flicks in the order of their hits):
+  shots, hit rate and median time to hit.
+- **Targets per minute** (from 10 s of play) and the median time to clear a target.
+
+## Flicks by direction
+
+This session's measured flicks, in any mode, by the direction of the movement they needed on screen: eight 45-degree sectors
+(right, up-right, up, ...), each with its first-movement bias, typical miss and time to hit.
+
+## Bursts, misses and stance
+
+- **By shot in a press**: hit rate of the first shot, the 2nd–3rd, the 4th–10th and the 11th on, from each shot's place in its
+  trigger press (both engines count it: the range's shot index, the duel's shots since fire was last up).
+- **Why shots missed**: missed shots with a target near are split by whether the crosshair was on the target at the shot (spread,
+  recoil or moving did it) or off it (aim).
+- **Stance**: crouched and walking shots, with their hit rates (a shot can be both, and also standing, stopped or moving).
+- **Stops by side**: stops while strafing left and right (mostly sideways relative to your view when the key last pushed you),
+  with how many came before you were accurate and the median time to accurate.
+
+## Directions
+
+Below the session's panels, the Aim tab holds Direction Calibration's results, moved there from Pop's setup: the chart of where
+first movements land in 16 directions with 95% intervals, the fitted four- and sixteen-direction profiles, the gap report, the
+profile table, Use fitted profile, Apply profile in SprayLab, Profile strength, the blind A/B test, the Raw Accel fields, Copy and
+Download profile, and Clear recorded flicks. Unlike the session report, they cover every calibration flick in this browser
+(`spraylab.direction.v1`), so they show even before the first session report. The analysis itself is unchanged (`aim-vector.ts`,
+`docs/pop-mode.md`).
+
+## Downloads
+
+- **Download report** saves a self-contained page (`aimReportHtml` in `aim-report-export.ts`): the tips, the key numbers and every
+  section of the tab with the numbers written out, and the direction section with its chart drawn in SVG when there are
+  calibration flicks. It opens in any browser and prints to PDF. File name: `spraylab-aim-report-<mode>-<date>.html`.
+- **Download data** saves the same session as JSON (format `spraylab-aim-report`, version 1): the report object and, with
+  calibration flicks, their summary, the 16-direction table, the fit, the gap report, the blind test and the profile in use.
+- **Download all reports** saves every report this browser keeps (format `spraylab-aim-reports`).
+
 ## Tips
 
 Up to three, the most costly first, each only with enough evidence: shots in the air (2 or more and at least 3% of shots),
@@ -90,7 +139,9 @@ accuracy, mostly releases if half, or a wait over 120 ms once accurate), a first
 8 flicks (otherwise 1.5 corrections per flick or more), 150 ms or more on target before clicking, clicks with the target
 still moving that hit at least 15 points less often than settled ones (5 or more, a quarter of clicks), crosshair placement
 6° or more off over at least 5 appearances, and under half of at least 8 targets hit with the first shot. With none of
-these and at least 10 shots, the tab says so.
+these and at least 10 shots, the tab says so. Two more join them: stops from one side at least 30 ms slower to accurate than
+from the other, or 25 points more often too early (at least 4 stops each way), and most misses coming with the crosshair on
+the target (at least 8 misses, 60% of them).
 
 ## Limits
 

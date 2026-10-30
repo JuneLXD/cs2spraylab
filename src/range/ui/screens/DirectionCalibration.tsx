@@ -1,15 +1,13 @@
 import {useEffect, useMemo, useState, useSyncExternalStore} from 'react';
 import type {Settings} from '../../config';
-import {directionLimits, directionProfileFile, directionReport, isNeutralProfile, MIN_FIT, modelExtent, neutralDirectionProfile, RECOMMENDED_FLICKS, TEST_FLICKS,
-  type DirectionProfile, type DirectionReport, type ModelComparison} from '../../aim-vector';
+import {calibrationFlicks, DIRECTION_NAMES as names, directionLimits, directionProfileFile, isNeutralProfile, MIN_FIT, modelExtent, neutralDirectionProfile, RECOMMENDED_FLICKS, TEST_FLICKS,
+  type DirectionProfile, type DirectionReport, type FlickRecord, type ModelComparison} from '../../aim-vector';
 import {directionStore} from '../../direction-store';
 import {vectorReach} from '../../pop-vector';
 import {download} from '../download';
 import {Button, SliderRow as Slider, SwitchRow as Toggle} from '../primitives';
 import '../direction.css';
 
-const names = ['Right', 'Right, up-right', 'Up-right', 'Up, up-right', 'Up', 'Up, up-left', 'Up-left', 'Left, up-left', 'Left', 'Left, down-left', 'Down-left',
-  'Down, down-left', 'Down', 'Down, down-right', 'Down-right', 'Right, down-right'];
 const percent = (value: number, digits = 0) => `${(value * 100).toFixed(digits)}%`;
 const signedPercent = (value: number, digits = 1) => `${value >= 0 ? '+' : '−'}${Math.abs(value * 100).toFixed(digits)}%`;
 const milliseconds = (seconds: number) => `${Math.round(seconds * 1000)} ms`;
@@ -29,6 +27,13 @@ export function useDirectionRecords() {
   const snapshot = useSyncExternalStore(directionStore.subscribe, directionStore.getSnapshot, directionStore.getSnapshot);
   useEffect(() => directionStore.watchStorage(), []);
   return snapshot;
+}
+
+/** Pop's Direction Calibration setup: how many calibration flicks are recorded, and that the results are in the Aim tab. */
+export function DirectionNote({openAim}: {openAim?: () => void}) {
+  const {records} = useDirectionRecords(), count = calibrationFlicks(records).length;
+  return <div className="sl-direction-note"><p className="setting-explanation">{count} calibration {count === 1 ? 'flick' : 'flicks'} recorded. Your results (where flicks land in each direction, the fitted profile, the blind A/B test and the Raw Accel export) are in the Aim tab, in the same report as the rest of your aim metrics.</p>
+    {openAim && <div className="sl-preset-actions"><Button onClick={openAim}>Open the Aim tab</Button></div>}</div>;
 }
 
 /** Where first movements landed in each of the 16 screen directions: the ring is exactly on target, outside it past the target,
@@ -73,11 +78,11 @@ function ProfileTable({fit, applied}: {fit: NonNullable<DirectionReport['fit']>;
   </tbody></table>;
 }
 
-/** Direction Calibration's results: where your flicks land by direction, the fitted profile and how much it can fix, the blind
- * A/B test, and the profile as Raw Accel settings and as a file. */
-export function DirectionCalibration({settings, update}: {settings: Settings; update: (patch: Partial<Settings>) => void}) {
-  const {records, persisted} = useDirectionRecords();
-  const report = useMemo(() => directionReport(records), [records]);
+/** Direction Calibration's results, in the Aim tab: where your flicks land by direction, the fitted profile and how much it can fix,
+ * the blind A/B test, and the profile as Raw Accel settings and as a file. They cover every calibration flick in this browser, not
+ * one session, so the chart and the fit sit on the left and what you do with the profile on the right. */
+export function DirectionCalibration({settings, update, records, persisted, report}: {settings: Settings; update: (patch: Partial<Settings>) => void;
+  records: readonly FlickRecord[]; persisted: boolean; report: DirectionReport}) {
   const [message, setMessage] = useState(''), [confirmClear, setConfirmClear] = useState(false);
   const {fit, comparison, summary, test} = report, applied = settings.directionProfile, hasProfile = !isNeutralProfile(applied);
   const file = useMemo(() => directionProfileFile(report, applied, settings.directionStrength), [report, applied, settings.directionStrength]);
@@ -89,48 +94,54 @@ export function DirectionCalibration({settings, update}: {settings: Settings; up
   };
   const time = test.time, verdict = !time ? '' : time.high < 1 ? 'The profile makes you faster. Keep it.'
     : time.low > 1 ? 'The profile makes you slower. Turn it off.' : 'No clear difference. Keep testing, or the profile is not worth using.';
-  return <section className="sl-direction" aria-label="Direction profile">
-    <h2>Direction profile</h2>
-    <p className="setting-explanation">{summary.valid} calibration {summary.valid === 1 ? 'flick' : 'flicks'} recorded, at least {fewest} in every direction. Aim for {RECOMMENDED_FLICKS} (three rounds of 48); the profile needs {MIN_FIT}. Calibration flicks are the ones with the profile switched off. Flicks stay in this browser{persisted ? '' : ' until you close this tab (storage is unavailable)'}.
-      {reach < settings.popVectorReach - .05 && ` At this distance the largest flick is limited to ${reach.toFixed(1)}° so targets stay above the floor; bring the targets closer for bigger flicks.`}</p>
-    <DirectionChart report={report}/>
-    <p className="sl-direction-legend"><span className="key measured"/>Where first movements landed: the bright ring is exactly on target, outside it past the target, inside it short. Bars are 95% intervals.
-      <span className="key fit-axis"/>Four-direction fit (what Raw Accel can apply). <span className="key fit-full"/>Sixteen-direction fit.{report.profiled.some(stat => stat.n) && <><span className="key profiled"/>With your profile on.</>}</p>
-    {summary.valid > 0 && <p className="setting-explanation">First movements: {percent(summary.perfect)} ended inside the target, {percent(summary.over)} past it, {percent(summary.under)} short.
-      Typical miss {percent(summary.error, 1)} of the flick distance. Reaction {milliseconds(summary.reaction)}, time to hit {milliseconds(summary.total)}, {summary.corrections.toFixed(1)} corrections per flick, {percent(summary.firstShot)} hit with the first shot.
-      Overall your first movements {summary.bias < 0 ? `fall ${percent(-summary.bias, 1)} short` : `overshoot by ${percent(summary.bias, 1)}`} (that is your sensitivity, which a direction profile leaves alone)
-      {Math.abs(summary.angle) < .1 ? ' and keep their direction' : ` and turn ${Math.abs(summary.angle).toFixed(1)}° ${summary.angle > 0 ? 'counterclockwise' : 'clockwise'}`}.</p>}
-    {comparison && <p className="setting-explanation" data-testid="direction-gap">{gapText(comparison)}</p>}
-    {fit ? <>
-      <ProfileTable fit={fit} applied={applied}/>
-      <p className="setting-explanation">Multipliers act on mouse counts before your sensitivity, in Raw Accel's order: rotate, then scale each direction. To apply shrinks each one toward no change by its own uncertainty, so noise never becomes a correction; limits are {percent(directionLimits.gain[0] - 1)}/+{percent(directionLimits.gain[1] - 1)} and ±{directionLimits.rotation}°. Your flicks imply a horizontal sensitivity ×{fit.scale.toFixed(3)}; that is reported, not applied. Changing up and down also changes how far you pull down to control a spray.</p>
-      <div className="sl-preset-actions"><Button onClick={() => {update({directionProfile: fit.profile, directionProfileOn: true}); setMessage('Applied the fitted profile.');}}>Use fitted profile</Button>
-        {hasProfile && <Button onClick={() => {update({directionProfile: neutralDirectionProfile, directionProfileOn: false, directionTest: false}); setMessage('Cleared the profile.');}}>Clear profile</Button>}</div>
-    </> : <p className="setting-explanation">Record {Math.max(0, MIN_FIT - summary.valid)} more calibration {MIN_FIT - summary.valid === 1 ? 'flick' : 'flicks'} for a profile.</p>}
-    <Toggle label="Apply profile in SprayLab" checked={settings.directionProfileOn} disabled={!hasProfile} onChange={directionProfileOn => update({directionProfileOn})}/>
-    <Slider label="Profile strength" value={Math.round(settings.directionStrength * 100)} min={0} max={100} step={5} suffix=" %" onChange={value => update({directionStrength: value / 100})}/>
-    <Toggle label="Blind A/B test" checked={settings.directionTest} disabled={!hasProfile} onChange={directionTest => update({directionTest})}/>
-    <p className="setting-explanation" data-testid="direction-test">{settings.directionTest || test.on + test.off > 0 ? <>
-      {settings.directionTest && 'The blind test switches your profile on and off in hidden blocks of 16 flicks, so you cannot tell which is which. '}
-      {test.ready && time && test.error && test.firstShot ? <>With the profile your time to hit was {signedPercent(time.estimate - 1)} (95% interval {signedPercent(time.low - 1)} to {signedPercent(time.high - 1)}),
-        first movements ended {signedPercent(test.error.estimate)} of the distance {test.error.estimate <= 0 ? 'closer' : 'further'}, and {percent(test.firstShot.on)} vs {percent(test.firstShot.off)} were hit with the first shot. <strong>{verdict}</strong></>
-        : `${test.on} flicks with the profile and ${test.off} without so far; the comparison needs ${TEST_FLICKS} of each.`}
-    </> : 'Once a profile is in use, the blind A/B test measures whether it actually makes you faster.'}</p>
-    {hasProfile && <>
-      <h2>Use it in CS2</h2>
-      <p className="setting-explanation">Raw Accel, a signed Windows mouse driver, can apply these fields to all mouse input, CS2 included. They include the strength above and assume Raw Accel's defaults (Output DPI 1000, ratios 1, no rotation): with other settings, multiply your Output DPI by {(applied.right ** settings.directionStrength).toFixed(4)}, multiply each ratio by its value here and add the rotation. Raw Accel's window has no left/right or up/down fields, so edit them in its settings.json and run writer.exe settings.json, or let the SprayLab companion (spraylab-direction.exe) do all of it from the downloaded profile. While Raw Accel applies the profile, switch Apply profile in SprayLab off, and switch the Raw Accel profile off before calibrating again: SprayLab sees what Raw Accel outputs, so it would measure on top of it.</p>
-      <pre className="sl-direction-export" data-testid="raw-accel-fields">{Object.entries(file.rawAccel).map(([key, value]) => `"${key}": ${value}`).join('\n')}</pre>
-      <div className="sl-preset-actions"><Button onClick={() => void copy()}>Copy profile</Button><Button onClick={() => download('spraylab-direction-profile.json', file)}>Download profile</Button></div>
-    </>}
-    <p className="sl-preset-status" role="status">{message}</p>
-    {summary.valid > 0 && <details className="sl-direction-details"><summary>Per-direction numbers</summary>
-      <table className="sl-direction-table"><thead><tr><th>Direction</th><th>Flicks</th><th>Distance ± 95%</th><th>Turn</th><th>Inside / past / short</th><th>Time to hit</th></tr></thead><tbody>
-        {report.directions.map(stat => <tr key={stat.dir}><th>{names[stat.dir]}</th><td>{stat.n}</td>
-          <td>{stat.n ? `${stat.extent.toFixed(3)}` : '–'}{stat.n > 1 && <small> {stat.low.toFixed(2)}–{stat.high.toFixed(2)}</small>}</td>
-          <td>{stat.n ? degrees(stat.angle) : '–'}</td><td>{stat.n ? `${percent(stat.perfect)} / ${percent(stat.over)} / ${percent(stat.under)}` : '–'}</td><td>{stat.n ? milliseconds(stat.total) : '–'}</td></tr>)}
-      </tbody></table></details>}
-    {records.length > 0 && <div className="sl-preset-actions">{confirmClear
-      ? <><Button onClick={() => {directionStore.clear(); setConfirmClear(false); setMessage('Cleared all recorded flicks.');}}>Delete {records.length} flicks</Button><Button onClick={() => setConfirmClear(false)}>Keep them</Button></>
-      : <Button onClick={() => setConfirmClear(true)}>Clear recorded flicks</Button>}</div>}
+  if (!records.length && !hasProfile) return <section className="sl-direction" aria-label="Direction profile">
+    <p className="setting-explanation">No Direction Calibration flicks yet. Play it in Pop: rest on the center dot, flick to each target and shoot it. Every round of 48 covers 16 directions at three sizes, and this section then shows where your first movements land in each direction, fits a profile and tests whether it helps.</p>
   </section>;
+  return <section className="sl-direction" aria-label="Direction profile"><div className="sl-direction-columns">
+    <div>
+      <p className="setting-explanation">{summary.valid} calibration {summary.valid === 1 ? 'flick' : 'flicks'} recorded, at least {fewest} in every direction: every Direction Calibration flick in this browser, not only the session above. Aim for {RECOMMENDED_FLICKS} (three rounds of 48); the profile needs {MIN_FIT}. Calibration flicks are the ones with the profile switched off. Flicks stay in this browser{persisted ? '' : ' until you close this tab (storage is unavailable)'}.
+        {reach < settings.popVectorReach - .05 && ` At this distance the largest flick is limited to ${reach.toFixed(1)}° so targets stay above the floor; bring the targets closer for bigger flicks.`}</p>
+      <DirectionChart report={report}/>
+      <p className="sl-direction-legend"><span className="key measured"/>Where first movements landed: the bright ring is exactly on target, outside it past the target, inside it short. Bars are 95% intervals.
+        <span className="key fit-axis"/>Four-direction fit (what Raw Accel can apply). <span className="key fit-full"/>Sixteen-direction fit.{report.profiled.some(stat => stat.n) && <><span className="key profiled"/>With your profile on.</>}</p>
+      {summary.valid > 0 && <p className="setting-explanation">First movements: {percent(summary.perfect)} ended inside the target, {percent(summary.over)} past it, {percent(summary.under)} short.
+        Typical miss {percent(summary.error, 1)} of the flick distance. Reaction {milliseconds(summary.reaction)}, time to hit {milliseconds(summary.total)}, {summary.corrections.toFixed(1)} corrections per flick, {percent(summary.firstShot)} hit with the first shot.
+        Overall your first movements {summary.bias < 0 ? `fall ${percent(-summary.bias, 1)} short` : `overshoot by ${percent(summary.bias, 1)}`} (that is your sensitivity, which a direction profile leaves alone)
+        {Math.abs(summary.angle) < .1 ? ' and keep their direction' : ` and turn ${Math.abs(summary.angle).toFixed(1)}° ${summary.angle > 0 ? 'counterclockwise' : 'clockwise'}`}.</p>}
+      {comparison && <p className="setting-explanation" data-testid="direction-gap">{gapText(comparison)}</p>}
+      {summary.valid > 0 && <details className="sl-direction-details"><summary>Per-direction numbers</summary>
+        <table className="sl-direction-table"><thead><tr><th>Direction</th><th>Flicks</th><th>Distance ± 95%</th><th>Turn</th><th>Inside / past / short</th><th>Time to hit</th></tr></thead><tbody>
+          {report.directions.map(stat => <tr key={stat.dir}><th>{names[stat.dir]}</th><td>{stat.n}</td>
+            <td>{stat.n ? `${stat.extent.toFixed(3)}` : '–'}{stat.n > 1 && <small> {stat.low.toFixed(2)}–{stat.high.toFixed(2)}</small>}</td>
+            <td>{stat.n ? degrees(stat.angle) : '–'}</td><td>{stat.n ? `${percent(stat.perfect)} / ${percent(stat.over)} / ${percent(stat.under)}` : '–'}</td><td>{stat.n ? milliseconds(stat.total) : '–'}</td></tr>)}
+        </tbody></table></details>}
+    </div>
+    <div>
+      {fit ? <>
+        <ProfileTable fit={fit} applied={applied}/>
+        <p className="setting-explanation">Multipliers act on mouse counts before your sensitivity, in Raw Accel's order: rotate, then scale each direction. To apply shrinks each one toward no change by its own uncertainty, so noise never becomes a correction; limits are {percent(directionLimits.gain[0] - 1)}/+{percent(directionLimits.gain[1] - 1)} and ±{directionLimits.rotation}°. Your flicks imply a horizontal sensitivity ×{fit.scale.toFixed(3)}; that is reported, not applied. Changing up and down also changes how far you pull down to control a spray.</p>
+        <div className="sl-preset-actions"><Button onClick={() => {update({directionProfile: fit.profile, directionProfileOn: true}); setMessage('Applied the fitted profile.');}}>Use fitted profile</Button>
+          {hasProfile && <Button onClick={() => {update({directionProfile: neutralDirectionProfile, directionProfileOn: false, directionTest: false}); setMessage('Cleared the profile.');}}>Clear profile</Button>}</div>
+      </> : <p className="setting-explanation">Record {Math.max(0, MIN_FIT - summary.valid)} more calibration {MIN_FIT - summary.valid === 1 ? 'flick' : 'flicks'} for a profile.</p>}
+      <Toggle label="Apply profile in SprayLab" checked={settings.directionProfileOn} disabled={!hasProfile} onChange={directionProfileOn => update({directionProfileOn})}/>
+      <Slider label="Profile strength" value={Math.round(settings.directionStrength * 100)} min={0} max={100} step={5} suffix=" %" onChange={value => update({directionStrength: value / 100})}/>
+      <Toggle label="Blind A/B test" checked={settings.directionTest} disabled={!hasProfile} onChange={directionTest => update({directionTest})}/>
+      <p className="setting-explanation" data-testid="direction-test">{settings.directionTest || test.on + test.off > 0 ? <>
+        {settings.directionTest && 'The blind test switches your profile on and off in hidden blocks of 16 flicks, so you cannot tell which is which. '}
+        {test.ready && time && test.error && test.firstShot ? <>With the profile your time to hit was {signedPercent(time.estimate - 1)} (95% interval {signedPercent(time.low - 1)} to {signedPercent(time.high - 1)}),
+          first movements ended {signedPercent(test.error.estimate)} of the distance {test.error.estimate <= 0 ? 'closer' : 'further'}, and {percent(test.firstShot.on)} vs {percent(test.firstShot.off)} were hit with the first shot. <strong>{verdict}</strong></>
+          : `${test.on} flicks with the profile and ${test.off} without so far; the comparison needs ${TEST_FLICKS} of each.`}
+      </> : 'Once a profile is in use, the blind A/B test measures whether it actually makes you faster.'}</p>
+      {hasProfile && <>
+        <h3>Use it in CS2</h3>
+        <p className="setting-explanation">Raw Accel, a signed Windows mouse driver, can apply these fields to all mouse input, CS2 included. They include the strength above and assume Raw Accel's defaults (Output DPI 1000, ratios 1, no rotation): with other settings, multiply your Output DPI by {(applied.right ** settings.directionStrength).toFixed(4)}, multiply each ratio by its value here and add the rotation. Raw Accel's window has no left/right or up/down fields, so edit them in its settings.json and run writer.exe settings.json, or let the SprayLab companion (spraylab-direction.exe) do all of it from the downloaded profile. While Raw Accel applies the profile, switch Apply profile in SprayLab off, and switch the Raw Accel profile off before calibrating again: SprayLab sees what Raw Accel outputs, so it would measure on top of it.</p>
+        <pre className="sl-direction-export" data-testid="raw-accel-fields">{Object.entries(file.rawAccel).map(([key, value]) => `"${key}": ${value}`).join('\n')}</pre>
+        <div className="sl-preset-actions"><Button onClick={() => void copy()}>Copy profile</Button><Button onClick={() => download('spraylab-direction-profile.json', file)}>Download profile</Button></div>
+      </>}
+      <p className="sl-preset-status" role="status">{message}</p>
+      {records.length > 0 && <div className="sl-preset-actions">{confirmClear
+        ? <><Button onClick={() => {directionStore.clear(); setConfirmClear(false); setMessage('Cleared all recorded flicks.');}}>Delete {records.length} flicks</Button><Button onClick={() => setConfirmClear(false)}>Keep them</Button></>
+        : <Button onClick={() => setConfirmClear(true)}>Clear recorded flicks</Button>}</div>}
+    </div>
+  </div></section>;
 }

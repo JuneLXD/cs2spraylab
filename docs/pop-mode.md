@@ -12,7 +12,9 @@ ones every other range drill uses.
   (a third, two thirds and all of `popVectorReach`, 4-20 degrees, default 12, limited so targets stay above the floor) once each in
   shuffled order. Defaults: 10 cm targets at 5 m (about 1.1 degrees). A target not hit in 4 s, or whose profile setting changes
   mid-flick, is withdrawn and set aside. Code: `pop-vector.ts` (exercise), `aim-vector.ts` (analysis), `direction-store.ts`
-  (browser storage, key `spraylab.direction.v1`, newest 3,000 flicks), `ui/screens/DirectionCalibration.tsx` (results).
+  (browser storage, key `spraylab.direction.v1`, newest 3,000 flicks), `ui/screens/DirectionCalibration.tsx` (results). Since
+  2026-10-30 the results (chart, fitted profile, gap report, blind test, Raw Accel export and the profile switches) are part of
+  the Aim tab's report (`docs/aim-report.md`); Pop's setup shows the flick count and a button to open the tab.
 - Analysis (`analyzeFlick`): `Simulation.aim()` records every mouse event during a flick in mouse-space degrees, both without and
   with the profile. The movement is resampled every 2 ms (each event spread over at most one 60 Hz frame) and Gaussian-smoothed
   (8 ms). The first movement is the first push past 30% of the largest; it starts at 5% of its own peak speed (reaction) and ends
