@@ -1,7 +1,7 @@
 import {memo} from 'react';
-import {Backpack, Crosshair, Gem, Gauge, History, ListPlus, Maximize, Minimize, Play, Settings2, Volume2, VolumeX} from 'lucide-react';
+import {Backpack, Crosshair, Gem, Gauge, History, ListPlus, Maximize, Minimize, Play, Settings2, Target, Volume2, VolumeX} from 'lucide-react';
 import {IconButton} from './primitives';
-export type MenuScreen = 'play' | 'home' | 'results';
+export type MenuScreen = 'play' | 'home' | 'results' | 'aim';
 export const TopNav = memo(function TopNav({screen, navigate, loadout, armory, session, settings, changelog, changelogOpen, count, fps, volume, toggleFps, mute, setVolume, fullscreen, fullscreenActive = false}: {
   screen: MenuScreen | 'game' | 'loadout' | 'session'; navigate: (screen: MenuScreen) => void;
   loadout: () => void; armory: () => void; session: () => void; settings: () => void; changelog: () => void;
@@ -18,6 +18,7 @@ export const TopNav = memo(function TopNav({screen, navigate, loadout, armory, s
       <button aria-current={screen === 'loadout' ? 'page' : undefined} onClick={loadout}><Backpack size={19}/><span>Loadout</span></button>
       <button onClick={armory}><Gem size={19}/><span>Armory</span></button>
       <button aria-current={screen === 'session' || screen === 'results' ? 'page' : undefined} onClick={session}><History size={19}/><span>Session</span><span className="count">{count}</span></button>
+      <button aria-current={screen === 'aim' ? 'page' : undefined} onClick={() => navigate('aim')}><Target size={19}/><span>Aim</span></button>
     </nav>
     <div className="app-actions"><button className="changelog-button" onClick={changelog} aria-label="Changelog" title="Changelog" aria-expanded={changelogOpen} aria-haspopup="dialog"><ListPlus size={17}/><span>Changelog</span></button>
       <IconButton label="Toggle FPS counter" aria-pressed={fps} onClick={toggleFps}><Gauge size={18}/></IconButton>

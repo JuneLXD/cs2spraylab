@@ -486,6 +486,11 @@ export const latestChanges = {
     {id: 'pop-3d-balls', title: 'Pop: shaded 3D balls', items: [
       'Turn on 3D balls for shaded spheres with highlights. The option works in every Pop mode and saves with your presets.',
     ]},
+    {id: 'aim-report', title: 'Aim report for every mode', items: [
+      'A new Aim tab reports on your aim after any mode: your time to hit and where it goes (reaction, first movement, adjusting, waiting on target), where first movements land by flick size, and your crosshair placement.',
+      'It checks shooting while moving: shots fired standing, after a stop, moving or in the air with their hit rates, whether you stopped with the opposite key or by letting go, and whether you fired before you were accurate.',
+      'It also measures your clicks, gives up to three tips from the numbers, compares with your last session in the same mode and keeps the latest 60 reports in this browser.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

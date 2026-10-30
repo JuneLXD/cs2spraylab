@@ -41,8 +41,9 @@ export type PopConfig = {variant: PopVariant; motionSpeed: number; motionRadius:
   respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
 export type PopBall = {id: number; x: number; y: number; z: number; radius: number; hits: number; vx: number; vy: number};
-/** `wallbang` is true when the bullet came through the peek wall to reach the ball. */
-export type PopHit = {ball: PopBall; point: Vec; distance: number; popped: boolean; wallbang: boolean};
+/** `wallbang` is true when the bullet came through the peek wall to reach the ball; `life` is the ball's life when it was hit
+ * (see `PopField.life`). */
+export type PopHit = {ball: PopBall; point: Vec; distance: number; popped: boolean; wallbang: boolean; life: number};
 /** Where a bullet met a face of the peek wall: distance along the ray (m), the point, the face's outward normal and the
  * damage the bullet carried at that face (an entry's is before the wall takes its share, an exit's after). */
 export type PopWallContact = {distance: number; point: Vec; normal: Vec; damage: number};
@@ -203,6 +204,9 @@ export class PopField {
   /** Balls the pad brought back since the engine last asked, for its trigger sound and flash. */
   private padReturned = 0;
   private nextId = 1;
+  /** Micro Flicks keeps one ball and moves it after every pop: each move starts a new life of it, a new target for the aim
+   * report. Other balls keep life 0. */
+  private lives = new Map<number, number>();
   private flickMotion?: {at: number; from: {x: number; y: number}; to: {x: number; y: number}};
   /** Center Return's fixed marker is an aim gate, never a scored/shootable ball. */
   readonly center?: Vec & {radius: number};
@@ -238,6 +242,7 @@ export class PopField {
     else if (!this.center) for (let i = 0; i < config.count; i++) this.spawn();
   }
   get moving() {return !!this.motion || !!this.center || !!this.flickMotion || axisMoves(this.config.x) || axisMoves(this.config.y);}
+  life(id: number) {return this.lives.get(id) ?? 0;}
   /** Fixed center dot under the actual crosshair ray, independent of shots/spread. */
   aimedAtCenter(origin: Vec, direction: Vec) {
     const center = this.center;
@@ -486,7 +491,7 @@ export class PopField {
       const t = -b - Math.sqrt(discriminant);
       if (t < 0 || t > limit) continue;
       if (!nearest || t < nearest.distance) nearest = {ball, distance: t, popped: false, wallbang: !!pass?.exit && t > pass.exit.distance,
-        point: {x: origin.x + direction.x * t, y: origin.y + direction.y * t, z: origin.z + direction.z * t}};
+        point: {x: origin.x + direction.x * t, y: origin.y + direction.y * t, z: origin.z + direction.z * t}, life: this.life(ball.id)};
     }
     return nearest;
   }
@@ -494,6 +499,7 @@ export class PopField {
     nearest.popped = true;
     if (this.config.variant === 'wide') {
       this.pops++; nearest.ball.hits = 0; this.startFlick(nearest.ball, time);
+      this.lives.set(nearest.ball.id, this.life(nearest.ball.id) + 1);
       return nearest;
     }
     this.balls = this.balls.filter(ball => ball !== nearest!.ball); this.travel.delete(nearest.ball.id); this.motion?.remove(nearest.ball.id);
@@ -513,7 +519,7 @@ export class PopField {
   /** How many balls stepping onto the pad brought back since the last call (0 when it has not triggered). */
   drainPadTrigger() {const returned = this.padReturned; this.padReturned = 0; return returned;}
   reset() {
-    this.flickMotion = undefined;
+    this.flickMotion = undefined; this.lives.clear();
     this.balls = []; this.popped = []; this.pending = []; this.travel.clear(); this.motion?.clear(); this.onPad = undefined; this.padReturned = 0;
     this.pops = this.hits = this.shots = this.heldSeconds = this.onTargetSeconds = 0; this.holdTarget = undefined;
     this.cluster = undefined; this.nextClusterAt = undefined; this.clustersCleared = 0;

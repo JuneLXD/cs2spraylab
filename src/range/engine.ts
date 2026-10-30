@@ -1,5 +1,7 @@
-import {holdPop} from './pop';
+import {holdPop, popVariants} from './pop';
 import {directionStore} from './direction-store';
+import {aimReport, AimRecorder} from './aim-report';
+import {aimReportStore} from './aim-report-store';
 import {createPopSphereMaterial} from './pop-sphere-material';
 import * as THREE from 'three';
 import {popFrameGeometry} from './pop-geometry';
@@ -9,7 +11,7 @@ import {followCrosshairDirection, followCrosshairOffset} from './crosshair-follo
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { clone as cloneSkeleton } from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { Settings, MeasuredProfile, Weapon, gameData, type Viewmodel } from './config';
+import { Settings, MeasuredProfile, Weapon, gameData, modeNames, type Viewmodel } from './config';
 import { DEG, direction, Simulation, Shot, Vec, VERTICAL_FOV, TARGET_Z, type Result } from './simulation';
 import { UNIT } from './actor-physics';
 import { dynamicCrosshairGap } from './crosshair-spread';
@@ -66,6 +68,8 @@ function scoringMeshes(model: THREE.Object3D) {
 }
 export class RangeEngine {
   sim: Simulation;
+  /** The aim report's recorder for the current session (see aim-report.ts). */
+  private readonly aimLog = new AimRecorder();
   renderer: THREE.WebGLRenderer;
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(VERTICAL_FOV, 1, .025, 250);
@@ -183,7 +187,7 @@ export class RangeEngine {
     this.cues.forEach((cue, i) => { cue.className = `aim-cue ${i ? 'next' : 'now'}`; cue.style.color = i ? GUIDE_COLORS.next : GUIDE_COLORS.now; cue.innerHTML = `<i></i><span>${i ? 'NEXT' : 'NOW'}</span>`; host.append(cue); });
     this.cueLabels = this.cues.map(cue => cue.querySelector('span')!);
     this.hitCaption.className = 'hit-caption'; host.append(this.hitCaption);
-    this.sim = new Simulation(settings);
+    this.sim = new Simulation(settings); this.sim.aimLog = this.aimLog;
     this.binds = new BindRuntime(settings.keyboard, event => this.onBind(event));
     this.applyViewmodel(settings.viewmodel);
     this.renderer = createGameRenderer({antialias: qualityPolicy(settings.quality).shadows, lowLatency: settings.lowLatency});
@@ -486,7 +490,20 @@ export class RangeEngine {
     if (this.attemptId) this.progression?.cancelAttempt(this.attemptId);
     this.attemptId = null; this.attemptRevision++; this.attemptTargets.clear();
   }
-  reset() {this.cancelProgression(); this.viewAnimations.get(this.sim.equipped)?.cancel(); this.sim.reset(); this.clearImpacts();}
+  reset() {this.saveAim(true); this.cancelProgression(); this.viewAnimations.get(this.sim.equipped)?.cancel(); this.sim.reset(); this.clearImpacts();}
+  /** Saves this session's aim report for the Aim tab (on a pause, and when the session ends); `finish` starts the next session.
+   * A setup change that restarts the drill ends the session, so each report covers one mode and setup. */
+  saveAim(finish = false) {
+    const log = this.sim?.aimLog, settings = this.sim?.settings;
+    if (!log || !settings) return;
+    // Classic is plain Pop; every other exercise is named after it.
+    const exercise = settings.mode === 'pop' && settings.popVariant !== 'classic' ? popVariants.find(variant => variant.id === settings.popVariant)?.name : undefined;
+    const label = exercise ? `Pop · ${exercise}` : modeNames[settings.mode];
+    // Pop's targets appear away from the crosshair on purpose; the drills' heads appear where you should pre-aim.
+    const report = aimReport(log, {mode: settings.mode, label, weapon: loadoutWeapon(settings), placement: settings.mode !== 'pop'});
+    if (report) aimReportStore.save(report);
+    if (finish) log.restart();
+  }
   trimModelCache() {
     // Embedded glove textures are duplicated per GLB, so only the loadout's assemblies stay on the GPU.
     const loadout = new Set(this.loadoutEquipment());
@@ -530,7 +547,7 @@ export class RangeEngine {
       this.mouseDemonstration.mesh.visible = settings.showMousePath && this.guidesAllowed && settings.mouseYaw !== 0 && settings.mousePitch * settings.sensitivityYScale !== 0;
       this.syncPop(); this.resize(); return;
     }
-    this.clearInput?.(); this.sim.configure(settings, measured); this.syncPop(true);
+    this.saveAim(true); this.clearInput?.(); this.sim.configure(settings, measured); this.syncPop(true);
     if (changedWeapon) {this.sim.slot = settings.primaryEnabled ? 1 : 2; this.sim.pattern = recoilPattern(loadoutWeapon(settings), measured);}
     this.updateDemonstration();
     this.clearImpacts(); this.syncTargets(); this.resize();
@@ -678,6 +695,8 @@ export class RangeEngine {
     this.hitCaption.textContent = head ? 'HEADSHOT' : hit ? 'BODY HIT' : physicalHit ? 'WRONG TARGET' : 'MISS';
     this.hitCaption.style.color = this.hitmarker.style.color;
     if (hit) {
+      // A drill's head or the spray dummy stays up after a hit: the report counts the hit, never a kill.
+      this.sim.aimLog?.hit(shot.aim, this.sim.aimTargetKey(expectedIndex), head, false);
       this.attemptTargets.add(expectedIndex);
       this.audio.playHit(head, false, false, this.sim.settings.volume);
       this.sim.hits++;
@@ -702,6 +721,7 @@ export class RangeEngine {
     for (const dir of shot.pelletDirections ?? [shot.direction]) {
       const pass = bullet && pop.wallPass(shot.origin, dir, shot.maxDistance, bullet);
       const hit = pop.hit(shot.origin, dir, shot.maxDistance, shot.at, pass);
+      if (hit && !shot.melee) this.sim.aimLog?.hit(shot.aim, this.sim.popAimKey(hit.ball.id, hit.life), false, hit.popped);
       const blocked = hit ? undefined : pass ? (pass.exit ? undefined : pass.entry) : pop.wallHit(shot.origin, dir, shot.maxDistance);
       const end = hit ? vector(hit.point) : blocked ? vector(blocked.point) : this.popBackdropPoint(shot.origin, dir, shot.maxDistance);
       if (hit) {if (hit.popped) popped++; else struck++; if (hit.wallbang) banged++;}
@@ -942,7 +962,7 @@ export class RangeEngine {
     this.enterRevision = (this.enterRevision ?? 0) + 1; this.entering = false;
     this.shortcuts?.release();
     this.clearInput?.();
-    this.sim.publishPopResult(); this.sim.cancel();
+    this.sim.publishPopResult(); this.sim.cancel(); this.saveAim();
     this.hitTime = 0;
     this.hitmarker.style.opacity = this.hitCaption.style.opacity = '0';
     if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
@@ -1198,7 +1218,7 @@ export class RangeEngine {
   }
   dispose() {
     this.cancelProgression();
-    this.disposed = true; this.pause(); cancelAnimationFrame(this.frame); this.observer.disconnect();
+    this.disposed = true; this.pause(); this.saveAim(true); cancelAnimationFrame(this.frame); this.observer.disconnect();
     this.cleanup.forEach(fn => fn()); this.audio.dispose();
     this.meter.dispose(); this.impactClouds?.forEach(cloud => cloud.dispose());
     this.shotEffects.dispose(); this.viewFlashes.dispose();

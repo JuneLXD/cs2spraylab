@@ -6,7 +6,9 @@ import {MeshoptDecoder} from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import {clone as cloneSkeleton} from 'three/examples/jsm/utils/SkeletonUtils.js';
 import {DEG, UNIT, type Vec} from '../actor-physics';
 import {RangeAudio} from '../audio';
-import {gameData,loadoutWeapon,resolutionPixelRatio,viewAspect, type Settings, type Viewmodel, type Weapon} from '../config';
+import {gameData,loadoutWeapon,modeNames,resolutionPixelRatio,viewAspect, type Mode, type Settings, type Viewmodel, type Weapon} from '../config';
+import {aimReport, AimRecorder} from '../aim-report';
+import {aimReportStore} from '../aim-report-store';
 import {requestRawLock} from '../input';
 import {InputClock, inputTimestamp} from '../input-clock';
 import {createGameRenderer} from '../render-context';
@@ -210,6 +212,8 @@ export class DuelEngine {
   private blitz?: BlitzConfig;
   private blitzArenas: BlitzArenaSet['arenas'] = [];
   private blitzRun = {index: 0, clears: 0, deaths: 0};
+  /** The aim report's recorder for the current session (see aim-report.ts); every new simulation reports to it. */
+  private readonly aimLog = new AimRecorder();
   private blitzLevel?: SkillLevel;
   private blitzHistory: BlitzHistory[] = [];
   private blitzRecorded = false;
@@ -234,7 +238,7 @@ export class DuelEngine {
       this.config = blitzDuelConfig(blitz.config, this.blitzLevel); this.blitzHistory = loadBlitzHistory(); this.blitzRun = this.blitzStart();
     }
     this.cosmeticKey = JSON.stringify(progression?.getSnapshot().profile.equipped);
-    this.sim = this.createSimulation();
+    this.sim = this.createSimulation(); this.sim.aimLog = this.aimLog;
     this.radar = new DuelRadar(host);
     this.scope = new ScopeOverlay(host);
     this.damageFeedback = new DamageFeedback(host);
@@ -788,6 +792,18 @@ export class DuelEngine {
     this.restart();
   }
 
+  /** Saves this session's aim report for the Aim tab (on a pause, at the end of a round or timed session); `finish` starts the
+   * next session. Rounds of one duel session share a report; a setup change or a new session starts another. */
+  private saveAim(finish = false) {
+    const log = this.sim?.aimLog;
+    if (!log) return;
+    const mode: Mode = this.blitz ? 'blitz' : this.botz ? this.botz.map === 'island' ? 'reflex' : this.botz.map === 'redline' ? 'redline' : 'botz'
+      : this.sim.deathmatch ? 'deathmatch' : 'duel';
+    const report = aimReport(log, {mode, label: modeNames[mode], weapon: loadoutWeapon(this.settings)});
+    if (report) aimReportStore.save(report);
+    if (finish) log.restart();
+  }
+
   /** Saves an Aim Botz session once: when time runs out, or on a new session or exit. */
   private recordBotz() {
     if (!this.botz || this.botzRecorded) return;
@@ -803,6 +819,8 @@ export class DuelEngine {
 
   restart(continuous = false) {
     this.recordBotz(); this.recordBlitz();
+    // A new round keeps the session's aim report going; anything else starts the next one.
+    if (!continuous) this.saveAim(true);
     if (continuous) this.advanceBlitz();
     if (this.attemptId) this.progression?.cancelAttempt(this.attemptId);
     this.attemptId = null; this.attemptRevision++;
@@ -815,7 +833,7 @@ export class DuelEngine {
       this.releaseShortcuts();
       if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
     }
-    this.sim = this.createSimulation(); this.viewAir.reset(); this.inputClock.reset(performance.now()); this.kills = this.damage = 0;
+    this.sim = this.createSimulation(); this.sim.aimLog = this.aimLog; this.aimLog.segment(); this.viewAir.reset(); this.inputClock.reset(performance.now()); this.kills = this.damage = 0;
     this.shell.scale.set(this.config.arenaScale, 1, this.config.arenaScale);
     this.damageFeedback.clear(); this.wasReloading = false;
     this.roundFlow.reset(); this.deaths.clear(); this.playerGeneration = 1;
@@ -875,6 +893,7 @@ export class DuelEngine {
     this.releaseShortcuts();
     this.sim.command(0, {fireHeld: false});
     if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
+    this.saveAim();
     this.report();
   }
 
@@ -916,7 +935,10 @@ export class DuelEngine {
         [dx, dy] = applyDirectionProfile(dx, dy, this.settings.directionProfile, this.settings.directionStrength);
       const look = mouseLook(dx, dy, this.settings, !mouse);
       const scale = actions.sensitivityAt(this.sim.time + this.sim.accumulator, mouse ? this.settings.keyboard.zoomSensitivity : 1);
-      if (dx || dy) this.sim.command(0, {yawDelta: look.yaw * scale, pitchDelta: look.pitch * scale});
+      if (dx || dy) {
+        this.sim.command(0, {yawDelta: look.yaw * scale, pitchDelta: look.pitch * scale});
+        this.sim.aimLog?.look(this.sim.time + this.sim.accumulator, -look.yaw * scale / DEG, -look.pitch * scale / DEG);
+      }
     }) as EventListener, {capture: true});
     this.listen(document, 'pointerup', ((event: PointerEvent) => {
       if (this.pointer !== event.pointerId) return;
@@ -1114,12 +1136,12 @@ export class DuelEngine {
           event.victim === 0 ? undefined : this.soundLocation(event.point));
       } else if (event.kind === 'round' && this.botz) {
         // A timed session is over: free the mouse so New session can be clicked.
-        this.recordBotz(); this.recordBlitz();
+        this.recordBotz(); this.recordBlitz(); this.saveAim();
         this.binds.releaseAll(); this.bindHandle?.reset(); this.updateMovement(); this.releaseShortcuts();
         this.sim.command(0, {fireHeld: false});
         if (document.pointerLockElement === this.renderer.domElement) document.exitPointerLock();
       } else if (event.kind === 'round') {
-        this.roundFlow.finish();
+        this.roundFlow.finish(); this.saveAim();
         if (this.attemptId) this.progression?.completeDuel(this.attemptId, {
           completion: 'completed', outcome: event.outcome, activeSeconds:this.sim.time, review: this.sim.coach.review(),
           opponents: this.sim.actors.slice(1).map(actor => ({id: String(actor.id), healthDamage: this.attemptDamage.get(actor.id) ?? 0, killed: !actor.alive})),
@@ -1385,7 +1407,7 @@ export class DuelEngine {
   }
 
   dispose() {
-    this.recordBotz(); this.recordBlitz();
+    this.recordBotz(); this.recordBlitz(); this.saveAim(true);
     if (this.attemptId) this.progression?.cancelAttempt(this.attemptId);
     this.disposed = true; cancelAnimationFrame(this.frame); this.pause(); this.releaseShortcuts(); this.observer.disconnect();
     this.cleanup.forEach(fn => fn()); this.clearEffects(); this.audio.dispose(); this.damageFeedback.dispose();

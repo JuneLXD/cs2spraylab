@@ -41,6 +41,8 @@ import {BOTZ_PLAYER_SPAWN, BotzSpawner, BotzStrafe, emptyBotzStats, sanitizeBotz
   type BotzConfig, type BotzStats} from './botz';
 import {atMouth, REFLEX_ISLAND, REFLEX_PLAYER_SPAWN, REFLEX_REACH, REFLEX_TOUCH, ReflexCrouch, reflexRing, ReflexSpawner,
   ReflexStrafe, reflexTarget, type ReflexRun} from './reflex';
+import type {AimPlayer, AimRecorder, AimTarget} from '../aim-report';
+import type {VisibleEnemy} from './perception';
 
 type CombatActor = ActorKinematics & TaggingState & {
   id: number;
@@ -173,6 +175,13 @@ export class DuelSimulation {
   /** Blitz: the arena's swingers wait at their hold spots until their swing time, then set off for you. */
   readonly blitz?: {config: BlitzConfig; arena: BlitzArena; level: SkillLevel};
   private blitzLives = new Map<number, {swingAt: number; swung: boolean; stopped: boolean; swinger: BlitzSwinger}>();
+  /** The aim report's recorder, when the engine keeps one. It sees the bots you can see (sampled every four steps, as the coach
+   * does), each of your shots and what they hit. `triggerShots` counts the shots of the current trigger press. */
+  aimLog?: AimRecorder;
+  private aimSight = new Set<number>();
+  private nextSightAt = 0;
+  private triggerShots = 0;
+  private aimShots = new Map<number, number>();
 
   constructor(config: DuelConfig = sanitizeDuelConfig({}), private seed = 1, arena: Arena = testArena(), private playerWeapon: Weapon = 'ak47', private sidearm: Pistol = 'usp', private hasPrimary = true, botz?: BotzConfig,
     blitz?: {config: BlitzConfig; arena: BlitzArena; level: SkillLevel}) {
@@ -402,11 +411,9 @@ export class DuelSimulation {
     if (!playerOnly && !this.botz && this.time + 1e-10 >= this.nextThinkAt) {
       this.nextThinkAt += STEP * 4;
       const shadows=actorShadows(actorView,this.arena);
-      this.coach.observe(this.time, actorView[0], actorView.slice(1).flatMap(opponent => {
-        const visible = observeBot(this.time, actorView[0], [opponent], this.arena,
-          {aspect: this.playerAspect, verticalFov: 2 * Math.atan(.75)}).visible;
-        return visible ? [visible] : [];
-      }));
+      const sighted = this.playerSight(actorView);
+      this.coach.observe(this.time, actorView[0], sighted);
+      if (this.aimLog) this.aimSight = new Set(sighted.map(enemy => enemy.id));
       for (const actor of actorView.slice(1)) {
         if (!actor.alive || this.controlledBots.has(actor.id)) continue;
         const observation=observeBot(this.time, actor, actorView, this.arena, undefined, shadows);
@@ -451,6 +458,10 @@ export class DuelSimulation {
         if(this.boostFeasibility.size>=128)this.boostFeasibility.clear();this.boostFeasibility.set(key,reachable);return reachable;
       });
       this.terrainCommand=this.terrainTactics.plan(this.time,peers,this.arena,this.environment,this.boostPlan?.assignments.map(item=>item.actorId));
+    } else if (!playerOnly && this.botz && this.aimLog && this.time + 1e-10 >= this.nextSightAt) {
+      // Aim Botz has no coach: the aim report samples your sight lines itself, at the coach's rate.
+      this.nextSightAt = this.time + STEP * 4 - 1e-9;
+      this.aimSight = new Set(this.playerSight(actorView).map(enemy => enemy.id));
     }
     for (const actor of this.actors.slice(1)) {
       if (playerOnly) break;
@@ -510,6 +521,7 @@ export class DuelSimulation {
         actor.weapon.actions.secondary(this.time);
       }
       if (actor.footsteps.update(this.time, dt, actor, command)) this.emitSound(actor, 'footstep', actor.position);
+      if (actor.id === 0 && !command.fireHeld && !command.firePressed) this.triggerShots = 0;
       // A generated bot steering command is a new segment on every AI update.
       // Human/controlled input persists across the intervening weapon updates.
       const move = actor.id === 0 || this.controlledBots.has(actor.id) ? advanceActorCommand : advanceActor;
@@ -563,6 +575,8 @@ export class DuelSimulation {
       if (actor.id === 0 && this.botz) {if (fired.kind !== 'melee') this.botzStats.shots++;}
       else if (actor.id === 0) this.coach.shot(this.snapshot()[0]);
       const shotId = this.shotId++;
+      if (actor.id === 0 && this.aimLog && fired.kind !== 'melee')
+        this.aimShots.set(shotId, this.aimLog.shot(this.time, this.aimPlayer(actor), fired.weapon, this.triggerShots++ === 0));
       shots.push({actor, fired, shotId});
       this.lastShotAt.set(actor.id,this.time);
       if (actor.immuneUntil) actor.immuneUntil = 0; // attacking ends spawn protection
@@ -614,6 +628,8 @@ export class DuelSimulation {
         if (brain instanceof TacticalBrain) brain.teammateCallout(victim.position, this.time);
       }
       event.lethal = lethal;
+      if (event.shooter === 0 && victim.side === 'enemy')
+        this.aimLog?.hit(this.aimShots.get(event.shotId), `${victim.id}:${victim.generation}`, event.group === 'head', lethal);
       if (this.deathmatch && lethal) {
         if (event.shooter === 0) this.deathmatchStats.kills++;
         if (victim.id === 0) this.deathmatchStats.deaths++;
@@ -635,6 +651,11 @@ export class DuelSimulation {
       this.coach.hit(event, this.time, this.actors[event.shooter].weapon.id === 'knife');
       this.emit(event);
     }
+    this.aimShots.clear();
+    const you = this.actors[0];
+    if (this.aimLog && dt > 0 && you.alive) this.aimLog.frame(this.time, this.aimPlayer(you), this.actors.filter(bot =>
+      bot.alive && bot.side === 'enemy' && this.aimSight.has(bot.id)).map((bot): AimTarget => ({key: `${bot.id}:${bot.generation}`,
+      point: {x: bot.position.x, y: bot.feet + 1.62 - .45 * (bot.duckAmount ?? 0), z: bot.position.z}, radius: .12})));
     if (this.botz) {
       if (this.botz.sessionSeconds && this.time + 1e-9 >= this.botz.sessionSeconds) {
         this.outcome = 'won'; this.phase = 'result';
@@ -650,6 +671,20 @@ export class DuelSimulation {
 
   private commandBot(actor: CombatActor, patch: Partial<ActorCommand>) {
     actor.command = {...actor.command, ...patch};
+  }
+
+  /** The bots you can see now: a clear sight line inside your field of view (the head height the coach and bots use). */
+  private playerSight(view: DuelActorSnapshot[]): VisibleEnemy[] {
+    return view.slice(1).flatMap(opponent => {
+      const visible = observeBot(this.time, view[0], [opponent], this.arena, {aspect: this.playerAspect, verticalFov: 2 * Math.atan(.75)}).visible;
+      return visible ? [visible] : [];
+    });
+  }
+  /** You as the aim report sees you: eye, view without recoil, velocity, the weapon's running speed, keys and stance. */
+  private aimPlayer(actor: CombatActor): AimPlayer {
+    return {eye: {...actor.position}, yaw: actor.yaw, pitch: actor.pitch, vx: actor.velocity.x, vz: actor.velocity.z,
+      maxSpeed: actor.weapon.actions.stats.speed * UNIT, forward: actor.command.forward, side: actor.command.side,
+      airborne: !(actor.grounded ?? actor.feet === 0), walking: !!actor.command.walk, ducking: !!actor.duckFlag};
   }
 
   /** A fresh Aim Botz life: full health and armor at a new spot, facing you. A Reflex bot waits out of sight for `hold` seconds. */

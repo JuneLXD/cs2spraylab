@@ -1,12 +1,13 @@
 import {mouseAngle, mouseLook} from './mouse-look';
 import {applyDirectionProfile, isNeutralProfile, profileNumbers, scaleProfile, type DirectionProfile} from './aim-vector';
+import type {AimPlayer, AimRecorder, AimTarget} from './aim-report';
 import type {VectorLook} from './pop-vector';
 import { Angle, clamp, gameData, loadoutWeapon, MeasuredProfile, recoilPattern, Settings } from './config';
 import {ViewPunch} from './view-punch';
 import {FootstepCadence} from './footsteps';
 import {advanceActorCommand} from './actor-command';
 import {equipmentForSlot, equipmentStats, isPumpShotgun, knifeModel, ZEUS_RECHARGE_SECONDS, type Equipment, type Slot} from './equipment';
-import {createScenario, DrillCoach, isDrillMode, RANGE_WALLS, REPOSITION_SHOTS, type CoachSample, type DrillMetrics} from './drills';
+import {createScenario, DrillCoach, exposedHead, HEAD_HEIGHT, isDrillMode, RANGE_WALLS, REPOSITION_SHOTS, type CoachSample, type DrillMetrics} from './drills';
 import {WeaponRecovery} from './ballistics';
 import type {RecoilSelection} from './recoil';
 import {DEG, GRAVITY, JUMP_SPEED, SERVER_TICK, STEP, UNIT, airVelocity, groundVelocity, idleInput, tickAligned, type ActorEnvironment, type ActorKinematics, type MoveInput, type Vec} from './actor-physics';
@@ -24,9 +25,12 @@ export const VERTICAL_FOV = 2 * Math.atan(.75) / DEG;
 export const TARGET_Z = -100;
 export const SPAWN_Z = TARGET_Z + 12;
 export type {Vec};
+/** `aim` is the shot's index in the aim report's recorder, for the hit it scores. */
 export type Shot = {index: number; at: number; origin: Vec; direction: Vec; recoil: Angle; equipment?: Equipment; melee?: boolean;
   ordinal: number; kind: 'bullet' | 'pellets' | 'melee' | 'zeus'; attack: 'primary' | 'secondary';
-  maxDistance: number; pelletDirections?: Vec[]; firstSlash?: boolean};
+  maxDistance: number; pelletDirections?: Vec[]; firstSlash?: boolean; aim?: number};
+/** The aim report's on-target zone around a head (metres): the native head hitbox is a 4.3-unit capsule. */
+export const AIM_HEAD_RADIUS = .12;
 export type RangeWeaponActionEvent = (ReloadActionEvent | {kind: 'zeus-discharge' | 'zeus-ready'; at: number}) & {equipment: Equipment};
 export type ImpactSample = { x: number; y: number; hit: boolean; head: boolean; bullet: number };
 export type Result = { id: string; weapon: Equipment; mode: Settings['mode'] | 'tracking'; shots: number; hits: number; heads: number; seconds: number; tracking: number; date: string; samples: ImpactSample[]; drill?: DrillMetrics; pokeball?: {variant?: 'pokeball' | 'driftts'; pops: number; heldSeconds: number; onTargetSeconds: number} };
@@ -98,6 +102,8 @@ export class Simulation {
   }
   /** Pop mode: the balls and the session tally; `popStartedAt` is the first shot of the session. */
   pop?: PopField; popStartedAt = 0; private popPublishedShots = 0; private popPlaced = false;
+  /** The aim report's recorder, when the engine keeps one; `popGeneration` tells one Pop field's balls from the next's. */
+  aimLog?: AimRecorder; private popGeneration = 0;
   drill?: DrillCoach; drillRound = 0; drillPassed = 0; drillCompleted = 0;
   drillResult?: DrillMetrics; nextDrillAt = 0; repositionFrom?: Vec; repositionYaw = 0; drillRevision = 0;
   get equipped() { return equipmentForSlot(this.slot, this.settings.weapon, this.settings.sidearm); }
@@ -212,7 +218,7 @@ export class Simulation {
       this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
     } }
     if (s.mode === 'pop') {
-      this.pop = new PopField(popConfig(s), POP_SPAWN, this.random ?? Math.random, this.time); this.popPublishedShots = 0;
+      this.pop = new PopField(popConfig(s), POP_SPAWN, this.random ?? Math.random, this.time); this.popPublishedShots = 0; this.popGeneration++;
       // A fresh simulation starts in Pop too (the constructor configures with the mode already set).
       if (changedMode || !this.popPlaced || changedWall) {
         this.popPlaced = true;
@@ -346,9 +352,35 @@ export class Simulation {
       this.pop.vector.record(this.time + this.accumulator, dx * kx, dy * ky, x * kx, y * ky);
     }
     this.drill?.mouse(Math.hypot(look.yaw, look.pitch)*scale/DEG);
+    const pitch = this.pitch;
     this.yaw += look.yaw * scale;
     this.pitch = clamp(this.pitch + look.pitch * scale, -89 * DEG, 89 * DEG);
+    this.aimLog?.look(this.time + this.accumulator, -look.yaw * scale / DEG, (pitch - this.pitch) / DEG);
   }
+  /** You as the aim report sees you: eye, view without recoil, velocity, the weapon's running speed, keys and stance. */
+  aimPlayer(): AimPlayer {
+    return {eye: {...this.position}, yaw: this.yaw, pitch: this.pitch, vx: this.velocity.x, vz: this.velocity.z, maxSpeed: this.stats.speed * UNIT,
+      forward: this.input.forward, side: this.input.side, airborne: !this.grounded, walking: this.input.walk, ducking: this.duckFlag};
+  }
+  /** A Pop ball's key in the aim report: Micro Flicks' one ball starts a new life at every pop. */
+  popAimKey(id: number, life = 0) {return `pop:${this.popGeneration}:${id}:${life}`;}
+  /** The targets in view for the aim report: Pop's balls (not behind a solid peek wall), a drill's head while it is exposed, or
+   * the spray drills' dummies, which are never flick-analysed. */
+  aimTargets(): AimTarget[] {
+    const pop = this.pop, eye = this.position;
+    if (pop) return pop.balls.filter(ball => {
+      if (!pop.wall || pop.config.wallbang) return true;
+      const dx = ball.x - eye.x, dy = ball.y - eye.y, dz = ball.z - eye.z, distance = Math.hypot(dx, dy, dz);
+      return distance < 1e-6 || !pop.wallHit(eye, {x: dx / distance, y: dy / distance, z: dz / distance}, distance);
+    }).map(ball => ({key: this.popAimKey(ball.id, pop.life(ball.id)), point: ball, radius: ball.radius}));
+    if (this.drill) return this.drill.visible ? [{key: this.aimTargetKey(0), point: exposedHead(this.drill.scenario), radius: AIM_HEAD_RADIUS}] : [];
+    return Array.from({length: this.settings.mode === 'transfer' ? 2 : 1}, (_, index) => {
+      const base = this.targetPosition(index);
+      return {key: this.aimTargetKey(index), point: {x: base.x, y: base.y + HEAD_HEIGHT, z: base.z}, radius: AIM_HEAD_RADIUS, persistent: true};
+    });
+  }
+  /** The aim report's key for the range target a shot scored on: each drill repetition is a target of its own. */
+  aimTargetKey(index: number) {return this.drill ? `drill:${this.drillRevision}` : `range:${index}`;}
   /** Mouse/key attack edge. Training's automatic start remains a separate action. */
   pressTrigger(alternate = false) {
     this.triggerHeld = true; this.triggerAlternate = alternate;
@@ -512,7 +544,8 @@ export class Simulation {
       if (this.pop.center) this.pop.advance(this.time, this.position, aim, this.pop.vector ? this.vectorLook() : undefined);
       else if (this.firing) {
         if (!this.pop.heldSeconds) this.popStartedAt = this.time - dt;
-        this.pop.hold(this.position, aim, dt, this.time);
+        const held = this.pop.hold(this.position, aim, dt, this.time);
+        if (held?.popped) this.aimLog?.clear(this.popAimKey(held.ball.id, held.life), this.time);
       }
     }
     if (this.settings.moving && !this.drill) {
@@ -554,6 +587,8 @@ export class Simulation {
       Math.max(this.shotReady.get(this.equipped) ?? 0, this.lastShotAt + this.stats.cycle, this.equipReadyAt, this.actions.readyAt)) this.reload(this.reloadHeld, true);
     if (!this.measured || this.slot !== 1) recovery.setParameters(this.stats);
     recovery.finishAccuracy();
+    // Held-fire Pop exercises fire no shots: the crosshair touching a ball while fire is held is its hit.
+    if (this.aimLog && dt > 0) this.aimLog.frame(this.time, this.aimPlayer(), this.aimTargets(), !!this.pop && holdPop(this.pop.config.variant) && this.firing);
   }
   fire() {
     if (holdPop(this.pop?.config.variant)) return;
@@ -590,6 +625,8 @@ export class Simulation {
       airborne:!this.grounded,verticalSpeedUnits:this.verticalVelocity/UNIT,spread:this.settings.spread,
       weaponId:this.equipped,alternateFire:this.actions.alternateFire,recoilIndex:this.recovery.index,seed:ordinal+1}, weapon.pellets, this.random);
     const index = this.shots++;
+    // Before the shot moves anything: you and your speed as you fired. The first shot of each trigger press is a click.
+    const aim = this.aimLog?.shot(this.time, this.aimPlayer(), this.equipped, index === 0);
     if (this.pop) {if (!this.pop.shots) this.popStartedAt = this.time; this.pop.shots++;}
     this.reloadState.ammo--;
     if (this.pop) this.refillPopAmmo(); this.shotOrdinals.set(this.equipped, ordinal + 1);
@@ -607,7 +644,7 @@ export class Simulation {
     this.recovery.finishAccuracy();
     this.onShot({index, ordinal, at:this.time, origin:{...this.position}, direction:directions[0], recoil:this.recoil, equipment:this.equipped,
       kind:this.equipped==='zeus'?'zeus':directions.length>1?'pellets':'bullet', attack:this.actions.alternateFire?'secondary':'primary',
-      maxDistance:weapon.range*UNIT, ...(directions.length>1?{pelletDirections:directions}:{})});
+      maxDistance:weapon.range*UNIT, ...(directions.length>1?{pelletDirections:directions}:{}), ...(aim === undefined ? {} : {aim})});
     if (this.drill && !this.drill.finished) {
       const sample = this.samples[this.samples.length-1];
       this.drill.record(this.coachSample(),!!sample?.hit,!!sample?.head);

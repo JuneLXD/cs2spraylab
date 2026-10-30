@@ -3,6 +3,7 @@ import {download} from './ui/download';
 import {HomeScreen} from './ui/screens/HomeScreen';
 import {SessionScreen} from './ui/screens/SessionScreen';
 import {ResultsScreen} from './ui/screens/ResultsScreen';
+import {AimScreen} from './ui/screens/AimScreen';
 import {readSessionHistories, recentSessions} from './ui/session-data';
 import type {DuelStatus} from './duel/DuelEngine';
 import {drillSetupSummary, rangeDrillDefaults} from './ui/drill-setup';
@@ -109,6 +110,7 @@ export default function RangeApp() {
   const navigate = useCallback((next: MenuScreen) => {engine.current?.pause(); duel.current?.pause(); setPanel(null); setScreen(next);}, []);
   const home = useCallback(() => navigate('home'), [navigate]);
   const play = useCallback(() => navigate('play'), [navigate]);
+  const aim = useCallback(() => navigate('aim'), [navigate]);
   const openLoadout = useCallback(() => {setLoadoutSlot(undefined); open('weapons');}, [open]);
   const openLoadoutSlot = useCallback((slot: LoadoutSlot) => {setLoadoutSlot(slot); open('weapons');}, [open]);
   const openSettings = useCallback(() => open('settings'), [open]);
@@ -297,7 +299,8 @@ export default function RangeApp() {
           startLabel={settings.mode === 'hearing' ? 'Start hearing practice' : isDuelEngineMode(settings.mode) ? `${hasSession ? 'Resume' : settings.mode === 'duel' || settings.mode === 'deathmatch' ? 'Enter' : 'Start'} ${settings.mode === 'duel' ? 'duel' : settings.mode === 'deathmatch' ? 'deathmatch' : settings.mode === 'reflex' ? 'reflex training' : settings.mode === 'redline' ? 'aim_redline' : settings.mode === 'blitz' ? 'Blitz' : 'Aim Botz'}` : 'Enter range'}
           start={start} newSession={newSession} loadout={openLoadoutSlot} setupSummary={setupSummary} openSettings={openSettings} tutorial={learn} reset={reset} recent={recent} history={openHistory}/>}
         {screen === 'home' && <HomeScreen settings={settings} profile={progressionState.profile} rows={recent} ready={settings.mode === 'hearing' || (isDuelEngineMode(settings.mode) ? duelMenu.ready : assetReady)} start={start} setup={play} setupSummary={setupSummary} loadout={openLoadoutSlot} armory={openAgent} history={openHistory} changelog={openChangelog} tutorial={learn}/>}
-        {screen === 'results' && completed && <ResultsScreen setupSummary={completed.setup} status={completed.status} mode={completed.mode} settings={settings} profile={progressionState.profile} home={home} setup={play} newSession={newSession}/>}
+        {screen === 'results' && completed && <ResultsScreen setupSummary={completed.setup} status={completed.status} mode={completed.mode} settings={settings} profile={progressionState.profile} home={home} setup={play} newSession={newSession} aim={aim}/>}
+        {screen === 'aim' && <AimScreen mode={settings.mode}/>}
         {setupHint && !panel && <div className="settings-hint" role="status"><button className="hint-action" aria-label="Customize your CS2 settings" onClick={openSettings}><b>Match your CS2 setup</b><span id="settings-hint-text">Sensitivity, crosshair & audio</span></button><ArrowUp className="hint-arrow" size={22}/><button className="icon-button" aria-label="Dismiss settings hint" onClick={() => {setSetupHint(false); stage.current?.querySelector<HTMLButtonElement>('.settings-button')?.focus();}}><X size={16}/></button></div>}
       </div>}
       {screen !== 'game' && (error || duelMenu.error) && <div className="sl-engine-error" role="alert"><Shield size={24}/><p>{error || duelMenu.error}</p><button onClick={() => {if (isDuelEngineMode(settings.mode)) location.reload(); else {setError(''); setGeneration(value=>value+1);}}}>Reload range</button></div>}

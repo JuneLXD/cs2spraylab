@@ -105,8 +105,26 @@ const GRID = .002, FRAME = 1 / 60, SIGMA = 4;
  * movement, already moving when the target appeared, a start under 80 ms (anticipated) and a first movement that went far off
  * (under 20% or over 250% of the distance, or more than 45 degrees off). */
 export function analyzeFlick(spawn: number, end: number, target: Point, events: readonly FlickEvent[]): FlickAnalysis {
-  const amplitude = Math.hypot(target.x, target.y);
-  const fail = (reason: string, reaction = 0, peak = 0): FlickAnalysis => ({valid: false, reason, reaction, peak, base: {x: 0, y: 0}, out: {x: 0, y: 0}, corrections: 0});
+  const amplitude = Math.hypot(target.x, target.y), segment = segmentMovement(spawn, end, amplitude, events);
+  const {reaction, peak} = segment;
+  const fail = (reason: string): FlickAnalysis => ({valid: false, reason, reaction, peak, base: {x: 0, y: 0}, out: {x: 0, y: 0}, corrections: 0});
+  if (!segment.valid) return fail(segment.reason ?? 'unknown');
+  const {out} = segment, ux = target.x / amplitude, uy = target.y / amplitude;
+  const along = (out.x * ux + out.y * uy) / amplitude;
+  if (along < .2 || along > 2.5) return fail('far off');
+  if (Math.abs(Math.atan2(ux * out.y - uy * out.x, ux * out.x + uy * out.y)) > 45 * DEG) return fail('wrong direction');
+  return {valid: true, reaction, peak, base: segment.base, out, corrections: segment.corrections};
+}
+
+/** A first movement found by `segmentMovement`: when it started (`reaction`, seconds after `spawn`) and ended (`stop`, simulation
+ * seconds), its peak speed (degrees per second), where it ended without (`base`) and with (`out`) the profile, and the corrections
+ * after it. */
+export type MovementSegment = {valid: boolean; reason?: string; reaction: number; peak: number; stop: number; base: Point; out: Point; corrections: number};
+/** The segmentation behind `analyzeFlick`, for a flick of `amplitude` degrees, without the checks that need the target's direction.
+ * `anticipation` is the shortest believable reaction (s): a start sooner than that after a target appears was a guess. Pass 0 when
+ * the target was already in view, so a flick that starts the moment the previous target dies is not set aside. */
+export function segmentMovement(spawn: number, end: number, amplitude: number, events: readonly FlickEvent[], anticipation = .08): MovementSegment {
+  const fail = (reason: string, reaction = 0, peak = 0): MovementSegment => ({valid: false, reason, reaction, peak, stop: spawn, base: {x: 0, y: 0}, out: {x: 0, y: 0}, corrections: 0});
   if (!(amplitude > 0)) return fail('no target');
   if (!(end > spawn)) return fail('instant');
   const cells = Math.min(3000, Math.ceil((end - spawn) / GRID) + 1);
@@ -155,7 +173,7 @@ export function analyzeFlick(spawn: number, end: number, target: Point, events: 
   let onset = top;
   while (onset > 0 && Math.hypot(raw[0][onset - 1], raw[1][onset - 1]) > still) onset--;
   const reaction = onset * GRID;
-  if (reaction < .08) return fail('anticipated', reaction, peak);
+  if (reaction < anticipation) return fail('anticipated', reaction, peak);
   let stop = cells - 1;
   for (let i = top + 1; i < cells - 1; i++) {
     if (speed[i] < peak * .1) {stop = i; break;}
@@ -171,11 +189,7 @@ export function analyzeFlick(spawn: number, end: number, target: Point, events: 
   for (let i = stop + 1; i < cells; i++) {
     if (!moving && speed[i] > high) {corrections++; moving = true;} else if (moving && speed[i] < low) moving = false;
   }
-  const out = {x: ox[stop], y: oy[stop]}, ux = target.x / amplitude, uy = target.y / amplitude;
-  const along = (out.x * ux + out.y * uy) / amplitude;
-  if (along < .2 || along > 2.5) return fail('far off', reaction, peak);
-  if (Math.abs(Math.atan2(ux * out.y - uy * out.x, ux * out.x + uy * out.y)) > 45 * DEG) return fail('wrong direction', reaction, peak);
-  return {valid: true, reaction, peak, base: {x: bx[stop], y: by[stop]}, out, corrections};
+  return {valid: true, reaction, peak, stop: spawn + stop * GRID, base: {x: bx[stop], y: by[stop]}, out: {x: ox[stop], y: oy[stop]}, corrections};
 }
 
 /** Gaussian smoothing over grid steps; the flick starts from rest and its last position holds after the hit. */
