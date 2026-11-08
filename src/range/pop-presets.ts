@@ -1,5 +1,6 @@
 import {defaults, loadoutWeapon, pistolIds, sanitizeSettings, weaponIds, type Pistol, type Settings, type Weapon} from './config';
 import {movingPop, type PopVariant} from './pop';
+import {popRampKeys} from './pop-ramp';
 
 /** Pop presets: a named setup of the balls and the environment that can be loaded in one click, saved under your own name,
  * and optionally tied to a weapon (loading it then equips that weapon). A preset never touches your ammo mode, sounds or
@@ -9,9 +10,10 @@ import {movingPop, type PopVariant} from './pop';
  * presets set exactly these, so loading one fully replaces the scenario. */
 export const popCoreKeys = ['popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popRespawn', 'popRespawnMode',
   'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance', 'popWall', 'popWallWidth', 'popWallbang'] as const;
-/** Everything a saved preset keeps. The extra keys (wall material, pad size, colours, see-through balls) are details a
- * built-in preset leaves as you have them, unless it is about that detail (the wallbang presets pick a material). */
-export const popPresetKeys = [...popCoreKeys, 'popWallMaterial', 'popPadWidth', 'popPadDepth', 'popWallXray', 'popColor', 'popBackground', 'popPadColor', 'pop3D'] as const;
+/** Everything a saved preset keeps. The extra keys (wall material, pad size, colours, see-through balls, the practice ramp) are
+ * details a built-in preset leaves as you have them, unless it is about that detail (the wallbang presets pick a material).
+ * The ramp is about where you stand, not what you shoot, so choosing a Pop mode or a built-in preset keeps the one you set up. */
+export const popPresetKeys = [...popCoreKeys, 'popWallMaterial', 'popPadWidth', 'popPadDepth', 'popWallXray', 'popColor', 'popBackground', 'popPadColor', 'pop3D', ...popRampKeys] as const;
 /** The look of the balls and the environment: built-in presets never change these. */
 export const popLookKeys = ['popWallXray', 'popColor', 'popBackground', 'popPadColor', 'pop3D'] as const;
 /** Pop settings that are about you, not the scenario; no preset touches them. */

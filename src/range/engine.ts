@@ -6,6 +6,9 @@ import {aimReportStore} from './aim-report-store';
 import {createPopSphereMaterial} from './pop-sphere-material';
 import * as THREE from 'three';
 import {popFrameGeometry} from './pop-geometry';
+import {popRampKeys, popRampSurfaceAt} from './pop-ramp';
+import {popRampGeometry} from './pop-ramp-geometry';
+import {rampSurface} from './terrain';
 import {recoilView} from './view-recoil';
 import {ViewmodelAir} from './viewmodel-air';
 import {followCrosshairDirection, followCrosshairOffset} from './crosshair-follow';
@@ -98,6 +101,9 @@ export class RangeEngine {
   private popColorApplied = '';
   private popBackgroundApplied = '';
   private popWall?: THREE.Mesh;
+  /** Pop's practice ramp: one unlit mesh with its shading and markings in vertex colours (see pop-ramp-geometry.ts). */
+  private popRamp?: THREE.Mesh;
+  private popRampMaterial = new THREE.MeshBasicMaterial({vertexColors: true, side: THREE.DoubleSide, fog: false, toneMapped: false});
   private popWallMaterial?: THREE.MeshStandardMaterial;
   private popWallEdgeMaterial = new THREE.MeshBasicMaterial({color: '#ffd23f'});
   /** A faint glowing copy of each ball that draws only where something nearer (the wall) hides it, so the balls behind a
@@ -540,7 +546,7 @@ export class RangeEngine {
     const changedWeapon = settings.weapon !== this.sim.settings.weapon || settings.primaryEnabled !== this.sim.settings.primaryEnabled;
     const changedSidearm = settings.sidearm !== this.sim.settings.sidearm;
     const resetKeys: (keyof Settings)[] = ['weapon', 'sidearm', 'primaryEnabled', 'mode', 'moving', 'targetSpeed', 'burst', 'peekScenario', 'peekDuration', 'drillPace',
-      'popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance'];
+      'popVariant', 'popMotionCount', 'popMotionSpeed', 'popMotionRadius', 'popMotionRate', 'popFloatBob', 'popPairGap', 'popPairRadius', 'popHoldTime', 'popPrecisionSpeed', 'popFlickStep', 'popFlickRadius', 'popClusterCount', 'popClusterWidth', 'popClusterHeight', 'popSize', 'popCount', 'popSpacing', 'popDistance', 'popHits', 'popWall', 'popWallWidth', 'popWallbang', 'popWallMaterial', 'popRespawn', 'popRespawnMode', 'popPadWidth', 'popPadDepth', 'popMoveX', 'popRangeX', 'popFlipX', 'popMoveY', 'popRangeY', 'popFlipY', 'popMoveChance', ...popRampKeys];
     if (!resetKeys.some(key => settings[key] !== this.sim.settings[key]) && measured === this.sim.measured) {
       const changedInversion = (['invertY', 'invertX', 'mouseYaw', 'mousePitch', 'sensitivityYScale'] as const).some(key => settings[key] !== this.sim.settings[key]);
       if (settings.popHideImpacts && !this.sim.settings.popHideImpacts) this.clearImpacts();
@@ -726,7 +732,10 @@ export class RangeEngine {
       const pass = bullet && pop.wallPass(shot.origin, dir, shot.maxDistance, bullet);
       const hit = pop.hit(shot.origin, dir, shot.maxDistance, shot.at, pass);
       if (hit && !shot.melee) this.sim.aimLog?.hit(shot.aim, this.sim.popAimKey(hit.ball.id, hit.life), false, hit.popped);
-      const blocked = hit ? undefined : pass ? (pass.exit ? undefined : pass.entry) : pop.wallHit(shot.origin, dir, shot.maxDistance);
+      const wall = hit ? undefined : pass ? (pass.exit ? undefined : pass.entry) : pop.wallHit(shot.origin, dir, shot.maxDistance);
+      // The ramp is solid ground: nothing shoots through it, and a shot into it marks its surface.
+      const ground = hit ? undefined : pop.rampHit(shot.origin, dir, shot.maxDistance);
+      const blocked = ground && (!wall || ground.distance < wall.distance) ? ground : wall;
       const end = hit ? vector(hit.point) : blocked ? vector(blocked.point) : this.popBackdropPoint(shot.origin, dir, shot.maxDistance);
       if (hit) {if (hit.popped) popped++; else struck++; if (hit.wallbang) banged++;}
       else if (end && !this.sim.settings.popHideImpacts) this.addImpact(this.impacts, end.clone().addScaledVector(vector(dir), -.012), end.distanceTo(vector(shot.origin)), this.missMaterial.color);
@@ -762,7 +771,7 @@ export class RangeEngine {
     const pop = this.sim.pop;
     this.pop.visible = !!pop;
     if (!pop) {
-      if (this.popMeshes.size || this.popBursts.length || this.popBackdrop || this.popWall) this.clearPopScene();
+      if (this.popMeshes.size || this.popBursts.length || this.popBackdrop || this.popWall || this.popRamp) this.clearPopScene();
       this.setPopAtmosphere(false); return;
     }
     this.setPopAtmosphere(true);
@@ -794,11 +803,12 @@ export class RangeEngine {
       material.color.set(pop.precisionPhase === 'target' ? '#967a40' : pop.centerProgress > 0 ? '#64ff9d' : '#ffd05b');
     }
     if (!this.popBackdrop) {
-      const width = Math.max(24, region.halfW * 2 + 6), height = Math.max(8, region.halfH * 2 + 4);
+      // It always reaches the floor and clears the field, which hangs higher when you start high up on a ramp.
+      const width = Math.max(24, region.halfW * 2 + 6), height = Math.max(8, region.halfH * 2 + 4, region.y + region.halfH + 4);
       // Unlit, so the chosen background colour shows as picked under Pop's dim lights.
       this.popBackgroundApplied = this.sim.settings.popBackground;
       this.popBackdrop = new THREE.Mesh(new THREE.PlaneGeometry(width, height), new THREE.MeshBasicMaterial({color: this.popBackgroundApplied, fog: false}));
-      this.popBackdrop.position.set(region.x, Math.max(height / 2, region.y), region.z - config.size - .5);
+      this.popBackdrop.position.set(region.x, height / 2, region.z - config.size - .5);
       this.popBackdrop.name = 'pop-backdrop'; this.pop.add(this.popBackdrop);
     }
     if ((config.variant === 'precision' || config.variant === 'microshot') && !this.popPanel) {
@@ -835,11 +845,21 @@ export class RangeEngine {
       this.pop.add(this.popWall);
       this.renderer.shadowMap.needsUpdate = true;
     }
+    if (pop.ramp && !this.popRamp) {
+      this.popRamp = new THREE.Mesh(popRampGeometry(pop.ramp.solid), this.popRampMaterial);
+      this.popRamp.name = 'pop-ramp'; this.pop.add(this.popRamp);
+    }
     if (config.respawnMode === 'pad' && !this.popPad) {
       // A filled rectangle lying on the floor (the plane's +y turns into world -z) with a solid border strip around it.
       const {pad} = pop, width = pad.halfW * 2, depth = pad.halfD * 2, border = Math.min(.06, width / 6, depth / 6);
       this.popPad = new THREE.Mesh(new THREE.PlaneGeometry(width, depth), this.popPadMaterial);
       this.popPad.rotation.x = -Math.PI / 2; this.popPad.position.set(pad.x, .012, pad.z); this.popPad.name = 'pop-pad';
+      if (pop.ramp) {
+        // You start on the ramp, so the pad lies on its slope instead of being buried in it.
+        const {slopeX, slopeZ} = rampSurface(pop.ramp.solid), normal = new THREE.Vector3(-slopeX, 1, -slopeZ).normalize();
+        this.popPad.quaternion.premultiply(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal));
+        this.popPad.position.set(pad.x, popRampSurfaceAt(pop.ramp.solid, pad.x, pad.z), pad.z).addScaledVector(normal, .012);
+      }
       const corners = (w: number, d: number) => [new THREE.Vector2(-w, -d), new THREE.Vector2(w, -d), new THREE.Vector2(w, d), new THREE.Vector2(-w, d)];
       const outline = new THREE.Shape(corners(width / 2, depth / 2));
       outline.holes.push(new THREE.Path(corners(width / 2 - border, depth / 2 - border)));
@@ -909,6 +929,7 @@ export class RangeEngine {
     this.popCluster?.geometry.dispose(); (this.popCluster?.material as THREE.Material | undefined)?.dispose(); this.popCluster = undefined;
     this.popBackdrop?.geometry.dispose(); (this.popBackdrop?.material as THREE.Material | undefined)?.dispose(); this.popBackdrop = undefined;
     this.popWall?.geometry.dispose(); this.popWall?.children.forEach(child => (child as THREE.Mesh).geometry.dispose()); this.popWall = undefined;
+    this.popRamp?.geometry.dispose(); this.popRamp = undefined;
     this.popPad?.geometry.dispose(); this.popPad?.children.forEach(child => (child as THREE.Mesh).geometry.dispose()); this.popPad = undefined;
   }
   /** Pop darkens the range: black sky and near fog, dim lights, so the glowing balls stand out. */
@@ -1231,7 +1252,7 @@ export class RangeEngine {
     this.viewAnimations.forEach(animation => animation.dispose());
     this.scope.dispose();
     this.popGeometry.dispose(); this.popMaterial.dispose(); this.popSphereMaterial.matcap?.dispose(); this.popSphereMaterial.dispose(); this.clearPopScene();
-    this.popWallMaterial?.dispose(); this.popWallEdgeMaterial.dispose(); this.popGhostMaterial.dispose(); this.popPadMaterial.dispose(); this.popPadEdgeMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
+    this.popWallMaterial?.dispose(); this.popRampMaterial.dispose(); this.popWallEdgeMaterial.dispose(); this.popGhostMaterial.dispose(); this.popPadMaterial.dispose(); this.popPadEdgeMaterial.dispose(); this.popDamaged.forEach(material => material.dispose());
     this.markerGeometry.dispose(); this.missMaterial.dispose(); this.hitMaterial.dispose(); this.bodyMaterial.dispose();
     this.cues.forEach(c => c.remove()); this.hitCaption.remove();
     this.environment?.dispose(); this.renderer.dispose(); this.renderer.domElement.remove();

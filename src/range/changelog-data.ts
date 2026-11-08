@@ -501,6 +501,11 @@ export const latestChanges = {
       'The Aim tab has two views: Session report, and Direction calibration with the direction chart, the fitted profile, the blind A/B test and the Raw Accel export.',
       'Record calibration flicks switches the recording on or off; the blind A/B test now runs in every mode too.',
     ]},
+    {id: 'pop-ramp', title: 'Pop: a ramp for counter-strafing', items: [
+      'Turn on Ramp in the Pop settings to start on a ramp and practise diagonal counter-strafing (W+D, W+A, S+D, S+A, then the opposite keys) on a slope. It works in every Pop mode.',
+      'Tune its angle (3 to 40 degrees), length and width, whether it rises toward the balls, away from them or to your left or right, and where on it you start. The ramp saves with your own presets.',
+      'You walk, strafe and stop with the same ground movement as everywhere else, so only your height changes. The balls hang at your starting eye height, bullets cannot pass through the ramp, and stepping off its edge drops you to the floor.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

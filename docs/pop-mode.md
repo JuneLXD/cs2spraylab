@@ -283,3 +283,64 @@ Validation:171 affected units and TypeScript pass. Four Chromium cases pass; ten
 intermediate frames, checking one persistent visible mesh, matching collision/render positions, no immediate
 jump and bounded movement. Units cover intermediate positions, current-position hits, mid-move redirection,
 no duplicate pellet score/burst, delayed motion, reset and frozen simulation time.
+
+
+## Ramp for diagonal counter-strafing (2026-11-07)
+
+The user asked for a ramp in Pop, switched on from the UI and tweakable, to practise diagonal counter-strafing (A+S, D+W,
+D+S, W+A and the stop on the opposite keys). It works in Classic and in every other Pop mode.
+
+- **Settings** (`pop-ramp.ts`, saved in `spraylab.range.v2`): `popRamp` (off by default), `popRampAngle` (3-40 degrees,
+  default 20; 40 keeps it above CS2's 0.7 standable normal), `popRampLength` (the run along the slope, 2-10 m in 0.5 m steps,
+  default 6), `popRampWidth` (the span across it, 1-16 m, default 6), `popRampFacing` and `popRampStart`. Facing is which way it
+  rises as seen where you start: `wall` uphill toward the balls, `away` downhill toward the balls, `left` / `right` uphill to
+  that side. Start is how far up you begin (0 = bottom edge, 1 = top, in 5 % steps, default 50 %); 100 % stops half a metre
+  short of the top edge so you do not begin on it.
+- **UI**: a Ramp switch after "Distance to the balls" in `TrainingSettings`, so it shows in the Play screen's drill setup and in
+  Settings > Game. Angle, length, width, direction and start appear only while it is on. The setup chip adds
+  "20° ramp (6 x 6 m), uphill toward the balls". Restore drill defaults turns it off and resets the values. Every change
+  rebuilds the field and puts you back at the ramp's start (the engine's reset keys, and `Simulation.configure` re-places you
+  like it does for the peek wall); turning it off puts you back on the floor at Pop's spawn.
+- **It is ordinary terrain.** `popRampLayout()` builds one `TerrainSolid` with `traversal: {kind: 'ramp'}`, the wedge the
+  AI Duel arenas and `terrain.test.ts` already walk. `Simulation.environment` adds it next to the peek wall, so the hull follows
+  the surface, steps up and down it and stays grounded exactly as on any other ramp. Nothing in the ground movement was changed.
+- **Placement.** The ramp stands against the range's near wall (its back edge at z = 5, the farthest back you can stand),
+  centred on x = 0, so changing the start only moves you along the same ramp. With the defaults you start at Pop's usual spot
+  (x 0, z 2), halfway up. `popOrigin()` is where the field, the peek wall and the pad are measured from: the spawn point with no
+  ramp, the start on the ramp with one, so "Distance to the balls" still counts from you and the field is centred on your eye
+  height at the start (balls at 1.63 m for a flat start, higher if you start up the slope). The balls are never closer than 1.5 m
+  to the end of the ramp that faces them (`POP_RAMP_CLEARANCE`): a ramp reaching further than the distance you set pushes the field
+  back instead of burying balls in it. A standing hull rests on the slope under its uphill edge, so the very bottom start is
+  already about `0.41 m x tan(angle)` up (0.15 m at 20 degrees).
+- **The peek wall and the pad.** The wall still stands from the floor and now reaches `2.8 m` above your feet, so it covers you
+  when you start high up. The respawn pad lies on the slope under your start (tilted to the slope, lifted 12 mm) instead of being
+  buried in it.
+- **Bullets.** The ramp is solid ground: `PopField.rampHit()` (`rayRampDistance()` clips the ray against the wedge's six planes)
+  limits every ball ray and, in `RangeEngine.popShot`, ends tracers and leaves the miss mark on the slope. Nothing wallbangs it.
+  A ramp that rises toward the balls therefore hides them while its far edge is higher than your eyes (for example from the bottom
+  of the default ramp, or anywhere on a 30 degree, 8 m one); start higher, lower the angle or pick another direction. The settings
+  text says so.
+- **Rendering** (`pop-ramp-geometry.ts`): one unlit mesh with its shading in vertex colours (lighter slope, darker faces), a light
+  border and a cross line every metre of run, so the direction and length read at a glance in Pop's dark scene. It uses no polygon
+  offset: a first version had one, and it hid the pad and bullet marks at shallow viewing angles. The backdrop plane now always
+  spans from the floor to above the field, which matters when the field hangs high.
+- **Presets.** The six ramp keys (`popRampKeys`) are part of saved presets (`popPresetKeys`) but not of `popCoreKeys`: choosing a
+  Pop mode or a built-in preset leaves the ramp you set up, and a preset you save keeps it. No built-in preset uses one.
+
+**What was verified about the movement.** The simulation was driven on 20 and 40 degree ramps, all four facings, the four
+diagonals plus W and D, holding the keys 0.15 s and then pressing the opposite ones: the horizontal speed matches the flat floor to
+1e-9 u/s on every tick, the stop takes the same 7 ticks (about 55 ms) under 34 u/s, and the player is never airborne and has no
+vertical velocity. Standing still on every angle, facing and start never drifts or hovers. Walking a ramp's length gives the same
+horizontal distance as on the flat. `feet` rises or falls with the slope and stays on the surface. So the ramp changes your height
+(and with it the aim: the balls sit higher or lower on your screen as you climb or descend) and which keys take you up or down it,
+not the strafe timing itself: that is the engine's one ground movement. The trainer was not compared with CS2's own ramp movement,
+which has not been captured.
+
+**Known limits.** Landing on a slope from a jump slides you a little down it (the engine's slope handling, not specific to this
+ramp). Stepping off an edge drops you to the floor (up to 8 m for the steepest, longest ramp, which also puts your eyes about 10 m
+up when you start at the top). The steepest settings are a stress case rather than a recommended one.
+
+Coverage: `pop-ramp.test.ts` (layout of all four facings, ray tests, field and wall placement, bullet blocking, standing, climbing,
+the counter-strafe comparison, walking off an edge, re-placing you, settings, presets, summary and the controls) and
+`tests/pop-ramp.spec.ts` (switch on, tune with the real controls, hill hides every ball, pop a ball from the ramp, shoot into the
+slope, reload, switch off). Screenshots of every facing, the pad on the slope and a bullet mark were reviewed.

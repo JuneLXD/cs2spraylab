@@ -16,7 +16,8 @@ import {TERRAIN_RULES} from './terrain';
 import {resolveDamage} from './duel/damage';
 import {NativeReloadState, WeaponActions, type ReloadActionEvent} from './weapon-actions';
 import {reloadInputAllows, usesNativeReloadInput} from './reload-input';
-import {holdPop, POP_SPAWN, PopField, popConfig, popSpawn} from './pop';
+import {holdPop, PopField, popConfig, popFeet, popOrigin, popSpawn} from './pop';
+import {popRampKeys} from './pop-ramp';
 import {recoilView} from './view-recoil';
 import {followCrosshairDirection} from './crosshair-follow';
 
@@ -109,8 +110,8 @@ export class Simulation {
   get equipped() { return equipmentForSlot(this.slot, this.settings.weapon, this.settings.sidearm); }
   get stats() { return this.actions.stats; }
   get environment(): ActorEnvironment {
-    const radius = TERRAIN_RULES.hullRadius;
-    return {solids: this.drill?.scenario.covers ?? (this.pop?.wall ? [this.pop.wall, ...RANGE_WALLS] : RANGE_WALLS), floor: 0, time: this.time, pitch: this.pitch,
+    const radius = TERRAIN_RULES.hullRadius, popSolids = this.pop?.solids;
+    return {solids: this.drill?.scenario.covers ?? (popSolids?.length ? [...popSolids, ...RANGE_WALLS] : RANGE_WALLS), floor: 0, time: this.time, pitch: this.pitch,
       bounds: {minX: -11.3 - radius, maxX: 11.3 + radius, minZ: TARGET_Z + 2.2 - radius, maxZ: 5 + radius}};
   }
   ammoFor(id: Equipment) {
@@ -199,6 +200,8 @@ export class Simulation {
     const changedMode = s.mode !== this.settings.mode;
     // Raising or moving the peek wall puts you back behind it: you may be standing where it goes up.
     const changedWall = s.mode === 'pop' && (s.popWall !== this.settings.popWall || s.popWallWidth !== this.settings.popWallWidth || s.popVariant !== this.settings.popVariant);
+    // A new ramp puts you back at its start for the same reason: you may be standing where it goes up, or high on one that went away.
+    const changedRamp = s.mode === 'pop' && popRampKeys.some(key => s[key] !== this.settings[key]);
     const leavingPositionedDrill = isDrillMode(this.settings.mode) || this.settings.mode === 'pop';
     this.cancel(); this.settings = s; this.measured = measured;
     if (!s.primaryEnabled && this.slot === 1) this.slot = 2;
@@ -218,11 +221,13 @@ export class Simulation {
       this.grounded = true; this.jumpHeld = false; this.resetMovementHistory();
     } }
     if (s.mode === 'pop') {
-      this.pop = new PopField(popConfig(s), POP_SPAWN, this.random ?? Math.random, this.time); this.popPublishedShots = 0; this.popGeneration++;
+      const config = popConfig(s), origin = popOrigin(config);
+      this.pop = new PopField(config, origin, this.random ?? Math.random, this.time); this.popPublishedShots = 0; this.popGeneration++;
       // A fresh simulation starts in Pop too (the constructor configures with the mode already set).
-      if (changedMode || !this.popPlaced || changedWall) {
+      if (changedMode || !this.popPlaced || changedWall || changedRamp) {
         this.popPlaced = true;
-        this.position = popSpawn(popConfig(s), POP_SPAWN); this.yaw = this.pitch = this.feet = this.verticalVelocity = this.duckAmount = 0;
+        this.position = popSpawn(config, origin); this.feet = popFeet(config, this.position);
+        this.yaw = this.pitch = this.verticalVelocity = this.duckAmount = 0;
         this.duckFlag = false;
         this.velocity = {x: 0, z: 0}; this.eyeHeight = 64 * UNIT; this.duckSpeed = 8; this.crouchHeld = false; this.duckCooldown = 0;
         this.duckViewOffset = this.duckRootOffset = 0;

@@ -2,6 +2,8 @@ import {PopMotion, movingPop, holdPop} from './pop-motion';
 export {movingPop, holdPop} from './pop-motion';
 import {DEG, UNIT, type Vec} from './actor-physics';
 import {resolveBulletRay, type PenetrationSolid, type PenetrationStats, type SurfaceContact} from './duel/penetration';
+import {POP_RAMP_CLEARANCE, popRampFloorAt, popRampLayout, rayRampDistance, type PopRampConfig, type PopRampFacing, type PopRampLayout} from './pop-ramp';
+import type {TerrainSolid} from './terrain';
 
 /** Pop (after Refrag's Pop mode): bright balls float on a dark wall ahead of you; a shot pops the first ball it
  * crosses and a new one appears elsewhere. Sizes and distances are metres; the setting stores the size in cm.
@@ -36,7 +38,9 @@ export type PopWallMaterial = 'wood' | 'concrete' | 'metal';
 export type PopAxisMotion = {speed: number; range: number; flips: number};
 export type PopConfig = {variant: PopVariant; motionSpeed: number; motionRadius: number; motionRate: number; floatBob: number; pairGap: number; pairRadius: number; holdTime: number; precisionSpeed: number; flickStep: number; flickRadius: number; clusterWidth: number; clusterHeight: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
   wallbang: boolean; wallMaterial: PopWallMaterial;
-  respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number};
+  respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number;
+  /** The practice ramp you start on, when one is up (see pop-ramp.ts). It works in every Pop mode. */
+  ramp?: PopRampConfig};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
 export type PopBall = {id: number; x: number; y: number; z: number; radius: number; hits: number; vx: number; vy: number};
 /** `wallbang` is true when the bullet came through the peek wall to reach the ball; `life` is the ball's life when it was hit
@@ -83,17 +87,23 @@ export const popWallMaterials: readonly (readonly [PopWallMaterial, string])[] =
 
 export function popConfig(settings: {popVariant: PopVariant; popMotionCount: number; popMotionSpeed: number; popMotionRadius: number; popMotionRate: number; popFloatBob: number; popPairGap: number; popPairRadius: number; popHoldTime: number; popPrecisionSpeed: number; popFlickStep: number; popFlickRadius: number; popClusterCount: number; popClusterWidth: number; popClusterHeight: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
   popWallWidth: number; popWallbang: boolean; popWallMaterial: PopWallMaterial; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number;
-  popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number}): PopConfig {
+  popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number;
+  popRamp: boolean; popRampAngle: number; popRampLength: number; popRampWidth: number; popRampFacing: PopRampFacing; popRampStart: number}): PopConfig {
   const classic = settings.popVariant === 'classic';
   const pairGap = Math.max(settings.popSize / 100 + .02, Math.min(settings.popPairGap, settings.popPairRadius));
+  const ramp: PopRampConfig | undefined = settings.popRamp ? {angle: settings.popRampAngle, length: settings.popRampLength,
+    width: settings.popRampWidth, facing: settings.popRampFacing, start: settings.popRampStart} : undefined;
+  // The balls keep their distance from you, but never come closer than POP_RAMP_CLEARANCE to the end of the ramp that faces them.
+  const distance = ramp ? Math.max(settings.popDistance, popRampLayout(ramp).ahead + POP_RAMP_CLEARANCE) : settings.popDistance;
   return {variant: settings.popVariant, motionSpeed: settings.popMotionSpeed, motionRadius: settings.popMotionRadius, motionRate: settings.popMotionRate, floatBob: settings.popFloatBob, pairGap, pairRadius: Math.max(settings.popPairRadius, pairGap), holdTime: settings.popHoldTime, precisionSpeed: settings.popPrecisionSpeed, flickStep: Math.min(settings.popFlickStep, settings.popFlickRadius), flickRadius: settings.popFlickRadius,
     clusterWidth: settings.popClusterWidth, clusterHeight: settings.popClusterHeight,
-    size: settings.popSize / 100, count: movingPop(settings.popVariant) ? settings.popMotionCount : classic ? settings.popCount : settings.popVariant === 'microshot' ? settings.popClusterCount : pairedPop(settings.popVariant) ? 2 : 1, spacing: settings.popSpacing, distance: settings.popDistance,
+    size: settings.popSize / 100, count: movingPop(settings.popVariant) ? settings.popMotionCount : classic ? settings.popCount : settings.popVariant === 'microshot' ? settings.popClusterCount : pairedPop(settings.popVariant) ? 2 : 1, spacing: settings.popSpacing, distance,
     hits: holdPop(settings.popVariant) ? 1 : settings.popHits, wall: settings.popWall, wallWidth: settings.popWallWidth, wallbang: settings.popWallbang, wallMaterial: settings.popWallMaterial,
     respawn: settings.popRespawn, respawnMode: settings.popRespawnMode,
     padWidth: settings.popPadWidth, padDepth: settings.popPadDepth,
     x: {speed: settings.popMoveX, range: settings.popRangeX, flips: settings.popFlipX},
     y: {speed: settings.popMoveY, range: settings.popRangeY, flips: settings.popFlipY}, moveChance: settings.popMoveChance,
+    ...(ramp ? {ramp} : {}),
     ...(!classic ? {wall: 'off' as const, wallbang: false, respawnMode: 'timer' as const,
       x: {speed: 0, range: 0, flips: 0}, y: {speed: 0, range: 0, flips: 0}, moveChance: 0} : {})};
 }
@@ -101,23 +111,38 @@ export function popConfig(settings: {popVariant: PopVariant; popMotionCount: num
 export const popWallSide = (wall: PopWallSide): -1 | 0 | 1 => wall === 'left' ? -1 : wall === 'right' ? 1 : 0;
 export const axisMoves = (axis: PopAxisMotion) => axis.speed > 0 && axis.range > 0;
 
-/** The peek wall for the chosen side, or undefined when it is off. `origin` is the Pop spawn point: a one-sided wall's
- * near edge sits 0.35 m past its shoulder and the wall runs `wallWidth` the other way; the pillar is centred on it. */
+/** The peek wall for the chosen side, or undefined when it is off. `origin` is where you start: a one-sided wall's
+ * near edge sits 0.35 m past its shoulder and the wall runs `wallWidth` the other way; the pillar is centred on it. It stands
+ * from the floor to POP_WALL.height above your feet, so it still covers you when you start high up on a ramp. */
 export function popWall(config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: Vec): PopWall | undefined {
   if (config.wall === 'off') return undefined;
-  const z = origin.z - POP_WALL.ahead, y = POP_WALL.height / 2, width = config.wallWidth;
+  const height = POP_WALL.height + Math.max(0, origin.y - POP_EYE);
+  const z = origin.z - POP_WALL.ahead, y = height / 2, width = config.wallWidth;
   if (config.wall === 'both') return {id: 'pop-wall', side: 0, edges: [origin.x - width / 2, origin.x + width / 2],
-    center: {x: origin.x, y, z}, size: {x: width, y: POP_WALL.height, z: POP_WALL.thickness}};
+    center: {x: origin.x, y, z}, size: {x: width, y: height, z: POP_WALL.thickness}};
   const side = popWallSide(config.wall) as -1 | 1, edge = origin.x + side * POP_WALL.edge;
   return {id: 'pop-wall', side, edges: [edge], center: {x: edge - side * width / 2, y, z},
-    size: {x: width, y: POP_WALL.height, z: POP_WALL.thickness}};
+    size: {x: width, y: height, z: POP_WALL.thickness}};
 }
 
 /** The respawn pad: centred behind the peek wall when one is up, else on the Pop spawn point. */
 export const popPad = (config: Pick<PopConfig, 'wall' | 'wallWidth' | 'padWidth' | 'padDepth'>, origin: Vec): PopPad =>
   ({x: popWall(config, origin)?.center.x ?? origin.x, z: origin.z, halfW: config.padWidth / 2, halfD: config.padDepth / 2});
-/** Where you start: on the pad's centre, so centred behind the cover. */
-export const popSpawn = (config: Pick<PopConfig, 'wall' | 'wallWidth'>, origin: Vec): Vec => ({...origin, x: popWall(config, origin)?.center.x ?? origin.x});
+/** Where the ball field, the wall and the pad are measured from: Pop's spawn point, or, with a ramp up, the place on the ramp
+ * where you start (so "distance to the balls" still counts from you, and the field is centred on your eye height there). */
+export function popOrigin(config: Pick<PopConfig, 'ramp'>): Vec {
+  if (!config.ramp) return POP_SPAWN;
+  const {start} = popRampLayout(config.ramp);
+  return {x: start.x, y: start.feet + POP_EYE, z: start.z};
+}
+/** The height of the ground under you at (x, z): the ramp's surface when it is under you, else the floor. */
+export const popFeet = (config: Pick<PopConfig, 'ramp'>, position: {x: number; z: number}): number =>
+  config.ramp ? popRampFloorAt(popRampLayout(config.ramp).solid, position.x, position.z) : 0;
+/** Where you start: on the pad's centre, so centred behind the cover (and on the ramp's surface when one is up). */
+export function popSpawn(config: Pick<PopConfig, 'wall' | 'wallWidth' | 'ramp'>, origin: Vec): Vec {
+  const x = popWall(config, origin)?.center.x ?? origin.x;
+  return config.ramp ? {...origin, x, y: popFeet(config, {x, z: origin.z}) + POP_EYE} : {...origin, x};
+}
 
 /** Give each dot its own jittered cell. Grow the rectangle only when its count/size cannot fit without overlap;
  * add columns instead of rows when necessary to keep the rectangle above the physical floor. */
@@ -214,6 +239,8 @@ export class PopField {
   private nextClusterAt?: number;
   readonly region: PopRegion;
   readonly wall?: PopWall;
+  /** The practice ramp under your start, when one is up. It stops movement (it is part of the range's terrain) and bullets. */
+  readonly ramp?: PopRampLayout;
   /** The wall as a surface bullets can pass through; only when wallbang is on. */
   private readonly wallSolid?: PenetrationSolid;
   readonly pad: PopPad;
@@ -223,6 +250,7 @@ export class PopField {
     if (movingPop(config.variant)) this.motion = new PopMotion(config, this.region, this.random);
     if (config.variant === 'precision') this.center = {...this.region, radius: .05 * config.distance / 8};
     this.wall = popWall(config, origin);
+    this.ramp = config.ramp ? popRampLayout(config.ramp) : undefined;
     this.wallSolid = this.wall && config.wallbang ? {id: this.wall.id, center: this.wall.center, size: this.wall.size, material: config.wallMaterial} : undefined;
     this.pad = popPad(config, origin);
     if (config.variant === 'microshot') this.spawnCluster();
@@ -413,6 +441,16 @@ export class PopField {
     if (distance === undefined || distance > maxDistance) return undefined;
     return {distance, point: {x: origin.x + direction.x * distance, y: origin.y + direction.y * distance, z: origin.z + direction.z * distance}};
   }
+  /** Where a unit-direction ray meets the ramp within `maxDistance`, if it is in the way. The ramp is solid ground, so unlike
+   * the wall no weapon shoots through it. */
+  rampHit(origin: Vec, direction: Vec, maxDistance = Infinity): {distance: number; point: Vec} | undefined {
+    if (!this.ramp) return undefined;
+    const distance = rayRampDistance(origin, direction, this.ramp.solid);
+    if (distance === undefined || distance > maxDistance) return undefined;
+    return {distance, point: {x: origin.x + direction.x * distance, y: origin.y + direction.y * distance, z: origin.z + direction.z * distance}};
+  }
+  /** Everything in Pop that stops walking: the peek wall and the ramp. */
+  get solids(): TerrainSolid[] {return [...(this.wall ? [this.wall] : []), ...(this.ramp ? [this.ramp.solid] : [])];}
   /** What a wallbangable peek wall does to a bullet fired along the unit `direction`, by CS2's penetration arithmetic: the
    * weapon's `stats`, the wall's material and the thickness of wall this ray actually crosses (a ray that clips the edge
    * crosses far less than one that goes straight through) decide how much damage comes out the far side. Undefined when the
@@ -461,7 +499,8 @@ export class PopField {
     return this.clearBall(nearest, time);
   }
   private raycast(origin: Vec, direction: Vec, maxDistance = Infinity, pass?: PopWallPass) {
-    const limit = Math.min(maxDistance, pass ? pass.reach : this.wallHit(origin, direction, maxDistance)?.distance ?? Infinity);
+    const limit = Math.min(maxDistance, this.rampHit(origin, direction, maxDistance)?.distance ?? Infinity,
+      pass ? pass.reach : this.wallHit(origin, direction, maxDistance)?.distance ?? Infinity);
     let nearest: PopHit | undefined;
     for (const ball of this.balls) {
       const ox = origin.x - ball.x, oy = origin.y - ball.y, oz = origin.z - ball.z;

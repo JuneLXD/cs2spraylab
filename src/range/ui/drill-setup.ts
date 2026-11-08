@@ -1,5 +1,6 @@
 import {defaults, type Mode, type Settings} from '../config';
 import {movingPop, holdPop, popVariants} from '../pop';
+import {popRampFacings} from '../pop-ramp';
 import type {BotzConfig} from '../duel/botz';
 import type {DuelConfig} from '../duel/config';
 import {blitzSummary, type BlitzConfig} from '../duel/blitz';
@@ -10,14 +11,22 @@ export function rangeDrillDefaults(mode: Mode): Partial<Settings> {
     impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides,
     popVariant, pop3D, popMotionCount, popMotionSpeed, popMotionRadius, popMotionRate, popFloatBob, popPairGap, popPairRadius, popHoldTime, popPrecisionSpeed, popFlickStep, popFlickRadius, popClusterCount, popClusterWidth, popClusterHeight, popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud,
     popBackground, popHits, popWall, popWallWidth, popWallbang, popWallMaterial, popWallXray, popRespawn, popRespawnMode, popMoveX, popRangeX, popFlipX, popMoveY, popRangeY, popFlipY, popMoveChance,
-    popPadWidth, popPadDepth, popPadColor, popPadSound} = defaults;
+    popPadWidth, popPadDepth, popPadColor, popPadSound,
+    popRamp, popRampAngle, popRampLength, popRampWidth, popRampFacing, popRampStart} = defaults;
   return {burst, peekScenario, peekDuration, drillPace, follow, transferRule, transferAfter,
     impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides, spread: mode !== 'guided',
     popVariant, pop3D, popMotionCount, popMotionSpeed, popMotionRadius, popMotionRate, popFloatBob, popPairGap, popPairRadius, popHoldTime, popPrecisionSpeed, popFlickStep, popFlickRadius, popClusterCount, popClusterWidth, popClusterHeight, popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud,
     popBackground, popHits, popWall, popWallWidth, popWallbang, popWallMaterial, popWallXray, popRespawn, popRespawnMode, popMoveX, popRangeX, popFlipX, popMoveY, popRangeY, popFlipY, popMoveChance,
-    popPadWidth, popPadDepth, popPadColor, popPadSound};
+    popPadWidth, popPadDepth, popPadColor, popPadSound,
+    popRamp, popRampAngle, popRampLength, popRampWidth, popRampFacing, popRampStart};
 }
+/** What the setup chip shows for the chosen drill; in Pop a ramp adds its angle, size and the way it rises. */
 export function drillSetupSummary(settings: Settings, botz: BotzConfig, duel: DuelConfig, blitz?: BlitzConfig): string {
+  const summary = drillSummary(settings, botz, duel, blitz);
+  if (settings.mode !== 'pop' || !settings.popRamp) return summary;
+  return `${summary} · ${settings.popRampAngle}° ramp (${settings.popRampLength} x ${settings.popRampWidth} m), ${popRampFacings.find(([id]) => id === settings.popRampFacing)![1].toLowerCase()}`;
+}
+function drillSummary(settings: Settings, botz: BotzConfig, duel: DuelConfig, blitz?: BlitzConfig): string {
   if (settings.mode === 'blitz' && blitz) return blitzSummary(blitz);
   if (['botz', 'reflex', 'redline'].includes(settings.mode)) {
     const movement = botz.movement === 'close' ? 'strafe and close in' : botz.movement === 'strafe' ? 'strafe A-D' : botz.map === 'island' ? 'run straight' : 'stand still';
