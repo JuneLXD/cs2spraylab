@@ -506,6 +506,11 @@ export const latestChanges = {
       'Tune its angle (3 to 40 degrees), length and width, whether it rises toward the balls, away from them or to your left or right, and where on it you start. The ramp saves with your own presets.',
       'You walk, strafe and stop with the same ground movement as everywhere else, so only your height changes. The balls hang at your starting eye height, bullets cannot pass through the ramp, and stepping off its edge drops you to the floor.',
     ]},
+    {id: 'pop-ramp-platform', title: 'Pop: a platform with four ramps', items: [
+      'Ramp now starts as a small platform with a ramp down each of its four sides, and you start in the middle of it. Pick One ramp under Ramp layout for the single ramp.',
+      'Set the angle, the length of the ramps and the size of the platform. Counter-strafe on the flat top, run down any of the four ramps, or come back up one from any direction.',
+      'You drop to the floor off a ramp\'s side or past a corner of the platform. The lines on the ramps are now part of the surface itself, so they show from any angle.',
+    ]},
   ] satisfies readonly ChangelogSection[],
 } as const satisfies ChangelogRelease;
 

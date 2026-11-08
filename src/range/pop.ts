@@ -2,7 +2,7 @@ import {PopMotion, movingPop, holdPop} from './pop-motion';
 export {movingPop, holdPop} from './pop-motion';
 import {DEG, UNIT, type Vec} from './actor-physics';
 import {resolveBulletRay, type PenetrationSolid, type PenetrationStats, type SurfaceContact} from './duel/penetration';
-import {POP_RAMP_CLEARANCE, popRampFloorAt, popRampLayout, rayRampDistance, type PopRampConfig, type PopRampFacing, type PopRampLayout} from './pop-ramp';
+import {POP_RAMP_CLEARANCE, popRampFloorAt, popRampLayout, rayRampsDistance, type PopRampConfig, type PopRampFacing, type PopRampLayout, type PopRampShape} from './pop-ramp';
 import type {TerrainSolid} from './terrain';
 
 /** Pop (after Refrag's Pop mode): bright balls float on a dark wall ahead of you; a shot pops the first ball it
@@ -39,7 +39,7 @@ export type PopAxisMotion = {speed: number; range: number; flips: number};
 export type PopConfig = {variant: PopVariant; motionSpeed: number; motionRadius: number; motionRate: number; floatBob: number; pairGap: number; pairRadius: number; holdTime: number; precisionSpeed: number; flickStep: number; flickRadius: number; clusterWidth: number; clusterHeight: number; size: number; count: number; spacing: number; distance: number; hits: number; wall: PopWallSide; wallWidth: number;
   wallbang: boolean; wallMaterial: PopWallMaterial;
   respawn: number; respawnMode: PopRespawnMode; padWidth: number; padDepth: number; x: PopAxisMotion; y: PopAxisMotion; moveChance: number;
-  /** The practice ramp you start on, when one is up (see pop-ramp.ts). It works in every Pop mode. */
+  /** The practice ramps you start on (a platform with four ramps, or one ramp), when they are up (see pop-ramp.ts). They work in every Pop mode. */
   ramp?: PopRampConfig};
 /** `vx`/`vy` are the ball's current drift (m/s) across and up the wall. */
 export type PopBall = {id: number; x: number; y: number; z: number; radius: number; hits: number; vx: number; vy: number};
@@ -88,11 +88,12 @@ export const popWallMaterials: readonly (readonly [PopWallMaterial, string])[] =
 export function popConfig(settings: {popVariant: PopVariant; popMotionCount: number; popMotionSpeed: number; popMotionRadius: number; popMotionRate: number; popFloatBob: number; popPairGap: number; popPairRadius: number; popHoldTime: number; popPrecisionSpeed: number; popFlickStep: number; popFlickRadius: number; popClusterCount: number; popClusterWidth: number; popClusterHeight: number; popSize: number; popCount: number; popSpacing: number; popDistance: number; popHits: number; popWall: PopWallSide;
   popWallWidth: number; popWallbang: boolean; popWallMaterial: PopWallMaterial; popRespawn: number; popRespawnMode: PopRespawnMode; popPadWidth: number;
   popPadDepth: number; popMoveX: number; popRangeX: number; popFlipX: number; popMoveY: number; popRangeY: number; popFlipY: number; popMoveChance: number;
-  popRamp: boolean; popRampAngle: number; popRampLength: number; popRampWidth: number; popRampFacing: PopRampFacing; popRampStart: number}): PopConfig {
+  popRamp: boolean; popRampShape: PopRampShape; popRampAngle: number; popRampLength: number; popRampWidth: number; popRampFacing: PopRampFacing; popRampStart: number;
+  popRampPlatform: number}): PopConfig {
   const classic = settings.popVariant === 'classic';
   const pairGap = Math.max(settings.popSize / 100 + .02, Math.min(settings.popPairGap, settings.popPairRadius));
-  const ramp: PopRampConfig | undefined = settings.popRamp ? {angle: settings.popRampAngle, length: settings.popRampLength,
-    width: settings.popRampWidth, facing: settings.popRampFacing, start: settings.popRampStart} : undefined;
+  const ramp: PopRampConfig | undefined = settings.popRamp ? {shape: settings.popRampShape, angle: settings.popRampAngle, length: settings.popRampLength,
+    width: settings.popRampWidth, facing: settings.popRampFacing, start: settings.popRampStart, platform: settings.popRampPlatform} : undefined;
   // The balls keep their distance from you, but never come closer than POP_RAMP_CLEARANCE to the end of the ramp that faces them.
   const distance = ramp ? Math.max(settings.popDistance, popRampLayout(ramp).ahead + POP_RAMP_CLEARANCE) : settings.popDistance;
   return {variant: settings.popVariant, motionSpeed: settings.popMotionSpeed, motionRadius: settings.popMotionRadius, motionRate: settings.popMotionRate, floatBob: settings.popFloatBob, pairGap, pairRadius: Math.max(settings.popPairRadius, pairGap), holdTime: settings.popHoldTime, precisionSpeed: settings.popPrecisionSpeed, flickStep: Math.min(settings.popFlickStep, settings.popFlickRadius), flickRadius: settings.popFlickRadius,
@@ -137,7 +138,7 @@ export function popOrigin(config: Pick<PopConfig, 'ramp'>): Vec {
 }
 /** The height of the ground under you at (x, z): the ramp's surface when it is under you, else the floor. */
 export const popFeet = (config: Pick<PopConfig, 'ramp'>, position: {x: number; z: number}): number =>
-  config.ramp ? popRampFloorAt(popRampLayout(config.ramp).solid, position.x, position.z) : 0;
+  config.ramp ? popRampFloorAt(popRampLayout(config.ramp).solids, position.x, position.z) : 0;
 /** Where you start: on the pad's centre, so centred behind the cover (and on the ramp's surface when one is up). */
 export function popSpawn(config: Pick<PopConfig, 'wall' | 'wallWidth' | 'ramp'>, origin: Vec): Vec {
   const x = popWall(config, origin)?.center.x ?? origin.x;
@@ -239,7 +240,7 @@ export class PopField {
   private nextClusterAt?: number;
   readonly region: PopRegion;
   readonly wall?: PopWall;
-  /** The practice ramp under your start, when one is up. It stops movement (it is part of the range's terrain) and bullets. */
+  /** The practice ramps under your start, when they are up. They stop movement (they are part of the range's terrain) and bullets. */
   readonly ramp?: PopRampLayout;
   /** The wall as a surface bullets can pass through; only when wallbang is on. */
   private readonly wallSolid?: PenetrationSolid;
@@ -441,16 +442,16 @@ export class PopField {
     if (distance === undefined || distance > maxDistance) return undefined;
     return {distance, point: {x: origin.x + direction.x * distance, y: origin.y + direction.y * distance, z: origin.z + direction.z * distance}};
   }
-  /** Where a unit-direction ray meets the ramp within `maxDistance`, if it is in the way. The ramp is solid ground, so unlike
-   * the wall no weapon shoots through it. */
+  /** Where a unit-direction ray meets the nearest ramp or platform within `maxDistance`, if one is in the way. They are solid
+   * ground, so unlike the wall no weapon shoots through them. */
   rampHit(origin: Vec, direction: Vec, maxDistance = Infinity): {distance: number; point: Vec} | undefined {
     if (!this.ramp) return undefined;
-    const distance = rayRampDistance(origin, direction, this.ramp.solid);
+    const distance = rayRampsDistance(origin, direction, this.ramp.solids);
     if (distance === undefined || distance > maxDistance) return undefined;
     return {distance, point: {x: origin.x + direction.x * distance, y: origin.y + direction.y * distance, z: origin.z + direction.z * distance}};
   }
   /** Everything in Pop that stops walking: the peek wall and the ramp. */
-  get solids(): TerrainSolid[] {return [...(this.wall ? [this.wall] : []), ...(this.ramp ? [this.ramp.solid] : [])];}
+  get solids(): TerrainSolid[] {return [...(this.wall ? [this.wall] : []), ...(this.ramp?.solids ?? [])];}
   /** What a wallbangable peek wall does to a bullet fired along the unit `direction`, by CS2's penetration arithmetic: the
    * weapon's `stats`, the wall's material and the thickness of wall this ray actually crosses (a ray that clips the edge
    * crosses far less than one that goes straight through) decide how much damage comes out the far side. Undefined when the

@@ -12,18 +12,19 @@ export function rangeDrillDefaults(mode: Mode): Partial<Settings> {
     popVariant, pop3D, popMotionCount, popMotionSpeed, popMotionRadius, popMotionRate, popFloatBob, popPairGap, popPairRadius, popHoldTime, popPrecisionSpeed, popFlickStep, popFlickRadius, popClusterCount, popClusterWidth, popClusterHeight, popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud,
     popBackground, popHits, popWall, popWallWidth, popWallbang, popWallMaterial, popWallXray, popRespawn, popRespawnMode, popMoveX, popRangeX, popFlipX, popMoveY, popRangeY, popFlipY, popMoveChance,
     popPadWidth, popPadDepth, popPadColor, popPadSound,
-    popRamp, popRampAngle, popRampLength, popRampWidth, popRampFacing, popRampStart} = defaults;
+    popRamp, popRampShape, popRampAngle, popRampLength, popRampWidth, popRampFacing, popRampStart, popRampPlatform} = defaults;
   return {burst, peekScenario, peekDuration, drillPace, follow, transferRule, transferAfter,
     impactSize, tracers, moving, targetSpeed, showImpactPattern, showMousePath, animatedGuides, spread: mode !== 'guided',
     popVariant, pop3D, popMotionCount, popMotionSpeed, popMotionRadius, popMotionRate, popFloatBob, popPairGap, popPairRadius, popHoldTime, popPrecisionSpeed, popFlickStep, popFlickRadius, popClusterCount, popClusterWidth, popClusterHeight, popSize, popCount, popSpacing, popDistance, popColor, popAmmo, popSound, popMuteGun, popHideImpacts, popHideHud,
     popBackground, popHits, popWall, popWallWidth, popWallbang, popWallMaterial, popWallXray, popRespawn, popRespawnMode, popMoveX, popRangeX, popFlipX, popMoveY, popRangeY, popFlipY, popMoveChance,
     popPadWidth, popPadDepth, popPadColor, popPadSound,
-    popRamp, popRampAngle, popRampLength, popRampWidth, popRampFacing, popRampStart};
+    popRamp, popRampShape, popRampAngle, popRampLength, popRampWidth, popRampFacing, popRampStart, popRampPlatform};
 }
-/** What the setup chip shows for the chosen drill; in Pop a ramp adds its angle, size and the way it rises. */
+/** What the setup chip shows for the chosen drill; in Pop, ramps add their angle, size and, for one ramp, the way it rises. */
 export function drillSetupSummary(settings: Settings, botz: BotzConfig, duel: DuelConfig, blitz?: BlitzConfig): string {
   const summary = drillSummary(settings, botz, duel, blitz);
   if (settings.mode !== 'pop' || !settings.popRamp) return summary;
+  if (settings.popRampShape === 'platform') return `${summary} · ${settings.popRampAngle}° ramps (${settings.popRampLength} m) to a ${settings.popRampPlatform} m platform`;
   return `${summary} · ${settings.popRampAngle}° ramp (${settings.popRampLength} x ${settings.popRampWidth} m), ${popRampFacings.find(([id]) => id === settings.popRampFacing)![1].toLowerCase()}`;
 }
 function drillSummary(settings: Settings, botz: BotzConfig, duel: DuelConfig, blitz?: BlitzConfig): string {

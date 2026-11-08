@@ -292,7 +292,7 @@ D+S, W+A and the stop on the opposite keys). It works in Classic and in every ot
 
 - **Settings** (`pop-ramp.ts`, saved in `spraylab.range.v2`): `popRamp` (off by default), `popRampAngle` (3-40 degrees,
   default 20; 40 keeps it above CS2's 0.7 standable normal), `popRampLength` (the run along the slope, 2-10 m in 0.5 m steps,
-  default 6), `popRampWidth` (the span across it, 1-16 m, default 6), `popRampFacing` and `popRampStart`. Facing is which way it
+  default 6, then 4 once the platform became the default), `popRampWidth` (the span across it, 1-16 m, default 6), `popRampFacing` and `popRampStart`. Facing is which way it
   rises as seen where you start: `wall` uphill toward the balls, `away` downhill toward the balls, `left` / `right` uphill to
   that side. Start is how far up you begin (0 = bottom edge, 1 = top, in 5 % steps, default 50 %); 100 % stops half a metre
   short of the top edge so you do not begin on it.
@@ -320,8 +320,8 @@ D+S, W+A and the stop on the opposite keys). It works in Classic and in every ot
   A ramp that rises toward the balls therefore hides them while its far edge is higher than your eyes (for example from the bottom
   of the default ramp, or anywhere on a 30 degree, 8 m one); start higher, lower the angle or pick another direction. The settings
   text says so.
-- **Rendering** (`pop-ramp-geometry.ts`): one unlit mesh with its shading in vertex colours (lighter slope, darker faces), a light
-  border and a cross line every metre of run, so the direction and length read at a glance in Pop's dark scene. It uses no polygon
+- **Rendering** (`pop-ramp-geometry.ts`; the markings changed with the platform, see below): one unlit mesh with its shading in
+  vertex colours (lighter slope, darker faces), a light border and a cross line every metre of run, so the direction and length read at a glance in Pop's dark scene. It uses no polygon
   offset: a first version had one, and it hid the pad and bullet marks at shallow viewing angles. The backdrop plane now always
   spans from the floor to above the field, which matters when the field hangs high.
 - **Presets.** The six ramp keys (`popRampKeys`) are part of saved presets (`popPresetKeys`) but not of `popCoreKeys`: choosing a
@@ -344,3 +344,52 @@ Coverage: `pop-ramp.test.ts` (layout of all four facings, ray tests, field and w
 the counter-strafe comparison, walking off an edge, re-placing you, settings, presets, summary and the controls) and
 `tests/pop-ramp.spec.ts` (switch on, tune with the real controls, hill hides every ball, pop a ball from the ramp, shoot into the
 slope, reload, switch off). Screenshots of every facing, the pad on the slope and a bullet mark were reviewed.
+
+## Platform with four ramps (2026-11-08)
+
+The user, after seeing the single ramp: "I was thinking like a ramps of 4 direction lead to a small platform". The Ramp switch now
+has a layout (`popRampShape`): `platform`, the default, or `ramp`, the single ramp described above, which is unchanged.
+
+- **Layout** (`platformLayout()` in `pop-ramp.ts`): a square platform, `popRampPlatform` m on a side (1.5-6 m in 0.5 m steps,
+  default 3) and `length x tan(angle)` high, with a wedge down each of its four sides. Each ramp is as wide as the platform,
+  `popRampLength` long (the same slider as the single ramp; its default is now 4 m, so the platform is 1.46 m high at 20 degrees)
+  and rises toward the platform. The corners between the ramps are open floor. All of it is ordinary terrain: one plain box
+  (`pop-platform`) and four `traversal: ramp` wedges (`pop-ramp-front`, `-back`, `-left`, `-right`), added to
+  `Simulation.environment` like the single ramp. The back ramp's foot stands against the near wall (z = 5), so the platform's
+  middle is at `z = 5 - side / 2 - length` (-0.5 with the defaults). A ramp is shortened when its foot would pass 11 m from the
+  middle of the range, which is as far as the hull can go sideways.
+- **Start.** The middle of the platform, standing on its top. Every layout setting puts you back there. The field is measured
+  from that point like with one ramp: balls at your starting eye height, never closer than 1.5 m to the end of the front ramp
+  (`ahead` is half the platform plus the ramp length, 5.5 m with the defaults). The peek wall and the respawn pad work as before:
+  the pad lies flat on the platform (`popRampGroundAt()` gives the height and the tilt of the ground under it). A very wide peek
+  wall can move your start sideways past the platform, and then you start on the ramp there.
+- **Bullets.** `rayRampsDistance()` takes the nearest of the five solids, so the platform and the ramps stop every ball ray and
+  leave the miss mark on their surface.
+- **Rendering.** `popRampGeometry()` now takes the list of solids. The markings are cells of the top itself (a plain cell, and a
+  light cell for each border or cross line) instead of strips laid 8 mm above it. The strips had a fault found on the live build:
+  in software-rendered Chromium most cross lines did not draw near the foot of a ramp, and lifting them 30 cm did not bring them
+  back, so they could vanish on some graphics cards too. A cell of the surface cannot be hidden by anything, needs no depth
+  offset and leaves the pad (12 mm) and the bullet marks above it.
+- **UI.** A "Ramp layout" select, then Ramp angle and Ramp length for both layouts, plus Platform size for the platform or Ramp
+  width, Ramp direction and Start on the ramp for one ramp. The setup chip says "20° ramps (4 m) to a 3 m platform".
+- **Presets.** `popRampShape` and `popRampPlatform` join the other ramp keys in `popRampKeys`, so saved presets keep them and
+  built-in presets and Pop mode switches leave them alone.
+
+**What was verified about the movement.** In the simulation, from the middle of the platform the player walks down each of the
+four ramps and ends on the floor (or against the near wall for the back one) with `feet` on the surface at every tick, never
+airborne, never rising. From the foot of each ramp the player walks up, over the junction onto the platform, and across it onto
+the opposite ramp the same way. Crossing each of the four platform edges obliquely, up and down, at four slants either side
+of the axis (about 11 and 23 degrees), never leaves the surface. The six key combinations (the four diagonals, W and D) held
+for 0.15 s and then reversed, on the platform and in the middle of each ramp at 20 and 40 degrees, match the flat floor's
+horizontal speed to 1e-9 u/s on every tick, with the same 7-tick stop, so the layout changes your height and your aim, not the
+strafe timing. Walking diagonally off a corner of the platform, or sideways off a ramp, drops you to the floor and you land
+standing. The trainer was not compared with CS2's own ramp movement, which has not been captured.
+
+**Known limits.** The corners between the ramps are open, so a diagonal move from the middle of a small platform reaches the
+edge of the structure within about 2 m: make the platform bigger for more room. The range's own walls and roof (about 5 m high
+near the start) are scenery, so a structure taller than that, which the steepest, longest settings give, passes through them.
+
+Coverage: `pop-ramp.test.ts` (both layouts, the solids and their junctions, rays, field and wall placement, bullet blocking,
+walking every ramp and edge, the counter-strafe comparison, re-placing you, settings, presets, summary, the controls and the
+mesh cell by cell) and `tests/pop-ramp.spec.ts` (switch on, the platform's controls, the layout switch, a ball popped from the
+platform, reload, switch off).

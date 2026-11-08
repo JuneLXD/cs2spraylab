@@ -1,6 +1,6 @@
 import data from './game-data.json';
 import type {PopPadSound, PopRespawnMode, PopVariant, PopWallMaterial, PopWallSide} from './pop';
-import type {PopRampFacing} from './pop-ramp';
+import type {PopRampFacing, PopRampShape} from './pop-ramp';
 import {neutralDirectionProfile, sanitizeDirectionProfile, type DirectionProfile} from './aim-vector';
 import { nativeRecoilPattern } from './recoil';
 import { defaultKeyboard, sanitizeKeyboard, type KeyboardProfile } from './keybinds/profile';
@@ -116,9 +116,11 @@ export type Settings = {
   /** Pop: the respawn pad's width across and depth along your line to the wall (m), its colour, and the sound it makes
    * when stepping onto it brings the balls back. */
   popPadWidth: number; popPadDepth: number; popPadColor: string; popPadSound: PopPadSound;
-  /** Pop: a ramp you start on, to practise counter-strafing on a slope (pop-ramp.ts): whether it is up, its angle (degrees),
-   * length (the run along the slope) and width (m), which way it rises, and how far up it you start (0 = bottom, 1 = top). */
-  popRamp: boolean; popRampAngle: number; popRampLength: number; popRampWidth: number; popRampFacing: PopRampFacing; popRampStart: number;
+  /** Pop: ramps you start on, to practise counter-strafing on a slope (pop-ramp.ts): whether they are up, the layout (a platform
+   * with four ramps, or one ramp), the angle (degrees) and the length (the run along a slope, m). A platform has a side (m). One
+   * ramp has a width (m), which way it rises, and how far up it you start (0 = bottom, 1 = top). */
+  popRamp: boolean; popRampShape: PopRampShape; popRampAngle: number; popRampLength: number; popRampWidth: number; popRampFacing: PopRampFacing; popRampStart: number;
+  popRampPlatform: number;
   /** CS2 crosshair convars behind `crosshair`, from an import or binds; cleared by manual edits. */
   cs2Crosshair?: Cs2Crosshair;
 };
@@ -154,7 +156,7 @@ export const defaults: Settings = {
   popSize: 30, popCount: 5, popSpacing: 1.2, popDistance: 12, popColor: '#ff6a4d', popAmmo: 'magazine', popSound: 'hitmarker',
   popMuteGun: false, popHideImpacts: false, popHideHud: false, popBackground: '#151a28', popHits: 1, popWall: 'off', popWallWidth: 3, popWallbang: false, popWallMaterial: 'wood', popWallXray: true, popRespawn: 0, popRespawnMode: 'timer', popMoveX: 0, popRangeX: 1.5, popFlipX: 0, popMoveY: 0, popRangeY: .5, popFlipY: 0, popMoveChance: .5,
   popPadWidth: .9, popPadDepth: .9, popPadColor: '#4df3ff', popPadSound: 'chime',
-  popRamp: false, popRampAngle: 20, popRampLength: 6, popRampWidth: 6, popRampFacing: 'wall', popRampStart: .5,
+  popRamp: false, popRampShape: 'platform', popRampAngle: 20, popRampLength: 4, popRampWidth: 6, popRampFacing: 'wall', popRampStart: .5, popRampPlatform: 3,
 };
 export const presets: Record<string, Crosshair> = {
   Compact: defaults.crosshair,
@@ -247,7 +249,8 @@ export function sanitizeSettings(raw: unknown): Settings {
     popPadWidth: Math.round(numeric(s.popPadWidth, defaults.popPadWidth, .3, 3) * 10) / 10, popPadDepth: Math.round(numeric(s.popPadDepth, defaults.popPadDepth, .3, 3) * 10) / 10,
     popPadColor: typeof s.popPadColor === 'string' && /^#[\da-f]{6}$/i.test(s.popPadColor) ? s.popPadColor.toLowerCase() : defaults.popPadColor,
     popPadSound: s.popPadSound === 'hitmarker' || s.popPadSound === 'pop' || s.popPadSound === 'off' ? s.popPadSound : 'chime',
-    popRamp: s.popRamp === true, popRampAngle: Math.round(numeric(s.popRampAngle, defaults.popRampAngle, 3, 40)),
+    popRamp: s.popRamp === true, popRampShape: s.popRampShape === 'ramp' ? 'ramp' : 'platform', popRampAngle: Math.round(numeric(s.popRampAngle, defaults.popRampAngle, 3, 40)),
+    popRampPlatform: Math.round(numeric(s.popRampPlatform, defaults.popRampPlatform, 1.5, 6) * 2) / 2,
     popRampLength: Math.round(numeric(s.popRampLength, defaults.popRampLength, 2, 10) * 2) / 2,
     popRampWidth: Math.round(numeric(s.popRampWidth, defaults.popRampWidth, 1, 16) * 2) / 2,
     popRampFacing: s.popRampFacing === 'away' || s.popRampFacing === 'left' || s.popRampFacing === 'right' ? s.popRampFacing : 'wall',

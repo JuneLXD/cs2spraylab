@@ -6,9 +6,8 @@ import {aimReportStore} from './aim-report-store';
 import {createPopSphereMaterial} from './pop-sphere-material';
 import * as THREE from 'three';
 import {popFrameGeometry} from './pop-geometry';
-import {popRampKeys, popRampSurfaceAt} from './pop-ramp';
+import {popRampGroundAt, popRampKeys} from './pop-ramp';
 import {popRampGeometry} from './pop-ramp-geometry';
-import {rampSurface} from './terrain';
 import {recoilView} from './view-recoil';
 import {ViewmodelAir} from './viewmodel-air';
 import {followCrosshairDirection, followCrosshairOffset} from './crosshair-follow';
@@ -101,7 +100,7 @@ export class RangeEngine {
   private popColorApplied = '';
   private popBackgroundApplied = '';
   private popWall?: THREE.Mesh;
-  /** Pop's practice ramp: one unlit mesh with its shading and markings in vertex colours (see pop-ramp-geometry.ts). */
+  /** Pop's practice ramps (and platform): one unlit mesh with its shading and markings in vertex colours (see pop-ramp-geometry.ts). */
   private popRamp?: THREE.Mesh;
   private popRampMaterial = new THREE.MeshBasicMaterial({vertexColors: true, side: THREE.DoubleSide, fog: false, toneMapped: false});
   private popWallMaterial?: THREE.MeshStandardMaterial;
@@ -846,7 +845,7 @@ export class RangeEngine {
       this.renderer.shadowMap.needsUpdate = true;
     }
     if (pop.ramp && !this.popRamp) {
-      this.popRamp = new THREE.Mesh(popRampGeometry(pop.ramp.solid), this.popRampMaterial);
+      this.popRamp = new THREE.Mesh(popRampGeometry(pop.ramp.solids), this.popRampMaterial);
       this.popRamp.name = 'pop-ramp'; this.pop.add(this.popRamp);
     }
     if (config.respawnMode === 'pad' && !this.popPad) {
@@ -855,10 +854,10 @@ export class RangeEngine {
       this.popPad = new THREE.Mesh(new THREE.PlaneGeometry(width, depth), this.popPadMaterial);
       this.popPad.rotation.x = -Math.PI / 2; this.popPad.position.set(pad.x, .012, pad.z); this.popPad.name = 'pop-pad';
       if (pop.ramp) {
-        // You start on the ramp, so the pad lies on its slope instead of being buried in it.
-        const {slopeX, slopeZ} = rampSurface(pop.ramp.solid), normal = new THREE.Vector3(-slopeX, 1, -slopeZ).normalize();
+        // You start on the ramps, so the pad lies on the surface under it (flat on the platform, tilted on a slope) instead of being buried in it.
+        const ground = popRampGroundAt(pop.ramp.solids, pad.x, pad.z), normal = new THREE.Vector3(ground.normal.x, ground.normal.y, ground.normal.z);
         this.popPad.quaternion.premultiply(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal));
-        this.popPad.position.set(pad.x, popRampSurfaceAt(pop.ramp.solid, pad.x, pad.z), pad.z).addScaledVector(normal, .012);
+        this.popPad.position.set(pad.x, ground.height, pad.z).addScaledVector(normal, .012);
       }
       const corners = (w: number, d: number) => [new THREE.Vector2(-w, -d), new THREE.Vector2(w, -d), new THREE.Vector2(w, d), new THREE.Vector2(-w, d)];
       const outline = new THREE.Shape(corners(width / 2, depth / 2));
